@@ -1,0 +1,45 @@
+# ============================================================
+# Knowledge Hub - 설정 파일 예시
+# 이 파일을 config.yaml로 복사한 뒤 값을 수정하세요.
+# 또는 `khub init` 명령으로 대화형 설정을 할 수 있습니다.
+# ============================================================
+
+# --- Obsidian Vault ---
+vault:
+  path: ""  # Obsidian vault 경로 (예: /path/to/your/vault)
+  exclude_folders:
+    - ".obsidian"
+    - ".trash"
+    - "templates"
+
+# --- 임베딩 ---
+embedding:
+  model: "nomic-embed-text"
+  base_url: "http://localhost:11434"
+  chunk_size: 1000
+  chunk_overlap: 200
+
+# --- LLM ---
+llm:
+  model: "qwen2.5:7b"
+  base_url: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 2000
+
+# --- 데이터베이스 ---
+database:
+  vector_db_path: "./data/chroma_db"
+  sqlite_path: "./data/knowledge.db"
+  collection_name: "knowledge_hub"
+  top_k: 5
+
+# --- 논문 관리 ---
+papers:
+  csv_path: ""
+  download_dir: "./data/papers"
+  translate_model: "gpt-4o-mini"
+
+# --- 로깅 ---
+logging:
+  level: "INFO"
+  file: "./logs/knowledge_hub.log"

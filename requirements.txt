@@ -1,0 +1,36 @@
+# ============================================================
+# Knowledge Hub - 의존성
+# ============================================================
+
+# CLI
+click>=8.1.0
+
+# 벡터 DB
+chromadb>=0.4.22
+
+# Ollama (로컬 임베딩/LLM)
+ollama>=0.1.6
+
+# 문서 처리
+markdown>=3.5.1
+python-frontmatter>=1.0.0
+PyYAML>=6.0.1
+
+# 웹 크롤링
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+lxml>=5.0.0
+
+# 유틸리티
+python-dotenv>=1.0.0
+tqdm>=4.66.1
+rich>=13.7.0
+
+# MCP 서버 (Cursor 통합)
+mcp>=0.9.0
+
+# 논문 번역 (선택사항 - OpenAI API 키 필요)
+openai>=1.0.0
+
+# PDF 생성 (선택사항)
+reportlab>=4.0.0

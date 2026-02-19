@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# User data (generated at runtime)
+data/
+logs/
+config.yaml
+*.db
+*.log
+.khub/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Legacy source (not part of the package)
+src/
+
+# Node.js (foundry-core)
+node_modules/
+
+# Temp/state files (foundry-core runtime)
+*.json.bak
+.foundry-sync-state.json
+.tmp-failfast.json
+.tmpstate/
+local-sync-state.json
+state-from-cli.json
+tmp_agent_event_log.json
+verify-state.json
+runtime_*.csv
+
+# Legacy root-level files (moved into knowledge_hub/ package)
+mcp_server.py
+cli.py
+
+# OS
+Thumbs.db

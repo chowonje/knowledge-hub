@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "knowledge-hub"
+version = "0.1.0"
+description = "AI paper discovery, translation, summarization & knowledge linking pipeline"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    {name = "knowledge-hub contributors"},
+]
+keywords = ["arxiv", "papers", "ai", "research", "knowledge-management", "obsidian"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "click>=8.1.0",
+    "chromadb>=0.4.22",
+    "requests>=2.31.0",
+    "rich>=13.7.0",
+    "PyYAML>=6.0.1",
+    "tqdm>=4.66.1",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0.0"]
+anthropic = ["anthropic>=0.25.0"]
+google = ["google-generativeai>=0.5.0"]
+ollama = ["ollama>=0.1.6"]
+obsidian = ["python-frontmatter>=1.0.0", "markdown>=3.5.1"]
+pdf = ["reportlab>=4.0.0"]
+mcp = ["mcp>=1.0.0"]
+dev = ["pytest>=8.0.0", "build>=1.0.0"]
+all = [
+    "knowledge-hub[openai,anthropic,google,ollama,obsidian,pdf,mcp]",
+]
+
+[project.scripts]
+khub = "knowledge_hub.cli.main:cli"
+khub-mcp = "knowledge_hub.mcp_server:main"
+
+[project.urls]
+Homepage = "https://github.com/knowledge-hub/knowledge-hub"
+Repository = "https://github.com/knowledge-hub/knowledge-hub"
+Issues = "https://github.com/knowledge-hub/knowledge-hub/issues"
+
+[tool.setuptools.packages.find]
+include = ["knowledge_hub*"]

@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/agent-run-result.schema.json",
+  "title": "knowledge-hub agent run result",
+  "type": "object",
+  "required": [
+    "schema",
+    "source",
+    "runId",
+    "status",
+    "goal",
+    "role",
+    "orchestratorMode",
+    "stage",
+    "transitions",
+    "createdAt",
+    "updatedAt",
+    "dryRun"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.foundry.agent.run.result.v1"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["running", "completed", "blocked", "failed"]
+    },
+    "goal": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["planner", "researcher", "analyst", "summarizer", "auditor", "coach"]
+    },
+    "orchestratorMode": {
+      "type": "string",
+      "enum": ["single-pass", "adaptive", "strict"]
+    },
+    "stage": {
+      "type": "string"
+    },
+    "tool": {
+      "type": "string"
+    },
+    "plan": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "playbook": {
+      "type": "object",
+      "required": [
+        "schema",
+        "source",
+        "goal",
+        "role",
+        "orchestratorMode",
+        "maxRounds",
+        "assumptions",
+        "warnings",
+        "steps",
+        "generatedAt"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.foundry.agent.run.playbook.v1"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goal": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "orchestratorMode": {
+          "type": "string"
+        },
+        "maxRounds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["order", "tool", "objective", "rationale"],
+            "properties": {
+              "order": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "tool": {
+                "type": "string",
+                "enum": ["ask_knowledge", "search_knowledge"]
+              },
+              "objective": {
+                "type": "string"
+              },
+              "rationale": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "generatedAt": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stage", "status", "message", "at"],
+        "properties": {
+          "stage": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "verify": {
+      "type": "object",
+      "required": ["allowed", "schemaValid", "policyAllowed", "schemaErrors"],
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "schemaValid": { "type": "boolean" },
+        "policyAllowed": { "type": "boolean" },
+        "schemaErrors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "writeback": {
+      "type": "object",
+      "required": ["ok"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "detail": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "artifact": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["jsonContent"],
+          "properties": {
+            "id": { "type": "string" },
+            "jsonContent": {},
+            "classification": {
+              "type": "string",
+              "enum": ["P0", "P1", "P2", "P3"]
+            },
+            "generatedAt": { "type": "string" },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "maxRounds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "dryRun": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}
