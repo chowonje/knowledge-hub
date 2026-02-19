@@ -51,9 +51,9 @@ khub = "knowledge_hub.cli.main:cli"
 khub-mcp = "knowledge_hub.mcp_server:main"
 
 [project.urls]
-Homepage = "https://github.com/knowledge-hub/knowledge-hub"
-Repository = "https://github.com/knowledge-hub/knowledge-hub"
-Issues = "https://github.com/knowledge-hub/knowledge-hub/issues"
+Homepage = "https://github.com/chowonje/knowledge-hub"
+Repository = "https://github.com/chowonje/knowledge-hub"
+Issues = "https://github.com/chowonje/knowledge-hub/issues"
 
 [tool.setuptools.packages.find]
 include = ["knowledge_hub*"]
