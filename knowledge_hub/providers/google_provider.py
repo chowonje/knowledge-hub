@@ -83,7 +83,8 @@ class GoogleLLM(BaseLLM):
             default_llm_model="gemini-2.0-flash",
             default_embed_model="text-embedding-004",
             available_models=[
-                "gemini-2.0-flash", "gemini-2.5-pro", "gemini-2.5-flash",
+                "gemini-2.0-flash", "gemini-2.0-flash-lite",
+                "gemini-2.5-pro", "gemini-2.5-flash",
             ],
         )
 

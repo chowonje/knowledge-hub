@@ -18,7 +18,7 @@ from rich.table import Table
 
 from knowledge_hub.core.config import Config
 from knowledge_hub.core.database import VectorDatabase, SQLiteDatabase
-from knowledge_hub.core.embeddings import OllamaEmbedder, OllamaLLM
+from knowledge_hub.providers.base import BaseEmbedder
 from knowledge_hub.core.models import SourceType
 from knowledge_hub.papers.downloader import PaperDownloader
 from knowledge_hub.papers.translator import PaperTranslator
@@ -35,7 +35,7 @@ class PaperManager:
         config: Config,
         vector_db: VectorDatabase,
         sqlite_db: SQLiteDatabase,
-        embedder: OllamaEmbedder,
+        embedder: BaseEmbedder,
     ):
         self.config = config
         self.vector_db = vector_db

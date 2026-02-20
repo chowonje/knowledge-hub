@@ -77,13 +77,43 @@ def _prompt_provider(role: str, default: str, exclude_embed_only: bool = True) -
             if 0 <= idx < len(choices):
                 name = choices[idx][0]
                 model = choices[idx][2]
+                if name == "openai-compat":
+                    return _prompt_compat_service(role)
                 return name, model
         except ValueError:
             if raw in [c[0] for c in choices]:
                 for c in choices:
                     if c[0] == raw:
+                        if c[0] == "openai-compat":
+                            return _prompt_compat_service(role)
                         return c[0], c[2]
         console.print("  [red]잘못된 선택입니다.[/red]")
+
+
+def _prompt_compat_service(role: str) -> tuple[str, str]:
+    """OpenAI-compatible 서비스 세부 선택"""
+    from knowledge_hub.providers.openai_compat import KNOWN_SERVICES
+
+    services = list(KNOWN_SERVICES.items())
+    console.print(f"\n  [bold]OpenAI-compatible 서비스 선택:[/bold]")
+    for i, (svc_name, svc) in enumerate(services, 1):
+        models_str = ", ".join(svc["llm_models"][:3]) if svc["llm_models"] else "(custom model)"
+        env = svc["env_key"] or "no key"
+        console.print(f"    {i}. [cyan]{svc_name}[/cyan] — {models_str} [{env}]")
+    console.print(f"    {len(services)+1}. [dim]Custom URL (직접 입력)[/dim]")
+
+    raw = click.prompt("    선택", default="1")
+    try:
+        idx = int(raw) - 1
+        if 0 <= idx < len(services):
+            svc_name, svc = services[idx]
+            model = svc["llm_models"][0] if svc["llm_models"] else click.prompt("    모델명", default="")
+            return "openai-compat", model
+        else:
+            model = click.prompt("    모델명")
+            return "openai-compat", model
+    except (ValueError, IndexError):
+        return "openai-compat", click.prompt("    모델명", default="deepseek-chat")
 
 
 def _prompt_embed_provider(default: str) -> tuple[str, str]:
@@ -157,6 +187,11 @@ def init_cmd(ctx, non_interactive):
     from knowledge_hub.providers.registry import get_provider_info
     for prov in needed_providers:
         info = get_provider_info(prov)
+
+        if prov == "openai-compat":
+            _setup_compat_provider(config, trans_model_input, summ_model_input, embed_model_input)
+            continue
+
         if info and info.requires_api_key:
             env_var = f"{prov.upper()}_API_KEY"
             existing = os.environ.get(env_var, "")
@@ -175,6 +210,42 @@ def init_cmd(ctx, non_interactive):
                 default=config.get_provider_config(prov).get("base_url", "http://localhost:11434"),
             )
             config.set_nested("providers", prov, "base_url", base_url)
+
+
+def _setup_compat_provider(config, *models):
+    """openai-compat provider의 base_url과 api_key를 설정"""
+    from knowledge_hub.providers.openai_compat import KNOWN_SERVICES
+
+    model_to_check = next((m for m in models if m), "")
+
+    detected_svc = None
+    for svc_name, svc in KNOWN_SERVICES.items():
+        if model_to_check in svc.get("llm_models", []) + svc.get("embed_models", []):
+            detected_svc = (svc_name, svc)
+            break
+
+    if detected_svc:
+        svc_name, svc = detected_svc
+        console.print(f"\n  [cyan]감지된 서비스: {svc_name}[/cyan]")
+        base_url = click.prompt("  Base URL", default=svc["base_url"])
+        config.set_nested("providers", "openai-compat", "base_url", base_url)
+
+        if svc["env_key"]:
+            existing = os.environ.get(svc["env_key"], "")
+            if existing:
+                masked = existing[:8] + "..." + existing[-4:] if len(existing) > 12 else "***"
+                console.print(f"  [green]{svc['env_key']} 감지됨: {masked}[/green]")
+                config.set_nested("providers", "openai-compat", "api_key", f"${{{svc['env_key']}}}")
+            else:
+                api_key = click.prompt(f"  {svc_name} API Key", default="", hide_input=True)
+                if api_key:
+                    config.set_nested("providers", "openai-compat", "api_key", api_key)
+    else:
+        base_url = click.prompt("\n  OpenAI-compatible Base URL", default="http://localhost:1234/v1")
+        config.set_nested("providers", "openai-compat", "base_url", base_url)
+        api_key = click.prompt("  API Key (없으면 Enter)", default="", hide_input=True)
+        if api_key:
+            config.set_nested("providers", "openai-compat", "api_key", api_key)
 
     # 5. Storage paths
     console.print("\n[bold cyan]저장 경로 설정:[/bold cyan]")

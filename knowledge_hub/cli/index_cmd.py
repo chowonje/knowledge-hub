@@ -8,87 +8,53 @@ khub index - 논문 + 개념 노트를 벡터DB에 통합 인덱싱 (배치 임�
 from __future__ import annotations
 
 import logging
-import os
 import re
 import time
 from pathlib import Path
 
 import click
-import requests
 from rich.console import Console
 
 console = Console()
 log = logging.getLogger("khub.index")
 
 BATCH_SIZE = 20
-EMBED_MAX_RETRIES = 3
-EMBED_RETRY_BASE_SEC = 2.0
 
 
-def _embed_with_retry(texts: list[str], provider: str, model: str,
-                       api_key: str = "", base_url: str = "") -> list[list[float]]:
-    """임베딩 API 호출 + 지수 백오프 재시도"""
-    last_err: Exception | None = None
-    for attempt in range(1, EMBED_MAX_RETRIES + 1):
-        try:
-            if provider == "openai":
-                return _embed_batch_openai(texts, model, api_key)
-            else:
-                return _embed_batch_ollama(texts, model, base_url)
-        except requests.HTTPError as e:
-            last_err = e
-            status = getattr(e.response, "status_code", 0)
-            if status == 429 or status >= 500:
-                wait = EMBED_RETRY_BASE_SEC * (2 ** (attempt - 1))
-                log.warning("임베딩 API %d 에러, %d/%d 재시도 (%.1fs 대기)",
-                            status, attempt, EMBED_MAX_RETRIES, wait)
-                time.sleep(wait)
-                continue
-            raise
-        except (requests.ConnectionError, requests.Timeout) as e:
-            last_err = e
-            wait = EMBED_RETRY_BASE_SEC * (2 ** (attempt - 1))
-            log.warning("임베딩 네트워크 오류, %d/%d 재시도 (%.1fs 대기)",
-                        attempt, EMBED_MAX_RETRIES, wait)
-            time.sleep(wait)
-    raise last_err  # type: ignore[misc]
+def _get_embedder(config):
+    """config 기반으로 적절한 Embedder 인스턴스 생성"""
+    from knowledge_hub.providers.registry import get_embedder
+    embed_cfg = config.get_provider_config(config.embedding_provider)
+    return get_embedder(config.embedding_provider, model=config.embedding_model, **embed_cfg)
 
 
-def _embed_batch_openai(texts: list[str], model: str, api_key: str) -> list[list[float]]:
-    resp = requests.post(
-        "https://api.openai.com/v1/embeddings",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={"model": model, "input": texts},
-        timeout=60,
-    )
-    resp.raise_for_status()
-    return [x["embedding"] for x in sorted(resp.json()["data"], key=lambda x: x["index"])]
-
-
-def _embed_batch_ollama(texts: list[str], model: str, base_url: str) -> list[list[float]]:
-    embs = []
-    for text in texts:
-        resp = requests.post(
-            f"{base_url}/api/embeddings",
-            json={"model": model, "prompt": text},
-            timeout=30,
-        )
-        resp.raise_for_status()
-        embs.append(resp.json()["embedding"])
-    return embs
+def _embed_batch_via_provider(embedder, texts: list[str]) -> list[list[float]]:
+    """프로바이더 추상화를 통해 배치 임베딩"""
+    results = embedder.embed_batch(texts, show_progress=False)
+    failed = [i for i, r in enumerate(results) if r is None]
+    if failed:
+        raise RuntimeError(f"{len(failed)}개 텍스트 임베딩 실패 (인덱스: {failed[:5]})")
+    return results
 
 
 def _get_paper_keywords(vault_path: str) -> dict[str, list[str]]:
     """Obsidian 논문 노트에서 arxiv_id → 키워드 목록 매핑 추출"""
-    papers_dir = Path(vault_path) / "Projects" / "AI" / "AI_Papers"
+    papers_dir = Path(vault_path) / "Papers"
     if not papers_dir.exists():
-        return {}
+        alt = Path(vault_path) / "Projects" / "AI" / "AI_Papers"
+        if alt.exists():
+            papers_dir = alt
+        else:
+            return {}
 
     mapping: dict[str, list[str]] = {}
     for md_path in papers_dir.glob("*.md"):
         if md_path.name == "00_Concept_Index.md":
             continue
-        content = md_path.read_text(encoding="utf-8")
+        try:
+            content = md_path.read_text(encoding="utf-8")
+        except Exception:
+            continue
         arxiv_match = re.search(r'arxiv_id:\s*"?([0-9]+\.[0-9]+)"?', content)
         if not arxiv_match:
             continue
@@ -102,13 +68,25 @@ def _get_paper_keywords(vault_path: str) -> dict[str, list[str]]:
 
 def _load_concept_notes(vault_path: str) -> list[dict]:
     """Obsidian 개념 노트 로드 → 임베딩용 데이터 리스트 반환"""
-    concepts_dir = Path(vault_path) / "Projects" / "AI" / "AI_Papers" / "Concepts"
-    if not concepts_dir.exists():
+    candidates = [
+        Path(vault_path) / "Papers" / "Concepts",
+        Path(vault_path) / "Projects" / "AI" / "AI_Papers" / "Concepts",
+        Path(vault_path) / "Concepts",
+    ]
+    concepts_dir = None
+    for c in candidates:
+        if c.exists():
+            concepts_dir = c
+            break
+    if concepts_dir is None:
         return []
 
     results = []
     for md_path in concepts_dir.glob("*.md"):
-        content = md_path.read_text(encoding="utf-8")
+        try:
+            content = md_path.read_text(encoding="utf-8")
+        except Exception:
+            continue
         name = md_path.stem
 
         desc_match = re.search(r'^# .+\n\n(.+?)(?:\n\n##|\Z)', content, re.MULTILINE | re.DOTALL)
@@ -144,19 +122,15 @@ def _load_concept_notes(vault_path: str) -> list[dict]:
 def index_cmd(ctx, index_all, concepts_only):
     """논문 + 개념 노트를 벡터DB에 통합 인덱싱"""
     from knowledge_hub.core.database import VectorDatabase, SQLiteDatabase
-    from knowledge_hub.core.config import ConfigError
 
     khub = ctx.obj["khub"]
     config = khub.config
 
-    embed_provider = config.embedding_provider
-    embed_model = config.embedding_model
-    embed_cfg = config.get_provider_config(embed_provider)
-    api_key = os.environ.get("OPENAI_API_KEY", "") or embed_cfg.get("api_key", "")
-    base_url = embed_cfg.get("base_url", "http://localhost:11434")
-
-    if embed_provider == "openai" and not api_key:
-        console.print("[red]OPENAI_API_KEY가 설정되지 않았습니다.[/red]")
+    try:
+        embedder = _get_embedder(config)
+    except Exception as e:
+        console.print(f"[red]임베딩 프로바이더 초기화 실패: {e}[/red]")
+        console.print("[dim]khub config providers 로 사용 가능한 프로바이더를 확인하세요.[/dim]")
         raise SystemExit(1)
 
     try:
@@ -164,6 +138,8 @@ def index_cmd(ctx, index_all, concepts_only):
     except Exception as e:
         console.print(f"[red]벡터DB 초기화 실패: {e}[/red]")
         raise SystemExit(1)
+
+    console.print(f"[dim]임베딩: {config.embedding_provider}/{config.embedding_model}[/dim]")
 
     t_start = time.time()
     failed_papers: list[dict] = []
@@ -199,10 +175,7 @@ def index_cmd(ctx, index_all, concepts_only):
                     texts.append(t)
 
                 try:
-                    embs = _embed_with_retry(
-                        texts, embed_provider, embed_model,
-                        api_key=api_key, base_url=base_url,
-                    )
+                    embs = _embed_batch_via_provider(embedder, texts)
 
                     docs, embeddings, metas, ids = [], [], [], []
                     for p, text, emb in zip(batch, texts, embs):
@@ -276,10 +249,7 @@ def index_cmd(ctx, index_all, concepts_only):
                     texts = [c["text"] for c in batch]
 
                     try:
-                        embs = _embed_with_retry(
-                            texts, embed_provider, embed_model,
-                            api_key=api_key, base_url=base_url,
-                        )
+                        embs = _embed_batch_via_provider(embedder, texts)
 
                         docs, embeddings, metas, ids = [], [], [], []
                         for c, text, emb in zip(batch, texts, embs):
@@ -324,7 +294,7 @@ def index_cmd(ctx, index_all, concepts_only):
     )
 
     if failed_papers or failed_concepts:
-        console.print("\n[bold red]⚠ 실패 항목:[/bold red]")
+        console.print("\n[bold red]실패 항목:[/bold red]")
         for fp in failed_papers:
             console.print(f"  논문 {fp['arxiv_id']}: {fp['error'][:80]}")
         for fc in failed_concepts:

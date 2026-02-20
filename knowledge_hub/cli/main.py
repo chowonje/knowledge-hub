@@ -122,11 +122,13 @@ from knowledge_hub.cli.search_cmd import search, ask
 from knowledge_hub.cli.index_cmd import index_cmd
 from knowledge_hub.cli.notebook_cmd import notebook_group
 from knowledge_hub.cli.graph_cmd import graph_group as kg_graph_group
+from knowledge_hub.cli.explore_cmd import explore_group
 
 cli.add_command(init_cmd, "init")
 cli.add_command(config_group, "config")
 cli.add_command(discover, "discover")
 cli.add_command(paper_group, "paper")
+cli.add_command(explore_group, "explore")
 cli.add_command(notebook_group, "notebook")
 cli.add_command(kg_graph_group, "graph")
 cli.add_command(search, "search")

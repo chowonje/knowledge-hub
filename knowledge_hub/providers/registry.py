@@ -51,6 +51,14 @@ def _discover_providers():
     except ImportError:
         pass
 
+    try:
+        from knowledge_hub.providers.openai_compat import OpenAICompatLLM, OpenAICompatEmbedder
+        _LLM_REGISTRY["openai-compat"] = OpenAICompatLLM
+        _EMBEDDER_REGISTRY["openai-compat"] = OpenAICompatEmbedder
+        _PROVIDER_INFO["openai-compat"] = OpenAICompatLLM.provider_info()
+    except ImportError:
+        pass
+
 
 def get_llm(provider: str, model: Optional[str] = None, **kwargs) -> BaseLLM:
     """프로바이더 이름으로 LLM 인스턴스 생성"""

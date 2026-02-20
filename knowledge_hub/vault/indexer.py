@@ -10,7 +10,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 from knowledge_hub.core.config import Config
 from knowledge_hub.core.database import VectorDatabase, SQLiteDatabase
-from knowledge_hub.core.embeddings import OllamaEmbedder
+from knowledge_hub.providers.base import BaseEmbedder
 from knowledge_hub.core.models import SourceType
 from knowledge_hub.vault.parser import ObsidianParser
 
@@ -25,7 +25,7 @@ class VaultIndexer:
         config: Config,
         vector_db: VectorDatabase,
         sqlite_db: SQLiteDatabase,
-        embedder: OllamaEmbedder,
+        embedder: BaseEmbedder,
     ):
         self.config = config
         self.vector_db = vector_db

@@ -77,6 +77,37 @@ def _api_call_with_retry(fn, *args, **kwargs):
 MAX_SUMMARIZE_CHARS = 30000
 
 
+def _resolve_vault_papers_dir(vault_path: str) -> Path | None:
+    """Obsidian vault 내 논문 폴더를 동적으로 탐색"""
+    candidates = [
+        Path(vault_path) / "Papers",
+        Path(vault_path) / "Projects" / "AI" / "AI_Papers",
+        Path(vault_path) / "papers",
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return Path(vault_path) / "Papers"
+
+
+def _resolve_vault_concepts_dir(vault_path: str) -> Path:
+    """Obsidian vault 내 개념 폴더를 동적으로 탐색"""
+    papers_dir = _resolve_vault_papers_dir(vault_path)
+    if papers_dir:
+        concepts = papers_dir / "Concepts"
+        if concepts.exists():
+            return concepts
+    candidates = [
+        Path(vault_path) / "Papers" / "Concepts",
+        Path(vault_path) / "Projects" / "AI" / "AI_Papers" / "Concepts",
+        Path(vault_path) / "Concepts",
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return (papers_dir or Path(vault_path) / "Papers") / "Concepts"
+
+
 def _collect_paper_text(paper: dict, config) -> str:
     """논문 전문 텍스트 수집: 번역본 → 원문 텍스트 → abstract 순으로 fallback"""
     translated = paper.get("translated_path")
@@ -113,10 +144,11 @@ def _update_obsidian_summary(paper: dict, summary: str, config):
     safe_title = re.sub(r'[\\/:*?"<>|]', '', paper["title"]).strip()
     safe_title = re.sub(r'\s+', ' ', safe_title)[:100].strip()
 
-    for subdir in ["Papers", "Projects/AI/AI_Papers"]:
-        note_path = vault / subdir / f"{safe_title}.md"
+    papers_dir = _resolve_vault_papers_dir(str(vault))
+    if papers_dir:
+        note_path = papers_dir / f"{safe_title}.md"
         if not note_path.exists():
-            continue
+            return
         content = note_path.read_text(encoding="utf-8")
         placeholder = "요약본/번역본이 아직 등록되지 않았습니다"
         old_summary_section = None
@@ -455,19 +487,11 @@ def paper_embed(ctx, arxiv_id):
     if paper.get("notes"):
         text += f"\n\n{paper['notes']}"
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    if not api_key:
-        api_key = config.get_provider_config("openai").get("api_key", "")
-
+    from knowledge_hub.providers.registry import get_embedder as _get_embedder
     try:
-        resp = requests.post(
-            "https://api.openai.com/v1/embeddings",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": config.embedding_model, "input": [text]},
-            timeout=30,
-        )
-        resp.raise_for_status()
-        emb = resp.json()["data"][0]["embedding"]
+        embed_cfg = config.get_provider_config(config.embedding_provider)
+        embedder = _get_embedder(config.embedding_provider, model=config.embedding_model, **embed_cfg)
+        emb = embedder.embed_text(text)
     except Exception as e:
         console.print(f"[red]임베딩 실패: {e}[/red]")
         return
@@ -709,10 +733,11 @@ def paper_embed_all(ctx, index_all):
         return
 
     console.print(f"[bold]인덱싱 시작: {len(unindexed)}편[/bold]")
+    console.print(f"[dim]임베딩: {config.embedding_provider}/{config.embedding_model}[/dim]")
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    if not api_key:
-        api_key = config.get_provider_config("openai").get("api_key", "")
+    from knowledge_hub.providers.registry import get_embedder as _get_embedder
+    embed_cfg = config.get_provider_config(config.embedding_provider)
+    embedder = _get_embedder(config.embedding_provider, model=config.embedding_model, **embed_cfg)
 
     vector_db = VectorDatabase(config.vector_db_path, config.collection_name)
     batch_size = 20
@@ -729,14 +754,10 @@ def paper_embed_all(ctx, index_all):
             texts.append(t)
 
         try:
-            resp = requests.post(
-                "https://api.openai.com/v1/embeddings",
-                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-                json={"model": config.embedding_model, "input": texts},
-                timeout=60,
-            )
-            resp.raise_for_status()
-            embs = [x["embedding"] for x in sorted(resp.json()["data"], key=lambda x: x["index"])]
+            raw_embs = embedder.embed_batch(texts, show_progress=False)
+            embs = [e for e in raw_embs if e is not None]
+            if len(embs) != len(texts):
+                raise RuntimeError(f"{len(texts) - len(embs)}개 텍스트 임베딩 실패")
 
             docs, embeddings, metas, ids = [], [], [], []
             for p, text, emb in zip(batch, texts, embs):
@@ -787,17 +808,16 @@ def paper_sync_keywords(ctx, force, limit):
         console.print("[red]Obsidian vault 경로가 설정되지 않았습니다. khub config set obsidian.vault_path <경로>[/red]")
         return
 
-    papers_dir = Path(vault_path) / "Projects" / "AI" / "AI_Papers"
-    if not papers_dir.exists():
-        console.print(f"[red]Obsidian 논문 폴더를 찾을 수 없습니다: {papers_dir}[/red]")
+    papers_dir = _resolve_vault_papers_dir(vault_path)
+    if not papers_dir or not papers_dir.exists():
+        console.print(f"[red]Obsidian 논문 폴더를 찾을 수 없습니다.[/red]")
+        console.print("[dim]khub config set obsidian.vault_path 로 vault 경로를 확인하세요.[/dim]")
         return
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    if not api_key:
-        api_key = config.get_provider_config("openai").get("api_key", "")
-    if not api_key:
-        console.print("[red]OPENAI_API_KEY가 설정되지 않았습니다.[/red]")
-        return
+    from knowledge_hub.providers.registry import get_llm
+    prov = config.summarization_provider
+    mdl = config.summarization_model
+    prov_cfg = config.get_provider_config(prov)
 
     sqlite_db = SQLiteDatabase(config.sqlite_path)
     md_files = sorted(papers_dir.glob("*.md"))
@@ -844,7 +864,9 @@ def paper_sync_keywords(ctx, force, limit):
         console.print(f"  [{idx+1}/{len(md_files)}] {title[:50]}...", end=" ")
 
         try:
-            evidence_results = _extract_keywords_with_evidence(api_key, title, summary_text, sqlite_db)
+            if not hasattr(paper_sync_keywords, '_llm'):
+                paper_sync_keywords._llm = get_llm(prov, model=mdl, **prov_cfg)
+            evidence_results = _extract_keywords_with_evidence(paper_sync_keywords._llm, title, summary_text, sqlite_db)
         except Exception as e:
             console.print(f"[red]실패: {e}[/red]")
             continue
@@ -910,41 +932,28 @@ def _extract_summary_text(content: str, title: str, sqlite_db) -> str:
     return f"제목: {title}"
 
 
-def _extract_keywords_with_evidence(api_key: str, title: str, text: str,
+def _extract_keywords_with_evidence(llm, title: str, text: str,
                                      sqlite_db=None) -> list[dict]:
-    """OpenAI로 키워드 + 근거 문장을 함께 추출.
+    """LLM으로 키워드 + 근거 문장을 함께 추출.
 
     반환: [{"concept": "Transformer", "evidence": "We propose...", "confidence": 0.9}, ...]
     """
     import json as _json
 
-    resp = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={
-            "model": "gpt-4o-mini",
-            "messages": [
-                {"role": "system", "content": (
-                    "You extract 5-10 core academic concepts from AI/ML papers. "
-                    "For each concept, provide a short evidence sentence from the text that "
-                    "shows why this concept is relevant to this paper, plus a confidence score.\n\n"
-                    "Return ONLY valid JSON: [{\"concept\": \"Name\", \"evidence\": \"sentence\", \"confidence\": 0.9}, ...]\n\n"
-                    "Rules:\n"
-                    "- Use SINGULAR form (e.g. 'Neural Network' not 'Neural Networks')\n"
-                    "- Use full names, not abbreviations\n"
-                    "- Use standard academic terms\n"
-                    "- confidence: 0.5-1.0 based on how central the concept is to this paper\n"
-                    "- evidence: 1 sentence from the text, or a brief paraphrase if exact quote unavailable"
-                )},
-                {"role": "user", "content": f"Paper: {title}\n\n{text[:2500]}"},
-            ],
-            "max_tokens": 1000,
-            "temperature": 0.1,
-        },
-        timeout=45,
+    prompt = (
+        "You extract 5-10 core academic concepts from AI/ML papers. "
+        "For each concept, provide a short evidence sentence from the text that "
+        "shows why this concept is relevant to this paper, plus a confidence score.\n\n"
+        "Return ONLY valid JSON: [{\"concept\": \"Name\", \"evidence\": \"sentence\", \"confidence\": 0.9}, ...]\n\n"
+        "Rules:\n"
+        "- Use SINGULAR form (e.g. 'Neural Network' not 'Neural Networks')\n"
+        "- Use full names, not abbreviations\n"
+        "- Use standard academic terms\n"
+        "- confidence: 0.5-1.0 based on how central the concept is to this paper\n"
+        "- evidence: 1 sentence from the text, or a brief paraphrase if exact quote unavailable\n\n"
+        f"Paper: {title}\n\n{text[:2500]}"
     )
-    resp.raise_for_status()
-    raw = resp.json()["choices"][0]["message"]["content"].strip()
+    raw = llm.generate(prompt).strip()
     if raw.startswith("```"):
         raw = re.sub(r"^```\w*\n?", "", raw)
         raw = re.sub(r"\n?```$", "", raw)
@@ -974,35 +983,22 @@ def _extract_keywords_with_evidence(api_key: str, title: str, text: str,
     return results
 
 
-def _extract_keywords_openai(api_key: str, title: str, text: str,
+def _extract_keywords_openai(llm, title: str, text: str,
                               sqlite_db=None) -> list[str]:
-    """OpenAI로 핵심 키워드 5~10개 추출 + DB alias 정규화 적용"""
+    """LLM으로 핵심 키워드 5~10개 추출 + DB alias 정규화 적용"""
     import json as _json
 
-    resp = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={
-            "model": "gpt-4o-mini",
-            "messages": [
-                {"role": "system", "content": (
-                    "You extract 5-10 core academic concepts/keywords from AI/ML papers. "
-                    "Return ONLY a JSON array of English concept names. "
-                    "Use standard academic terms (e.g. 'Transformer', 'Attention Mechanism', "
-                    "'Reinforcement Learning', 'Knowledge Distillation'). "
-                    "Always use SINGULAR form (e.g. 'Neural Network' not 'Neural Networks'). "
-                    "Use full names, not abbreviations (e.g. 'Large Language Model' not 'LLM'). "
-                    "Do NOT include LaTeX commands, paper-specific names, or generic terms like 'AI' or 'deep learning' unless central."
-                )},
-                {"role": "user", "content": f"Paper: {title}\n\n{text[:2500]}"},
-            ],
-            "max_tokens": 300,
-            "temperature": 0.1,
-        },
-        timeout=30,
+    prompt = (
+        "You extract 5-10 core academic concepts/keywords from AI/ML papers. "
+        "Return ONLY a JSON array of English concept names. "
+        "Use standard academic terms (e.g. 'Transformer', 'Attention Mechanism', "
+        "'Reinforcement Learning', 'Knowledge Distillation'). "
+        "Always use SINGULAR form (e.g. 'Neural Network' not 'Neural Networks'). "
+        "Use full names, not abbreviations (e.g. 'Large Language Model' not 'LLM'). "
+        "Do NOT include LaTeX commands, paper-specific names, or generic terms like 'AI' or 'deep learning' unless central.\n\n"
+        f"Paper: {title}\n\n{text[:2500]}"
     )
-    resp.raise_for_status()
-    raw = resp.json()["choices"][0]["message"]["content"].strip()
+    raw = llm.generate(prompt).strip()
     if raw.startswith("```"):
         raw = re.sub(r"^```\w*\n?", "", raw)
         raw = re.sub(r"\n?```$", "", raw)
@@ -1103,16 +1099,15 @@ def paper_build_concepts(ctx, force):
         console.print("[red]Obsidian vault 경로가 설정되지 않았습니다.[/red]")
         return
 
-    papers_dir = Path(vault_path) / "Projects" / "AI" / "AI_Papers"
-    concepts_dir = papers_dir / "Concepts"
+    papers_dir = _resolve_vault_papers_dir(vault_path)
+    concepts_dir = _resolve_vault_concepts_dir(vault_path)
     concepts_dir.mkdir(parents=True, exist_ok=True)
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    if not api_key:
-        api_key = config.get_provider_config("openai").get("api_key", "")
-    if not api_key:
-        console.print("[red]OPENAI_API_KEY가 설정되지 않았습니다.[/red]")
-        return
+    from knowledge_hub.providers.registry import get_llm as _get_llm
+    prov = config.summarization_provider
+    mdl = config.summarization_model
+    prov_cfg = config.get_provider_config(prov)
+    llm = _get_llm(prov, model=mdl, **prov_cfg)
 
     from knowledge_hub.core.database import SQLiteDatabase
     sqlite_db = SQLiteDatabase(config.sqlite_path)
@@ -1154,7 +1149,7 @@ def paper_build_concepts(ctx, force):
         console.print(f"  배치 [{i+1}~{i+len(batch)}/{len(to_process)}]...", end=" ")
 
         try:
-            results = _batch_describe_concepts(api_key, batch, all_concept_names)
+            results = _batch_describe_concepts(llm, batch, all_concept_names)
         except Exception as e:
             console.print(f"[red]API 오류: {e}[/red]")
             continue
@@ -1194,37 +1189,22 @@ def paper_build_concepts(ctx, force):
     console.print(f"[dim]위치: {concepts_dir}[/dim]")
 
 
-def _batch_describe_concepts(api_key: str, batch: list[str], all_concepts: list[str]) -> dict:
-    """OpenAI로 개념 배치의 설명 + 관련 개념 추출"""
+def _batch_describe_concepts(llm, batch: list[str], all_concepts: list[str]) -> dict:
+    """LLM으로 개념 배치의 설명 + 관련 개념 추출"""
     import json
 
     concept_list_str = ", ".join(all_concepts[:200])
 
-    resp = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={
-            "model": "gpt-4o-mini",
-            "messages": [
-                {"role": "system", "content": (
-                    "You are an AI/ML concept expert. For each concept, provide:\n"
-                    "1. A concise Korean description (1-2 sentences) explaining what it is\n"
-                    "2. 3-5 related concepts from the provided concept list\n\n"
-                    "Return ONLY valid JSON: {\"ConceptName\": {\"description\": \"한국어 설명\", \"related\": [\"Related1\", \"Related2\", ...]}, ...}\n"
-                    "Pick related concepts ONLY from the provided list. Be precise and educational."
-                )},
-                {"role": "user", "content": (
-                    f"Concepts to describe:\n{json.dumps(batch, ensure_ascii=False)}\n\n"
-                    f"Available concepts for relations:\n{concept_list_str}"
-                )},
-            ],
-            "max_tokens": 3000,
-            "temperature": 0.2,
-        },
-        timeout=60,
+    prompt = (
+        "You are an AI/ML concept expert. For each concept, provide:\n"
+        "1. A concise Korean description (1-2 sentences) explaining what it is\n"
+        "2. 3-5 related concepts from the provided concept list\n\n"
+        "Return ONLY valid JSON: {\"ConceptName\": {\"description\": \"한국어 설명\", \"related\": [\"Related1\", \"Related2\", ...]}, ...}\n"
+        "Pick related concepts ONLY from the provided list. Be precise and educational.\n\n"
+        f"Concepts to describe:\n{json.dumps(batch, ensure_ascii=False)}\n\n"
+        f"Available concepts for relations:\n{concept_list_str}"
     )
-    resp.raise_for_status()
-    raw = resp.json()["choices"][0]["message"]["content"].strip()
+    raw = llm.generate(prompt).strip()
     if raw.startswith("```"):
         raw = re.sub(r"^```\w*\n?", "", raw)
         raw = re.sub(r"\n?```$", "", raw)
@@ -1319,15 +1299,14 @@ def paper_normalize_concepts(ctx, dry_run):
         console.print("[red]Obsidian vault 경로가 설정되지 않았습니다.[/red]")
         return
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    if not api_key:
-        api_key = config.get_provider_config("openai").get("api_key", "")
-    if not api_key:
-        console.print("[red]OPENAI_API_KEY가 설정되지 않았습니다.[/red]")
-        return
+    from knowledge_hub.providers.registry import get_llm as _get_llm
+    prov = config.summarization_provider
+    mdl = config.summarization_model
+    prov_cfg = config.get_provider_config(prov)
+    llm = _get_llm(prov, model=mdl, **prov_cfg)
 
-    papers_dir = Path(vault_path) / "Projects" / "AI" / "AI_Papers"
-    concepts_dir = papers_dir / "Concepts"
+    papers_dir = _resolve_vault_papers_dir(vault_path)
+    concepts_dir = _resolve_vault_concepts_dir(vault_path)
 
     # 1) 모든 개념 이름 수집
     concept_names = sorted({f.stem for f in concepts_dir.glob("*.md")}) if concepts_dir.exists() else []
@@ -1357,7 +1336,7 @@ def paper_normalize_concepts(ctx, dry_run):
         batch = concept_names[i:i + batch_size]
         console.print(f"  배치 [{i+1}~{i+len(batch)}/{len(concept_names)}]...", end=" ")
         try:
-            groups = _detect_synonym_groups(api_key, batch)
+            groups = _detect_synonym_groups(llm, batch)
             all_groups.extend(groups)
             console.print(f"[green]{len(groups)}개 그룹[/green]")
         except Exception as e:
@@ -1433,37 +1412,24 @@ def _concept_id(name: str) -> str:
     return re.sub(r'\s+', '_', name.strip()).lower()
 
 
-def _detect_synonym_groups(api_key: str, concept_names: list[str]) -> list[dict]:
-    """OpenAI로 동의어/복수형/약어 그룹 탐지"""
+def _detect_synonym_groups(llm, concept_names: list[str]) -> list[dict]:
+    """LLM으로 동의어/복수형/약어 그룹 탐지"""
     import json as _json
 
-    resp = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={
-            "model": "gpt-4o-mini",
-            "messages": [
-                {"role": "system", "content": (
-                    "You are an AI/ML terminology expert. Given a list of concept names, "
-                    "find groups of synonyms, abbreviations, plural/singular variants, or "
-                    "near-duplicates that should be merged into a single canonical concept.\n\n"
-                    "Rules:\n"
-                    "- Only group terms that truly refer to the SAME concept\n"
-                    "- Do NOT merge parent-child (e.g. 'Reinforcement Learning' and 'Multi-Agent RL' are different)\n"
-                    "- Prefer singular form as canonical\n"
-                    "- Prefer full name over abbreviation as canonical\n"
-                    "- Return ONLY a JSON array of {\"canonical\": \"...\", \"aliases\": [\"...\"]}\n"
-                    "- Skip concepts with no duplicates"
-                )},
-                {"role": "user", "content": _json.dumps(concept_names, ensure_ascii=False)},
-            ],
-            "max_tokens": 2000,
-            "temperature": 0.1,
-        },
-        timeout=60,
+    prompt = (
+        "You are an AI/ML terminology expert. Given a list of concept names, "
+        "find groups of synonyms, abbreviations, plural/singular variants, or "
+        "near-duplicates that should be merged into a single canonical concept.\n\n"
+        "Rules:\n"
+        "- Only group terms that truly refer to the SAME concept\n"
+        "- Do NOT merge parent-child (e.g. 'Reinforcement Learning' and 'Multi-Agent RL' are different)\n"
+        "- Prefer singular form as canonical\n"
+        "- Prefer full name over abbreviation as canonical\n"
+        "- Return ONLY a JSON array of {\"canonical\": \"...\", \"aliases\": [\"...\"]}\n"
+        "- Skip concepts with no duplicates\n\n"
+        + _json.dumps(concept_names, ensure_ascii=False)
     )
-    resp.raise_for_status()
-    raw = resp.json()["choices"][0]["message"]["content"].strip()
+    raw = llm.generate(prompt).strip()
     if raw.startswith("```"):
         raw = re.sub(r"^```\w*\n?", "", raw)
         raw = re.sub(r"\n?```$", "", raw)

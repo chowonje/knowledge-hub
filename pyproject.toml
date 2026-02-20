@@ -46,6 +46,7 @@ all = [
     "knowledge-hub[openai,anthropic,google,ollama,obsidian,pdf,mcp]",
 ]
 
+
 [project.scripts]
 khub = "knowledge_hub.cli.main:cli"
 khub-mcp = "knowledge_hub.mcp_server:main"

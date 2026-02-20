@@ -79,7 +79,7 @@ class AnthropicLLM(BaseLLM):
             is_local=False,
             default_llm_model="claude-sonnet-4-20250514",
             available_models=[
-                "claude-sonnet-4-20250514",
-                "claude-3-5-haiku-20241022",
+                "claude-sonnet-4-20250514", "claude-opus-4-20250514",
+                "claude-3-5-haiku-20241022", "claude-3-5-sonnet-20241022",
             ],
         )

@@ -83,8 +83,8 @@ class OpenAILLM(BaseLLM):
             default_llm_model="gpt-4o-mini",
             default_embed_model="text-embedding-3-small",
             available_models=[
-                "gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1",
-                "o3-mini",
+                "gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1", "gpt-4.1-nano",
+                "o1", "o1-mini", "o1-pro", "o3", "o3-mini", "o4-mini",
             ],
         )
 

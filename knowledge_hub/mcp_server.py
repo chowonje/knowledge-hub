@@ -35,7 +35,7 @@ except ImportError:
 
 from knowledge_hub.core.config import Config
 from knowledge_hub.core.database import VectorDatabase, SQLiteDatabase
-from knowledge_hub.core.embeddings import OllamaEmbedder, OllamaLLM
+from knowledge_hub.providers.registry import get_llm, get_embedder
 from knowledge_hub.ai.rag import RAGSearcher
 
 searcher = None
@@ -501,16 +501,18 @@ def _build_fallback_agent_payload(
 def initialize():
     global searcher, sqlite_db, config
 
-    config = Config(str(project_root / "config.yaml"))
+    config_path = str(project_root / "config.yaml")
+    if not Path(config_path).exists():
+        config_path = None
+    config = Config(config_path)
 
-    embedder = OllamaEmbedder(model=config.embed_model, base_url=config.embed_base_url)
-    vector_db = VectorDatabase(config.db_path, config.collection_name)
-    llm = OllamaLLM(
-        model=config.llm_model,
-        base_url=config.llm_base_url,
-        temperature=config.get_nested("llm", "temperature", default=0.7),
-        max_tokens=config.get_nested("llm", "max_tokens", default=2000),
-    )
+    embed_cfg = config.get_provider_config(config.embedding_provider)
+    embedder = get_embedder(config.embedding_provider, model=config.embedding_model, **embed_cfg)
+
+    summ_cfg = config.get_provider_config(config.summarization_provider)
+    llm = get_llm(config.summarization_provider, model=config.summarization_model, **summ_cfg)
+
+    vector_db = VectorDatabase(config.vector_db_path, config.collection_name)
     sqlite_db = SQLiteDatabase(config.sqlite_path)
     searcher = RAGSearcher(embedder, vector_db, llm)
 
@@ -593,6 +595,94 @@ async def list_tools() -> list[Tool]:
             name="get_hub_stats",
             description="Knowledge Hub 통계 정보 (노트, 논문, 태그, 벡터 DB 현황)",
             inputSchema={"type": "object", "properties": {}},
+        ),
+        Tool(
+            name="search_authors",
+            description="저자 이름/소속으로 검색 (Semantic Scholar)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "저자 이름 또는 소속"},
+                    "limit": {"type": "integer", "description": "최대 결과 수", "default": 10},
+                },
+                "required": ["query"],
+            },
+        ),
+        Tool(
+            name="get_author_papers",
+            description="특정 저자의 논문 목록 조회",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "author_id": {"type": "string", "description": "Semantic Scholar 저자 ID"},
+                    "limit": {"type": "integer", "description": "최대 논문 수", "default": 20},
+                },
+                "required": ["author_id"],
+            },
+        ),
+        Tool(
+            name="get_paper_detail",
+            description="논문 상세 정보 조회 (abstract, 메타데이터, 인용수 등). arXiv ID, DOI, SS ID 사용 가능",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "paper_id": {"type": "string", "description": "논문 ID (arXiv ID, DOI, Semantic Scholar ID)"},
+                },
+                "required": ["paper_id"],
+            },
+        ),
+        Tool(
+            name="get_paper_citations",
+            description="이 논문을 인용한 논문들 조회 (피인용)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "paper_id": {"type": "string", "description": "논문 ID"},
+                    "limit": {"type": "integer", "description": "최대 결과 수", "default": 20},
+                },
+                "required": ["paper_id"],
+            },
+        ),
+        Tool(
+            name="get_paper_references",
+            description="이 논문이 참고한 논문들 조회 (참고문헌)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "paper_id": {"type": "string", "description": "논문 ID"},
+                    "limit": {"type": "integer", "description": "최대 결과 수", "default": 20},
+                },
+                "required": ["paper_id"],
+            },
+        ),
+        Tool(
+            name="analyze_citation_network",
+            description="인용 네트워크 분석 — 피인용/참고문헌/연도 분포/분야 통계",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "paper_id": {"type": "string", "description": "논문 ID"},
+                    "depth": {"type": "integer", "description": "분석 깊이 (1 또는 2)", "default": 1},
+                    "citations_limit": {"type": "integer", "description": "피인용 최대 수", "default": 10},
+                    "references_limit": {"type": "integer", "description": "참고문헌 최대 수", "default": 10},
+                },
+                "required": ["paper_id"],
+            },
+        ),
+        Tool(
+            name="batch_paper_lookup",
+            description="복수 논문 일괄 조회 (arXiv ID, DOI 등)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "paper_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "논문 ID 배열",
+                    },
+                },
+                "required": ["paper_ids"],
+            },
         ),
         Tool(
             name="discover_and_ingest",
@@ -875,6 +965,87 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
                 f"- 컬렉션: {vec_stats['collection_name']}\n"
             )
             return [TextContent(type="text", text=response)]
+
+        elif name == "search_authors":
+            from knowledge_hub.papers.discoverer import search_authors as _search_authors
+            query = arguments.get("query", "")
+            limit = int(arguments.get("limit", 10))
+            authors = _search_authors(query, limit=limit)
+            if not authors:
+                return [TextContent(type="text", text="검색 결과가 없습니다.")]
+            lines = [f"저자 검색: '{query}' ({len(authors)}명)\n"]
+            for i, a in enumerate(authors, 1):
+                affil = ", ".join(a.affiliations[:2]) if a.affiliations else "-"
+                lines.append(
+                    f"{i}. **{a.name}** (ID: {a.author_id})\n"
+                    f"   소속: {affil} | 논문: {a.paper_count:,} | 인용: {a.citation_count:,} | h-index: {a.h_index}\n"
+                )
+            return [TextContent(type="text", text="\n".join(lines))]
+
+        elif name == "get_author_papers":
+            from knowledge_hub.papers.discoverer import get_author_papers as _get_author_papers
+            author_id = arguments.get("author_id", "")
+            limit = int(arguments.get("limit", 20))
+            author, papers = _get_author_papers(author_id, limit=limit)
+            lines = []
+            if author:
+                lines.append(f"**{author.name}** — 논문: {author.paper_count:,} | 인용: {author.citation_count:,} | h-index: {author.h_index}\n")
+            if not papers:
+                lines.append("논문이 없습니다.")
+            else:
+                for i, p in enumerate(papers, 1):
+                    fields = ", ".join(p.fields_of_study[:2]) if p.fields_of_study else ""
+                    lines.append(f"{i}. **{p.title}** ({p.year}) — 인용: {p.citation_count:,} [{fields}] arXiv: {p.arxiv_id or '-'}")
+            return [TextContent(type="text", text="\n".join(lines))]
+
+        elif name == "get_paper_detail":
+            from knowledge_hub.papers.discoverer import get_paper_detail as _get_paper_detail
+            paper_id = arguments.get("paper_id", "")
+            data = _get_paper_detail(paper_id)
+            if not data:
+                return [TextContent(type="text", text=f"논문 '{paper_id}'를 찾을 수 없습니다.")]
+            return [TextContent(type="text", text=json.dumps(data, ensure_ascii=False, indent=2))]
+
+        elif name == "get_paper_citations":
+            from knowledge_hub.papers.discoverer import get_paper_citations as _get_citations
+            paper_id = arguments.get("paper_id", "")
+            limit = int(arguments.get("limit", 20))
+            _, papers = _get_citations(paper_id, limit=limit)
+            if not papers:
+                return [TextContent(type="text", text="피인용 논문이 없습니다.")]
+            lines = [f"'{paper_id}' 피인용 논문 ({len(papers)}편):\n"]
+            for i, p in enumerate(papers, 1):
+                lines.append(f"{i}. **{p.title}** ({p.year}) — 인용: {p.citation_count:,} | arXiv: {p.arxiv_id or '-'}")
+            return [TextContent(type="text", text="\n".join(lines))]
+
+        elif name == "get_paper_references":
+            from knowledge_hub.papers.discoverer import get_paper_references as _get_refs
+            paper_id = arguments.get("paper_id", "")
+            limit = int(arguments.get("limit", 20))
+            _, papers = _get_refs(paper_id, limit=limit)
+            if not papers:
+                return [TextContent(type="text", text="참고문헌이 없습니다.")]
+            lines = [f"'{paper_id}' 참고문헌 ({len(papers)}편):\n"]
+            for i, p in enumerate(papers, 1):
+                lines.append(f"{i}. **{p.title}** ({p.year}) — 인용: {p.citation_count:,} | arXiv: {p.arxiv_id or '-'}")
+            return [TextContent(type="text", text="\n".join(lines))]
+
+        elif name == "analyze_citation_network":
+            from knowledge_hub.papers.discoverer import analyze_citation_network as _analyze
+            paper_id = arguments.get("paper_id", "")
+            depth = int(arguments.get("depth", 1))
+            cit_limit = int(arguments.get("citations_limit", 10))
+            ref_limit = int(arguments.get("references_limit", 10))
+            result = _analyze(paper_id, depth=depth, citations_limit=cit_limit, references_limit=ref_limit)
+            return [TextContent(type="text", text=json.dumps(result, ensure_ascii=False, indent=2))]
+
+        elif name == "batch_paper_lookup":
+            from knowledge_hub.papers.discoverer import get_papers_batch as _batch
+            paper_ids = arguments.get("paper_ids", [])
+            if not paper_ids:
+                return [TextContent(type="text", text="paper_ids가 필요합니다.")]
+            results = _batch(paper_ids)
+            return [TextContent(type="text", text=json.dumps(results, ensure_ascii=False, indent=2))]
 
         elif name == "discover_and_ingest":
             topic = arguments.get("topic")

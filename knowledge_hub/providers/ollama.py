@@ -82,9 +82,13 @@ class OllamaLLM(BaseLLM):
             default_llm_model="qwen2.5:7b",
             default_embed_model="nomic-embed-text",
             available_models=[
-                "qwen2.5:7b", "qwen2.5:14b", "qwen2.5:32b",
-                "llama3.3:latest", "gemma3:12b",
-                "deepseek-r1:14b", "deepseek-r1:32b",
+                "qwen2.5:7b", "qwen2.5:14b", "qwen2.5:32b", "qwen3:8b", "qwen3:14b", "qwen3:32b",
+                "llama3.3:latest", "llama4:latest",
+                "gemma3:12b", "gemma3:27b",
+                "deepseek-r1:14b", "deepseek-r1:32b", "deepseek-r1:70b",
+                "phi4:latest", "phi4-mini:latest",
+                "mistral:latest", "mistral-nemo:latest", "codestral:latest",
+                "command-r:latest",
             ],
         )
 
@@ -139,5 +143,8 @@ class OllamaEmbedder(BaseEmbedder):
             requires_api_key=False,
             is_local=True,
             default_embed_model="nomic-embed-text",
-            available_models=["nomic-embed-text", "mxbai-embed-large", "all-minilm"],
+            available_models=[
+                "nomic-embed-text", "mxbai-embed-large", "all-minilm",
+                "snowflake-arctic-embed:335m", "bge-m3:latest",
+            ],
         )

@@ -108,8 +108,9 @@ def config_path(ctx):
 
 
 @config_group.command("providers")
+@click.option("--models", "-m", is_flag=True, help="각 프로바이더의 사용 가능 모델 전체 표시")
 @click.pass_context
-def config_providers(ctx):
+def config_providers(ctx, models):
     """사용 가능한 AI 프로바이더 목록"""
     from knowledge_hub.providers.registry import list_providers
 
@@ -120,21 +121,47 @@ def config_providers(ctx):
         return
 
     table = Table(title="사용 가능한 프로바이더")
-    table.add_column("이름", style="cyan")
-    table.add_column("LLM", justify="center")
-    table.add_column("Embedding", justify="center")
-    table.add_column("로컬", justify="center")
-    table.add_column("기본 LLM 모델")
-    table.add_column("기본 Embed 모델")
+    table.add_column("이름", style="cyan", width=14)
+    table.add_column("LLM", justify="center", width=4)
+    table.add_column("Embed", justify="center", width=5)
+    table.add_column("로컬", justify="center", width=4)
+    table.add_column("기본 LLM 모델", max_width=30)
+    table.add_column("기본 Embed 모델", max_width=25)
 
     for name, info in providers.items():
         table.add_row(
-            info.display_name,
-            "O" if info.supports_llm else "-",
-            "O" if info.supports_embedding else "-",
-            "O" if info.is_local else "-",
+            name,
+            "[green]O[/green]" if info.supports_llm else "-",
+            "[green]O[/green]" if info.supports_embedding else "-",
+            "[green]O[/green]" if info.is_local else "-",
             info.default_llm_model or "-",
             info.default_embed_model or "-",
         )
 
     console.print(table)
+
+    if models:
+        console.print()
+        for name, info in providers.items():
+            if info.available_models:
+                console.print(f"[bold cyan]{name}[/bold cyan] 사용 가능 모델:")
+                for m in info.available_models:
+                    console.print(f"  - {m}")
+                console.print()
+
+        if "openai-compat" in providers:
+            console.print("[bold cyan]openai-compat[/bold cyan] 사전 구성된 서비스:")
+            try:
+                from knowledge_hub.providers.openai_compat import KNOWN_SERVICES
+                for svc_name, svc in KNOWN_SERVICES.items():
+                    env = svc["env_key"] or "no key needed"
+                    console.print(f"  [cyan]{svc_name}[/cyan] ({svc['base_url']}) [{env}]")
+                    for m in svc["llm_models"][:5]:
+                        console.print(f"    - {m}")
+            except ImportError:
+                pass
+    else:
+        console.print("\n[dim]--models 플래그로 사용 가능한 모델 전체를 확인할 수 있습니다.[/dim]")
+
+    console.print("\n[dim]커스텀 모델: khub config set translation.model <모델명>[/dim]")
+    console.print("[dim]커스텀 엔드포인트: khub config set providers.openai-compat.base_url <URL>[/dim]")

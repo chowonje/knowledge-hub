@@ -12,18 +12,21 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 
 from knowledge_hub.core.models import SearchResult
-from knowledge_hub.core.embeddings import OllamaEmbedder, OllamaLLM
 from knowledge_hub.core.database import VectorDatabase
 
 
 class RAGSearcher:
-    """통합 RAG 검색 및 답변 생성"""
+    """통합 RAG 검색 및 답변 생성
+
+    embedder: embed_text(str) -> List[float] 를 제공하는 객체
+    llm: generate(prompt, context) 를 제공하는 객체
+    """
 
     def __init__(
         self,
-        embedder: OllamaEmbedder,
+        embedder,
         database: VectorDatabase,
-        llm: Optional[OllamaLLM] = None,
+        llm=None,
     ):
         self.embedder = embedder
         self.database = database

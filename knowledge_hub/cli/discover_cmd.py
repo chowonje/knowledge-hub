@@ -52,42 +52,19 @@ def _build_pipeline(khub_ctx, need_translator=False):
     return config, summarizer, translator, sqlite_db
 
 
-def _embed_via_requests(texts, config):
-    """requests로 직접 임베딩 API 호출 (openai 라이브러리 우회)"""
-    import os
-    import requests
-
-    if config.embedding_provider == "openai":
-        api_key = os.environ.get("OPENAI_API_KEY", "")
-        if not api_key:
-            api_key = config.get_provider_config("openai").get("api_key", "")
-        resp = requests.post(
-            "https://api.openai.com/v1/embeddings",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": config.embedding_model, "input": texts},
-            timeout=30,
-        )
-        resp.raise_for_status()
-        return [x["embedding"] for x in sorted(resp.json()["data"], key=lambda x: x["index"])]
-    else:
-        base_url = config.get_provider_config(config.embedding_provider).get("base_url", "http://localhost:11434")
-        embs = []
-        for text in texts:
-            resp = requests.post(
-                f"{base_url}/api/embeddings",
-                json={"model": config.embedding_model, "prompt": text},
-                timeout=30,
-            )
-            resp.raise_for_status()
-            embs.append(resp.json()["embedding"])
-        return embs
+def _get_embedder(config):
+    """config 기반 Embedder 인스턴스 생성"""
+    from knowledge_hub.providers.registry import get_embedder
+    embed_cfg = config.get_provider_config(config.embedding_provider)
+    return get_embedder(config.embedding_provider, model=config.embedding_model, **embed_cfg)
 
 
 def _index_papers_inline(papers_to_index, config):
-    """배치 임베딩으로 벡터 인덱싱 (requests + ChromaDB 지연 로드)"""
+    """배치 임베딩으로 벡터 인덱싱 (프로바이더 레지스트리 사용)"""
     from knowledge_hub.core.database import VectorDatabase
 
     vector_db = VectorDatabase(config.vector_db_path, config.collection_name)
+    embedder = _get_embedder(config)
     results = {}
 
     texts, paper_refs = [], []
@@ -104,10 +81,11 @@ def _index_papers_inline(papers_to_index, config):
         return results
 
     try:
-        embeddings = _embed_via_requests(texts, config)
+        raw_embeddings = embedder.embed_batch(texts, show_progress=False)
+        valid_pairs = [(p, t, e) for p, t, e in zip(paper_refs, texts, raw_embeddings) if e is not None]
 
         docs, embs, metas, ids = [], [], [], []
-        for paper, text, emb in zip(paper_refs, texts, embeddings):
+        for paper, text, emb in valid_pairs:
             docs.append(text)
             embs.append(emb)
             metas.append({
@@ -119,11 +97,15 @@ def _index_papers_inline(papers_to_index, config):
             })
             ids.append(f"paper_{paper['arxiv_id']}_0")
 
-        vector_db.add_documents(
-            documents=docs, embeddings=embs, metadatas=metas, ids=ids,
-        )
-        for paper in paper_refs:
+        if docs:
+            vector_db.add_documents(
+                documents=docs, embeddings=embs, metadatas=metas, ids=ids,
+            )
+        for paper, _, emb in valid_pairs:
             results[paper["arxiv_id"]] = {"ok": True, "chunks": 1}
+        for paper in paper_refs:
+            if paper["arxiv_id"] not in results:
+                results[paper["arxiv_id"]] = {"ok": False, "chunks": 0, "error": "embedding failed"}
     except Exception as e:
         for paper in paper_refs:
             results[paper["arxiv_id"]] = {"ok": False, "chunks": 0, "error": str(e)}
