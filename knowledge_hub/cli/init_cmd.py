@@ -143,6 +143,25 @@ def _prompt_embed_provider(default: str) -> tuple[str, str]:
         console.print("  [red]잘못된 선택입니다.[/red]")
 
 
+def _prompt_api_key(info_display: str) -> str:
+    """API 키 입력을 명확하게 받는다.
+
+    숨김 입력이라 내용이 보이지 않아 오인되는 문제를 방지하기 위해
+    입력 실패 시 재요청한다.
+    """
+    while True:
+        api_key = click.prompt(
+            f"  {info_display} API Key (입력 후 Enter, 화면에 표시되지 않음)",
+            hide_input=True,
+            confirmation_prompt=False,
+            default="",
+            show_default=False,
+        )
+        if api_key:
+            return api_key
+        console.print("  [yellow]API Key가 비어 있습니다. 다시 입력해주세요.[/yellow]")
+
+
 @click.command("init")
 @click.option("--non-interactive", is_flag=True, help="기본값으로 자동 설정")
 @click.pass_context
@@ -200,7 +219,7 @@ def init_cmd(ctx, non_interactive):
                 console.print(f"\n  [green]{env_var} 감지됨: {masked}[/green]")
                 config.set_nested("providers", prov, "api_key", f"${{{env_var}}}")
             else:
-                api_key = click.prompt(f"\n  {info.display_name} API Key", default="", hide_input=True)
+                api_key = _prompt_api_key(info.display_name)
                 if api_key:
                     config.set_nested("providers", prov, "api_key", api_key)
 
@@ -210,6 +229,43 @@ def init_cmd(ctx, non_interactive):
                 default=config.get_provider_config(prov).get("base_url", "http://localhost:11434"),
             )
             config.set_nested("providers", prov, "base_url", base_url)
+
+    # 5. Storage paths
+    from knowledge_hub.core.config import DEFAULT_CONFIG_DIR, DEFAULT_CONFIG_PATH
+    console.print("\n[bold cyan]저장 경로 설정:[/bold cyan]")
+    papers_dir = click.prompt("  논문 저장 경로", default=str(DEFAULT_CONFIG_DIR / "papers"))
+    config.set_nested("storage", "papers_dir", papers_dir)
+
+    # 6. Obsidian
+    obsidian = click.confirm("\n  Obsidian vault 연동을 활성화할까요?", default=False)
+    config.set_nested("obsidian", "enabled", obsidian)
+    if obsidian:
+        default_vault = _detect_obsidian_vault()
+        if default_vault:
+            console.print(f"  [dim]감지된 vault: {default_vault}[/dim]")
+        vault_path = click.prompt("  Obsidian vault 경로", default=default_vault or "")
+        if vault_path:
+            config.set_nested("obsidian", "vault_path", vault_path)
+        else:
+            console.print("  [yellow]vault 경로 생략 - 나중에 khub config set obsidian.vault_path 로 설정 가능[/yellow]")
+            config.set_nested("obsidian", "enabled", False)
+
+    # Save
+    config.save()
+    console.print(f"\n[bold green]설정 완료![/bold green] 저장 위치: {DEFAULT_CONFIG_PATH}")
+
+    # Summary table
+    table = Table(title="설정 요약")
+    table.add_column("항목", style="cyan")
+    table.add_column("값")
+    table.add_row("번역", f"{config.translation_provider}/{config.translation_model}")
+    table.add_row("요약", f"{config.summarization_provider}/{config.summarization_model}")
+    table.add_row("임베딩", f"{config.embedding_provider}/{config.embedding_model}")
+    table.add_row("논문 저장", config.papers_dir)
+    table.add_row("Obsidian", f"{'활성' if config.vault_enabled else '비활성'}")
+    console.print(table)
+
+    console.print("\n[dim]시작: khub discover \"AI agent\" --max-papers 5[/dim]")
 
 
 def _setup_compat_provider(config, *models):
@@ -246,39 +302,3 @@ def _setup_compat_provider(config, *models):
         api_key = click.prompt("  API Key (없으면 Enter)", default="", hide_input=True)
         if api_key:
             config.set_nested("providers", "openai-compat", "api_key", api_key)
-
-    # 5. Storage paths
-    console.print("\n[bold cyan]저장 경로 설정:[/bold cyan]")
-    papers_dir = click.prompt("  논문 저장 경로", default=str(DEFAULT_CONFIG_DIR / "papers"))
-    config.set_nested("storage", "papers_dir", papers_dir)
-
-    # 6. Obsidian
-    obsidian = click.confirm("\n  Obsidian vault 연동을 활성화할까요?", default=False)
-    config.set_nested("obsidian", "enabled", obsidian)
-    if obsidian:
-        default_vault = _detect_obsidian_vault()
-        if default_vault:
-            console.print(f"  [dim]감지된 vault: {default_vault}[/dim]")
-        vault_path = click.prompt("  Obsidian vault 경로", default=default_vault or "")
-        if vault_path:
-            config.set_nested("obsidian", "vault_path", vault_path)
-        else:
-            console.print("  [yellow]vault 경로 생략 - 나중에 khub config set obsidian.vault_path 로 설정 가능[/yellow]")
-            config.set_nested("obsidian", "enabled", False)
-
-    # Save
-    config.save()
-    console.print(f"\n[bold green]설정 완료![/bold green] 저장 위치: {DEFAULT_CONFIG_PATH}")
-
-    # Summary table
-    table = Table(title="설정 요약")
-    table.add_column("항목", style="cyan")
-    table.add_column("값")
-    table.add_row("번역", f"{config.translation_provider}/{config.translation_model}")
-    table.add_row("요약", f"{config.summarization_provider}/{config.summarization_model}")
-    table.add_row("임베딩", f"{config.embedding_provider}/{config.embedding_model}")
-    table.add_row("논문 저장", config.papers_dir)
-    table.add_row("Obsidian", f"{'활성' if config.vault_enabled else '비활성'}")
-    console.print(table)
-
-    console.print("\n[dim]시작: khub discover \"AI agent\" --max-papers 5[/dim]")
