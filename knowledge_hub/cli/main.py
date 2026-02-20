@@ -8,7 +8,8 @@ Usage:
     khub config get|set|list
     khub search "query"
     khub ask "question"
-    khub status
+    khub health                         # 설정/의존성 진단
+    khub setup [--quick]               # 초보자용 빠른 시작
 """
 
 from __future__ import annotations
@@ -124,6 +125,7 @@ from knowledge_hub.cli.notebook_cmd import notebook_group
 from knowledge_hub.cli.graph_cmd import graph_group as kg_graph_group
 from knowledge_hub.cli.explore_cmd import explore_group
 from knowledge_hub.cli.health_cmd import health_cmd
+from knowledge_hub.cli.setup_cmd import setup_cmd
 
 cli.add_command(init_cmd, "init")
 cli.add_command(config_group, "config")
@@ -136,6 +138,7 @@ cli.add_command(search, "search")
 cli.add_command(ask, "ask")
 cli.add_command(index_cmd, "index")
 cli.add_command(health_cmd, "health")
+cli.add_command(setup_cmd, "setup")
 
 
 def main():
