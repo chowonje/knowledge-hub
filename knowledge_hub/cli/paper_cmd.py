@@ -1725,19 +1725,22 @@ def _assess_vault_note_quality(content: str) -> dict:
     if has_garbled:
         return {"score": 10, "label": "깨짐", "color": "red", "reason": "LaTeX 잔해 포함"}
 
-    title_match = re.search(r'title:\s*"?(.+?)"?\s*$', content, re.MULTILINE)
-    title = title_match.group(1).strip() if title_match else ""
-    if title and len(summary_text) > 100:
-        title_words = set(title.lower().split()[:3])
-        summary_lower = summary_text.lower()
-        overlap = sum(1 for w in title_words if w in summary_lower and len(w) > 3)
-        if overlap == 0 and len(title_words) >= 2:
-            return {"score": 15, "label": "엉뚱함", "color": "bright_red", "reason": "요약이 논문 제목과 무관"}
-
     structured_markers = ["### 한줄 요약", "### 핵심 기여", "### 방법론"]
     has_structure = sum(1 for m in structured_markers if m in summary_text) >= 2
     if has_structure and len(summary_text) >= 500:
         return {"score": 90, "label": "우수", "color": "green", "reason": ""}
+
+    title_match = re.search(r'title:\s*"?(.+?)"?\s*$', content, re.MULTILINE)
+    title = title_match.group(1).strip() if title_match else ""
+    if title and len(summary_text) > 100 and not has_structure:
+        title_words = set(title.lower().split()[:5])
+        summary_lower = summary_text.lower()
+        significant_words = [w for w in title_words if len(w) > 3]
+        if significant_words:
+            overlap = sum(1 for w in significant_words if w in summary_lower)
+            if overlap == 0:
+                return {"score": 15, "label": "엉뚱함", "color": "bright_red", "reason": "요약이 논문 제목과 무관"}
+
     if len(summary_text) >= 300:
         return {"score": 70, "label": "보통", "color": "yellow", "reason": "구조화 부족"}
     if len(summary_text) >= 100:
