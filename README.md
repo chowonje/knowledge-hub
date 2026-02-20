@@ -16,17 +16,20 @@ AI 논문을 자동으로 검색, 다운로드, 번역, 요약하고 Obsidian과
 ## Quick Start
 
 ```bash
-# 설치 (최소)
-pip install -e .
+# 설치 (최소, PyPI)
+pip install knowledge-hub-cli
 
 # OpenAI 사용 시
-pip install -e ".[openai]"
+pip install "knowledge-hub-cli[openai]"
 
 # Ollama(로컬) 사용 시
-pip install -e ".[ollama]"
+pip install "knowledge-hub-cli[ollama]"
 
 # 전체 프로바이더
-pip install -e ".[all]"
+pip install "knowledge-hub-cli[all]"
+
+# 로컬 수정 후 개발/테스트
+pip install -e .
 ```
 
 ### 최소 데모 흐름
@@ -61,25 +64,32 @@ khub explore citations 1706.03762
 
 ## Installation
 
-### 기본 설치 (PyPI 미등록 시 로컬 설치)
+### 기본 설치
+
+```bash
+# PyPI 설치(권장)
+pip install "knowledge-hub-cli[openai]"
+```
+
+### 로컬 개발/테스트 설치
 
 ```bash
 git clone https://github.com/chowonje/knowledge-hub.git
 cd knowledge-hub
-pip install -e ".[openai]"
+pip install -e .
 ```
 
 ### 프로바이더별 설치
 
 ```bash
 # OpenAI만 사용
-pip install -e ".[openai]"
+pip install "knowledge-hub-cli[openai]"
 
 # Ollama(로컬) + OpenAI
-pip install -e ".[ollama,openai]"
+pip install "knowledge-hub-cli[ollama,openai]"
 
 # 전체 프로바이더
-pip install -e ".[all]"
+pip install "knowledge-hub-cli[all]"
 ```
 
 ### 사전 조건
