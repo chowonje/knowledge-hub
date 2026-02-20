@@ -146,17 +146,27 @@ def _prompt_embed_provider(default: str) -> tuple[str, str]:
 def _prompt_api_key(info_display: str) -> str:
     """API 키 입력을 명확하게 받는다.
 
-    숨김 입력이라 내용이 보이지 않아 오인되는 문제를 방지하기 위해
-    입력 실패 시 재요청한다.
+    - 입력 후 화면에 보이지 않는 동작 때문에 발생하는 오입력 방지
+    - 붙여넣기 시 공백/개행이 섞이는 경우 정규화
+    - 비어 있으면 한 번은 보이는 입력으로 재요청
     """
     while True:
         api_key = click.prompt(
             f"  {info_display} API Key (입력 후 Enter, 화면에 표시되지 않음)",
             hide_input=True,
-            confirmation_prompt=False,
             default="",
             show_default=False,
         )
+        api_key = (api_key or "").strip().strip('"').strip("'")
+        if api_key == "":
+            api_key = click.prompt(
+                f"  [표시 입력] {info_display} API Key (안 보이면 붙여넣기 실패 가능성: 화면에 표시됨)",
+                default="",
+                hide_input=False,
+                show_default=False,
+            )
+            api_key = (api_key or "").strip().strip('"').strip("'")
+
         if api_key:
             return api_key
         console.print("  [yellow]API Key가 비어 있습니다. 다시 입력해주세요.[/yellow]")
@@ -216,8 +226,12 @@ def init_cmd(ctx, non_interactive):
             existing = os.environ.get(env_var, "")
             if existing:
                 masked = existing[:8] + "..." + existing[-4:] if len(existing) > 12 else "***"
-                console.print(f"\n  [green]{env_var} 감지됨: {masked}[/green]")
-                config.set_nested("providers", prov, "api_key", f"${{{env_var}}}")
+                if click.confirm(f"\n  [yellow]{env_var} 감지됨: {masked}[/yellow] - 사용하시겠습니까?", default=True):
+                    config.set_nested("providers", prov, "api_key", f"${{{env_var}}}")
+                else:
+                    api_key = _prompt_api_key(info.display_name)
+                    if api_key:
+                        config.set_nested("providers", prov, "api_key", api_key)
             else:
                 api_key = _prompt_api_key(info.display_name)
                 if api_key:
@@ -290,15 +304,19 @@ def _setup_compat_provider(config, *models):
             existing = os.environ.get(svc["env_key"], "")
             if existing:
                 masked = existing[:8] + "..." + existing[-4:] if len(existing) > 12 else "***"
-                console.print(f"  [green]{svc['env_key']} 감지됨: {masked}[/green]")
-                config.set_nested("providers", "openai-compat", "api_key", f"${{{svc['env_key']}}}")
+                if click.confirm(f"  [yellow]{svc['env_key']} 감지됨: {masked}[/yellow] - 사용하시겠습니까?", default=True):
+                    config.set_nested("providers", "openai-compat", "api_key", f"${{{svc['env_key']}}}")
+                else:
+                    api_key = _prompt_api_key(f"{svc_name}")
+                    if api_key:
+                        config.set_nested("providers", "openai-compat", "api_key", api_key)
             else:
-                api_key = click.prompt(f"  {svc_name} API Key", default="", hide_input=True)
+                api_key = _prompt_api_key(f"{svc_name}")
                 if api_key:
                     config.set_nested("providers", "openai-compat", "api_key", api_key)
     else:
         base_url = click.prompt("\n  OpenAI-compatible Base URL", default="http://localhost:1234/v1")
         config.set_nested("providers", "openai-compat", "base_url", base_url)
-        api_key = click.prompt("  API Key (없으면 Enter)", default="", hide_input=True)
+        api_key = _prompt_api_key("OpenAI-compatible")
         if api_key:
             config.set_nested("providers", "openai-compat", "api_key", api_key)
