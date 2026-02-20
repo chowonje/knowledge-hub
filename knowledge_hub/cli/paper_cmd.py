@@ -463,6 +463,153 @@ def paper_summarize(ctx, arxiv_id, provider, model, quick):
 
 
 # ─────────────────────────────────────────────
+# paper review
+# ─────────────────────────────────────────────
+def _assess_summary_quality(notes: str) -> dict:
+    """요약 품질 평가 → {score, label, reasons}"""
+    if not notes or len(notes.strip()) < 30:
+        return {"score": 0, "label": "없음", "color": "red", "reasons": ["요약 없음"]}
+
+    reasons = []
+    score = 0
+    text = notes.strip()
+
+    if len(text) >= 500:
+        score += 30
+    elif len(text) >= 200:
+        score += 15
+    else:
+        reasons.append(f"너무 짧음({len(text)}자)")
+
+    structured_markers = ["### 한줄 요약", "### 핵심 기여", "### 방법론", "### 주요 실험", "### 한계"]
+    found_sections = sum(1 for m in structured_markers if m in text)
+    if found_sections >= 4:
+        score += 40
+    elif found_sections >= 2:
+        score += 20
+    else:
+        reasons.append("구조화 부족")
+
+    if any(c.isdigit() for c in text) and any(kw in text for kw in ["%", "정확도", "성능", "BLEU", "F1", "점", "배"]):
+        score += 15
+    else:
+        reasons.append("구체적 수치 부족")
+
+    if any(kw in text for kw in ["제안", "기여", "새로", "기존", "향상", "개선"]):
+        score += 15
+    else:
+        reasons.append("핵심 기여 불명확")
+
+    if text.startswith("citations:") or text.startswith("citation"):
+        return {"score": 5, "label": "미요약", "color": "red", "reasons": ["초기 메모만 존재"]}
+
+    if score >= 80:
+        label, color = "우수", "green"
+    elif score >= 50:
+        label, color = "보통", "yellow"
+    elif score >= 20:
+        label, color = "미흡", "bright_red"
+    else:
+        label, color = "형편없음", "red"
+
+    return {"score": score, "label": label, "color": color, "reasons": reasons}
+
+
+@paper_group.command("review")
+@click.option("--bad-only", is_flag=True, help="품질이 나쁜 요약만 표시 (점수 50 미만)")
+@click.option("--threshold", "-t", default=50, help="나쁜 요약 기준 점수 (기본: 50)")
+@click.option("--field", "-f", default=None, help="분야 필터")
+@click.option("--show-summary", "-s", is_flag=True, help="요약 내용 미리보기 포함")
+@click.option("--limit", "-n", default=100, help="최대 표시 수")
+@click.pass_context
+def paper_review(ctx, bad_only, threshold, field, show_summary, limit):
+    """논문 요약 품질 리뷰 — 나쁜 요약을 식별하고 재요약 대상 파악
+
+    \b
+    사용 예시:
+      khub paper review                     # 전체 품질 리뷰
+      khub paper review --bad-only          # 나쁜 요약만 표시
+      khub paper review --bad-only -s       # 나쁜 요약 + 내용 미리보기
+      khub paper review -t 70              # 70점 미만만 표시
+
+    \b
+    품질 리뷰 후 재요약:
+      khub paper summarize <arxiv_id>                    # 개별 재요약
+      khub paper summarize-all --bad-only                # 나쁜 요약 일괄 재요약
+      khub paper summarize-all --bad-only -p openai -m gpt-4o  # 더 좋은 모델로
+    """
+    config = ctx.obj["khub"].config
+    from knowledge_hub.core.database import SQLiteDatabase
+
+    sqlite_db = SQLiteDatabase(config.sqlite_path)
+    papers = sqlite_db.list_papers(field=field, limit=999)
+
+    if not papers:
+        console.print("[yellow]수집된 논문이 없습니다.[/yellow]")
+        return
+
+    assessments = []
+    for p in papers:
+        quality = _assess_summary_quality(p.get("notes", ""))
+        assessments.append((p, quality))
+
+    if bad_only:
+        assessments = [(p, q) for p, q in assessments if q["score"] < threshold]
+
+    assessments.sort(key=lambda x: x[1]["score"])
+
+    if not assessments:
+        console.print("[green]모든 요약이 기준 이상입니다.[/green]")
+        return
+
+    assessments = assessments[:limit]
+
+    total = len(papers)
+    bad_count = sum(1 for _, q in assessments if q["score"] < threshold)
+    good_count = total - sum(1 for p in papers if _assess_summary_quality(p.get("notes", ""))["score"] < threshold)
+
+    console.print(f"\n[bold]논문 요약 품질 리뷰[/bold]")
+    console.print(f"  전체: {total}편 | 우수/보통: {good_count}편 | 미흡/형편없음: {total - good_count}편\n")
+
+    table = Table(title=f"요약 품질 ({len(assessments)}편)")
+    table.add_column("arXiv ID", style="cyan", width=14)
+    table.add_column("제목", max_width=40)
+    table.add_column("점수", width=5, justify="right")
+    table.add_column("등급", width=8)
+    table.add_column("문제점", max_width=30)
+    table.add_column("요약길이", width=8, justify="right")
+
+    for p, q in assessments:
+        notes_len = len(p.get("notes", "").strip())
+        table.add_row(
+            p["arxiv_id"],
+            p["title"][:40],
+            str(q["score"]),
+            f"[{q['color']}]{q['label']}[/{q['color']}]",
+            ", ".join(q["reasons"][:2]) if q["reasons"] else "-",
+            f"{notes_len:,}자",
+        )
+
+    console.print(table)
+
+    if show_summary:
+        console.print("\n[bold]요약 미리보기:[/bold]\n")
+        for p, q in assessments[:10]:
+            notes = (p.get("notes") or "").strip()
+            preview = notes[:200] + "..." if len(notes) > 200 else notes
+            console.print(f"[cyan]{p['arxiv_id']}[/cyan] [{q['color']}]{q['label']}[/{q['color']}] {p['title'][:50]}")
+            if preview:
+                console.print(f"  [dim]{preview}[/dim]")
+            console.print()
+
+    if bad_count > 0:
+        console.print(f"\n[bold yellow]재요약 가이드:[/bold yellow]")
+        console.print(f"  개별: khub paper summarize <arxiv_id> -p openai -m gpt-4o")
+        console.print(f"  일괄: khub paper summarize-all --bad-only -p openai -m gpt-4o")
+        console.print(f"  전체: khub paper summarize-all --resummary")
+
+
+# ─────────────────────────────────────────────
 # paper embed <arxiv_id>
 # ─────────────────────────────────────────────
 @paper_group.command("embed")
@@ -613,9 +760,22 @@ def paper_translate_all(ctx, limit, field, provider, model):
 @click.option("--field", "-f", default=None, help="분야 필터")
 @click.option("--quick", is_flag=True, help="간단 요약 (구조화 분석 대신 3-5문장)")
 @click.option("--resummary", is_flag=True, help="이미 요약된 논문도 재요약")
+@click.option("--bad-only", is_flag=True, help="품질이 나쁜 요약만 재요약 (khub paper review로 확인)")
+@click.option("--threshold", "-t", default=50, help="나쁜 요약 기준 점수 (--bad-only와 함께 사용, 기본: 50)")
+@click.option("--provider", "-p", default=None, help="요약 프로바이더 (기본: config)")
+@click.option("--model", "-m", default=None, help="요약 모델 (기본: config)")
 @click.pass_context
-def paper_summarize_all(ctx, limit, field, quick, resummary):
-    """전체 논문 심층 요약 (구조화된 분석)"""
+def paper_summarize_all(ctx, limit, field, quick, resummary, bad_only, threshold, provider, model):
+    """전체 논문 심층 요약 (구조화된 분석)
+
+    \b
+    사용 예시:
+      khub paper summarize-all                              # 미요약 논문만
+      khub paper summarize-all --resummary                  # 전체 재요약
+      khub paper summarize-all --bad-only                   # 나쁜 요약만 재요약
+      khub paper summarize-all --bad-only -p openai -m gpt-4o  # 좋은 모델로 재요약
+      khub paper summarize-all --bad-only -t 70             # 70점 미만 재요약
+    """
     config = ctx.obj["khub"].config
     from knowledge_hub.core.database import SQLiteDatabase
     from knowledge_hub.providers.registry import get_llm
@@ -623,7 +783,10 @@ def paper_summarize_all(ctx, limit, field, quick, resummary):
     sqlite_db = SQLiteDatabase(config.sqlite_path)
     papers = sqlite_db.list_papers(field=field, limit=999)
 
-    if resummary:
+    if bad_only:
+        targets = [p for p in papers if _assess_summary_quality(p.get("notes", ""))["score"] < threshold]
+        console.print(f"[dim]품질 점수 {threshold}점 미만 논문 필터링[/dim]")
+    elif resummary:
         targets = papers
     else:
         targets = [p for p in papers if not p.get("notes") or len(p.get("notes", "")) < 100]
@@ -635,11 +798,16 @@ def paper_summarize_all(ctx, limit, field, quick, resummary):
         console.print("[green]모든 논문이 이미 요약되어 있습니다.[/green]")
         return
 
-    prov = config.summarization_provider
-    mdl = config.summarization_model
+    prov = provider or config.summarization_provider
+    mdl = model or config.summarization_model
     llm = get_llm(prov, model=mdl, **config.get_provider_config(prov))
 
-    console.print(f"[bold]{len(targets)}편 {'간단' if quick else '심층'} 요약 시작[/bold]")
+    mode_label = "간단" if quick else "심층"
+    if bad_only:
+        mode_label += " (품질 미달 재요약)"
+    elif resummary:
+        mode_label += " (전체 재요약)"
+    console.print(f"[bold]{len(targets)}편 {mode_label} 요약 시작[/bold]")
     console.print(f"[dim]프로바이더: {prov}/{mdl}[/dim]\n")
 
     # abstract가 없는 논문은 Semantic Scholar에서 보충
@@ -1519,5 +1687,288 @@ def paper_info(ctx, arxiv_id):
 
     notes = paper.get("notes", "")
     if notes and len(notes) > 30:
-        console.print(f"\n[bold]요약:[/bold]")
-        console.print(notes[:500])
+        quality = _assess_summary_quality(notes)
+        console.print(f"\n[bold]요약[/bold] [{quality['color']}]({quality['label']}, {quality['score']}점)[/{quality['color']}]")
+        if quality["reasons"]:
+            console.print(f"[dim]문제점: {', '.join(quality['reasons'])}[/dim]")
+        console.print()
+        from rich.markdown import Markdown
+        console.print(Markdown(notes))
+    else:
+        console.print("\n[yellow]요약이 없습니다. 'khub paper summarize {arxiv_id}' 로 생성하세요.[/yellow]".format(arxiv_id=arxiv_id))
+
+
+# ─────────────────────────────────────────────
+# paper resummary-vault
+# ─────────────────────────────────────────────
+def _assess_vault_note_quality(content: str) -> dict:
+    """Obsidian 논문 노트의 요약 품질 평가"""
+    placeholder = "아직 등록되지 않았습니다"
+
+    if placeholder in content:
+        return {"score": 0, "label": "플레이스홀더", "color": "red", "reason": "플레이스홀더만 존재"}
+
+    summary_text = ""
+    for heading in ["## 요약", "# 📌 한줄 요약"]:
+        if heading in content:
+            section = content.split(heading, 1)[1]
+            next_h = re.search(r'\n#{1,2} [^#]', section)
+            if next_h:
+                section = section[:next_h.start()]
+            summary_text = section.strip()
+            break
+
+    if not summary_text or len(summary_text) < 50:
+        return {"score": 0, "label": "요약없음", "color": "red", "reason": "요약 섹션 없음/부족"}
+
+    has_garbled = bool(re.search(r'\\hline|\\begin\{tabular\}|\\end\{tabular\}|& &|\\\\', summary_text))
+    if has_garbled:
+        return {"score": 10, "label": "깨짐", "color": "red", "reason": "LaTeX 잔해 포함"}
+
+    title_match = re.search(r'title:\s*"?(.+?)"?\s*$', content, re.MULTILINE)
+    title = title_match.group(1).strip() if title_match else ""
+    if title and len(summary_text) > 100:
+        title_words = set(title.lower().split()[:3])
+        summary_lower = summary_text.lower()
+        overlap = sum(1 for w in title_words if w in summary_lower and len(w) > 3)
+        if overlap == 0 and len(title_words) >= 2:
+            return {"score": 15, "label": "엉뚱함", "color": "bright_red", "reason": "요약이 논문 제목과 무관"}
+
+    structured_markers = ["### 한줄 요약", "### 핵심 기여", "### 방법론"]
+    has_structure = sum(1 for m in structured_markers if m in summary_text) >= 2
+    if has_structure and len(summary_text) >= 500:
+        return {"score": 90, "label": "우수", "color": "green", "reason": ""}
+    if len(summary_text) >= 300:
+        return {"score": 70, "label": "보통", "color": "yellow", "reason": "구조화 부족"}
+    if len(summary_text) >= 100:
+        return {"score": 40, "label": "미흡", "color": "bright_red", "reason": "짧음"}
+    return {"score": 20, "label": "부실", "color": "red", "reason": "매우 짧음"}
+
+
+def _collect_vault_note_text(md_path: Path, papers_dir: Path) -> str:
+    """Obsidian 노트에 대응하는 텍스트 수집: .txt → 노트 내 초록 → 노트 본문"""
+    stem = md_path.stem
+
+    txt_candidates = list(papers_dir.glob(f"{stem}*.txt"))
+    if not txt_candidates:
+        short = stem[:40]
+        txt_candidates = [p for p in papers_dir.glob("*.txt") if short in p.stem]
+    for txt in txt_candidates:
+        text = txt.read_text(encoding="utf-8")
+        if len(text) > 200:
+            return text[:MAX_SUMMARIZE_CHARS]
+
+    content = md_path.read_text(encoding="utf-8")
+
+    arxiv_match = re.search(r'source:\s*(\d{4}\.\d{4,5})', content)
+    if not arxiv_match:
+        arxiv_match = re.search(r'arxiv_id:\s*"?(\d{4}\.\d{4,5})"?', content)
+    if arxiv_match:
+        aid = arxiv_match.group(1)
+        for txt in papers_dir.glob(f"*{aid}*.txt"):
+            text = txt.read_text(encoding="utf-8")
+            if len(text) > 200:
+                return text[:MAX_SUMMARIZE_CHARS]
+
+    for heading in ["## 초록", "## Abstract", "## 초록 (한국어)"]:
+        if heading in content:
+            section = content.split(heading, 1)[1]
+            next_h = re.search(r'\n#{1,2} [^#]', section)
+            if next_h:
+                section = section[:next_h.start()]
+            section = section.strip()
+            if len(section) > 100:
+                return f"제목: {stem}\n\n{section}"
+
+    body = re.sub(r'^---.*?---\s*', '', content, flags=re.DOTALL)
+    body = re.sub(r'\[\[.*?\]\]', '', body)
+    body = body.strip()
+    if len(body) > 100:
+        return f"제목: {stem}\n\n{body[:MAX_SUMMARIZE_CHARS]}"
+
+    return f"제목: {stem}"
+
+
+def _update_vault_note_summary(md_path: Path, summary: str):
+    """Obsidian 노트의 요약 섹션을 교체"""
+    content = md_path.read_text(encoding="utf-8")
+
+    placeholder = "아직 등록되지 않았습니다"
+    if placeholder in content:
+        for line in content.split('\n'):
+            if placeholder in line:
+                content = content.replace(line, '')
+                break
+        for line in content.split('\n'):
+            if 'sync-keywords' in line:
+                content = content.replace(line, '')
+                break
+
+    if "## 요약" in content:
+        lines = content.split("\n")
+        start = None
+        end = None
+        for i, line in enumerate(lines):
+            if line.strip() == "## 요약":
+                start = i
+            elif start is not None and re.match(r'^#{1,2} [^#]', line) and i > start:
+                end = i
+                break
+        if start is not None:
+            if end is None:
+                end = len(lines)
+            new_lines = lines[:start] + ["## 요약", "", summary, ""] + lines[end:]
+            content = "\n".join(new_lines)
+    elif "# 📌 한줄 요약" in content:
+        lines = content.split("\n")
+        start = None
+        end = None
+        for i, line in enumerate(lines):
+            if "# 📌 한줄 요약" in line:
+                start = i
+            elif start is not None and re.match(r'^#{1,2} [^#]', line) and i > start + 1:
+                end = i
+                break
+        if start is not None:
+            if end is None:
+                end = len(lines)
+            new_lines = lines[:start] + ["## 요약", "", summary, ""] + lines[end:]
+            content = "\n".join(new_lines)
+    else:
+        fm_end = content.find("---", content.find("---") + 3)
+        if fm_end > 0:
+            insert_at = fm_end + 3
+            content = content[:insert_at] + "\n\n## 요약\n\n" + summary + "\n" + content[insert_at:]
+        else:
+            content = "## 요약\n\n" + summary + "\n\n" + content
+
+    content = re.sub(r'\n{4,}', '\n\n\n', content)
+    md_path.write_text(content, encoding="utf-8")
+
+
+@paper_group.command("resummary-vault")
+@click.option("--bad-only", is_flag=True, default=True, help="부실한 요약만 재요약 (기본값)")
+@click.option("--all", "resummary_all", is_flag=True, help="모든 노트 재요약")
+@click.option("--threshold", "-t", default=60, help="재요약 기준 점수 (기본: 60)")
+@click.option("--provider", "-p", default=None, help="요약 프로바이더")
+@click.option("--model", "-m", default=None, help="요약 모델")
+@click.option("--limit", "-n", default=0, help="최대 처리 수 (0=전체)")
+@click.option("--dry-run", is_flag=True, help="변경 없이 대상만 표시")
+@click.pass_context
+def paper_resummary_vault(ctx, bad_only, resummary_all, threshold, provider, model, limit, dry_run):
+    """Obsidian vault 논문 노트의 부실한 요약을 재생성
+
+    \b
+    사용 예시:
+      khub paper resummary-vault --dry-run          # 대상만 확인
+      khub paper resummary-vault                     # 부실한 요약 재생성
+      khub paper resummary-vault -p openai -m gpt-4o # 모델 지정
+      khub paper resummary-vault --all               # 전체 재요약
+    """
+    config = ctx.obj["khub"].config
+
+    candidates = []
+    if config.vault_path:
+        candidates.append(_resolve_vault_papers_dir(config.vault_path.strip("'\"")))
+    candidates.append(Path(config.papers_dir.strip("'\"")))
+    papers_dir = None
+    for c in candidates:
+        if c and c.exists() and list(c.glob("*.md")):
+            papers_dir = c
+            break
+    if not papers_dir:
+        console.print("[red]논문 노트가 있는 폴더를 찾을 수 없습니다.[/red]")
+        console.print(f"[dim]검색 경로: {[str(c) for c in candidates]}[/dim]")
+        return
+
+    md_files = sorted(papers_dir.glob("*.md"))
+    md_files = [f for f in md_files if f.name != "00_Concept_Index.md"]
+
+    assessments = []
+    for md_path in md_files:
+        content = md_path.read_text(encoding="utf-8")
+        quality = _assess_vault_note_quality(content)
+        assessments.append((md_path, quality))
+
+    if resummary_all:
+        targets = assessments
+    else:
+        targets = [(p, q) for p, q in assessments if q["score"] < threshold]
+
+    targets.sort(key=lambda x: x[1]["score"])
+
+    if limit > 0:
+        targets = targets[:limit]
+
+    total = len(md_files)
+    bad_count = len(targets)
+    good_count = total - sum(1 for _, q in assessments if q["score"] < threshold)
+
+    console.print(f"\n[bold]Obsidian Vault 논문 요약 리뷰[/bold]")
+    console.print(f"  전체: {total}편 | 양호: {good_count}편 | 재요약 대상: {bad_count}편\n")
+
+    if not targets:
+        console.print("[green]모든 노트의 요약이 양호합니다.[/green]")
+        return
+
+    table = Table(title=f"재요약 대상 ({len(targets)}편)")
+    table.add_column("노트", max_width=50)
+    table.add_column("점수", width=5, justify="right")
+    table.add_column("등급", width=10)
+    table.add_column("문제점", max_width=25)
+
+    for md_path, q in targets:
+        table.add_row(
+            md_path.stem[:50],
+            str(q["score"]),
+            f"[{q['color']}]{q['label']}[/{q['color']}]",
+            q["reason"],
+        )
+    console.print(table)
+
+    if dry_run:
+        console.print(f"\n[dim]--dry-run: 변경 없이 종료. 실행하려면 --dry-run 제거[/dim]")
+        return
+
+    prov = provider or config.summarization_provider
+    mdl = model or config.summarization_model
+
+    console.print(f"\n[bold]{len(targets)}편 재요약 시작[/bold]")
+    console.print(f"[dim]프로바이더: {prov}/{mdl}[/dim]\n")
+
+    from knowledge_hub.providers.registry import get_llm
+    llm = get_llm(prov, model=mdl, **config.get_provider_config(prov))
+
+    success = 0
+    failed = []
+    for idx, (md_path, q) in enumerate(targets, 1):
+        title = md_path.stem
+        console.print(f"  [{idx}/{len(targets)}] {title[:50]}...", end=" ")
+
+        text = _collect_vault_note_text(md_path, papers_dir)
+        if len(text) < 50:
+            console.print("[yellow]텍스트 부족, 스킵[/yellow]")
+            continue
+
+        source = "전문" if len(text) > 2000 else "abstract/노트"
+        try:
+            summary = llm.summarize_paper(text, title=title, language="ko")
+
+            if not summary or len(summary) < 50:
+                console.print("[yellow]요약 생성 실패[/yellow]")
+                failed.append({"title": title, "error": "빈 응답"})
+                continue
+
+            _update_vault_note_summary(md_path, summary)
+            success += 1
+            console.print(f"[green]OK ({source}, {len(summary)}자)[/green]")
+        except Exception as e:
+            log.error("vault 재요약 실패 %s: %s", title, e)
+            failed.append({"title": title, "error": str(e)})
+            console.print(f"[red]FAIL ({e})[/red]")
+
+    console.print(f"\n[bold green]{success}/{len(targets)}편 재요약 완료[/bold green]")
+    if failed:
+        console.print(f"[bold red]실패: {len(failed)}편[/bold red]")
+        for f in failed:
+            console.print(f"  {f['title'][:50]}: {f['error'][:80]}")
