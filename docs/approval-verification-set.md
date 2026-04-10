@@ -3,6 +3,28 @@
 ## Goal
 
 - Freeze the smallest credible release/merge gate for the current capture read-model + processor + orphan-operator-loop + OS bridge + authority subset.
+- Add a separate, faster local CLI smoke gate for release-trust checks when the full approval set is too wide for a quick sanity pass.
+
+## Release Smoke Gate
+
+```bash
+cd /Users/won/Desktop/allinone/knowledge-hub && python scripts/check_release_smoke.py
+```
+
+Covers:
+- `khub setup --quick --non-interactive` in an isolated temp `HOME`
+- `khub --config <temp>/.khub/config.yaml status`
+- `khub --config <temp>/.khub/config.yaml doctor --json`
+
+Pass contract:
+- hosted providers are not required
+- missing Ollama is acceptable when the live CLI still returns the intended local contract (`doctor.status in ok|blocked|degraded|needs_setup`)
+- empty vector corpus is acceptable when it is surfaced as `needs_setup` or another non-fatal local readiness state
+- the gate fails only when the CLI surface breaks: command exit failure, missing runtime table, invalid doctor JSON/schema, or unexpected readiness status such as `failed`
+
+Notes:
+- this is a narrow release-trust smoke gate, not a replacement for the frozen approval verification set below
+- prefer this command for fast local sanity checks before spending time on the broader targeted approval-set reruns
 
 ## Approval Verification Set
 
