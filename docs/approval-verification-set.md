@@ -30,6 +30,7 @@ Pass contract:
 Notes:
 - this is a narrow release-trust smoke gate, not a replacement for the frozen approval verification set below
 - prefer this command for fast local sanity checks before spending time on the broader targeted approval-set reruns
+- exit code contract: `0` on pass, `1` on smoke failure
 
 ## Approval Verification Set
 

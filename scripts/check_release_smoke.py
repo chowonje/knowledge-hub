@@ -288,10 +288,14 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
                 failed = True
                 break
 
+        checked_count = len(validations)
+        passed_count = sum(1 for item in validations if item.get("status") == "ok")
         payload = {
             "status": "ok" if not failed else "failed",
             "repoRoot": str(root),
             "tempHome": str(home_dir) if (keep_temp_dir or failed) else "",
+            "checkedCount": checked_count,
+            "passedCount": passed_count,
             "commands": validations,
         }
         if keep_temp_dir and not failed:
@@ -309,6 +313,10 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
                     target.write_bytes(source.read_bytes())
             payload["tempHome"] = str(persisted_home)
         return payload
+
+
+def payload_exit_code(payload: dict[str, Any]) -> int:
+    return 0 if payload.get("status") == "ok" else 1
 
 
 def print_human(payload: dict[str, Any]) -> None:
@@ -339,7 +347,7 @@ def main() -> int:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:
         print_human(payload)
-    return 0 if payload.get("status") == "ok" else 1
+    return payload_exit_code(payload)
 
 
 if __name__ == "__main__":

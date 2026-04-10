@@ -95,6 +95,13 @@ def test_validate_invalid_command_result_requires_non_zero_error():
     assert validation.details["returncode"] == 1
 
 
+def test_payload_exit_code_reflects_pass_fail_behavior():
+    module = _load_script_module()
+
+    assert module.payload_exit_code({"status": "ok"}) == 0
+    assert module.payload_exit_code({"status": "failed"}) == 1
+
+
 def test_release_smoke_script_passes_with_local_contract():
     completed = subprocess.run(
         [sys.executable, str(SCRIPT), "--json"],
@@ -107,6 +114,8 @@ def test_release_smoke_script_passes_with_local_contract():
     assert completed.returncode == 0, completed.stderr or completed.stdout
     payload = json.loads(completed.stdout)
     assert payload["status"] == "ok"
+    assert payload["checkedCount"] == 6
+    assert payload["passedCount"] == 6
     assert [item["name"] for item in payload["commands"]] == [
         "top_help",
         "setup",
