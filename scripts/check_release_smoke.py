@@ -26,6 +26,9 @@ import yaml
 DOCTOR_ALLOWED_STATUSES = {"ok", "blocked", "degraded", "needs_setup"}
 STATUS_REQUIRED_MARKERS = ("Knowledge Hub v", "Retrieval Runtime", "vector corpus")
 DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
+TOP_HELP_REQUIRED_MARKERS = ("Commands:", "doctor", "status", "setup")
+CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
+INVALID_COMMAND_REQUIRED_MARKER = "No such command"
 
 
 @dataclass
@@ -196,6 +199,37 @@ def validate_doctor_result(result: CommandResult) -> ValidationResult:
     )
 
 
+def validate_help_result(result: CommandResult, *, required_markers: tuple[str, ...], summary: str) -> ValidationResult:
+    errors: list[str] = []
+    if result.returncode != 0:
+        errors.append(f"{result.name} exited with {result.returncode}")
+    haystack = result.stdout
+    for marker in required_markers:
+        if marker not in haystack:
+            errors.append(f"{result.name} output missing marker: {marker}")
+    return ValidationResult(
+        ok=not errors,
+        summary=summary if not errors else f"{result.name} contract failed",
+        details={"markers": list(required_markers)},
+        errors=errors,
+    )
+
+
+def validate_invalid_command_result(result: CommandResult) -> ValidationResult:
+    errors: list[str] = []
+    if result.returncode == 0:
+        errors.append("invalid command exited with 0")
+    combined = f"{result.stdout}\n{result.stderr}"
+    if INVALID_COMMAND_REQUIRED_MARKER not in combined:
+        errors.append(f"invalid command output missing marker: {INVALID_COMMAND_REQUIRED_MARKER}")
+    return ValidationResult(
+        ok=not errors,
+        summary="invalid command exits non-zero with a user-facing error" if not errors else "invalid command contract failed",
+        details={"returncode": result.returncode},
+        errors=errors,
+    )
+
+
 def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
     root = repo_root()
     cli_argv = [sys.executable, "-m", "knowledge_hub.interfaces.cli.main"]
@@ -204,21 +238,38 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
         env = build_env(home_dir)
         config_path = temp_config_path(home_dir)
         plan = [
+            ("top_help", cli_argv + ["--help"]),
             ("setup", cli_argv + ["setup", "--quick", "--non-interactive"]),
+            ("capture_help", cli_argv + ["dinger", "capture", "--help"]),
             ("status", cli_argv + ["--config", str(config_path), "status"]),
             ("doctor", cli_argv + ["--config", str(config_path), "doctor", "--json"]),
+            ("invalid_command", cli_argv + ["definitely-missing"]),
         ]
         validations: list[dict[str, Any]] = []
         failed = False
 
         for name, argv in plan:
             result = run_command(argv, env=env, cwd=root, name=name)
-            if name == "setup":
+            if name == "top_help":
+                validation = validate_help_result(
+                    result,
+                    required_markers=TOP_HELP_REQUIRED_MARKERS,
+                    summary="top-level help surface is present",
+                )
+            elif name == "setup":
                 validation = validate_setup_result(result, config_path=config_path)
+            elif name == "capture_help":
+                validation = validate_help_result(
+                    result,
+                    required_markers=CAPTURE_HELP_REQUIRED_MARKERS,
+                    summary="dinger capture help surface is present",
+                )
             elif name == "status":
                 validation = validate_status_result(result, config_path=config_path)
-            else:
+            elif name == "doctor":
                 validation = validate_doctor_result(result)
+            else:
+                validation = validate_invalid_command_result(result)
             validations.append(
                 {
                     "name": name,

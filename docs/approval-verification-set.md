@@ -12,14 +12,19 @@ cd /Users/won/Desktop/allinone/knowledge-hub && python scripts/check_release_smo
 ```
 
 Covers:
+- `khub --help`
 - `khub setup --quick --non-interactive` in an isolated temp `HOME`
+- `khub dinger capture --help`
 - `khub --config <temp>/.khub/config.yaml status`
 - `khub --config <temp>/.khub/config.yaml doctor --json`
+- invalid command exit behavior (`khub definitely-missing`)
 
 Pass contract:
 - hosted providers are not required
 - missing Ollama is acceptable when the live CLI still returns the intended local contract (`doctor.status in ok|blocked|degraded|needs_setup`)
 - empty vector corpus is acceptable when it is surfaced as `needs_setup` or another non-fatal local readiness state
+- help surfaces must still expose the expected top-level and nested operator commands
+- invalid commands must exit non-zero and still surface a user-facing command error
 - the gate fails only when the CLI surface breaks: command exit failure, missing runtime table, invalid doctor JSON/schema, or unexpected readiness status such as `failed`
 
 Notes:
