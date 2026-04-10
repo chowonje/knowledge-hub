@@ -152,6 +152,17 @@ flowchart LR
   - 증분 동기화: `python cli.py agent sync --json --cursor "<ts>" --limit 200`
   - 결과는 `{"ts","items":[...], ...}` 형태의 JSON 문자열이며, 추후 `foundry-core` 런타임 스냅샷 소스로 사용할 수 있다.
 
+### 9.1 `project-cli` smoke / timeout probe 주의
+
+- `foundry-core`의 `project-cli`가 Python CLI를 `-m knowledge_hub.interfaces.cli.main`로 호출할 때는 child `cwd`를 제품 repo root에 고정한다.
+- 이유: Node bridge가 `knowledge-hub/` 루트가 아니라 `foundry-core/` 같은 하위 디렉터리에서 실행되어도 Python module resolution이 현재 shell `cwd`에 따라 흔들리지 않게 하기 위함이다.
+- `scripts/probe_ts_project_cli_timeout.py`는 이제 다음을 함께 출력한다.
+  - bridge candidate 목록
+  - `node` / `npx` / `tsx` / `python` 버전 probe
+  - repo root vs `foundry-core/` cwd에서의 `python` module import probe
+  - 각 실행의 `category` (`ok`, `timeout`, `module-resolution-failure`, `ts-loader-failure`, `no-json-payload`, `nonzero-exit`)
+- 따라서 intermittent failure가 남더라도 최소한 `slow tsx startup`와 `Python module import failure`를 같은 bucket으로 보지 않도록 운영 증거를 남긴다.
+
 ### 10. 표준 출력 스키마 (현재 적용)
 
 - `foundry-core/cli-agent.ts` + `run_agentic_query`는 동일 형태 엔벨로프를 기준으로 동작합니다.
