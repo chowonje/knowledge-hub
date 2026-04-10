@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 import subprocess
@@ -29,6 +30,8 @@ DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
 TOP_HELP_REQUIRED_MARKERS = ("Commands:", "doctor", "status", "setup")
 CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
 INVALID_COMMAND_REQUIRED_MARKER = "No such command"
+SMOKE_COMMAND_TIMEOUT_SEC = 20.0
+SMOKE_TIMEOUT_RETURN_CODE = 124
 
 
 @dataclass
@@ -39,6 +42,8 @@ class CommandResult:
     stdout: str
     stderr: str
     duration_sec: float
+    timed_out: bool = False
+    timeout_sec: float = SMOKE_COMMAND_TIMEOUT_SEC
 
 
 @dataclass
@@ -67,29 +72,54 @@ def build_env(home_dir: Path) -> dict[str, str]:
     return env
 
 
+def _ensure_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return str(value)
+
+
 def run_command(argv: list[str], *, env: dict[str, str], cwd: Path, name: str) -> CommandResult:
     started = time.monotonic()
-    proc = subprocess.run(
-        argv,
-        cwd=str(cwd),
-        env=env,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
+    timed_out = False
+    try:
+        proc = subprocess.run(
+            argv,
+            cwd=str(cwd),
+            env=env,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            timeout=SMOKE_COMMAND_TIMEOUT_SEC,
+        )
+        returncode = int(proc.returncode)
+        stdout = _ensure_text(proc.stdout)
+        stderr = _ensure_text(proc.stderr)
+    except subprocess.TimeoutExpired as exc:
+        timed_out = True
+        returncode = SMOKE_TIMEOUT_RETURN_CODE
+        stdout = _ensure_text(getattr(exc, "output", None))
+        stderr = _ensure_text(getattr(exc, "stderr", None))
     return CommandResult(
         name=name,
         argv=list(argv),
-        returncode=int(proc.returncode),
-        stdout=str(proc.stdout or ""),
-        stderr=str(proc.stderr or ""),
+        returncode=returncode,
+        stdout=stdout,
+        stderr=stderr,
         duration_sec=round(time.monotonic() - started, 3),
+        timed_out=timed_out,
+        timeout_sec=SMOKE_COMMAND_TIMEOUT_SEC,
     )
 
 
 def validate_setup_result(result: CommandResult, *, config_path: Path) -> ValidationResult:
     errors: list[str] = []
     config_data: dict[str, Any] = {}
+    if result.timed_out:
+        errors.append(f"setup timed out after {result.timeout_sec:.0f}s")
     if result.returncode != 0:
         errors.append(f"setup exited with {result.returncode}")
     if not config_path.exists():
@@ -127,6 +157,8 @@ def validate_setup_result(result: CommandResult, *, config_path: Path) -> Valida
 
 def validate_status_result(result: CommandResult, *, config_path: Path) -> ValidationResult:
     errors: list[str] = []
+    if result.timed_out:
+        errors.append(f"status timed out after {result.timeout_sec:.0f}s")
     if result.returncode != 0:
         errors.append(f"status exited with {result.returncode}")
     for marker in STATUS_REQUIRED_MARKERS:
@@ -177,6 +209,8 @@ def validate_doctor_payload(payload: dict[str, Any]) -> ValidationResult:
 def validate_doctor_result(result: CommandResult) -> ValidationResult:
     errors: list[str] = []
     payload: dict[str, Any] = {}
+    if result.timed_out:
+        errors.append(f"doctor timed out after {result.timeout_sec:.0f}s")
     if result.returncode != 0:
         errors.append(f"doctor exited with {result.returncode}")
     try:
@@ -201,6 +235,8 @@ def validate_doctor_result(result: CommandResult) -> ValidationResult:
 
 def validate_help_result(result: CommandResult, *, required_markers: tuple[str, ...], summary: str) -> ValidationResult:
     errors: list[str] = []
+    if result.timed_out:
+        errors.append(f"{result.name} timed out after {result.timeout_sec:.0f}s")
     if result.returncode != 0:
         errors.append(f"{result.name} exited with {result.returncode}")
     haystack = result.stdout
@@ -217,6 +253,8 @@ def validate_help_result(result: CommandResult, *, required_markers: tuple[str, 
 
 def validate_invalid_command_result(result: CommandResult) -> ValidationResult:
     errors: list[str] = []
+    if result.timed_out:
+        errors.append(f"invalid command timed out after {result.timeout_sec:.0f}s")
     if result.returncode == 0:
         errors.append("invalid command exited with 0")
     combined = f"{result.stdout}\n{result.stderr}"
@@ -233,86 +271,88 @@ def validate_invalid_command_result(result: CommandResult) -> ValidationResult:
 def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
     root = repo_root()
     cli_argv = [sys.executable, "-m", "knowledge_hub.interfaces.cli.main"]
-    with tempfile.TemporaryDirectory(prefix="khub-release-smoke-") as tmp_home_str:
-        home_dir = Path(tmp_home_str)
-        env = build_env(home_dir)
-        config_path = temp_config_path(home_dir)
-        plan = [
-            ("top_help", cli_argv + ["--help"]),
-            ("setup", cli_argv + ["setup", "--quick", "--non-interactive"]),
-            ("capture_help", cli_argv + ["dinger", "capture", "--help"]),
-            ("status", cli_argv + ["--config", str(config_path), "status"]),
-            ("doctor", cli_argv + ["--config", str(config_path), "doctor", "--json"]),
-            ("invalid_command", cli_argv + ["definitely-missing"]),
-        ]
-        validations: list[dict[str, Any]] = []
-        failed = False
+    home_dir = Path(tempfile.mkdtemp(prefix="khub-release-smoke-"))
+    env = build_env(home_dir)
+    config_path = temp_config_path(home_dir)
+    plan = [
+        ("top_help", cli_argv + ["--help"]),
+        ("setup", cli_argv + ["setup", "--quick", "--non-interactive"]),
+        ("capture_help", cli_argv + ["dinger", "capture", "--help"]),
+        ("status", cli_argv + ["--config", str(config_path), "status"]),
+        ("doctor", cli_argv + ["--config", str(config_path), "doctor", "--json"]),
+        ("invalid_command", cli_argv + ["definitely-missing"]),
+    ]
+    validations: list[dict[str, Any]] = []
+    failed = False
 
-        for name, argv in plan:
-            result = run_command(argv, env=env, cwd=root, name=name)
-            if name == "top_help":
-                validation = validate_help_result(
-                    result,
-                    required_markers=TOP_HELP_REQUIRED_MARKERS,
-                    summary="top-level help surface is present",
-                )
-            elif name == "setup":
-                validation = validate_setup_result(result, config_path=config_path)
-            elif name == "capture_help":
-                validation = validate_help_result(
-                    result,
-                    required_markers=CAPTURE_HELP_REQUIRED_MARKERS,
-                    summary="dinger capture help surface is present",
-                )
-            elif name == "status":
-                validation = validate_status_result(result, config_path=config_path)
-            elif name == "doctor":
-                validation = validate_doctor_result(result)
-            else:
-                validation = validate_invalid_command_result(result)
-            validations.append(
-                {
-                    "name": name,
-                    "argv": result.argv,
-                    "returncode": result.returncode,
-                    "durationSec": result.duration_sec,
-                    "status": "ok" if validation.ok else "failed",
-                    "summary": validation.summary,
-                    "details": validation.details,
-                    "errors": validation.errors,
-                    "stdout": result.stdout if not validation.ok else "",
-                    "stderr": result.stderr if result.stderr else "",
-                }
+    for name, argv in plan:
+        result = run_command(argv, env=env, cwd=root, name=name)
+        if name == "top_help":
+            validation = validate_help_result(
+                result,
+                required_markers=TOP_HELP_REQUIRED_MARKERS,
+                summary="top-level help surface is present",
             )
-            if not validation.ok:
-                failed = True
-                break
+        elif name == "setup":
+            validation = validate_setup_result(result, config_path=config_path)
+        elif name == "capture_help":
+            validation = validate_help_result(
+                result,
+                required_markers=CAPTURE_HELP_REQUIRED_MARKERS,
+                summary="dinger capture help surface is present",
+            )
+        elif name == "status":
+            validation = validate_status_result(result, config_path=config_path)
+        elif name == "doctor":
+            validation = validate_doctor_result(result)
+        else:
+            validation = validate_invalid_command_result(result)
+        validations.append(
+            {
+                "name": name,
+                "argv": result.argv,
+                "returncode": result.returncode,
+                "durationSec": result.duration_sec,
+                "timedOut": result.timed_out,
+                "timeoutSec": result.timeout_sec,
+                "status": "ok" if validation.ok else "failed",
+                "summary": validation.summary,
+                "details": validation.details,
+                "errors": validation.errors,
+                "stdout": result.stdout if not validation.ok else "",
+                "stderr": result.stderr if result.stderr else "",
+            }
+        )
+        if not validation.ok:
+            failed = True
 
-        checked_count = len(validations)
-        passed_count = sum(1 for item in validations if item.get("status") == "ok")
-        payload = {
-            "status": "ok" if not failed else "failed",
-            "repoRoot": str(root),
-            "tempHome": str(home_dir) if (keep_temp_dir or failed) else "",
-            "checkedCount": checked_count,
-            "passedCount": passed_count,
-            "commands": validations,
-        }
-        if keep_temp_dir and not failed:
-            persisted_home = root / ".tmp_release_smoke_home"
-            if persisted_home.exists():
-                raise RuntimeError(f"refusing to overwrite existing temp dir: {persisted_home}")
-            persisted_home.mkdir(parents=True, exist_ok=False)
-            for source in home_dir.rglob("*"):
-                relative = source.relative_to(home_dir)
-                target = persisted_home / relative
-                if source.is_dir():
-                    target.mkdir(parents=True, exist_ok=True)
-                else:
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    target.write_bytes(source.read_bytes())
-            payload["tempHome"] = str(persisted_home)
-        return payload
+    checked_count = len(validations)
+    passed_count = sum(1 for item in validations if item.get("status") == "ok")
+    payload = {
+        "status": "ok" if not failed else "failed",
+        "repoRoot": str(root),
+        "tempHome": str(home_dir) if (keep_temp_dir or failed) else "",
+        "checkedCount": checked_count,
+        "passedCount": passed_count,
+        "commands": validations,
+    }
+    if keep_temp_dir and not failed:
+        persisted_home = root / ".tmp_release_smoke_home"
+        if persisted_home.exists():
+            raise RuntimeError(f"refusing to overwrite existing temp dir: {persisted_home}")
+        persisted_home.mkdir(parents=True, exist_ok=False)
+        for source in home_dir.rglob("*"):
+            relative = source.relative_to(home_dir)
+            target = persisted_home / relative
+            if source.is_dir():
+                target.mkdir(parents=True, exist_ok=True)
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(source.read_bytes())
+        payload["tempHome"] = str(persisted_home)
+    elif not keep_temp_dir and not failed:
+        shutil.rmtree(home_dir, ignore_errors=True)
+    return payload
 
 
 def payload_exit_code(payload: dict[str, Any]) -> int:
