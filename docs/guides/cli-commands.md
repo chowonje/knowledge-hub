@@ -433,6 +433,8 @@ khub doctor
 용도:
 - 사용자용 환경 진단 요약
 - `status`, `checks[]`, `nextActions[]` 확인
+- local-first profile에서 Ollama가 꺼져 있으면 `blocked/degraded`를 그대로 유지한 채 원인과 다음 명령을 보여준다
+- typical recovery order: `ollama serve` -> `ollama pull <model>` -> `python -m knowledge_hub.interfaces.cli.main doctor`
 
 ### `khub mcp`
 
@@ -635,6 +637,8 @@ khub setup
 - 환경/설정 보조
 - `--profile local|hybrid|custom`
 - `--quick`는 `local --non-interactive` 별칭
+- `setup`은 설정을 저장하지만 local runtime을 자동으로 시작하지는 않는다
+- local/hybrid에서 Ollama runtime이 응답하지 않으면 setup 출력에 `blocked/degraded`가 아직 정상이라는 안내와 다음 명령이 같이 나온다
 
 ### `khub status`
 

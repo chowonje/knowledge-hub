@@ -112,6 +112,22 @@ khub init
 번역/요약/임베딩에 사용할 AI 프로바이더, API 키, 저장 경로 등을 대화형으로 설정합니다.
 설정은 `~/.khub/config.yaml`에 저장됩니다.
 
+local-first quick check:
+
+```bash
+khub setup --profile local
+khub doctor
+```
+
+`khub setup`은 설정만 저장합니다. local profile 또는 Ollama 기반 embedding을 쓰는 경우 local runtime이 아직 응답하지 않으면 `khub doctor`가 계속 `blocked/degraded`를 보여주는 것이 정상이며, 이때는 아래 순서로 복구합니다.
+
+```bash
+ollama serve
+ollama pull qwen3:14b
+ollama pull nomic-embed-text
+python -m knowledge_hub.interfaces.cli.main doctor
+```
+
 ### 설정 관리
 
 ```bash
