@@ -17,6 +17,8 @@ from typing import Dict, List, Set, Optional
 from rich.console import Console
 from rich.table import Table
 
+from knowledge_hub.core.vault_paths import resolve_vault_exclude_folders
+
 try:
     import frontmatter as fm_lib
 except ImportError:
@@ -104,7 +106,7 @@ def _extract_keywords(text: str, top_k: int = 5) -> Set[str]:
 
 def scan_vault(vault_path: Path, exclude_folders: List[str]) -> List[VaultNote]:
     """vault의 모든 마크다운 노트 스캔"""
-    excludes = set(exclude_folders)
+    excludes = set(resolve_vault_exclude_folders(exclude_folders))
     notes = []
 
     for md_file in vault_path.rglob("*.md"):
@@ -231,7 +233,7 @@ class AutoLinker:
 
     def __init__(self, vault_path: str, exclude_folders: List[str] = None):
         self.vault_path = Path(vault_path)
-        self.excludes = exclude_folders or [".obsidian", ".trash", "templates"]
+        self.excludes = resolve_vault_exclude_folders(exclude_folders)
 
     def run(self, apply: bool = False, top_k: int = 5, all_notes: bool = False):
         """

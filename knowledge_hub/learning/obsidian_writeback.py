@@ -26,6 +26,10 @@ class LearningHubPaths:
     web_sources_file: Path
     web_concepts_file: Path
     canvas_file: Path
+    gap_report_file: Path
+    quiz_file: Path
+    patch_suggestions_file: Path
+    reinforcement_plan_file: Path
     sessions_dir: Path
 
     def session_file(self, session_id: str) -> Path:
@@ -274,6 +278,27 @@ def _split_frontmatter(content: str) -> tuple[dict, str]:
     return parsed, body
 
 
+def _format_obsidian_note(
+    frontmatter: dict,
+    title: str,
+    meta_lines: Iterable[str] | None = None,
+) -> str:
+    """Build a markdown note with YAML frontmatter and base sections."""
+    fm = frontmatter if isinstance(frontmatter, dict) else {}
+    yaml_text = yaml.safe_dump(
+        fm,
+        allow_unicode=True,
+        sort_keys=False,
+        default_flow_style=False,
+    ).strip()
+    header = f"---\n{yaml_text}\n---\n\n" if yaml_text else ""
+    lines = [f"# {title}", ""]
+    if meta_lines:
+        lines.extend([str(line) for line in meta_lines])
+        lines.append("")
+    return header + "\n".join(lines)
+
+
 def _safe_canvas_id(value: str, fallback: str = "node") -> str:
     normalized = re.sub(r"[^a-zA-Z0-9_-]", "-", str(value).strip().lower())
     normalized = re.sub(r"-+", "-", normalized).strip("-")
@@ -384,6 +409,10 @@ def build_paths(vault_path: str, topic: str) -> LearningHubPaths:
         web_sources_file=base / "03_Web_Sources.md",
         web_concepts_file=base / "04_Web_Concepts.md",
         canvas_file=base / "05_Topic_Canvas.canvas",
+        gap_report_file=base / "06_Gap_Report.md",
+        quiz_file=base / "07_Quiz.md",
+        patch_suggestions_file=base / "08_Patch_Suggestions.md",
+        reinforcement_plan_file=base / "09_Reinforcement_Plan.md",
         sessions_dir=sessions,
     )
 
@@ -726,3 +755,256 @@ def write_canvas(
     payload = {"nodes": nodes, "edges": edges}
     _write(paths.canvas_file, json.dumps(payload, ensure_ascii=False, indent=2), adapter=adapter)
     return paths.canvas_file
+
+
+def write_gap_report(
+    paths: LearningHubPaths,
+    topic: str,
+    gap_result: dict,
+    adapter: VaultWriteAdapter | None = None,
+) -> None:
+    content = _read(paths.gap_report_file, adapter=adapter)
+    if not content:
+        content = f"# Gap Report: {topic}\n"
+
+    summary = gap_result.get("summary") if isinstance(gap_result.get("summary"), dict) else {}
+    missing = gap_result.get("missingTrunks") if isinstance(gap_result.get("missingTrunks"), list) else []
+    weak_edges = gap_result.get("weakEdges") if isinstance(gap_result.get("weakEdges"), list) else []
+    evidence_gaps = gap_result.get("evidenceGaps") if isinstance(gap_result.get("evidenceGaps"), list) else []
+
+    content = _upsert_marked_section(
+        content,
+        "gap-summary",
+        "\n".join(
+            [
+                "## Summary",
+                f"- runId: `{gap_result.get('runId', '-')}`",
+                f"- status: {gap_result.get('status', '-')}",
+                f"- targetTrunks: {summary.get('targetTrunkCount', 0)}",
+                f"- coveredTrunks: {summary.get('coveredTrunkCount', 0)}",
+                f"- avgGapConfidence: {summary.get('avgGapConfidence', 0)}",
+                f"- normalizationFailureRate: {summary.get('normalizationFailureRate', 0)}",
+            ]
+        ),
+    )
+
+    lines = ["## Missing Trunks"]
+    if missing:
+        for item in missing[:100]:
+            lines.append(
+                f"- `{item.get('canonical_id', '-')}` {item.get('display_name', '-')}"
+                f" (priority={item.get('priority', 0)})"
+            )
+    else:
+        lines.append("- 없음")
+    content = _upsert_marked_section(content, "missing-trunks", "\n".join(lines))
+
+    lines = ["## Weak Edges"]
+    if weak_edges:
+        for item in weak_edges[:200]:
+            lines.append(
+                f"- `{item.get('sourceCanonicalId', '-')}` -> {item.get('relationNorm', '-')}"
+                f" -> `{item.get('targetCanonicalId', '-')}`"
+                f" | confidence={item.get('confidence', 0)} | reasons={', '.join(item.get('issues', []) or [])}"
+            )
+    else:
+        lines.append("- 없음")
+    content = _upsert_marked_section(content, "weak-edges", "\n".join(lines))
+
+    lines = ["## Evidence Gaps"]
+    if evidence_gaps:
+        for item in evidence_gaps[:200]:
+            lines.append(
+                f"- `{item.get('sourceCanonicalId', '-')}` -> {item.get('relationNorm', '-')}"
+                f" -> `{item.get('targetCanonicalId', '-')}`"
+            )
+    else:
+        lines.append("- 없음")
+    content = _upsert_marked_section(content, "evidence-gaps", "\n".join(lines))
+
+    _write(paths.gap_report_file, content, adapter=adapter)
+
+
+def write_quiz_report(
+    paths: LearningHubPaths,
+    topic: str,
+    quiz_payload: dict,
+    adapter: VaultWriteAdapter | None = None,
+) -> None:
+    content = _read(paths.quiz_file, adapter=adapter)
+    if not content:
+        content = f"# Quiz: {topic}\n"
+
+    quiz = quiz_payload.get("quiz") if isinstance(quiz_payload.get("quiz"), dict) else {}
+    questions = quiz.get("questions") if isinstance(quiz.get("questions"), list) else []
+    grading = quiz_payload.get("grading") if isinstance(quiz_payload.get("grading"), dict) else {}
+
+    content = _upsert_marked_section(
+        content,
+        "quiz-summary",
+        "\n".join(
+            [
+                "## Quiz Summary",
+                f"- runId: `{quiz_payload.get('runId', '-')}`",
+                f"- status: {quiz_payload.get('status', '-')}",
+                f"- questionCount: {len(questions)}",
+                f"- mix: {quiz.get('mix', '-')}",
+                f"- score: {grading.get('score', '-')}",
+            ]
+        ),
+    )
+
+    lines = ["## Questions"]
+    if questions:
+        for item in questions[:50]:
+            qid = item.get("id", "-")
+            qtype = item.get("type", "unknown")
+            prompt = str(item.get("prompt", "")).strip()
+            lines.append(f"- ({qid}) [{qtype}] {prompt}")
+    else:
+        lines.append("- 없음")
+    content = _upsert_marked_section(content, "quiz-questions", "\n".join(lines))
+
+    feedback_lines = ["## Feedback"]
+    if grading:
+        feedback_lines.append(f"- passed: {grading.get('passed', False)}")
+        for item in grading.get("feedback", []) if isinstance(grading.get("feedback"), list) else []:
+            feedback_lines.append(f"- {item}")
+    else:
+        feedback_lines.append("- 채점 결과 없음")
+    content = _upsert_marked_section(content, "quiz-feedback", "\n".join(feedback_lines))
+
+    _write(paths.quiz_file, content, adapter=adapter)
+
+
+def write_patch_suggestions(
+    paths: LearningHubPaths,
+    topic: str,
+    patch_payload: dict,
+    adapter: VaultWriteAdapter | None = None,
+) -> None:
+    content = _read(paths.patch_suggestions_file, adapter=adapter)
+    if not content:
+        content = f"# Patch Suggestions: {topic}\n"
+
+    suggestions = patch_payload.get("suggestions") if isinstance(patch_payload.get("suggestions"), list) else []
+
+    content = _upsert_marked_section(
+        content,
+        "patch-summary",
+        "\n".join(
+            [
+                "## Summary",
+                f"- runId: `{patch_payload.get('runId', '-')}`",
+                f"- status: {patch_payload.get('status', '-')}",
+                f"- mode: {patch_payload.get('mode', 'proposal-only')}",
+                f"- suggestionCount: {len(suggestions)}",
+            ]
+        ),
+    )
+
+    lines = ["## Suggestions"]
+    if suggestions:
+        for item in suggestions[:100]:
+            lines.extend(
+                [
+                    f"- id: `{item.get('id', '-')}`",
+                    f"  - target: `{item.get('targetPath', '-')}`",
+                    f"  - section: {item.get('sectionTitle', '-')}",
+                    f"  - reason: {item.get('reason', '-')}",
+                    f"  - confidence: {item.get('confidence', 0)}",
+                    "  - patch:",
+                    "```markdown",
+                    str(item.get("patchText", "")).rstrip(),
+                    "```",
+                ]
+            )
+    else:
+        lines.append("- 없음")
+    content = _upsert_marked_section(content, "patch-suggestions", "\n".join(lines))
+
+    _write(paths.patch_suggestions_file, content, adapter=adapter)
+
+
+def write_reinforcement_plan(
+    paths: LearningHubPaths,
+    topic: str,
+    result: dict,
+    adapter: VaultWriteAdapter | None = None,
+) -> None:
+    """
+    09_Reinforcement_Plan.md 작성
+
+    지식 보강 추천 결과를 Obsidian 노트로 저장
+    """
+    adapter = adapter or FileSystemVaultAdapter()
+
+    existing = adapter.read_text(paths.reinforcement_plan_file)
+    frontmatter, content = _split_frontmatter(existing)
+
+    # Frontmatter 업데이트
+    frontmatter.update(
+        {
+            "topic": topic,
+            "runId": result.get("runId", "-"),
+            "sessionId": result.get("sessionId", "-"),
+            "status": result.get("status", "-"),
+            "createdAt": result.get("createdAt", "-"),
+        }
+    )
+
+    content = _format_obsidian_note(
+        frontmatter=frontmatter,
+        title=f"{topic} - Knowledge Reinforcement Plan",
+        meta_lines=(
+            [
+                "## Meta",
+                f"- runId: `{result.get('runId', '-')}`",
+                f"- sessionId: `{result.get('sessionId', '-')}`",
+                f"- status: {result.get('status', '-')}",
+                f"- totalActions: {result.get('summary', {}).get('totalActions', 0)}",
+                f"- totalSources: {result.get('summary', {}).get('totalSources', 0)}",
+            ]
+        ),
+    )
+
+    # Actions 섹션
+    actions = result.get("actions", [])
+    lines = ["## Reinforcement Actions"]
+
+    if actions:
+        for idx, action in enumerate(actions[:20], start=1):
+            action_type = action.get("actionType", "unknown")
+            priority = action.get("priority", 0.0)
+            target = action.get("targetEntityName", "unknown")
+            reason = action.get("reason", "")
+            impact = action.get("estimatedImpact", "")
+            sources = action.get("suggestedSources", [])
+
+            lines.extend([
+                f"### {idx}. {target}",
+                f"- **Type**: `{action_type}`",
+                f"- **Priority**: {priority:.3f}",
+                f"- **Reason**: {reason}",
+                f"- **Estimated Impact**: {impact}",
+                f"- **Suggested Sources** ({len(sources)})",
+            ])
+
+            for source in sources[:5]:
+                source_type = source.get("sourceType", "unknown")
+                title = source.get("title", "Untitled")
+                relevance = source.get("relevanceScore", 0.0)
+                snippet = source.get("snippet", "")[:150]
+                file_path = source.get("filePath", "")
+
+                lines.append(f"  - [{title}]({file_path}) (relevance: {relevance:.3f}, type: {source_type})")
+                if snippet:
+                    lines.append(f"    > {snippet}...")
+
+            lines.append("")  # 빈 줄
+    else:
+        lines.append("- 없음")
+
+    content = _upsert_marked_section(content, "reinforcement-actions", "\n".join(lines))
+
+    _write(paths.reinforcement_plan_file, content, adapter=adapter)

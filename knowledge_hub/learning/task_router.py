@@ -8,6 +8,7 @@ from typing import Any, Literal
 
 import requests
 
+from knowledge_hub.application.runtime_diagnostics import provider_runtime_probe
 from knowledge_hub.infrastructure.config import Config
 from knowledge_hub.infrastructure.providers import get_llm
 
@@ -19,6 +20,7 @@ TaskType = Literal[
     "materialization_source_enrichment",
     "materialization_concept_enrichment",
     "learning_graph_refinement",
+    "rag_query_planning",
     "rag_answer",
     "rag_answer_verification",
     "rag_answer_rewrite",
@@ -37,6 +39,7 @@ _TASK_OVERRIDE_ROUTE: dict[str, ResolvedRoute] = {
     "materialization_source_enrichment": "mini",
     "materialization_concept_enrichment": "strong",
     "learning_graph_refinement": "strong",
+    "rag_query_planning": "local",
     "rag_answer_verification": "strong",
     "rag_answer_rewrite": "strong",
     "claim_extraction": "strong",
@@ -312,6 +315,11 @@ def get_llm_for_task(
         if route == "fallback-only":
             break
         provider, model, route_timeout = _bucket_config(config, route)
+        runtime_probe = provider_runtime_probe(config, provider)
+        if runtime_probe and not bool(runtime_probe.get("available", True)):
+            summary = str(runtime_probe.get("summary") or runtime_probe.get("detail") or "runtime unavailable").strip()
+            warnings.append(f"route unavailable ({provider}/{model}): {summary}")
+            continue
         provider_cfg = dict(config.get_provider_config(provider))
         resolved_timeout = float(timeout_sec or route_timeout)
         provider_cfg["timeout"] = resolved_timeout
