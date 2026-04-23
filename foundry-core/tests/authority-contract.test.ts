@@ -15,6 +15,7 @@ const repoRoot = path.resolve(__dirname, "..", "..");
 const fixturesRoot = path.resolve(repoRoot, "docs", "schemas", "fixtures");
 const schemasRoot = path.resolve(repoRoot, "docs", "schemas");
 const policyCorpusPath = path.resolve(repoRoot, "docs", "policy", "p0-sample-corpus.json");
+const policyConformancePath = path.resolve(repoRoot, "docs", "policy", "policy-conformance-cases.json");
 const p0PatternConfigPath = path.resolve(repoRoot, "docs", "policy", "p0-detection-patterns.json");
 const authorityEnvelopeSchemaPath = path.resolve(schemasRoot, "authority-result-envelope.v1.json");
 
@@ -95,6 +96,39 @@ describe("authority contract", () => {
     for (const item of corpus.cases) {
       const isP0 = engine.classify({ text: item.text }) === "P0";
       assert.equal(isP0, item.expectedP0, item.id);
+    }
+  });
+
+  it("keeps LocalPolicyEngine decisions in parity with the shared Python authority fixture", async () => {
+    const fixture = loadJson<{
+      cases: Array<{
+        id: string;
+        action: any;
+        resourceType: string;
+        resourceId: string;
+        classification?: any;
+        payload: unknown;
+        expected: {
+          allowed: boolean;
+          classification: string;
+          tsPolicyCode: string;
+        };
+      }>;
+    }>(policyConformancePath);
+    const engine = new LocalPolicyEngine();
+
+    for (const item of fixture.cases) {
+      const decision = await engine.evaluate({
+        actorId: "fixture-user",
+        action: item.action,
+        resourceType: item.resourceType,
+        resourceId: item.resourceId,
+        payload: item.payload,
+        classification: item.classification,
+      });
+      assert.equal(decision.allowed, item.expected.allowed, item.id);
+      assert.equal(decision.classification, item.expected.classification, item.id);
+      assert.equal(decision.policyCode, item.expected.tsPolicyCode, item.id);
     }
   });
 

@@ -27,6 +27,7 @@ from knowledge_hub.interfaces.cli.commands.agent_cmd import _normalize_run_paylo
 
 FIXTURE_ROOT = PROJECT_ROOT / "docs" / "schemas" / "fixtures"
 POLICY_CORPUS_PATH = PROJECT_ROOT / "docs" / "policy" / "p0-sample-corpus.json"
+POLICY_CONFORMANCE_PATH = PROJECT_ROOT / "docs" / "policy" / "policy-conformance-cases.json"
 AGENT_RUN_SCHEMA_PATH = PROJECT_ROOT / "docs" / "schemas" / "agent-run-result.v1.json"
 AUTHORITY_ENVELOPE_SCHEMA_PATH = PROJECT_ROOT / "docs" / "schemas" / "authority-result-envelope.v1.json"
 TS_RUNTIME_PATH = PROJECT_ROOT / "foundry-core" / "src" / "runtime.ts"
@@ -616,6 +617,17 @@ def test_evaluate_policy_gate_matches_shared_p0_corpus():
         allowed, _errors, classification = evaluate_policy_gate(payload)
         assert (classification == "P0") is bool(case["expectedP0"]), case["id"]
         assert allowed is (not bool(case["expectedP0"])), case["id"]
+
+
+def test_evaluate_policy_gate_matches_shared_foundry_conformance_cases():
+    cases = _load_json(POLICY_CONFORMANCE_PATH)["cases"]  # type: ignore[index]
+    for case in cases:
+        expected = case["expected"]
+        allowed, errors, classification = evaluate_policy_gate(case["payload"])
+        assert allowed is bool(expected["allowed"]), case["id"]
+        assert classification == expected["classification"], case["id"]
+        if not allowed:
+            assert errors, case["id"]
 
 
 def test_evaluate_policy_gate_uses_most_sensitive_non_p0_classification():

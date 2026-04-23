@@ -291,6 +291,13 @@ def normalize_classification(value: object | None) -> str:
     return _normalize_classification(value)
 
 
+_POLICY_METADATA_KEYS = {
+    "classification",
+    "policyclass",
+    "policy_class",
+}
+
+
 def _extract_text_fragments_for_policy(value: Any) -> list[str]:
     fragments: list[str] = []
     if value is None:
@@ -300,7 +307,9 @@ def _extract_text_fragments_for_policy(value: Any) -> list[str]:
     if isinstance(value, (int, float, bool)):
         return [str(value)]
     if isinstance(value, dict):
-        for nested_value in value.values():
+        for key, nested_value in value.items():
+            if str(key or "").replace("-", "_").replace(" ", "_").lower() in _POLICY_METADATA_KEYS:
+                continue
             fragments.extend(_extract_text_fragments_for_policy(nested_value))
         return fragments
     if isinstance(value, (list, tuple, set)):
