@@ -43,6 +43,7 @@
 
 ### Added
 
+- Added a hidden `khub labs ontology contributor-audit` operator surface for dry-run auditing and optional metadata-only backfill of historical concept `contributor_hashes` gaps from live derived ontology claims/relations.
 - Added `docs/adr/2026-04-24-store-authority-inventory.md` to classify persistence stores as canonical source/audit, derivative materialized view, mixed authority, or operational canonical, and to pin the invariant that derivative semantic rows are retrieval/UI signals unless they resolve back to source-backed spans.
 - Added docs-only v1 answer architecture contracts for `EvidencePacket`, `AnswerContract`, and `VerificationVerdict`, with fixture coverage for source-hashed evidence spans, answer citations/abstention metadata, and pass/fail/abstain verification verdicts that explicitly exclude `rewrite_and_retry`.
 - Promoted the source-quality observation loop into a local daily hard gate. The new `eval/knowledgeos/scripts/check_source_quality_hard_gate.py` reads the latest observation report and exits non-zero unless the seven-run window is `ready_for_hard_gate_review` with no blockers, perfect paper/vault/web route correctness, zero vault stale citations, and zero legacy/capability-missing rates. `scripts/run_daily_source_quality.py` now supports `--enforce-hard-gate`, and both the repo wrapper plus the installed launchd helper enforce the gate by default while keeping docs writeback opt-in.

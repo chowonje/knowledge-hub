@@ -9,6 +9,7 @@ import click
 from rich.console import Console
 from rich.table import Table
 
+from knowledge_hub.application.ontology_contributor_audit import audit_ontology_contributor_hashes
 from knowledge_hub.knowledge.ontology_profiles import OntologyProfileManager
 
 console = Console()
@@ -251,6 +252,46 @@ def predicate_list(ctx, status, limit, as_json):
             str(item.get("status", "")),
             str(item.get("parent_predicate_id", "") or "-"),
             str(item.get("description", "") or "-"),
+        )
+    console.print(table)
+
+
+@ontology_group.command("contributor-audit", hidden=True)
+@click.option("--apply", "apply_changes", is_flag=True, default=False, help="Fill missing contributor hashes.")
+@click.option("--limit", default=50, show_default=True, help="Maximum sample rows to print.")
+@click.option("--json/--no-json", "as_json", default=False, show_default=True)
+@click.pass_context
+def contributor_audit(ctx, apply_changes, limit, as_json):
+    """Audit/backfill concept contributor hashes for historical ontology rows."""
+    db = _db(ctx)
+    payload = audit_ontology_contributor_hashes(db.conn, apply=bool(apply_changes), sample_limit=max(1, int(limit)))
+    if as_json:
+        console.print_json(data=payload)
+        return
+    counts = payload.get("counts") if isinstance(payload.get("counts"), dict) else {}
+    console.print(
+        "[bold]ontology contributor-audit[/bold] "
+        f"apply={payload.get('apply')} "
+        f"concepts={counts.get('conceptEntityCount', 0)} "
+        f"candidates={counts.get('contributorCandidateCount', 0)} "
+        f"missing_entities={counts.get('missingContributorEntityCount', 0)} "
+        f"missing_hashes={counts.get('missingContributorHashCount', 0)} "
+        f"updated={counts.get('updatedEntityCount', 0)}"
+    )
+    rows = payload.get("items") if isinstance(payload.get("items"), list) else []
+    if not rows:
+        return
+    table = Table(title=f"Contributor Hash Gaps ({len(rows)})")
+    table.add_column("entity_id", style="cyan")
+    table.add_column("name")
+    table.add_column("missing", max_width=56)
+    table.add_column("action", style="magenta")
+    for item in rows:
+        table.add_row(
+            str(item.get("entityId", "")),
+            str(item.get("canonicalName", "")),
+            ", ".join(str(value) for value in item.get("missingContributorHashes", [])),
+            str(item.get("action", "")),
         )
     console.print(table)
 
