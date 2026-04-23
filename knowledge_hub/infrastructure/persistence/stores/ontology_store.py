@@ -11,6 +11,10 @@ from typing import Any
 from uuid import uuid4
 
 from knowledge_hub.core.models import OntologyEvent
+from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
+    add_derivative_lifecycle_columns,
+    source_hash_from_payload,
+)
 
 log = logging.getLogger("khub.ontology_store")
 
@@ -370,6 +374,16 @@ class OntologyStore:
             "origin",
             "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
         )
+        add_column = lambda conn, table, column_name, column_sql: self._add_column_if_missing(
+            table,
+            column_name,
+            column_sql,
+        )
+        add_derivative_lifecycle_columns(self.conn, "concepts", add_column)
+        add_derivative_lifecycle_columns(self.conn, "ontology_entities", add_column)
+        add_derivative_lifecycle_columns(self.conn, "ontology_claims", add_column)
+        add_derivative_lifecycle_columns(self.conn, "ontology_relations", add_column)
+        add_derivative_lifecycle_columns(self.conn, "kg_relations", add_column)
 
     @staticmethod
     def _decode_entity_row(row: Any) -> dict[str, Any] | None:
@@ -906,6 +920,7 @@ class OntologyStore:
                 else [],
                 "reason": {"legacy_relation": legacy_relation},
             }
+            item["stale"] = bool(item.get("stale"))
             return item
 
         reason_json = _safe_json_dict(item.get("reason_json"))
@@ -937,6 +952,7 @@ class OntologyStore:
             item["evidence_text"] = legacy_evidence_text
         else:
             item["evidence_text"] = json.dumps(evidence_json, ensure_ascii=False)
+        item["stale"] = bool(item.get("stale"))
         return item
 
     def _attach_predicate_semantics(self, item: dict[str, Any]) -> dict[str, Any]:
@@ -1110,14 +1126,16 @@ class OntologyStore:
         source_value = str(evidence_json.get("source", "")).strip()
         if not source_value:
             source_value = "web" if source_type_norm in {"concept", "note"} else "system"
+        source_hash = source_hash_from_payload({"reason": reason_json, "evidence_ptrs": evidence_ptrs})
 
         if self._table_exists("ontology_relations"):
             self.conn.execute(
                 """INSERT INTO ontology_relations
                      (source_entity_id, predicate_id, target_entity_id,
                       source_type, source_id, target_type, target_id,
-                      confidence, evidence_ptrs_json, reason_json, source)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                      confidence, evidence_ptrs_json, reason_json, source, origin,
+                      source_content_hash, stale, stale_reason, invalidated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'derived', ?, 0, '', '')
                    ON CONFLICT(source_entity_id, predicate_id, target_entity_id, source) DO UPDATE SET
                      confidence=excluded.confidence,
                      evidence_ptrs_json=excluded.evidence_ptrs_json,
@@ -1126,6 +1144,11 @@ class OntologyStore:
                      source_id=excluded.source_id,
                      target_type=excluded.target_type,
                      target_id=excluded.target_id,
+                     origin=excluded.origin,
+                     source_content_hash=excluded.source_content_hash,
+                     stale=excluded.stale,
+                     stale_reason=excluded.stale_reason,
+                     invalidated_at=excluded.invalidated_at,
                      updated_at=CURRENT_TIMESTAMP""",
                 (
                     source_entity_id or source_id_norm,
@@ -1139,6 +1162,7 @@ class OntologyStore:
                     json.dumps(evidence_ptrs, ensure_ascii=False),
                     json.dumps(reason_json, ensure_ascii=False),
                     source_value,
+                    source_hash,
                 ),
             )
 
@@ -1177,11 +1201,12 @@ class OntologyStore:
                     error,
                 )
 
-    def get_relations(self, entity_type: str, entity_id: str) -> list[dict]:
+    def get_relations(self, entity_type: str, entity_id: str, *, include_stale: bool = False) -> list[dict]:
         et = str(entity_type or "").strip()
         eid = str(entity_id or "").strip()
         if not self._table_exists("ontology_relations"):
             return []
+        columns = self._table_columns("ontology_relations")
         query = """
             SELECT * FROM ontology_relations
             WHERE (source_type=? AND source_id=?) OR (target_type=? AND target_id=?)
@@ -1207,6 +1232,8 @@ class OntologyStore:
                 ORDER BY confidence DESC, relation_id DESC
             """
             params.extend([canonical, canonical])
+        if "stale" in columns and not include_stale:
+            query = query.replace("ORDER BY confidence DESC, relation_id DESC", "AND (COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual') ORDER BY confidence DESC, relation_id DESC")
         rows = self.conn.execute(query, params).fetchall()
         return [self._attach_predicate_semantics(self._format_relation_row(row)) for row in rows]
 
@@ -1218,6 +1245,7 @@ class OntologyStore:
         source_id: str | None = None,
         target_id: str | None = None,
         limit: int = 2000,
+        include_stale: bool = False,
     ) -> list[dict]:
         if not self._table_exists("kg_relations"):
             return []
@@ -1235,6 +1263,8 @@ class OntologyStore:
         if target_id:
             query += " AND target_id = ?"
             params.append(str(target_id))
+        if "stale" in self._table_columns("kg_relations") and not include_stale:
+            query += " AND (COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual')"
         query += " ORDER BY confidence DESC, id DESC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -1256,6 +1286,7 @@ class OntologyStore:
         source_id: str | None = None,
         target_id: str | None = None,
         limit: int = 2000,
+        include_stale: bool = False,
     ) -> list[dict]:
         if not self._table_exists("ontology_relations"):
             return []
@@ -1273,6 +1304,8 @@ class OntologyStore:
         if target_id:
             query += " AND target_id = ?"
             params.append(str(target_id))
+        if "stale" in self._table_columns("ontology_relations") and not include_stale:
+            query += " AND (COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual')"
         query += " ORDER BY confidence DESC, relation_id DESC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -1290,6 +1323,7 @@ class OntologyStore:
         source_type: str | None = None,
         target_type: str | None = None,
         predicate_id: str | None = None,
+        include_stale: bool = False,
     ) -> list[dict]:
         if not self._table_exists("ontology_relations"):
             return []
@@ -1307,6 +1341,8 @@ class OntologyStore:
         if predicate_id:
             query += " AND predicate_id = ?"
             params.append(str(predicate_id))
+        if "stale" in self._table_columns("ontology_relations") and not include_stale:
+            query += " AND (COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual')"
         query += " ORDER BY created_at ASC, relation_id ASC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -1708,6 +1744,7 @@ class OntologyStore:
         subject_entity_id: str | None = None,
         predicate: str | None = None,
         object_entity_id: str | None = None,
+        include_stale: bool = False,
     ) -> list[dict]:
         query = "SELECT * FROM ontology_claims WHERE 1=1"
         params: list[Any] = []
@@ -1723,6 +1760,8 @@ class OntologyStore:
         if object_entity_id:
             query += " AND object_entity_id = ?"
             params.append(str(object_entity_id))
+        if "stale" in self._table_columns("ontology_claims") and not include_stale:
+            query += " AND COALESCE(stale, 0) = 0"
         query += " ORDER BY created_at ASC, claim_id ASC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -1735,6 +1774,7 @@ class OntologyStore:
                 item["evidence_ptrs"] = json.loads(raw) if raw else []
             except Exception:
                 item["evidence_ptrs"] = []
+            item["stale"] = bool(item.get("stale"))
             result.append(item)
         return result
 

@@ -9,6 +9,10 @@ from typing import Any, Optional
 from uuid import uuid4
 
 from knowledge_hub.core.models import OntologyEvent
+from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
+    add_derivative_lifecycle_columns,
+    source_hash_from_payload,
+)
 
 log = logging.getLogger("khub.claim_store")
 
@@ -23,6 +27,13 @@ def _safe_json_dict(raw: Any) -> dict[str, Any]:
     except Exception:
         return {}
     return parsed if isinstance(parsed, dict) else {}
+
+
+def _add_column_if_missing(conn, table: str, column_name: str, column_sql: str) -> None:
+    columns = {str(row[1]) for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+    if column_name in columns:
+        return
+    conn.execute(f"ALTER TABLE {table} ADD COLUMN {column_sql}")
 
 
 class ClaimStore:
@@ -74,6 +85,8 @@ class ClaimStore:
         columns = {str(row[1]) for row in self.conn.execute("PRAGMA table_info(claim_normalizations)").fetchall()}
         if "negative_scope_text" not in columns:
             self.conn.execute("ALTER TABLE claim_normalizations ADD COLUMN negative_scope_text TEXT DEFAULT ''")
+        if self.conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='ontology_claims'").fetchone():
+            add_derivative_lifecycle_columns(self.conn, "ontology_claims", _add_column_if_missing)
         self.conn.commit()
 
     def _decode_claim(self, row) -> Optional[dict[str, Any]]:
@@ -84,6 +97,7 @@ class ClaimStore:
             item["evidence_ptrs"] = json.loads(item.get("evidence_ptrs_json") or "[]")
         except Exception:
             item["evidence_ptrs"] = []
+        item["stale"] = bool(item.get("stale"))
         return item
 
     def _decode_claim_normalization(self, row) -> Optional[dict[str, Any]]:
@@ -116,11 +130,13 @@ class ClaimStore:
         existing = self.get_claim(claim_id)
         is_update = existing is not None
         evidence_json = json.dumps(evidence_ptrs or [], ensure_ascii=False)
+        source_hash = source_hash_from_payload({"evidence_ptrs": evidence_ptrs or []})
         self.conn.execute(
             """INSERT INTO ontology_claims
                (claim_id, claim_text, subject_entity_id, predicate, object_entity_id,
-                object_literal, confidence, evidence_ptrs_json, source, valid_from, valid_to)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                object_literal, confidence, evidence_ptrs_json, source, valid_from, valid_to,
+                origin, source_content_hash, stale, stale_reason, invalidated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'derived', ?, 0, '', '')
                ON CONFLICT(claim_id) DO UPDATE SET
                  claim_text=excluded.claim_text,
                  subject_entity_id=excluded.subject_entity_id,
@@ -131,7 +147,12 @@ class ClaimStore:
                  evidence_ptrs_json=excluded.evidence_ptrs_json,
                  source=excluded.source,
                  valid_from=excluded.valid_from,
-                 valid_to=excluded.valid_to""",
+                 valid_to=excluded.valid_to,
+                 origin=excluded.origin,
+                 source_content_hash=excluded.source_content_hash,
+                 stale=excluded.stale,
+                 stale_reason=excluded.stale_reason,
+                 invalidated_at=excluded.invalidated_at""",
             (
                 str(claim_id),
                 str(claim_text),
@@ -144,6 +165,7 @@ class ClaimStore:
                 str(source),
                 valid_from,
                 valid_to,
+                source_hash,
             ),
         )
         self.conn.commit()
@@ -323,9 +345,11 @@ class ClaimStore:
         predicate: str | None = None,
         object_id: str | None = None,
         limit: int = 500,
+        include_stale: bool = False,
     ) -> list[dict[str, Any]]:
         query = "SELECT * FROM ontology_claims WHERE 1=1"
         params: list[Any] = []
+        columns = {str(row[1]) for row in self.conn.execute("PRAGMA table_info(ontology_claims)").fetchall()}
         if subject_id:
             query += " AND subject_entity_id = ?"
             params.append(str(subject_id))
@@ -335,6 +359,8 @@ class ClaimStore:
         if object_id:
             query += " AND object_entity_id = ?"
             params.append(str(object_id))
+        if "stale" in columns and not include_stale:
+            query += " AND COALESCE(stale, 0) = 0"
         query += " ORDER BY confidence DESC, created_at DESC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()

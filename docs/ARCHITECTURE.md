@@ -38,6 +38,7 @@ See also:
 - SQLite, vector collections, parser artifacts, and note/paper/web source records remain canonical local stores.
 - Store authority is explicit: source/audit stores can be canonical in their own domain, semantic cards/memory/graph/ontology projections are derivative unless they resolve back to source-backed spans, and operational queues/logs are not factual answer evidence.
 - Mixed semantic stores now use table-level authority plus row-level prep columns (`origin`, `contributor_hashes`, `supersedes`, `superseded_by`) so later lifecycle work does not confuse manual rows, aggregated projections, and epistemic review state.
+- Mixed derivative read paths now also enforce a first lifecycle boundary: stale `ontology_claims`, `ontology_relations`, legacy `kg_relations`, `learning_graph_*`, and derived `memory_relations` are excluded by default, while `origin='manual'` rows stay visible and mixed-store invalidation runs only for explicit source-document hash changes rather than every document-memory rebuild.
 - Local workbench helpers may reshape or scope existing sources, but they must not become the system of record or silently add external sync paths.
 - Repo/project context is read-only and ephemeral unless a feature explicitly promotes it into a persistent store.
 

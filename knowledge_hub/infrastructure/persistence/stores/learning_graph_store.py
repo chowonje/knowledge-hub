@@ -5,6 +5,11 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
+    add_derivative_lifecycle_columns,
+    source_hash_from_payload,
+)
+
 
 def _loads(raw: Any, fallback):
     if raw is None or raw == "":
@@ -171,6 +176,10 @@ class LearningGraphStore:
             "origin",
             "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
         )
+        add_derivative_lifecycle_columns(self.conn, "learning_graph_nodes", _add_column_if_missing)
+        add_derivative_lifecycle_columns(self.conn, "learning_graph_edges", _add_column_if_missing)
+        add_derivative_lifecycle_columns(self.conn, "learning_graph_paths", _add_column_if_missing)
+        add_derivative_lifecycle_columns(self.conn, "learning_graph_resource_links", _add_column_if_missing)
         self.conn.commit()
 
     def upsert_node(
@@ -185,11 +194,14 @@ class LearningGraphStore:
         confidence: float,
         provenance: dict[str, Any] | None = None,
     ) -> None:
+        payload = dict(provenance or {})
+        source_hash = source_hash_from_payload({"provenance": payload})
         self.conn.execute(
             """INSERT INTO learning_graph_nodes
                  (node_id, entity_id, node_type, canonical_name, difficulty_level,
-                  difficulty_score, stage, confidence, provenance_json, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                  difficulty_score, stage, confidence, provenance_json, source_content_hash,
+                  stale, stale_reason, invalidated_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, '', '', CURRENT_TIMESTAMP)
                ON CONFLICT(node_id) DO UPDATE SET
                  entity_id=excluded.entity_id,
                  node_type=excluded.node_type,
@@ -199,6 +211,10 @@ class LearningGraphStore:
                  stage=excluded.stage,
                  confidence=excluded.confidence,
                  provenance_json=excluded.provenance_json,
+                 source_content_hash=excluded.source_content_hash,
+                 stale=excluded.stale,
+                 stale_reason=excluded.stale_reason,
+                 invalidated_at=excluded.invalidated_at,
                  updated_at=CURRENT_TIMESTAMP""",
             (
                 node_id,
@@ -209,7 +225,8 @@ class LearningGraphStore:
                 float(difficulty_score),
                 stage,
                 float(confidence),
-                json.dumps(provenance or {}, ensure_ascii=False),
+                json.dumps(payload, ensure_ascii=False),
+                source_hash,
             ),
         )
         self.conn.commit()
@@ -223,14 +240,25 @@ class LearningGraphStore:
             return None
         item = dict(row)
         item["provenance_json"] = _loads(item.get("provenance_json"), {})
+        item["stale"] = bool(item.get("stale"))
         return item
 
-    def list_nodes(self, node_type: str | None = None, limit: int = 2000) -> list[dict[str, Any]]:
+    def list_nodes(
+        self,
+        node_type: str | None = None,
+        limit: int = 2000,
+        include_stale: bool = False,
+    ) -> list[dict[str, Any]]:
         query = "SELECT * FROM learning_graph_nodes"
         params: list[Any] = []
+        clauses: list[str] = []
         if node_type:
-            query += " WHERE node_type = ?"
+            clauses.append("node_type = ?")
             params.append(node_type)
+        if not include_stale:
+            clauses.append("COALESCE(stale, 0) = 0")
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
         query += " ORDER BY canonical_name ASC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -238,6 +266,7 @@ class LearningGraphStore:
         for row in rows:
             item = dict(row)
             item["provenance_json"] = _loads(item.get("provenance_json"), {})
+            item["stale"] = bool(item.get("stale"))
             result.append(item)
         return result
 
@@ -252,17 +281,26 @@ class LearningGraphStore:
         provenance: dict[str, Any] | None = None,
         evidence: dict[str, Any] | None = None,
     ) -> None:
+        provenance_payload = dict(provenance or {})
+        evidence_payload = dict(evidence or {})
+        source_hash = source_hash_from_payload({"provenance": provenance_payload, "evidence": evidence_payload})
         self.conn.execute(
             """INSERT INTO learning_graph_edges
                  (edge_id, source_node_id, edge_type, target_node_id, confidence, status,
-                  provenance_json, evidence_json, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                  provenance_json, evidence_json, origin, source_content_hash,
+                  stale, stale_reason, invalidated_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'derived', ?, 0, '', '', CURRENT_TIMESTAMP)
                ON CONFLICT(source_node_id, edge_type, target_node_id) DO UPDATE SET
                  edge_id=excluded.edge_id,
                  confidence=excluded.confidence,
                  status=excluded.status,
                  provenance_json=excluded.provenance_json,
                  evidence_json=excluded.evidence_json,
+                 origin=excluded.origin,
+                 source_content_hash=excluded.source_content_hash,
+                 stale=excluded.stale,
+                 stale_reason=excluded.stale_reason,
+                 invalidated_at=excluded.invalidated_at,
                  updated_at=CURRENT_TIMESTAMP""",
             (
                 edge_id,
@@ -271,18 +309,29 @@ class LearningGraphStore:
                 target_node_id,
                 float(confidence),
                 status,
-                json.dumps(provenance or {}, ensure_ascii=False),
-                json.dumps(evidence or {}, ensure_ascii=False),
+                json.dumps(provenance_payload, ensure_ascii=False),
+                json.dumps(evidence_payload, ensure_ascii=False),
+                source_hash,
             ),
         )
         self.conn.commit()
 
-    def list_edges(self, status: str | None = None, limit: int = 5000) -> list[dict[str, Any]]:
+    def list_edges(
+        self,
+        status: str | None = None,
+        limit: int = 5000,
+        include_stale: bool = False,
+    ) -> list[dict[str, Any]]:
         query = "SELECT * FROM learning_graph_edges"
         params: list[Any] = []
+        clauses: list[str] = []
         if status:
-            query += " WHERE status = ?"
+            clauses.append("status = ?")
             params.append(status)
+        if not include_stale:
+            clauses.append("(COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual')")
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
         query += " ORDER BY updated_at DESC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -291,6 +340,7 @@ class LearningGraphStore:
             item = dict(row)
             item["provenance_json"] = _loads(item.get("provenance_json"), {})
             item["evidence_json"] = _loads(item.get("evidence_json"), {})
+            item["stale"] = bool(item.get("stale"))
             result.append(item)
         return result
 
@@ -304,10 +354,15 @@ class LearningGraphStore:
         score_payload: dict[str, Any],
         provenance: dict[str, Any] | None = None,
     ) -> None:
+        provenance_payload = dict(provenance or {})
+        source_hash = source_hash_from_payload(
+            {"provenance": provenance_payload, "path": path_payload or {}, "score": score_payload or {}}
+        )
         self.conn.execute(
             """INSERT INTO learning_graph_paths
-                 (path_id, topic_slug, status, version, path_json, score_json, provenance_json, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                 (path_id, topic_slug, status, version, path_json, score_json, provenance_json,
+                  source_content_hash, stale, stale_reason, invalidated_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, '', '', CURRENT_TIMESTAMP)
                ON CONFLICT(path_id) DO UPDATE SET
                  topic_slug=excluded.topic_slug,
                  status=excluded.status,
@@ -315,6 +370,10 @@ class LearningGraphStore:
                  path_json=excluded.path_json,
                  score_json=excluded.score_json,
                  provenance_json=excluded.provenance_json,
+                 source_content_hash=excluded.source_content_hash,
+                 stale=excluded.stale,
+                 stale_reason=excluded.stale_reason,
+                 invalidated_at=excluded.invalidated_at,
                  updated_at=CURRENT_TIMESTAMP""",
             (
                 path_id,
@@ -323,17 +382,25 @@ class LearningGraphStore:
                 int(version),
                 json.dumps(path_payload, ensure_ascii=False),
                 json.dumps(score_payload, ensure_ascii=False),
-                json.dumps(provenance or {}, ensure_ascii=False),
+                json.dumps(provenance_payload, ensure_ascii=False),
+                source_hash,
             ),
         )
         self.conn.commit()
 
-    def get_latest_path(self, topic_slug: str, status: str | None = None) -> dict[str, Any] | None:
+    def get_latest_path(
+        self,
+        topic_slug: str,
+        status: str | None = None,
+        include_stale: bool = False,
+    ) -> dict[str, Any] | None:
         query = "SELECT * FROM learning_graph_paths WHERE topic_slug = ?"
         params: list[Any] = [topic_slug]
         if status:
             query += " AND status = ?"
             params.append(status)
+        if not include_stale:
+            query += " AND COALESCE(stale, 0) = 0"
         query += " ORDER BY version DESC, updated_at DESC LIMIT 1"
         row = self.conn.execute(query, params).fetchone()
         if not row:
@@ -342,6 +409,7 @@ class LearningGraphStore:
         item["path_json"] = _loads(item.get("path_json"), {})
         item["score_json"] = _loads(item.get("score_json"), {})
         item["provenance_json"] = _loads(item.get("provenance_json"), {})
+        item["stale"] = bool(item.get("stale"))
         return item
 
     def upsert_resource_link(
@@ -355,17 +423,25 @@ class LearningGraphStore:
         status: str,
         provenance: dict[str, Any] | None = None,
     ) -> None:
+        payload = dict(provenance or {})
+        source_hash = source_hash_from_payload({"provenance": payload})
         self.conn.execute(
             """INSERT INTO learning_graph_resource_links
                  (link_id, concept_node_id, resource_node_id, link_type, reading_stage,
-                  confidence, status, provenance_json, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                  confidence, status, provenance_json, origin, source_content_hash,
+                  stale, stale_reason, invalidated_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'derived', ?, 0, '', '', CURRENT_TIMESTAMP)
                ON CONFLICT(concept_node_id, resource_node_id, link_type) DO UPDATE SET
                  link_id=excluded.link_id,
                  reading_stage=excluded.reading_stage,
                  confidence=excluded.confidence,
                  status=excluded.status,
                  provenance_json=excluded.provenance_json,
+                 origin=excluded.origin,
+                 source_content_hash=excluded.source_content_hash,
+                 stale=excluded.stale,
+                 stale_reason=excluded.stale_reason,
+                 invalidated_at=excluded.invalidated_at,
                  updated_at=CURRENT_TIMESTAMP""",
             (
                 link_id,
@@ -375,17 +451,28 @@ class LearningGraphStore:
                 reading_stage,
                 float(confidence),
                 status,
-                json.dumps(provenance or {}, ensure_ascii=False),
+                json.dumps(payload, ensure_ascii=False),
+                source_hash,
             ),
         )
         self.conn.commit()
 
-    def list_resource_links(self, status: str | None = None, limit: int = 5000) -> list[dict[str, Any]]:
+    def list_resource_links(
+        self,
+        status: str | None = None,
+        limit: int = 5000,
+        include_stale: bool = False,
+    ) -> list[dict[str, Any]]:
         query = "SELECT * FROM learning_graph_resource_links"
         params: list[Any] = []
+        clauses: list[str] = []
         if status:
-            query += " WHERE status = ?"
+            clauses.append("status = ?")
             params.append(status)
+        if not include_stale:
+            clauses.append("(COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual')")
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
         query += " ORDER BY updated_at DESC LIMIT ?"
         params.append(max(1, int(limit)))
         rows = self.conn.execute(query, params).fetchall()
@@ -393,6 +480,7 @@ class LearningGraphStore:
         for row in rows:
             item = dict(row)
             item["provenance_json"] = _loads(item.get("provenance_json"), {})
+            item["stale"] = bool(item.get("stale"))
             result.append(item)
         return result
 

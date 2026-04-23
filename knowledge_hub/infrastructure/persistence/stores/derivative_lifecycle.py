@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from typing import Any, Callable
 
 
@@ -51,18 +52,26 @@ def add_derivative_lifecycle_columns(conn: Any, table: str, add_column_fn: Calla
 
 
 def source_hash_from_payload(payload: dict[str, Any]) -> str:
-    for key in SOURCE_HASH_KEYS:
-        token = clean_token(payload.get(key))
-        if token:
-            return token
-    for nested_key in ("provenance", "diagnostics", "metadata", "source_trace", "sourceTrace"):
-        nested = payload.get(nested_key)
-        if not isinstance(nested, dict):
+    seen: set[int] = set()
+    stack: list[Any] = [dict(payload or {})]
+    while stack:
+        current = stack.pop()
+        current_id = id(current)
+        if current_id in seen:
             continue
-        for key in SOURCE_HASH_KEYS:
-            token = clean_token(nested.get(key))
-            if token:
-                return token
+        seen.add(current_id)
+        if isinstance(current, dict):
+            for key in SOURCE_HASH_KEYS:
+                token = clean_token(current.get(key))
+                if token:
+                    return token
+            for value in current.values():
+                if isinstance(value, (dict, list, tuple)):
+                    stack.append(value)
+        elif isinstance(current, (list, tuple)):
+            for value in current:
+                if isinstance(value, (dict, list, tuple)):
+                    stack.append(value)
     return ""
 
 
@@ -171,6 +180,90 @@ def _tables_with_column(conn: Any, column_name: str) -> set[str]:
     return matched
 
 
+def _safe_json_dict(raw: Any) -> dict[str, Any]:
+    if isinstance(raw, dict):
+        return raw
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except Exception:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def _document_identity_tokens(conn: Any, document_id: str, *, source_type: str = "") -> list[str]:
+    variants = _document_id_variants(document_id, source_type=source_type)
+    tokens: list[str] = []
+
+    def add(value: Any) -> None:
+        token = clean_token(value)
+        if token and token not in tokens:
+            tokens.append(token)
+
+    for variant in variants:
+        add(variant)
+    if table_exists(conn, "notes"):
+        for variant in variants:
+            row = conn.execute(
+                "SELECT id, file_path, metadata FROM notes WHERE id = ? OR file_path = ? LIMIT 1",
+                (variant, variant),
+            ).fetchone()
+            if not row:
+                continue
+            add(row["id"] if hasattr(row, "keys") and "id" in row.keys() else row[0])
+            add(row["file_path"] if hasattr(row, "keys") and "file_path" in row.keys() else row[1])
+            metadata_raw = row["metadata"] if hasattr(row, "keys") and "metadata" in row.keys() else row[2]
+            metadata = _safe_json_dict(metadata_raw)
+            for key in ("canonical_url", "url", "source_url", "record_id", "source_item_id", "source_content_hash"):
+                add(metadata.get(key))
+    if source_type == "paper":
+        paper_id = clean_token(document_id.removeprefix("paper:") if str(document_id).startswith("paper:") else document_id)
+        add(paper_id)
+        add(f"paper:{paper_id}" if paper_id else "")
+    return tokens
+
+
+def _like_any_clause(column: str, values: list[str]) -> tuple[str, tuple[Any, ...]]:
+    normalized = [clean_token(value) for value in values if clean_token(value)]
+    if not normalized:
+        return "", ()
+    return (
+        "(" + " OR ".join(f"{column} LIKE ?" for _ in normalized) + ")",
+        tuple(f"%{value}%" for value in normalized),
+    )
+
+
+def _mark_table_rows_stale(
+    conn: Any,
+    *,
+    table: str,
+    identity_clause: str,
+    identity_params: tuple[Any, ...],
+    source_content_hash: str,
+    allow_manual_rows: bool = False,
+) -> int:
+    columns = column_names(conn, table)
+    required = {"source_content_hash", "stale", "stale_reason", "invalidated_at"}
+    if not required.issubset(columns):
+        return 0
+    where_parts = [f"({identity_clause})", "(source_content_hash = '' OR source_content_hash != ?)", "COALESCE(stale, 0) = 0"]
+    params: list[Any] = [*identity_params, source_content_hash]
+    if "origin" in columns and not allow_manual_rows:
+        where_parts.append("COALESCE(origin, 'derived') != 'manual'")
+    cursor = conn.execute(
+        f"""
+        UPDATE {table}
+        SET stale = 1,
+            stale_reason = 'source_content_hash_changed',
+            invalidated_at = CURRENT_TIMESTAMP
+        WHERE {' AND '.join(where_parts)}
+        """,
+        tuple(params),
+    )
+    return int(cursor.rowcount or 0)
+
+
 def mark_derivatives_stale_for_document(
     conn: Any,
     *,
@@ -180,11 +273,13 @@ def mark_derivatives_stale_for_document(
 ) -> int:
     doc_id = clean_token(document_id)
     new_hash = clean_token(source_content_hash)
+    source_kind = clean_token(source_type).lower()
     if not doc_id or not new_hash:
         return 0
 
     paper_id = doc_id.removeprefix("paper:") if doc_id.startswith("paper:") else ""
     variants = _document_id_variants(doc_id, source_type=source_type)
+    tokens = _document_identity_tokens(conn, doc_id, source_type=source_type)
 
     def _in_clause(column: str, values: list[str]) -> tuple[str, tuple[Any, ...]]:
         placeholders = ", ".join("?" for _ in values)
@@ -221,21 +316,116 @@ def mark_derivatives_stale_for_document(
 
     changed = 0
     for table, identity_clause, identity_params in targets:
-        columns = column_names(conn, table)
-        required = {"source_content_hash", "stale", "stale_reason", "invalidated_at"}
-        if not required.issubset(columns):
-            continue
-        cursor = conn.execute(
-            f"""
-            UPDATE {table}
-            SET stale = 1,
-                stale_reason = 'source_content_hash_changed',
-                invalidated_at = CURRENT_TIMESTAMP
-            WHERE {identity_clause}
-              AND (source_content_hash = '' OR source_content_hash != ?)
-              AND COALESCE(stale, 0) = 0
-            """,
-            tuple([*identity_params, new_hash]),
+        changed += _mark_table_rows_stale(
+            conn,
+            table=table,
+            identity_clause=identity_clause,
+            identity_params=identity_params,
+            source_content_hash=new_hash,
         )
-        changed += int(cursor.rowcount or 0)
+    invalidate_mixed_derivatives = source_kind in {"note", "paper", "web", "vault"}
+    if tokens and invalidate_mixed_derivatives:
+        claim_like_clause, claim_like_params = _like_any_clause("evidence_ptrs_json", tokens)
+        if claim_like_clause:
+            changed += _mark_table_rows_stale(
+                conn,
+                table="ontology_claims",
+                identity_clause=claim_like_clause,
+                identity_params=claim_like_params,
+                source_content_hash=new_hash,
+            )
+
+        relation_clauses: list[str] = []
+        relation_params: list[Any] = []
+        if variants:
+            placeholders = ", ".join("?" for _ in variants)
+            relation_clauses.append(f"source_id IN ({placeholders})")
+            relation_params.extend(variants)
+            relation_clauses.append(f"target_id IN ({placeholders})")
+            relation_params.extend(variants)
+        reason_like_clause, reason_like_params = _like_any_clause("reason_json", tokens)
+        if reason_like_clause:
+            relation_clauses.append(reason_like_clause)
+            relation_params.extend(reason_like_params)
+        if relation_clauses:
+            changed += _mark_table_rows_stale(
+                conn,
+                table="ontology_relations",
+                identity_clause=" OR ".join(f"({clause})" for clause in relation_clauses),
+                identity_params=tuple(relation_params),
+                source_content_hash=new_hash,
+            )
+
+        legacy_clauses: list[str] = []
+        legacy_params: list[Any] = []
+        if variants:
+            placeholders = ", ".join("?" for _ in variants)
+            legacy_clauses.append(f"source_id IN ({placeholders})")
+            legacy_params.extend(variants)
+            legacy_clauses.append(f"target_id IN ({placeholders})")
+            legacy_params.extend(variants)
+        evidence_like_clause, evidence_like_params = _like_any_clause("evidence_text", tokens)
+        if evidence_like_clause:
+            legacy_clauses.append(evidence_like_clause)
+            legacy_params.extend(evidence_like_params)
+        if legacy_clauses:
+            changed += _mark_table_rows_stale(
+                conn,
+                table="kg_relations",
+                identity_clause=" OR ".join(f"({clause})" for clause in legacy_clauses),
+                identity_params=tuple(legacy_params),
+                source_content_hash=new_hash,
+            )
+
+        memory_clauses: list[str] = []
+        memory_params: list[Any] = []
+        if variants:
+            placeholders = ", ".join("?" for _ in variants)
+            memory_clauses.append(f"(src_form = 'document_memory' AND src_id IN ({placeholders}))")
+            memory_params.extend(variants)
+            memory_clauses.append(f"(dst_form = 'document_memory' AND dst_id IN ({placeholders}))")
+            memory_params.extend(variants)
+        if paper_id:
+            memory_clauses.extend(
+                [
+                    "(src_form = 'paper_memory' AND src_id IN (SELECT memory_id FROM paper_memory_cards WHERE paper_id = ?))",
+                    "(dst_form = 'paper_memory' AND dst_id IN (SELECT memory_id FROM paper_memory_cards WHERE paper_id = ?))",
+                ]
+            )
+            memory_params.extend([paper_id, paper_id])
+        provenance_like_clause, provenance_like_params = _like_any_clause("provenance_json", tokens)
+        if provenance_like_clause:
+            memory_clauses.append(provenance_like_clause)
+            memory_params.extend(provenance_like_params)
+        if memory_clauses:
+            changed += _mark_table_rows_stale(
+                conn,
+                table="memory_relations",
+                identity_clause=" OR ".join(f"({clause})" for clause in memory_clauses),
+                identity_params=tuple(memory_params),
+                source_content_hash=new_hash,
+            )
+
+        learning_targets = (
+            ("learning_graph_nodes", ("provenance_json",)),
+            ("learning_graph_edges", ("provenance_json", "evidence_json")),
+            ("learning_graph_paths", ("provenance_json", "path_json")),
+            ("learning_graph_resource_links", ("provenance_json",)),
+        )
+        for table, text_columns in learning_targets:
+            clauses: list[str] = []
+            params: list[Any] = []
+            for column in text_columns:
+                clause, clause_params = _like_any_clause(column, tokens)
+                if clause:
+                    clauses.append(clause)
+                    params.extend(clause_params)
+            if clauses:
+                changed += _mark_table_rows_stale(
+                    conn,
+                    table=table,
+                    identity_clause=" OR ".join(f"({clause})" for clause in clauses),
+                    identity_params=tuple(params),
+                    source_content_hash=new_hash,
+                )
     return changed

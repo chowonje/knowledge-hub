@@ -5,6 +5,11 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
+    add_derivative_lifecycle_columns,
+    source_hash_from_payload,
+)
+
 
 def _loads_dict(raw: Any) -> dict[str, Any]:
     if raw is None or raw == "":
@@ -64,11 +69,13 @@ class MemoryRelationStore:
             "origin",
             "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
         )
+        add_derivative_lifecycle_columns(self.conn, "memory_relations", _add_column_if_missing)
         self.conn.commit()
 
     def _row_to_item(self, row) -> dict[str, Any]:
         item = dict(row)
         item["provenance"] = _loads_dict(item.get("provenance_json"))
+        item["stale"] = bool(item.get("stale"))
         return item
 
     def upsert_relation(
@@ -82,13 +89,17 @@ class MemoryRelationStore:
         relation_type: str,
         confidence: float = 0.0,
         provenance: dict[str, Any] | None = None,
+        origin: str = "derived",
     ) -> dict[str, Any] | None:
+        payload = dict(provenance or {})
+        source_hash = source_hash_from_payload({"provenance": payload})
         self.conn.execute(
             """
             INSERT INTO memory_relations (
                 relation_id, src_form, src_id, dst_form, dst_id, relation_type,
-                confidence, provenance_json, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                confidence, provenance_json, origin, source_content_hash, stale, stale_reason,
+                invalidated_at, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
             ON CONFLICT(relation_id) DO UPDATE SET
                 src_form=excluded.src_form,
                 src_id=excluded.src_id,
@@ -97,6 +108,11 @@ class MemoryRelationStore:
                 relation_type=excluded.relation_type,
                 confidence=excluded.confidence,
                 provenance_json=excluded.provenance_json,
+                origin=excluded.origin,
+                source_content_hash=excluded.source_content_hash,
+                stale=excluded.stale,
+                stale_reason=excluded.stale_reason,
+                invalidated_at=excluded.invalidated_at,
                 updated_at=CURRENT_TIMESTAMP
             """,
             (
@@ -107,7 +123,9 @@ class MemoryRelationStore:
                 str(dst_id or "").strip(),
                 str(relation_type or "").strip(),
                 float(confidence or 0.0),
-                json.dumps(dict(provenance or {}), ensure_ascii=False),
+                json.dumps(payload, ensure_ascii=False),
+                str(origin or "derived").strip() or "derived",
+                source_hash,
             ),
         )
         self.conn.commit()
@@ -129,6 +147,7 @@ class MemoryRelationStore:
         dst_id: str = "",
         relation_type: str = "",
         limit: int = 100,
+        include_stale: bool = False,
     ) -> list[dict[str, Any]]:
         clauses: list[str] = []
         params: list[Any] = []
@@ -147,6 +166,8 @@ class MemoryRelationStore:
         if str(relation_type or "").strip():
             clauses.append("relation_type = ?")
             params.append(str(relation_type).strip())
+        if not include_stale:
+            clauses.append("(COALESCE(stale, 0) = 0 OR COALESCE(origin, 'derived') = 'manual')")
         where_clause = f" WHERE {' AND '.join(clauses)}" if clauses else ""
         rows = self.conn.execute(
             f"SELECT * FROM memory_relations{where_clause} ORDER BY updated_at DESC, relation_id ASC LIMIT ?",
