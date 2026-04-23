@@ -2,15 +2,41 @@
 import sqlite3, requests, time, os, re, json
 from pathlib import Path
 
-for line in open('/Users/won/Desktop/allinone/knowledge-hub/.env'):
-    if '=' in line and not line.startswith('#'):
-        k, v = line.strip().split('=', 1)
-        os.environ[k] = v
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
-DB_PATH = '/Users/won/Desktop/allinone/knowledge-hub/data/knowledge.db'
+
+def _load_local_env():
+    for candidate in (Path.cwd() / ".env", REPO_ROOT / ".env"):
+        if not candidate.exists():
+            continue
+        for line in candidate.read_text(encoding="utf-8", errors="ignore").splitlines():
+            if "=" in line and not line.startswith("#"):
+                k, v = line.strip().split("=", 1)
+                os.environ.setdefault(k, v)
+        break
+
+
+def _resolve_db_path() -> Path:
+    raw = os.environ.get("KHUB_DB_PATH", "").strip()
+    if raw:
+        return Path(raw).expanduser()
+    return REPO_ROOT / "knowledge_hub.db"
+
+
+def _resolve_vault_dirs() -> list[Path]:
+    raw = os.environ.get("KHUB_VAULT_DIRS", "").strip()
+    if raw:
+        return [Path(item).expanduser() for item in raw.split(os.pathsep) if item.strip()]
+    sibling_vault = REPO_ROOT.parent / "vault"
+    return [sibling_vault / "Papers", sibling_vault / "Projects" / "AI" / "AI_Papers"]
+
+
+_load_local_env()
+
+DB_PATH = _resolve_db_path()
 API_KEY = os.environ['OPENAI_API_KEY']
 
-conn = sqlite3.connect(DB_PATH)
+conn = sqlite3.connect(str(DB_PATH))
 conn.row_factory = sqlite3.Row
 
 # ── Step 1: abstract 확보 ──
@@ -159,8 +185,7 @@ print(f'\n=== {success}/{len(papers)}편 요약+번역 완료 ===', flush=True)
 print(f'\n=== Step 4: Obsidian 노트 업데이트 ===', flush=True)
 
 vault_dirs = [
-    Path("/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/Papers"),
-    Path("/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/Projects/AI/AI_Papers"),
+    *[path for path in _resolve_vault_dirs() if path.exists()],
 ]
 
 updated_notes = 0
