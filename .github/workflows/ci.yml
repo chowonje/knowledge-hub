@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  static-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static guard checks
+        run: |
+          set -euo pipefail
+          if rg -n '\.get_concept\b|\.list_concepts\b|\.get_aliases\b|\.add_alias\b|\.upsert_concept\b|\.resolve_concept\b|\.delete_concept\b' knowledge_hub -S | rg -v 'learning/resolver.py'; then
+            echo "old concept API usage detected"
+            exit 1
+          fi
+          if rg -n 'except\s+Exception\s*:\s*pass' knowledge_hub -S; then
+            echo "except Exception: pass is forbidden"
+            exit 1
+          fi
+          if rg -n 'from src\.|import src\.' . -S; then
+            echo "legacy src imports detected"
+            exit 1
+          fi
+          test -f docs/policy/p0-detection-patterns.json
+          python - <<'PY'
+from pathlib import Path
+repo = Path(".").resolve()
+expected = repo / "docs" / "policy" / "p0-detection-patterns.json"
+matches = sorted(repo.rglob("p0-detection-patterns.json"))
+extra = [path for path in matches if path != expected]
+if extra:
+    print("duplicate p0-detection-patterns.json copies detected:")
+    for path in extra:
+        print(path.relative_to(repo))
+    raise SystemExit(1)
+PY
+          if rg -n 'const DEFAULT_P0_PATTERNS|const DEFAULT_REDACT_KEYS' foundry-core/src/personal-foundry -S; then
+            echo "duplicate TypeScript P0 defaults detected"
+            exit 1
+          fi
+          if rg -n '^P0_PATTERNS\s*=' knowledge_hub -S; then
+            echo "duplicate Python P0 pattern registry detected"
+            exit 1
+          fi
+
+  python-hermetic:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,openai]"
+
+      - name: Run release smoke
+        run: python scripts/check_release_smoke.py --json
+
+      # weekly_core_loop remains a manual/local gate because it exercises the
+      # Ollama-backed local profile, index, and ask/search path on an isolated
+      # temp vault fixture. Required PR CI stays hermetic on purpose.
+
+      - name: Run narrow Python contract tests
+        run: >
+          pytest -q
+          tests/test_cli_smoke_contract.py
+          tests/test_doctor_cmd.py
+          tests/test_status_cmd.py
+
+  authority-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,openai]"
+
+      - name: Install TypeScript dependencies
+        working-directory: foundry-core
+        run: npm ci
+
+      - name: Run authority Python contract tests
+        run: >
+          pytest -q tests/test_authority_contract.py
+          -k "not temp_runtime_capture_process_smoke_stays_local_and_reuses_existing_open_item"
+
+      - name: Run TypeScript typecheck
+        working-directory: foundry-core
+        run: npm run check
+
+      - name: Run authority TypeScript contract tests
+        working-directory: foundry-core
+        run: node --import tsx --test tests/authority-contract.test.ts

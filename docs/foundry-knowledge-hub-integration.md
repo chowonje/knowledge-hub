@@ -1,23 +1,25 @@
-# knowledge-hub + Personal Foundry v1 결합 설계 (AI Hub 연동 제외)
+# knowledge-hub + Personal Foundry v1 결합 설계
 
 작성일: 2026-02-18  
-범위: `/Users/won/Desktop/allinone/knowledge-hub`만 사용
+범위: 현재 `knowledge-hub` 저장소만 사용
 
 ## 1. 결합 목표
 
 `knowledge-hub`의 로컬 지식 인프라(노트/논문/웹 + 검색 + MCP/CLI)를 유지한 채, 개인용 Foundry형 에이전트 런타임을 붙인다.  
 핵심은 `P0` 원문은 로컬에만 두고, 외부 처리나 플러그인은 `P1/P2` 수준 정제 데이터만 넘기는 방식이다.
 
+현재 구현 기준으로는 `foundry-core`가 에이전트 실행의 **preferred delegated runtime** 이고, Python fallback이 여전히 유효한 실제 경로다. 문서의 모든 런타임 설명은 이 전제를 따른다.
+
 ## 2. 추천 아키텍처 (권장)
 
 ```mermaid
 flowchart LR
   subgraph KH["knowledge-hub"]
-    CLI["cli.py"]
-    MCP["mcp_server.py"]
-    VAULT["src/vault"]
-    PAPERS["src/papers"]
-    RAG["src/ai/rag.py"]
+    CLI["khub / interfaces/cli"]
+    MCP["khub-mcp / interfaces/mcp"]
+    VAULT["knowledge_hub/vault"]
+    PAPERS["knowledge_hub/papers"]
+    RAG["knowledge_hub/ai/rag.py"]
     DB[(SQLite + Chroma)]
   end
 
@@ -41,8 +43,9 @@ flowchart LR
 
 ### 3.1 경계
 - MCP는 런타임 입구로만 사용한다.
-- `cli.py`는 운영 도구 보조로 두되, 에이전트가 직접 조합할 수도 있다.
-- Node.js 런타임은 상태와 정책/감사를 책임지고, knowledge-hub는 실제 데이터/검색 책임을 가진다.
+- CLI는 `khub`를 기본 엔트리포인트로 두되, 에이전트가 직접 조합할 수도 있다.
+- Node.js 런타임은 stricter policy/audit/agent-runtime 경계를 제공하지만, knowledge-hub Python 런타임이 기본 제품 실행과 fallback 경로를 계속 소유한다.
+- Python은 task mode 분류, payload normalization, fallback 응답 구성을 포함한 최종 실행 권한을 가진다.
 
 ### 3.2 최소 도구 세트 (MCP 확장)
 - `ask_knowledge(question, top_k, min_score, source)`
@@ -63,6 +66,11 @@ flowchart LR
 - `--max-round`, `--tool`로 실행 제어
 - `--dry-run`으로 정책·스키마 실패만 점검
 - `--dump-json`으로 `runId`, `stage`, `tool trace`, `audit`를 JSON으로 출력
+
+현재 구현 주의:
+- CLI `khub agent run`은 synchronous surface다.
+- MCP `run_agentic_query`는 async job surface이며 `mcp_jobs`를 통해 queued -> running -> done/blocked/failed 상태를 가진다.
+- `mcp_jobs`는 MCP transport/persistence 레이어이지, 범용 agent session store는 아니다.
 
 ## 4. 온톨로지 + 이벤트 우선 모델
 
@@ -133,10 +141,10 @@ flowchart LR
 ## 9. CLI 결합 실행 가이드 (현재 구현 대상)
 
 - 에이전트 질의 실행
-  - `python cli.py agent run "이번 주에 중요 논문 3개 요약해줘"`
-  - `python cli.py agent run "논문과 노트에서 강화학습 관련 비교 포인트 정리" --role researcher --orchestrator-mode adaptive --max-rounds 3`
-  - `python cli.py agent run "재무 지출 이상치 이상 탐지" --dry-run --compact`
-  - `python cli.py agent run "핵심 논문 5개 정리" --max-rounds 2 --orchestrator-mode strict --report-path /tmp/agent-run.json --dry-run --dump-json`
+  - `khub agent run "이번 주에 중요 논문 3개 요약해줘"`
+  - `khub agent run "논문과 노트에서 강화학습 관련 비교 포인트 정리" --role researcher --orchestrator-mode adaptive --max-rounds 3`
+  - `khub agent run "재무 지출 이상치 이상 탐지" --dry-run --compact`
+  - `khub agent run "핵심 논문 5개 정리" --max-rounds 2 --orchestrator-mode strict --report-path /tmp/agent-run.json --dry-run --dump-json`
 
 - MCP에서 에이전트 질의 호출
   - `run_agentic_query` 도구 호출 시 `goal`, `max_rounds`, `dry_run`, `dump_json`, `compact` 파라미터 사용
@@ -148,14 +156,15 @@ flowchart LR
   - `reportPath`: 실행 후 리포트 저장(스키마 `knowledge-hub.foundry.agent.run.report.v1`)
   - `KHUB_FOUNDRY_RETRY_ATTEMPTS`: MCP → foundry 브리지 재시도 횟수(기본 2회)
 - Connector 스냅샷 동기화(로컬 온디바이스 입력)
-  - `python cli.py agent sync --json --source all --limit 200`
-  - 증분 동기화: `python cli.py agent sync --json --cursor "<ts>" --limit 200`
+  - `khub agent sync --json --source all --limit 200`
+  - 증분 동기화: `khub agent sync --json --cursor "<ts>" --limit 200`
   - 결과는 `{"ts","items":[...], ...}` 형태의 JSON 문자열이며, 추후 `foundry-core` 런타임 스냅샷 소스로 사용할 수 있다.
 
 ### 9.1 `project-cli` smoke / timeout probe 주의
 
 - `foundry-core`의 `project-cli`가 Python CLI를 `-m knowledge_hub.interfaces.cli.main`로 호출할 때는 child `cwd`를 제품 repo root에 고정한다.
 - 이유: Node bridge가 `knowledge-hub/` 루트가 아니라 `foundry-core/` 같은 하위 디렉터리에서 실행되어도 Python module resolution이 현재 shell `cwd`에 따라 흔들리지 않게 하기 위함이다.
+- bridge 후보는 이제 repo-local `foundry-core/node_modules/.bin/tsx`를 `npx tsx`보다 먼저 사용한다. 따라서 registry/network 상태가 불안정해도, 로컬 설치가 있으면 외부 lookup 없이 같은 tsx-backed 경로를 우선 시도한다.
 - `scripts/probe_ts_project_cli_timeout.py`는 이제 다음을 함께 출력한다.
   - bridge candidate 목록
   - `node` / `npx` / `tsx` / `python` 버전 probe
@@ -166,9 +175,10 @@ flowchart LR
 ### 10. 표준 출력 스키마 (현재 적용)
 
 - `foundry-core/cli-agent.ts` + `run_agentic_query`는 동일 형태 엔벨로프를 기준으로 동작합니다.
+- 다만 동일 엔벨로프를 사용해도 실행 경로는 동일하지 않습니다. CLI는 synchronous normalize/print 경로이고, MCP는 async job queue + verify/persistence 경로입니다.
 - 성공/실패 모두 다음 키를 우선 노출합니다.
   - `schema`: `knowledge-hub.foundry.agent.run.result.v1`
-  - `source`: 실행 소스(예: `foundry-core/cli-agent`, `knowledge-hub/cli.py.fallback`)
+  - `source`: 실행 소스(예: `foundry-core/cli-agent`, `knowledge-hub/cli.agent.run.fallback`)
   - `artifact json schema`: `foundry-core/docs/schemas/agent-run-result.schema.json`
   - `runId`: 런타임 실행 ID
   - `status`: `completed/blocked/failed/running`
@@ -180,6 +190,18 @@ flowchart LR
     - `allowed`, `schemaValid`, `policyAllowed`, `schemaErrors`
   - `artifact`: 생성 결과
   - `createdAt`, `updatedAt`, `dryRun`
+- 공식 `Agent Gateway v1` dry-run surface에서는 additive `gateway` 메타데이터도 함께 노출합니다.
+  - `version = "v1"`
+  - `surface = "agent_run"`
+  - `mode = "dry_run"`
+  - `contract = "read_only_dry_run"`
+  - `executionAllowed = false`
+  - `writebackAllowed = false`
+  - `repoContextEphemeral = true`
+
+현재 구현 현실:
+- Foundry 경로가 가장 강한 `PLAN -> ACT -> VERIFY -> WRITEBACK` 의미를 가진다.
+- Python fallback은 실제로 존재하며 중요하지만, writeback semantics는 Foundry보다 약하고 report/envelope 중심이다.
 
 예시(MCP/CLI `--dump-json`):
 ```json
@@ -203,13 +225,13 @@ flowchart LR
 ### 11. `agent discover` (CLI-only 패턴)
 
 - 기본 실행
-  - `python cli.py agent discover --source all --days 7`
-  - `python cli.py agent discover --feature daily_coach --feature focus_analytics --days 7 --source all --json`
+  - `khub agent discover --source all --days 7`
+  - `khub agent discover --feature daily_coach --feature focus_analytics --days 7 --source all --json`
 
 - 파일 기반 재실행/재시도
-  - `python cli.py agent discover --source all --days 7 --output .tmp-discover.json`
-  - `python cli.py agent discover --resume .tmp-discover.json`
-  - `python cli.py agent discover --resume .tmp-discover.json --to 2026-02-18T23:59:59` (명시 옵션 우선)
+  - `khub agent discover --source all --days 7 --output .tmp-discover.json`
+  - `khub agent discover --resume .tmp-discover.json`
+  - `khub agent discover --resume .tmp-discover.json --to 2026-02-18T23:59:59` (명시 옵션 우선)
 
 - 병합 규칙
   - `--resume` 사용 시 기본은 이전 파일의 `request`를 기본값으로 사용하고, 현재 커맨드에서 명시한 옵션만 우선 적용합니다.
@@ -227,12 +249,12 @@ flowchart LR
   - JSON Schema 파일: `foundry-core/docs/schemas/agent-discover-result.schema.json`
 
 - 검증(선택)
-  - `python cli.py agent discover-validate --input .tmp-discover.json`
-  - `python cli.py agent discover-validate --input .tmp-discover.json --json`
+  - `khub agent discover-validate --input .tmp-discover.json`
+  - `khub agent discover-validate --input .tmp-discover.json --json`
 
 - 실행 정책 예시
-  - `python cli.py agent discover --source all --days 7 --fail-on-partial`
-  - `python cli.py agent discover --source all --days 7 --fail-on-partial --no-fail-on-partial --no-fail-on-error`
+  - `khub agent discover --source all --days 7 --fail-on-partial`
+  - `khub agent discover --source all --days 7 --fail-on-partial --no-fail-on-partial --no-fail-on-error`
 
   - 스키마 정리
 
@@ -240,7 +262,7 @@ flowchart LR
     {
       "schema": "knowledge-hub.agent.discover.result.v1",
       "runId": "khub-discover-...",
-      "source": "knowledge-hub/cli.py.agent.discover",
+      "source": "knowledge-hub/cli.agent.discover",
       "status": "ok",
       "errors": [],
       "sync": {},
