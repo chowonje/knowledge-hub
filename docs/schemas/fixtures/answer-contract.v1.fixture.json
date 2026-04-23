@@ -21,6 +21,7 @@
     "supported_span_count": 1,
     "unsupported_claim_count": 0
   },
+  "retrieval_signals": [],
   "model_id": "fixture-answer-model:v1",
   "prompt_hash": "sha256:1512e89f9d1029ce6a28ccdc5adfe9713e70f1645c0d3b909c77dc2a9a33633d",
   "created_at": "2026-04-23T00:00:01+00:00"

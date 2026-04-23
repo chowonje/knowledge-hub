@@ -90,6 +90,7 @@ def test_answer_contract_blocks_rewrite_for_unsupported_claim_verdict():
     assert contract["verificationVerdict"]["verdict"] == "fail"
     assert contract["citations"][0]["spanRef"] == "span:1"
     assert contract["citations"][0]["source_id"] == "vault:Alpha.md"
+    assert contract["retrievalSignals"] == []
     assert contract["modelId"] == "local/test"
     assert validate_payload(contract, "knowledge-hub.answer-contract.v1", strict=True).ok
     assert validate_payload(verdict, "knowledge-hub.verification-verdict.v1", strict=True).ok
@@ -189,3 +190,87 @@ def test_answer_contract_coverage_uses_claim_to_citation_mapping_not_citation_co
     assert contract["coverage"]["unmapped_claim_count"] == 1
     assert contract["citationClaimMap"][0]["citationRefs"] == ["span:1"]
     assert contract["citationClaimMap"][1]["citationRefs"] == []
+
+
+def test_evidence_packet_contract_excludes_non_evidence_source_spans():
+    packet = SimpleNamespace(
+        evidence=[
+            {
+                "title": "Belief row",
+                "excerpt": "This came from a belief store row.",
+                "citation_label": "S1",
+                "citation_target": "belief:rag:1",
+                "source_id": "belief:rag:1",
+                "source_type": "belief",
+                "source_content_hash": "hash-belief",
+                "span_locator": "chars:1-20",
+            }
+        ],
+        citations=[{"label": "S1", "target": "belief:rag:1", "kind": "source"}],
+        evidence_packet={"answerable": True, "answerableDecisionReason": "grounded"},
+        evidence_policy={"policyKey": "test-policy"},
+    )
+    pipeline_result = SimpleNamespace(plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"source_type": "paper"}}))
+
+    contract = build_evidence_packet_contract(
+        query="belief evidence?",
+        retrieval_mode="keyword",
+        pipeline_result=pipeline_result,
+        evidence_packet=packet,
+    )
+
+    assert contract["spans"] == []
+    assert contract["answerable"] is False
+    assert contract["coverage"]["excluded_non_evidence"] == 1
+    assert validate_payload(contract, "knowledge-hub.evidence-packet.v1", strict=True).ok
+
+
+def test_answer_contract_routes_non_evidence_sources_to_retrieval_signals():
+    packet = SimpleNamespace(
+        evidence=[
+            {
+                "title": "Alpha",
+                "excerpt": "Alpha evidence supports grounded answers.",
+                "citation_label": "S1",
+                "citation_target": "vault:Alpha.md",
+                "source_id": "vault:Alpha.md",
+                "source_ref": "vault:Alpha.md",
+                "source_content_hash": "hash-alpha",
+                "span_locator": "chars:10-52",
+                "evidence_kind": "raw_span",
+            },
+            {
+                "title": "Learning edge",
+                "excerpt": "Learning graph edges are retrieval hints, not citations.",
+                "citation_label": "S2",
+                "citation_target": "learning_edge:rag:prereq",
+                "source_id": "learning_edge:rag:prereq",
+                "source_type": "learning_edge",
+                "source_content_hash": "hash-learning-edge",
+                "span_locator": "chars:60-110",
+                "evidence_kind": "derived_anchor",
+            },
+        ],
+        citations=[
+            {"label": "S1", "target": "vault:Alpha.md", "kind": "source"},
+            {"label": "S2", "target": "learning_edge:rag:prereq", "kind": "source"},
+        ],
+        evidence_packet={"answerable": True, "answerableDecisionReason": "grounded"},
+        evidence_policy={"policyKey": "test-policy"},
+    )
+
+    contract = build_answer_contract(
+        answer="Alpha is grounded.",
+        evidence_packet=packet,
+        verification={"status": "verified", "unsupportedClaimCount": 0, "needsCaution": False},
+        rewrite={"attempted": False, "applied": False, "finalAnswerSource": "original"},
+        routing_meta={"provider": "local", "model": "test"},
+    )
+
+    assert len(contract["citations"]) == 1
+    assert contract["citations"][0]["source_id"] == "vault:Alpha.md"
+    assert len(contract["retrievalSignals"]) == 1
+    assert contract["retrievalSignals"][0]["source_id"] == "learning_edge:rag:prereq"
+    assert contract["retrievalSignals"][0]["reason"] == "non_evidence_source_type:learning_edge"
+    assert contract["coverage"]["citation_count"] == 1
+    assert validate_payload(contract, "knowledge-hub.answer-contract.v1", strict=True).ok

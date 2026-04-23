@@ -69,6 +69,7 @@
         },
         "span_count": { "type": "integer", "minimum": 0 },
         "source_count": { "type": "integer", "minimum": 0 },
+        "excluded_non_evidence": { "type": "integer", "minimum": 0 },
         "notes": { "type": "string" }
       },
       "additionalProperties": true

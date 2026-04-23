@@ -24,6 +24,14 @@
     },
     "abstain": { "type": "boolean" },
     "coverage": { "$ref": "#/$defs/coverage" },
+    "retrieval_signals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/retrievalSignal" }
+    },
+    "retrievalSignals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/retrievalSignal" }
+    },
     "model_id": { "$ref": "#/$defs/nonEmptyString" },
     "prompt_hash": { "$ref": "#/$defs/nonEmptyString" },
     "created_at": { "$ref": "#/$defs/timestamp" },
@@ -55,6 +63,19 @@
       },
       "additionalProperties": true
     },
+    "retrievalSignal": {
+      "type": "object",
+      "required": ["signal_id", "source_id", "reason"],
+      "properties": {
+        "signal_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_type": { "type": "string" },
+        "source_scheme": { "type": "string" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "evidenceKind": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
     "coverage": {
       "type": "object",
       "required": ["status"],
@@ -66,6 +87,7 @@
         "citation_count": { "type": "integer", "minimum": 0 },
         "supported_span_count": { "type": "integer", "minimum": 0 },
         "unsupported_claim_count": { "type": "integer", "minimum": 0 },
+        "excluded_non_evidence_signal_count": { "type": "integer", "minimum": 0 },
         "notes": { "type": "string" }
       },
       "additionalProperties": true

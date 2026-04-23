@@ -9,6 +9,35 @@ from typing import Any
 EVIDENCE_PACKET_SCHEMA = "knowledge-hub.evidence-packet.v1"
 ANSWER_CONTRACT_SCHEMA = "knowledge-hub.answer-contract.v1"
 VERIFICATION_VERDICT_SCHEMA = "knowledge-hub.verification-verdict.v1"
+NON_EVIDENCE_SOURCE_SCHEMES = {
+    "belief",
+    "decision",
+    "outcome",
+    "ontology",
+    "learning_node",
+    "learning_edge",
+    "learning_path",
+    "learning_resource",
+    "memory_relation",
+    "entity_merge",
+    "entity_split",
+}
+NON_EVIDENCE_SOURCE_TYPES = {
+    "belief",
+    "decision",
+    "outcome",
+    "ontology_claim",
+    "ontology_relation",
+    "kg_relation",
+    "learning_graph",
+    "learning_node",
+    "learning_edge",
+    "learning_path",
+    "learning_resource",
+    "memory_relation",
+    "entity_merge",
+    "entity_split",
+}
 
 
 def _clean_text(value: Any) -> str:
@@ -43,6 +72,14 @@ def _int_or_none(value: Any) -> int | None:
         return int(value)
     except Exception:
         return None
+
+
+def _source_scheme(value: Any) -> str:
+    token = _clean_text(value).lower()
+    if not token or ":" not in token:
+        return ""
+    scheme = token.split(":", 1)[0]
+    return scheme if re.fullmatch(r"[a-z_][a-z0-9_+.-]*", scheme) else ""
 
 
 def parse_span_offsets(*values: Any) -> tuple[int | None, int | None]:
@@ -120,6 +157,8 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
         "citation_label": _clean_text(item.get("citation_label") or f"S{index}"),
         "sourceId": source_id,
         "source_id": source_id,
+        "sourceScheme": _source_scheme(source_id),
+        "source_scheme": _source_scheme(source_id),
         "source_type": _clean_text(item.get("source_type") or item.get("sourceType")),
         "sourceRef": _clean_text(item.get("source_ref") or item.get("sourceRef") or source_id),
         "sourceContentHash": source_hash,
@@ -146,6 +185,63 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
         "derivativeSource": dict(item.get("derivative_source") or item.get("derivativeSource") or {}),
         "snippetHash": snippet_hash,
     }
+
+
+def _non_evidence_reason(item: dict[str, Any]) -> str:
+    source_type = _clean_text(item.get("source_type") or item.get("sourceType")).lower()
+    if source_type in NON_EVIDENCE_SOURCE_TYPES:
+        return f"non_evidence_source_type:{source_type}"
+    source_scheme = _source_scheme(
+        item.get("source_id")
+        or item.get("sourceId")
+        or item.get("source_ref")
+        or item.get("sourceRef")
+    )
+    if source_scheme in NON_EVIDENCE_SOURCE_SCHEMES:
+        return f"non_evidence_source_scheme:{source_scheme}"
+    return ""
+
+
+def _retrieval_signal_entry(item: dict[str, Any], span: dict[str, Any], *, reason: str) -> dict[str, Any]:
+    source_id = _clean_text(span.get("source_id") or item.get("source_id") or item.get("sourceId"))
+    source_type = _clean_text(span.get("source_type") or item.get("source_type") or item.get("sourceType"))
+    source_scheme = _source_scheme(source_id)
+    evidence_kind = _clean_text(span.get("evidenceKind") or item.get("evidence_kind") or item.get("evidenceKind"))
+    signal_id = _hash_text(reason, source_id, source_type, evidence_kind, length=24)
+    return {
+        "signalId": signal_id,
+        "signal_id": signal_id,
+        "sourceId": source_id,
+        "source_id": source_id,
+        "sourceType": source_type,
+        "source_type": source_type,
+        "sourceScheme": source_scheme,
+        "source_scheme": source_scheme,
+        "reason": reason,
+        "evidenceKind": evidence_kind,
+        "derivativeSource": dict(span.get("derivativeSource") or item.get("derivative_source") or item.get("derivativeSource") or {}),
+        "citationLabel": _clean_text(span.get("citation_label") or item.get("citation_label") or item.get("citationLabel")),
+    }
+
+
+def _append_unique_signal(bucket: list[dict[str, Any]], signal: dict[str, Any]) -> None:
+    key = (
+        _clean_text(signal.get("source_id")),
+        _clean_text(signal.get("source_type")),
+        _clean_text(signal.get("reason")),
+        _clean_text(signal.get("evidenceKind")),
+    )
+    existing = {
+        (
+            _clean_text(item.get("source_id")),
+            _clean_text(item.get("source_type")),
+            _clean_text(item.get("reason")),
+            _clean_text(item.get("evidenceKind")),
+        )
+        for item in bucket
+    }
+    if key not in existing:
+        bucket.append(signal)
 
 
 def _span_is_stale(span: dict[str, Any]) -> bool:
@@ -177,8 +273,17 @@ def build_evidence_packet_contract(
     query_frame = dict(plan_payload.get("queryFrame") or {})
     evidence = [dict(item or {}) for item in list(getattr(evidence_packet, "evidence", []) or [])]
     raw_spans = [_evidence_span(item, index=index) for index, item in enumerate(evidence, start=1)]
-    excluded_low_provenance = [span for span in raw_spans if not _span_has_strict_provenance(span)]
-    spans = [span for span in raw_spans if _span_has_strict_provenance(span)] if strict else raw_spans
+    excluded_non_evidence = [span for span in raw_spans if _non_evidence_reason(span)]
+    excluded_low_provenance = [
+        span
+        for span in raw_spans
+        if not _non_evidence_reason(span) and not _span_has_strict_provenance(span)
+    ]
+    spans = [
+        span
+        for span in raw_spans
+        if not _non_evidence_reason(span) and (not strict or _span_has_strict_provenance(span))
+    ]
     policy_payload = dict(getattr(evidence_packet, "evidence_policy", {}) or {})
     query_id = _hash_text(query, retrieval_mode, [span.get("sourceId") for span in spans])
     assembled_at = datetime.now(timezone.utc).isoformat()
@@ -229,6 +334,7 @@ def build_evidence_packet_contract(
             "raw_span_count": len(raw_spans),
             "source_count": len({span.get("source_id") for span in spans if span.get("source_id")}),
             "excluded_low_provenance": len(excluded_low_provenance) if strict else 0,
+            "excluded_non_evidence": len(excluded_non_evidence),
             "excluded_stale": sum(1 for span in excluded_low_provenance if _span_is_stale(span)) if strict else 0,
         },
         "assembledAt": assembled_at,
@@ -334,10 +440,18 @@ def build_answer_contract(
     evidence = [dict(item or {}) for item in list(getattr(evidence_packet, "evidence", []) or [])]
     citations_payload = list(getattr(evidence_packet, "citations", []) or [])
     citations: list[dict[str, Any]] = []
-    for index, raw in enumerate(citations_payload, start=1):
-        citation = dict(raw or {})
+    retrieval_signals: list[dict[str, Any]] = []
+    for index in range(1, max(len(evidence), len(citations_payload)) + 1):
+        citation = dict(citations_payload[index - 1] or {}) if index - 1 < len(citations_payload) else {}
         item = evidence[index - 1] if index - 1 < len(evidence) else {}
         span = _evidence_span(item, index=index)
+        signal_reason = _non_evidence_reason({**item, **span})
+        if signal_reason:
+            _append_unique_signal(
+                retrieval_signals,
+                _retrieval_signal_entry(item, span, reason=signal_reason),
+            )
+            continue
         if not _span_has_strict_provenance(span):
             continue
         citations.append(
@@ -397,11 +511,14 @@ def build_answer_contract(
             "claim_count": len(claim_sentences),
             "unmapped_claim_count": max(0, len(claim_sentences) - citation_backed),
             "unsupported_claim_count": unsupported,
+            "excluded_non_evidence_signal_count": len(retrieval_signals),
         },
         "coverageRatio": coverage_ratio,
         "claimLikeSentenceCount": len(claim_sentences),
         "citationBackedSentenceCount": citation_backed,
         "citationClaimMap": claim_citation_map,
+        "retrievalSignals": retrieval_signals,
+        "retrieval_signals": retrieval_signals,
         "verificationVerdict": build_verification_verdict(verification),
         "rewrite": {
             "attempted": bool((rewrite or {}).get("attempted")),
