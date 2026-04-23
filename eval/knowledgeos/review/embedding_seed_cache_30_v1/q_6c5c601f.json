@@ -1,0 +1,1631 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "최근 paper-memory retrieval 접근이 강조하는 차별점은 무엇인가?",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "title",
+        "parent_type",
+        "chunk_index",
+        "parent_title",
+        "parent_id",
+        "source_type",
+        "document_id",
+        "contextual_summary",
+        "chunk_size",
+        "file_path",
+        "url",
+        "quality_score",
+        "section_path",
+        "section_title",
+        "topic"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "최근 paper-memory retrieval 접근이 강조하는 차별점은 무엇인가?",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_3a93bc3e5a21",
+        "entity_type": "concept",
+        "canonical_name": "retrieval",
+        "matched_terms": [
+          "retrieval",
+          "retrival",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [
+          "retrival"
+        ],
+        "relation_count": 70,
+        "neighbor_entity_ids": [
+          "webc_93c83c59e0b7",
+          "webc_e7052aeb5d20",
+          "webc_fc38e4aeb7a5",
+          "webc_8527edb7b0cd",
+          "webc_8586c76a0032",
+          "webc_cd738ebdb108"
+        ],
+        "neighbor_names": [
+          "agentic",
+          "agents",
+          "benchmark",
+          "efficient",
+          "embeddings",
+          "generation"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.56,
+        "reasons": [
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "symmetric_private_information_retrieval",
+        "entity_type": "concept",
+        "canonical_name": "Symmetric Private Information Retrieval",
+        "matched_terms": [
+          "Symmetric Private Information Retrieval",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 9,
+        "neighbor_entity_ids": [
+          "2602.16700",
+          "capacity_of_symmetric_private_information_retrieval",
+          "common_randomness",
+          "database_privacy",
+          "information_retrieval",
+          "minimum_common_randomness_size"
+        ],
+        "neighbor_names": [
+          "2602.16700",
+          "Capacity of Symmetric Private Information Retrieval",
+          "Common randomness",
+          "Database privacy",
+          "Information Retrieval",
+          "Minimum common randomness size"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.44,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "retrieval",
+        "entity_type": "concept",
+        "canonical_name": "Retrieval",
+        "matched_terms": [
+          "retrieval",
+          "Retrieval",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [
+          "retrieval"
+        ],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2312.10997"
+        ],
+        "neighbor_names": [
+          "2312.10997"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.433333,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "memory",
+        "entity_type": "concept",
+        "canonical_name": "Memory",
+        "matched_terms": [
+          "memory",
+          "Memory",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.433333,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "retrieval-augmented_generation",
+        "entity_type": "concept",
+        "canonical_name": "Retrieval-Augmented Generation",
+        "matched_terms": [
+          "Retrieval-Augmented Generation",
+          "rag",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [
+          "rag"
+        ],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_names": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_types": [
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 5,
+      "relation_count": 89,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "최근 paper-memory retrieval 접근이 강조하는 차별점은 무엇인가?",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_3a93bc3e5a21",
+        "entity_type": "concept",
+        "canonical_name": "retrieval",
+        "matched_terms": [
+          "retrieval",
+          "retrival",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [
+          "retrival"
+        ],
+        "relation_count": 70,
+        "neighbor_entity_ids": [
+          "webc_93c83c59e0b7",
+          "webc_e7052aeb5d20",
+          "webc_fc38e4aeb7a5",
+          "webc_8527edb7b0cd",
+          "webc_8586c76a0032",
+          "webc_cd738ebdb108"
+        ],
+        "neighbor_names": [
+          "agentic",
+          "agents",
+          "benchmark",
+          "efficient",
+          "embeddings",
+          "generation"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.56,
+        "reasons": [
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "symmetric_private_information_retrieval",
+        "entity_type": "concept",
+        "canonical_name": "Symmetric Private Information Retrieval",
+        "matched_terms": [
+          "Symmetric Private Information Retrieval",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 9,
+        "neighbor_entity_ids": [
+          "2602.16700",
+          "capacity_of_symmetric_private_information_retrieval",
+          "common_randomness",
+          "database_privacy",
+          "information_retrieval",
+          "minimum_common_randomness_size"
+        ],
+        "neighbor_names": [
+          "2602.16700",
+          "Capacity of Symmetric Private Information Retrieval",
+          "Common randomness",
+          "Database privacy",
+          "Information Retrieval",
+          "Minimum common randomness size"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.44,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "retrieval",
+        "entity_type": "concept",
+        "canonical_name": "Retrieval",
+        "matched_terms": [
+          "retrieval",
+          "Retrieval",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [
+          "retrieval"
+        ],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2312.10997"
+        ],
+        "neighbor_names": [
+          "2312.10997"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.433333,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "memory",
+        "entity_type": "concept",
+        "canonical_name": "Memory",
+        "matched_terms": [
+          "memory",
+          "Memory",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.433333,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "retrieval-augmented_generation",
+        "entity_type": "concept",
+        "canonical_name": "Retrieval-Augmented Generation",
+        "matched_terms": [
+          "Retrieval-Augmented Generation",
+          "rag",
+          "최근 paper memory retrieval 접근이 강조하는 차별점은 무엇인가"
+        ],
+        "aliases": [
+          "rag"
+        ],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_names": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_types": [
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 5,
+      "relation_count": 89,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.4177850554029083,
+      "semanticScore": 0.5052005648612976,
+      "semantic_score": 0.5052005648612976,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.4947994351387024,
+      "documentId": "web_32248bfe3d02494a_1",
+      "document_id": "web_32248bfe3d02494a_1",
+      "parentId": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parentLabel": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parent_label": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.006667
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005833
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.36084,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005833,
+        "path_token_overlap_boost": 0.002778,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.006667,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.377785,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.006667
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005833
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.006667
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005833
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.36084,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005833,
+        "path_token_overlap_boost": 0.002778,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.006667,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.377785,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.006667
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005833
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "parent_type": "document",
+        "title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "parent_title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "chunk_index": 1,
+        "url": "https://arxiv.org/abs/2510.18866",
+        "topic": "",
+        "file_path": "/Users/won/.khub/web_docs/web_32248bfe3d02494a-2510-18866-lightmem-lightweight-and-efficient-memory-augmented-generation.md",
+        "chunk_size": 1184,
+        "section_path": "",
+        "source_type": "web",
+        "parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "contextual_summary": "[[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation] introduce substantial time and computational overhead",
+        "section_title": "",
+        "quality_score": 0.9065,
+        "document_id": "web:web_32248bfe3d02494a",
+        "resolved_parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_label": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation\nURL: https://arxiv.org/abs/2510.18866\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2510.18866\n\n(cs)\n\n[Submitted on 21 Oct 2025 (\n\n), last revised 28 Feb 2026 (this version, v4)]\n\nTitle:\n\nLightMem: Lightweight and Efficient Memory-Augmented Generation\n\nAuthors:\n\nJizhan Fang\n\nXinle Deng\n\nHaoming Xu\n\nZiyan Jiang\n\nYuqi Tang\n\nZiwen Xu\n\nShumin Deng\n\nYunzhi Yao\n\nMengru Wang\n\nShuofei Qiao\n\nHuajun Chen\n\nNingyu Zhang\n\nView a PDF of the paper titled LightMem: Lightweight and Efficient Memory-Augmented Generation, by Jizhan Fang and 11 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nDespite their remarkable capabilities, Large Language Models (LLMs) struggle to effectively leverage historical interaction information in dynamic and complex environments. Memory systems enable LLMs to move beyond stateless interactions by introducing persistent information storage, retrieval, and utilization mechanisms. However, existing memory systems often introduce substantial time and computational overhead. To this end, we introduce a new memory system called LightMem, which strikes a balan"
+    },
+    {
+      "title": "[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.40329355860137933,
+      "semanticScore": 0.464949369430542,
+      "semantic_score": 0.464949369430542,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.535050630569458,
+      "documentId": "web_aa256598c8996756_1",
+      "document_id": "web_aa256598c8996756_1",
+      "parentId": "web:web_aa256598c8996756::document:[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+      "parent_id": "web:web_aa256598c8996756::document:[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+      "parentLabel": "[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+      "parent_label": "[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0392
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.011429
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.332665,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.01,
+        "path_token_overlap_boost": 0.005,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.011429,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.363294,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0392
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.011429
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.0392,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "retrieval",
+          "Retrieval",
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0392
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.011429
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.332665,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.01,
+        "path_token_overlap_boost": 0.005,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.011429,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.363294,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0392
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.011429
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.0392,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "retrieval",
+          "Retrieval",
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "parent_type": "document",
+        "parent_id": "web:web_aa256598c8996756::document:[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+        "chunk_index": 1,
+        "parent_title": "[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+        "section_path": "",
+        "url": "https://arxiv.org/abs/2603.01783",
+        "file_path": "/Users/won/.khub/web_docs/web_aa256598c8996756-2603-01783-gam-rag-gain-adaptive-memory-for-evolving-retrieval-in-retrieval-augmented-generation.md",
+        "source_type": "web",
+        "chunk_size": 1183,
+        "section_title": "",
+        "quality_score": 0.9067,
+        "document_id": "web:web_aa256598c8996756",
+        "contextual_summary": "[[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation] elated queries and updates retrieval memory over time",
+        "title": "[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+        "topic": "ai",
+        "resolved_parent_id": "web:web_aa256598c8996756::document:[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+        "resolved_parent_label": "[2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.01783] GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation\nURL: https://arxiv.org/abs/2603.01783\nSection: \n\nComputer Science > Artificial Intelligence\n\narXiv:2603.01783\n\n(cs)\n\n[Submitted on 2 Mar 2026]\n\nTitle:\n\nGAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation\n\nAuthors:\n\nYifan Wang\n\n,\n\nMingxuan Jiang\n\n,\n\nZhihao Sun\n\n,\n\nYixin Cao\n\n,\n\nYicun Liu\n\n,\n\nKeyang Chen\n\n,\n\nGuangnan Ye\n\n,\n\nHongfeng Chai\n\nView a PDF of the paper titled GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation, by Yifan Wang and 7 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nRetrieval-Augmented Generation (RAG) grounds large language models with external evidence, but many implementations rely on pre-built indices that remain static after construction. Related queries therefore repeat similar multi-hop traversal, increasing latency and compute. Motivated by schema-based learning in cognitive neuroscience, we propose GAM-RAG, a training-free framework that accumulates retrieval experience from recurring or related queries and updates retrieval memory over time. GAM-RAG builds a l"
+    },
+    {
+      "title": "[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.4027661515466308,
+      "semanticScore": 0.48893070220947266,
+      "semantic_score": 0.48893070220947266,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5110692977905273,
+      "documentId": "web_dbf37939a3bcf309_1",
+      "document_id": "web_dbf37939a3bcf309_1",
+      "parentId": "web:web_dbf37939a3bcf309::document:[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+      "parent_id": "web:web_dbf37939a3bcf309::document:[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+      "parentLabel": "[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+      "parent_label": "[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005
+        },
+        {
+          "name": "source_prior_boost",
+          "value": -0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.349451,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004375,
+        "path_token_overlap_boost": 0.002273,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.362766,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005
+          },
+          {
+            "name": "source_prior_boost",
+            "value": -0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005
+        },
+        {
+          "name": "source_prior_boost",
+          "value": -0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.349451,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004375,
+        "path_token_overlap_boost": 0.002273,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.362766,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005
+          },
+          {
+            "name": "source_prior_boost",
+            "value": -0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "contextual_summary": "[[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents] \"memorize while reading\" methods",
+        "section_title": "",
+        "quality_score": 0.9011,
+        "parent_title": "[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+        "topic": "",
+        "document_id": "web:web_dbf37939a3bcf309",
+        "chunk_index": 1,
+        "parent_type": "document",
+        "title": "[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+        "parent_id": "web:web_dbf37939a3bcf309::document:[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+        "chunk_size": 1196,
+        "section_path": "",
+        "url": "https://arxiv.org/abs/2509.23040",
+        "file_path": "/Users/won/.khub/web_docs/web_dbf37939a3bcf309-2509-23040-look-back-to-reason-forward-revisitable-memory-for-long-context-llm-agents.md",
+        "source_type": "web",
+        "resolved_parent_id": "web:web_dbf37939a3bcf309::document:[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+        "resolved_parent_label": "[2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2509.23040] Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents\nURL: https://arxiv.org/abs/2509.23040\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2509.23040\n\n(cs)\n\n[Submitted on 27 Sep 2025 (\n\n), last revised 2 Mar 2026 (this version, v5)]\n\nTitle:\n\nLook Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents\n\nAuthors:\n\nYaorui Shi\n\nYuxin Chen\n\nSiyuan Wang\n\nSihang Li\n\nHengxing Cai\n\nQi Gu\n\nXiang Wang\n\nAn Zhang\n\nView a PDF of the paper titled Look Back to Reason Forward: Revisitable Memory for Long-Context LLM Agents, by Yaorui Shi and 7 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nLarge language models face challenges in long-context question answering, where key evidence of a query may be dispersed across millions of tokens. Existing works equip large language models with a memory buffer that is dynamically updated via a linear document scan, also known as the \"memorize while reading\" methods. While this approach scales efficiently, it suffers from pruning of latent evidence, information loss through overwriting, and sparse reinforcement learning signals.\n\n[chunk 1]\nTitle: [2509.23040] Look Back to"
+    },
+    {
+      "title": "[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.40267756631294244,
+      "semanticScore": 0.47483986616134644,
+      "semantic_score": 0.47483986616134644,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5251601338386536,
+      "documentId": "web_9fa824dd30a86537_2",
+      "document_id": "web_9fa824dd30a86537_2",
+      "parentId": "web:web_9fa824dd30a86537::document:[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+      "parent_id": "web:web_9fa824dd30a86537::document:[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+      "parentLabel": "[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+      "parent_label": "[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": -0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.339588,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0035,
+        "path_token_overlap_boost": 0.001923,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.362678,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": -0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": -0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.339588,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0035,
+        "path_token_overlap_boost": 0.001923,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.362678,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": -0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "file_path": "/Users/won/.khub/web_docs/web_9fa824dd30a86537-2603-01455-from-verbatim-to-gist-distilling-pyramidal-multimodal-memory-via-semantic-information-bottleneck-for-long-horizon-video-agents.md",
+        "section_title": "",
+        "topic": "",
+        "chunk_index": 2,
+        "parent_type": "document",
+        "quality_score": 0.8846,
+        "chunk_size": 1169,
+        "title": "[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+        "document_id": "web:web_9fa824dd30a86537",
+        "contextual_summary": "[[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents] ntropy-driven top-down memory retrieval strategy, which first tries with the abstract Symbolic Schema and progressively \"drills down\" to the Sensory Buffer and Episodic Stream u...",
+        "parent_title": "[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+        "url": "https://arxiv.org/abs/2603.01455",
+        "parent_id": "web:web_9fa824dd30a86537::document:[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+        "source_type": "web",
+        "section_path": "",
+        "resolved_parent_id": "web:web_9fa824dd30a86537::document:[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+        "resolved_parent_label": "[2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2603.01455] From Verbatim to Gist: Distilling Pyramidal Multimodal Memory via Semantic Information Bottleneck for Long-Horizon Video Agents\nURL: https://arxiv.org/abs/2603.01455\nSection: \n\n: vision-centric methods that incur high latency and redundancy through dense visual accumulation, or text-centric approaches that suffer from detail loss and hallucination via aggressive captioning. To bridge this gap, we propose MM-Mem, a pyramidal multimodal memory architecture grounded in Fuzzy-Trace Theory. MM-Mem structures memory hierarchically into a Sensory Buffer, Episodic Stream, and Symbolic Schema, enabling the progressive distillation of fine-grained perceptual traces (verbatim) into high-level semantic schemas (gist). Furthermore, to govern the dynamic construction of memory, we derive a Semantic Information Bottleneck objective and introduce SIB-GRPO to optimize the trade-off between memory compression and task-relevant information retention. In inference, we design an entropy-driven top-down memory retrieval strategy, which first tries with the abstract Symbolic Schema and progressively \"drills down\" to the Sensory Buffer and Episodic Stream under high uncertain"
+    },
+    {
+      "title": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.40255321468368527,
+      "semanticScore": 0.469246506690979,
+      "semantic_score": 0.469246506690979,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.530753493309021,
+      "documentId": "web_5e0e380b56ca9dbb_2",
+      "document_id": "web_5e0e380b56ca9dbb_2",
+      "parentId": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parent_id": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parentLabel": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parent_label": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005714
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.335673,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005714,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.362554,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005714
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005714
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.335673,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005714,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.362554,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005714
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "contextual_summary": "[[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents] ccess Paper: View a PDF of the paper titled MemPO: Self-Memory Policy Optimization for Long-Horizon Agents, by Ruoran Li and 9 other authors View PDF HTML (experimental) TeX Sou...",
+        "title": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "quality_score": 0.7678,
+        "chunk_index": 2,
+        "source_type": "web",
+        "parent_title": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "chunk_size": 1180,
+        "document_id": "web:web_5e0e380b56ca9dbb",
+        "parent_id": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "file_path": "/Users/won/.khub/web_docs/web_5e0e380b56ca9dbb-2603-00680-mempo-self-memory-policy-optimization-for-long-horizon-agents.md",
+        "url": "https://arxiv.org/abs/2603.00680",
+        "parent_type": "document",
+        "section_title": "",
+        "section_path": "",
+        "topic": "",
+        "resolved_parent_id": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "resolved_parent_label": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents\nURL: https://arxiv.org/abs/2603.00680\nSection: \n\nations, we propose the self-memory policy optimization algorithm (MemPO), which enables the agent (policy model) to autonomously summarize and manage their memory during interaction with environment. By improving the credit assignment mechanism based on memory effectiveness, the policy model can selectively retain crucial information, significantly reducing token consumption while preserving task performance. Extensive experiments and analyses confirm that MemPO achieves absolute F1 score gains of 25.98% over the base model and 7.1% over the previous SOTA baseline, while reducing token usage by 67.58% and 73.12%.\n\nSubjects:\n\nArtificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.00680\n\n[cs.AI]\n\n(or\n\narXiv:2603.00680v1\n\n[cs.AI]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.00680\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Ruoran Li [\n\nview email\n\n[v1]\n\nSat, 28 Feb 2026 14:43:02 UTC (218 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled MemPO: Self-Memory Poli"
+    }
+  ]
+}

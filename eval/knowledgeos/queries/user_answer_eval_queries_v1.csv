@@ -1,0 +1,21 @@
+query,source,query_type,expected_primary_source,expected_answer_style,difficulty,review_bucket
+Transformer의 핵심 아이디어를 비전공자도 이해할 수 있게 설명해줘,paper,definition,paper,beginner_explainer,easy,paper_beginner_explainer
+RAG가 왜 필요한지 파인튜닝과 비교해서 설명해줘,paper,comparison,paper,compare_summary,medium,paper_rag_vs_finetuning
+Attention Is All You Need 논문의 핵심 기여를 3가지로 정리해줘,paper,paper_lookup,paper,structured_summary,medium,paper_lookup_contributions
+BERT와 GPT는 학습 방식과 활용 목적이 어떻게 다른지 비교해줘,paper,comparison,paper,compare_summary,medium,paper_bert_vs_gpt
+LoRA와 full fine-tuning은 비용, 성능, 운영 측면에서 어떻게 다른지 비교해줘,paper,comparison,paper,compare_summary,medium,paper_lora_vs_full_ft
+최근 벡터 검색 품질 개선 글들은 rerank를 어떤 역할로 설명하나?,web,temporal,web,timeline_compare,medium,web_temporal_rerank
+최근 LLM agent 연구에서 많이 다루는 핵심 주제를 정리해줘,paper,paper_discover,paper,shortlist_summary,hard,paper_topic_agent
+recent long-context model discussions what are the main tradeoffs,web,temporal,web,timeline_compare,hard,web_temporal_long_context
+web 문서에서 latest와 reference를 구분해야 하는 이유를 설명해줘,web,definition,web,concise_summary,medium,web_source_class
+observed_at만 있는 문서로 최신 답변을 단정하면 왜 위험한가?,web,abstention,web,abstain,medium,web_abstention_observed_at
+RAG 검색 품질을 떨어뜨리는 가장 흔한 원인을 설명해줘,vault,definition,vault,concise_summary,easy,vault_common_failure
+document memory와 chunk retrieval의 차이를 쉽게 설명해줘,vault,comparison,vault,compare_summary,medium,vault_memory_vs_chunk
+memory-first retrieval의 목적을 한 문장과 짧은 예시로 설명해줘,vault,definition,vault,concise_summary,easy,vault_memory_first
+검색 정확도를 높이고 싶을 때 embedding 교체보다 먼저 점검할 항목들을 알려줘,vault,implementation,vault,implementation_steps,medium,vault_retrieval_tuning
+local-first knowledge system의 장점과 현실적인 한계를 같이 설명해줘,vault,comparison,vault,balanced_summary,medium,vault_local_first_tradeoff
+repo 구조에서 entrypoint와 adapter 경계를 어떻게 찾는지 설명해줘,project,implementation,project,implementation_steps,hard,project_architecture_boundary
+테스트 파일만으로 아키텍처를 단정하면 왜 위험한가?,project,abstention,project,abstain,medium,project_architecture_abstention
+service architecture를 빠르게 파악할 때 어떤 파일부터 읽어야 하는지 알려줘,project,architecture,project,implementation_steps,medium,project_read_order
+작은 팀이 처음 RAG 시스템을 만들 때 가장 먼저 신경 써야 할 설계 포인트를 정리해줘,paper,implementation,paper,implementation_steps,medium,paper_rag_design
+AI 연구 노트를 Obsidian처럼 관리할 때 검색성과 재사용성을 높이는 방법을 제안해줘,vault,implementation,vault,implementation_steps,medium,vault_obsidian_practice

@@ -1,0 +1,21 @@
+query,source,query_type,temporal_query,expected_primary_source,expected_answer_style,difficulty
+RAG의 핵심 장단점은 무엇인가?,all,general,0,paper,concise_summary,easy
+Transformer attention mechanism explained,all,general,0,paper,concept_explanation,easy
+Batch Normalization이 학습 안정성에 미치는 영향,all,general,0,paper,concept_explanation,easy
+멀티에이전트 시스템에서 협업 계획 방법,all,general,0,paper,compare_options,medium
+diffusion model vs GAN 차이,all,comparison,0,paper,compare_options,easy
+reinforcement learning policy optimization,all,general,0,paper,concept_explanation,easy
+vector database retrieval quality 개선 방법,all,general,0,all,practical_guidance,medium
+LLM hallucination을 줄이는 방법,all,general,0,all,practical_guidance,medium
+문서 청크 분할 전략 chunk size overlap,all,general,0,all,practical_guidance,medium
+Vision Transformer와 CNN 비교,all,comparison,0,paper,compare_options,easy
+지식 그래프 온톨로지 설계 best practice,all,general,0,all,practical_guidance,medium
+Agent tool-calling 검증 루프 설계,all,general,0,all,design_guidance,medium
+long-context retrieval failure case,all,general,0,paper,concise_summary,medium
+메모리 기반 에이전트와 stateless 에이전트 차이,all,comparison,0,paper,compare_options,medium
+openai-compatible 임베딩 호환성 이슈,all,general,0,all,design_guidance,medium
+MCP 서버로 검색 도구 연결 방법,all,general,0,vault,design_guidance,medium
+학습 코치 세션 채점 기준 설계,all,general,0,vault,design_guidance,medium
+정책 엔진과 audit log 구현 패턴,all,general,0,all,design_guidance,medium
+event sourcing snapshot time-series 설계,all,general,0,vault,design_guidance,medium
+개인 지식베이스에서 개념 중복 정규화 방법,all,general,0,vault,design_guidance,medium

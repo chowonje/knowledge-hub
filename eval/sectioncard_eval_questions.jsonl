@@ -1,0 +1,24 @@
+{"paper_id":"2501.06322","question_id":"2501.06322-q1","intent":"problem","question":"2501.06322 논문은 무엇을 해결하려 하나?","expected_focus":"problem"}
+{"paper_id":"2501.06322","question_id":"2501.06322-q2","intent":"method","question":"2501.06322 논문은 어떻게 작동하나?","expected_focus":"method"}
+{"paper_id":"2501.06322","question_id":"2501.06322-q3","intent":"results","question":"2501.06322 논문은 어떤 결과나 근거를 제시하나?","expected_focus":"results"}
+{"paper_id":"2501.06322","question_id":"2501.06322-q4","intent":"limitations","question":"2501.06322 논문의 한계나 적용 범위는 무엇인가?","expected_focus":"limitations"}
+{"paper_id":"2503.10970","question_id":"2503.10970-q1","intent":"problem","question":"2503.10970 논문은 무엇을 해결하려 하나?","expected_focus":"problem"}
+{"paper_id":"2503.10970","question_id":"2503.10970-q2","intent":"method","question":"2503.10970 논문은 어떻게 작동하나?","expected_focus":"method"}
+{"paper_id":"2503.10970","question_id":"2503.10970-q3","intent":"results","question":"2503.10970 논문은 어떤 결과나 근거를 제시하나?","expected_focus":"results"}
+{"paper_id":"2503.10970","question_id":"2503.10970-q4","intent":"limitations","question":"2503.10970 논문의 한계나 적용 범위는 무엇인가?","expected_focus":"limitations"}
+{"paper_id":"2502.05151","question_id":"2502.05151-q1","intent":"problem","question":"2502.05151 논문은 무엇을 해결하려 하나?","expected_focus":"problem"}
+{"paper_id":"2502.05151","question_id":"2502.05151-q2","intent":"method","question":"2502.05151 논문은 어떻게 작동하나?","expected_focus":"method"}
+{"paper_id":"2502.05151","question_id":"2502.05151-q3","intent":"results","question":"2502.05151 논문은 어떤 결과나 근거를 제시하나?","expected_focus":"results"}
+{"paper_id":"2502.05151","question_id":"2502.05151-q4","intent":"limitations","question":"2502.05151 논문의 한계나 적용 범위는 무엇인가?","expected_focus":"limitations"}
+{"paper_id":"2602.16698","question_id":"2602.16698-q1","intent":"problem","question":"2602.16698 논문은 무엇을 해결하려 하나?","expected_focus":"problem"}
+{"paper_id":"2602.16698","question_id":"2602.16698-q2","intent":"method","question":"2602.16698 논문은 어떻게 작동하나?","expected_focus":"method"}
+{"paper_id":"2602.16698","question_id":"2602.16698-q3","intent":"results","question":"2602.16698 논문은 어떤 결과나 근거를 제시하나?","expected_focus":"results"}
+{"paper_id":"2602.16698","question_id":"2602.16698-q4","intent":"limitations","question":"2602.16698 논문의 한계나 적용 범위는 무엇인가?","expected_focus":"limitations"}
+{"paper_id":"2603.07379","question_id":"2603.07379-q1","intent":"problem","question":"2603.07379 논문은 무엇을 해결하려 하나?","expected_focus":"problem"}
+{"paper_id":"2603.07379","question_id":"2603.07379-q2","intent":"method","question":"2603.07379 논문은 어떻게 작동하나?","expected_focus":"method"}
+{"paper_id":"2603.07379","question_id":"2603.07379-q3","intent":"results","question":"2603.07379 논문은 어떤 결과나 근거를 제시하나?","expected_focus":"results"}
+{"paper_id":"2603.07379","question_id":"2603.07379-q4","intent":"limitations","question":"2603.07379 논문의 한계나 적용 범위는 무엇인가?","expected_focus":"limitations"}
+{"paper_id":"2602.20021","question_id":"2602.20021-q1","intent":"problem","question":"2602.20021 논문은 무엇을 해결하려 하나?","expected_focus":"problem"}
+{"paper_id":"2602.20021","question_id":"2602.20021-q2","intent":"method","question":"2602.20021 논문은 어떻게 작동하나?","expected_focus":"method"}
+{"paper_id":"2602.20021","question_id":"2602.20021-q3","intent":"results","question":"2602.20021 논문은 어떤 결과나 근거를 제시하나?","expected_focus":"results"}
+{"paper_id":"2602.20021","question_id":"2602.20021-q4","intent":"limitations","question":"2602.20021 논문의 한계나 적용 범위는 무엇인가?","expected_focus":"limitations"}

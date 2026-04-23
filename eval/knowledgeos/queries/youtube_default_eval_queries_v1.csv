@@ -1,0 +1,5 @@
+query,source,query_type,expected_primary_source,expected_answer_style,difficulty,regression_bucket
+https://www.youtube.com/watch?v=s4xnZMiEIJc 영상 요약해줘,youtube,video_lookup,youtube,video_scoped_answer,easy,youtube_video_lookup_url
+DSBA Study Agent AI 2주차 Cognitive Architectures (2) 영상 요약해줘,youtube,video_lookup,youtube,video_scoped_answer,easy,youtube_video_lookup_title
+https://www.youtube.com/watch?v=s4xnZMiEIJc 트랜스크립트 내용을 요약해줘,youtube,section_lookup,youtube,section_summary,medium,youtube_transcript_section
+https://www.youtube.com/watch?v=s4xnZMiEIJc 에서 메모리는 언제 언급돼?,youtube,timestamp_lookup,youtube,timeline_grounded,medium,youtube_timestamp_lookup

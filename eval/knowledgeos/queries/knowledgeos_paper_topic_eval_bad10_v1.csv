@@ -1,0 +1,11 @@
+query_id,query,source,query_type,temporal_query,expected_primary_source,expected_answer_style,difficulty,review_focus,must_avoid
+pt001,트랜스포머를 대체할 차세대 아키텍처를 다루는 논문들을 찾아서 정리해줘,paper,paper_topic,0,paper,multi_paper_synthesis,hard,대체 아키텍처와 단순 최적화 논문을 구분해야 함,Switch Transformer 같은 확장형 transformer 최적화 논문만 고르는 것
+pt002,state space model 계열 논문들 중에서 transformer 대안으로 읽을 만한 것들을 골라 비교해줘,paper,paper_topic,0,paper,multi_paper_synthesis,hard,계열 대표 논문을 여러 편 고르고 왜 대안인지 설명해야 함,단순 long-context trick이나 inference optimization 논문 포함
+pt004,agentic RAG를 다루는 논문들 중에서 retrieval architecture를 실제로 바꾸는 논문들을 골라 비교해줘,paper,paper_topic,0,paper,multi_paper_synthesis,hard,agentic RAG와 일반 RAG survey를 구분해야 함,vanilla RAG survey만 모아서 답하는 것
+pt006,AI scientist 또는 scientific discovery agent를 평가하는 논문들을 찾아서 benchmark와 survey를 나눠 정리해줘,paper,paper_topic,0,paper,multi_paper_synthesis,medium,평가용 벤치마크와 포괄 survey를 분리해야 함,일반 과학 LLM survey만으로 채우는 것
+pt010,AI safety evaluation framework 논문들을 찾아서 benchmark paper와 taxonomy 또는 survey 논문을 구분해줘,paper,paper_topic,0,paper,multi_paper_synthesis,medium,평가 프레임워크와 survey/taxonomy를 분리해야 함,일반 safety alignment 논문을 evaluation framework로 설명하는 것
+pt012,audio-visual 또는 multimodal understanding에서 transformer 변형보다 다른 reasoning 구조를 강조하는 논문들을 찾아 정리해줘,paper,paper_topic,0,paper,multi_paper_synthesis,hard,멀티모달 reasoning 구조 차이를 설명해야 함,단순 멀티모달 모델 소개 논문 나열
+pt014,장기 기억이 핵심인 agent application 논문들과 장기 기억을 평가하는 benchmark 논문들을 비교 정리해줘,paper,paper_topic,0,paper,multi_paper_synthesis,medium,application과 benchmark를 분리하고 연결해 설명해야 함,두 범주를 섞어서 정리하는 것
+pt016,video 또는 embodied setting에서 long-term memory를 다루는 논문들을 찾아서 benchmark와 method를 구분해줘,paper,paper_topic,0,paper,multi_paper_synthesis,medium,embodied long-term memory 문맥을 분리해야 함,일반 VLM benchmark를 long-term memory 논문으로 포함
+pt017,world model이나 alternative sequential modeling과 연결될 수 있는 논문들을 찾아서 transformer 대체 맥락에서 읽을 가치가 있는지 정리해줘,paper,paper_topic,0,paper,multi_paper_synthesis,hard,직접 대체와 인접 주제를 구분하며 borderline를 설명해야 함,관련성 낮은 world generation benchmark를 핵심 대안으로 제시
+pt019,논문을 AI agent로 재구성하거나 paper-to-agent를 다루는 논문들을 찾아서 system paper와 conceptual framing을 구분해줘,paper,paper_topic,0,paper,multi_paper_synthesis,medium,paper-to-agent 계열의 실제 시스템과 개념 정리 논문을 분리해야 함,agent 전반 논문을 paper-to-agent로 과대포함

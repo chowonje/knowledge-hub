@@ -1,0 +1,1357 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "before/after 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "url",
+        "chunk_index",
+        "contextual_summary",
+        "section_path",
+        "file_path",
+        "quality_score",
+        "title",
+        "source_type",
+        "chunk_size",
+        "document_id",
+        "parent_id",
+        "section_title",
+        "parent_type",
+        "topic",
+        "parent_title"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "before/after 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘",
+    "is_graph_heavy": true,
+    "confidence": 0.6675,
+    "cue_hits": [],
+    "matched_entity_count": 3,
+    "candidate_hints": [
+      {
+        "entity_id": "temporal_continuity",
+        "entity_type": "concept",
+        "canonical_name": "Temporal Continuity",
+        "matched_terms": [
+          "Temporal Continuity",
+          "beforeafter 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘"
+        ],
+        "aliases": [],
+        "relation_count": 4,
+        "neighbor_entity_ids": [
+          "2602.16669",
+          "causal_inference",
+          "generalization",
+          "simulation"
+        ],
+        "neighbor_names": [
+          "2602.16669",
+          "Causal Inference",
+          "Generalization",
+          "Simulation"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.273333,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_b61620a89675",
+        "entity_type": "concept",
+        "canonical_name": "temporal difference learning",
+        "matched_terms": [
+          "temporal difference learning",
+          "step td learning",
+          "beforeafter 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘"
+        ],
+        "aliases": [
+          "step td learning"
+        ],
+        "relation_count": 2,
+        "neighbor_entity_ids": [
+          "webc_083dbabef569",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_names": [
+          "ability",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_types": [
+          "concept",
+          "note"
+        ],
+        "score": 0.206667,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "paper:2602.16711",
+        "entity_type": "paper",
+        "canonical_name": "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
+        "matched_terms": [
+          "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
+          "beforeafter 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.14,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 11,
+      "entity_match_count": 3,
+      "relation_count": 6,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "before/after 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘",
+    "is_graph_heavy": true,
+    "confidence": 0.6675,
+    "cue_hits": [],
+    "matched_entity_count": 3,
+    "candidate_hints": [
+      {
+        "entity_id": "temporal_continuity",
+        "entity_type": "concept",
+        "canonical_name": "Temporal Continuity",
+        "matched_terms": [
+          "Temporal Continuity",
+          "beforeafter 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘"
+        ],
+        "aliases": [],
+        "relation_count": 4,
+        "neighbor_entity_ids": [
+          "2602.16669",
+          "causal_inference",
+          "generalization",
+          "simulation"
+        ],
+        "neighbor_names": [
+          "2602.16669",
+          "Causal Inference",
+          "Generalization",
+          "Simulation"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.273333,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_b61620a89675",
+        "entity_type": "concept",
+        "canonical_name": "temporal difference learning",
+        "matched_terms": [
+          "temporal difference learning",
+          "step td learning",
+          "beforeafter 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘"
+        ],
+        "aliases": [
+          "step td learning"
+        ],
+        "relation_count": 2,
+        "neighbor_entity_ids": [
+          "webc_083dbabef569",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_names": [
+          "ability",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_types": [
+          "concept",
+          "note"
+        ],
+        "score": 0.206667,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "paper:2602.16711",
+        "entity_type": "paper",
+        "canonical_name": "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
+        "matched_terms": [
+          "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
+          "beforeafter 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.14,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 11,
+      "entity_match_count": 3,
+      "relation_count": 6,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.5181128506498975,
+      "semanticScore": 0.41394078731536865,
+      "semantic_score": 0.41394078731536865,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5860592126846313,
+      "documentId": "web_3a939da663e9a568_3",
+      "document_id": "web_3a939da663e9a568_3",
+      "parentId": "web:web_3a939da663e9a568::document:[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+      "parent_id": "web:web_3a939da663e9a568::document:[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+      "parentLabel": "[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+      "parent_label": "[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.169368
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.001786
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.169368,
+        "retrieval_adjusted_score": 0.466327,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.001786,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.478113,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.169368
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.001786
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.169368
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.001786
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.169368,
+        "retrieval_adjusted_score": 0.466327,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.001786,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.478113,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.169368
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.001786
+          }
+        ]
+      },
+      "metadata": {
+        "quality_score": 0.8881,
+        "chunk_index": 3,
+        "topic": "ai",
+        "title": "[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+        "url": "https://arxiv.org/abs/2603.02949v1",
+        "parent_title": "[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+        "source_type": "web",
+        "parent_id": "web:web_3a939da663e9a568::document:[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+        "chunk_size": 1174,
+        "parent_type": "document",
+        "file_path": "/Users/won/.khub/web_docs/web_3a939da663e9a568-2603-02949v1-sealing-the-gap-a-reference-framework-for-llm-inference-carbon-estimation-via-multi-benchmark-driven-embodiment.md",
+        "document_id": "web:web_3a939da663e9a568",
+        "section_title": "",
+        "section_path": "",
+        "contextual_summary": "[[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment] holar export BibTeX citation Loading..",
+        "resolved_parent_id": "web:web_3a939da663e9a568::document:[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+        "resolved_parent_label": "[2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.02949v1] SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment\nURL: https://arxiv.org/abs/2603.02949v1\nSection: \n\ndeas and Emerging Results Track)\n\nSubjects:\n\nSoftware Engineering (cs.SE)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.02949\n\n[cs.SE]\n\n(or\n\narXiv:2603.02949v1\n\n[cs.SE]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.02949\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nRelated DOI\n\n:\n\nhttps://doi.org/10.1145/3786582.3786846\n\nFocus to learn more\n\nDOI(s) linking to related resources\n\nSubmission history\n\nFrom: Rohit Mehra [\n\nview email\n\n]\n\n[v1]\n\nTue, 3 Mar 2026 12:57:27 UTC (253 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled SEALing the Gap: A Reference Framework for LLM Inference Carbon Estimation via Multi-Benchmark Driven Embodiment, by Priyavanshi Pathania and 6 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.SE\n\n< prev\n\n|\n\nnext >\n\nnew\n\n|\n\nrecent\n\n|\n\n2026-03\n\nChange to browse by:\n\ncs\n\ncs.AI\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport Bib"
+    },
+    {
+      "title": "[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.49773340585677583,
+      "semanticScore": 0.4028888940811157,
+      "semantic_score": 0.4028888940811157,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5971111059188843,
+      "documentId": "web_9f03b18c57c1c96f_3",
+      "document_id": "web_9f03b18c57c1c96f_3",
+      "parentId": "web:web_9f03b18c57c1c96f::document:[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+      "parent_id": "web:web_9f03b18c57c1c96f::document:[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+      "parentLabel": "[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+      "parent_label": "[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156588
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.001923
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156588,
+        "retrieval_adjusted_score": 0.44581,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.001923,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.457733,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156588
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.001923
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156588
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.001923
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156588,
+        "retrieval_adjusted_score": 0.44581,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.001923,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.457733,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156588
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.001923
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://arxiv.org/abs/2603.02702v1",
+        "topic": "ai",
+        "quality_score": 0.8863,
+        "chunk_index": 3,
+        "document_id": "web:web_9f03b18c57c1c96f",
+        "section_path": "",
+        "chunk_size": 1187,
+        "parent_id": "web:web_9f03b18c57c1c96f::document:[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+        "source_type": "web",
+        "contextual_summary": "[[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing] Level Pairing, by Jaehoon Lee and 11 other authors View PDF TeX Source view license Current browse context: cs.AI < prev | next > new | recent | 2026-03 Change to browse by: cs ...",
+        "file_path": "/Users/won/.khub/web_docs/web_9f03b18c57c1c96f-2603-02702v1-fintexts-financial-text-paired-time-series-dataset-via-semantic-based-and-multi-level-pairing.md",
+        "parent_title": "[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+        "section_title": "",
+        "title": "[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+        "parent_type": "document",
+        "resolved_parent_id": "web:web_9f03b18c57c1c96f::document:[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+        "resolved_parent_label": "[2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.02702v1] FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing\nURL: https://arxiv.org/abs/2603.02702v1\nSection: \n\nlarge-scale text-paired stock price dataset. Experimental results on \\textbf{FinTexTS} demonstrate the effectiveness of our semantic-based and multi-level pairing strategy in stock price forecasting. In addition to publicly-available news underlying \\textbf{FinTexTS}, we show that applying our method to proprietary yet carefully curated news sources leads to higher-quality paired data and improved stock price forecasting performance.\n\nComments:\n\n14 pages\n\nSubjects:\n\nArtificial Intelligence (cs.AI)\n\n; Machine Learning (cs.LG)\n\nCite as:\n\narXiv:2603.02702\n\n[cs.AI]\n\n(or\n\narXiv:2603.02702v1\n\n[cs.AI]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.02702\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Jaehoon Lee [\n\nview email\n\n]\n\n[v1]\n\nTue, 3 Mar 2026 07:45:57 UTC (740 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled FinTexTS: Financial Text-Paired Time-Series Dataset via Semantic-Based and Multi-Level Pairing, by Jaehoon Lee and 11"
+    },
+    {
+      "title": "[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.4898909840457592,
+      "semanticScore": 0.4028400182723999,
+      "semantic_score": 0.4028400182723999,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5971599817276001,
+      "documentId": "web_f77e299abdb089cf_2",
+      "document_id": "web_f77e299abdb089cf_2",
+      "parentId": "web:web_f77e299abdb089cf::document:[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+      "parent_id": "web:web_f77e299abdb089cf::document:[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+      "parentLabel": "[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+      "parent_label": "[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.15343
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.002273
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.15343,
+        "retrieval_adjusted_score": 0.442618,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.002273,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.449891,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.15343
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.002273
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.15343
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.002273
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.15343,
+        "retrieval_adjusted_score": 0.442618,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.002273,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.449891,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.15343
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.002273
+          }
+        ]
+      },
+      "metadata": {
+        "section_title": "",
+        "quality_score": 0.8481,
+        "contextual_summary": "[[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers] y (cs.CR) ; Artificial Intelligence (cs.AI) Cite as: arXiv:2603.03417 [cs.CR] (or arXiv:2603.03417v1 [cs.CR] for this version) https://doi.org/10.48550/arXiv.2603.03417 Focus to...",
+        "parent_title": "[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+        "source_type": "web",
+        "url": "https://arxiv.org/abs/2603.03417v1",
+        "section_path": "",
+        "parent_id": "web:web_f77e299abdb089cf::document:[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+        "parent_type": "document",
+        "document_id": "web:web_f77e299abdb089cf",
+        "chunk_index": 2,
+        "file_path": "/Users/won/.khub/web_docs/web_f77e299abdb089cf-2603-03417v1-parallel-test-time-scaling-with-multi-sequence-verifiers.md",
+        "topic": "ai",
+        "title": "[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+        "chunk_size": 1188,
+        "resolved_parent_id": "web:web_f77e299abdb089cf::document:[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+        "resolved_parent_label": "[2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2603.03417v1] Parallel Test-Time Scaling with Multi-Sequence Verifiers\nURL: https://arxiv.org/abs/2603.03417v1\nSection: \n\ns early-stopping strategies to reduce latency. However, existing verifiers are limited as they score each candidate in isolation, overlooking rich contextual information across the set of candidates. To address this, we introduce the Multi-Sequence Verifier (MSV), the first verifier designed to jointly process all candidate solutions and model their interactions. MSV achieves improved calibration, which directly enhances best-of-N selection performance. We further introduce a streaming MSV variant that empowers a novel early-stopping framework. Our novel framework fully leverages parallel decoding, which contrasts with the existing multi-sequence early exit works that decode sequences one by one and thus incur significant latency. In this novel setting, MSV can achieve the same target accuracy with around half the latency that would be required with its counterpart that scores each solution in isolation.\n\nSubjects:\n\nCryptography and Security (cs.CR)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.03417\n\n[cs.CR]\n\n(or\n\narXiv:2603.03417v1"
+    },
+    {
+      "title": "[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.40803543288597105,
+      "semanticScore": 0.4238601326942444,
+      "semantic_score": 0.4238601326942444,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5761398673057556,
+      "documentId": "web_4d38856ab5325642_2",
+      "document_id": "web_4d38856ab5325642_2",
+      "parentId": "web:web_4d38856ab5325642::document:[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+      "parent_id": "web:web_4d38856ab5325642::document:[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+      "parentLabel": "[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+      "parent_label": "[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.032133
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005333
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.303902,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.005,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.368035,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.032133
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005333
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.032133,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "temporal difference learning"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.032133
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005333
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.303902,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.005,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.368035,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.032133
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005333
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.032133,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "temporal difference learning"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "parent_title": "[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+        "source_type": "web",
+        "contextual_summary": "[[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction] 7:54:12 UTC (6,844 KB) [v2] Wed, 21 Jul 2021 03:58:47 UTC (6,844 KB) [v3] Tue, 12 Oct 2021 00:48:02 UTC (6,844 KB) [v4] Mon, 29 Nov 2021 00:51:39 UTC (6,844 KB) Full-text links:...",
+        "url": "https://arxiv.org/abs/2010.14496",
+        "parent_type": "document",
+        "parent_id": "web:web_4d38856ab5325642::document:[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+        "file_path": "/Users/won/.khub/web_docs/web_4d38856ab5325642-2010-14496-generative-temporal-difference-learning-for-infinite-horizon-prediction.md",
+        "section_title": "",
+        "document_id": "web:web_4d38856ab5325642",
+        "section_path": "",
+        "chunk_index": 2,
+        "title": "[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+        "quality_score": 0.752,
+        "chunk_size": 1193,
+        "topic": "ai",
+        "resolved_parent_id": "web:web_4d38856ab5325642::document:[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+        "resolved_parent_label": "[2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2010.14496] Generative Temporal Difference Learning for Infinite-Horizon Prediction\nURL: https://arxiv.org/abs/2010.14496\nSection: \n\na hybrid between model-free and model-based mechanisms. Like a value function, it contains information about the long-term future; like a standard predictive model, it is independent of task reward. We instantiate the $\\gamma$-model as both a generative adversarial network and normalizing flow, discuss how its training reflects an inescapable tradeoff between training-time and testing-time compounding errors, and empirically investigate its utility for prediction and control.\n\nComments:\n\nNeurIPS 2020. Project page at:\n\nthis https URL\n\nSubjects:\n\nMachine Learning (cs.LG)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2010.14496\n\n[cs.LG]\n\n(or\n\narXiv:2010.14496v4\n\n[cs.LG]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2010.14496\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Michael Janner [\n\nview email\n\n]\n\n[v1]\n\nTue, 27 Oct 2020 17:54:12 UTC (6,844 KB)\n\n[v2]\n\nWed, 21 Jul 2021 03:58:47 UTC (6,844 KB)\n\n[v3]\n\nTue, 12 Oct 2021 00:48:02 UTC (6,844 KB)\n\n[v4]\n\nMon, 29 Nov 2021 00:51:39 UTC (6,844 KB)\n\n"
+    },
+    {
+      "title": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3857933072586059,
+      "semanticScore": 0.43659472465515137,
+      "semantic_score": 0.43659472465515137,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5634052753448486,
+      "documentId": "web_09e2be7a9e1cc0bc_2",
+      "document_id": "web_09e2be7a9e1cc0bc_2",
+      "parentId": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parent_id": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parentLabel": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parent_label": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005714
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.005263
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.312816,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.005263,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005714,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.345793,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005714
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.005263
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005714
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.005263
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.312816,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.005263,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005714,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.345793,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005714
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.005263
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "section_path": "",
+        "chunk_size": 1187,
+        "contextual_summary": "[[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control] oi.org/10.48550/arXiv.1802.09081 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Vitchyr H",
+        "chunk_index": 2,
+        "parent_type": "document",
+        "title": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "topic": "ai",
+        "section_title": "",
+        "source_type": "web",
+        "parent_title": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "url": "https://arxiv.org/abs/1802.09081",
+        "document_id": "web:web_09e2be7a9e1cc0bc",
+        "quality_score": 0.7562,
+        "parent_id": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "file_path": "/Users/won/.khub/web_docs/web_09e2be7a9e1cc0bc-1802-09081-temporal-difference-models-model-free-deep-rl-for-model-based-control.md",
+        "resolved_parent_id": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "resolved_parent_label": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control\nURL: https://arxiv.org/abs/1802.09081\nSection: \n\ntained in state transition tuples. Model-based RL uses this information, by training a predictive model, but often does not achieve the same asymptotic performance as model-free RL due to model bias. We introduce temporal difference models (TDMs), a family of goal-conditioned value functions that can be trained with model-free learning and used for model-based control. TDMs combine the benefits of model-free and model-based RL: they leverage the rich information in state transitions to learn very efficiently, while still attaining asymptotic performance that exceeds that of direct model-based RL methods. Our experimental results show that, on a range of continuous control tasks, TDMs provide a substantial improvement in efficiency compared to state-of-the-art model-based and model-free methods.\n\nComments:\n\nAppeared in ICLR 2018; typos corrected\n\nSubjects:\n\nMachine Learning (cs.LG)\n\nCite as:\n\narXiv:1802.09081\n\n[cs.LG]\n\n(or\n\narXiv:1802.09081v2\n\n[cs.LG]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.1802.09081\n\nFocus to learn more\n\na"
+    }
+  ]
+}

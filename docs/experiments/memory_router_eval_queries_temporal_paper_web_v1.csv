@@ -1,0 +1,21 @@
+query,source
+최근 업데이트된 memory retrieval benchmark의 핵심 개선점은 무엇인가?,paper
+latest long-context retrieval benchmark가 이전 버전과 달라진 점은?,paper
+before 2025 기준 agent memory 평가 초점은 무엇이었나?,paper
+after 2025 multi-agent planning evaluation은 어떻게 바뀌었나?,paper
+최근 paper-memory retrieval 접근이 강조하는 차별점은 무엇인가?,paper
+updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가?,paper
+최신 retrieval augmentation 논문은 stale answer를 어떻게 줄인다고 설명하나?,paper
+before 와 after 기준으로 long-context failure taxonomy가 어떻게 달라졌나?,paper
+최근 survey와 primary paper를 구분할 때 봐야 할 신호는 무엇인가?,paper
+updated paper disambiguation 문제를 최신 논문은 어떻게 다루나?,paper
+최근 업데이트된 RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?,web
+latest vector database retrieval best practice는 무엇인가?,web
+before 2026 기준 web reference source와 continuous latest source를 어떻게 구분했나?,web
+after 2026 업데이트된 specialist reference crawling의 핵심 변화는?,web
+최근 memory-first retrieval 관련 웹 문서는 temporal grounding을 왜 중요하게 보나?,web
+최신 web 문서 기준으로 long-context retrieval failure의 대표 패턴은 무엇인가?,web
+업데이트된 web source에서 stale answer를 줄이는 가장 중요한 방법은 무엇인가?,web
+before/after 기준으로 RAG evaluation guideline이 어떻게 달라졌나?,web
+최근 벡터 검색 품질 개선 글은 rerank를 어떤 역할로 설명하나?,web
+latest retrieval pipeline guide는 evidence-first answering을 어떻게 설명하나?,web

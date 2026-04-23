@@ -1,0 +1,1385 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "document memory와 paper memory의 차이를 논문 관점에서 설명해줘",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "section_path",
+        "file_path",
+        "parent_id",
+        "quality_score",
+        "source_type",
+        "title",
+        "url",
+        "parent_title",
+        "parent_type",
+        "chunk_index",
+        "topic",
+        "document_id",
+        "contextual_summary",
+        "chunk_size",
+        "section_title"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "document memory와 paper memory의 차이를 논문 관점에서 설명해줘",
+    "is_graph_heavy": true,
+    "confidence": 0.63,
+    "cue_hits": [],
+    "matched_entity_count": 2,
+    "candidate_hints": [
+      {
+        "entity_id": "memory",
+        "entity_type": "concept",
+        "canonical_name": "Memory",
+        "matched_terms": [
+          "memory의",
+          "Memory",
+          "document memory와 paper memory의 차이를 논문 관점에서 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.402564,
+        "reasons": [
+          "fuzzy",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "document_ranking",
+        "entity_type": "concept",
+        "canonical_name": "Document Ranking",
+        "matched_terms": [
+          "Document Ranking",
+          "document memory와 paper memory의 차이를 논문 관점에서 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 12,
+        "neighbor_entity_ids": [
+          "2507.08191",
+          "cumulative_attention-based_index_selection",
+          "deep_neural_ranking_model",
+          "information_retrieval",
+          "ms_marco_dataset",
+          "multi-stage_retrieval_pipeline"
+        ],
+        "neighbor_names": [
+          "2507.08191",
+          "Cumulative attention-based index selection",
+          "Deep Neural Ranking Model",
+          "Information Retrieval",
+          "MS MARCO Dataset",
+          "Multi-stage Retrieval Pipeline"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 2,
+      "relation_count": 13,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "document memory와 paper memory의 차이를 논문 관점에서 설명해줘",
+    "is_graph_heavy": true,
+    "confidence": 0.63,
+    "cue_hits": [],
+    "matched_entity_count": 2,
+    "candidate_hints": [
+      {
+        "entity_id": "memory",
+        "entity_type": "concept",
+        "canonical_name": "Memory",
+        "matched_terms": [
+          "memory의",
+          "Memory",
+          "document memory와 paper memory의 차이를 논문 관점에서 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.402564,
+        "reasons": [
+          "fuzzy",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "document_ranking",
+        "entity_type": "concept",
+        "canonical_name": "Document Ranking",
+        "matched_terms": [
+          "Document Ranking",
+          "document memory와 paper memory의 차이를 논문 관점에서 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 12,
+        "neighbor_entity_ids": [
+          "2507.08191",
+          "cumulative_attention-based_index_selection",
+          "deep_neural_ranking_model",
+          "information_retrieval",
+          "ms_marco_dataset",
+          "multi-stage_retrieval_pipeline"
+        ],
+        "neighbor_names": [
+          "2507.08191",
+          "Cumulative attention-based index selection",
+          "Deep Neural Ranking Model",
+          "Information Retrieval",
+          "MS MARCO Dataset",
+          "Multi-stage Retrieval Pipeline"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 2,
+      "relation_count": 13,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.5138192792649197,
+      "semanticScore": 0.3685274124145508,
+      "semantic_score": 0.3685274124145508,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6314725875854492,
+      "documentId": "web_c7f7efd37f0453a2_3",
+      "document_id": "web_c7f7efd37f0453a2_3",
+      "parentId": "web:web_c7f7efd37f0453a2::document:[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+      "parent_id": "web:web_c7f7efd37f0453a2::document:[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+      "parentLabel": "[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+      "parent_label": "[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.153428
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.006154
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005385
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.153428,
+        "retrieval_adjusted_score": 0.418597,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005385,
+        "path_token_overlap_boost": 0.002632,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.006154,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.473819,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.153428
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.006154
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005385
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.153428
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.006154
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005385
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.153428,
+        "retrieval_adjusted_score": 0.418597,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005385,
+        "path_token_overlap_boost": 0.002632,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.006154,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.473819,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.153428
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.006154
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005385
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "source_type": "web",
+        "parent_title": "[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+        "quality_score": 0.733,
+        "file_path": "/Users/won/.khub/web_docs/web_c7f7efd37f0453a2-2603-03596v1-mem-multi-scale-embodied-memory-for-vision-language-action-models.md",
+        "title": "[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+        "contextual_summary": "[[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models] ull-text links: Access Paper: View a PDF of the paper titled MEM: Multi-Scale Embodied Memory for Vision Language Action Models, by Marcel Torne and 16 other authors View PDF HT...",
+        "parent_id": "web:web_c7f7efd37f0453a2::document:[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+        "section_path": "",
+        "section_title": "",
+        "chunk_index": 3,
+        "chunk_size": 1191,
+        "parent_type": "document",
+        "document_id": "web:web_c7f7efd37f0453a2",
+        "topic": "ai",
+        "url": "https://arxiv.org/abs/2603.03596v1",
+        "resolved_parent_id": "web:web_c7f7efd37f0453a2::document:[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+        "resolved_parent_label": "[2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.03596v1] MEM: Multi-Scale Embodied Memory for Vision Language Action Models\nURL: https://arxiv.org/abs/2603.03596v1\nSection: \n\nshould combine multiple modalities to capture these different levels of abstraction. We introduce Multi-Scale Embodied Memory (MEM), an approach for mixed-modal long-horizon memory in robot policies. MEM combines video-based short-horizon memory, compressed via a video encoder, with text-based long-horizon memory. Together, they enable robot policies to perform tasks that span up to fifteen minutes, like cleaning up a kitchen, or preparing a grilled cheese sandwich. Additionally, we find that memory enables MEM policies to intelligently adapt manipulation strategies in-context.\n\nComments:\n\nWebsite:\n\nthis https URL\n\nSubjects:\n\nRobotics (cs.RO)\n\n; Machine Learning (cs.LG)\n\nCite as:\n\narXiv:2603.03596\n\n[cs.RO]\n\n(or\n\narXiv:2603.03596v1\n\n[cs.RO]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.03596\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Karl Pertsch [\n\nview email\n\n]\n\n[v1]\n\nWed, 4 Mar 2026 00:03:02 UTC (8,502 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper t"
+    },
+    {
+      "title": "[1410.3916] Memory Networks",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.4005360723278808,
+      "semanticScore": 0.40287113189697266,
+      "semantic_score": 0.40287113189697266,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5971288681030273,
+      "documentId": "web_6e7a2ebb3d3562bb_2",
+      "document_id": "web_6e7a2ebb3d3562bb_2",
+      "parentId": "web:web_6e7a2ebb3d3562bb::document:[1410.3916] Memory Networks",
+      "parent_id": "web:web_6e7a2ebb3d3562bb::document:[1410.3916] Memory Networks",
+      "parentLabel": "[1410.3916] Memory Networks",
+      "parent_label": "[1410.3916] Memory Networks",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.011429
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.28921,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.01,
+        "path_token_overlap_boost": 0.003846,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.011429,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.360536,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.011429
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.011429
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.28921,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.01,
+        "path_token_overlap_boost": 0.003846,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.011429,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.360536,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.011429
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "parent_id": "web:web_6e7a2ebb3d3562bb::document:[1410.3916] Memory Networks",
+        "document_id": "web:web_6e7a2ebb3d3562bb",
+        "file_path": "/Users/won/.khub/web_docs/web_6e7a2ebb3d3562bb-1410-3916-memory-networks.md",
+        "chunk_size": 1188,
+        "contextual_summary": "[[1410.3916] Memory Networks] ) Full-text links: Access Paper: View a PDF of the paper titled Memory Networks, by Jason Weston and 2 other authors View PDF TeX Source view license Current browse context: cs....",
+        "chunk_index": 2,
+        "section_path": "",
+        "quality_score": 0.7964,
+        "section_title": "",
+        "source_type": "web",
+        "topic": "ai",
+        "parent_title": "[1410.3916] Memory Networks",
+        "title": "[1410.3916] Memory Networks",
+        "parent_type": "document",
+        "url": "https://arxiv.org/abs/1410.3916",
+        "resolved_parent_id": "web:web_6e7a2ebb3d3562bb::document:[1410.3916] Memory Networks",
+        "resolved_parent_label": "[1410.3916] Memory Networks",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [1410.3916] Memory Networks\nURL: https://arxiv.org/abs/1410.3916\nSection: \n\ne show the reasoning power of such models by chaining multiple supporting sentences to answer questions that require understanding the intension of verbs.\n\nSubjects:\n\nArtificial Intelligence (cs.AI)\n\n; Computation and Language (cs.CL); Machine Learning (stat.ML)\n\nCite as:\n\narXiv:1410.3916\n\n[cs.AI]\n\n(or\n\narXiv:1410.3916v11\n\n[cs.AI]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.1410.3916\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Jason  Weston [\n\nview email\n\n]\n\n[v1]\n\nWed, 15 Oct 2014 03:13:18 UTC (23 KB)\n\n[v2]\n\nThu, 16 Oct 2014 16:33:51 UTC (23 KB)\n\n[v3]\n\nSat, 20 Dec 2014 03:53:26 UTC (56 KB)\n\n[v4]\n\nWed, 24 Dec 2014 21:56:07 UTC (56 KB)\n\n[v5]\n\nWed, 21 Jan 2015 07:26:45 UTC (56 KB)\n\n[v6]\n\nSat, 7 Feb 2015 01:25:50 UTC (56 KB)\n\n[v7]\n\nWed, 25 Feb 2015 04:08:49 UTC (57 KB)\n\n[v8]\n\nSat, 7 Mar 2015 15:29:16 UTC (57 KB)\n\n[v9]\n\nThu, 9 Apr 2015 20:45:05 UTC (57 KB)\n\n[v10]\n\nTue, 19 May 2015 21:48:30 UTC (57 KB)\n\n[v11]\n\nSun, 29 Nov 2015 07:00:41 UTC (57 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled Memory Networks, by Jason Weston and 2 other"
+    },
+    {
+      "title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.38094157419708247,
+      "semanticScore": 0.39444613456726074,
+      "semantic_score": 0.39444613456726074,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6055538654327393,
+      "documentId": "web_32248bfe3d02494a_0",
+      "document_id": "web_32248bfe3d02494a_0",
+      "parentId": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parentLabel": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parent_label": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.007273
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.006364
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.283312,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.006364,
+        "path_token_overlap_boost": 0.002941,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.007273,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.340941,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.007273
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.006364
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.007273
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.006364
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.283312,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.006364,
+        "path_token_overlap_boost": 0.002941,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.007273,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.340941,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.007273
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.006364
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "file_path": "/Users/won/.khub/web_docs/web_32248bfe3d02494a-2510-18866-lightmem-lightweight-and-efficient-memory-augmented-generation.md",
+        "parent_type": "document",
+        "url": "https://arxiv.org/abs/2510.18866",
+        "topic": "",
+        "chunk_size": 1117,
+        "parent_title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "chunk_index": 0,
+        "document_id": "web:web_32248bfe3d02494a",
+        "section_path": "",
+        "section_title": "",
+        "title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "source_type": "web",
+        "quality_score": 0.9065,
+        "contextual_summary": "[[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation] Computer Science > Computation and Language arXiv:2510.18866 (cs) [Submitted on 21 Oct 2025 ( ), last revised 28 Feb 2026 (this version, v4)] Title: LightMem: Lightweight and Ef...",
+        "resolved_parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_label": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation\nURL: https://arxiv.org/abs/2510.18866\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2510.18866\n\n(cs)\n\n[Submitted on 21 Oct 2025 (\n\n), last revised 28 Feb 2026 (this version, v4)]\n\nTitle:\n\nLightMem: Lightweight and Efficient Memory-Augmented Generation\n\nAuthors:\n\nJizhan Fang\n\nXinle Deng\n\nHaoming Xu\n\nZiyan Jiang\n\nYuqi Tang\n\nZiwen Xu\n\nShumin Deng\n\nYunzhi Yao\n\nMengru Wang\n\nShuofei Qiao\n\nHuajun Chen\n\nNingyu Zhang\n\nView a PDF of the paper titled LightMem: Lightweight and Efficient Memory-Augmented Generation, by Jizhan Fang and 11 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nDespite their remarkable capabilities, Large Language Models (LLMs) struggle to effectively leverage historical interaction information in dynamic and complex environments. Memory systems enable LLMs to move beyond stateless interactions by introducing persistent information storage, retrieval, and utilization mechanisms. However, existing memory systems often introduce substantial time and computational overhead. To this end, we introduce a new memory system called LightMem, which strikes a balan"
+    },
+    {
+      "title": "[1802.10542] Memory-based Parameter Adaptation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.377148777554779,
+      "semanticScore": 0.3736807107925415,
+      "semantic_score": 0.3736807107925415,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6263192892074585,
+      "documentId": "web_a59b4ef3d9569faf_2",
+      "document_id": "web_a59b4ef3d9569faf_2",
+      "parentId": "web:web_a59b4ef3d9569faf::document:[1802.10542] Memory-based Parameter Adaptation",
+      "parent_id": "web:web_a59b4ef3d9569faf::document:[1802.10542] Memory-based Parameter Adaptation",
+      "parentLabel": "[1802.10542] Memory-based Parameter Adaptation",
+      "parent_label": "[1802.10542] Memory-based Parameter Adaptation",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.00875
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.268776,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.00875,
+        "path_token_overlap_boost": 0.003571,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.01,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.337148,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.00875
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.00875
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.268776,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.00875,
+        "path_token_overlap_boost": 0.003571,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.01,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.337148,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.00875
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "section_title": "",
+        "parent_title": "[1802.10542] Memory-based Parameter Adaptation",
+        "section_path": "",
+        "file_path": "/Users/won/.khub/web_docs/web_a59b4ef3d9569faf-1802-10542-memory-based-parameter-adaptation.md",
+        "source_type": "web",
+        "document_id": "web:web_a59b4ef3d9569faf",
+        "title": "[1802.10542] Memory-based Parameter Adaptation",
+        "url": "https://arxiv.org/abs/1802.10542",
+        "parent_type": "document",
+        "chunk_size": 1177,
+        "topic": "ai",
+        "chunk_index": 2,
+        "contextual_summary": "[[1802.10542] Memory-based Parameter Adaptation] : Access Paper: View a PDF of the paper titled Memory-based Parameter Adaptation, by Pablo Sprechmann and 9 other authors View PDF TeX Source Other Formats view license Current ...",
+        "parent_id": "web:web_a59b4ef3d9569faf::document:[1802.10542] Memory-based Parameter Adaptation",
+        "quality_score": 0.8138,
+        "resolved_parent_id": "web:web_a59b4ef3d9569faf::document:[1802.10542] Memory-based Parameter Adaptation",
+        "resolved_parent_label": "[1802.10542] Memory-based Parameter Adaptation",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [1802.10542] Memory-based Parameter Adaptation\nURL: https://arxiv.org/abs/1802.10542\nSection: \n\nmodify the weights of a neural network. Much higher learning rates can be used for this local adaptation, reneging the need for many iterations over similar data before good predictions can be made. As our method is memory-based, it alleviates several shortcomings of neural networks, such as catastrophic forgetting, fast, stable acquisition of new knowledge, learning with an imbalanced class labels, and fast learning during evaluation. We demonstrate this on a range of supervised tasks: large-scale image classification and language modelling.\n\nComments:\n\nPublished as a conference paper at ICLR 2018\n\nSubjects:\n\nMachine Learning (stat.ML)\n\n; Machine Learning (cs.LG)\n\nCite as:\n\narXiv:1802.10542\n\n[stat.ML]\n\n(or\n\narXiv:1802.10542v1\n\n[stat.ML]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.1802.10542\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Siddhant M. Jayakumar [\n\nview email\n\n]\n\n[v1]\n\nWed, 28 Feb 2018 17:21:44 UTC (1,076 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled Memory-based Parameter Adaptation, by Pablo Sp"
+    },
+    {
+      "title": "[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3748649191162872,
+      "semanticScore": 0.36641234159469604,
+      "semantic_score": 0.36641234159469604,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.633587658405304,
+      "documentId": "web_441257cebaec5085_1",
+      "document_id": "web_441257cebaec5085_1",
+      "parentId": "web:web_441257cebaec5085::document:[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+      "parent_id": "web:web_441257cebaec5085::document:[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+      "parentLabel": "[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+      "parent_label": "[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.008
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.007
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.263689,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.007,
+        "path_token_overlap_boost": 0.003125,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.008,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.334865,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.008
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.007
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036051
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.008
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.007
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.263689,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.007,
+        "path_token_overlap_boost": 0.003125,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.008,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.334865,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036051
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.008
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.007
+          }
+        ],
+        "graph_candidate_boost": 0.036051,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "file_path": "/Users/won/.khub/web_docs/web_441257cebaec5085-1804-01756-the-kanerva-machine-a-generative-distributed-memory.md",
+        "chunk_index": 1,
+        "parent_type": "document",
+        "source_type": "web",
+        "parent_id": "web:web_441257cebaec5085::document:[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+        "topic": "ai",
+        "contextual_summary": "[[1804.01756] The Kanerva Machine: A Generative Distributed Memory] ombined to produce the code representing an observation",
+        "section_path": "",
+        "parent_title": "[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+        "quality_score": 0.802,
+        "title": "[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+        "url": "https://arxiv.org/abs/1804.01756",
+        "document_id": "web:web_441257cebaec5085",
+        "chunk_size": 1195,
+        "section_title": "",
+        "resolved_parent_id": "web:web_441257cebaec5085::document:[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+        "resolved_parent_label": "[1804.01756] The Kanerva Machine: A Generative Distributed Memory",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [1804.01756] The Kanerva Machine: A Generative Distributed Memory\nURL: https://arxiv.org/abs/1804.01756\nSection: \n\nStatistics > Machine Learning\n\narXiv:1804.01756\n\n(stat)\n\n[Submitted on 5 Apr 2018 (\n\nv1\n\n), last revised 18 Jun 2018 (this version, v3)]\n\nTitle:\n\nThe Kanerva Machine: A Generative Distributed Memory\n\nAuthors:\n\nYan Wu\n\n,\n\nGreg Wayne\n\n,\n\nAlex Graves\n\n,\n\nTimothy Lillicrap\n\nView a PDF of the paper titled The Kanerva Machine: A Generative Distributed Memory, by Yan Wu and 3 other authors\n\nView PDF\n\nAbstract:\n\nWe present an end-to-end trained memory system that quickly adapts to new data and generates samples like them. Inspired by Kanerva's sparse distributed memory, it has a robust distributed reading and writing mechanism. The memory is analytically tractable, which enables optimal on-line compression via a Bayesian update-rule. We formulate it as a hierarchical conditional generative model, where memory provides a rich data-dependent prior distribution. Consequently, the top-down memory and bottom-up perception are combined to produce the code representing an observation. Empirically, we demonstrate that the adaptive memory significantly improves generat"
+    }
+  ]
+}

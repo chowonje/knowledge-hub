@@ -8,7 +8,7 @@ from typing import Optional
 from rich.console import Console
 from rich.table import Table
 
-from knowledge_hub.core.database import SQLiteDatabase
+from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 
 console = Console()
 

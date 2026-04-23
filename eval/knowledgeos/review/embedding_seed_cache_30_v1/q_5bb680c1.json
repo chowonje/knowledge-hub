@@ -1,0 +1,1029 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "EvidenceAssemblyService는 어떤 입력을 받아 무엇을 만드는가?",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "topic",
+        "parent_title",
+        "chunk_size",
+        "quality_score",
+        "contextual_summary",
+        "source_type",
+        "parent_type",
+        "url",
+        "section_path",
+        "parent_id",
+        "document_id",
+        "chunk_index",
+        "title",
+        "section_title",
+        "file_path"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "EvidenceAssemblyService는 어떤 입력을 받아 무엇을 만드는가?",
+    "is_graph_heavy": false,
+    "confidence": 0.0,
+    "cue_hits": [],
+    "matched_entity_count": 0,
+    "candidate_hints": [],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 6,
+      "entity_match_count": 0,
+      "relation_count": 0,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": false,
+      "recommended_top_k": 5,
+      "recommended_mode": "baseline",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "baseline",
+    "recommended_top_k": 5
+  },
+  "graph_query_signal": {
+    "query": "EvidenceAssemblyService는 어떤 입력을 받아 무엇을 만드는가?",
+    "is_graph_heavy": false,
+    "confidence": 0.0,
+    "cue_hits": [],
+    "matched_entity_count": 0,
+    "candidate_hints": [],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 6,
+      "entity_match_count": 0,
+      "relation_count": 0,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": false,
+      "recommended_top_k": 5,
+      "recommended_mode": "baseline",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "baseline",
+    "recommended_top_k": 5
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.42266185870939904,
+      "semanticScore": 0.30557936429977417,
+      "semantic_score": 0.30557936429977417,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6944206357002258,
+      "documentId": "web_20bb55a841d90949_1",
+      "document_id": "web_20bb55a841d90949_1",
+      "parentId": "web:web_20bb55a841d90949::document:[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+      "parent_id": "web:web_20bb55a841d90949::document:[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+      "parentLabel": "[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+      "parent_label": "[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156556
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156556,
+        "retrieval_adjusted_score": 0.377662,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.382662,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156556
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156556
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156556,
+        "retrieval_adjusted_score": 0.377662,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.382662,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156556
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "document_id": "web:web_20bb55a841d90949",
+        "url": "https://arxiv.org/abs/2603.02909v2",
+        "quality_score": 0.8313,
+        "chunk_size": 1125,
+        "topic": "ai",
+        "chunk_index": 1,
+        "contextual_summary": "[[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction] o Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction, by Guangjun Zhang and 6 other authors View PDF HTML (exper...",
+        "file_path": "/Users/won/.khub/web_docs/web_20bb55a841d90949-2603-02909v2-learning-to-generate-and-extract-a-multi-agent-collaboration-framework-for-zero-shot-document-level-event-arguments-extraction.md",
+        "source_type": "web",
+        "title": "[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+        "section_title": "",
+        "parent_type": "document",
+        "parent_id": "web:web_20bb55a841d90949::document:[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+        "section_path": "",
+        "parent_title": "[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+        "resolved_parent_id": "web:web_20bb55a841d90949::document:[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+        "resolved_parent_label": "[2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction\nURL: https://arxiv.org/abs/2603.02909v2\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2603.02909v2\n\n(cs)\n\n[Submitted on 3 Mar 2026 (\n\nv1\n\n), last revised 4 Mar 2026 (this version, v2)]\n\nTitle:\n\nLearning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction\n\nAuthors:\n\nGuangjun Zhang\n\n,\n\nHu Zhang\n\n,\n\nYazhou Han\n\n,\n\nYue Fan\n\n,\n\nYuhang Shao\n\n,\n\nRu Li\n\n,\n\nHongye Tan\n\nView a PDF of the paper titled Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction, by Guangjun Zhang and 6 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\n[chunk 1]\nTitle: [2603.02909v2] Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction\nURL: https://arxiv.org/abs/2603.02909v2\nSection: \n\no Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction, by Guangjun Zhang and 6"
+    },
+    {
+      "title": "Building custom model provider for Strands Agents with LLMs hosted on SageMaker AI endpoints | Artificial Intelligence",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.40299443977185867,
+      "semanticScore": 0.2532362937927246,
+      "semantic_score": 0.2532362937927246,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7467637062072754,
+      "documentId": "web_482e7f567ca26145_12",
+      "document_id": "web_482e7f567ca26145_12",
+      "parentId": "web:web_482e7f567ca26145::section:Test the agent",
+      "parent_id": "web:web_482e7f567ca26145::section:Test the agent",
+      "parentLabel": "Test the agent",
+      "parent_label": "Test the agent",
+      "parentChunkSpan": "12-12",
+      "parent_chunk_span": "12-12",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.88,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.163929
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0168
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.88,
+        "source_trust_boost": 0.0168,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.163929,
+        "retrieval_adjusted_score": 0.357994,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.362994,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.163929
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0168
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.88,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.163929
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0168
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.88,
+        "source_trust_boost": 0.0168,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.163929,
+        "retrieval_adjusted_score": 0.357994,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.362994,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.163929
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0168
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://aws.amazon.com/blogs/machine-learning/building-custom-model-provider-for-strands-agents-with-llms-hosted-on-sagemaker-ai-endpoints",
+        "parent_type": "section",
+        "source_type": "web",
+        "chunk_size": 886,
+        "document_id": "web:web_482e7f567ca26145",
+        "chunk_index": 12,
+        "file_path": "/Users/won/.khub/web_docs/web_482e7f567ca26145-building-custom-model-provider-for-strands-agents-with-llms-hosted-on-sagemaker-ai-endpoints-artificial-intelligence.md",
+        "title": "Building custom model provider for Strands Agents with LLMs hosted on SageMaker AI endpoints | Artificial Intelligence",
+        "section_path": "Test the agent",
+        "contextual_summary": "[Test the agent] ory",
+        "parent_id": "web:web_482e7f567ca26145::section:Test the agent",
+        "section_title": "Test the agent",
+        "parent_title": "Test the agent",
+        "topic": "input-model-v1-smoke",
+        "quality_score": 0.8305,
+        "resolved_parent_id": "web:web_482e7f567ca26145::section:Test the agent",
+        "resolved_parent_label": "Test the agent",
+        "resolved_parent_chunk_span": "12-12"
+      },
+      "document": "[chunk 12] [Test the agent]\nTitle: Building custom model provider for Strands Agents with LLMs hosted on SageMaker AI endpoints | Artificial Intelligence\nURL: https://aws.amazon.com/blogs/machine-learning/building-custom-model-provider-for-strands-agents-with-llms-hosted-on-sagemaker-ai-endpoints\nSection: Test the agent\n\nory\n\n.\n\nConclusion\n\nBuilding custom model parsers for Strands agents helps users to leverage different LLM deployments on SageMaker, regardless of its response format. By extending\n\nSageMakerAIModel\n\nand implementing the\n\nstream()\n\nmethod, you can integrate custom-hosted models while maintaining the clean agent interface of Strands.\n\nKey takeaways\n\n:\n\nawslabs/ml-container-creator\n\nsimplifies SageMaker BYOC deployments with production-ready infrastructure code\n\nCustom parsers bridge the gap between model server response formats and Strands expectations\n\nThe stream() method is the critical integration point for custom providers\n\nAbout the authors\n\nDan Ferguson\n\nis a Sr. Solutions Architect at AWS, based in New York, USA. As a machine learning services expert, Dan works to support customers on their journey to integrating ML workflows efficiently, effectively, and sus"
+    },
+    {
+      "title": "[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3968844456962363,
+      "semanticScore": 0.26878607273101807,
+      "semantic_score": 0.26878607273101807,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7312139272689819,
+      "documentId": "web_327bef6cf6deaac3_1",
+      "document_id": "web_327bef6cf6deaac3_1",
+      "parentId": "web:web_327bef6cf6deaac3::document:[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+      "parent_id": "web:web_327bef6cf6deaac3::document:[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+      "parentLabel": "[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+      "parent_label": "[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156534
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156534,
+        "retrieval_adjusted_score": 0.351884,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.356884,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156534
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156534
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156534,
+        "retrieval_adjusted_score": 0.351884,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.356884,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156534
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "file_path": "/Users/won/.khub/web_docs/web_327bef6cf6deaac3-2603-03031v1-step-level-sparse-autoencoder-for-reasoning-process-interpretation.md",
+        "topic": "ai",
+        "contextual_summary": "[[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation] semantic transitions",
+        "quality_score": 0.8066,
+        "chunk_index": 1,
+        "url": "https://arxiv.org/abs/2603.03031v1",
+        "parent_title": "[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+        "parent_type": "document",
+        "section_path": "",
+        "title": "[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+        "section_title": "",
+        "source_type": "web",
+        "parent_id": "web:web_327bef6cf6deaac3::document:[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+        "chunk_size": 1163,
+        "document_id": "web:web_327bef6cf6deaac3",
+        "resolved_parent_id": "web:web_327bef6cf6deaac3::document:[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+        "resolved_parent_label": "[2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.03031v1] Step-Level Sparse Autoencoder for Reasoning Process Interpretation\nURL: https://arxiv.org/abs/2603.03031v1\nSection: \n\nComputer Science > Machine Learning\n\narXiv:2603.03031v1\n\n(cs)\n\n[Submitted on 3 Mar 2026]\n\nTitle:\n\nStep-Level Sparse Autoencoder for Reasoning Process Interpretation\n\nAuthors:\n\nXuan Yang\n\n,\n\nJiayu Liu\n\n,\n\nYuhang Lai\n\n,\n\nHao Xu\n\n,\n\nZhenya Huang\n\n,\n\nNing Miao\n\nView a PDF of the paper titled Step-Level Sparse Autoencoder for Reasoning Process Interpretation, by Xuan Yang and 5 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nLarge Language Models (LLMs) have achieved strong complex reasoning capabilities through Chain-of-Thought (CoT) reasoning. However, their reasoning patterns remain too complicated to analyze. While Sparse Autoencoders (SAEs) have emerged as a powerful tool for interpretability, existing approaches predominantly operate at the token level, creating a granularity mismatch when capturing more critical step-level information, such as reasoning direction and semantic transitions. In this work, we propose step-level sparse autoencoder (SSAE), which serves as an analytical tool to disentangle different aspects of LLM"
+    },
+    {
+      "title": "Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.350360210516262,
+      "semanticScore": 0.27358365058898926,
+      "semantic_score": 0.27358365058898926,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7264163494110107,
+      "documentId": "web_83ed35ae5c3f5093_2",
+      "document_id": "web_83ed35ae5c3f5093_2",
+      "parentId": "web:web_83ed35ae5c3f5093::document:Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+      "parent_id": "web:web_83ed35ae5c3f5093::document:Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+      "parentLabel": "Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+      "parent_label": "Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.101652
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.101652,
+        "retrieval_adjusted_score": 0.30036,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.31036,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.101652
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.101652
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.101652,
+        "retrieval_adjusted_score": 0.30036,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.31036,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.101652
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "chunk_size": 1051,
+        "source_type": "web",
+        "title": "Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+        "parent_id": "web:web_83ed35ae5c3f5093::document:Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+        "topic": "input-model-v1-smoke",
+        "url": "https://bair.berkeley.edu/blog/2025/04/11/prompt-injection-defense",
+        "quality_score": 0.8423,
+        "parent_type": "document",
+        "chunk_index": 2,
+        "parent_title": "Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+        "section_path": "",
+        "document_id": "web:web_83ed35ae5c3f5093",
+        "section_title": "",
+        "contextual_summary": "[Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog] al, results from API calls, etc",
+        "file_path": "/Users/won/.khub/web_docs/web_83ed35ae5c3f5093-defending-against-prompt-injection-with-structured-queries-struq-and-preference-optimization-secalign-the-berkeley-artificial-intelligence-research-blog.md",
+        "resolved_parent_id": "web:web_83ed35ae5c3f5093::document:Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+        "resolved_parent_label": "Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: Defending against Prompt Injection with Structured Queries (StruQ) and Preference Optimization (SecAlign) – The Berkeley Artificial Intelligence Research Blog\nURL: https://bair.berkeley.edu/blog/2025/04/11/prompt-injection-defense\nSection: \n\ninjected instruction, it could be misled to recommend Restaurant A, which has poor reviews.\n\nAn example of prompt injection\n\nProduction-level LLM systems, e.g.,\n\nGoogle Docs\n\n,\n\nSlack AI\n\n,\n\nChatGPT\n\n, have been shown vulnerable to prompt injections. To mitigate the imminent prompt injection threat, we propose two fine-tuning-defenses, StruQ and SecAlign. Without additional cost on computation or human labor, they are utility-preserving effective defenses. StruQ and SecAlign reduce the success rates of over a dozen of optimization-free attacks to around 0%. SecAlign also stops strong optimization-based attacks to success rates lower than 15%, a number reduced by over 4 times from the previous SOTA in all 5 tested LLMs.\n\nPrompt Injection Attack: Causes\n\nBelow is the threat model of prompt injection attacks. The prompt and LLM from the system developer are trusted. The data is untrusted, as it comes from external sources such as "
+    },
+    {
+      "title": "Attention Residuals",
+      "sourceType": "paper",
+      "source_type": "paper",
+      "score": 0.2691500712394714,
+      "semanticScore": 0.24507153034210205,
+      "semantic_score": 0.24507153034210205,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.754928469657898,
+      "documentId": "paper_attnres2026_0",
+      "document_id": "paper_attnres2026_0",
+      "parentId": "",
+      "parent_id": "",
+      "parentLabel": "Attention Residuals",
+      "parent_label": "Attention Residuals",
+      "parentChunkSpan": "0-0",
+      "parent_chunk_span": "0-0",
+      "normalizedSourceType": "paper",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.86,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "source_prior_boost",
+          "value": 0.03
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0156
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.86,
+        "source_trust_boost": 0.0156,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.18715,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.03,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "paper",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.22915,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_prior_boost",
+            "value": 0.03
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0156
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.86,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "paper",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "source_prior_boost",
+          "value": 0.03
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0156
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.86,
+        "source_trust_boost": 0.0156,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.18715,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.03,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "paper",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.22915,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_prior_boost",
+            "value": 0.03
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0156
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          }
+        ]
+      },
+      "metadata": {
+        "source_type": "paper",
+        "field": "Computer Science",
+        "arxiv_id": "attnres2026",
+        "chunk_index": 0,
+        "title": "Attention Residuals",
+        "resolved_parent_id": "",
+        "resolved_parent_label": "Attention Residuals",
+        "resolved_parent_chunk_span": "0-0"
+      },
+      "document": "[chunk 0]\nTitle: Attention Residuals\n\n### 한줄 요약\nTransformer의 고정 residual accumulation을 depth-wise softmax attention으로 대체하는 Attention Residuals와 Block AttnRes를 제안한 Kimi Team 기술 보고서다.\n\n### 핵심 기여\n- PreNorm residual path에서 깊이에 따라 hidden-state magnitude가 커지고 레이어 기여가 희석되는 문제를 정식화한다.\n- 각 레이어가 이전 레이어 출력 전체를 선택적으로 집계하는 Attention Residuals를 제안한다.\n- 대규모 학습 비용을 줄이기 위해 블록 대표 표현에만 attention하는 Block AttnRes를 설계한다.\n- Kimi Linear 48B/3B activated 설정에서 reasoning, code, Chinese benchmark 개선을 보고한다.\n\n### 방법론\nResidual sum 대신 이전 depth representation에 대한 softmax attention을 사용해 content-dependent aggregation을 수행한다.\n\n### 한계\narXiv 논문이 아니라 GitHub technical report 공개본 기준이며, 재현 코드/체크포인트보다는 설계와 결과 보고 중심이다."
+    }
+  ]
+}

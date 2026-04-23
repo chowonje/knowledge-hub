@@ -1,0 +1,50 @@
+[
+  {
+    "paper_id": "2501.06322",
+    "bucket": "strong",
+    "section_coverage_status": "strong",
+    "quality_gate_allowed": true,
+    "selected_roles": ["problem", "method", "results", "limitations"],
+    "notes": "Known good materialized SectionCard sample."
+  },
+  {
+    "paper_id": "2503.10970",
+    "bucket": "strong",
+    "section_coverage_status": "strong",
+    "quality_gate_allowed": true,
+    "selected_roles": ["problem", "method", "results", "limitations"],
+    "notes": "Known good materialized SectionCard sample."
+  },
+  {
+    "paper_id": "2502.05151",
+    "bucket": "medium",
+    "section_coverage_status": "weak",
+    "quality_gate_allowed": true,
+    "selected_roles": ["problem", "method", "results"],
+    "notes": "Confirmed medium paper: weak coverage but quality gate allows section-first."
+  },
+  {
+    "paper_id": "2602.16698",
+    "bucket": "medium",
+    "section_coverage_status": "weak",
+    "quality_gate_allowed": true,
+    "selected_roles": ["problem", "method", "results"],
+    "notes": "Confirmed medium paper: weak coverage but real method/results content is present."
+  },
+  {
+    "paper_id": "2603.07379",
+    "bucket": "weak",
+    "section_coverage_status": "weak",
+    "quality_gate_allowed": false,
+    "selected_roles": ["problem"],
+    "notes": "Known placeholder/meta-only source memory case."
+  },
+  {
+    "paper_id": "2602.20021",
+    "bucket": "weak",
+    "section_coverage_status": "weak",
+    "quality_gate_allowed": false,
+    "selected_roles": ["problem"],
+    "notes": "Confirmed placeholder/meta-only source memory case. Quality gate blocks section-first."
+  }
+]

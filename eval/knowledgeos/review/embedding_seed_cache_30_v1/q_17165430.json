@@ -1,0 +1,1577 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "section_title",
+        "section_path",
+        "title",
+        "source_type",
+        "quality_score",
+        "document_id",
+        "file_path",
+        "parent_title",
+        "chunk_index",
+        "contextual_summary",
+        "url",
+        "parent_id",
+        "chunk_size",
+        "topic",
+        "parent_type"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "retrieval-augmented_generation",
+        "entity_type": "concept",
+        "canonical_name": "Retrieval-Augmented Generation",
+        "matched_terms": [
+          "Retrieval-Augmented Generation",
+          "rag",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [
+          "rag"
+        ],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_names": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_types": [
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper"
+        ],
+        "score": 0.54,
+        "reasons": [
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_69a537093ff9",
+        "entity_type": "concept",
+        "canonical_name": "rag",
+        "matched_terms": [
+          "rag",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 2,
+        "neighbor_entity_ids": [
+          "webc_476ee0f6af1d",
+          "web_fc9a8b4e10c6db50"
+        ],
+        "neighbor_names": [
+          "performance",
+          "web_fc9a8b4e10c6db50"
+        ],
+        "neighbor_types": [
+          "concept",
+          "note"
+        ],
+        "score": 0.466667,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "paper:2510.01375",
+        "entity_type": "paper",
+        "canonical_name": "Fine-tuning with RAG for Improving LLM Learning of New Skills",
+        "matched_terms": [
+          "Fine-tuning with RAG for Improving LLM Learning of New Skills",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 9,
+        "neighbor_entity_ids": [
+          "distillation",
+          "fine-tuning",
+          "generalization",
+          "internalization",
+          "learning_from_failures",
+          "model_performance"
+        ],
+        "neighbor_names": [
+          "Distillation",
+          "Fine-tuning",
+          "Generalization",
+          "Internalization",
+          "Learning from failures",
+          "Model performance"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2603.07379",
+        "entity_type": "paper",
+        "canonical_name": "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+        "matched_terms": [
+          "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "agentic_behavior",
+          "architecture",
+          "evaluation",
+          "human-computer_interaction",
+          "knowledge_representation",
+          "research_direction"
+        ],
+        "neighbor_names": [
+          "Agentic Behavior",
+          "Architecture",
+          "Evaluation",
+          "Human-Computer Interaction",
+          "Knowledge Representation",
+          "Research Direction"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2602.03442",
+        "entity_type": "paper",
+        "canonical_name": "A-RAG: Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces",
+        "matched_terms": [
+          "A-RAG: Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 7,
+        "neighbor_entity_ids": [
+          "agentic_retrieval",
+          "generation",
+          "hierarchical_retrieval",
+          "information_retrieval",
+          "interfaces",
+          "retrieval-augmented_generation"
+        ],
+        "neighbor_names": [
+          "Agentic Retrieval",
+          "Generation",
+          "Hierarchical Retrieval",
+          "Information Retrieval",
+          "Interfaces",
+          "Retrieval-Augmented Generation"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 5,
+      "relation_count": 34,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "retrieval-augmented_generation",
+        "entity_type": "concept",
+        "canonical_name": "Retrieval-Augmented Generation",
+        "matched_terms": [
+          "Retrieval-Augmented Generation",
+          "rag",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [
+          "rag"
+        ],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_names": [
+          "2312.10997",
+          "2510.01375",
+          "2510.15682",
+          "2512.13564",
+          "2602.03442",
+          "2603.07379"
+        ],
+        "neighbor_types": [
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper",
+          "paper"
+        ],
+        "score": 0.54,
+        "reasons": [
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_69a537093ff9",
+        "entity_type": "concept",
+        "canonical_name": "rag",
+        "matched_terms": [
+          "rag",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 2,
+        "neighbor_entity_ids": [
+          "webc_476ee0f6af1d",
+          "web_fc9a8b4e10c6db50"
+        ],
+        "neighbor_names": [
+          "performance",
+          "web_fc9a8b4e10c6db50"
+        ],
+        "neighbor_types": [
+          "concept",
+          "note"
+        ],
+        "score": 0.466667,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "paper:2510.01375",
+        "entity_type": "paper",
+        "canonical_name": "Fine-tuning with RAG for Improving LLM Learning of New Skills",
+        "matched_terms": [
+          "Fine-tuning with RAG for Improving LLM Learning of New Skills",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 9,
+        "neighbor_entity_ids": [
+          "distillation",
+          "fine-tuning",
+          "generalization",
+          "internalization",
+          "learning_from_failures",
+          "model_performance"
+        ],
+        "neighbor_names": [
+          "Distillation",
+          "Fine-tuning",
+          "Generalization",
+          "Internalization",
+          "Learning from failures",
+          "Model performance"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2603.07379",
+        "entity_type": "paper",
+        "canonical_name": "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+        "matched_terms": [
+          "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "agentic_behavior",
+          "architecture",
+          "evaluation",
+          "human-computer_interaction",
+          "knowledge_representation",
+          "research_direction"
+        ],
+        "neighbor_names": [
+          "Agentic Behavior",
+          "Architecture",
+          "Evaluation",
+          "Human-Computer Interaction",
+          "Knowledge Representation",
+          "Research Direction"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2602.03442",
+        "entity_type": "paper",
+        "canonical_name": "A-RAG: Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces",
+        "matched_terms": [
+          "A-RAG: Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces",
+          "rag 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 7,
+        "neighbor_entity_ids": [
+          "agentic_retrieval",
+          "generation",
+          "hierarchical_retrieval",
+          "information_retrieval",
+          "interfaces",
+          "retrieval-augmented_generation"
+        ],
+        "neighbor_names": [
+          "Agentic Retrieval",
+          "Generation",
+          "Hierarchical Retrieval",
+          "Information Retrieval",
+          "Interfaces",
+          "Retrieval-Augmented Generation"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 5,
+      "relation_count": 34,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.5097058275992865,
+      "semanticScore": 0.2899693250656128,
+      "semantic_score": 0.2899693250656128,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7100306749343872,
+      "documentId": "web_2683a882af322bd9_4",
+      "document_id": "web_2683a882af322bd9_4",
+      "parentId": "web:web_2683a882af322bd9::document:[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+      "parent_id": "web:web_2683a882af322bd9::document:[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+      "parentLabel": "[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+      "parent_label": "[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.91,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.192573
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0186
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.004706
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.91,
+        "source_trust_boost": 0.0186,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.192573,
+        "retrieval_adjusted_score": 0.414152,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.002381,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004706,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.469706,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.192573
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0186
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.004706
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation",
+          "rag"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.91,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.192573
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0186
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.004706
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.91,
+        "source_trust_boost": 0.0186,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.192573,
+        "retrieval_adjusted_score": 0.414152,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.002381,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004706,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.469706,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.192573
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0186
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.004706
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation",
+          "rag"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "topic": "input-model-v1-index-smoke",
+        "chunk_size": 848,
+        "title": "[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+        "section_title": "",
+        "url": "https://arxiv.org/abs/2603.04406",
+        "section_path": "",
+        "parent_id": "web:web_2683a882af322bd9::document:[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+        "document_id": "web:web_2683a882af322bd9",
+        "contextual_summary": "[[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models] ed Papers Recommenders and Search Tools Link to Influence Flower Influence Flower ( What are Influence Flowers? ) Core recommender toggle CORE Recommender ( What is CORE? ) Auth...",
+        "parent_type": "document",
+        "file_path": "/Users/won/.khub/web_docs/web_2683a882af322bd9-2603-04406-ctrl-rag-contrastive-likelihood-reward-based-reinforcement-learning-for-context-faithful-rag-models.md",
+        "source_type": "web",
+        "quality_score": 0.8984,
+        "chunk_index": 4,
+        "parent_title": "[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+        "resolved_parent_id": "web:web_2683a882af322bd9::document:[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+        "resolved_parent_label": "[2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.04406] CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models\nURL: https://arxiv.org/abs/2603.04406\nSection: \n\ns. Our training code and models are coming soon.\n\nSubjects:\n\nComputation and Language (cs.CL)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.04406\n\n[cs.CL]\n\n(or\n\narXiv:2603.04406v1\n\n[cs.CL]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.04406\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Zhehao Tan [\n\nview email\n\n]\n\n[v1]\n\nMon, 2 Feb 2026 12:21:59 UTC (2,799 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled CTRL-RAG: Contrastive Likelihood Reward Based Reinforcement Learning for Context-Faithful RAG Models, by Zhehao Tan and 10 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.CL\n\n< prev\n\n|\n\nnext >\n\nnew\n\n|\n\nrecent\n\n|\n\n2026-03\n\nChange to browse by:\n\ncs\n\ncs.AI\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\n×\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliographic Tools\n\nBibliographic and Citation Tools\n\nBi"
+    },
+    {
+      "title": "[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.47438954163037317,
+      "semanticScore": 0.2899364233016968,
+      "semantic_score": 0.2899364233016968,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7100635766983032,
+      "documentId": "web_41989d1d65147001_1",
+      "document_id": "web_41989d1d65147001_1",
+      "parentId": "web:web_41989d1d65147001::document:[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+      "parent_id": "web:web_41989d1d65147001::document:[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+      "parentLabel": "[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+      "parent_label": "[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.169342
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.004444
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.169342,
+        "retrieval_adjusted_score": 0.379498,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004375,
+        "path_token_overlap_boost": 0.002273,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004444,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.43439,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.169342
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.004444
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation",
+          "rag"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.169342
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.004444
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.169342,
+        "retrieval_adjusted_score": 0.379498,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004375,
+        "path_token_overlap_boost": 0.002273,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004444,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.43439,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.169342
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.004444
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation",
+          "rag"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "section_title": "",
+        "document_id": "web:web_41989d1d65147001",
+        "title": "[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+        "url": "https://arxiv.org/abs/2603.03541v1",
+        "topic": "ai",
+        "parent_title": "[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+        "source_type": "web",
+        "parent_id": "web:web_41989d1d65147001::document:[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+        "section_path": "",
+        "contextual_summary": "[[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering] precision required for complex QA tasks",
+        "chunk_size": 1195,
+        "quality_score": 0.8915,
+        "chunk_index": 1,
+        "parent_type": "document",
+        "file_path": "/Users/won/.khub/web_docs/web_41989d1d65147001-2603-03541v1-rag-x-systematic-diagnosis-of-retrieval-augmented-generation-for-medical-question-answering.md",
+        "resolved_parent_id": "web:web_41989d1d65147001::document:[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+        "resolved_parent_label": "[2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.03541v1] RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering\nURL: https://arxiv.org/abs/2603.03541v1\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2603.03541v1\n\n(cs)\n\n[Submitted on 3 Mar 2026]\n\nTitle:\n\nRAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering\n\nAuthors:\n\nAswini Sivakumar\n\n,\n\nVijayan Sugumaran\n\n,\n\nYao Qiang\n\nView a PDF of the paper titled RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering, by Aswini Sivakumar and 2 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nAutomated question-answering (QA) systems increasingly rely on retrieval-augmented generation (RAG) to ground large language models (LLMs) in authoritative medical knowledge, ensuring clinical accuracy and patient safety in Artificial Intelligence (AI) applications for healthcare. Despite progress in RAG evaluation, current benchmarks focus only on simple multiple-choice QA tasks and employ metrics that poorly capture the semantic precision required for complex QA tasks. These approaches fail to diagnose whether an error stems from faulty retriev"
+    },
+    {
+      "title": "[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.4700266690250491,
+      "semanticScore": 0.2779463529586792,
+      "semantic_score": 0.2779463529586792,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7220536470413208,
+      "documentId": "web_25950626814da19d_1",
+      "document_id": "web_25950626814da19d_1",
+      "parentId": "web:web_25950626814da19d::document:[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+      "parent_id": "web:web_25950626814da19d::document:[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+      "parentLabel": "[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+      "parent_label": "[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.184464
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.184464,
+        "retrieval_adjusted_score": 0.386227,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.430027,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.184464
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.184464
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.184464,
+        "retrieval_adjusted_score": 0.386227,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.430027,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.184464
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "section_title": "",
+        "chunk_index": 1,
+        "contextual_summary": "[[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers] des a comprehensive synthesis of recent advances in RAG systems, offering a taxonomy that categorizes architectures into retriever-centric, generator-centric, hybrid, and robust...",
+        "parent_id": "web:web_25950626814da19d::document:[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+        "topic": "rag-core",
+        "quality_score": 0.8924,
+        "parent_type": "document",
+        "parent_title": "[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+        "chunk_size": 1187,
+        "document_id": "web:web_25950626814da19d",
+        "url": "https://arxiv.org/abs/2506.00054",
+        "file_path": "/Users/won/.khub/web_docs/web_25950626814da19d-2506-00054-retrieval-augmented-generation-a-comprehensive-survey-of-architectures-enhancements-and-robustness-frontiers.md",
+        "title": "[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+        "source_type": "web",
+        "section_path": "",
+        "resolved_parent_id": "web:web_25950626814da19d::document:[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+        "resolved_parent_label": "[2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2506.00054] Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers\nURL: https://arxiv.org/abs/2506.00054\nSection: \n\nComputer Science > Information Retrieval\n\narXiv:2506.00054\n\n(cs)\n\n[Submitted on 28 May 2025]\n\nTitle:\n\nRetrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers\n\nAuthors:\n\nChaitanya Sharma\n\nView a PDF of the paper titled Retrieval-Augmented Generation: A Comprehensive Survey of Architectures, Enhancements, and Robustness Frontiers, by Chaitanya Sharma\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nRetrieval-Augmented Generation (RAG) has emerged as a powerful paradigm to enhance large language models (LLMs) by conditioning generation on external evidence retrieved at inference time. While RAG addresses critical limitations of parametric knowledge storage-such as factual inconsistency and domain inflexibility-it introduces new challenges in retrieval quality, grounding fidelity, pipeline efficiency, and robustness against noisy or adversarial inputs. This survey provides a comprehensive synthesis of recent advances in RAG systems, offering a taxon"
+    },
+    {
+      "title": "[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.45577099145389394,
+      "semanticScore": 0.2947060465812683,
+      "semantic_score": 0.2947060465812683,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7052939534187317,
+      "documentId": "web_d9a3cf2823b77e56_1",
+      "document_id": "web_d9a3cf2823b77e56_1",
+      "parentId": "web:web_d9a3cf2823b77e56::document:[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+      "parent_id": "web:web_d9a3cf2823b77e56::document:[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+      "parentLabel": "[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+      "parent_label": "[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.197277
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.197277,
+        "retrieval_adjusted_score": 0.410771,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.415771,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.197277
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.197277
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.197277,
+        "retrieval_adjusted_score": 0.410771,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.415771,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.197277
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "chunk_size": 1192,
+        "source_type": "web",
+        "quality_score": 0.8951,
+        "chunk_index": 1,
+        "parent_type": "document",
+        "section_path": "",
+        "title": "[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+        "parent_id": "web:web_d9a3cf2823b77e56::document:[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+        "parent_title": "[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+        "section_title": "",
+        "contextual_summary": "[[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning] global RAG -- which involves aggregating and analyzing information across entire document collections to derive corpus-level insights (for example, \"What are the top 10 most cit...",
+        "file_path": "/Users/won/.khub/web_docs/web_d9a3cf2823b77e56-2510-26205-towards-global-retrieval-augmented-generation-a-benchmark-for-corpus-level-reasoning.md",
+        "topic": "rag-core",
+        "document_id": "web:web_d9a3cf2823b77e56",
+        "url": "https://arxiv.org/abs/2510.26205",
+        "resolved_parent_id": "web:web_d9a3cf2823b77e56::document:[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+        "resolved_parent_label": "[2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2510.26205] Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning\nURL: https://arxiv.org/abs/2510.26205\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2510.26205\n\n(cs)\n\n[Submitted on 30 Oct 2025 (\n\nv1\n\n), last revised 4 Nov 2025 (this version, v2)]\n\nTitle:\n\nTowards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning\n\nAuthors:\n\nQi Luo\n\n,\n\nXiaonan Li\n\n,\n\nTingshuo Fan\n\n,\n\nXinchi Chen\n\n,\n\nXipeng Qiu\n\nView a PDF of the paper titled Towards Global Retrieval Augmented Generation: A Benchmark for Corpus-Level Reasoning, by Qi Luo and 4 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nRetrieval-augmented generation (RAG) has emerged as a leading approach to reducing hallucinations in large language models (LLMs). Current RAG evaluation benchmarks primarily focus on what we call local RAG: retrieving relevant chunks from a small subset of documents to answer queries that require only localized understanding within specific text chunks. However, many real-world applications require a fundamentally different capability -- global RAG -- which involves aggregating and analyzing information across e"
+    },
+    {
+      "title": "[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.45027132731447483,
+      "semanticScore": 0.2712947726249695,
+      "semantic_score": 0.2712947726249695,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7287052273750305,
+      "documentId": "web_8fc32767dbab3275_1",
+      "document_id": "web_8fc32767dbab3275_1",
+      "parentId": "web:web_8fc32767dbab3275::document:[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+      "parent_id": "web:web_8fc32767dbab3275::document:[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+      "parentLabel": "[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+      "parent_label": "[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.169365
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.169365,
+        "retrieval_adjusted_score": 0.366471,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.410271,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.169365
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation",
+          "rag"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.169365
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.0388
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.169365,
+        "retrieval_adjusted_score": 0.366471,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "definition",
+        "ranking_signal_total": 0.410271,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.169365
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.0388
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.0388,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Retrieval-Augmented Generation",
+          "rag"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "source_type": "web",
+        "parent_type": "document",
+        "section_title": "",
+        "chunk_size": 1174,
+        "title": "[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+        "chunk_index": 1,
+        "parent_id": "web:web_8fc32767dbab3275::document:[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+        "parent_title": "[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+        "section_path": "",
+        "file_path": "/Users/won/.khub/web_docs/web_8fc32767dbab3275-2603-03617v1-ragtrack-language-aware-rgbt-tracking-with-retrieval-augmented-generation.md",
+        "quality_score": 0.8893,
+        "document_id": "web:web_8fc32767dbab3275",
+        "topic": "ai",
+        "url": "https://arxiv.org/abs/2603.03617v1",
+        "contextual_summary": "[[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation] s suffer from redundant search regions and heterogeneous modality gaps, causing background distraction",
+        "resolved_parent_id": "web:web_8fc32767dbab3275::document:[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+        "resolved_parent_label": "[2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.03617v1] RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation\nURL: https://arxiv.org/abs/2603.03617v1\nSection: \n\nComputer Science > Computer Vision and Pattern Recognition\n\narXiv:2603.03617v1\n\n(cs)\n\n[Submitted on 4 Mar 2026]\n\nTitle:\n\nRAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation\n\nAuthors:\n\nHao Li\n\n,\n\nYuhao Wang\n\n,\n\nWenning Hao\n\n,\n\nPingping Zhang\n\n,\n\nDong Wang\n\n,\n\nHuchuan Lu\n\nView a PDF of the paper titled RAGTrack: Language-aware RGBT Tracking with Retrieval-Augmented Generation, by Hao Li and Yuhao Wang and Wenning Hao and Pingping Zhang and Dong Wang and Huchuan Lu\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nRGB-Thermal (RGBT) tracking aims to achieve robust object localization across diverse environmental conditions by fusing visible and thermal infrared modalities. However, existing RGBT trackers rely solely on initial-frame visual information for target modeling, failing to adapt to appearance variations due to the absence of language guidance. Furthermore, current methods suffer from redundant search regions and heterogeneous modality gaps, causing background distraction. To address these issues, we firs"
+    }
+  ]
+}

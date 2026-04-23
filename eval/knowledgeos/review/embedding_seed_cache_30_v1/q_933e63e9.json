@@ -1,0 +1,1627 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "section_path",
+        "quality_score",
+        "contextual_summary",
+        "topic",
+        "section_title",
+        "parent_id",
+        "url",
+        "chunk_size",
+        "parent_title",
+        "document_id",
+        "source_type",
+        "file_path",
+        "chunk_index",
+        "title",
+        "parent_type"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_fc38e4aeb7a5",
+        "entity_type": "concept",
+        "canonical_name": "benchmark",
+        "matched_terms": [
+          "benchmark",
+          "benchmarks",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [
+          "benchmarks",
+          "benchmark"
+        ],
+        "relation_count": 101,
+        "neighbor_entity_ids": [
+          "webc_0608c4054662",
+          "webc_e7052aeb5d20",
+          "webc_81cc9cb210d5",
+          "webc_90f0f88bf84f",
+          "webc_cd738ebdb108",
+          "webc_c65a0fb7e74f"
+        ],
+        "neighbor_names": [
+          "agent",
+          "agents",
+          "autonomous",
+          "evaluation",
+          "generation",
+          "kernel"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.6,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "visual_question_answering_benchmark",
+        "entity_type": "concept",
+        "canonical_name": "Visual question answering benchmark",
+        "matched_terms": [
+          "Visual question answering benchmark",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "2602.16689",
+          "benchmark_dataset",
+          "evaluation_metric",
+          "image_dataset",
+          "visual_question_answering"
+        ],
+        "neighbor_names": [
+          "2602.16689",
+          "Benchmark dataset",
+          "Evaluation metric",
+          "Image Dataset",
+          "Visual question answering"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.356667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2312.10997",
+        "entity_type": "paper",
+        "canonical_name": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+        "matched_terms": [
+          "Retrieval-Augmented Generation for Large Language Models: A Survey",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 18,
+        "neighbor_entity_ids": [
+          "augmentation_technique",
+          "evaluation_framework",
+          "external_knowledge_base",
+          "generation",
+          "generation_technique",
+          "hallucination"
+        ],
+        "neighbor_names": [
+          "Augmentation Technique",
+          "Evaluation framework",
+          "External knowledge base",
+          "Generation",
+          "Generation Technique",
+          "Hallucination"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2502.05151",
+        "entity_type": "paper",
+        "canonical_name": "Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation",
+        "matched_terms": [
+          "Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 7,
+        "neighbor_entity_ids": [
+          "benchmarking",
+          "content_generation",
+          "ethics",
+          "experimentation",
+          "large_language_model",
+          "scientific_discovery"
+        ],
+        "neighbor_names": [
+          "Benchmarking",
+          "Content Generation",
+          "Ethics",
+          "Experimentation",
+          "Large Language Model",
+          "Scientific Discovery"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2501.06322",
+        "entity_type": "paper",
+        "canonical_name": "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
+        "matched_terms": [
+          "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.14,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 11,
+      "entity_match_count": 5,
+      "relation_count": 131,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_fc38e4aeb7a5",
+        "entity_type": "concept",
+        "canonical_name": "benchmark",
+        "matched_terms": [
+          "benchmark",
+          "benchmarks",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [
+          "benchmarks",
+          "benchmark"
+        ],
+        "relation_count": 101,
+        "neighbor_entity_ids": [
+          "webc_0608c4054662",
+          "webc_e7052aeb5d20",
+          "webc_81cc9cb210d5",
+          "webc_90f0f88bf84f",
+          "webc_cd738ebdb108",
+          "webc_c65a0fb7e74f"
+        ],
+        "neighbor_names": [
+          "agent",
+          "agents",
+          "autonomous",
+          "evaluation",
+          "generation",
+          "kernel"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.6,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "visual_question_answering_benchmark",
+        "entity_type": "concept",
+        "canonical_name": "Visual question answering benchmark",
+        "matched_terms": [
+          "Visual question answering benchmark",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "2602.16689",
+          "benchmark_dataset",
+          "evaluation_metric",
+          "image_dataset",
+          "visual_question_answering"
+        ],
+        "neighbor_names": [
+          "2602.16689",
+          "Benchmark dataset",
+          "Evaluation metric",
+          "Image Dataset",
+          "Visual question answering"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.356667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2312.10997",
+        "entity_type": "paper",
+        "canonical_name": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+        "matched_terms": [
+          "Retrieval-Augmented Generation for Large Language Models: A Survey",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 18,
+        "neighbor_entity_ids": [
+          "augmentation_technique",
+          "evaluation_framework",
+          "external_knowledge_base",
+          "generation",
+          "generation_technique",
+          "hallucination"
+        ],
+        "neighbor_names": [
+          "Augmentation Technique",
+          "Evaluation framework",
+          "External knowledge base",
+          "Generation",
+          "Generation Technique",
+          "Hallucination"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2502.05151",
+        "entity_type": "paper",
+        "canonical_name": "Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation",
+        "matched_terms": [
+          "Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 7,
+        "neighbor_entity_ids": [
+          "benchmarking",
+          "content_generation",
+          "ethics",
+          "experimentation",
+          "large_language_model",
+          "scientific_discovery"
+        ],
+        "neighbor_names": [
+          "Benchmarking",
+          "Content Generation",
+          "Ethics",
+          "Experimentation",
+          "Large Language Model",
+          "Scientific Discovery"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "paper:2501.06322",
+        "entity_type": "paper",
+        "canonical_name": "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
+        "matched_terms": [
+          "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
+          "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.14,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 11,
+      "entity_match_count": 5,
+      "relation_count": 131,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.5265266876900401,
+      "semanticScore": 0.39536547660827637,
+      "semantic_score": 0.39536547660827637,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6046345233917236,
+      "documentId": "web_4a4d92fcb6982c81_2",
+      "document_id": "web_4a4d92fcb6982c81_2",
+      "parentId": "web:web_4a4d92fcb6982c81::document:[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+      "parent_id": "web:web_4a4d92fcb6982c81::document:[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+      "parentLabel": "[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+      "parent_label": "[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.171627
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005833
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.171627,
+        "retrieval_adjusted_score": 0.455583,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005833,
+        "path_token_overlap_boost": 0.002778,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.486527,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.171627
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005833
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.171627
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005833
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.171627,
+        "retrieval_adjusted_score": 0.455583,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005833,
+        "path_token_overlap_boost": 0.002778,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.486527,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.171627
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005833
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "source_type": "web",
+        "quality_score": 0.8781,
+        "title": "[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+        "parent_id": "web:web_4a4d92fcb6982c81::document:[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+        "section_path": "",
+        "parent_type": "document",
+        "contextual_summary": "[[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey] ,085 KB) Full-text links: Access Paper: View a PDF of the paper titled Evaluation and Benchmarking of LLM Agents: A Survey, by Mahmoud Mohammadi and 3 other authors View PDF HTM...",
+        "file_path": "/Users/won/.khub/web_docs/web_4a4d92fcb6982c81-2507-21504-evaluation-and-benchmarking-of-llm-agents-a-survey.md",
+        "chunk_size": 1191,
+        "parent_title": "[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+        "document_id": "web:web_4a4d92fcb6982c81",
+        "chunk_index": 2,
+        "url": "https://arxiv.org/abs/2507.21504",
+        "topic": "agents-core",
+        "section_title": "",
+        "resolved_parent_id": "web:web_4a4d92fcb6982c81::document:[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+        "resolved_parent_label": "[2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2507.21504] Evaluation and Benchmarking of LLM Agents: A Survey\nURL: https://arxiv.org/abs/2507.21504\nSection: \n\nise-specific challenges, such as role-based access to data, the need for reliability guarantees, dynamic and long-horizon interactions, and compliance, which are often overlooked in current research. We also identify future research directions, including holistic, more realistic, and scalable evaluation. This work aims to bring clarity to the fragmented landscape of agent evaluation and provide a framework for systematic assessment, enabling researchers and practitioners to evaluate LLM agents for real-world deployment.\n\nSubjects:\n\nMachine Learning (cs.LG)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2507.21504\n\n[cs.LG]\n\n(or\n\narXiv:2507.21504v1\n\n[cs.LG]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2507.21504\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nRelated DOI\n\n:\n\nhttps://doi.org/10.1145/3711896.3736570\n\nFocus to learn more\n\nDOI(s) linking to related resources\n\nSubmission history\n\nFrom: Mahmoud Mohammadi [\n\nview email\n\n]\n\n[v1]\n\nTue, 29 Jul 2025 04:57:02 UTC (1,085 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper tit"
+    },
+    {
+      "title": "[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.33972586188888537,
+      "semanticScore": 0.3761712312698364,
+      "semantic_score": 0.3761712312698364,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6238287687301636,
+      "documentId": "web_2bca2082420d9c29_4",
+      "document_id": "web_2bca2082420d9c29_4",
+      "parentId": "web:web_2bca2082420d9c29::document:[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parent_id": "web:web_2bca2082420d9c29::document:[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parentLabel": "[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parent_label": "[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parentChunkSpan": "3-5",
+      "parent_chunk_span": "3-5",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.27052,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004706,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.299726,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.27052,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004706,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.299726,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "topic": "ai",
+        "source_type": "web",
+        "section_path": "",
+        "parent_type": "document",
+        "parent_title": "[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "chunk_index": 4,
+        "contextual_summary": "[[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory] ) Connected Papers Toggle Connected Papers ( What is Connected Papers? ) Litmaps Toggle Litmaps ( What is Litmaps? ) scite.ai Toggle scite Smart Citations ( What are Smart Citat...",
+        "url": "https://arxiv.org/abs/2603.03781",
+        "document_id": "web:web_2bca2082420d9c29",
+        "title": "[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "quality_score": 0.8277,
+        "file_path": "/Users/won/.khub/web_docs/web_2bca2082420d9c29-2603-03781-lifebench-a-benchmark-for-long-horizon-multi-source-memory.md",
+        "parent_id": "web:web_2bca2082420d9c29::document:[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "chunk_size": 1182,
+        "section_title": "",
+        "resolved_parent_id": "web:web_2bca2082420d9c29::document:[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "resolved_parent_label": "[2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "resolved_parent_chunk_span": "3-5"
+      },
+      "document": "[chunk 3]\nTitle: [2603.03781] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory\nURL: https://arxiv.org/abs/2603.03781\nSection: \n\nSubjects:\n\nArtificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.03781\n\n[cs.AI]\n\n(or\n\narXiv:2603.03781v1\n\n[cs.AI]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.03781\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Zihao Cheng [\n\nview email\n\n]\n\n[v1]\n\nWed, 4 Mar 2026 06:42:17 UTC (5,776 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled LifeBench: A Benchmark for Long-Horizon Multi-Source Memory, by Zihao Cheng and 17 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.AI\n\n< prev\n\n|\n\nnext >\n\nnew\n\n|\n\nrecent\n\n|\n\n2026-03\n\nChange to browse by:\n\ncs\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\n×\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliographic Tools\n\nBibliographic and Citation Tools\n\nBibliographic Explorer Toggle\n\nBibliographic Explorer\n\n(\n\nWhat is the Explorer?\n\n)\n\nConnected Papers Toggle\n\nConnected Papers\n\n(\n\nWhat is Connected Pape"
+    },
+    {
+      "title": "[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3396021207256316,
+      "semanticScore": 0.3770144581794739,
+      "semantic_score": 0.3770144581794739,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6229855418205261,
+      "documentId": "web_187b90d5d62ccde4_2",
+      "document_id": "web_187b90d5d62ccde4_2",
+      "parentId": "web:web_187b90d5d62ccde4::document:[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+      "parent_id": "web:web_187b90d5d62ccde4::document:[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+      "parentLabel": "[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+      "parent_label": "[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": -0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.27111,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.002381,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004444,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.299602,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": -0.005
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": -0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.27111,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.002381,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004444,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.299602,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": -0.005
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "quality_score": 0.8524,
+        "document_id": "web:web_187b90d5d62ccde4",
+        "source_type": "web",
+        "parent_id": "web:web_187b90d5d62ccde4::document:[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+        "chunk_size": 1185,
+        "topic": "ai",
+        "parent_title": "[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+        "section_path": "",
+        "file_path": "/Users/won/.khub/web_docs/web_187b90d5d62ccde4-2603-02119-pencil-puzzle-bench-a-benchmark-for-multi-step-verifiable-reasoning.md",
+        "section_title": "",
+        "chunk_index": 2,
+        "title": "[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+        "url": "https://arxiv.org/abs/2603.02119",
+        "parent_type": "document",
+        "contextual_summary": "[[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning] earn more arXiv-issued DOI via DataCite (pending registration) Submission history From: Justin Waugh [ view email ] [v1] Mon, 2 Mar 2026 17:40:54 UTC (562 KB) Full-text links: A...",
+        "resolved_parent_id": "web:web_187b90d5d62ccde4::document:[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+        "resolved_parent_label": "[2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2603.02119] Pencil Puzzle Bench: A Benchmark for Multi-Step Verifiable Reasoning\nURL: https://arxiv.org/abs/2603.02119\nSection: \n\ngainst variety-specific constraints, localizing errors to the exact rule violated, providing the infrastructure for dense, per-move reward signals for process supervision and reinforcement learning.\n\nOur evaluation reveals two distinct axes of capability: (1) reasoning effort scaling, where GPT-5.2 improves 81x from no reasoning to maximum effort; and (2) agentic iteration, where Claude Opus 4.6 rises from 0.3% to 30.0% through iterative checking, while GPT-5.2@xhigh improves from 20.2% to 56.0%. Agentic attempts span a median of 29 turns over 17 minutes, with the longest exceeding 1,221 turns and 14.3 hours - a demanding test of long-context utilization, not just reasoning.\n\nSubjects:\n\nArtificial Intelligence (cs.AI)\n\n; Computer Science and Game Theory (cs.GT); Machine Learning (cs.LG)\n\nCite as:\n\narXiv:2603.02119\n\n[cs.AI]\n\n(or\n\narXiv:2603.02119v1\n\n[cs.AI]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.02119\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Justin Waugh [\n\nvie"
+    },
+    {
+      "title": "[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3387806633529662,
+      "semanticScore": 0.3748209476470947,
+      "semantic_score": 0.3748209476470947,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6251790523529053,
+      "documentId": "web_75f49f52de96f165_4",
+      "document_id": "web_75f49f52de96f165_4",
+      "parentId": "web:web_75f49f52de96f165::document:[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parent_id": "web:web_75f49f52de96f165::document:[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parentLabel": "[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parent_label": "[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "parentChunkSpan": "3-5",
+      "parent_chunk_span": "3-5",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.269575,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004706,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.298781,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.269575,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.004706,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.298781,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "title": "[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "contextual_summary": "[[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory] ) Connected Papers Toggle Connected Papers ( What is Connected Papers? ) Litmaps Toggle Litmaps ( What is Litmaps? ) scite.ai Toggle scite Smart Citations ( What are Smart Citat...",
+        "parent_type": "document",
+        "parent_id": "web:web_75f49f52de96f165::document:[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "topic": "ai",
+        "source_type": "web",
+        "chunk_index": 4,
+        "section_title": "",
+        "chunk_size": 1182,
+        "file_path": "/Users/won/.khub/web_docs/web_75f49f52de96f165-2603-03781v1-lifebench-a-benchmark-for-long-horizon-multi-source-memory.md",
+        "parent_title": "[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "document_id": "web:web_75f49f52de96f165",
+        "url": "https://arxiv.org/abs/2603.03781v1",
+        "section_path": "",
+        "quality_score": 0.8277,
+        "resolved_parent_id": "web:web_75f49f52de96f165::document:[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "resolved_parent_label": "[2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+        "resolved_parent_chunk_span": "3-5"
+      },
+      "document": "[chunk 3]\nTitle: [2603.03781v1] LifeBench: A Benchmark for Long-Horizon Multi-Source Memory\nURL: https://arxiv.org/abs/2603.03781v1\nSection: \n\nSubjects:\n\nArtificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.03781\n\n[cs.AI]\n\n(or\n\narXiv:2603.03781v1\n\n[cs.AI]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.03781\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Zihao Cheng [\n\nview email\n\n]\n\n[v1]\n\nWed, 4 Mar 2026 06:42:17 UTC (5,776 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled LifeBench: A Benchmark for Long-Horizon Multi-Source Memory, by Zihao Cheng and 17 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.AI\n\n< prev\n\n|\n\nnext >\n\nnew\n\n|\n\nrecent\n\n|\n\n2026-03\n\nChange to browse by:\n\ncs\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\n×\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliographic Tools\n\nBibliographic and Citation Tools\n\nBibliographic Explorer Toggle\n\nBibliographic Explorer\n\n(\n\nWhat is the Explorer?\n\n)\n\nConnected Papers Toggle\n\nConnected Papers\n\n(\n\nWhat is Connected "
+    },
+    {
+      "title": "[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3382336477699279,
+      "semanticScore": 0.3715566396713257,
+      "semantic_score": 0.3715566396713257,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6284433603286743,
+      "documentId": "web_7bfa0625f0226765_3",
+      "document_id": "web_7bfa0625f0226765_3",
+      "parentId": "web:web_7bfa0625f0226765::document:[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+      "parent_id": "web:web_7bfa0625f0226765::document:[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+      "parentLabel": "[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+      "parent_label": "[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005833
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.26729,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005833,
+        "path_token_overlap_boost": 0.002778,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.298234,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005833
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.005833
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.26729,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005833,
+        "path_token_overlap_boost": 0.002778,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.298234,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.005833
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "title": "[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+        "source_type": "web",
+        "chunk_index": 3,
+        "url": "https://arxiv.org/abs/2510.02386",
+        "parent_type": "document",
+        "section_path": "",
+        "parent_title": "[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+        "quality_score": 0.8041,
+        "contextual_summary": "[[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models] ued DOI via DataCite Submission history From: Han Wang [ view email [v1] Tue, 30 Sep 2025 21:40:54 UTC (3,955 KB) [v2] Mon, 2 Mar 2026 06:28:00 UTC (7,450 KB) Full-text links: A...",
+        "chunk_size": 1193,
+        "file_path": "/Users/won/.khub/web_docs/web_7bfa0625f0226765-2510-02386-on-the-fragility-of-benchmark-contamination-detection-in-reasoning-models.md",
+        "parent_id": "web:web_7bfa0625f0226765::document:[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+        "section_title": "",
+        "document_id": "web:web_7bfa0625f0226765",
+        "topic": "",
+        "resolved_parent_id": "web:web_7bfa0625f0226765::document:[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+        "resolved_parent_label": "[2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2510.02386] On The Fragility of Benchmark Contamination Detection in Reasoning Models\nURL: https://arxiv.org/abs/2510.02386\nSection: \n\nated LRMs would still have more confidence when responding to those unseen samples that share similar distributions to the training set, and thus, evade existing memorization-based detection methods. Together, our findings reveal the unique vulnerability of LRMs evaluations: Model developers could easily contaminate LRMs to achieve inflated leaderboards performance while leaving minimal traces of contamination, thereby strongly undermining the fairness of evaluation and threatening the integrity of public leaderboards. This underscores the urgent need for advanced contamination detection methods and trustworthy evaluation protocols tailored to LRMs.\n\nComments:\n\nAccepted by ICLR 2026\n\nSubjects:\n\nCryptography and Security (cs.CR)\n\n; Artificial Intelligence (cs.AI); Machine Learning (cs.LG)\n\nCite as:\n\narXiv:2510.02386\n\n[cs.CR]\n\n(or\n\narXiv:2510.02386v2\n\n[cs.CR]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2510.02386\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Han Wang [\n\nview email\n\n[v1]\n\nTue, 3"
+    }
+  ]
+}

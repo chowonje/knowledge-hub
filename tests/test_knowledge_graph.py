@@ -173,7 +173,7 @@ class TestKGStats:
 
 class TestConceptIdHelper:
     def test_concept_id(self):
-        from knowledge_hub.cli.paper_cmd import _concept_id
+        from knowledge_hub.interfaces.cli.commands.paper_cmd import _concept_id
         assert _concept_id("Neural Network") == "neural_network"
         assert _concept_id("  BERT  ") == "bert"
         assert _concept_id("Attention Mechanism") == "attention_mechanism"

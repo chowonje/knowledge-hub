@@ -1,0 +1,1449 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "Compare how paper and web sources explain temporal grounding before vs after the recent changes.",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "parent_title",
+        "title",
+        "chunk_size",
+        "chunk_index",
+        "section_path",
+        "parent_id",
+        "contextual_summary",
+        "document_id",
+        "source_type",
+        "topic",
+        "file_path",
+        "quality_score",
+        "url",
+        "section_title",
+        "parent_type"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "Compare how paper and web sources explain temporal grounding before vs after the recent changes.",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_fcd6fe084c50",
+        "entity_type": "concept",
+        "canonical_name": "decomposition strategy",
+        "matched_terms": [
+          "decomposition strategy",
+          "divide and conquer",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [
+          "divide and conquer"
+        ],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "webc_aa078da4c54f",
+          "webc_afddd76fc131",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_names": [
+          "overcome",
+          "separate",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "note"
+        ],
+        "score": 0.356667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_b61620a89675",
+        "entity_type": "concept",
+        "canonical_name": "temporal difference learning",
+        "matched_terms": [
+          "temporal difference learning",
+          "step td learning",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [
+          "step td learning"
+        ],
+        "relation_count": 2,
+        "neighbor_entity_ids": [
+          "webc_083dbabef569",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_names": [
+          "ability",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_types": [
+          "concept",
+          "note"
+        ],
+        "score": 0.256667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "webc_f2d787a51a70",
+        "entity_type": "concept",
+        "canonical_name": "original word2vec model",
+        "matched_terms": [
+          "original word2vec model",
+          "the original word2vec",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [
+          "the original word2vec"
+        ],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "web_84aa89fe18848080"
+        ],
+        "neighbor_names": [
+          "web_84aa89fe18848080"
+        ],
+        "neighbor_types": [
+          "note"
+        ],
+        "score": 0.223333,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "paper:2602.18346",
+        "entity_type": "paper",
+        "canonical_name": "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
+        "matched_terms": [
+          "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.2,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "paper:2602.16683",
+        "entity_type": "paper",
+        "canonical_name": "Scattering data and correlation function for the $K f_1(1285)$ interaction",
+        "matched_terms": [
+          "Scattering data and correlation function for the $K f_1(1285)$ interaction",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.2,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 15,
+      "entity_match_count": 5,
+      "relation_count": 8,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "Compare how paper and web sources explain temporal grounding before vs after the recent changes.",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_fcd6fe084c50",
+        "entity_type": "concept",
+        "canonical_name": "decomposition strategy",
+        "matched_terms": [
+          "decomposition strategy",
+          "divide and conquer",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [
+          "divide and conquer"
+        ],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "webc_aa078da4c54f",
+          "webc_afddd76fc131",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_names": [
+          "overcome",
+          "separate",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "note"
+        ],
+        "score": 0.356667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_b61620a89675",
+        "entity_type": "concept",
+        "canonical_name": "temporal difference learning",
+        "matched_terms": [
+          "temporal difference learning",
+          "step td learning",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [
+          "step td learning"
+        ],
+        "relation_count": 2,
+        "neighbor_entity_ids": [
+          "webc_083dbabef569",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_names": [
+          "ability",
+          "web_8247940d923ef8a0"
+        ],
+        "neighbor_types": [
+          "concept",
+          "note"
+        ],
+        "score": 0.256667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "webc_f2d787a51a70",
+        "entity_type": "concept",
+        "canonical_name": "original word2vec model",
+        "matched_terms": [
+          "original word2vec model",
+          "the original word2vec",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [
+          "the original word2vec"
+        ],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "web_84aa89fe18848080"
+        ],
+        "neighbor_names": [
+          "web_84aa89fe18848080"
+        ],
+        "neighbor_types": [
+          "note"
+        ],
+        "score": 0.223333,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "paper:2602.18346",
+        "entity_type": "paper",
+        "canonical_name": "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
+        "matched_terms": [
+          "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.2,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      },
+      {
+        "entity_id": "paper:2602.16683",
+        "entity_type": "paper",
+        "canonical_name": "Scattering data and correlation function for the $K f_1(1285)$ interaction",
+        "matched_terms": [
+          "Scattering data and correlation function for the $K f_1(1285)$ interaction",
+          "compare how paper and web sources explain temporal grounding before vs after the recent changes"
+        ],
+        "aliases": [],
+        "relation_count": 0,
+        "neighbor_entity_ids": [],
+        "neighbor_names": [],
+        "neighbor_types": [],
+        "score": 0.2,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 15,
+      "entity_match_count": 5,
+      "relation_count": 8,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.5105784954196856,
+      "semanticScore": 0.4278062582015991,
+      "semantic_score": 0.4278062582015991,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5721937417984009,
+      "documentId": "web_80819a4fcdd8acb0_3",
+      "document_id": "web_80819a4fcdd8acb0_3",
+      "parentId": "web:web_80819a4fcdd8acb0::document:[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+      "parent_id": "web:web_80819a4fcdd8acb0::document:[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+      "parentLabel": "[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+      "parent_label": "[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156533
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.002381
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156533,
+        "retrieval_adjusted_score": 0.463197,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.002381,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.470578,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156533
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.002381
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.156533
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.002381
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.156533,
+        "retrieval_adjusted_score": 0.463197,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.002381,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.470578,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.156533
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.002381
+          }
+        ]
+      },
+      "metadata": {
+        "quality_score": 0.8935,
+        "chunk_size": 1197,
+        "parent_id": "web:web_80819a4fcdd8acb0::document:[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+        "title": "[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+        "section_path": "",
+        "chunk_index": 3,
+        "source_type": "web",
+        "document_id": "web:web_80819a4fcdd8acb0",
+        "parent_title": "[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+        "file_path": "/Users/won/.khub/web_docs/web_80819a4fcdd8acb0-2603-03142v1-apres-an-agentic-paper-revision-and-evaluation-system.md",
+        "contextual_summary": "[[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System] matted citation × loading..",
+        "url": "https://arxiv.org/abs/2603.03142v1",
+        "parent_type": "document",
+        "topic": "ai",
+        "section_title": "",
+        "resolved_parent_id": "web:web_80819a4fcdd8acb0::document:[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+        "resolved_parent_label": "[2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.03142v1] APRES: An Agentic Paper Revision and Evaluation System\nURL: https://arxiv.org/abs/2603.03142v1\nSection: \n\nman expert reviewers, for it should be humans who discern which discoveries truly matter, guiding science toward advancing knowledge and enriching lives.\n\nSubjects:\n\nComputation and Language (cs.CL)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.03142\n\n[cs.CL]\n\n(or\n\narXiv:2603.03142v1\n\n[cs.CL]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.03142\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Bingchen Zhao [\n\nview email\n\n]\n\n[v1]\n\nTue, 3 Mar 2026 16:29:13 UTC (5,222 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled APRES: An Agentic Paper Revision and Evaluation System, by Bingchen Zhao and 10 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.CL\n\n< prev\n\n|\n\nnext >\n\nnew\n\n|\n\nrecent\n\n|\n\n2026-03\n\nChange to browse by:\n\ncs\n\ncs.AI\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\n×\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliograph"
+    },
+    {
+      "title": "[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.4094354928627013,
+      "semanticScore": 0.4946378469467163,
+      "semantic_score": 0.4946378469467163,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5053621530532837,
+      "documentId": "web_f9b3d28b06a8a459_2",
+      "document_id": "web_f9b3d28b06a8a459_2",
+      "parentId": "web:web_f9b3d28b06a8a459::document:[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+      "parent_id": "web:web_f9b3d28b06a8a459::document:[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+      "parentLabel": "[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+      "parent_label": "[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.003846
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.00381
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.003333
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.353446,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.003333,
+        "path_token_overlap_boost": 0.003846,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.00381,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.369435,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.003846
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.00381
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.003333
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.003846
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.00381
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.003333
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.353446,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.003333,
+        "path_token_overlap_boost": 0.003846,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.00381,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.369435,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.003846
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.00381
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.003333
+          }
+        ]
+      },
+      "metadata": {
+        "topic": "ai",
+        "section_title": "",
+        "section_path": "",
+        "title": "[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+        "contextual_summary": "[[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study] queries, incremental ablations attribute +8.3pp to catalog grounding, +3.2pp to agentic web search grounding, and +1.5pp to dual intent disambiguation, yielding 90.7% accuracy (...",
+        "file_path": "/Users/won/.khub/web_docs/web_f9b3d28b06a8a459-2603-01486-agentic-multi-source-grounding-for-enhanced-query-intent-understanding-a-doordash-case-study.md",
+        "parent_id": "web:web_f9b3d28b06a8a459::document:[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+        "chunk_size": 1195,
+        "parent_title": "[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+        "quality_score": 0.9033,
+        "parent_type": "document",
+        "chunk_index": 2,
+        "source_type": "web",
+        "document_id": "web:web_f9b3d28b06a8a459",
+        "url": "https://arxiv.org/abs/2603.01486",
+        "resolved_parent_id": "web:web_f9b3d28b06a8a459::document:[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+        "resolved_parent_label": "[2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2603.01486] Agentic Multi-Source Grounding for Enhanced Query Intent Understanding: A DoorDash Case Study\nURL: https://arxiv.org/abs/2603.01486\nSection: \n\nsystem that addresses both failure modes by grounding LLM inference in (i) a staged catalog entity retrieval pipeline and (ii) an agentic web-search tool invoked autonomously for cold-start queries. Rather than predicting a single label, the model emits an ordered multi-intent set, resolved by a configurable disambiguation layer that applies deterministic business policies and is designed for extensibility to personalization signals. This decoupled design generalizes across domains, allowing any marketplace to supply its own grounding sources and resolution rules without modifying the core architecture. Evaluated on DoorDash's multi-vertical search platform, the system achieves +10.9pp over the ungrounded LLM baseline and +4.6pp over the legacy production system. On long-tail queries, incremental ablations attribute +8.3pp to catalog grounding, +3.2pp to agentic web search grounding, and +1.5pp to dual intent disambiguation, yielding 90.7% accuracy (+13.0pp over baseline).\n\n[chunk 2]\nTitle: [2603.01486] Agentic "
+    },
+    {
+      "title": "[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.39606958281707755,
+      "semanticScore": 0.4762108325958252,
+      "semantic_score": 0.4762108325958252,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5237891674041748,
+      "documentId": "web_c4a8e8af84a0d323_3",
+      "document_id": "web_c4a8e8af84a0d323_3",
+      "parentId": "web:web_c4a8e8af84a0d323::document:[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+      "parent_id": "web:web_c4a8e8af84a0d323::document:[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+      "parentLabel": "[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+      "parent_label": "[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.003704
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.003636
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.003182
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.340548,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.003182,
+        "path_token_overlap_boost": 0.003704,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.003636,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.35607,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.003704
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.003636
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.003182
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.003704
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.003636
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.003182
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.340548,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.003182,
+        "path_token_overlap_boost": 0.003704,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.003636,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.35607,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.003704
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.003636
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.003182
+          }
+        ]
+      },
+      "metadata": {
+        "section_path": "",
+        "contextual_summary": "[[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models] Connected Papers Toggle Connected Papers What is Connected Papers? Litmaps Toggle Litmaps What is Litmaps? scite.ai Toggle scite Smart Citations What are Smart Citations? Code, ...",
+        "section_title": "",
+        "file_path": "/Users/won/.khub/web_docs/web_c4a8e8af84a0d323-2508-02045-harnessing-temporal-databases-for-systematic-evaluation-of-factual-time-sensitive-question-answering-in-large-language-models.md",
+        "quality_score": 0.7578,
+        "source_type": "web",
+        "document_id": "web:web_c4a8e8af84a0d323",
+        "parent_title": "[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+        "chunk_index": 3,
+        "title": "[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+        "topic": "",
+        "url": "https://arxiv.org/abs/2508.02045",
+        "chunk_size": 1089,
+        "parent_type": "document",
+        "parent_id": "web:web_c4a8e8af84a0d323::document:[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+        "resolved_parent_id": "web:web_c4a8e8af84a0d323::document:[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+        "resolved_parent_label": "[2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2508.02045] Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models\nURL: https://arxiv.org/abs/2508.02045\nSection: \n\nrXiv:2508.02045v2\n\n[cs.CL]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2508.02045\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Soyeon Kim [\n\nview email\n\n[v1]\n\nMon, 4 Aug 2025 04:27:06 UTC (674 KB)\n\n[v2]\n\nMon, 2 Mar 2026 05:57:24 UTC (709 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled Harnessing Temporal Databases for Systematic Evaluation of Factual Time-Sensitive Question-Answering in Large Language Models, by Soyeon Kim and 3 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.CL\n\n< prev\n\nnext >\n\nnew\n\nrecent\n\n2025-08\n\nChange to browse by:\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliographic Tools\n\nBibliographic and Citation Tools\n\nBibliographic Explorer Toggle\n\nBibliographic Explorer\n\nWhat is the Explorer?\n\nConnected Papers Toggle\n\nConnec"
+    },
+    {
+      "title": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3943921689510345,
+      "semanticScore": 0.4502745270729065,
+      "semantic_score": 0.4502745270729065,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5497254729270935,
+      "documentId": "web_09e2be7a9e1cc0bc_3",
+      "document_id": "web_09e2be7a9e1cc0bc_3",
+      "parentId": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parent_id": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parentLabel": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parent_label": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005333
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.005
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.322392,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.005,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.354392,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005333
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.005
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005333
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.005
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.322392,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.004667,
+        "path_token_overlap_boost": 0.005,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005333,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.354392,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005333
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.005
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "chunk_index": 3,
+        "file_path": "/Users/won/.khub/web_docs/web_09e2be7a9e1cc0bc-1802-09081-temporal-difference-models-model-free-deep-rl-for-model-based-control.md",
+        "topic": "ai",
+        "url": "https://arxiv.org/abs/1802.09081",
+        "quality_score": 0.7562,
+        "document_id": "web:web_09e2be7a9e1cc0bc",
+        "title": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "parent_title": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "contextual_summary": "[[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control] Toggle Connected Papers ( What is Connected Papers? ) Litmaps Toggle Litmaps ( What is Litmaps? ) scite.ai Toggle scite Smart Citations ( What are Smart Citations? ) Code, Data,...",
+        "parent_id": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "section_path": "",
+        "section_title": "",
+        "chunk_size": 1169,
+        "parent_type": "document",
+        "source_type": "web",
+        "resolved_parent_id": "web:web_09e2be7a9e1cc0bc::document:[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "resolved_parent_label": "[1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [1802.09081] Temporal Difference Models: Model-Free Deep RL for Model-Based Control\nURL: https://arxiv.org/abs/1802.09081\nSection: \n\noi.org/10.48550/arXiv.1802.09081\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Vitchyr H. Pong [\n\nview email\n\n]\n\n[v1]\n\nSun, 25 Feb 2018 21:14:44 UTC (1,407 KB)\n\n[v2]\n\nMon, 24 Feb 2020 06:34:11 UTC (1,412 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled Temporal Difference Models: Model-Free Deep RL for Model-Based Control, by Vitchyr Pong and 3 other authors\n\nView PDF\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.LG\n\n< prev\n\n|\n\nnext >\n\nnew\n\n|\n\nrecent\n\n|\n\n2018-02\n\nChange to browse by:\n\ncs\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nDBLP\n\n- CS Bibliography\n\nlisting\n\n|\n\nbibtex\n\nVitchyr Pong\n\nShixiang Gu\n\nMurtaza Dalal\n\nSergey Levine\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\n×\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliographic Tools\n\nBibliographic and Citation Tools\n\nBibliographic Explorer Toggle\n\nBibliographic Explorer\n\n(\n\nWhat is the Explorer?\n\n)\n\nConnected Papers Toggle\n\nConnected Papers\n\n(\n\nWhat is Connected Papers?\n\n)\n\nLi"
+    },
+    {
+      "title": "[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3913274417533874,
+      "semanticScore": 0.44419777393341064,
+      "semantic_score": 0.44419777393341064,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5558022260665894,
+      "documentId": "web_304db8015492638b_2",
+      "document_id": "web_304db8015492638b_2",
+      "parentId": "web:web_304db8015492638b::document:[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+      "parent_id": "web:web_304db8015492638b::document:[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+      "parentLabel": "[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+      "parent_label": "[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.008889
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.007778
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.006522
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.318138,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.007778,
+        "path_token_overlap_boost": 0.006522,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.008889,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.351327,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.008889
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.007778
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.006522
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.008889
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.007778
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "path_token_overlap_boost",
+          "value": 0.006522
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.005
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.318138,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.007778,
+        "path_token_overlap_boost": 0.006522,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.008889,
+        "source_prior_boost": 0.005,
+        "direct_answer_bonus": 0.005,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "comparison",
+        "ranking_signal_total": 0.351327,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.008889
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.007778
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "path_token_overlap_boost",
+            "value": 0.006522
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.005
+          }
+        ]
+      },
+      "metadata": {
+        "parent_id": "web:web_304db8015492638b::document:[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+        "section_path": "",
+        "document_id": "web:web_304db8015492638b",
+        "title": "[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+        "quality_score": 0.7693,
+        "source_type": "web",
+        "section_title": "",
+        "chunk_size": 1194,
+        "contextual_summary": "[[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures] ML (experimental) TeX Source view license Current browse context: cs.RO < prev | next > new | recent | 2026-03 Change to browse by: cs References & Citations NASA ADS Google Sch...",
+        "chunk_index": 2,
+        "topic": "ai",
+        "parent_title": "[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+        "parent_type": "document",
+        "file_path": "/Users/won/.khub/web_docs/web_304db8015492638b-2603-02881v1-tracing-back-error-sources-to-explain-and-mitigate-pose-estimation-failures.md",
+        "url": "https://arxiv.org/abs/2603.02881v1",
+        "resolved_parent_id": "web:web_304db8015492638b::document:[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+        "resolved_parent_label": "[2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: [2603.02881v1] Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures\nURL: https://arxiv.org/abs/2603.02881v1\nSection: \n\nmitigation strategies only when necessary. Instantiated with Iterative Closest Point (ICP) as a simple and lightweight pose estimator, we leverage our framework for real-world robotic grasping tasks. By decomposing pose estimation into failure detection, error attribution, and targeted recovery, we significantly improve the robustness of ICP and achieve competitive performance compared to foundation models, while relying on a substantially simpler and faster pose estimator.\n\nSubjects:\n\nRobotics (cs.RO)\n\nCite as:\n\narXiv:2603.02881\n\n[cs.RO]\n\n(or\n\narXiv:2603.02881v1\n\n[cs.RO]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.02881\n\nFocus to learn more\n\narXiv-issued DOI via DataCite\n\nSubmission history\n\nFrom: Loris Schneider [\n\nview email\n\n]\n\n[v1]\n\nTue, 3 Mar 2026 11:33:44 UTC (11,926 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled Tracing Back Error Sources to Explain and Mitigate Pose Estimation Failures, by Loris Schneider and 5 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nC"
+    }
+  ]
+}

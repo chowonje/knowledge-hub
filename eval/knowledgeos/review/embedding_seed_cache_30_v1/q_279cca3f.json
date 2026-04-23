@@ -1,0 +1,1529 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "paper memory card의 목적을 설명해줘",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "source_type",
+        "title",
+        "file_path",
+        "document_id",
+        "topic",
+        "chunk_size",
+        "url",
+        "quality_score",
+        "parent_title",
+        "parent_id",
+        "section_path",
+        "section_title",
+        "chunk_index",
+        "contextual_summary",
+        "parent_type"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "paper memory card의 목적을 설명해줘",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "paper:2512.13564",
+        "entity_type": "paper",
+        "canonical_name": "Memory in the Age of AI Agents",
+        "matched_terms": [
+          "Memory in the Age of AI Agents",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "ai_agent",
+          "cognitive_architecture",
+          "data_storage",
+          "episodic_memory",
+          "learning",
+          "memory"
+        ],
+        "neighbor_names": [
+          "AI Agent",
+          "Cognitive Architecture",
+          "Data Storage",
+          "Episodic Memory",
+          "Learning",
+          "Memory"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.44,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "memory",
+        "entity_type": "concept",
+        "canonical_name": "Memory",
+        "matched_terms": [
+          "memory",
+          "Memory",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.433333,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "manual_memory_management",
+        "entity_type": "concept",
+        "canonical_name": "Manual memory management",
+        "matched_terms": [
+          "Manual memory management",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "2602.16671",
+          "code_generation",
+          "pointer_arithmetic",
+          "program_evaluation"
+        ],
+        "neighbor_names": [
+          "2602.16671",
+          "Code Generation",
+          "Pointer arithmetic",
+          "Program evaluation"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.306667,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "rasterized_map_memory",
+        "entity_type": "concept",
+        "canonical_name": "Rasterized Map Memory",
+        "matched_terms": [
+          "Rasterized Map Memory",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 4,
+        "neighbor_entity_ids": [
+          "2602.16669",
+          "high-dimensional_vectorized_map",
+          "map_instance_tracking",
+          "online_map_construction"
+        ],
+        "neighbor_names": [
+          "2602.16669",
+          "High-dimensional Vectorized Map",
+          "Map Instance Tracking",
+          "Online Map Construction"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.273333,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "episodic_memory",
+        "entity_type": "concept",
+        "canonical_name": "Episodic Memory",
+        "matched_terms": [
+          "Episodic Memory",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.173333,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 5,
+      "entity_match_count": 5,
+      "relation_count": 19,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "paper memory card의 목적을 설명해줘",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 5,
+    "candidate_hints": [
+      {
+        "entity_id": "paper:2512.13564",
+        "entity_type": "paper",
+        "canonical_name": "Memory in the Age of AI Agents",
+        "matched_terms": [
+          "Memory in the Age of AI Agents",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 8,
+        "neighbor_entity_ids": [
+          "ai_agent",
+          "cognitive_architecture",
+          "data_storage",
+          "episodic_memory",
+          "learning",
+          "memory"
+        ],
+        "neighbor_names": [
+          "AI Agent",
+          "Cognitive Architecture",
+          "Data Storage",
+          "Episodic Memory",
+          "Learning",
+          "Memory"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.44,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "memory",
+        "entity_type": "concept",
+        "canonical_name": "Memory",
+        "matched_terms": [
+          "memory",
+          "Memory",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.433333,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap"
+        ],
+        "scope_recommendation": "entity_lookup"
+      },
+      {
+        "entity_id": "manual_memory_management",
+        "entity_type": "concept",
+        "canonical_name": "Manual memory management",
+        "matched_terms": [
+          "Manual memory management",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "2602.16671",
+          "code_generation",
+          "pointer_arithmetic",
+          "program_evaluation"
+        ],
+        "neighbor_names": [
+          "2602.16671",
+          "Code Generation",
+          "Pointer arithmetic",
+          "Program evaluation"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.306667,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "rasterized_map_memory",
+        "entity_type": "concept",
+        "canonical_name": "Rasterized Map Memory",
+        "matched_terms": [
+          "Rasterized Map Memory",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 4,
+        "neighbor_entity_ids": [
+          "2602.16669",
+          "high-dimensional_vectorized_map",
+          "map_instance_tracking",
+          "online_map_construction"
+        ],
+        "neighbor_names": [
+          "2602.16669",
+          "High-dimensional Vectorized Map",
+          "Map Instance Tracking",
+          "Online Map Construction"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.273333,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "episodic_memory",
+        "entity_type": "concept",
+        "canonical_name": "Episodic Memory",
+        "matched_terms": [
+          "Episodic Memory",
+          "paper memory card의 목적을 설명해줘"
+        ],
+        "aliases": [],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "2512.13564"
+        ],
+        "neighbor_names": [
+          "2512.13564"
+        ],
+        "neighbor_types": [
+          "paper"
+        ],
+        "score": 0.173333,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 5,
+      "entity_match_count": 5,
+      "relation_count": 19,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3931537934982529,
+      "semanticScore": 0.253811240196228,
+      "semantic_score": 0.253811240196228,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.746188759803772,
+      "documentId": "web_3ef994ef6c361399_0",
+      "document_id": "web_3ef994ef6c361399_0",
+      "parentId": "web:web_3ef994ef6c361399::document:[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+      "parent_id": "web:web_3ef994ef6c361399::document:[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+      "parentLabel": "[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+      "parent_label": "[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.153405
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005714
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.153405,
+        "retrieval_adjusted_score": 0.338273,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005714,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.353154,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.153405
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005714
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.153405
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.005714
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.153405,
+        "retrieval_adjusted_score": 0.338273,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005,
+        "path_token_overlap_boost": 0.0025,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005714,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.353154,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.153405
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.005714
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "url": "https://arxiv.org/abs/2603.03491v1",
+        "title": "[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+        "document_id": "web:web_3ef994ef6c361399",
+        "parent_type": "document",
+        "quality_score": 0.9022,
+        "contextual_summary": "[[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators] Computer Science > Machine Learning arXiv:2603.03491v1 (cs) [Submitted on 3 Mar 2026] Title: When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memo...",
+        "parent_title": "[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+        "section_path": "",
+        "parent_id": "web:web_3ef994ef6c361399::document:[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+        "chunk_size": 1197,
+        "source_type": "web",
+        "file_path": "/Users/won/.khub/web_docs/web_3ef994ef6c361399-2603-03491v1-when-small-variations-become-big-failures-reliability-challenges-in-compute-in-memory-neural-accelerators.md",
+        "topic": "ai",
+        "section_title": "",
+        "chunk_index": 0,
+        "resolved_parent_id": "web:web_3ef994ef6c361399::document:[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+        "resolved_parent_label": "[2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.03491v1] When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators\nURL: https://arxiv.org/abs/2603.03491v1\nSection: \n\nComputer Science > Machine Learning\n\narXiv:2603.03491v1\n\n(cs)\n\n[Submitted on 3 Mar 2026]\n\nTitle:\n\nWhen Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators\n\nAuthors:\n\nYifan Qin\n\n,\n\nJiahao Zheng\n\n,\n\nZheyu Yan\n\n,\n\nWujie Wen\n\n,\n\nXiaobo Sharon Hu\n\n,\n\nYiyu Shi\n\nView a PDF of the paper titled When Small Variations Become Big Failures: Reliability Challenges in Compute-in-Memory Neural Accelerators, by Yifan Qin and 5 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nCompute-in-memory (CiM) architectures promise significant improvements in energy efficiency and throughput for deep neural network acceleration by alleviating the von Neumann bottleneck. However, their reliance on emerging non-volatile memory devices introduces device-level non-idealities-such as write variability, conductance drift, and stochastic noise-that fundamentally challenge reliability, predictability, and safety, especially in safety-critical applications. This talk examines"
+    },
+    {
+      "title": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.28923004799285884,
+      "semanticScore": 0.3025505542755127,
+      "semantic_score": 0.3025505542755127,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6974494457244873,
+      "documentId": "web_5e0e380b56ca9dbb_4",
+      "document_id": "web_5e0e380b56ca9dbb_4",
+      "parentId": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parent_id": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parentLabel": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parent_label": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.007273
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.218985,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.006364,
+        "path_token_overlap_boost": 0.002941,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.007273,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.24923,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.007273
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.007273
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.218985,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.006364,
+        "path_token_overlap_boost": 0.002941,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.007273,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.24923,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.007273
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "topic": "",
+        "contextual_summary": "[[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents] data privacy",
+        "parent_id": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "chunk_size": 276,
+        "document_id": "web:web_5e0e380b56ca9dbb",
+        "section_title": "",
+        "parent_type": "document",
+        "quality_score": 0.7678,
+        "parent_title": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "source_type": "web",
+        "chunk_index": 4,
+        "section_path": "",
+        "url": "https://arxiv.org/abs/2603.00680",
+        "title": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "file_path": "/Users/won/.khub/web_docs/web_5e0e380b56ca9dbb-2603-00680-mempo-self-memory-policy-optimization-for-long-horizon-agents.md",
+        "resolved_parent_id": "web:web_5e0e380b56ca9dbb::document:[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "resolved_parent_label": "[2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.00680] MemPO: Self-Memory Policy Optimization for Long-Horizon Agents\nURL: https://arxiv.org/abs/2603.00680\nSection: \n\nccess Paper:\n\nView a PDF of the paper titled MemPO: Self-Memory Policy Optimization for Long-Horizon Agents, by Ruoran Li and 9 other authors\n\nView PDF\n\nHTML (experimental)\n\nTeX Source\n\nview license\n\nCurrent browse context:\n\ncs.AI\n\n< prev\n\nnext >\n\nnew\n\nrecent\n\n2026-03\n\nChange to browse by:\n\nReferences & Citations\n\nNASA ADS\n\nGoogle Scholar\n\nSemantic Scholar\n\nexport BibTeX citation\n\nLoading...\n\nBibTeX formatted citation\n\nloading...\n\nData provided by:\n\nBookmark\n\nBibliographic Tools\n\nBibliographic and Citation Tools\n\nBibliographic Explorer Toggle\n\nBibliographic Explorer\n\nWhat is the Explorer?\n\nConnected Papers Toggle\n\nConnected Papers\n\nWhat is Connected Papers?\n\nLitmaps Toggle\n\nLitmaps\n\nWhat is Litmaps?\n\nscite.ai Toggle\n\nscite Smart Citations\n\nWhat are Smart Citations?\n\nCode, Data, Media\n\nCode, Data and Media Associated with this Article\n\nalphaXiv Toggle\n\nalphaXiv\n\nWhat is alphaXiv?\n\nLinks to Code Toggle\n\nCatalyzeX Code Finder for Papers\n\nWhat is CatalyzeX?\n\nDagsHub Toggle\n\nDagsHub\n\nWhat is DagsHub?\n\nGotitPub Toggle\n\nGotit.pub\n\nWhat is GotitPub?\n"
+    },
+    {
+      "title": "Attention Residuals",
+      "sourceType": "paper",
+      "source_type": "paper",
+      "score": 0.27322662124633784,
+      "semanticScore": 0.23660945892333984,
+      "semantic_score": 0.23660945892333984,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7633905410766602,
+      "documentId": "paper_attnres2026_0",
+      "document_id": "paper_attnres2026_0",
+      "parentId": "",
+      "parent_id": "",
+      "parentLabel": "Attention Residuals",
+      "parent_label": "Attention Residuals",
+      "parentChunkSpan": "0-0",
+      "parent_chunk_span": "0-0",
+      "normalizedSourceType": "paper",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.86,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "source_prior_boost",
+          "value": 0.04
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0156
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.86,
+        "source_trust_boost": 0.0156,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.181227,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.04,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "paper",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.233227,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_prior_boost",
+            "value": 0.04
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0156
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.86,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "paper",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "source_prior_boost",
+          "value": 0.04
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0156
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.86,
+        "source_trust_boost": 0.0156,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.181227,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.04,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "paper",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.233227,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_prior_boost",
+            "value": 0.04
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0156
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          }
+        ]
+      },
+      "metadata": {
+        "field": "Computer Science",
+        "source_type": "paper",
+        "chunk_index": 0,
+        "arxiv_id": "attnres2026",
+        "title": "Attention Residuals",
+        "resolved_parent_id": "",
+        "resolved_parent_label": "Attention Residuals",
+        "resolved_parent_chunk_span": "0-0"
+      },
+      "document": "[chunk 0]\nTitle: Attention Residuals\n\n### 한줄 요약\nTransformer의 고정 residual accumulation을 depth-wise softmax attention으로 대체하는 Attention Residuals와 Block AttnRes를 제안한 Kimi Team 기술 보고서다.\n\n### 핵심 기여\n- PreNorm residual path에서 깊이에 따라 hidden-state magnitude가 커지고 레이어 기여가 희석되는 문제를 정식화한다.\n- 각 레이어가 이전 레이어 출력 전체를 선택적으로 집계하는 Attention Residuals를 제안한다.\n- 대규모 학습 비용을 줄이기 위해 블록 대표 표현에만 attention하는 Block AttnRes를 설계한다.\n- Kimi Linear 48B/3B activated 설정에서 reasoning, code, Chinese benchmark 개선을 보고한다.\n\n### 방법론\nResidual sum 대신 이전 depth representation에 대한 softmax attention을 사용해 content-dependent aggregation을 수행한다.\n\n### 한계\narXiv 논문이 아니라 GitHub technical report 공개본 기준이며, 재현 코드/체크포인트보다는 설계와 결과 보고 중심이다."
+    },
+    {
+      "title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.2663447278749084,
+      "semanticScore": 0.2821115255355835,
+      "semantic_score": 0.2821115255355835,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7178884744644165,
+      "documentId": "web_32248bfe3d02494a_1",
+      "document_id": "web_32248bfe3d02494a_1",
+      "parentId": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parentLabel": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parent_label": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.008889
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.007778
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.204678,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.007778,
+        "path_token_overlap_boost": 0.003333,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.008889,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.226345,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.008889
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.007778
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.008889
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.007778
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.204678,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.007778,
+        "path_token_overlap_boost": 0.003333,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.008889,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.226345,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.008889
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.007778
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "document_id": "web:web_32248bfe3d02494a",
+        "topic": "",
+        "quality_score": 0.9065,
+        "title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "file_path": "/Users/won/.khub/web_docs/web_32248bfe3d02494a-2510-18866-lightmem-lightweight-and-efficient-memory-augmented-generation.md",
+        "url": "https://arxiv.org/abs/2510.18866",
+        "source_type": "web",
+        "parent_title": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "section_path": "",
+        "parent_type": "document",
+        "chunk_index": 1,
+        "contextual_summary": "[[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation] introduce substantial time and computational overhead",
+        "section_title": "",
+        "chunk_size": 1184,
+        "parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_id": "web:web_32248bfe3d02494a::document:[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_label": "[2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2510.18866] LightMem: Lightweight and Efficient Memory-Augmented Generation\nURL: https://arxiv.org/abs/2510.18866\nSection: \n\nComputer Science > Computation and Language\n\narXiv:2510.18866\n\n(cs)\n\n[Submitted on 21 Oct 2025 (\n\n), last revised 28 Feb 2026 (this version, v4)]\n\nTitle:\n\nLightMem: Lightweight and Efficient Memory-Augmented Generation\n\nAuthors:\n\nJizhan Fang\n\nXinle Deng\n\nHaoming Xu\n\nZiyan Jiang\n\nYuqi Tang\n\nZiwen Xu\n\nShumin Deng\n\nYunzhi Yao\n\nMengru Wang\n\nShuofei Qiao\n\nHuajun Chen\n\nNingyu Zhang\n\nView a PDF of the paper titled LightMem: Lightweight and Efficient Memory-Augmented Generation, by Jizhan Fang and 11 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nDespite their remarkable capabilities, Large Language Models (LLMs) struggle to effectively leverage historical interaction information in dynamic and complex environments. Memory systems enable LLMs to move beyond stateless interactions by introducing persistent information storage, retrieval, and utilization mechanisms. However, existing memory systems often introduce substantial time and computational overhead. To this end, we introduce a new memory system called LightMem, which strikes a balan"
+    },
+    {
+      "title": "[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.26290443184104917,
+      "semanticScore": 0.25673824548721313,
+      "semantic_score": 0.25673824548721313,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7432617545127869,
+      "documentId": "web_393d24841a3ae410_3",
+      "document_id": "web_393d24841a3ae410_3",
+      "parentId": "web:web_393d24841a3ae410::document:[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+      "parent_id": "web:web_393d24841a3ae410::document:[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+      "parentLabel": "[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+      "parent_label": "[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+      "parentChunkSpan": "2-4",
+      "parent_chunk_span": "2-4",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.00875
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.186917,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.00875,
+        "path_token_overlap_boost": 0.003571,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.01,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.222905,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.00875
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.036667
+        },
+        {
+          "name": "paper_source_mismatch_penalty",
+          "value": 0.035
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "ontology_entity_overlap_boost",
+          "value": 0.01
+        },
+        {
+          "name": "near_title_overlap_boost",
+          "value": 0.00875
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.186917,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.00875,
+        "path_token_overlap_boost": 0.003571,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.01,
+        "source_prior_boost": -0.005,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.035,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "paper_lookup",
+        "ranking_signal_total": 0.222905,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.036667
+          },
+          {
+            "name": "paper_source_mismatch_penalty",
+            "value": 0.035
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "ontology_entity_overlap_boost",
+            "value": 0.01
+          },
+          {
+            "name": "near_title_overlap_boost",
+            "value": 0.00875
+          }
+        ],
+        "graph_candidate_boost": 0.036667,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "Memory"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "title": "[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+        "topic": "",
+        "chunk_size": 1175,
+        "contextual_summary": "[[2603.01761] Modular Memory is the Key to Continual Learning Agents] ext links: Access Paper: View a PDF of the paper titled Modular Memory is the Key to Continual Learning Agents, by Vaggelis Dorovatas and 23 other authors View PDF HTML (experim...",
+        "quality_score": 0.8576,
+        "parent_title": "[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+        "file_path": "/Users/won/.khub/web_docs/web_393d24841a3ae410-2603-01761-modular-memory-is-the-key-to-continual-learning-agents.md",
+        "section_path": "",
+        "section_title": "",
+        "parent_type": "document",
+        "chunk_index": 3,
+        "parent_id": "web:web_393d24841a3ae410::document:[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+        "url": "https://arxiv.org/abs/2603.01761",
+        "source_type": "web",
+        "document_id": "web:web_393d24841a3ae410",
+        "resolved_parent_id": "web:web_393d24841a3ae410::document:[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+        "resolved_parent_label": "[2603.01761] Modular Memory is the Key to Continual Learning Agents",
+        "resolved_parent_chunk_span": "2-4"
+      },
+      "document": "[chunk 2]\nTitle: [2603.01761] Modular Memory is the Key to Continual Learning Agents\nURL: https://arxiv.org/abs/2603.01761\nSection: \n\nthe strengths of In-Weight Learning (IWL) and the newly emerged capabilities of In-Context Learning (ICL) through the design of modular memory is the missing piece for continual adaptation at scale. We outline a conceptual framework for modular memory-centric architectures that leverage ICL for rapid adaptation and knowledge accumulation, and IWL for stable updates to model capabilities, charting a practical roadmap toward continually learning agents.\n\nComments:\n\nThis work stems from discussions held at the Dagstuhl seminar on Continual Learning in the Era of Foundation Models (October 2025)\n\nSubjects:\n\nMachine Learning (cs.LG)\n\n; Artificial Intelligence (cs.AI)\n\nCite as:\n\narXiv:2603.01761\n\n[cs.LG]\n\n(or\n\narXiv:2603.01761v1\n\n[cs.LG]\n\nfor this version)\n\nhttps://doi.org/10.48550/arXiv.2603.01761\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Vaggelis Dorovatas [\n\nview email\n\n[v1]\n\nMon, 2 Mar 2026 11:40:05 UTC (508 KB)\n\nFull-text links:\n\nAccess Paper:\n\nView a PDF of the paper titled Modular Memory is"
+    }
+  ]
+}

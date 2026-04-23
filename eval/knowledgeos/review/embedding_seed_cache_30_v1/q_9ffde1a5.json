@@ -1,0 +1,1387 @@
+{
+  "schema": "knowledge-hub.search.result.v1",
+  "query": "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가?",
+  "sourceType": null,
+  "retrievalMode": "hybrid",
+  "alpha": 0.7,
+  "runtimeDiagnostics": {
+    "schema": "knowledge-hub.runtime.diagnostics.v1",
+    "status": "ok",
+    "degraded": false,
+    "vectorCorpus": {
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "collection_name": "knowledge_hub_pplx_context_060b_v2",
+      "total_documents": 27237,
+      "db_path": "/Users/won/.khub/chroma_db_pipeline2",
+      "lexical_db_path": "/Users/won/.khub/chroma_db_pipeline2/_lexical.sqlite3",
+      "metadata_keys": [
+        "contextual_summary",
+        "title",
+        "file_path",
+        "parent_id",
+        "section_title",
+        "source_type",
+        "section_path",
+        "topic",
+        "chunk_size",
+        "chunk_index",
+        "url",
+        "document_id",
+        "parent_type",
+        "parent_title",
+        "quality_score"
+      ]
+    },
+    "providers": [
+      {
+        "role": "translation",
+        "provider": "openai",
+        "model": "gpt-4o-mini",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "summarization",
+        "provider": "ollama",
+        "model": "qwen3:14b",
+        "display_name": "Ollama (Local)",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": false,
+        "api_key_status": "not_required",
+        "is_local": true,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      },
+      {
+        "role": "embedding",
+        "provider": "openai",
+        "model": "text-embedding-3-small",
+        "display_name": "OpenAI",
+        "installed": true,
+        "supports": {
+          "llm": true,
+          "embedding": true
+        },
+        "requires_api_key": true,
+        "api_key_status": "ok",
+        "is_local": false,
+        "available": true,
+        "degraded": false,
+        "reasons": [],
+        "runtime_status": {}
+      }
+    ],
+    "semanticRetrieval": {
+      "role": "embedding",
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "display_name": "OpenAI",
+      "installed": true,
+      "supports": {
+        "llm": true,
+        "embedding": true
+      },
+      "requires_api_key": true,
+      "api_key_status": "ok",
+      "is_local": false,
+      "available": true,
+      "degraded": false,
+      "reasons": [],
+      "runtime_status": {}
+    },
+    "warnings": []
+  },
+  "graphQuerySignal": {
+    "query": "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가?",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 4,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_fc38e4aeb7a5",
+        "entity_type": "concept",
+        "canonical_name": "benchmark",
+        "matched_terms": [
+          "benchmark",
+          "benchmarks",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [
+          "benchmarks",
+          "benchmark"
+        ],
+        "relation_count": 101,
+        "neighbor_entity_ids": [
+          "webc_0608c4054662",
+          "webc_e7052aeb5d20",
+          "webc_81cc9cb210d5",
+          "webc_90f0f88bf84f",
+          "webc_cd738ebdb108",
+          "webc_c65a0fb7e74f"
+        ],
+        "neighbor_names": [
+          "agent",
+          "agents",
+          "autonomous",
+          "evaluation",
+          "generation",
+          "kernel"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.6,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "visual_question_answering_benchmark",
+        "entity_type": "concept",
+        "canonical_name": "Visual question answering benchmark",
+        "matched_terms": [
+          "Visual question answering benchmark",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "2602.16689",
+          "benchmark_dataset",
+          "evaluation_metric",
+          "image_dataset",
+          "visual_question_answering"
+        ],
+        "neighbor_names": [
+          "2602.16689",
+          "Benchmark dataset",
+          "Evaluation metric",
+          "Image Dataset",
+          "Visual question answering"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.356667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "benchmark_dataset",
+        "entity_type": "concept",
+        "canonical_name": "Benchmark dataset",
+        "matched_terms": [
+          "Benchmark dataset",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 10,
+        "neighbor_entity_ids": [
+          "2602.16682",
+          "benchmarking",
+          "collection_size",
+          "dataset_construction",
+          "evaluation_metric",
+          "ms_marco_dataset"
+        ],
+        "neighbor_names": [
+          "2602.16682",
+          "Benchmarking",
+          "Collection Size",
+          "DataSet Construction",
+          "Evaluation metric",
+          "MS MARCO Dataset"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_5b63b0fea09b",
+        "entity_type": "concept",
+        "canonical_name": "baseline metrics",
+        "matched_terms": [
+          "baseline metrics",
+          "baseline perceptual metrics",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [
+          "baseline perceptual metrics"
+        ],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "web_b056361ce38f2d9e"
+        ],
+        "neighbor_names": [
+          "web_b056361ce38f2d9e"
+        ],
+        "neighbor_types": [
+          "note"
+        ],
+        "score": 0.173333,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 4,
+      "relation_count": 117,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "graph_query_signal": {
+    "query": "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가?",
+    "is_graph_heavy": true,
+    "confidence": 0.73,
+    "cue_hits": [],
+    "matched_entity_count": 4,
+    "candidate_hints": [
+      {
+        "entity_id": "webc_fc38e4aeb7a5",
+        "entity_type": "concept",
+        "canonical_name": "benchmark",
+        "matched_terms": [
+          "benchmark",
+          "benchmarks",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [
+          "benchmarks",
+          "benchmark"
+        ],
+        "relation_count": 101,
+        "neighbor_entity_ids": [
+          "webc_0608c4054662",
+          "webc_e7052aeb5d20",
+          "webc_81cc9cb210d5",
+          "webc_90f0f88bf84f",
+          "webc_cd738ebdb108",
+          "webc_c65a0fb7e74f"
+        ],
+        "neighbor_names": [
+          "agent",
+          "agents",
+          "autonomous",
+          "evaluation",
+          "generation",
+          "kernel"
+        ],
+        "neighbor_types": [
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.6,
+        "reasons": [
+          "exact",
+          "multi_term_match",
+          "name_overlap",
+          "relation_density"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "visual_question_answering_benchmark",
+        "entity_type": "concept",
+        "canonical_name": "Visual question answering benchmark",
+        "matched_terms": [
+          "Visual question answering benchmark",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 5,
+        "neighbor_entity_ids": [
+          "2602.16689",
+          "benchmark_dataset",
+          "evaluation_metric",
+          "image_dataset",
+          "visual_question_answering"
+        ],
+        "neighbor_names": [
+          "2602.16689",
+          "Benchmark dataset",
+          "Evaluation metric",
+          "Image Dataset",
+          "Visual question answering"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.356667,
+        "reasons": [
+          "multi_term_match",
+          "neighbor_overlap",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "benchmark_dataset",
+        "entity_type": "concept",
+        "canonical_name": "Benchmark dataset",
+        "matched_terms": [
+          "Benchmark dataset",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [],
+        "relation_count": 10,
+        "neighbor_entity_ids": [
+          "2602.16682",
+          "benchmarking",
+          "collection_size",
+          "dataset_construction",
+          "evaluation_metric",
+          "ms_marco_dataset"
+        ],
+        "neighbor_names": [
+          "2602.16682",
+          "Benchmarking",
+          "Collection Size",
+          "DataSet Construction",
+          "Evaluation metric",
+          "MS MARCO Dataset"
+        ],
+        "neighbor_types": [
+          "paper",
+          "concept",
+          "concept",
+          "concept",
+          "concept",
+          "concept"
+        ],
+        "score": 0.34,
+        "reasons": [
+          "multi_term_match",
+          "relation_density",
+          "token_overlap"
+        ],
+        "scope_recommendation": "candidate_reduction"
+      },
+      {
+        "entity_id": "webc_5b63b0fea09b",
+        "entity_type": "concept",
+        "canonical_name": "baseline metrics",
+        "matched_terms": [
+          "baseline metrics",
+          "baseline perceptual metrics",
+          "updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가"
+        ],
+        "aliases": [
+          "baseline perceptual metrics"
+        ],
+        "relation_count": 1,
+        "neighbor_entity_ids": [
+          "web_b056361ce38f2d9e"
+        ],
+        "neighbor_names": [
+          "web_b056361ce38f2d9e"
+        ],
+        "neighbor_types": [
+          "note"
+        ],
+        "score": 0.173333,
+        "reasons": [
+          "multi_term_match",
+          "token_overlap"
+        ],
+        "scope_recommendation": "baseline"
+      }
+    ],
+    "community_hints": [],
+    "diagnostics": {
+      "graph_cue_hits": [],
+      "graph_cue_count": 0,
+      "query_token_count": 8,
+      "entity_match_count": 4,
+      "relation_count": 117,
+      "community_hint_count": 0,
+      "candidate_reduction_eligible": true,
+      "recommended_top_k": 3,
+      "recommended_mode": "graph",
+      "query_kind": "entity"
+    },
+    "recommended_mode": "graph",
+    "recommended_top_k": 3
+  },
+  "relatedNotes": [],
+  "related_notes": [],
+  "results": [
+    {
+      "title": "Benchmark Test-Time Scaling of General LLM Agents",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.6614703762236611,
+      "semanticScore": 0.45196688175201416,
+      "semantic_score": 0.45196688175201416,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.5480331182479858,
+      "documentId": "web_6a8b28b97be87714_12",
+      "document_id": "web_6a8b28b97be87714_12",
+      "parentId": "web:web_6a8b28b97be87714::document:Benchmark Test-Time Scaling of General LLM Agents",
+      "parent_id": "web:web_6a8b28b97be87714::document:Benchmark Test-Time Scaling of General LLM Agents",
+      "parentLabel": "Benchmark Test-Time Scaling of General LLM Agents",
+      "parent_label": "Benchmark Test-Time Scaling of General LLM Agents",
+      "parentChunkSpan": "11-13",
+      "parent_chunk_span": "11-13",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "feature_boost",
+          "value": 0.222877
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.222877,
+        "retrieval_adjusted_score": 0.546453,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005385,
+        "path_token_overlap_boost": 0.002632,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.62147,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.222877
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "feature_boost",
+          "value": 0.222877
+        },
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.222877,
+        "retrieval_adjusted_score": 0.546453,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.005385,
+        "path_token_overlap_boost": 0.002632,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.005,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.62147,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "feature_boost",
+            "value": 0.222877
+          },
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "source_type": "web",
+        "parent_type": "document",
+        "url": "https://arxiv.org/html/2602.18998v1",
+        "file_path": "/Users/won/.khub/web_docs/web_6a8b28b97be87714-benchmark-test-time-scaling-of-general-llm-agents.md",
+        "contextual_summary": "[Benchmark Test-Time Scaling of General LLM Agents] domain",
+        "section_path": "",
+        "chunk_index": 12,
+        "title": "Benchmark Test-Time Scaling of General LLM Agents",
+        "parent_id": "web:web_6a8b28b97be87714::document:Benchmark Test-Time Scaling of General LLM Agents",
+        "parent_title": "Benchmark Test-Time Scaling of General LLM Agents",
+        "document_id": "web:web_6a8b28b97be87714",
+        "topic": "agents-core",
+        "quality_score": 0.7564,
+        "chunk_size": 937,
+        "section_title": "",
+        "resolved_parent_id": "web:web_6a8b28b97be87714::document:Benchmark Test-Time Scaling of General LLM Agents",
+        "resolved_parent_label": "Benchmark Test-Time Scaling of General LLM Agents",
+        "resolved_parent_chunk_span": "11-13"
+      },
+      "document": "[chunk 11]\nTitle: Benchmark Test-Time Scaling of General LLM Agents\nURL: https://arxiv.org/html/2602.18998v1\nSection: \n\ntools. These tasks emphasize structured tool calling and multi-step planning in realistic service and workflow scenarios.\n\nReason\n\nFor long-context reasoning, we use MathHay\n\n(Wang et al.,\n\n2024a\n\n)\n\n, which constructs queries by embedding relevant mathematical documents into noisy long-context haystacks. This benchmark isolates sustained reasoning over long inputs without relying on external tool execution, complementing the other domains.\n\nFigure 2\n\n:\n\nIllustration of how General AgentBench covers a wide range of task categories while providing a unified interface to simulate real-world user interactions.\n\nThe green region indicates the specific task currently being handled by the agent (e.g., a search task). Orange boxes denote other clients and servers that remain active and responsive but are not directly involved in the current interaction. Red indicates that other domain-specific data are excluded.\n\nTable 2:\n\nMain results on\n\nGeneral AgentBench\n\n. Benchmarks are grouped by domain.\n\nAvg.\n\ndenotes the mean score across all available benchmarks for each model."
+    },
+    {
+      "title": "[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3846094243049621,
+      "semanticScore": 0.3934420347213745,
+      "semantic_score": 0.3934420347213745,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6065579652786255,
+      "documentId": "web_ec083bc4851e3d09_1",
+      "document_id": "web_ec083bc4851e3d09_1",
+      "parentId": "web:web_ec083bc4851e3d09::document:[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+      "parent_id": "web:web_ec083bc4851e3d09::document:[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+      "parentLabel": "[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+      "parent_label": "[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+      "parentChunkSpan": "0-2",
+      "parent_chunk_span": "0-2",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.282609,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.344609,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "graph_candidate_boost",
+          "value": 0.04
+        },
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.282609,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.344609,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "graph_candidate_boost",
+            "value": 0.04
+          },
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ],
+        "graph_candidate_boost": 0.04,
+        "graph_query_kind": "entity",
+        "graph_candidate_matches": [
+          "benchmark"
+        ],
+        "graph_candidate_reduction_applied": true
+      },
+      "metadata": {
+        "chunk_index": 1,
+        "file_path": "/Users/won/.khub/web_docs/web_ec083bc4851e3d09-2603-01557-benchmarking-llm-summaries-of-multimodal-clinical-time-series-for-remote-monitoring.md",
+        "topic": "ai",
+        "contextual_summary": "[[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring] ly significant events, such as sustained abnormalities",
+        "url": "https://arxiv.org/abs/2603.01557",
+        "chunk_size": 1062,
+        "source_type": "web",
+        "document_id": "web:web_ec083bc4851e3d09",
+        "parent_id": "web:web_ec083bc4851e3d09::document:[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+        "quality_score": 0.9047,
+        "parent_title": "[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+        "section_title": "",
+        "title": "[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+        "section_path": "",
+        "parent_type": "document",
+        "resolved_parent_id": "web:web_ec083bc4851e3d09::document:[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+        "resolved_parent_label": "[2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring",
+        "resolved_parent_chunk_span": "0-2"
+      },
+      "document": "[chunk 0]\nTitle: [2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring\nURL: https://arxiv.org/abs/2603.01557\nSection: \n\nComputer Science > Artificial Intelligence\n\narXiv:2603.01557\n\n(cs)\n\n[Submitted on 2 Mar 2026]\n\nTitle:\n\nBenchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring\n\nAuthors:\n\nAditya Shukla\n\n,\n\nYining Yuan\n\n,\n\nBen Tamo\n\n,\n\nYifei Wang\n\n,\n\nMicky Nnamdi\n\n,\n\nShaun Tan\n\n,\n\nJieru Li\n\n,\n\nBenoit Marteau\n\n,\n\nBrad Willingham\n\n,\n\nMay Wang\n\nView a PDF of the paper titled Benchmarking LLM Summaries of Multimodal Clinical Time Series for Remote Monitoring, by Aditya Shukla and 9 other authors\n\nView PDF\n\nHTML (experimental)\n\nAbstract:\n\nLarge language models (LLMs) can generate fluent clinical summaries of remote therapeutic monitoring time series. However, it remains unclear whether these narratives faithfully capture clinically significant events, such as sustained abnormalities. Existing evaluation metrics primarily focus on semantic similarity and linguistic quality, leaving event-level correctness largely unmeasured.\n\n[chunk 1]\nTitle: [2603.01557] Benchmarking LLM Summaries of Multimodal Clinical Time Series fo"
+    },
+    {
+      "title": "Introducing RTEB: A New Standard for Retrieval Evaluation",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3474502770423889,
+      "semanticScore": 0.3975003957748413,
+      "semantic_score": 0.3975003957748413,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6024996042251587,
+      "documentId": "web_2b9a9034c5e01688_2",
+      "document_id": "web_2b9a9034c5e01688_2",
+      "parentId": "web:web_2b9a9034c5e01688::document:Introducing RTEB: A New Standard for Retrieval Evaluation",
+      "parent_id": "web:web_2b9a9034c5e01688::document:Introducing RTEB: A New Standard for Retrieval Evaluation",
+      "parentLabel": "Introducing RTEB: A New Standard for Retrieval Evaluation",
+      "parent_label": "Introducing RTEB: A New Standard for Retrieval Evaluation",
+      "parentChunkSpan": "1-3",
+      "parent_chunk_span": "1-3",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.28545,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.30745,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.28545,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.30745,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ]
+      },
+      "metadata": {
+        "source_type": "web",
+        "parent_type": "document",
+        "chunk_index": 2,
+        "file_path": "/Users/won/.khub/web_docs/web_2b9a9034c5e01688-introducing-rteb-a-new-standard-for-retrieval-evaluation.md",
+        "contextual_summary": "[Introducing RTEB: A New Standard for Retrieval Evaluation] the underlying evaluation methodology and metrics (such as NDCG@10) are well-known and robust, the integrity of existing benchmarks is often set back by the following issues: Th...",
+        "parent_title": "Introducing RTEB: A New Standard for Retrieval Evaluation",
+        "topic": "ai",
+        "quality_score": 0.813,
+        "title": "Introducing RTEB: A New Standard for Retrieval Evaluation",
+        "section_title": "",
+        "document_id": "web:web_2b9a9034c5e01688",
+        "url": "https://huggingface.co/blog/rteb",
+        "chunk_size": 993,
+        "section_path": "",
+        "parent_id": "web:web_2b9a9034c5e01688::document:Introducing RTEB: A New Standard for Retrieval Evaluation",
+        "resolved_parent_id": "web:web_2b9a9034c5e01688::document:Introducing RTEB: A New Standard for Retrieval Evaluation",
+        "resolved_parent_label": "Introducing RTEB: A New Standard for Retrieval Evaluation",
+        "resolved_parent_chunk_span": "1-3"
+      },
+      "document": "[chunk 1]\nTitle: Introducing RTEB: A New Standard for Retrieval Evaluation\nURL: https://huggingface.co/blog/rteb\nSection: \n\nms, is fundamentally limited by the quality of search and retrieval. As such, accurately measuring the retrieval quality of embedding models is a common pain point for developers. How do you\n\nreally\n\nknow how well a model will perform in the wild?\n\nThis is where things get tricky. The current standard for evaluation often relies on a model's \"zero-shot\" performance on public benchmarks. However, this is, at best, an approximation of a model's true generalization capabilities. When models are repeatedly evaluated against the same public datasets, a gap emerges between their reported scores and their actual performance on new, unseen data.\n\nPerformance Discrepancy Between Public and Closed Datasets\n\nTo address these challenges, we developed RTEB, a benchmark built to provide a reliable standard for evaluating retrieval models.\n\nWhy Existing Benchmarks Fall Short\n\nWhile the underlying evaluation methodology and metrics (such as NDCG@10) are well-known and robust, the integrity of existing benchmarks is often set back by the following issues:\n\nThe Generalization G"
+    },
+    {
+      "title": "Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+      "sourceType": "web",
+      "source_type": "web",
+      "score": 0.3437729565620422,
+      "semanticScore": 0.3922470808029175,
+      "semantic_score": 0.3922470808029175,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.6077529191970825,
+      "documentId": "web_4126b60f40666527_16",
+      "document_id": "web_4126b60f40666527_16",
+      "parentId": "web:web_4126b60f40666527::document:Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+      "parent_id": "web:web_4126b60f40666527::document:Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+      "parentLabel": "Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+      "parent_label": "Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+      "parentChunkSpan": "15-17",
+      "parent_chunk_span": "15-17",
+      "normalizedSourceType": "web",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.72,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.281773,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.303773,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.72,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "web",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "direct_answer_bonus",
+          "value": 0.012
+        },
+        {
+          "name": "source_prior_boost",
+          "value": 0.01
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0072
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.72,
+        "source_trust_boost": 0.0072,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.281773,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.01,
+        "direct_answer_bonus": 0.012,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "web",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.303773,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "direct_answer_bonus",
+            "value": 0.012
+          },
+          {
+            "name": "source_prior_boost",
+            "value": 0.01
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0072
+          }
+        ]
+      },
+      "metadata": {
+        "document_id": "web:web_4126b60f40666527",
+        "contextual_summary": "[Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance] y select the benchmarks most relevant to your use case to view the corresponding aggregated performance scores (below is a screenshort of our interactive plot in the official bl...",
+        "source_type": "web",
+        "quality_score": 0.8376,
+        "file_path": "/Users/won/.khub/web_docs/web_4126b60f40666527-falcon-h1-a-family-of-hybrid-head-language-models-redefining-efficiency-and-performance.md",
+        "title": "Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+        "parent_type": "document",
+        "parent_title": "Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+        "url": "https://huggingface.co/blog/tiiuae/falcon-h1",
+        "chunk_index": 16,
+        "section_title": "",
+        "section_path": "",
+        "chunk_size": 1065,
+        "topic": "ai",
+        "parent_id": "web:web_4126b60f40666527::document:Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+        "resolved_parent_id": "web:web_4126b60f40666527::document:Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+        "resolved_parent_label": "Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance",
+        "resolved_parent_chunk_span": "15-17"
+      },
+      "document": "[chunk 15]\nTitle: Falcon-H1: A Family of Hybrid-Head Language Models Redefining Efficiency and Performance\nURL: https://huggingface.co/blog/tiiuae/falcon-h1\nSection: \n\ns (SSMs)\n\noffer significant advantages in terms of\n\nmemory efficiency and computational cost\n\n.\n\nTo demonstrate these capabilities, we evaluate\n\nFalcon-H1-34B-Instruct\n\nagainst\n\nQwen2.5-72B-Instruct\n\nacross a set of long-context benchmarks. We focus on three core task categories drawn from the Helmet benchmark suite - Retrieval-Augmented Generation (RAG):\n\nNatural Questions\n\n,\n\nTriviaQA\n\n,\n\nPopQA\n\n,\n\nHotpotQA\n\n; Recall tasks:\n\nJSON KV\n\n,\n\nRULER MK Needle\n\n,\n\nRULER MK UUID\n\n,\n\nRULER MV\n\n; Long Document QA tasks:\n\n∞BENCH QA\n\n,\n\n∞BENCH MC\n\n. These evaluations highlight Falcon-H1’s strength in scaling to longer sequences while maintaining high performance and efficiency.\n\nIn addition, we conducted a comprehensive evaluation of the Falcon-H1 series alongside leading Transformer-based models across 23 benchmarks, covering multiple domains and model scales. You can explore the interactive results below—simply select the benchmarks most relevant to your use case to view the corresponding aggregated performance scores (below "
+    },
+    {
+      "title": "Attention Residuals",
+      "sourceType": "paper",
+      "source_type": "paper",
+      "score": 0.29268180069923394,
+      "semanticScore": 0.2958311438560486,
+      "semantic_score": 0.2958311438560486,
+      "lexicalScore": 0.0,
+      "lexical_score": 0.0,
+      "distance": 0.7041688561439514,
+      "documentId": "paper_attnres2026_0",
+      "document_id": "paper_attnres2026_0",
+      "parentId": "",
+      "parent_id": "",
+      "parentLabel": "Attention Residuals",
+      "parent_label": "Attention Residuals",
+      "parentChunkSpan": "0-0",
+      "parent_chunk_span": "0-0",
+      "normalizedSourceType": "paper",
+      "qualityFlag": "unscored",
+      "sourceTrustScore": 0.86,
+      "referenceRole": "",
+      "referenceTier": "",
+      "duplicateCollapsed": false,
+      "topRankingSignals": [
+        {
+          "name": "source_prior_boost",
+          "value": 0.03
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0156
+        }
+      ],
+      "rankingSignals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.86,
+        "source_trust_boost": 0.0156,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.222682,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.03,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "paper",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.252682,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_prior_boost",
+            "value": 0.03
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0156
+          }
+        ]
+      },
+      "quality_flag": "unscored",
+      "source_trust_score": 0.86,
+      "reference_role": "",
+      "reference_tier": "",
+      "normalized_source_type": "paper",
+      "duplicate_collapsed": false,
+      "top_ranking_signals": [
+        {
+          "name": "source_prior_boost",
+          "value": 0.03
+        },
+        {
+          "name": "source_trust_boost",
+          "value": 0.0156
+        }
+      ],
+      "ranking_signals": {
+        "quality_flag": "unscored",
+        "quality_boost": 0.0,
+        "source_trust_score": 0.86,
+        "source_trust_boost": 0.0156,
+        "reference_role": "",
+        "reference_tier": "",
+        "reference_prior_boost": 0.0,
+        "contradiction_penalty": 0.0,
+        "feature_boost": 0.0,
+        "retrieval_adjusted_score": 0.222682,
+        "exact_title_match_boost": 0.0,
+        "near_title_overlap_boost": 0.0,
+        "path_token_overlap_boost": 0.0,
+        "alias_overlap_boost": 0.0,
+        "ontology_entity_exact_match_boost": 0.0,
+        "ontology_entity_overlap_boost": 0.0,
+        "source_prior_boost": 0.03,
+        "direct_answer_bonus": 0.0,
+        "paper_source_mismatch_penalty": 0.0,
+        "refusal_excerpt_penalty": 0.0,
+        "citation_only_penalty": 0.0,
+        "generic_concept_penalty": 0.0,
+        "generic_vault_penalty": 0.0,
+        "vault_hub_penalty": 0.0,
+        "duplicate_exposure_penalty": 0.0,
+        "normalized_source_type": "paper",
+        "query_intent": "evaluation",
+        "ranking_signal_total": 0.252682,
+        "duplicate_collapsed": false,
+        "duplicate_parent_rank": 0,
+        "top_ranking_signals": [
+          {
+            "name": "source_prior_boost",
+            "value": 0.03
+          },
+          {
+            "name": "source_trust_boost",
+            "value": 0.0156
+          }
+        ]
+      },
+      "metadata": {
+        "source_type": "paper",
+        "field": "Computer Science",
+        "arxiv_id": "attnres2026",
+        "title": "Attention Residuals",
+        "chunk_index": 0,
+        "resolved_parent_id": "",
+        "resolved_parent_label": "Attention Residuals",
+        "resolved_parent_chunk_span": "0-0"
+      },
+      "document": "[chunk 0]\nTitle: Attention Residuals\n\n### 한줄 요약\nTransformer의 고정 residual accumulation을 depth-wise softmax attention으로 대체하는 Attention Residuals와 Block AttnRes를 제안한 Kimi Team 기술 보고서다.\n\n### 핵심 기여\n- PreNorm residual path에서 깊이에 따라 hidden-state magnitude가 커지고 레이어 기여가 희석되는 문제를 정식화한다.\n- 각 레이어가 이전 레이어 출력 전체를 선택적으로 집계하는 Attention Residuals를 제안한다.\n- 대규모 학습 비용을 줄이기 위해 블록 대표 표현에만 attention하는 Block AttnRes를 설계한다.\n- Kimi Linear 48B/3B activated 설정에서 reasoning, code, Chinese benchmark 개선을 보고한다.\n\n### 방법론\nResidual sum 대신 이전 depth representation에 대한 softmax attention을 사용해 content-dependent aggregation을 수행한다.\n\n### 한계\narXiv 논문이 아니라 GitHub technical report 공개본 기준이며, 재현 코드/체크포인트보다는 설계와 결과 보고 중심이다."
+    }
+  ]
+}

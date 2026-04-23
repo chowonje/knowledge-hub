@@ -1,0 +1,31 @@
+query,query_variant_group,source,query_type,temporal_query,expected_primary_source,expected_answer_style,difficulty,gold_doc_ids,hard_negative_doc_ids,notes
+RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?,vault_rag_failure,vault,general,0,vault,concise_summary,easy,,,seed from 100q; curate gold/hard negatives before promotion decision
+What usually hurts RAG retrieval quality the most in this system?,vault_rag_failure,vault,general,0,vault,concise_summary,medium,,,english variant for multilingual consistency; pair with vault_rag_failure
+memory-first retrieval의 목적을 한 문장으로 설명해줘,,vault,general,0,vault,concise_summary,easy,,,seed from 100q
+document memory와 chunk retrieval의 차이를 설명해줘,,vault,general,0,vault,compare_summary,medium,,,seed from 100q
+EvidenceAssemblyService는 어떤 입력을 받아 무엇을 만드는가?,,vault,implementation,0,vault,implementation_steps,medium,,,seed from 100q
+query intent 분류는 retrieval plan에 어떤 영향을 주나?,,vault,implementation,0,vault,implementation_steps,medium,,,seed from 100q
+최근 retrieval pipeline에서 temporal route가 추가된 이유는 무엇인가?,vault_temporal_route,vault,temporal,1,vault,timeline_compare,medium,,,seed from 100q
+Why was temporal routing added to the retrieval pipeline recently?,vault_temporal_route,vault,temporal,1,vault,timeline_compare,medium,,,english variant for multilingual consistency; pair with vault_temporal_route
+지금 구조가 cross-encoder reranker를 기본으로 사용한다고 단정할 수 있나?,,vault,abstention,0,vault,abstain,medium,,,seed from 100q; abstention-focused
+현재 KnowledgeOS가 self-attention 구조로 retrieval 코어를 완전히 교체했다고 볼 수 있나?,,vault,abstention,0,vault,abstain,medium,,,seed from 100q; abstention-focused
+paper memory card의 목적을 설명해줘,paper_memory_card_purpose,paper,general,0,paper,concise_summary,easy,,,seed from 100q
+What is the purpose of a paper memory card?,paper_memory_card_purpose,paper,general,0,paper,concise_summary,easy,,,english variant for multilingual consistency; pair with paper_memory_card_purpose
+document memory와 paper memory의 차이를 논문 관점에서 설명해줘,,paper,general,0,paper,compare_summary,medium,,,seed from 100q
+논문 retrieval에서 memory prefilter가 chunk evidence로 어떻게 이어지는가?,,paper,implementation,0,paper,implementation_steps,hard,,,seed from 100q
+paper memory retriever는 updates relation을 어떻게 활용하나?,,paper,implementation,0,paper,implementation_steps,medium,,,seed from 100q
+최근 paper-memory retrieval 접근이 강조하는 차별점은 무엇인가?,paper_temporal_updates,paper,temporal,1,paper,timeline_compare,medium,,,seed from 100q
+What does the latest paper-memory retrieval approach emphasize?,paper_temporal_updates,paper,temporal,1,paper,timeline_compare,medium,,,english variant for multilingual consistency; pair with paper_temporal_updates
+updated benchmark v2가 baseline v1보다 더 강조한 metric은 무엇인가?,,paper,temporal,1,paper,timeline_compare,medium,,,seed from 100q
+survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘,,paper,disambiguation,0,paper,disambiguation,hard,,,seed from 100q; good hard-negative candidate query
+같은 주제의 구버전 논문과 신버전 논문 중 최신 것을 골라줘,,paper,disambiguation,1,paper,disambiguation,medium,,,seed from 100q; temporal disambiguation
+현재 코퍼스에서 최신 RAG benchmark와 관련된 핵심 근거를 source 구분 없이 찾아줘,mixed_latest_benchmark,all,temporal,1,mixed,compare_summary,hard,,,seed from 100q; mixed retrieval
+Find the best current evidence for the latest RAG benchmark regardless of source type.,mixed_latest_benchmark,all,temporal,1,mixed,compare_summary,hard,,,english variant for multilingual consistency; pair with mixed_latest_benchmark
+최근 memory-first retrieval 업데이트를 paper와 vault 중 어디에서 더 직접 설명하는지 정리해줘,,all,temporal,1,mixed,compare_summary,hard,,,seed from 100q
+before/after 기준으로 temporal grounding 설명이 paper와 web에서 어떻게 다른지 비교해줘,mixed_temporal_grounding_compare,all,temporal,1,mixed,compare_summary,hard,,,seed from 100q
+Compare how paper and web sources explain temporal grounding before vs after the recent changes.,mixed_temporal_grounding_compare,all,temporal,1,mixed,compare_summary,hard,,,english variant for multilingual consistency; pair with mixed_temporal_grounding_compare
+"같은 topic의 vault note, paper, web article이 함께 있을 때 가장 우선 봐야 할 source를 골라줘",,all,disambiguation,0,mixed,disambiguation,hard,,,seed from 100q
+reference article과 paper benchmark note가 같이 있을 때 최신성 질문의 주 근거를 골라줘,,all,disambiguation,1,mixed,disambiguation,hard,,,seed from 100q
+온톨로지와 memory layer가 함께 있을 때 retrieval 정확도가 왜 좋아지는지 설명해줘,mixed_ontology_memory_accuracy,all,general,0,mixed,compare_summary,medium,,,seed from 100q
+Why do ontology and memory together improve retrieval accuracy in KnowledgeOS?,mixed_ontology_memory_accuracy,all,general,0,mixed,compare_summary,medium,,,english variant for multilingual consistency; pair with mixed_ontology_memory_accuracy
+현재 코퍼스만으로 최신성 질문에서 출처 없이 결론을 단정해도 되는가?,,all,abstention,1,mixed,abstain,medium,,,seed from 100q; abstention + temporal
