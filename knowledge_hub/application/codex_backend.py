@@ -12,11 +12,25 @@ import tempfile
 from typing import Any
 
 import anyio
-from mcp import ClientSession
-from mcp.client.stdio import StdioServerParameters, stdio_client
 
 
 CODEX_BACKEND_NAME = "codex_mcp"
+MCP_DEPENDENCY_MISSING_SUMMARY = "mcp dependency unavailable; install knowledge-hub-cli[mcp]"
+
+
+class CodexMCPDependencyMissing(RuntimeError):
+    pass
+
+
+def _load_mcp_stdio_client() -> tuple[Any, Any, Any]:
+    try:
+        from mcp import ClientSession
+        from mcp.client.stdio import StdioServerParameters, stdio_client
+    except ModuleNotFoundError as error:
+        if str(getattr(error, "name", "")) == "mcp":
+            raise CodexMCPDependencyMissing(MCP_DEPENDENCY_MISSING_SUMMARY) from error
+        raise
+    return ClientSession, StdioServerParameters, stdio_client
 
 
 def _config_value(config: Any, *keys: str, default: Any = None) -> Any:
@@ -238,6 +252,7 @@ async def _call_codex_tool(
     task_type: str = "rag_answer",
 ) -> dict[str, Any]:
     server = resolve_codex_server_config(config, task_type=task_type)
+    ClientSession, StdioServerParameters, stdio_client = _load_mcp_stdio_client()
     params = StdioServerParameters(
         command=str(server["command"]),
         args=list(server["args"]),
@@ -388,11 +403,22 @@ def run_codex_tool_sync(
 def codex_backend_readiness(config: Any, *, task_type: str = "rag_answer") -> dict[str, Any]:
     try:
         transport = resolve_codex_transport(config, task_type=task_type)
+        if transport == "mcp":
+            _load_mcp_stdio_client()
         runtime = (
             resolve_codex_server_config(config, task_type=task_type)
             if transport == "mcp"
             else resolve_codex_exec_config(config, task_type=task_type)
         )
+    except CodexMCPDependencyMissing as error:
+        return {
+            "available": False,
+            "provider": CODEX_BACKEND_NAME,
+            "transport": "mcp",
+            "command": "",
+            "reason": "dependency_missing",
+            "summary": str(error),
+        }
     except Exception as error:
         return {
             "available": False,

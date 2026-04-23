@@ -115,6 +115,26 @@ def test_resolve_preferred_codex_backend_surfaces_unavailable_warning(monkeypatc
     assert warnings == ["codex_mcp backend unavailable: codex command not found: codex"]
 
 
+def test_codex_backend_readiness_reports_missing_mcp_dependency(monkeypatch):
+    config = _Config({"eval": {"answer_loop": {"codex": {"transport": "mcp"}}}})
+
+    def _missing_mcp():
+        raise codex_backend.CodexMCPDependencyMissing(codex_backend.MCP_DEPENDENCY_MISSING_SUMMARY)
+
+    monkeypatch.setattr(codex_backend, "_load_mcp_stdio_client", _missing_mcp)
+
+    readiness = codex_backend.codex_backend_readiness(config)
+
+    assert readiness == {
+        "available": False,
+        "provider": "codex_mcp",
+        "transport": "mcp",
+        "command": "",
+        "reason": "dependency_missing",
+        "summary": codex_backend.MCP_DEPENDENCY_MISSING_SUMMARY,
+    }
+
+
 def test_codex_prompt_llm_generate_uses_runner_and_sanitizes(monkeypatch):
     observed: dict[str, str] = {}
 
