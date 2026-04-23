@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import knowledge_hub.application.agent.foundry_bridge as foundry_bridge
 from pathlib import Path
 import re
 import subprocess
@@ -22,7 +23,6 @@ from knowledge_hub.application.mcp.responses import evaluate_policy_gate
 from knowledge_hub.core.config import Config
 from knowledge_hub.core.sanitizer import P0_PATTERN_CONFIG_PATH, get_p0_detection_config
 from knowledge_hub.core.schema_validator import SCHEMA_NAME_BY_ID, validate_payload
-from knowledge_hub.interfaces.cli.commands.dinger_cmd import dinger_group
 from knowledge_hub.interfaces.cli.commands.agent_cmd import _normalize_run_payload
 
 FIXTURE_ROOT = PROJECT_ROOT / "docs" / "schemas" / "fixtures"
@@ -107,11 +107,12 @@ def _extract_ts_runtime_schema_ids() -> set[str]:
 
 
 def _project_cli_candidate_label(candidate: list[str]) -> str:
+    binary_name = Path(candidate[0]).name if candidate else ""
     if candidate[:2] == ["npx", "tsx"]:
         return "npx-tsx-source"
-    if candidate and candidate[0] == "tsx":
+    if binary_name == "tsx":
         return "tsx-source"
-    if candidate and candidate[0] == "ts-node":
+    if binary_name == "ts-node":
         return "ts-node-source"
     if len(candidate) >= 2 and candidate[0] == "node" and candidate[1].endswith(".ts"):
         return "node-ts-source"
@@ -245,6 +246,34 @@ def test_ts_runtime_schema_registry_is_subset_of_python_registry():
     ts_schema_ids = _extract_ts_runtime_schema_ids()
     missing = sorted(schema_id for schema_id in ts_schema_ids if schema_id not in SCHEMA_NAME_BY_ID)
     assert missing == []
+
+
+def test_bridge_candidates_prefer_repo_local_tsx_before_npx(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    script_path = tmp_path / "project-cli.ts"
+    dist_path = tmp_path / "project-cli.js"
+    local_tsx = tmp_path / "tsx"
+    script_path.write_text("console.log('ts')", encoding="utf-8")
+    dist_path.write_text("console.log('js')", encoding="utf-8")
+    local_tsx.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    local_tsx.chmod(0o755)
+
+    monkeypatch.setattr(foundry_bridge, "FOUNDRY_LOCAL_TSX_BIN", local_tsx)
+    monkeypatch.setattr(
+        foundry_bridge.shutil,
+        "which",
+        lambda binary: {"npx": "/usr/bin/npx"}.get(binary),
+    )
+
+    candidates = foundry_bridge._bridge_candidates(
+        ["repo-root", "python", "project", "status"],
+        script_path=script_path,
+        dist_path=dist_path,
+    )
+    labels = [_project_cli_candidate_label(candidate) for candidate in candidates]
+
+    assert "tsx-source" in labels
+    assert "npx-tsx-source" in labels
+    assert labels.index("tsx-source") < labels.index("npx-tsx-source")
 
 
 @pytest.mark.parametrize(
@@ -589,6 +618,28 @@ def test_evaluate_policy_gate_matches_shared_p0_corpus():
         assert allowed is (not bool(case["expectedP0"])), case["id"]
 
 
+def test_evaluate_policy_gate_uses_most_sensitive_non_p0_classification():
+    allowed, errors, classification = evaluate_policy_gate(
+        {
+            "classification": "P3",
+            "jsonContent": '{"id":"paper-1","score":0.91}',
+        }
+    )
+    assert allowed is True
+    assert errors == []
+    assert classification == "P1"
+
+    allowed, errors, classification = evaluate_policy_gate(
+        {
+            "classification": "P1",
+            "jsonContent": "plain public summary",
+        }
+    )
+    assert allowed is True
+    assert errors == []
+    assert classification == "P1"
+
+
 def _parse_supported_re_flags(raw_flags: object | None) -> int:
     flags = 0
     for flag in str(raw_flags or ""):
@@ -644,6 +695,8 @@ def test_python_p0_loader_matches_shared_pattern_source_contract():
 
 
 def test_temp_runtime_capture_process_smoke_stays_local_and_reuses_existing_open_item(monkeypatch, tmp_path: Path):
+    from knowledge_hub.interfaces.cli.commands.dinger_cmd import dinger_group
+
     runner = CliRunner()
     khub = _AuthorityStubKhub(_make_capture_runtime_config(tmp_path))
 
@@ -781,7 +834,7 @@ def test_temp_runtime_capture_process_smoke_stays_local_and_reuses_existing_open
     ]
 
 # Known follow-up: this round-trip is not the final green gate for the full
-# authority file until slow `npx tsx` environments are isolated. On this
+# authority file until slow tsx-backed bridge environments are isolated. On this
 # worktree the command path is fast; the flaky surface is the subprocess bridge,
 # not the payload validation assertions below.
 def test_ts_project_cli_outputs_validate_in_python(tmp_path: Path):

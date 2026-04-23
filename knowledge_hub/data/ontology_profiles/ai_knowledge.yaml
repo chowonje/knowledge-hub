@@ -1,0 +1,107 @@
+profile_id: ai_knowledge
+kind: personal
+title: AI Knowledge Classification Profile
+knowledge_classification:
+  version: ai-knowledge-v1
+  knowledge_kinds:
+    - theory
+    - algorithm
+    - software_system
+    - hardware_system
+    - data
+    - evaluation
+    - operation
+    - application
+  subtype_vocab:
+    theory:
+      - information_theory
+      - optimization
+      - statistical_learning
+      - complexity
+      - representation_learning
+      - generalization
+    algorithm:
+      - transformer
+      - attention
+      - diffusion
+      - reinforcement_learning
+      - search
+      - inference_optimization
+      - quantization
+    software_system:
+      - training_stack
+      - serving_stack
+      - orchestration
+      - agent_runtime
+      - vector_db
+      - compiler
+    hardware_system:
+      - gpu
+      - tpu
+      - npu
+      - memory_hierarchy
+      - interconnect
+      - storage
+      - power_thermal
+    data:
+      - dataset
+      - synthetic_data
+      - labeling
+      - curation
+      - filtering
+      - licensing
+    evaluation:
+      - benchmark
+      - metric
+      - failure_mode
+      - robustness
+      - safety_eval
+    operation:
+      - deployment
+      - monitoring
+      - cost
+      - latency
+      - scaling
+      - reliability
+    application:
+      - coding_agent
+      - robotics
+      - multimodal_assistant
+      - search
+      - biotech
+  facets:
+    abstraction_level:
+      - principle
+      - component
+      - system
+      - product
+    lifecycle_stage:
+      - research
+      - training
+      - inference
+      - evaluation
+      - operation
+    resource_axis:
+      - compute
+      - memory
+      - bandwidth
+      - data
+      - energy
+      - latency
+      - cost
+    modality:
+      - text
+      - image
+      - audio
+      - video
+      - multimodal
+      - action
+    evidence_status:
+      - speculative
+      - experimental
+      - replicated
+      - production
+extraction_hints:
+  ai_knowledge:
+    mode: rule_first
+    source_of_truth: ontology_properties
