@@ -1,0 +1,75 @@
+{
+  "schema": "knowledge-hub.dinger.capture.result.v1",
+  "status": "captured",
+  "stage": "captured",
+  "accepted": true,
+  "queued": true,
+  "captureId": "cap_123456789abc",
+  "sourceUrl": "https://example.com/rag",
+  "pageTitle": "RAG Capture",
+  "selectionText": "RAG combines retrieval with generation.",
+  "capturedAt": "2026-04-09T12:00:00+00:00",
+  "client": "browser.clipper",
+  "tags": ["rag", "evidence"],
+  "rawPath": "/tmp/raw/rag-capture.md",
+  "queuePath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json",
+  "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json",
+  "queueStatus": "queued",
+  "flowSemantics": {
+    "capturePacket": "input",
+    "dingerFiling": "projection_only",
+    "osBridge": "inbox_evidence_candidate_only",
+    "canonicalStore": "no_new_store"
+  },
+  "traceability": {
+    "captureId": "cap_123456789abc",
+    "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json"
+  },
+  "captureUrl": "https://example.com/rag",
+  "title": "RAG Capture",
+  "slug": "rag-capture",
+  "sourceRefs": [
+    {
+      "sourceType": "web",
+      "url": "https://example.com/rag"
+    }
+  ],
+  "payload": {
+    "captureId": "cap_123456789abc",
+    "kind": "web_capture",
+    "sourceUrl": "https://example.com/rag",
+    "pageTitle": "RAG Capture",
+    "selectionText": "RAG combines retrieval with generation.",
+    "capturedAt": "2026-04-09T12:00:00+00:00",
+    "client": "browser.clipper",
+    "tags": ["rag", "evidence"],
+    "rawPath": "/tmp/raw/rag-capture.md",
+    "rawVaultNotePath": "",
+    "note": "save this for later",
+    "metadata": {
+      "input": "capture",
+      "sourceType": "web"
+    },
+    "sourceRefs": [
+      {
+        "sourceType": "web",
+        "url": "https://example.com/rag"
+      }
+    ],
+    "raw": {
+      "sourceUrl": "https://example.com/rag",
+      "pageTitle": "RAG Capture",
+      "client": "browser.clipper",
+      "tags": ["rag", "evidence"],
+      "selection": "RAG combines retrieval with generation.",
+      "selectionText": "",
+      "body": "",
+      "bodyFile": "",
+      "note": "save this for later",
+      "capturedAt": "2026-04-09T12:00:00+00:00",
+      "rawPath": "/tmp/raw/rag-capture.md",
+      "rawVaultNotePath": ""
+    }
+  },
+  "createdAt": "2026-04-09T12:00:00+00:00"
+}

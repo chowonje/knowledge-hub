@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/connector-sync-result.v2.json",
+  "title": "knowledge-hub connector sync result v2",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "connectorId",
+    "source_filter",
+    "items",
+    "ontologyDelta",
+    "cursor",
+    "ts"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.foundry.connector.sync.result.v2"
+    },
+    "source": {
+      "type": "string"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "connectorId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_filter": {
+      "type": "string",
+      "enum": [
+        "all",
+        "note",
+        "paper",
+        "web",
+        "expense",
+        "sleep",
+        "schedule",
+        "behavior"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "blocked", "error"]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "title",
+          "content",
+          "filePath",
+          "metadata",
+          "updatedAt",
+          "classification"
+        ],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "source": {
+            "type": "string",
+            "enum": [
+              "note",
+              "paper",
+              "web",
+              "expense",
+              "sleep",
+              "schedule",
+              "behavior"
+            ]
+          },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "filePath": { "type": "string" },
+          "metadata": { "type": "object" },
+          "updatedAt": { "type": "string", "minLength": 1 },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "classification": {
+            "type": "string",
+            "enum": ["P0", "P1", "P2", "P3"]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "ontologyDelta": {
+      "type": "object",
+      "required": ["entities", "relations", "claims", "events"],
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "relations": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "claims": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "pendingConflicts": {
+      "type": "object",
+      "properties": {
+        "count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "cursor": {
+      "type": "object",
+      "required": ["next_record_ts", "next_event_ts", "hasMore"],
+      "properties": {
+        "next_record_ts": { "type": "string" },
+        "next_event_ts": { "type": "string" },
+        "hasMore": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "ts": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

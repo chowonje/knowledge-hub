@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.capture-cleanup.result.v1",
+  "description": "Strict cleanup contract for Dinger capture runtime artifacts. The existing `khub dinger capture cleanup` CLI and targeted approval checks use this schema; it is intentionally limited to the current operator-facing classifications and does not document future cleanup fields.",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "dryRun",
+    "confirmed",
+    "queueDir",
+    "runtimeDir",
+    "policy",
+    "counts",
+    "delete",
+    "keep",
+    "errors",
+    "createdAt"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.capture-cleanup.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "dryRun": { "type": "boolean" },
+    "confirmed": { "type": "boolean" },
+    "queueDir": { "type": "string", "minLength": 1 },
+    "runtimeDir": { "type": "string", "minLength": 1 },
+    "policy": { "$ref": "#/$defs/policy" },
+    "counts": { "$ref": "#/$defs/counts" },
+    "delete": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/deleteEntry" }
+    },
+    "keep": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/keepEntry" }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/errorItem" }
+    },
+    "createdAt": { "$ref": "#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "ok" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "errors": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "failed" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "errors": { "minItems": 1 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "canonicalRefs": {
+      "type": "object",
+      "required": [
+        "dingerProjectionPresent",
+        "dingerProjectionRef",
+        "osItemPresent",
+        "osItemId"
+      ],
+      "properties": {
+        "dingerProjectionPresent": { "type": "boolean" },
+        "dingerProjectionRef": { "type": "string" },
+        "osItemPresent": { "type": "boolean" },
+        "osItemId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "packetSnapshot": {
+      "type": "object",
+      "required": [
+        "present",
+        "source",
+        "title",
+        "captureUrl",
+        "relativePath",
+        "sourceRefCount"
+      ],
+      "properties": {
+        "present": { "const": true },
+        "source": {
+          "type": "string",
+          "enum": ["normalized", "filed_result", "os_capture_trace"]
+        },
+        "title": { "type": "string" },
+        "captureUrl": { "type": "string" },
+        "relativePath": { "type": "string" },
+        "sourceRefCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "dryRunDefault",
+        "requiresExplicitConfirmation",
+        "deletableKinds",
+        "protectedKinds",
+        "neverDeleteCanonicalSurfaces"
+      ],
+      "properties": {
+        "dryRunDefault": { "const": true },
+        "requiresExplicitConfirmation": { "const": true },
+        "deletableKinds": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "orphan_runtime_artifact" },
+            { "const": "stale_claim_file" },
+            { "const": "incomplete_runtime_junk" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "protectedKinds": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "queue_packet_present_capture" },
+            { "const": "recoverable_orphan" },
+            { "const": "active_claim_file" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "neverDeleteCanonicalSurfaces": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "queue_packet" },
+            { "const": "dinger_projection_page" },
+            { "const": "os_item" },
+            { "const": "canonical_store_content" }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "scannedCaptureGroups",
+        "scannedClaimFiles",
+        "deleteEligibleEntries",
+        "deleteEligiblePaths",
+        "deletedEntries",
+        "deletedPaths",
+        "keptEntries",
+        "failedEntries"
+      ],
+      "properties": {
+        "scannedCaptureGroups": { "type": "integer", "minimum": 0 },
+        "scannedClaimFiles": { "type": "integer", "minimum": 0 },
+        "deleteEligibleEntries": { "type": "integer", "minimum": 0 },
+        "deleteEligiblePaths": { "type": "integer", "minimum": 0 },
+        "deletedEntries": { "type": "integer", "minimum": 0 },
+        "deletedPaths": { "type": "integer", "minimum": 0 },
+        "keptEntries": { "type": "integer", "minimum": 0 },
+        "failedEntries": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "errorItem": {
+      "type": "object",
+      "required": ["entryType", "captureId", "message"],
+      "properties": {
+        "entryType": { "type": "string", "enum": ["capture_runtime", "claim_file"] },
+        "captureId": { "type": "string" },
+        "message": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "captureRuntimeDeleteEntry": {
+      "type": "object",
+      "required": [
+        "entryType",
+        "captureId",
+        "cleanupKind",
+        "disposition",
+        "action",
+        "packetPath",
+        "packetPresent",
+        "packetSnapshotPresent",
+        "recoverability",
+        "runtimeArtifactPaths",
+        "canonicalRefs",
+        "recommendedAction",
+        "reasonCodes",
+        "targetPathCount",
+        "deletedPaths"
+      ],
+      "properties": {
+        "entryType": { "const": "capture_runtime" },
+        "captureId": { "type": "string", "minLength": 1 },
+        "cleanupKind": {
+          "type": "string",
+          "enum": ["orphan_runtime_artifact", "incomplete_runtime_junk"]
+        },
+        "disposition": { "const": "delete" },
+        "action": { "type": "string", "enum": ["planned_delete", "deleted", "delete_failed"] },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "packetPresent": { "const": false },
+        "packetSnapshotPresent": { "const": false },
+        "recoverability": { "const": "unrecoverable" },
+        "runtimeArtifactPaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "canonicalRefs": { "$ref": "#/$defs/canonicalRefs" },
+        "recommendedAction": { "const": "cleanup_runtime_artifacts" },
+        "reasonCodes": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "missing_queue_packet" },
+            { "type": "string", "enum": ["orphan_runtime_artifact", "incomplete_runtime_junk"] }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "targetPathCount": { "type": "integer", "minimum": 1 },
+        "deletedPaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "errors": { "$ref": "#/$defs/stringArray" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "action": { "const": "delete_failed" } },
+            "required": ["action"]
+          },
+          "then": {
+            "required": ["errors"],
+            "properties": {
+              "errors": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "cleanupKind": { "const": "orphan_runtime_artifact" } },
+            "required": ["cleanupKind"]
+          },
+          "then": {
+            "properties": {
+              "reasonCodes": {
+                "const": ["missing_queue_packet", "orphan_runtime_artifact"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "cleanupKind": { "const": "incomplete_runtime_junk" } },
+            "required": ["cleanupKind"]
+          },
+          "then": {
+            "properties": {
+              "reasonCodes": {
+                "const": ["missing_queue_packet", "incomplete_runtime_junk"]
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "queuePacketPresentCaptureKeepEntry": {
+      "type": "object",
+      "required": [
+        "entryType",
+        "captureId",
+        "cleanupKind",
+        "disposition",
+        "action",
+        "packetPath",
+        "packetPresent",
+        "packetSnapshotPresent",
+        "recoverability",
+        "runtimeArtifactPaths",
+        "canonicalRefs",
+        "recommendedAction",
+        "reasonCodes"
+      ],
+      "properties": {
+        "entryType": { "const": "capture_runtime" },
+        "captureId": { "type": "string", "minLength": 1 },
+        "cleanupKind": { "const": "queue_packet_present_capture" },
+        "disposition": { "const": "keep" },
+        "action": { "const": "skipped" },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "packetPresent": { "const": true },
+        "packetSnapshotPresent": { "type": "boolean" },
+        "recoverability": { "const": "protected" },
+        "runtimeArtifactPaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "canonicalRefs": { "$ref": "#/$defs/canonicalRefs" },
+        "recommendedAction": { "const": "leave_runtime_artifacts_attached_to_live_queue_packet" },
+        "reasonCodes": {
+          "const": ["queue_packet_present"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "recoverableOrphanKeepEntry": {
+      "type": "object",
+      "required": [
+        "entryType",
+        "captureId",
+        "cleanupKind",
+        "disposition",
+        "action",
+        "packetPath",
+        "packetPresent",
+        "packetSnapshotPresent",
+        "packetSnapshot",
+        "recoverability",
+        "runtimeArtifactPaths",
+        "canonicalRefs",
+        "recommendedAction",
+        "reasonCodes"
+      ],
+      "properties": {
+        "entryType": { "const": "capture_runtime" },
+        "captureId": { "type": "string", "minLength": 1 },
+        "cleanupKind": { "const": "recoverable_orphan" },
+        "disposition": { "const": "keep" },
+        "action": { "const": "skipped" },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "packetPresent": { "const": false },
+        "packetSnapshotPresent": { "const": true },
+        "packetSnapshot": { "$ref": "#/$defs/packetSnapshot" },
+        "recoverability": { "const": "recoverable" },
+        "runtimeArtifactPaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "canonicalRefs": { "$ref": "#/$defs/canonicalRefs" },
+        "recommendedAction": { "const": "requeue_capture_from_runtime_snapshot_before_cleanup" },
+        "reasonCodes": {
+          "const": ["missing_queue_packet", "recoverable_from_runtime_snapshot"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "staleClaimDeleteEntry": {
+      "type": "object",
+      "required": [
+        "entryType",
+        "captureId",
+        "cleanupKind",
+        "disposition",
+        "action",
+        "claimPath",
+        "packetPath",
+        "packetPresent",
+        "stale",
+        "staleReason",
+        "recommendedAction",
+        "reasonCodes",
+        "deletedPaths"
+      ],
+      "properties": {
+        "entryType": { "const": "claim_file" },
+        "captureId": { "type": "string", "minLength": 1 },
+        "cleanupKind": { "const": "stale_claim_file" },
+        "disposition": { "const": "delete" },
+        "action": { "type": "string", "enum": ["planned_delete", "deleted", "delete_failed"] },
+        "claimPath": { "type": "string", "minLength": 1 },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "packetPresent": { "type": "boolean" },
+        "stale": { "const": true },
+        "staleReason": { "type": "string", "minLength": 1 },
+        "recommendedAction": { "const": "remove_stale_claim_file" },
+        "reasonCodes": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "stale_claim_file" },
+            { "type": "string", "minLength": 1 }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "deletedPaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "errors": { "$ref": "#/$defs/stringArray" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "action": { "const": "delete_failed" } },
+            "required": ["action"]
+          },
+          "then": {
+            "required": ["errors"],
+            "properties": {
+              "errors": { "minItems": 1 }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "invalidClaimDeleteEntry": {
+      "type": "object",
+      "required": [
+        "entryType",
+        "captureId",
+        "cleanupKind",
+        "disposition",
+        "action",
+        "claimPath",
+        "packetPath",
+        "packetPresent",
+        "stale",
+        "staleReason",
+        "recommendedAction",
+        "reasonCodes",
+        "deletedPaths"
+      ],
+      "properties": {
+        "entryType": { "const": "claim_file" },
+        "captureId": { "type": "string", "minLength": 1 },
+        "cleanupKind": { "const": "incomplete_runtime_junk" },
+        "disposition": { "const": "delete" },
+        "action": { "type": "string", "enum": ["planned_delete", "deleted", "delete_failed"] },
+        "claimPath": { "type": "string", "minLength": 1 },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "packetPresent": { "type": "boolean" },
+        "stale": { "const": false },
+        "staleReason": { "const": "claim_payload_invalid" },
+        "recommendedAction": { "const": "remove_invalid_claim_file" },
+        "reasonCodes": {
+          "const": ["invalid_claim_payload"]
+        },
+        "deletedPaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "errors": { "$ref": "#/$defs/stringArray" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "action": { "const": "delete_failed" } },
+            "required": ["action"]
+          },
+          "then": {
+            "required": ["errors"],
+            "properties": {
+              "errors": { "minItems": 1 }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "activeClaimKeepEntry": {
+      "type": "object",
+      "required": [
+        "entryType",
+        "captureId",
+        "cleanupKind",
+        "disposition",
+        "action",
+        "claimPath",
+        "packetPath",
+        "packetPresent",
+        "stale",
+        "staleReason",
+        "recommendedAction",
+        "reasonCodes"
+      ],
+      "properties": {
+        "entryType": { "const": "claim_file" },
+        "captureId": { "type": "string", "minLength": 1 },
+        "cleanupKind": { "const": "active_claim_file" },
+        "disposition": { "const": "keep" },
+        "action": { "const": "skipped" },
+        "claimPath": { "type": "string", "minLength": 1 },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "packetPresent": { "type": "boolean" },
+        "stale": { "const": false },
+        "staleReason": { "type": "string", "minLength": 1 },
+        "recommendedAction": { "const": "leave_claim_file" },
+        "reasonCodes": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "claim_not_stale" },
+            { "type": "string", "minLength": 1 }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "additionalProperties": false
+    },
+    "deleteEntry": {
+      "oneOf": [
+        { "$ref": "#/$defs/captureRuntimeDeleteEntry" },
+        { "$ref": "#/$defs/staleClaimDeleteEntry" },
+        { "$ref": "#/$defs/invalidClaimDeleteEntry" }
+      ]
+    },
+    "keepEntry": {
+      "oneOf": [
+        { "$ref": "#/$defs/queuePacketPresentCaptureKeepEntry" },
+        { "$ref": "#/$defs/recoverableOrphanKeepEntry" },
+        { "$ref": "#/$defs/activeClaimKeepEntry" }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

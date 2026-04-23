@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.task.update.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "task", "inbox", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.task.update.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "task": { "$ref": "#/$defs/task" },
+    "inbox": { "type": "array", "items": { "$ref": "#/$defs/inbox" } },
+    "createdAt": { "type": "string" }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceType"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "scope", "document"] },
+        "paperId": { "type": "string" },
+        "url": { "type": "string" },
+        "noteId": { "type": "string" },
+        "stableScopeId": { "type": "string" },
+        "documentScopeId": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "required": ["id", "projectId", "title", "kind", "status", "priority", "assignee", "blockedBy", "sourceRefs", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "goalId": { "type": "string" },
+        "title": { "type": "string" },
+        "kind": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "in_progress", "blocked", "completed", "cancelled"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "assignee": { "type": "string" },
+        "dueAt": { "type": "string" },
+        "blockedBy": { "type": "array", "items": { "type": "string" } },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "inbox": {
+      "type": "object",
+      "required": ["id", "kind", "severity", "state", "summary", "sourceRefs", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "kind": { "type": "string", "enum": ["blocked_task", "due_soon_task", "ops_alert"] },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "state": { "type": "string", "enum": ["open", "resolved"] },
+        "summary": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

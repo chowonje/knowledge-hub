@@ -7,33 +7,34 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Optional
 
-from knowledge_hub.core.claim_store import ClaimStore
-from knowledge_hub.core.claim_card_v1_store import ClaimCardV1Store
-from knowledge_hub.core.crawl_pipeline_store import CrawlPipelineStore
-from knowledge_hub.core.document_memory_store import DocumentMemoryStore
-from knowledge_hub.core.entity_resolution_store import EntityResolutionStore
-from knowledge_hub.core.epistemic_store import EpistemicStore
 from knowledge_hub.knowledge.feature_store import FeatureStore
-from knowledge_hub.core.ko_note_store import KoNoteStore
-from knowledge_hub.core.learning_graph_store import LearningGraphStore
-from knowledge_hub.core.learning_store import LearningStore
-from knowledge_hub.core.memory_relation_store import MemoryRelationStore
-from knowledge_hub.core.mcp_job_store import MCPJobStore
-from knowledge_hub.core.migrations import MigrationManager
-from knowledge_hub.core.note_store import NoteStore
-from knowledge_hub.core.notebook_bridge_store import NotebookBridgeStore
-from knowledge_hub.core.ontology_profile_store import OntologyProfileStore
-from knowledge_hub.core.ontology_store import OntologyStore
-from knowledge_hub.core.paper_store import PaperStore
-from knowledge_hub.core.paper_card_v2_store import PaperCardV2Store
-from knowledge_hub.core.paper_memory_store import PaperMemoryStore
-from knowledge_hub.core.quality_mode_store import QualityModeStore
-from knowledge_hub.core.rag_answer_log_store import RAGAnswerLogStore
-from knowledge_hub.core.sync_conflict_store import SyncConflictStore
-from knowledge_hub.core.ops_action_queue_store import OpsActionQueueStore
-from knowledge_hub.core.ops_action_receipt_store import OpsActionReceiptStore
-from knowledge_hub.core.vault_card_v2_store import VaultCardV2Store
-from knowledge_hub.core.web_card_v2_store import WebCardV2Store
+from knowledge_hub.infrastructure.persistence.stores import (
+    ClaimCardV1Store,
+    ClaimStore,
+    CrawlPipelineStore,
+    DocumentMemoryStore,
+    EntityResolutionStore,
+    EpistemicStore,
+    KoNoteStore,
+    LearningGraphStore,
+    LearningStore,
+    MCPJobStore,
+    MemoryRelationStore,
+    MigrationManager,
+    NoteStore,
+    OntologyProfileStore,
+    OntologyStore,
+    OpsActionQueueStore,
+    OpsActionReceiptStore,
+    PaperCardV2Store,
+    PaperMemoryStore,
+    PaperStore,
+    QualityModeStore,
+    RAGAnswerLogStore,
+    SyncConflictStore,
+    VaultCardV2Store,
+    WebCardV2Store,
+)
 
 log = logging.getLogger("khub.database")
 
@@ -172,17 +173,6 @@ DELEGATED_METHODS.update(
 )
 DELEGATED_METHODS.update(
     _delegate_map(
-        "notebook_bridge_store",
-        get_notebook_topic_binding="get_topic_binding",
-        upsert_notebook_topic_binding="upsert_topic_binding",
-        list_notebook_topic_bindings="list_topic_bindings",
-        get_notebook_source_binding="get_source_binding",
-        upsert_notebook_source_binding="upsert_source_binding",
-        list_notebook_source_bindings="list_source_bindings",
-    )
-)
-DELEGATED_METHODS.update(
-    _delegate_map(
         "ontology_store",
         (
             "upsert_concept",
@@ -271,6 +261,7 @@ DELEGATED_METHODS.update(
         (
             "upsert_learning_session",
             "get_learning_session",
+            "list_learning_sessions",
             "replace_learning_session_edges",
             "list_learning_session_edges",
             "upsert_learning_progress",
@@ -501,7 +492,6 @@ class StoreRegistry:
         self.vault_card_v2_store = VaultCardV2Store(self.conn)
         self.paper_memory_store = PaperMemoryStore(self.conn)
         self.memory_relation_store = MemoryRelationStore(self.conn)
-        self.notebook_bridge_store = NotebookBridgeStore(self.conn)
         self.ontology_store = OntologyStore(self.conn, event_store=None, db_path=self.db_path)
         self.ontology_profile_store = OntologyProfileStore(self.conn)
         self.epistemic_store = EpistemicStore(self.conn)
@@ -530,7 +520,7 @@ class StoreRegistry:
         self.event_store = None
         if enable_event_store and not self.read_only:
             try:
-                from knowledge_hub.core.event_store import EventStore
+                from knowledge_hub.infrastructure.persistence.stores.event_store import EventStore
 
                 jsonl_path = self.db_path.parent / "ontology_events.jsonl"
                 self.event_store = EventStore(self, jsonl_path)
@@ -555,7 +545,6 @@ class StoreRegistry:
             self.vault_card_v2_store.ensure_schema()
             self.paper_memory_store.ensure_schema()
             self.memory_relation_store.ensure_schema()
-            self.notebook_bridge_store.ensure_schema()
             self.ops_action_queue_store.ensure_schema()
             self.ops_action_receipt_store.ensure_schema()
             self.entity_resolution_store.ensure_schema()

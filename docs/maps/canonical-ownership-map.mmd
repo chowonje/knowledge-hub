@@ -1,0 +1,47 @@
+flowchart TD
+    KHUB["khub"]
+    KHUBMCP["khub-mcp"]
+
+    subgraph IFACE["Canonical Interfaces"]
+        CLI["knowledge_hub.interfaces.cli"]
+        MCP["knowledge_hub.interfaces.mcp"]
+    end
+
+    subgraph APP["Application"]
+        APPBOX["knowledge_hub.application"]
+    end
+
+    subgraph INFRA["Infrastructure"]
+        INFRABOX["knowledge_hub.infrastructure"]
+    end
+
+    subgraph CORE["Core"]
+        COREBOX["knowledge_hub.core"]
+    end
+
+    subgraph FC["TypeScript Foundry Runtime"]
+        FOUNDRY["foundry-core"]
+    end
+
+    subgraph SHIM["Compatibility Only"]
+        SHIMS["knowledge_hub.cli.*\nknowledge_hub.mcp_server\nselected compatibility exports"]
+    end
+
+    KHUB --> CLI
+    KHUBMCP --> MCP
+    CLI --> APPBOX
+    MCP --> APPBOX
+    APPBOX --> INFRABOX
+    APPBOX --> COREBOX
+
+    FOUNDRY --> APPBOX
+    FOUNDRY --> CLI
+    APPBOX --> FOUNDRY
+
+    SHIMS --> CLI
+    SHIMS --> MCP
+    SHIMS --> APPBOX
+
+    NOTE1["Python remains final authority for mode and payload decisions"] -.-> APPBOX
+    NOTE2["Foundry is the stricter runtime and policy boundary"] -.-> FOUNDRY
+    NOTE3["Shims delegate only and are not peer architecture layers"] -.-> SHIMS

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "runId", "status", "applied", "proposalId", "ts"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.entity.merge.apply.result.v1" },
+    "runId": { "type": "string" },
+    "status": { "type": "string" },
+    "applied": { "type": "boolean" },
+    "proposalId": { "type": "integer", "minimum": 1 },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

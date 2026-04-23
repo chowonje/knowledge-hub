@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-start-resume-result.v1.json",
+  "title": "knowledge-hub learning start or resume result v1",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "topicSlug", "status", "session_id", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.start-resume.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "topicSlug": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "error"]},
+    "created": {"type": "boolean"},
+    "resumed": {"type": "boolean"},
+    "session_id": {"type": "string"},
+    "sessionId": {"type": "string"},
+    "recent_state_summary": {"type": "object"},
+    "weak_areas": {"type": "array", "items": {"type": "object"}},
+    "next_review_targets": {"type": "array", "items": {"type": "string"}},
+    "recommended_next_step": {"type": "string"},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

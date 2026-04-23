@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "updatedAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.learning.graph.pending.result.v1" },
+    "status": { "type": "string" },
+    "topic": { "type": ["string", "null"] },
+    "topicSlug": { "type": ["string", "null"] },
+    "counts": { "type": "object" },
+    "items": { "type": "array" },
+    "pendingId": { "type": "integer" },
+    "itemType": { "type": "string" },
+    "applied": { "type": "boolean" },
+    "rejected": { "type": "boolean" },
+    "error": { "type": "string" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

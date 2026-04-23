@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.authority.result-envelope.v1",
+  "description": "Shared docs-only helper schema for capture -> dinger -> OS smoke. Runtime result schemas keep local $defs for now; this helper pins lifecycle stage, flow semantics, and stage-appropriate traceability invariants for shared fixtures plus temp-runtime / temporary-vault smoke without introducing a new canonical store.",
+  "type": "object",
+  "required": ["schema", "status", "stage", "flowSemantics", "traceability", "createdAt"],
+  "properties": {
+    "schema": { "$ref": "#/$defs/nonEmptyString" },
+    "status": { "$ref": "#/$defs/nonEmptyString" },
+    "stage": { "$ref": "#/$defs/lifecycleStage" },
+    "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+    "projectionRelativePath": { "$ref": "#/$defs/nonEmptyString" },
+    "flowSemantics": { "$ref": "#/$defs/flowSemantics" },
+    "traceability": { "$ref": "#/$defs/traceability" },
+    "authorityTimeout": { "$ref": "#/$defs/authorityTimeout" },
+    "createdAt": { "$ref": "#/$defs/timestamp" },
+    "error": { "$ref": "#/$defs/nonEmptyString" }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceType"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "scope", "document"] },
+        "paperId": { "$ref": "#/$defs/nonEmptyString" },
+        "url": { "$ref": "#/$defs/nonEmptyString" },
+        "noteId": { "$ref": "#/$defs/nonEmptyString" },
+        "stableScopeId": { "$ref": "#/$defs/nonEmptyString" },
+        "documentScopeId": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "sourceType": { "const": "paper" } }, "required": ["sourceType"] },
+          "then": { "required": ["paperId"] }
+        },
+        {
+          "if": { "properties": { "sourceType": { "const": "web" } }, "required": ["sourceType"] },
+          "then": { "required": ["url"] }
+        },
+        {
+          "if": { "properties": { "sourceType": { "const": "vault" } }, "required": ["sourceType"] },
+          "then": { "required": ["noteId"] }
+        },
+        {
+          "if": { "properties": { "sourceType": { "const": "scope" } }, "required": ["sourceType"] },
+          "then": { "required": ["stableScopeId"] }
+        },
+        {
+          "if": { "properties": { "sourceType": { "const": "document" } }, "required": ["sourceType"] },
+          "then": { "required": ["documentScopeId"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "lifecycleStage": {
+      "type": "string",
+      "enum": ["captured", "normalized", "filed", "linked_to_os", "failed"]
+    },
+    "flowSemantics": {
+      "type": "object",
+      "required": ["capturePacket", "dingerFiling", "osBridge", "canonicalStore"],
+      "properties": {
+        "capturePacket": { "type": "string", "enum": ["input"] },
+        "dingerFiling": { "type": "string", "enum": ["projection_only"] },
+        "osBridge": { "type": "string", "enum": ["inbox_evidence_candidate_only"] },
+        "canonicalStore": { "type": "string", "enum": ["no_new_store"] }
+      },
+      "additionalProperties": false
+    },
+    "osBridgeTrace": {
+      "type": "object",
+      "required": ["bridge", "schema", "itemId", "projectId"],
+      "properties": {
+        "bridge": { "type": "string", "enum": ["os_capture"] },
+        "schema": { "type": "string", "enum": ["knowledge-hub.os.capture.result.v1"] },
+        "itemId": { "$ref": "#/$defs/nonEmptyString" },
+        "projectId": { "$ref": "#/$defs/nonEmptyString" },
+        "captureTraceBridge": { "type": "string", "enum": ["dinger"] },
+        "relativePath": { "$ref": "#/$defs/nonEmptyString" },
+        "createdAt": { "$ref": "#/$defs/timestamp" }
+      },
+      "additionalProperties": false
+    },
+    "traceability": {
+      "type": "object",
+      "required": ["captureId"],
+      "properties": {
+        "captureId": { "$ref": "#/$defs/nonEmptyString" },
+        "packetPath": { "$ref": "#/$defs/nonEmptyString" },
+        "runtimePointer": { "$ref": "#/$defs/nonEmptyString" },
+        "filingOutputPointer": { "$ref": "#/$defs/nonEmptyString" },
+        "osBridgeTrace": { "$ref": "#/$defs/osBridgeTrace" }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["packetPath"] },
+        { "required": ["runtimePointer"] }
+      ]
+    },
+    "workflowInboxKind": {
+      "type": "string",
+      "enum": ["blocked_task", "due_soon_task", "ops_alert", "captured", "dinger_capture", "dinger_file"]
+    },
+    "workflowInboxItem": {
+      "type": "object",
+      "required": ["id", "projectId", "kind", "severity", "state", "summary", "sourceRefs", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "projectId": { "$ref": "#/$defs/nonEmptyString" },
+        "taskId": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "$ref": "#/$defs/workflowInboxKind" },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "state": { "type": "string", "enum": ["open", "resolved"] },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "createdAt": { "$ref": "#/$defs/timestamp" },
+        "updatedAt": { "$ref": "#/$defs/timestamp" }
+      },
+      "additionalProperties": true
+    },
+    "authorityTimeout": {
+      "type": "object",
+      "required": ["classification", "handledAs"],
+      "properties": {
+        "classification": { "type": "string", "enum": ["not_applicable", "timeout_observed"] },
+        "handledAs": { "type": "string", "enum": ["classification_only"] },
+        "note": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": { "enum": ["captured", "normalized"] }
+        },
+        "required": ["stage"]
+      },
+      "then": {
+        "required": ["traceability"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": { "enum": ["filed", "linked_to_os"] }
+        },
+        "required": ["stage"]
+      },
+      "then": {
+        "required": ["projectionRelativePath"],
+        "properties": {
+          "traceability": {
+            "required": ["filingOutputPointer"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": { "const": "linked_to_os" }
+        },
+        "required": ["stage"]
+      },
+      "then": {
+        "required": ["projectionRelativePath"],
+        "properties": {
+          "traceability": {
+            "required": ["osBridgeTrace"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "failed" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["error"]
+      }
+    }
+  ],
+  "additionalProperties": true
+}

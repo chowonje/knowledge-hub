@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "outPath", "rowCount", "filters", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.claim-synthesis.eval.prepare.result.v1" },
+    "status": { "type": "string" },
+    "outPath": { "type": "string" },
+    "rowCount": { "type": "integer" },
+    "filters": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

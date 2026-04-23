@@ -20,12 +20,14 @@ class OllamaLLM(BaseLLM):
         base_url: str = "http://localhost:11434",
         temperature: float = 0.7,
         max_tokens: int = 2000,
+        timeout: float = 60.0,
         **kwargs,
     ):
         super().__init__(model, **kwargs)
         self.base_url = base_url
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self.timeout = float(timeout)
         self._client = None
 
     @property
@@ -33,7 +35,7 @@ class OllamaLLM(BaseLLM):
         if self._client is None:
             try:
                 import ollama
-                self._client = ollama.Client(host=self.base_url)
+                self._client = ollama.Client(host=self.base_url, timeout=self.timeout)
             except ImportError:
                 raise ImportError("ollama 패키지 필요: pip install knowledge-hub[ollama]")
         return self._client
@@ -100,10 +102,12 @@ class OllamaEmbedder(BaseEmbedder):
         self,
         model: str = "nomic-embed-text",
         base_url: str = "http://localhost:11434",
+        timeout: float = 60.0,
         **kwargs,
     ):
         super().__init__(model, **kwargs)
         self.base_url = base_url
+        self.timeout = float(timeout)
         self._client = None
 
     @property
@@ -111,7 +115,7 @@ class OllamaEmbedder(BaseEmbedder):
         if self._client is None:
             try:
                 import ollama
-                self._client = ollama.Client(host=self.base_url)
+                self._client = ollama.Client(host=self.base_url, timeout=self.timeout)
             except ImportError:
                 raise ImportError("ollama 패키지 필요: pip install knowledge-hub[ollama]")
         return self._client

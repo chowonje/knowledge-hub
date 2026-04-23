@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.transform.preview.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "transformation", "query", "selected_sources", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.transform.preview.result.v1" },
+    "status": { "type": "string" },
+    "transformation": { "type": "object" },
+    "query": { "type": "string" },
+    "selected_sources": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "collectManifestPath",
+    "generatorModel",
+    "judgeModel",
+    "roundCount",
+    "stopReason",
+    "bestCandidates",
+    "estimatedTokens",
+    "budget",
+    "overall",
+    "artifactPaths"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-loop.optimize.result.v1" },
+    "status": { "type": "string" },
+    "collectManifestPath": { "type": "string" },
+    "generatorModel": { "type": "string" },
+    "judgeModel": { "type": "string" },
+    "roundCount": { "type": "integer", "minimum": 0 },
+    "stopReason": { "type": "string" },
+    "bestCandidates": { "type": "array", "items": { "type": "object" } },
+    "estimatedTokens": { "type": "object" },
+    "budget": { "type": "object" },
+    "overall": { "type": "object" },
+    "artifactPaths": { "type": "object" },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

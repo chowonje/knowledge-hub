@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.vault.cluster.materialize.manifest.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "mode",
+    "generatedAt",
+    "vaultPath",
+    "sourceSnapshotPath",
+    "outputDir",
+    "manifestDir",
+    "managedBlock",
+    "options",
+    "counts",
+    "clusterNotes",
+    "touchedNotes",
+    "generatedNotePaths",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.vault.cluster.materialize.manifest.v1"
+    },
+    "runId": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["dry-run", "apply"]
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "vaultPath": {
+      "type": "string"
+    },
+    "sourceSnapshotPath": {
+      "type": "string"
+    },
+    "outputDir": {
+      "type": "string"
+    },
+    "manifestDir": {
+      "type": "string"
+    },
+    "manifestPath": {
+      "type": "string"
+    },
+    "managedBlock": {
+      "type": "object",
+      "required": ["startMarker", "endMarker"],
+      "properties": {
+        "startMarker": { "type": "string" },
+        "endMarker": { "type": "string" }
+      }
+    },
+    "options": {
+      "type": "object",
+      "required": ["maxClusterLinks", "maxBridgeLinks", "includeSingletons"],
+      "properties": {
+        "maxClusterLinks": { "type": "integer", "minimum": 0 },
+        "maxBridgeLinks": { "type": "integer", "minimum": 0 },
+        "includeSingletons": { "type": "boolean" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["clustersGenerated", "notesTouched", "singletonsSkipped"],
+      "properties": {
+        "clustersGenerated": { "type": "integer", "minimum": 0 },
+        "notesTouched": { "type": "integer", "minimum": 0 },
+        "singletonsSkipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "clusterNotes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["clusterId", "label", "path", "representativeNoteId", "memberCount", "bridgeCount", "content"],
+        "properties": {
+          "clusterId": { "type": "string" },
+          "label": { "type": "string" },
+          "path": { "type": "string" },
+          "representativeNoteId": { "type": "string" },
+          "memberCount": { "type": "integer", "minimum": 1 },
+          "bridgeCount": { "type": "integer", "minimum": 0 },
+          "content": { "type": "string" }
+        }
+      }
+    },
+    "touchedNotes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "clusterId", "beforeHash", "afterHash", "changed", "missing", "managedBlock"],
+        "properties": {
+          "path": { "type": "string" },
+          "clusterId": { "type": "string" },
+          "beforeHash": { "type": "string" },
+          "afterHash": { "type": "string" },
+          "changed": { "type": "boolean" },
+          "missing": { "type": "boolean" },
+          "managedBlock": { "type": "string" }
+        }
+      }
+    },
+    "generatedNotePaths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

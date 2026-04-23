@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "answer_text", "backend", "model", "status", "latency_ms", "warnings", "backend_trace"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-eval.result.v1" },
+    "answer_text": { "type": "string" },
+    "backend": { "type": "string" },
+    "model": { "type": "string" },
+    "status": { "type": "string" },
+    "latency_ms": { "type": "number" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "backend_trace": { "type": "object" },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

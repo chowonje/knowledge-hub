@@ -1,0 +1,42 @@
+{
+  "schema": "knowledge-hub.dinger.file.result.v1",
+  "status": "ok",
+  "stage": "filed",
+  "title": "RAG Capture",
+  "slug": "rag-capture",
+  "kind": "web_capture",
+  "relativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+  "projectionRelativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+  "filePath": "/tmp/vault/KnowledgeOS/Dinger/Pages/rag-capture.md",
+  "indexPath": "/tmp/vault/KnowledgeOS/Dinger/Index.md",
+  "logPath": "/tmp/vault/KnowledgeOS/Dinger/Log.md",
+  "vaultPath": "/tmp/vault",
+  "backend": "filesystem",
+  "sourceRefs": [
+    {
+      "sourceType": "paper",
+      "paperId": "1706.03762",
+      "title": "Attention Is All You Need"
+    },
+    {
+      "sourceType": "web",
+      "url": "https://example.com/rag",
+      "title": "RAG Capture"
+    }
+  ],
+  "sourceSchema": "knowledge-hub.dinger.capture.result.v1",
+  "captureId": "cap_123456789abc",
+  "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json",
+  "flowSemantics": {
+    "capturePacket": "input",
+    "dingerFiling": "projection_only",
+    "osBridge": "inbox_evidence_candidate_only",
+    "canonicalStore": "no_new_store"
+  },
+  "traceability": {
+    "captureId": "cap_123456789abc",
+    "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json",
+    "filingOutputPointer": "KnowledgeOS/Dinger/Pages/rag-capture.md"
+  },
+  "createdAt": "2026-04-09T12:00:00+00:00"
+}

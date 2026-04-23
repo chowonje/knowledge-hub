@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-quiz-generate-result.v1.json",
+  "title": "knowledge-hub learning quiz generate result v1",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "status", "policy", "session", "quiz", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.quiz.generate.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "blocked", "error"]},
+    "policy": {"type": "object"},
+    "session": {"type": "object"},
+    "quiz": {
+      "type": "object",
+      "required": ["mix", "questionCount", "questions"],
+      "properties": {
+        "mix": {"type": "string"},
+        "questionCount": {"type": "integer"},
+        "questions": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": true
+    },
+    "gapSummary": {"type": "object"},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

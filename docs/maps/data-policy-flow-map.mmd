@@ -1,0 +1,66 @@
+flowchart TD
+    subgraph SOURCES["Sources"]
+        VAULT["Vault"]
+        PAPER["Paper"]
+        WEB["Web"]
+        REPO["Repo and project context"]
+    end
+
+    subgraph LOCAL["Canonical local stores"]
+        SQLITE["SQLite"]
+        VDB["Vector DB"]
+        PARSER["Parser artifacts"]
+        RECORDS["Note paper web records"]
+    end
+
+    subgraph RUNTIME["Retrieval and task-context runtime"]
+        RETRIEVE["Search ask task-context assembly"]
+        TASKCTX["Ephemeral workspace evidence"]
+    end
+
+    subgraph POLICY["Policy checkpoints"]
+        OUTBOUND["Outbound provider policy guard"]
+        FOUNDRYPOL["Foundry ACT VERIFY WRITEBACK policy"]
+        MCPPOL["MCP job verify and persistence gate"]
+    end
+
+    subgraph CONSUMERS["Consumers"]
+        USER["CLI and MCP answers"]
+        NOTEBOOK["Notebook export adapters"]
+        WRITEBACK["Writeback and reports"]
+    end
+
+    VAULT --> SQLITE
+    PAPER --> SQLITE
+    WEB --> SQLITE
+    VAULT --> VDB
+    PAPER --> VDB
+    WEB --> VDB
+    PAPER --> PARSER
+    VAULT --> RECORDS
+    PAPER --> RECORDS
+    WEB --> RECORDS
+
+    SQLITE --> RETRIEVE
+    VDB --> RETRIEVE
+    PARSER --> RETRIEVE
+    RECORDS --> RETRIEVE
+    REPO --> TASKCTX
+    TASKCTX --> RETRIEVE
+
+    RETRIEVE --> USER
+    RETRIEVE --> OUTBOUND
+    OUTBOUND --> USER
+
+    RETRIEVE --> FOUNDRYPOL
+    FOUNDRYPOL --> WRITEBACK
+
+    RETRIEVE --> MCPPOL
+    MCPPOL --> WRITEBACK
+
+    RETRIEVE --> NOTEBOOK
+
+    N1["Persistent: vault paper web plus local stores"] -.-> LOCAL
+    N2["Ephemeral by default: repo and workspace context"] -.-> TASKCTX
+    N3["Notebook adapters are not canonical stores"] -.-> NOTEBOOK
+    N4["P0 must stay local unless transformed into allowed sanitized form"] -.-> OUTBOUND

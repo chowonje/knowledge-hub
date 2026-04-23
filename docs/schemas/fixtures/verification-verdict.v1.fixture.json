@@ -1,0 +1,19 @@
+{
+  "schema": "knowledge-hub.verification-verdict.v1",
+  "verdict": "pass",
+  "answer_contract_id": "answer_fixture_001",
+  "evidence_packet_id": "epkt_fixture_001",
+  "reason": "All cited claims map to the provided evidence span.",
+  "checked_at": "2026-04-23T00:00:02+00:00",
+  "verifier": {
+    "mode": "deterministic_fixture",
+    "model_id": "fixture-verifier:v1"
+  },
+  "coverage": {
+    "status": "partial",
+    "citation_count": 1,
+    "unsupported_claim_count": 0
+  },
+  "failures": [],
+  "recommended_action": "accept"
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "runId",
+    "applied",
+    "skipped",
+    "conflicts",
+    "warnings",
+    "ts"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ko-note.apply.result.v1" },
+    "status": { "type": "string" },
+    "runId": { "type": "string" },
+    "applied": { "type": "integer" },
+    "skipped": { "type": "integer" },
+    "conflicts": { "type": "integer" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

@@ -7,7 +7,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 import requests
 
-from knowledge_hub.cli.index_cmd import _embed_with_retry
+from knowledge_hub.interfaces.cli.commands.index_cmd import _embed_with_retry
 
 
 class _FakeResponse:
@@ -18,7 +18,7 @@ class _FakeResponse:
 class TestEmbedWithRetry:
     def test_success_on_first_try(self):
         fake_embs = [[0.1, 0.2, 0.3]]
-        with patch("knowledge_hub.cli.index_cmd._embed_batch_openai", return_value=fake_embs):
+        with patch("knowledge_hub.interfaces.cli.commands.index_cmd._embed_batch_openai", return_value=fake_embs):
             result = _embed_with_retry(
                 ["test text"], "openai", "text-embedding-3-small", api_key="sk-test",
             )
@@ -35,8 +35,8 @@ class TestEmbedWithRetry:
                 raise http_err
             return fake_embs
 
-        with patch("knowledge_hub.cli.index_cmd._embed_batch_openai", side_effect=side_effect):
-            with patch("knowledge_hub.cli.index_cmd.EMBED_RETRY_BASE_SEC", 0.01):
+        with patch("knowledge_hub.interfaces.cli.commands.index_cmd._embed_batch_openai", side_effect=side_effect):
+            with patch("knowledge_hub.interfaces.cli.commands.index_cmd.EMBED_RETRY_BASE_SEC", 0.01):
                 result = _embed_with_retry(
                     ["a"], "openai", "model", api_key="sk-test",
                 )
@@ -45,7 +45,7 @@ class TestEmbedWithRetry:
 
     def test_raises_on_401_no_retry(self):
         http_err = requests.HTTPError(response=_FakeResponse(401))
-        with patch("knowledge_hub.cli.index_cmd._embed_batch_openai", side_effect=http_err):
+        with patch("knowledge_hub.interfaces.cli.commands.index_cmd._embed_batch_openai", side_effect=http_err):
             with pytest.raises(requests.HTTPError):
                 _embed_with_retry(
                     ["a"], "openai", "model", api_key="bad-key",
@@ -53,8 +53,8 @@ class TestEmbedWithRetry:
 
     def test_exhausts_retries_raises(self):
         http_err = requests.HTTPError(response=_FakeResponse(500))
-        with patch("knowledge_hub.cli.index_cmd._embed_batch_openai", side_effect=http_err):
-            with patch("knowledge_hub.cli.index_cmd.EMBED_RETRY_BASE_SEC", 0.01):
+        with patch("knowledge_hub.interfaces.cli.commands.index_cmd._embed_batch_openai", side_effect=http_err):
+            with patch("knowledge_hub.interfaces.cli.commands.index_cmd.EMBED_RETRY_BASE_SEC", 0.01):
                 with pytest.raises(requests.HTTPError):
                     _embed_with_retry(
                         ["a"], "openai", "model", api_key="sk-test",

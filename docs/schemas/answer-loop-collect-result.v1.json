@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "request", "rowCount", "packetCount", "artifactPaths"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-loop.collect.result.v1" },
+    "status": { "type": "string" },
+    "request": { "type": "object" },
+    "rowCount": { "type": "integer", "minimum": 0 },
+    "packetCount": { "type": "integer", "minimum": 0 },
+    "artifactPaths": { "type": "object" },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

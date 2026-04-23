@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/crawl-benchmark-result.v1.json",
+  "title": "knowledge-hub crawl benchmark result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "jobId",
+    "runId",
+    "sample",
+    "profile",
+    "sourcePolicy",
+    "recordsPerMin",
+    "p50StepLatencyMs",
+    "retryRate",
+    "dedupeRate",
+    "memoryPeakRatio",
+    "processed",
+    "indexed",
+    "failed",
+    "ts"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.crawl.benchmark.result.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "completed", "partial", "failed", "blocked", "running"]
+    },
+    "jobId": {"type": "string"},
+    "runId": {"type": "string"},
+    "sample": {"type": "integer", "minimum": 1},
+    "profile": {"type": "string"},
+    "sourcePolicy": {"type": "string", "enum": ["fixed", "hybrid", "keyword"]},
+    "recordsPerMin": {"type": "number", "minimum": 0},
+    "p50StepLatencyMs": {"type": "number", "minimum": 0},
+    "retryRate": {"type": "number", "minimum": 0},
+    "dedupeRate": {"type": "number", "minimum": 0},
+    "memoryPeakRatio": {"type": "number", "minimum": 0, "maximum": 1},
+    "processed": {"type": "integer", "minimum": 0},
+    "indexed": {"type": "integer", "minimum": 0},
+    "failed": {"type": "integer", "minimum": 0},
+    "schemaErrors": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "ts": {"type": "string"}
+  },
+  "additionalProperties": true
+}

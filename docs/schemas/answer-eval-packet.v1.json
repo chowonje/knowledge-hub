@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "packetRef",
+    "question",
+    "source",
+    "query_type",
+    "expected_primary_source",
+    "expected_answer_style",
+    "retrieved_sources",
+    "warnings",
+    "guidance",
+    "runtimeDiagnostics"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-eval.packet.v1" },
+    "packetRef": { "type": "string", "minLength": 1 },
+    "question": { "type": "string" },
+    "source": { "type": "string" },
+    "query_type": { "type": "string" },
+    "expected_primary_source": { "type": "string" },
+    "expected_answer_style": { "type": "string" },
+    "difficulty": { "type": "string" },
+    "review_bucket": { "type": "string" },
+    "retrieved_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rank", "title", "source_type", "source_ref", "score", "excerpt"],
+        "properties": {
+          "rank": { "type": "integer", "minimum": 1 },
+          "title": { "type": "string" },
+          "source_type": { "type": "string" },
+          "source_ref": { "type": "string" },
+          "score": { "type": "number" },
+          "semantic_score": { "type": "number" },
+          "lexical_score": { "type": "number" },
+          "retrieval_mode": { "type": "string" },
+          "excerpt": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "guidance": {
+      "type": "object",
+      "required": ["abstainPreferred", "groundingRequired"],
+      "properties": {
+        "abstainPreferred": { "type": "boolean" },
+        "groundingRequired": { "type": "boolean" },
+        "styleHint": { "type": "string" },
+        "primarySourceHint": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "runtimeDiagnostics": {
+      "type": "object"
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

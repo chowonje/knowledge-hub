@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "topicSlug", "status", "counts", "updatedAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.learning.review.result.v1" },
+    "runId": { "type": "string" },
+    "topic": { "type": "string" },
+    "topicSlug": { "type": "string" },
+    "status": { "type": "string" },
+    "counts": {
+      "type": "object",
+      "required": ["claims", "topConcepts", "mergeProposals", "learningPending"],
+      "properties": {
+        "claims": { "type": "integer", "minimum": 0 },
+        "topConcepts": { "type": "integer", "minimum": 0 },
+        "mergeProposals": { "type": "integer", "minimum": 0 },
+        "learningPending": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "writeback": {
+      "type": "object",
+      "properties": {
+        "claimsToReview": { "type": "string" },
+        "topConcepts": { "type": "string" },
+        "readingQueue": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

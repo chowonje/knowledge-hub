@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.inbox.list.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "count", "items", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.inbox.list.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "count": { "type": "integer", "minimum": 0 },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

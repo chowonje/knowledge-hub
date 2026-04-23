@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "days", "limit", "counts", "verification", "rates", "samples", "alerts", "recommendedActions", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.report.result.v1" },
+    "status": { "type": "string" },
+    "days": { "type": "integer" },
+    "limit": { "type": "integer" },
+    "counts": { "type": "object" },
+    "verification": { "type": "object" },
+    "rates": { "type": "object" },
+    "topWarningPatterns": { "type": "array" },
+    "samples": { "type": "array" },
+    "alerts": { "type": "array" },
+    "recommendedActions": { "type": "array" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

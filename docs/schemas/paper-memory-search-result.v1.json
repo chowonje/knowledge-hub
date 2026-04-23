@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper-memory.search.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "query", "count", "items", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-memory.search.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "query": { "type": "string" },
+    "count": { "type": "integer", "minimum": 0 },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/paperMemoryCardWithRefs" }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "paperMemoryCard": {
+      "type": "object",
+      "required": [
+        "memoryId",
+        "paperId",
+        "sourceNoteId",
+        "title",
+        "paperCore",
+        "problemContext",
+        "methodCore",
+        "evidenceCore",
+        "limitations",
+        "conceptLinks",
+        "claimRefs",
+        "publishedAt",
+        "evidenceWindow",
+        "searchText",
+        "qualityFlag",
+        "version",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "memoryId": { "type": "string" },
+        "paperId": { "type": "string" },
+        "sourceNoteId": { "type": "string" },
+        "title": { "type": "string" },
+        "paperCore": { "type": "string" },
+        "problemContext": { "type": "string" },
+        "methodCore": { "type": "string" },
+        "evidenceCore": { "type": "string" },
+        "limitations": { "type": "string" },
+        "conceptLinks": { "type": "array", "items": { "type": "string" } },
+        "claimRefs": { "type": "array", "items": { "type": "string" } },
+        "publishedAt": { "type": "string" },
+        "evidenceWindow": { "type": "string" },
+        "searchText": { "type": "string" },
+        "qualityFlag": { "type": "string" },
+        "version": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "paperRef": {
+      "type": "object",
+      "required": ["paperId", "title", "field"],
+      "properties": {
+        "paperId": { "type": "string" },
+        "title": { "type": "string" },
+        "year": { "type": ["integer", "null"] },
+        "field": { "type": "string" },
+        "publishedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sourceNoteRef": {
+      "type": "object",
+      "required": ["id", "title", "sourceType"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "sourceType": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "claimRef": {
+      "type": "object",
+      "required": ["claimId", "claimText"],
+      "properties": {
+        "claimId": { "type": "string" },
+        "claimText": { "type": "string" },
+        "confidence": { "type": ["number", "integer", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "paperMemoryCardWithRefs": {
+      "type": "object",
+      "required": [
+        "memoryId",
+        "paperId",
+        "sourceNoteId",
+        "title",
+        "paperCore",
+        "problemContext",
+        "methodCore",
+        "evidenceCore",
+        "limitations",
+        "conceptLinks",
+        "claimRefs",
+        "publishedAt",
+        "evidenceWindow",
+        "searchText",
+        "qualityFlag",
+        "version",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "memoryId": { "type": "string" },
+        "paperId": { "type": "string" },
+        "sourceNoteId": { "type": "string" },
+        "title": { "type": "string" },
+        "paperCore": { "type": "string" },
+        "problemContext": { "type": "string" },
+        "methodCore": { "type": "string" },
+        "evidenceCore": { "type": "string" },
+        "limitations": { "type": "string" },
+        "conceptLinks": { "type": "array", "items": { "type": "string" } },
+        "claimRefs": { "type": "array", "items": { "type": "string" } },
+        "publishedAt": { "type": "string" },
+        "evidenceWindow": { "type": "string" },
+        "searchText": { "type": "string" },
+        "qualityFlag": { "type": "string" },
+        "version": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "paper": { "$ref": "#/$defs/paperRef" },
+        "sourceNote": { "$ref": "#/$defs/sourceNoteRef" },
+        "retrievalSignals": {
+          "type": "object",
+          "properties": {
+            "strategy": { "type": "string" },
+            "lexicalMatch": { "type": ["number", "integer"] },
+            "titleMatch": { "type": ["number", "integer"] },
+            "timeRelevance": { "type": ["number", "integer"] },
+            "updateRelationBoost": { "type": ["number", "integer"] },
+            "temporalSignals": { "type": "object", "additionalProperties": true },
+            "memoryRelationsUsed": { "type": "array", "items": { "type": "string" } },
+            "updatesPreferred": { "type": "boolean" },
+            "qualityBoost": { "type": ["number", "integer"] },
+            "score": { "type": ["number", "integer"] },
+            "fallbackLexicalMatch": { "type": ["number", "integer"] }
+          },
+          "required": [
+            "strategy",
+            "lexicalMatch",
+            "titleMatch",
+            "timeRelevance",
+            "updateRelationBoost",
+            "temporalSignals",
+            "memoryRelationsUsed",
+            "updatesPreferred",
+            "qualityBoost",
+            "score"
+          ],
+          "additionalProperties": false
+        },
+        "claims": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/claimRef" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

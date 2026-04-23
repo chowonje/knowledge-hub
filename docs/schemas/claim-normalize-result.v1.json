@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "version", "count", "items", "counts", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.claim-normalize.result.v1" },
+    "status": { "type": "string" },
+    "version": { "type": "string" },
+    "count": { "type": "integer", "minimum": 0 },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "counts": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/normalized-web-record.v2.json",
+  "title": "knowledge-hub normalized web record v2",
+  "type": "object",
+  "required": [
+    "schema",
+    "record_id",
+    "source",
+    "url",
+    "canonical_url",
+    "domain",
+    "fetched_at",
+    "content_sha256",
+    "lang",
+    "quality_score",
+    "title_hint",
+    "title",
+    "description",
+    "author",
+    "published_at",
+    "source_name",
+    "source_type",
+    "source_vendor",
+    "source_channel",
+    "source_channel_type",
+    "source_item_id",
+    "tags",
+    "freshness_days",
+    "discovery",
+    "metadata_quality",
+    "content_text",
+    "crawl_engine",
+    "job_id",
+    "run_id"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.normalized.web-record.v2"
+    },
+    "record_id": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "minLength": 1},
+    "url": {"type": "string", "minLength": 1},
+    "canonical_url": {"type": "string", "minLength": 1},
+    "domain": {"type": "string"},
+    "fetched_at": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "minLength": 1},
+    "lang": {"type": "string"},
+    "quality_score": {"type": "number", "minimum": 0, "maximum": 1},
+    "title_hint": {"type": "string"},
+    "title": {"type": "string"},
+    "description": {"type": "string"},
+    "author": {"type": "string"},
+    "published_at": {"type": "string"},
+    "source_name": {"type": "string"},
+    "source_type": {"type": "string"},
+    "source_vendor": {"type": "string"},
+    "source_channel": {"type": "string"},
+    "source_channel_type": {"type": "string"},
+    "source_item_id": {"type": "string"},
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "freshness_days": {
+      "type": ["number", "null"],
+      "minimum": 0
+    },
+    "discovery": {
+      "$ref": "#/$defs/discovery"
+    },
+    "metadata_quality": {
+      "$ref": "#/$defs/metadataQuality"
+    },
+    "content_text": {"type": "string"},
+    "crawl_engine": {"type": "string"},
+    "job_id": {"type": "string"},
+    "run_id": {"type": "string"}
+  },
+  "$defs": {
+    "discovery": {
+      "type": "object",
+      "required": ["method", "origin_url", "entry_ref", "discovered_at", "rank"],
+      "properties": {
+        "method": {"type": "string"},
+        "origin_url": {"type": "string"},
+        "entry_ref": {"type": "string"},
+        "discovered_at": {"type": "string"},
+        "rank": {"type": ["integer", "null"], "minimum": 1}
+      },
+      "additionalProperties": true
+    },
+    "metadataQuality": {
+      "type": "object",
+      "required": ["completeness", "consistency_flags", "precedence_used"],
+      "properties": {
+        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "consistency_flags": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "precedence_used": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

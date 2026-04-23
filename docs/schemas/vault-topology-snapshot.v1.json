@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.vault.topology.snapshot.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generatedAt",
+    "vaultPath",
+    "scope",
+    "projection",
+    "neighbors",
+    "minDist",
+    "spherize",
+    "coverage",
+    "nodes",
+    "edges",
+    "clusters"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.vault.topology.snapshot.v1"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "vaultPath": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "embeddingProvider": {
+      "type": "string"
+    },
+    "embeddingModel": {
+      "type": "string"
+    },
+    "projection": {
+      "type": "string",
+      "enum": ["umap", "pca"]
+    },
+    "neighbors": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "minDist": {
+      "type": "number",
+      "minimum": 0
+    },
+    "spherize": {
+      "type": "boolean"
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["totalVaultNotes", "embeddedNotes", "skippedNotes", "staleSqliteNotes", "vaultChunkCount", "embeddedChunkCount"],
+      "properties": {
+        "totalVaultNotes": { "type": "integer", "minimum": 0 },
+        "embeddedNotes": { "type": "integer", "minimum": 0 },
+        "skippedNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "staleSqliteNotes": { "type": "integer", "minimum": 0 },
+        "vaultChunkCount": { "type": "integer", "minimum": 0 },
+        "embeddedChunkCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "title", "tags", "clusterId", "x", "y", "z", "importance", "bridgeScore", "bridge", "orphan", "updatedAt"],
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" },
+          "title": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "clusterId": { "type": "string" },
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "z": { "type": "number" },
+          "importance": { "type": "number" },
+          "bridgeScore": { "type": "number" },
+          "bridge": { "type": "boolean" },
+          "orphan": { "type": "boolean" },
+          "updatedAt": { "type": "string" }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "type", "weight"],
+        "properties": {
+          "source": { "type": "string" },
+          "target": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["wiki_link", "embedding_neighbor", "bridge_hint"]
+          },
+          "weight": { "type": "number" }
+        }
+      }
+    },
+    "clusters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "size", "representativeNoteId", "topTags"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "size": { "type": "integer", "minimum": 1 },
+          "representativeNoteId": { "type": "string" },
+          "topTags": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

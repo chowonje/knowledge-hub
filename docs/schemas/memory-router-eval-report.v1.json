@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.memory-router.eval.report.v1",
+  "type": "object",
+  "required": ["schema", "status", "dataset", "metrics", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.memory-router.eval.report.v1" },
+    "status": { "type": "string" },
+    "dataset": { "type": "object" },
+    "metrics": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

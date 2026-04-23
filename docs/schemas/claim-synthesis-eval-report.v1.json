@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "dataset", "metrics", "itemTypeCounts", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.claim-synthesis.eval.report.v1" },
+    "status": { "type": "string" },
+    "dataset": { "type": "object" },
+    "metrics": { "type": "object" },
+    "itemTypeCounts": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

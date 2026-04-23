@@ -15,6 +15,23 @@ _EMBEDDER_REGISTRY: dict[str, type[BaseEmbedder]] = {}
 _PROVIDER_INFO: dict[str, ProviderInfo] = {}
 
 
+def _merge_provider_info(existing: ProviderInfo | None, incoming: ProviderInfo) -> ProviderInfo:
+    if existing is None:
+        return incoming
+    merged_models = list(dict.fromkeys([*existing.available_models, *incoming.available_models]))
+    return ProviderInfo(
+        name=incoming.name or existing.name,
+        display_name=incoming.display_name or existing.display_name,
+        supports_llm=bool(existing.supports_llm or incoming.supports_llm),
+        supports_embedding=bool(existing.supports_embedding or incoming.supports_embedding),
+        requires_api_key=bool(existing.requires_api_key or incoming.requires_api_key),
+        is_local=bool(existing.is_local and incoming.is_local) if (existing.is_local or incoming.is_local) else False,
+        default_llm_model=str(existing.default_llm_model or incoming.default_llm_model or ""),
+        default_embed_model=str(existing.default_embed_model or incoming.default_embed_model or ""),
+        available_models=merged_models,
+    )
+
+
 def _discover_providers():
     """설치된 프로바이더를 자동 탐색하여 레지스트리에 등록"""
     if _LLM_REGISTRY:
@@ -24,7 +41,8 @@ def _discover_providers():
         from knowledge_hub.providers.ollama import OllamaLLM, OllamaEmbedder
         _LLM_REGISTRY["ollama"] = OllamaLLM
         _EMBEDDER_REGISTRY["ollama"] = OllamaEmbedder
-        _PROVIDER_INFO["ollama"] = OllamaLLM.provider_info()
+        _PROVIDER_INFO["ollama"] = _merge_provider_info(_PROVIDER_INFO.get("ollama"), OllamaLLM.provider_info())
+        _PROVIDER_INFO["ollama"] = _merge_provider_info(_PROVIDER_INFO.get("ollama"), OllamaEmbedder.provider_info())
     except ImportError:
         pass
 
@@ -32,7 +50,8 @@ def _discover_providers():
         from knowledge_hub.providers.openai_provider import OpenAILLM, OpenAIEmbedder
         _LLM_REGISTRY["openai"] = OpenAILLM
         _EMBEDDER_REGISTRY["openai"] = OpenAIEmbedder
-        _PROVIDER_INFO["openai"] = OpenAILLM.provider_info()
+        _PROVIDER_INFO["openai"] = _merge_provider_info(_PROVIDER_INFO.get("openai"), OpenAILLM.provider_info())
+        _PROVIDER_INFO["openai"] = _merge_provider_info(_PROVIDER_INFO.get("openai"), OpenAIEmbedder.provider_info())
     except ImportError:
         pass
 
@@ -47,7 +66,8 @@ def _discover_providers():
         from knowledge_hub.providers.google_provider import GoogleLLM, GoogleEmbedder
         _LLM_REGISTRY["google"] = GoogleLLM
         _EMBEDDER_REGISTRY["google"] = GoogleEmbedder
-        _PROVIDER_INFO["google"] = GoogleLLM.provider_info()
+        _PROVIDER_INFO["google"] = _merge_provider_info(_PROVIDER_INFO.get("google"), GoogleLLM.provider_info())
+        _PROVIDER_INFO["google"] = _merge_provider_info(_PROVIDER_INFO.get("google"), GoogleEmbedder.provider_info())
     except ImportError:
         pass
 
@@ -55,7 +75,22 @@ def _discover_providers():
         from knowledge_hub.providers.openai_compat import OpenAICompatLLM, OpenAICompatEmbedder
         _LLM_REGISTRY["openai-compat"] = OpenAICompatLLM
         _EMBEDDER_REGISTRY["openai-compat"] = OpenAICompatEmbedder
-        _PROVIDER_INFO["openai-compat"] = OpenAICompatLLM.provider_info()
+        _PROVIDER_INFO["openai-compat"] = _merge_provider_info(_PROVIDER_INFO.get("openai-compat"), OpenAICompatLLM.provider_info())
+        _PROVIDER_INFO["openai-compat"] = _merge_provider_info(_PROVIDER_INFO.get("openai-compat"), OpenAICompatEmbedder.provider_info())
+    except ImportError:
+        pass
+
+    try:
+        from knowledge_hub.providers.pplx_local import PPLXLocalEmbedder
+        _EMBEDDER_REGISTRY["pplx-local"] = PPLXLocalEmbedder
+        _PROVIDER_INFO["pplx-local"] = PPLXLocalEmbedder.provider_info()
+    except ImportError:
+        pass
+
+    try:
+        from knowledge_hub.providers.pplx_st import PPLXSentenceTransformerEmbedder
+        _EMBEDDER_REGISTRY["pplx-st"] = PPLXSentenceTransformerEmbedder
+        _PROVIDER_INFO["pplx-st"] = PPLXSentenceTransformerEmbedder.provider_info()
     except ImportError:
         pass
 

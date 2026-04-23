@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.next.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "activeProjects", "actionableTasks", "blockedTasks", "openInbox", "recentDecisions", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.next.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "activeProjects": { "type": "array", "items": { "$ref": "#/$defs/project" } },
+    "actionableTasks": { "type": "array", "items": { "$ref": "#/$defs/task" } },
+    "blockedTasks": { "type": "array", "items": { "$ref": "#/$defs/task" } },
+    "openInbox": { "type": "array", "items": { "$ref": "#/$defs/inbox" } },
+    "recentDecisions": { "type": "array", "items": { "$ref": "#/$defs/decision" } },
+    "createdAt": { "type": "string" }
+  },
+  "$defs": {
+    "project": {
+      "type": "object",
+      "required": ["id", "title", "slug", "status", "priority", "summary", "owner", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "on_hold", "completed", "archived"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "summary": { "type": "string" },
+        "owner": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceType"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "scope", "document"] },
+        "paperId": { "type": "string" },
+        "url": { "type": "string" },
+        "noteId": { "type": "string" },
+        "stableScopeId": { "type": "string" },
+        "documentScopeId": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "required": ["id", "projectId", "title", "kind", "status", "priority", "assignee", "blockedBy", "sourceRefs", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "goalId": { "type": "string" },
+        "title": { "type": "string" },
+        "kind": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "in_progress", "blocked", "completed", "cancelled"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "assignee": { "type": "string" },
+        "dueAt": { "type": "string" },
+        "blockedBy": { "type": "array", "items": { "type": "string" } },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "inbox": {
+      "type": "object",
+      "required": ["id", "kind", "severity", "state", "summary", "sourceRefs", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "kind": { "type": "string", "enum": ["blocked_task", "due_soon_task", "ops_alert"] },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "state": { "type": "string", "enum": ["open", "resolved"] },
+        "summary": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["id", "projectId", "kind", "summary", "rationale", "sourceRefs", "createdByType", "createdById", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "goalId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "kind": { "type": "string" },
+        "summary": { "type": "string" },
+        "rationale": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "createdByType": { "type": "string", "enum": ["human", "agent", "system"] },
+        "createdById": { "type": "string" },
+        "supersedesDecisionId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-session-state-result.v1.json",
+  "title": "knowledge-hub learning session state result v1",
+  "type": "object",
+  "required": ["schema", "runId", "status", "session", "progress", "conceptStates", "quizHistory", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.session-state.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "topicSlug": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "not_found", "error"]},
+    "session": {"type": "object"},
+    "progress": {"type": "object"},
+    "summary": {"type": "object"},
+    "conceptStates": {"type": "array", "items": {"type": "object"}},
+    "quizHistory": {"type": "array", "items": {"type": "object"}},
+    "weakAreas": {"type": "array", "items": {"type": "object"}},
+    "nextReviewTargets": {"type": "array", "items": {"type": "string"}},
+    "recentEvents": {"type": "array", "items": {"type": "object"}},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

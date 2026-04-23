@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.board-export.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "source", "papers", "stats", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.board-export.v1" },
+    "status": { "type": "string" },
+    "generatedAt": { "type": "string" },
+    "source": {
+      "type": "object",
+      "required": ["mode", "field", "limit", "conceptLimit", "relatedLimit"],
+      "properties": {
+        "mode": { "const": "read_only" },
+        "field": { "type": "string" },
+        "limit": { "type": "integer", "minimum": 1 },
+        "conceptLimit": { "type": "integer", "minimum": 1 },
+        "relatedLimit": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "paperId",
+          "title",
+          "year",
+          "field",
+          "artifactFlags",
+          "summary",
+          "memory",
+          "concepts",
+          "relatedPapers",
+          "paths",
+          "warnings"
+        ],
+        "properties": {
+          "paperId": { "type": "string" },
+          "title": { "type": "string" },
+          "year": { "type": ["integer", "null"] },
+          "field": { "type": "string" },
+          "artifactFlags": {
+            "type": "object",
+            "required": ["hasPdf", "hasSummary", "hasTranslation", "isIndexed", "hasMemory"],
+            "properties": {
+              "hasPdf": { "type": "boolean" },
+              "hasSummary": { "type": "boolean" },
+              "hasTranslation": { "type": "boolean" },
+              "isIndexed": { "type": "boolean" },
+              "hasMemory": { "type": "boolean" }
+            },
+            "additionalProperties": true
+          },
+          "summary": {
+            "type": "object",
+            "required": ["oneLine", "coreIdea"],
+            "properties": {
+              "oneLine": { "type": "string" },
+              "coreIdea": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "memory": {
+            "type": "object",
+            "required": ["paperCore", "methodCore", "evidenceCore", "qualityFlag"],
+            "properties": {
+              "paperCore": { "type": "string" },
+              "methodCore": { "type": "string" },
+              "evidenceCore": { "type": "string" },
+              "qualityFlag": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "concepts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "conceptsDetailed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "source", "confidence", "band", "hasConceptNote"],
+              "properties": {
+                "name": { "type": "string" },
+                "source": { "type": "string" },
+                "confidence": { "type": "number" },
+                "band": { "type": "string" },
+                "hasConceptNote": { "type": "boolean" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "quality": {
+            "type": "object",
+            "required": ["band", "score", "summaryStatus", "memoryStatus", "slotStatus", "reasons", "displayFlags"],
+            "properties": {
+              "band": { "type": "string" },
+              "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+              "summaryStatus": { "type": "string" },
+              "memoryStatus": { "type": "string" },
+              "slotStatus": { "type": "object" },
+              "reasons": { "type": "array", "items": { "type": "string" } },
+              "displayFlags": { "type": "object" }
+            },
+            "additionalProperties": true
+          },
+          "relatedPapers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["paperId", "title", "year", "field"],
+              "properties": {
+                "paperId": { "type": "string" },
+                "title": { "type": "string" },
+                "year": { "type": ["integer", "null"] },
+                "field": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "paths": {
+            "type": "object",
+            "required": ["pdfPath", "translatedPath"],
+            "properties": {
+              "pdfPath": { "type": "string" },
+              "translatedPath": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "warnings": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "claimCoverage": { "type": "object" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "stats": {
+      "type": "object",
+      "required": ["returnedPapers", "papersWithSummary", "papersWithMemory", "indexedPapers"],
+      "properties": {
+        "returnedPapers": { "type": "integer", "minimum": 0 },
+        "papersWithSummary": { "type": "integer", "minimum": 0 },
+        "papersWithMemory": { "type": "integer", "minimum": 0 },
+        "indexedPapers": { "type": "integer", "minimum": 0 },
+        "qualityBands": { "type": "object" },
+        "conceptBands": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

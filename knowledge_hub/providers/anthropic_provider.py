@@ -7,9 +7,13 @@ pip install knowledge-hub[anthropic]
 from __future__ import annotations
 
 import os
+import logging
 from typing import Generator
 
 from knowledge_hub.providers.base import BaseLLM, ProviderInfo
+from knowledge_hub.providers.policy_guard import enforce_outbound_policy
+
+log = logging.getLogger("khub.providers.anthropic")
 
 
 class AnthropicLLM(BaseLLM):
@@ -40,6 +44,10 @@ class AnthropicLLM(BaseLLM):
         return self._client
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
+        decision = enforce_outbound_policy(provider="anthropic", model=self.model, prompt=prompt, context=context)
+        self.last_policy = decision.to_dict()
+        if decision.classification == "P1":
+            log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
         system = ""
         if context:
             system = f"참고 문서:\n{context}"
@@ -54,6 +62,10 @@ class AnthropicLLM(BaseLLM):
         return message.content[0].text
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
+        decision = enforce_outbound_policy(provider="anthropic", model=self.model, prompt=prompt, context=context)
+        self.last_policy = decision.to_dict()
+        if decision.classification == "P1":
+            log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
         system = ""
         if context:
             system = f"참고 문서:\n{context}"

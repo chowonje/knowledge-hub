@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.context-pack.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "target", "query", "sources", "counts", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.context-pack.result.v1" },
+    "status": { "type": "string" },
+    "target": { "type": "string" },
+    "query": { "type": "string" },
+    "sources": { "type": "array", "items": { "type": "object" } },
+    "counts": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

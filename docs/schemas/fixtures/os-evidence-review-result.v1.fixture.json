@@ -1,0 +1,133 @@
+{
+  "schema": "knowledge-hub.os.evidence.review.result.v1",
+  "status": "ok",
+  "action": "approve",
+  "project": {
+    "id": "proj_001",
+    "slug": "knowledgeos-decision-os",
+    "title": "KnowledgeOS Decision OS"
+  },
+  "candidate": {
+    "inboxId": "inbox_001",
+    "summary": "Blocked task: Review projection output",
+    "sourceRefs": [
+      {
+        "sourceType": "vault",
+        "noteId": "KnowledgeOS/Dinger/Pages/decision-os.md",
+        "title": "Decision OS"
+      },
+      {
+        "sourceType": "web",
+        "url": "https://example.com/decision-os",
+        "title": "Design note"
+      }
+    ],
+    "trace": {
+      "bridge": "dinger",
+      "relativePath": "KnowledgeOS/Dinger/Pages/decision-os.md",
+      "title": "Decision OS"
+    },
+    "explanation": "Open inbox item inbox_001 is linked to filed Dinger page KnowledgeOS/Dinger/Pages/decision-os.md and keeps 1 supporting source ref attached for later manual promotion. rerun reuse=inbox_001(open):Blocked task: Review projection output; replay resolved=none; replay other=none.",
+    "reason": {
+      "kind": "dinger_linked_inbox_candidate",
+      "summary": "Open inbox item inbox_001 is linked to filed Dinger page KnowledgeOS/Dinger/Pages/decision-os.md and keeps 1 supporting source ref attached for later manual promotion. rerun reuse=inbox_001(open):Blocked task: Review projection output; replay resolved=none; replay other=none.",
+      "inboxState": "open",
+      "bridge": "dinger",
+      "inboxSummary": "Blocked task: Review projection output",
+      "relativePath": "KnowledgeOS/Dinger/Pages/decision-os.md",
+      "supportingSourceRefCount": 1,
+      "sourceTypes": ["vault", "web"],
+      "upstreamSourceRefs": [
+        {
+          "sourceType": "web",
+          "url": "https://example.com/decision-os",
+          "title": "Design note"
+        }
+      ],
+      "replayAction": "reused_existing_open_item",
+      "replayPolicy": {
+        "open": "reuse",
+        "resolved": "create_new",
+        "triaged": "create_new"
+      },
+      "matchedOpenItems": [
+        {
+          "id": "inbox_001",
+          "state": "open",
+          "summary": "Blocked task: Review projection output"
+        }
+      ],
+      "matchedResolvedItems": [],
+      "matchedOtherItems": [],
+      "dedupeKeySummary": {
+        "kind": "dinger_file",
+        "strategy": "vault_note",
+        "markerCount": 1,
+        "markers": [
+          {
+            "sourceType": "vault",
+            "primary": "KnowledgeOS/Dinger/Pages/decision-os.md"
+          }
+        ],
+        "fingerprint": "dinger_file|vault_note|vault:KnowledgeOS/Dinger/Pages/decision-os.md"
+      },
+      "bridgeTraceSummary": {
+        "bridge": "dinger",
+        "sourceSchema": "",
+        "kind": "",
+        "relativePath": "KnowledgeOS/Dinger/Pages/decision-os.md",
+        "title": "Decision OS"
+      }
+    }
+  },
+  "item": {
+    "id": "inbox_001",
+    "projectId": "proj_001",
+    "kind": "dinger_capture",
+    "severity": "medium",
+    "state": "resolved",
+    "summary": "Blocked task: Review projection output",
+    "sourceRefs": [
+      {
+        "sourceType": "vault",
+        "noteId": "KnowledgeOS/Dinger/Pages/decision-os.md",
+        "title": "Decision OS"
+      },
+      {
+        "sourceType": "web",
+        "url": "https://example.com/decision-os",
+        "title": "Design note"
+      }
+    ],
+    "trace": {
+      "bridge": "dinger",
+      "relativePath": "KnowledgeOS/Dinger/Pages/decision-os.md",
+      "title": "Decision OS"
+    }
+  },
+  "review": {
+    "decision": "approved",
+    "command": "khub os inbox triage --resolve-only",
+    "stateChanged": true,
+    "beforeState": "open",
+    "afterState": "resolved",
+    "receipt": {
+      "chosenAction": "approve",
+      "semanticMeaning": "reviewed_for_manual_promotion",
+      "operatorMeaning": "Resolve this inbox item as reviewed while keeping later task or decision promotion explicit.",
+      "followUpExpectation": "No task or decision is created here; use explicit promotion later if this evidence should drive work.",
+      "resultingInboxState": "resolved"
+    },
+    "preservesFlow": {
+      "projectEvidence": "derived_read_model",
+      "stateChange": "existing_inbox_state_only",
+      "promotion": "manual_only"
+    },
+    "traceability": {
+      "inboxId": "inbox_001",
+      "relativePath": "KnowledgeOS/Dinger/Pages/decision-os.md",
+      "bridge": "dinger"
+    }
+  },
+  "createdAt": "2026-04-09T03:00:00.000Z"
+}

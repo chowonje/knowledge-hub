@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-checkpoint-result.v1.json",
+  "title": "knowledge-hub learning checkpoint result v1",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "status", "saved", "session_id", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.checkpoint.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "error"]},
+    "saved": {"type": "boolean"},
+    "session_id": {"type": "string"},
+    "sessionId": {"type": "string"},
+    "summary": {"type": "string"},
+    "updated_concepts": {"type": "array", "items": {"type": "object"}},
+    "updatedConcepts": {"type": "array", "items": {"type": "object"}},
+    "weak_areas": {"type": "array", "items": {"type": "object"}},
+    "weakAreas": {"type": "array", "items": {"type": "object"}},
+    "next_review_targets": {"type": "array", "items": {"type": "string"}},
+    "nextReviewTargets": {"type": "array", "items": {"type": "string"}},
+    "stateSummary": {"type": "object"},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

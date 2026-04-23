@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "paperId", "parserUsed", "documentMemoryDiagnostics", "summary", "evidenceMap", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-summary.build.result.v1" },
+    "status": { "type": "string" },
+    "paperId": { "type": "string" },
+    "paperTitle": { "type": "string" },
+    "parserUsed": { "type": "string" },
+    "parserAttempted": { "type": "string" },
+    "parserFallbackReason": { "type": "string" },
+    "fallbackUsed": { "type": "boolean" },
+    "llmRoute": { "type": "string" },
+    "contextStats": { "type": "object" },
+    "documentMemoryDiagnostics": { "type": "object" },
+    "memoryRoute": { "type": "object" },
+    "readingCore": { "type": "object" },
+    "summary": { "type": "object" },
+    "evidenceMap": { "type": "array", "items": { "type": "object" } },
+    "artifactPaths": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

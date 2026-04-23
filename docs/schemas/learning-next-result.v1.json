@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-next-result.v1.json",
+  "title": "knowledge-hub learning next result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "topic",
+    "status",
+    "policy",
+    "session",
+    "unlockPlan",
+    "remediationPlan",
+    "loadSignal",
+    "reasoning",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.next.result.v1"},
+    "runId": {"type": "string", "minLength": 1},
+    "topic": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["ok", "blocked", "error"]},
+    "policy": {
+      "type": "object",
+      "required": ["mode", "allowed", "classification", "policyErrors"],
+      "properties": {
+        "mode": {"type": "string"},
+        "allowed": {"type": "boolean"},
+        "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+        "blockedReason": {"type": ["string", "null"]},
+        "policyErrors": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "session": {
+      "type": "object",
+      "required": ["sessionId"],
+      "properties": {
+        "sessionId": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "unlockPlan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["canonical_id", "display_name", "reason"],
+        "properties": {
+          "canonical_id": {"type": "string"},
+          "display_name": {"type": "string"},
+          "reason": {"type": "string"},
+          "miniMission": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "remediationPlan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["focus", "reason", "task"],
+        "properties": {
+          "focus": {"type": "array", "items": {"type": "string"}},
+          "reason": {"type": "string"},
+          "task": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "loadSignal": {
+      "type": "object",
+      "required": ["level"],
+      "properties": {
+        "level": {"type": "string", "enum": ["normal", "high"]},
+        "avgSleepHours": {"type": ["number", "null"]},
+        "avgExpense": {"type": ["number", "null"]},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "reasoning": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

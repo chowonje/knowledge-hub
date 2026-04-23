@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-grade-result.v1.json",
+  "title": "knowledge-hub learning grade result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "topic",
+    "status",
+    "policy",
+    "session",
+    "targetTrunkIds",
+    "scores",
+    "gateDecision",
+    "weaknesses",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.grade.result.v1"},
+    "runId": {"type": "string", "minLength": 1},
+    "topic": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["ok", "failed", "insufficient", "blocked", "error"]},
+    "policy": {
+      "type": "object",
+      "required": ["mode", "allowed", "classification", "policyErrors"],
+      "properties": {
+        "mode": {"type": "string"},
+        "allowed": {"type": "boolean"},
+        "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+        "blockedReason": {"type": ["string", "null"]},
+        "policyErrors": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "session": {
+      "type": "object",
+      "required": ["sessionId", "targetTrunkIds"],
+      "properties": {
+        "sessionId": {"type": "string"},
+        "path": {"type": "string"},
+        "targetTrunkIds": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "targetTrunkIds": {"type": "array", "items": {"type": "string"}},
+    "scores": {
+      "type": "object",
+      "required": ["coverage", "edgeAccuracy", "explanationQuality", "final", "totalEdges", "validEdges", "minEdges"],
+      "properties": {
+        "coverage": {"type": "number"},
+        "edgeAccuracy": {"type": "number"},
+        "explanationQuality": {"type": "number"},
+        "final": {"type": "number"},
+        "totalEdges": {"type": "integer"},
+        "validEdges": {"type": "integer"},
+        "minEdges": {"type": "integer"}
+      },
+      "additionalProperties": true
+    },
+    "gateDecision": {
+      "type": "object",
+      "required": ["passed", "status", "reasons"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "status": {"type": "string", "enum": ["passed", "failed", "insufficient", "blocked"]},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "weaknesses": {
+      "type": "array",
+      "items": {"type": "object"}
+    },
+    "policyErrors": {"type": "array", "items": {"type": "string"}},
+    "edges": {"type": "array", "items": {"type": "object"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}
