@@ -1,0 +1,29 @@
+{
+  "schema": "knowledge-hub.store-authority-inventory.v1",
+  "updated": "2026-04-24",
+  "tables": [
+    {"table": "document_memory_units", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_requires_source_span", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "paper_memory_cards", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "paper_cards_v2", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "paper_section_cards_v1", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_only", "manual_origin_allowed": false, "bootstrap": "optional_section_card_v1"},
+    {"table": "claim_cards_v1", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "web_cards_v2", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "vault_cards_v2", "authority": "derivative", "requires_lifecycle": true, "evidence_role": "retrieval_hint_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "concepts", "authority": "derivative_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "ontology_entities", "authority": "mixed_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "ontology_claims", "authority": "derivative_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "ontology_relations", "authority": "derivative_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "kg_relations", "authority": "legacy_derivative_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "optional_legacy_kg"},
+    {"table": "memory_relations", "authority": "mixed_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": true, "bootstrap": "default"},
+    {"table": "learning_graph_nodes", "authority": "derivative_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "learning_graph_edges", "authority": "mixed_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": true, "bootstrap": "default"},
+    {"table": "learning_graph_resource_links", "authority": "mixed_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": true, "bootstrap": "default"},
+    {"table": "learning_graph_paths", "authority": "derivative_projection", "requires_lifecycle": true, "evidence_role": "retrieval_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "claim_normalizations", "authority": "derivative_projection", "requires_lifecycle": false, "evidence_role": "normalization_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "entity_merge_proposals", "authority": "operational_queue", "requires_lifecycle": false, "evidence_role": "not_answer_evidence", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "entity_split_proposals", "authority": "operational_queue", "requires_lifecycle": false, "evidence_role": "not_answer_evidence", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "beliefs", "authority": "mixed_epistemic_state", "requires_lifecycle": false, "evidence_role": "post_check_signal_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "decisions", "authority": "canonical_decision_history", "requires_lifecycle": false, "evidence_role": "audit_only", "manual_origin_allowed": false, "bootstrap": "default"},
+    {"table": "outcomes", "authority": "canonical_observation_log", "requires_lifecycle": false, "evidence_role": "audit_only", "manual_origin_allowed": false, "bootstrap": "default"}
+  ]
+}
