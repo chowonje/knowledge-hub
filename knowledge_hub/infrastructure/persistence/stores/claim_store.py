@@ -11,6 +11,8 @@ from uuid import uuid4
 from knowledge_hub.core.models import OntologyEvent
 from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
     add_derivative_lifecycle_columns,
+    merge_token_json,
+    normalize_token_list,
     source_hash_from_payload,
 )
 
@@ -112,6 +114,43 @@ class ClaimStore:
         item["normalized_payload"] = _safe_json_dict(item.get("normalized_payload_json"))
         return item
 
+    def _merge_contributor_hashes_for_entity(self, entity_id: str, contributor_hashes: list[str] | None) -> None:
+        hashes = normalize_token_list(contributor_hashes or [])
+        if not hashes:
+            return
+        entity_token = str(entity_id or "").strip()
+        if not entity_token:
+            return
+        entity_row = self.conn.execute(
+            "SELECT entity_type, contributor_hashes FROM ontology_entities WHERE entity_id = ?",
+            (entity_token,),
+        ).fetchone()
+        if not entity_row:
+            return
+        entity_type = str(entity_row["entity_type"] if hasattr(entity_row, "keys") else entity_row[0])
+        if entity_type != "concept":
+            return
+        existing = entity_row["contributor_hashes"] if hasattr(entity_row, "keys") else entity_row[1]
+        merged = merge_token_json(existing, hashes)
+        self.conn.execute(
+            """
+            UPDATE ontology_entities
+            SET contributor_hashes = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE entity_id = ?
+            """,
+            (merged, entity_token),
+        )
+        concept_row = self.conn.execute(
+            "SELECT contributor_hashes FROM concepts WHERE id = ?",
+            (entity_token,),
+        ).fetchone()
+        if concept_row:
+            concept_existing = concept_row["contributor_hashes"] if hasattr(concept_row, "keys") else concept_row[0]
+            self.conn.execute(
+                "UPDATE concepts SET contributor_hashes = ? WHERE id = ?",
+                (merge_token_json(concept_existing, hashes), entity_token),
+            )
+
     def upsert_claim(
         self,
         *,
@@ -168,6 +207,9 @@ class ClaimStore:
                 source_hash,
             ),
         )
+        if source_hash:
+            self._merge_contributor_hashes_for_entity(subject_entity_id, [source_hash])
+            self._merge_contributor_hashes_for_entity(object_entity_id or "", [source_hash])
         self.conn.commit()
 
         if not self.event_store:

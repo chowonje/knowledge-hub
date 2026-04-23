@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import re
 from typing import Any
 
+from knowledge_hub.ai.answer_contracts import NON_EVIDENCE_SOURCE_SCHEMES, NON_EVIDENCE_SOURCE_TYPES
 from knowledge_hub.ai.rag_support import (
     clean_text as _clean_text,
     extract_json_payload as _extract_json_payload,
@@ -11,6 +13,94 @@ from knowledge_hub.ai.rag_support import (
 )
 from knowledge_hub.core.sanitizer import redact_p0
 from knowledge_hub.learning.policy import evaluate_policy_for_payload
+
+
+def _source_scheme(value: Any) -> str:
+    token = str(value or "").strip().lower()
+    if ":" not in token:
+        return ""
+    scheme = token.split(":", 1)[0]
+    return scheme if re.fullmatch(r"[a-z_][a-z0-9_+.-]*", scheme) else ""
+
+
+def _non_evidence_signal_reason(item: dict[str, Any]) -> str:
+    source_type = str(item.get("source_type") or item.get("sourceType") or "").strip().lower()
+    if source_type in NON_EVIDENCE_SOURCE_TYPES:
+        return f"non_evidence_source_type:{source_type}"
+    source_scheme = _source_scheme(
+        item.get("source_id")
+        or item.get("sourceId")
+        or item.get("source_ref")
+        or item.get("sourceRef")
+        or item.get("title")
+    )
+    if source_scheme in NON_EVIDENCE_SOURCE_SCHEMES:
+        return f"non_evidence_source_scheme:{source_scheme}"
+    return ""
+
+
+def _apply_verification_guards(
+    searcher,
+    payload: dict[str, Any],
+    *,
+    answer: str,
+    evidence: list[dict[str, Any]],
+    contradicting_beliefs: list[dict[str, Any]],
+) -> dict[str, Any]:
+    result = dict(payload or {})
+    warnings = list(result.get("warnings") or [])
+    signal_count = sum(1 for item in evidence if _non_evidence_signal_reason(item))
+    grounding_evidence_count = max(0, len(evidence) - signal_count)
+    rejected_beliefs = [
+        dict(item or {})
+        for item in contradicting_beliefs or []
+        if str((item or {}).get("status") or "").strip().lower() == "rejected"
+    ]
+    rejected_count = len(rejected_beliefs)
+    conflict_mentioned = bool(result.get("conflictMentioned"))
+    if "conflictMentioned" not in result:
+        conflict_mentioned = searcher._answer_mentions_conflict(answer)
+        result["conflictMentioned"] = conflict_mentioned
+    status = str(result.get("status") or "").strip().lower() or "unknown"
+    needs_caution = bool(result.get("needsCaution"))
+    reason_code = str(result.get("reasonCode") or "").strip().lower()
+    summary = str(result.get("summary") or "").strip()
+
+    result["retrievalSignalCount"] = int(signal_count)
+    result["groundingEvidenceCount"] = int(grounding_evidence_count)
+    result["rejectedBeliefConflictCount"] = int(rejected_count)
+    result["contradictsRejectedBelief"] = bool(rejected_count)
+
+    if rejected_count > 0:
+        if not conflict_mentioned:
+            needs_caution = True
+            status = "failed"
+            reason_code = reason_code or "contradicts_rejected_belief"
+            warnings.append("answer verification failed: contradicts rejected belief without explicit conflict framing")
+            if not summary:
+                summary = "기존에 rejected 처리된 belief와 충돌하는 답변인데, 답변 본문이 충돌/불확실성을 드러내지 않았습니다."
+        else:
+            warnings.append("answer verification caution: answer conflicts with a rejected belief")
+            if not summary:
+                summary = "기존에 rejected 처리된 belief와 충돌하는 신호가 있어 답변을 보수적으로 읽어야 합니다."
+
+    if signal_count > 0 and grounding_evidence_count == 0 and status not in {"skipped", "abstain"}:
+        needs_caution = True
+        if status not in {"failed", "caution"}:
+            status = "failed"
+        elif status == "caution" and int(result.get("supportedClaimCount") or 0) == 0:
+            status = "failed"
+        reason_code = reason_code or "signal_only_grounding"
+        warnings.append("answer verification failed: retrieval signals are not citation-grade evidence")
+        if not summary:
+            summary = "답변 검증 입력이 retrieval signal에만 의존하고 있어 citation-grade evidence 기반 grounding으로 취급할 수 없습니다."
+
+    result["status"] = status
+    result["needsCaution"] = bool(needs_caution)
+    result["reasonCode"] = reason_code
+    result["summary"] = summary
+    result["warnings"] = list(dict.fromkeys(warnings))
+    return result
 
 
 def heuristic_answer_verification(
@@ -25,7 +115,9 @@ def heuristic_answer_verification(
 ) -> dict[str, Any]:
     claim_texts = searcher._split_answer_claims(answer)
     if not claim_texts:
-        return {
+        return _apply_verification_guards(
+            searcher,
+            {
             "status": "skipped",
             "supportedClaimCount": 0,
             "unsupportedClaimCount": 0,
@@ -36,7 +128,11 @@ def heuristic_answer_verification(
             "warnings": list(dict.fromkeys([*(warnings or []), "answer verification skipped: no concrete claims found"])),
             "claims": [],
             "route": {**dict(route_meta or {}), "mode": "heuristic"},
-        }
+            },
+            answer=answer,
+            evidence=evidence,
+            contradicting_beliefs=contradicting_beliefs,
+        )
 
     evidence_rows: list[tuple[str, set[str], str]] = []
     for item in evidence:
@@ -81,7 +177,9 @@ def heuristic_answer_verification(
         if needs_caution
         else "휴리스틱 검증에서 뚜렷한 위험 신호는 찾지 못했습니다."
     )
-    return {
+    return _apply_verification_guards(
+        searcher,
+        {
         "status": "caution" if needs_caution else "verified",
         "supportedClaimCount": 0,
         "unsupportedClaimCount": unsupported_count,
@@ -92,7 +190,11 @@ def heuristic_answer_verification(
         "warnings": list(dict.fromkeys([*(warnings or []), "answer verification used heuristic fallback"])),
         "claims": claims,
         "route": {**dict(route_meta or {}), "mode": "heuristic"},
-    }
+        },
+        answer=answer,
+        evidence=evidence,
+        contradicting_beliefs=contradicting_beliefs,
+    )
 
 
 def normalize_answer_verification(
@@ -100,6 +202,7 @@ def normalize_answer_verification(
     *,
     raw: dict[str, Any],
     answer: str,
+    evidence: list[dict[str, Any]],
     answer_signals: dict[str, Any],
     contradicting_beliefs: list[dict[str, Any]],
     route_meta: dict[str, Any],
@@ -150,7 +253,9 @@ def normalize_answer_verification(
             summary = f"검증 결과 {supported_count}건의 claim이 근거와 직접 연결되었습니다."
         else:
             summary = f"검증 결과 unsupported {unsupported_count}건, uncertain {uncertain_count}건이 있어 답변을 보수적으로 읽어야 합니다."
-    return {
+    return _apply_verification_guards(
+        searcher,
+        {
         "status": status,
         "supportedClaimCount": supported_count,
         "unsupportedClaimCount": unsupported_count,
@@ -161,7 +266,11 @@ def normalize_answer_verification(
         "warnings": list(dict.fromkeys(warnings or [])),
         "claims": normalized_claims,
         "route": {**dict(route_meta or {}), "mode": "llm"},
-    }
+        },
+        answer=answer,
+        evidence=evidence,
+        contradicting_beliefs=contradicting_beliefs,
+    )
 
 
 def verify_answer(
@@ -192,7 +301,9 @@ def verify_answer(
 
     if verifier_llm is None:
         if route_name == "fallback-only" and "config_missing" in route_reasons:
-            return {
+            return _apply_verification_guards(
+                searcher,
+                {
                 "status": "skipped",
                 "supportedClaimCount": 0,
                 "unsupportedClaimCount": 0,
@@ -203,7 +314,11 @@ def verify_answer(
                 "warnings": list(dict.fromkeys(warnings)),
                 "claims": [],
                 "route": {**dict(route_meta or {}), "mode": "skipped"},
-            }
+                },
+                answer=answer,
+                evidence=evidence,
+                contradicting_beliefs=contradicting_beliefs,
+            )
         return heuristic_answer_verification(
             searcher,
             answer=answer,
@@ -232,7 +347,9 @@ def verify_answer(
             external_policy = redacted_policy
         else:
             warnings.append("answer verification skipped external verifier due to P0 policy block")
-            return {
+            return _apply_verification_guards(
+                searcher,
+                {
                 "status": "skipped",
                 "supportedClaimCount": 0,
                 "unsupportedClaimCount": 0,
@@ -243,7 +360,11 @@ def verify_answer(
                 "warnings": list(dict.fromkeys(warnings)),
                 "claims": [],
                 "route": {**dict(route_meta or {}), "mode": "skipped"},
-            }
+                },
+                answer=answer,
+                evidence=evidence,
+                contradicting_beliefs=contradicting_beliefs,
+            )
 
     try:
         raw_output = verifier_llm.generate(
@@ -279,6 +400,7 @@ def verify_answer(
         searcher,
         raw=parsed,
         answer=answer,
+        evidence=evidence,
         answer_signals=answer_signals,
         contradicting_beliefs=contradicting_beliefs,
         route_meta=route_meta,

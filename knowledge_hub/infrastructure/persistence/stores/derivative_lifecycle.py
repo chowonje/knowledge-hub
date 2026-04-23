@@ -32,6 +32,43 @@ def clean_token(value: Any) -> str:
     return str(value or "").strip()
 
 
+def normalize_token_list(values: Any) -> list[str]:
+    parsed: list[Any]
+    if isinstance(values, list):
+        parsed = values
+    elif isinstance(values, tuple):
+        parsed = list(values)
+    elif not values:
+        parsed = []
+    else:
+        try:
+            loaded = json.loads(values)
+        except Exception:
+            loaded = []
+        parsed = loaded if isinstance(loaded, list) else []
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for raw in parsed:
+        token = clean_token(raw)
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        normalized.append(token)
+    return normalized
+
+
+def merge_token_json(existing: Any, new_values: list[str] | tuple[str, ...] | None) -> str:
+    merged = normalize_token_list(existing)
+    seen = set(merged)
+    for raw in list(new_values or []):
+        token = clean_token(raw)
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        merged.append(token)
+    return json.dumps(merged, ensure_ascii=False)
+
+
 def table_exists(conn: Any, table: str) -> bool:
     row = conn.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name = ?",
@@ -264,6 +301,109 @@ def _mark_table_rows_stale(
     return int(cursor.rowcount or 0)
 
 
+def _collect_affected_source_hashes(
+    conn: Any,
+    *,
+    table: str,
+    identity_clause: str,
+    identity_params: tuple[Any, ...],
+    source_content_hash: str,
+    allow_manual_rows: bool = False,
+) -> set[str]:
+    columns = column_names(conn, table)
+    required = {"source_content_hash", "stale"}
+    if not required.issubset(columns):
+        return set()
+    where_parts = [f"({identity_clause})", "source_content_hash != ''", "source_content_hash != ?", "COALESCE(stale, 0) = 0"]
+    params: list[Any] = [*identity_params, source_content_hash]
+    if "origin" in columns and not allow_manual_rows:
+        where_parts.append("COALESCE(origin, 'derived') != 'manual'")
+    rows = conn.execute(
+        f"""
+        SELECT DISTINCT source_content_hash
+        FROM {table}
+        WHERE {' AND '.join(where_parts)}
+        """,
+        tuple(params),
+    ).fetchall()
+    return {clean_token(row["source_content_hash"] if hasattr(row, "keys") else row[0]) for row in rows if clean_token(row["source_content_hash"] if hasattr(row, "keys") else row[0])}
+
+
+def _has_live_contributor_support(
+    conn: Any,
+    contributor_hashes: list[str],
+    *,
+    supporting_tables: tuple[str, ...] = ("ontology_claims", "ontology_relations", "kg_relations"),
+) -> bool:
+    hashes = [clean_token(value) for value in contributor_hashes if clean_token(value)]
+    if not hashes:
+        return False
+    placeholders = ", ".join("?" for _ in hashes)
+    for table in supporting_tables:
+        columns = column_names(conn, table)
+        if not {"source_content_hash", "stale"}.issubset(columns):
+            continue
+        row = conn.execute(
+            f"""
+            SELECT 1
+            FROM {table}
+            WHERE source_content_hash IN ({placeholders})
+              AND source_content_hash != ''
+              AND COALESCE(stale, 0) = 0
+            LIMIT 1
+            """,
+            tuple(hashes),
+        ).fetchone()
+        if row:
+            return True
+    return False
+
+
+def _mark_contributor_gated_rows_stale(
+    conn: Any,
+    *,
+    table: str,
+    id_column: str,
+    affected_source_hashes: set[str],
+    entity_type: str | None = None,
+) -> int:
+    columns = column_names(conn, table)
+    required = {"contributor_hashes", "stale", "stale_reason", "invalidated_at"}
+    if not required.issubset(columns):
+        return 0
+    query = f"SELECT {id_column}, contributor_hashes FROM {table} WHERE COALESCE(stale, 0) = 0"
+    params: list[Any] = []
+    if entity_type and "entity_type" in columns:
+        query += " AND entity_type = ?"
+        params.append(clean_token(entity_type))
+    rows = conn.execute(query, tuple(params)).fetchall()
+    changed = 0
+    for row in rows:
+        contributor_hashes = normalize_token_list(row["contributor_hashes"] if hasattr(row, "keys") else row[1])
+        if not contributor_hashes:
+            continue
+        if not set(contributor_hashes) & affected_source_hashes:
+            continue
+        if _has_live_contributor_support(conn, contributor_hashes):
+            continue
+        row_id = clean_token(row[id_column] if hasattr(row, "keys") else row[0])
+        if not row_id:
+            continue
+        cursor = conn.execute(
+            f"""
+            UPDATE {table}
+            SET stale = 1,
+                stale_reason = 'contributors_stale',
+                invalidated_at = CURRENT_TIMESTAMP
+            WHERE {id_column} = ?
+              AND COALESCE(stale, 0) = 0
+            """,
+            (row_id,),
+        )
+        changed += int(cursor.rowcount or 0)
+    return changed
+
+
 def mark_derivatives_stale_for_document(
     conn: Any,
     *,
@@ -324,9 +464,19 @@ def mark_derivatives_stale_for_document(
             source_content_hash=new_hash,
         )
     invalidate_mixed_derivatives = source_kind in {"note", "paper", "web", "vault"}
+    affected_ontology_hashes: set[str] = set()
     if tokens and invalidate_mixed_derivatives:
         claim_like_clause, claim_like_params = _like_any_clause("evidence_ptrs_json", tokens)
         if claim_like_clause:
+            affected_ontology_hashes.update(
+                _collect_affected_source_hashes(
+                    conn,
+                    table="ontology_claims",
+                    identity_clause=claim_like_clause,
+                    identity_params=claim_like_params,
+                    source_content_hash=new_hash,
+                )
+            )
             changed += _mark_table_rows_stale(
                 conn,
                 table="ontology_claims",
@@ -348,6 +498,15 @@ def mark_derivatives_stale_for_document(
             relation_clauses.append(reason_like_clause)
             relation_params.extend(reason_like_params)
         if relation_clauses:
+            affected_ontology_hashes.update(
+                _collect_affected_source_hashes(
+                    conn,
+                    table="ontology_relations",
+                    identity_clause=" OR ".join(f"({clause})" for clause in relation_clauses),
+                    identity_params=tuple(relation_params),
+                    source_content_hash=new_hash,
+                )
+            )
             changed += _mark_table_rows_stale(
                 conn,
                 table="ontology_relations",
@@ -369,6 +528,15 @@ def mark_derivatives_stale_for_document(
             legacy_clauses.append(evidence_like_clause)
             legacy_params.extend(evidence_like_params)
         if legacy_clauses:
+            affected_ontology_hashes.update(
+                _collect_affected_source_hashes(
+                    conn,
+                    table="kg_relations",
+                    identity_clause=" OR ".join(f"({clause})" for clause in legacy_clauses),
+                    identity_params=tuple(legacy_params),
+                    source_content_hash=new_hash,
+                )
+            )
             changed += _mark_table_rows_stale(
                 conn,
                 table="kg_relations",
@@ -428,4 +596,18 @@ def mark_derivatives_stale_for_document(
                     identity_params=tuple(params),
                     source_content_hash=new_hash,
                 )
+        if affected_ontology_hashes:
+            changed += _mark_contributor_gated_rows_stale(
+                conn,
+                table="ontology_entities",
+                id_column="entity_id",
+                affected_source_hashes=affected_ontology_hashes,
+                entity_type="concept",
+            )
+            changed += _mark_contributor_gated_rows_stale(
+                conn,
+                table="concepts",
+                id_column="id",
+                affected_source_hashes=affected_ontology_hashes,
+            )
     return changed

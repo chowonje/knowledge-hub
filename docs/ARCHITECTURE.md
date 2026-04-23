@@ -39,7 +39,10 @@ See also:
 - Store authority is explicit: source/audit stores can be canonical in their own domain, semantic cards/memory/graph/ontology projections are derivative unless they resolve back to source-backed spans, and operational queues/logs are not factual answer evidence.
 - Mixed semantic stores now use table-level authority plus row-level prep columns (`origin`, `contributor_hashes`, `supersedes`, `superseded_by`) so later lifecycle work does not confuse manual rows, aggregated projections, and epistemic review state.
 - Mixed derivative read paths now also enforce a first lifecycle boundary: stale `ontology_claims`, `ontology_relations`, legacy `kg_relations`, `learning_graph_*`, and derived `memory_relations` are excluded by default, while `origin='manual'` rows stay visible and mixed-store invalidation runs only for explicit source-document hash changes rather than every document-memory rebuild.
+- Epistemic review history is now append-style at the review boundary: `belief_review` / `decision_review` create successor rows linked by `supersedes` / `superseded_by`, and default list surfaces hide superseded history unless a caller explicitly asks for it.
+- Aggregated ontology concept/entity projections now track `contributor_hashes`. Their invalidation rule is AND-gated rather than single-hash: a concept/entity row only goes stale when an affected contributor hash intersects its contributor set and no live claim/relation derivative remains for any contributor hash in that set.
 - Answer-contract evidence is now narrower than retrieval input by construction: blocked mixed-store source schemes/types (`belief`, `decision`, `outcome`, `ontology`, `learning_*`, `memory_relation`, `entity_merge`, `entity_split`) are treated as retrieval or post-check signals only, never as citation targets. When such rows survive into answer assembly diagnostics they are surfaced under `retrievalSignals`, not under `citations`.
+- Verification now treats rejected-belief conflicts and signal-only grounding as structural gates, not stylistic cautions. A rejected belief that is contradicted without explicit conflict framing fails verification, and retrieval signals without citation-grade evidence fail verification instead of passing as grounded success.
 - Local workbench helpers may reshape or scope existing sources, but they must not become the system of record or silently add external sync paths.
 - Repo/project context is read-only and ephemeral unless a feature explicitly promotes it into a persistent store.
 
@@ -79,6 +82,7 @@ Definitions:
 - `document-memory`, `claim-normalization`, `claim-synthesis`, deeper memory-route controls, and parser/debug-heavy memory builders remain labs-first.
 - Promoted user-facing paper reading surfaces (`khub paper summary|evidence|memory|related`) should stay thin adapters over additive internals rather than forcing a store redesign.
 - Promotion path is `labs -> opt-in -> promoted default`, backed by eval evidence rather than architectural intent alone.
+- Evidence-first promotion now has a dedicated required CI slice: the fixture-backed golden pack plus answer-contract, verification, epistemic-supersede, and mixed-store lifecycle tests run under the `evidence-first-gates` workflow job before merge.
 
 ## Current canonical entrypoints
 

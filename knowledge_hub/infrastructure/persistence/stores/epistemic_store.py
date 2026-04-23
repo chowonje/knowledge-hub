@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 from typing import Any
+from uuid import uuid4
 
 
-BELIEF_STATUSES = {"proposed", "reviewed", "trusted", "stale", "rejected"}
+BELIEF_STATUSES = {"proposed", "reviewed", "trusted", "stale", "rejected", "superseded"}
 DECISION_STATUSES = {"open", "committed", "reviewed", "closed"}
 OUTCOME_STATUSES = {"observed", "confirmed", "invalidated"}
 
@@ -42,6 +43,20 @@ def _add_column_if_missing(conn, table: str, column_name: str, column_sql: str) 
     if column_name in columns:
         return
     conn.execute(f"ALTER TABLE {table} ADD COLUMN {column_sql}")
+
+
+def _normalize_status(raw_status: str | None, *, allowed: set[str], default: str) -> str:
+    value = str(raw_status or default).strip().lower()
+    if value not in allowed:
+        return default
+    return value
+
+
+def _new_version_id(prefix: str, explicit_id: str | None = None) -> str:
+    token = str(explicit_id or "").strip()
+    if token:
+        return token
+    return f"{prefix}_{uuid4().hex[:12]}"
 
 
 class EpistemicStore:
@@ -110,6 +125,44 @@ class EpistemicStore:
         item["contradiction_ids"] = _json_loads_list(item.get("contradiction_ids_json"))
         return item
 
+    def _resolve_latest_belief_id(self, belief_id: str) -> str | None:
+        current_id = str(belief_id or "").strip()
+        if not current_id:
+            return None
+        seen: set[str] = set()
+        while current_id and current_id not in seen:
+            seen.add(current_id)
+            row = self.conn.execute(
+                "SELECT belief_id, superseded_by FROM beliefs WHERE belief_id = ?",
+                (current_id,),
+            ).fetchone()
+            if not row:
+                return None
+            successor_id = str(row["superseded_by"] or "").strip()
+            if not successor_id:
+                return str(row["belief_id"])
+            current_id = successor_id
+        return current_id or None
+
+    def _resolve_latest_decision_id(self, decision_id: str) -> str | None:
+        current_id = str(decision_id or "").strip()
+        if not current_id:
+            return None
+        seen: set[str] = set()
+        while current_id and current_id not in seen:
+            seen.add(current_id)
+            row = self.conn.execute(
+                "SELECT decision_id, superseded_by FROM decisions WHERE decision_id = ?",
+                (current_id,),
+            ).fetchone()
+            if not row:
+                return None
+            successor_id = str(row["superseded_by"] or "").strip()
+            if not successor_id:
+                return str(row["decision_id"])
+            current_id = successor_id
+        return current_id or None
+
     def upsert_belief(
         self,
         *,
@@ -124,9 +177,7 @@ class EpistemicStore:
         last_validated_at: str | None = None,
         review_due_at: str | None = None,
     ) -> None:
-        status_value = str(status or "proposed").strip().lower()
-        if status_value not in BELIEF_STATUSES:
-            status_value = "proposed"
+        status_value = _normalize_status(status, allowed=BELIEF_STATUSES, default="proposed")
         self.conn.execute(
             """INSERT INTO beliefs
                (belief_id, statement, scope, status, confidence,
@@ -169,9 +220,12 @@ class EpistemicStore:
         status: str | None = None,
         scope: str | None = None,
         limit: int = 200,
+        include_superseded: bool = False,
     ) -> list[dict[str, Any]]:
         query = "SELECT * FROM beliefs WHERE 1=1"
         params: list[Any] = []
+        if not include_superseded:
+            query += " AND COALESCE(status, '') != 'superseded'"
         if status:
             query += " AND status = ?"
             params.append(str(status))
@@ -183,17 +237,77 @@ class EpistemicStore:
         rows = self.conn.execute(query, params).fetchall()
         return [item for item in (self._decode_belief(row) for row in rows) if item]
 
-    def list_beliefs_by_claim_ids(self, claim_ids: list[str], limit: int = 200) -> list[dict[str, Any]]:
+    def list_beliefs_by_claim_ids(
+        self,
+        claim_ids: list[str],
+        limit: int = 200,
+        *,
+        include_superseded: bool = False,
+    ) -> list[dict[str, Any]]:
         wanted = {str(item or "").strip() for item in claim_ids or [] if str(item or "").strip()}
         if not wanted:
             return []
         result: list[dict[str, Any]] = []
-        for item in self.list_beliefs(limit=max(1, int(limit * 4))):
+        for item in self.list_beliefs(limit=max(1, int(limit * 4)), include_superseded=include_superseded):
             if wanted & set(item.get("derived_from_claim_ids", [])):
                 result.append(item)
             if len(result) >= limit:
                 break
         return result[:limit]
+
+    def supersede_belief(
+        self,
+        belief_id: str,
+        *,
+        status: str,
+        successor_belief_id: str | None = None,
+        last_validated_at: str | None = None,
+        review_due_at: str | None = None,
+    ) -> dict[str, Any] | None:
+        latest_belief_id = self._resolve_latest_belief_id(belief_id)
+        if not latest_belief_id:
+            return None
+        belief = self.get_belief(latest_belief_id)
+        if not belief:
+            return None
+        successor_id = _new_version_id("belief", successor_belief_id)
+        if successor_id == latest_belief_id:
+            raise ValueError("successor belief_id must differ from the superseded belief_id")
+        if self.get_belief(successor_id):
+            raise ValueError(f"belief already exists: {successor_id}")
+        status_value = _normalize_status(status, allowed=BELIEF_STATUSES - {"superseded"}, default="proposed")
+        with self.conn:
+            self.conn.execute(
+                """
+                UPDATE beliefs
+                   SET status = 'superseded',
+                       superseded_by = ?,
+                       updated_at = CURRENT_TIMESTAMP
+                 WHERE belief_id = ?
+                """,
+                (successor_id, latest_belief_id),
+            )
+            self.conn.execute(
+                """INSERT INTO beliefs
+                   (belief_id, statement, scope, status, confidence,
+                    derived_from_claim_ids_json, support_ids_json, contradiction_ids_json,
+                    last_validated_at, review_due_at, supersedes, superseded_by, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', CURRENT_TIMESTAMP)""",
+                (
+                    successor_id,
+                    str(belief.get("statement", "")),
+                    str(belief.get("scope", "global")),
+                    status_value,
+                    float(belief.get("confidence", 0.5) or 0.5),
+                    _json_dumps_list(list(belief.get("derived_from_claim_ids", []))),
+                    _json_dumps_list(list(belief.get("support_ids", []))),
+                    _json_dumps_list(list(belief.get("contradiction_ids", []))),
+                    last_validated_at or belief.get("last_validated_at"),
+                    review_due_at or belief.get("review_due_at"),
+                    latest_belief_id,
+                ),
+            )
+        return self.get_belief(successor_id)
 
     def review_belief(
         self,
@@ -202,23 +316,15 @@ class EpistemicStore:
         status: str,
         last_validated_at: str | None = None,
         review_due_at: str | None = None,
+        successor_belief_id: str | None = None,
     ) -> dict[str, Any] | None:
-        belief = self.get_belief(belief_id)
-        if not belief:
-            return None
-        self.upsert_belief(
-            belief_id=belief_id,
-            statement=str(belief.get("statement", "")),
-            scope=str(belief.get("scope", "global")),
+        return self.supersede_belief(
+            belief_id,
             status=status,
-            confidence=float(belief.get("confidence", 0.5) or 0.5),
-            derived_from_claim_ids=list(belief.get("derived_from_claim_ids", [])),
-            support_ids=list(belief.get("support_ids", [])),
-            contradiction_ids=list(belief.get("contradiction_ids", [])),
-            last_validated_at=last_validated_at or belief.get("last_validated_at"),
-            review_due_at=review_due_at or belief.get("review_due_at"),
+            successor_belief_id=successor_belief_id,
+            last_validated_at=last_validated_at,
+            review_due_at=review_due_at,
         )
-        return self.get_belief(belief_id)
 
     def _decode_decision(self, row) -> dict[str, Any] | None:
         if not row:
@@ -238,9 +344,7 @@ class EpistemicStore:
         status: str = "open",
         review_due_at: str | None = None,
     ) -> None:
-        status_value = str(status or "open").strip().lower()
-        if status_value not in DECISION_STATUSES:
-            status_value = "open"
+        status_value = _normalize_status(status, allowed=DECISION_STATUSES, default="open")
         self.conn.execute(
             """INSERT INTO decisions
                (decision_id, title, summary, related_belief_ids_json, chosen_option, status, review_due_at, updated_at)
@@ -269,9 +373,17 @@ class EpistemicStore:
         row = self.conn.execute("SELECT * FROM decisions WHERE decision_id = ?", (str(decision_id),)).fetchone()
         return self._decode_decision(row)
 
-    def list_decisions(self, *, status: str | None = None, limit: int = 200) -> list[dict[str, Any]]:
+    def list_decisions(
+        self,
+        *,
+        status: str | None = None,
+        limit: int = 200,
+        include_superseded: bool = False,
+    ) -> list[dict[str, Any]]:
         query = "SELECT * FROM decisions WHERE 1=1"
         params: list[Any] = []
+        if not include_superseded:
+            query += " AND COALESCE(superseded_by, '') = ''"
         if status:
             query += " AND status = ?"
             params.append(str(status))
@@ -280,20 +392,68 @@ class EpistemicStore:
         rows = self.conn.execute(query, params).fetchall()
         return [item for item in (self._decode_decision(row) for row in rows) if item]
 
-    def review_decision(self, decision_id: str, *, status: str, review_due_at: str | None = None) -> dict[str, Any] | None:
-        item = self.get_decision(decision_id)
+    def supersede_decision(
+        self,
+        decision_id: str,
+        *,
+        status: str,
+        successor_decision_id: str | None = None,
+        review_due_at: str | None = None,
+    ) -> dict[str, Any] | None:
+        latest_decision_id = self._resolve_latest_decision_id(decision_id)
+        if not latest_decision_id:
+            return None
+        item = self.get_decision(latest_decision_id)
         if not item:
             return None
-        self.upsert_decision(
-            decision_id=decision_id,
-            title=str(item.get("title", "")),
-            summary=str(item.get("summary", "")),
-            related_belief_ids=list(item.get("related_belief_ids", [])),
-            chosen_option=str(item.get("chosen_option", "")),
+        successor_id = _new_version_id("decision", successor_decision_id)
+        if successor_id == latest_decision_id:
+            raise ValueError("successor decision_id must differ from the superseded decision_id")
+        if self.get_decision(successor_id):
+            raise ValueError(f"decision already exists: {successor_id}")
+        status_value = _normalize_status(status, allowed=DECISION_STATUSES, default="open")
+        with self.conn:
+            self.conn.execute(
+                """
+                UPDATE decisions
+                   SET superseded_by = ?,
+                       updated_at = CURRENT_TIMESTAMP
+                 WHERE decision_id = ?
+                """,
+                (successor_id, latest_decision_id),
+            )
+            self.conn.execute(
+                """INSERT INTO decisions
+                   (decision_id, title, summary, related_belief_ids_json, chosen_option,
+                    status, review_due_at, supersedes, superseded_by, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, '', CURRENT_TIMESTAMP)""",
+                (
+                    successor_id,
+                    str(item.get("title", "")),
+                    str(item.get("summary", "")),
+                    _json_dumps_list(list(item.get("related_belief_ids", []))),
+                    str(item.get("chosen_option", "")),
+                    status_value,
+                    review_due_at or item.get("review_due_at"),
+                    latest_decision_id,
+                ),
+            )
+        return self.get_decision(successor_id)
+
+    def review_decision(
+        self,
+        decision_id: str,
+        *,
+        status: str,
+        review_due_at: str | None = None,
+        successor_decision_id: str | None = None,
+    ) -> dict[str, Any] | None:
+        return self.supersede_decision(
+            decision_id,
             status=status,
-            review_due_at=review_due_at or item.get("review_due_at"),
+            successor_decision_id=successor_decision_id,
+            review_due_at=review_due_at,
         )
-        return self.get_decision(decision_id)
 
     def record_outcome(
         self,

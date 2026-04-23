@@ -84,14 +84,20 @@ def decision_list(ctx, status, limit, as_json):
 @click.argument("decision_id")
 @click.option("--status", required=True, type=click.Choice(["open", "committed", "reviewed", "closed"]))
 @click.option("--review-due-at", default=None)
+@click.option("--successor-decision-id", default=None)
 @click.option("--json/--no-json", "as_json", default=False, show_default=True)
 @click.pass_context
-def decision_review(ctx, decision_id, status, review_due_at, as_json):
+def decision_review(ctx, decision_id, status, review_due_at, successor_decision_id, as_json):
     db = _db(ctx)
-    item = db.review_decision(decision_id, status=status, review_due_at=review_due_at)
+    item = db.review_decision(
+        decision_id,
+        status=status,
+        review_due_at=review_due_at,
+        successor_decision_id=successor_decision_id,
+    )
     if not item:
         raise click.ClickException(f"decision not found: {decision_id}")
     if as_json:
         console.print_json(data={"status": "ok", "item": item})
         return
-    console.print(f"[green]decision reviewed[/green] id={decision_id} status={status}")
+    console.print(f"[green]decision reviewed[/green] old_id={decision_id} new_id={item['decision_id']} status={status}")

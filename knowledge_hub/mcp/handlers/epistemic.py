@@ -157,12 +157,16 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         status = str(arguments.get("status", "")).strip()
         if not belief_id or not status:
             return emit(status_failed, {"error": "belief_id와 status가 필요합니다."}, status_message="belief_id/status required")
-        item = sqlite_db.review_belief(
-            belief_id,
-            status=status,
-            last_validated_at=str(arguments.get("last_validated_at", "")).strip() or datetime.now(timezone.utc).isoformat(),
-            review_due_at=str(arguments.get("review_due_at", "")).strip() or None,
-        )
+        try:
+            item = sqlite_db.review_belief(
+                belief_id,
+                status=status,
+                last_validated_at=str(arguments.get("last_validated_at", "")).strip() or datetime.now(timezone.utc).isoformat(),
+                review_due_at=str(arguments.get("review_due_at", "")).strip() or None,
+                successor_belief_id=str(arguments.get("successor_belief_id", "")).strip() or None,
+            )
+        except ValueError as error:
+            return emit(status_failed, {"error": str(error)}, status_message="belief review failed")
         if not item:
             return emit(status_failed, {"error": "belief not found"}, status_message="belief not found")
         return emit(status_ok, {"item": item})
@@ -195,11 +199,15 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         status = str(arguments.get("status", "")).strip()
         if not decision_id or not status:
             return emit(status_failed, {"error": "decision_id와 status가 필요합니다."}, status_message="decision_id/status required")
-        item = sqlite_db.review_decision(
-            decision_id,
-            status=status,
-            review_due_at=str(arguments.get("review_due_at", "")).strip() or None,
-        )
+        try:
+            item = sqlite_db.review_decision(
+                decision_id,
+                status=status,
+                review_due_at=str(arguments.get("review_due_at", "")).strip() or None,
+                successor_decision_id=str(arguments.get("successor_decision_id", "")).strip() or None,
+            )
+        except ValueError as error:
+            return emit(status_failed, {"error": str(error)}, status_message="decision review failed")
         if not item:
             return emit(status_failed, {"error": "decision not found"}, status_message="decision not found")
         return emit(status_ok, {"item": item})

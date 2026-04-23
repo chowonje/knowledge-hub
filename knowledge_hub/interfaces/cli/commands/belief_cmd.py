@@ -121,19 +121,21 @@ def belief_upsert(
 @click.option("--status", required=True, type=click.Choice(["proposed", "reviewed", "trusted", "stale", "rejected"]))
 @click.option("--last-validated-at", default=None)
 @click.option("--review-due-at", default=None)
+@click.option("--successor-belief-id", default=None)
 @click.option("--json/--no-json", "as_json", default=False, show_default=True)
 @click.pass_context
-def belief_review(ctx, belief_id, status, last_validated_at, review_due_at, as_json):
+def belief_review(ctx, belief_id, status, last_validated_at, review_due_at, successor_belief_id, as_json):
     db = _db(ctx)
     item = db.review_belief(
         belief_id,
         status=status,
         last_validated_at=last_validated_at or datetime.now(timezone.utc).isoformat(),
         review_due_at=review_due_at,
+        successor_belief_id=successor_belief_id,
     )
     if not item:
         raise click.ClickException(f"belief not found: {belief_id}")
     if as_json:
         console.print_json(data={"status": "ok", "item": item})
         return
-    console.print(f"[green]belief reviewed[/green] id={belief_id} status={status}")
+    console.print(f"[green]belief reviewed[/green] old_id={belief_id} new_id={item['belief_id']} status={status}")

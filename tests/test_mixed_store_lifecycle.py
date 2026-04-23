@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from typing import Any
 
 from knowledge_hub.core.database import SQLiteDatabase
 from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
@@ -103,6 +104,14 @@ def _bootstrap_note_backed_mixed_rows(db: SQLiteDatabase) -> None:
         score_payload={},
         provenance={"noteId": "note-1"},
     )
+
+
+def _json_list(raw: Any) -> list[str]:
+    if not raw:
+        return []
+    if isinstance(raw, list):
+        return [str(item) for item in raw if str(item or "").strip()]
+    return [str(item) for item in json.loads(raw) if str(item or "").strip()]
 
 
 def test_note_source_change_marks_mixed_derivatives_stale_and_default_reads_exclude_them(tmp_path):
@@ -270,3 +279,126 @@ def test_paper_memory_relations_go_stale_when_linked_paper_memory_row_is_invalid
         )
         == []
     )
+
+
+def test_claim_and_relation_updates_merge_contributor_hashes_for_concept_entities(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "mixed-lifecycle-contributors.db"))
+    db.upsert_note(
+        "note-1",
+        "Contributor Note",
+        "body",
+        file_path="vault/contributor-note.md",
+        metadata={"source_content_hash": "hash-note-old"},
+    )
+    db.upsert_ontology_entity(
+        entity_id="concept-a",
+        entity_type="concept",
+        canonical_name="Concept A",
+        source="test",
+    )
+    db.upsert_ontology_entity(
+        entity_id="concept-b",
+        entity_type="concept",
+        canonical_name="Concept B",
+        source="test",
+    )
+
+    db.upsert_claim(
+        claim_id="claim-1",
+        claim_text="Concept A relates to note-1.",
+        subject_entity_id="concept-a",
+        predicate="mentions",
+        confidence=0.7,
+        evidence_ptrs=[{"note_id": "note-1", "source_content_hash": "hash-note-old"}],
+        source="test",
+    )
+    db.add_relation(
+        "note",
+        "note-1",
+        "note_mentions_concept",
+        "concept",
+        "concept-b",
+        evidence_text=json.dumps(
+            {"note_id": "note-1", "source_content_hash": "hash-note-old", "evidence_ptrs": [{"note_id": "note-1"}]},
+            ensure_ascii=False,
+        ),
+        confidence=0.8,
+    )
+
+    concept_a = db.get_ontology_entity("concept-a")
+    concept_b = db.get_ontology_entity("concept-b")
+    assert concept_a is not None and "hash-note-old" in _json_list(concept_a.get("contributor_hashes"))
+    assert concept_b is not None and "hash-note-old" in _json_list(concept_b.get("contributor_hashes"))
+
+
+def test_concept_entities_only_go_stale_when_all_contributors_are_invalidated(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "mixed-lifecycle-contributor-and.db"))
+    db.upsert_note(
+        "note-1",
+        "Contributor Note One",
+        "body",
+        file_path="vault/contributor-note-1.md",
+        metadata={"source_content_hash": "hash-note-1-old"},
+    )
+    db.upsert_note(
+        "note-2",
+        "Contributor Note Two",
+        "body",
+        file_path="vault/contributor-note-2.md",
+        metadata={"source_content_hash": "hash-note-2-old"},
+    )
+    db.upsert_ontology_entity(
+        entity_id="concept-a",
+        entity_type="concept",
+        canonical_name="Concept A",
+        source="test",
+    )
+    db.upsert_claim(
+        claim_id="claim-1",
+        claim_text="Concept A appears in note-1.",
+        subject_entity_id="concept-a",
+        predicate="mentions",
+        confidence=0.7,
+        evidence_ptrs=[{"note_id": "note-1", "path": "vault/contributor-note-1.md", "source_content_hash": "hash-note-1-old"}],
+        source="test",
+    )
+    db.upsert_claim(
+        claim_id="claim-2",
+        claim_text="Concept A appears in note-2.",
+        subject_entity_id="concept-a",
+        predicate="mentions",
+        confidence=0.7,
+        evidence_ptrs=[{"note_id": "note-2", "path": "vault/contributor-note-2.md", "source_content_hash": "hash-note-2-old"}],
+        source="test",
+    )
+
+    concept_before = db.get_ontology_entity("concept-a")
+    assert concept_before is not None
+    assert set(_json_list(concept_before.get("contributor_hashes"))) == {"hash-note-1-old", "hash-note-2-old"}
+    assert db.list_ontology_entities(entity_type="concept", limit=10)
+
+    changed_first = mark_derivatives_stale_for_document(
+        db.conn,
+        document_id="note-1",
+        source_content_hash="hash-note-1-new",
+        source_type="note",
+    )
+    assert changed_first >= 1
+
+    concept_mid = db.get_ontology_entity("concept-a")
+    assert concept_mid is not None
+    assert bool(concept_mid.get("stale")) is False
+    assert len(db.list_ontology_entities(entity_type="concept", limit=10)) == 1
+
+    changed_second = mark_derivatives_stale_for_document(
+        db.conn,
+        document_id="note-2",
+        source_content_hash="hash-note-2-new",
+        source_type="note",
+    )
+    assert changed_second >= 1
+
+    concept_after = db.get_ontology_entity("concept-a")
+    assert concept_after is not None
+    assert bool(concept_after.get("stale")) is True
+    assert db.list_ontology_entities(entity_type="concept", limit=10) == []

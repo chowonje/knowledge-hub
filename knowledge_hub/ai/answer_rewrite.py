@@ -30,6 +30,10 @@ def _unsupported_claim_count(verification: dict) -> int:
 
 
 def _gate_fallback_warning(verification: dict) -> str:
+    if bool(verification.get("contradictsRejectedBelief")):
+        return "answer rewrite skipped: rejected belief conflict requires conservative fallback"
+    if int(verification.get("retrievalSignalCount") or 0) > 0 and int(verification.get("groundingEvidenceCount") or 0) == 0:
+        return "answer rewrite skipped: retrieval signals without citation-grade evidence require conservative fallback"
     if _unsupported_claim_count(verification) > 0:
         return "answer rewrite skipped: unsupported claims require conservative fallback"
     if bool(verification.get("needsCaution")) and not bool(verification.get("conflictMentioned")):

@@ -13,6 +13,8 @@ from uuid import uuid4
 from knowledge_hub.core.models import OntologyEvent
 from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
     add_derivative_lifecycle_columns,
+    merge_token_json,
+    normalize_token_list,
     source_hash_from_payload,
 )
 
@@ -395,6 +397,42 @@ class OntologyStore:
         except Exception:
             item["properties"] = {}
         return item
+
+    def _merge_contributor_hashes_for_entity(self, entity_id: str, contributor_hashes: list[str] | None) -> None:
+        hashes = normalize_token_list(contributor_hashes or [])
+        if not hashes:
+            return
+        entity_token = str(entity_id or "").strip()
+        if not entity_token:
+            return
+        entity = self.get_ontology_entity(entity_token)
+        if not entity or str(entity.get("entity_type") or "") != "concept":
+            return
+        if "contributor_hashes" in self._table_columns("ontology_entities"):
+            row = self.conn.execute(
+                "SELECT contributor_hashes FROM ontology_entities WHERE entity_id = ?",
+                (entity_token,),
+            ).fetchone()
+            merged = merge_token_json((dict(row) if row else {}).get("contributor_hashes") if row else "", hashes)
+            self.conn.execute(
+                """
+                UPDATE ontology_entities
+                SET contributor_hashes = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE entity_id = ?
+                """,
+                (merged, entity_token),
+            )
+        if self._table_exists("concepts") and "contributor_hashes" in self._table_columns("concepts"):
+            row = self.conn.execute(
+                "SELECT contributor_hashes FROM concepts WHERE id = ?",
+                (entity_token,),
+            ).fetchone()
+            if row:
+                merged = merge_token_json((dict(row) if row else {}).get("contributor_hashes") if row else "", hashes)
+                self.conn.execute(
+                    "UPDATE concepts SET contributor_hashes = ? WHERE id = ?",
+                    (merged, entity_token),
+                )
 
     def _upsert_entity(
         self,
@@ -1166,6 +1204,9 @@ class OntologyStore:
                 ),
             )
 
+        if source_hash:
+            self._merge_contributor_hashes_for_entity(source_entity_id or source_id_norm, [source_hash])
+            self._merge_contributor_hashes_for_entity(target_entity_id or target_id_norm, [source_hash])
         self.conn.commit()
 
         if self.event_store:
@@ -1421,6 +1462,7 @@ class OntologyStore:
         properties: dict[str, Any] | None = None,
         confidence: float = 1.0,
         source: str = "system",
+        contributor_hashes: list[str] | None = None,
     ) -> None:
         existing = self.get_ontology_entity(entity_id)
         is_update = existing is not None
@@ -1447,6 +1489,8 @@ class OntologyStore:
                 str(source),
             ),
         )
+        self.conn.commit()
+        self._merge_contributor_hashes_for_entity(entity_id, contributor_hashes)
         self.conn.commit()
 
         if not self.event_store:
@@ -1483,15 +1527,19 @@ class OntologyStore:
         self,
         entity_type: str | None = None,
         limit: int = 500,
+        include_stale: bool = False,
     ) -> list[dict[str, Any]]:
+        stale_filter = ""
+        if "stale" in self._table_columns("ontology_entities") and not include_stale:
+            stale_filter = " AND COALESCE(stale, 0) = 0"
         if entity_type:
             rows = self.conn.execute(
-                "SELECT * FROM ontology_entities WHERE entity_type = ? ORDER BY canonical_name LIMIT ?",
+                f"SELECT * FROM ontology_entities WHERE entity_type = ?{stale_filter} ORDER BY canonical_name LIMIT ?",
                 (str(entity_type), max(1, int(limit))),
             ).fetchall()
         else:
             rows = self.conn.execute(
-                "SELECT * FROM ontology_entities ORDER BY entity_type, canonical_name LIMIT ?",
+                f"SELECT * FROM ontology_entities WHERE 1=1{stale_filter} ORDER BY entity_type, canonical_name LIMIT ?",
                 (max(1, int(limit)),),
             ).fetchall()
         return [item for item in (self._decode_entity_row(row) for row in rows) if item]
@@ -1612,12 +1660,20 @@ class OntologyStore:
         ).fetchall()
         return [str(row[0]) for row in rows if row and row[0]]
 
-    def resolve_entity(self, name_or_alias: str, entity_type: str | None = None) -> dict[str, Any] | None:
+    def resolve_entity(
+        self,
+        name_or_alias: str,
+        entity_type: str | None = None,
+        *,
+        include_stale: bool = False,
+    ) -> dict[str, Any] | None:
         query = "SELECT * FROM ontology_entities WHERE (canonical_name = ? OR entity_id = ?)"
         params: list[Any] = [str(name_or_alias), str(name_or_alias)]
         if entity_type:
             query += " AND entity_type = ?"
             params.append(str(entity_type))
+        if "stale" in self._table_columns("ontology_entities") and not include_stale:
+            query += " AND COALESCE(stale, 0) = 0"
         row = self.conn.execute(query, params).fetchone()
         if row:
             return self._decode_entity_row(row)
@@ -1631,6 +1687,8 @@ class OntologyStore:
         if entity_type:
             alias_query += " AND e.entity_type = ?"
             alias_params.append(str(entity_type))
+        if "stale" in self._table_columns("ontology_entities") and not include_stale:
+            alias_query += " AND COALESCE(e.stale, 0) = 0"
         alias_row = self.conn.execute(alias_query, alias_params).fetchone()
         return self._decode_entity_row(alias_row)
 
@@ -1680,13 +1738,20 @@ class OntologyStore:
         except Exception as error:
             log.error("Event append failed for entity delete (%s): %s", entity_token, error)
 
-    def upsert_concept(self, concept_id: str, canonical_name: str, description: str = "") -> None:
+    def upsert_concept(
+        self,
+        concept_id: str,
+        canonical_name: str,
+        description: str = "",
+        contributor_hashes: list[str] | None = None,
+    ) -> None:
         self.upsert_ontology_entity(
             entity_id=str(concept_id),
             entity_type="concept",
             canonical_name=str(canonical_name),
             description=str(description or ""),
             source="legacy_concept_api",
+            contributor_hashes=contributor_hashes,
         )
 
     def get_concept(self, concept_id: str) -> dict[str, Any] | None:

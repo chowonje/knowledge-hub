@@ -2725,7 +2725,11 @@ def test_generate_answer_rewrites_when_conflict_language_missing(monkeypatch):
     assert result["initialAnswerVerification"]["conflictMentioned"] is False
     assert result["answerVerification"]["conflictMentioned"] is True
     assert result["answerVerification"]["needsCaution"] is False
-    assert any("answer rewrite skipped: caution requires conservative fallback" in warning for warning in result["warnings"])
+    assert any(
+        "answer rewrite skipped: rejected belief conflict requires conservative fallback" in warning
+        or "answer rewrite skipped: caution requires conservative fallback" in warning
+        for warning in result["warnings"]
+    )
 
 
 def test_generate_answer_uses_conservative_fallback_for_uncertain_only_claims(monkeypatch):

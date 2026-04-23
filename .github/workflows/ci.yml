@@ -117,3 +117,27 @@ PY
       - name: Run authority TypeScript contract tests
         working-directory: foundry-core
         run: node --import tsx --test tests/authority-contract.test.ts
+
+  evidence-first-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,openai]"
+
+      - name: Run evidence-first golden and contract gates
+        run: >
+          pytest -q
+          tests/test_evidence_first_golden.py
+          tests/test_answer_contracts_runtime.py
+          tests/test_answer_verification_guards.py
+          tests/test_epistemic_supersede.py
+          tests/test_mixed_store_lifecycle.py
