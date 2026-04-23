@@ -37,6 +37,13 @@ def _json_loads_list(raw: Any) -> list[str]:
     return [str(item) for item in parsed if str(item or "").strip()]
 
 
+def _add_column_if_missing(conn, table: str, column_name: str, column_sql: str) -> None:
+    columns = {str(row[1]) for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+    if column_name in columns:
+        return
+    conn.execute(f"ALTER TABLE {table} ADD COLUMN {column_sql}")
+
+
 class EpistemicStore:
     def __init__(self, conn):
         self.conn = conn
@@ -88,6 +95,10 @@ class EpistemicStore:
             )
             """
         )
+        _add_column_if_missing(self.conn, "beliefs", "supersedes", "supersedes TEXT NOT NULL DEFAULT ''")
+        _add_column_if_missing(self.conn, "beliefs", "superseded_by", "superseded_by TEXT NOT NULL DEFAULT ''")
+        _add_column_if_missing(self.conn, "decisions", "supersedes", "supersedes TEXT NOT NULL DEFAULT ''")
+        _add_column_if_missing(self.conn, "decisions", "superseded_by", "superseded_by TEXT NOT NULL DEFAULT ''")
         self.conn.commit()
 
     def _decode_belief(self, row) -> dict[str, Any] | None:

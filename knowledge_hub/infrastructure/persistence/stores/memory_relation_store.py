@@ -18,6 +18,13 @@ def _loads_dict(raw: Any) -> dict[str, Any]:
     return parsed if isinstance(parsed, dict) else {}
 
 
+def _add_column_if_missing(conn, table: str, column_name: str, column_sql: str) -> None:
+    columns = {str(row[1]) for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+    if column_name in columns:
+        return
+    conn.execute(f"ALTER TABLE {table} ADD COLUMN {column_sql}")
+
+
 class MemoryRelationStore:
     def __init__(self, conn):
         self.conn = conn
@@ -50,6 +57,12 @@ class MemoryRelationStore:
             CREATE INDEX IF NOT EXISTS idx_memory_relations_dst
             ON memory_relations(dst_form, dst_id, relation_type, updated_at DESC)
             """
+        )
+        _add_column_if_missing(
+            self.conn,
+            "memory_relations",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
         )
         self.conn.commit()
 

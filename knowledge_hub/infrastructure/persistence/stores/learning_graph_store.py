@@ -20,6 +20,13 @@ def _loads(raw: Any, fallback):
     return parsed if isinstance(parsed, dict) else fallback
 
 
+def _add_column_if_missing(conn, table: str, column_name: str, column_sql: str) -> None:
+    columns = {str(row[1]) for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+    if column_name in columns:
+        return
+    conn.execute(f"ALTER TABLE {table} ADD COLUMN {column_sql}")
+
+
 class LearningGraphStore:
     def __init__(self, conn):
         self.conn = conn
@@ -151,6 +158,18 @@ class LearningGraphStore:
             CREATE INDEX IF NOT EXISTS idx_learning_graph_events_topic
             ON learning_graph_events(topic_slug, created_at DESC)
             """
+        )
+        _add_column_if_missing(
+            self.conn,
+            "learning_graph_edges",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
+        )
+        _add_column_if_missing(
+            self.conn,
+            "learning_graph_resource_links",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
         )
         self.conn.commit()
 

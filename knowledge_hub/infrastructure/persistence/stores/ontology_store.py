@@ -274,6 +274,7 @@ class OntologyStore:
             ON ontology_pending(pending_type, status, created_at DESC)
             """
         )
+        self._ensure_mixed_authority_columns()
         self.conn.commit()
 
     def ensure_core_predicates(self) -> None:
@@ -334,6 +335,41 @@ class OntologyStore:
         cols = {str(row["name"]) for row in rows}
         self._table_columns_cache[table_name] = cols
         return cols
+
+    def _add_column_if_missing(self, table_name: str, column_name: str, column_sql: str) -> None:
+        if not self._table_exists(table_name):
+            return
+        if column_name in self._table_columns(table_name):
+            return
+        self.conn.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_sql}")
+        self._table_columns_cache.pop(table_name, None)
+
+    def _ensure_mixed_authority_columns(self) -> None:
+        self._add_column_if_missing(
+            "concepts",
+            "contributor_hashes",
+            "contributor_hashes TEXT NOT NULL DEFAULT '[]'",
+        )
+        self._add_column_if_missing(
+            "ontology_entities",
+            "contributor_hashes",
+            "contributor_hashes TEXT NOT NULL DEFAULT '[]'",
+        )
+        self._add_column_if_missing(
+            "ontology_claims",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
+        )
+        self._add_column_if_missing(
+            "ontology_relations",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
+        )
+        self._add_column_if_missing(
+            "kg_relations",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
+        )
 
     @staticmethod
     def _decode_entity_row(row: Any) -> dict[str, Any] | None:
@@ -535,6 +571,13 @@ class OntologyStore:
             CREATE INDEX IF NOT EXISTS idx_kg_target
             ON kg_relations(target_type, target_id)
             """
+        )
+        self._table_exists_cache.pop("kg_relations", None)
+        self._table_columns_cache.pop("kg_relations", None)
+        self._add_column_if_missing(
+            "kg_relations",
+            "origin",
+            "origin TEXT NOT NULL DEFAULT 'derived' CHECK(origin IN ('derived','manual','pending'))",
         )
 
     def run_core_migration(self) -> None:

@@ -12,6 +12,7 @@ See also:
 - `docs/maps/agent-execution-map.md`
 - `docs/maps/data-policy-flow-map.md`
 - `docs/adr/2026-04-24-store-authority-inventory.md`
+- `docs/adr/2026-04-24-mixed-store-schema-prep.md`
 
 ## Major boundaries
 
@@ -36,6 +37,7 @@ See also:
 ### Persistence and context boundary
 - SQLite, vector collections, parser artifacts, and note/paper/web source records remain canonical local stores.
 - Store authority is explicit: source/audit stores can be canonical in their own domain, semantic cards/memory/graph/ontology projections are derivative unless they resolve back to source-backed spans, and operational queues/logs are not factual answer evidence.
+- Mixed semantic stores now use table-level authority plus row-level prep columns (`origin`, `contributor_hashes`, `supersedes`, `superseded_by`) so later lifecycle work does not confuse manual rows, aggregated projections, and epistemic review state.
 - Local workbench helpers may reshape or scope existing sources, but they must not become the system of record or silently add external sync paths.
 - Repo/project context is read-only and ephemeral unless a feature explicitly promotes it into a persistent store.
 
