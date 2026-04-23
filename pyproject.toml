@@ -28,6 +28,7 @@ dependencies = [
     "chromadb>=0.4.22",
     "requests>=2.31.0",
     "rich>=13.7.0",
+    "jsonschema>=4.25.0",
     "PyYAML>=6.0.1",
     "tqdm>=4.66.1",
     "python-dotenv>=1.0.0",
@@ -38,18 +39,53 @@ openai = ["openai>=1.0.0"]
 anthropic = ["anthropic>=0.25.0"]
 google = ["google-generativeai>=0.5.0"]
 ollama = ["ollama>=0.1.6"]
+st = ["sentence-transformers>=3.0.0"]
 obsidian = ["python-frontmatter>=1.0.0", "markdown>=3.5.1"]
 pdf = ["reportlab>=4.0.0"]
 mcp = ["mcp>=1.0.0"]
-dev = ["pytest>=8.0.0", "build>=1.0.0"]
+crawl4ai = ["crawl4ai>=0.8.0"]
+pymupdf = ["PyMuPDF>=1.24.0,<2.0.0"]
+ocrmypdf = ["ocrmypdf>=16.0.0,<17.0.0"]
+opendataloader = ["opendataloader-pdf>=2.2.0,<3.0.0"]
+mineru = ["mineru[pipeline]>=3.0.1,<3.1.0", "addict>=2.4.0,<3.0.0", "transformers>=4.57.3,<5.0.0"]
+topology = ["numpy>=1.26.0", "scikit-learn>=1.5.0", "umap-learn>=0.5.7"]
+ontology = [
+    "rdflib>=7.0.0",
+    "pyshacl>=0.30.0",
+    "owlready2>=0.46",
+    "oxigraph>=0.4.7",
+]
+dev = ["pytest>=8.0.0", "pytest-cov>=7.0.0", "build>=1.0.0", "ruff>=0.15.0"]
 all = [
-    "knowledge-hub[openai,anthropic,google,ollama,obsidian,pdf,mcp]",
+    "openai>=1.0.0",
+    "anthropic>=0.25.0",
+    "google-generativeai>=0.5.0",
+    "ollama>=0.1.6",
+    "sentence-transformers>=3.0.0",
+    "python-frontmatter>=1.0.0",
+    "markdown>=3.5.1",
+    "reportlab>=4.0.0",
+    "mcp>=1.0.0",
+    "crawl4ai>=0.8.0",
+    "PyMuPDF>=1.24.0,<2.0.0",
+    "ocrmypdf>=16.0.0,<17.0.0",
+    "opendataloader-pdf>=2.2.0,<3.0.0",
+    "mineru[pipeline]>=3.0.1,<3.1.0",
+    "addict>=2.4.0,<3.0.0",
+    "transformers>=4.57.3,<5.0.0",
+    "numpy>=1.26.0",
+    "scikit-learn>=1.5.0",
+    "umap-learn>=0.5.7",
+    "rdflib>=7.0.0",
+    "pyshacl>=0.30.0",
+    "owlready2>=0.46",
+    "oxigraph>=0.4.7",
 ]
 
 
 [project.scripts]
-khub = "knowledge_hub.cli.main:cli"
-khub-mcp = "knowledge_hub.mcp_server:main"
+khub = "knowledge_hub.interfaces.cli.main:cli"
+khub-mcp = "knowledge_hub.interfaces.mcp.server:main"
 
 [project.urls]
 Homepage = "https://github.com/chowonje/knowledge-hub"
@@ -58,3 +94,22 @@ Issues = "https://github.com/chowonje/knowledge-hub/issues"
 
 [tool.setuptools.packages.find]
 include = ["knowledge_hub*"]
+
+[tool.setuptools.package-data]
+knowledge_hub = ["data/ontology_profiles/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--tb=short"
+
+[tool.coverage.run]
+source = ["knowledge_hub"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 40
+
+[tool.ruff]
+target-version = "py310"

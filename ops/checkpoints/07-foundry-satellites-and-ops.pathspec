@@ -1,0 +1,5 @@
+# TypeScript runtime and operational assets.
+
+docs/foundry-knowledge-hub-integration.md
+:(glob)foundry-core/**
+:(glob)ops/**

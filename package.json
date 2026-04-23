@@ -1,0 +1,10 @@
+{
+  "name": "knowledge-hub-cli-mcp",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "cli": "python -m knowledge_hub.interfaces.cli.main",
+    "mcp": "python -m knowledge_hub.interfaces.mcp.server",
+    "foundry:project": "npm --prefix foundry-core run project"
+  }
+}

@@ -1,0 +1,28 @@
+# Canonical entrypoints, health/integrity repair, and the tests/docs that pin
+# the green-baseline contract.
+
+package.json
+pyproject.toml
+README.md
+docs/PROJECT_STATE.md
+.github/workflows/ci.yml
+knowledge_hub/interfaces/__init__.py
+knowledge_hub/interfaces/cli/__init__.py
+:(glob)knowledge_hub/interfaces/cli/main.py
+:(glob)knowledge_hub/interfaces/cli/commands/**
+:(exclude,glob)knowledge_hub/interfaces/cli/commands/paper*
+:(glob)knowledge_hub/interfaces/mcp/**
+knowledge_hub/infrastructure/config.py
+knowledge_hub/infrastructure/persistence/__init__.py
+knowledge_hub/infrastructure/persistence/store_registry.py
+knowledge_hub/infrastructure/persistence/sqlite_db.py
+knowledge_hub/infrastructure/persistence/stores/event_store.py
+knowledge_hub/infrastructure/persistence/stores/entity_resolution_store.py
+scripts/repair_event_integrity.py
+tests/test_pyproject_metadata.py
+tests/test_interfaces_cli_main.py
+tests/test_interfaces_mcp_server.py
+tests/test_health_cmd.py
+tests/test_config.py
+tests/test_event_store.py
+tests/test_entity_resolution.py

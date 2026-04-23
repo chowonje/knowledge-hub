@@ -11,9 +11,11 @@ build/
 # Virtual environments
 venv/
 .venv/
+.venv*/
 env/
 
 # IDE
+.cursor/
 .vscode/
 .idea/
 *.swp
@@ -23,29 +25,47 @@ env/
 # Testing
 .pytest_cache/
 .coverage
+coverage.xml
 htmlcov/
 
 # User data (generated at runtime)
-data/
+/data/
 logs/
+exports/
+tmp/
+.tmp/
 config.yaml
+config.yaml.bak_*
 *.db
+*.db-shm
+*.db-wal
 *.log
 .khub/
+runs/
+eval/knowledgeos/runs
+eval/knowledgeos/runs/
+runs/ab/
 
 # Secrets
 .env
 .env.*
 !.env.example
 
-# Legacy source (not part of the package)
-src/
+# Legacy root source (not part of the package)
+/src/
 
 # Node.js (foundry-core)
 node_modules/
 
+# Browser/tool runtime
+.playwright-cli/
+output/
+
 # Temp/state files (foundry-core runtime)
 *.json.bak
+.foundry-audit.jsonl
+.foundry-idempotency.json
+.foundry-ontology-events.jsonl
 .foundry-sync-state.json
 .tmp-failfast.json
 .tmpstate/
@@ -54,6 +74,7 @@ state-from-cli.json
 tmp_agent_event_log.json
 verify-state.json
 runtime_*.csv
+tmp_*
 
 # Legacy root-level files (moved into knowledge_hub/ package)
 mcp_server.py

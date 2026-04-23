@@ -75,6 +75,19 @@ class TestConfigValidation:
             config = Config(str(cfg_path))
             config.validate(require_providers=["openai"])
 
+    def test_local_provider_does_not_require_api_key(self, tmp_path, monkeypatch):
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text(yaml.dump({
+            "embedding": {"provider": "ollama"},
+        }))
+
+        class _ProviderInfo:
+            requires_api_key = False
+
+        monkeypatch.setattr("knowledge_hub.providers.registry.get_provider_info", lambda _provider: _ProviderInfo())
+        config = Config(str(cfg_path))
+        config.validate(require_providers=["ollama"])
+
     def test_require_api_key_missing(self, tmp_path):
         cfg_path = tmp_path / "config.yaml"
         cfg_path.write_text(yaml.dump({}))
@@ -97,3 +110,50 @@ class TestConfigFileNotFound:
     def test_raises_on_missing_file(self):
         with pytest.raises(FileNotFoundError):
             Config("/nonexistent/path/config.yaml")
+
+
+class TestConfigCompatibility:
+    def test_storage_collection_alias_is_supported(self, tmp_path):
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text(
+            yaml.dump(
+                {
+                    "storage": {
+                        "collection": "legacy_collection",
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        config = Config(str(cfg_path))
+
+        assert config.collection_name == "legacy_collection"
+
+    def test_legacy_example_paths_still_resolve(self, tmp_path):
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text(
+            yaml.dump(
+                {
+                    "vault": {"path": str(tmp_path / "vault")},
+                    "database": {
+                        "vector_db_path": str(tmp_path / "db" / "chroma"),
+                        "sqlite_path": str(tmp_path / "db" / "knowledge.db"),
+                        "collection_name": "legacy_db_collection",
+                    },
+                    "papers": {
+                        "download_dir": str(tmp_path / "papers"),
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        config = Config(str(cfg_path))
+
+        assert config.vault_path == str(tmp_path / "vault")
+        assert config.vault_enabled is True
+        assert config.vector_db_path == str(tmp_path / "db" / "chroma")
+        assert config.sqlite_path == str(tmp_path / "db" / "knowledge.db")
+        assert config.collection_name == "legacy_db_collection"
+        assert config.papers_dir == str(tmp_path / "papers")

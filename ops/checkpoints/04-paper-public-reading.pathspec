@@ -1,0 +1,7 @@
+# Public paper surface and supporting paper runtimes.
+
+:(glob)knowledge_hub/papers/**
+:(glob)knowledge_hub/interfaces/cli/commands/paper*
+:(glob)tests/test_paper*.py
+tests/test_opendataloader_adapter.py
+tests/test_public_productization_cli.py

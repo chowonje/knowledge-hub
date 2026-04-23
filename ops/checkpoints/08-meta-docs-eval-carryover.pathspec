@@ -1,0 +1,15 @@
+# Parking bucket for repo-level docs, eval assets, config examples, and other
+# carryover files that are not part of the product/runtime checkpoint set.
+
+.gitignore
+.github/workflows/test.yml
+AGENTS.md
+COMMANDS.md
+PROJECT_PROGRESS.md
+config.yaml.example
+:(glob)config.yaml.bak_*
+:(glob)docs/**
+:(glob)eval/**
+logo-v2.png
+logo.png
+requirements.txt

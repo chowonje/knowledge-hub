@@ -1,0 +1,8 @@
+# Retrieval, answer orchestration, and ask-v2/additive memory surfaces.
+
+:(glob)knowledge_hub/agent_memory/**
+:(glob)knowledge_hub/ai/**
+:(glob)tests/test_ask_v2*.py
+:(glob)tests/test_rag*.py
+:(glob)tests/test_retrieval*.py
+tests/test_search_result_contract.py

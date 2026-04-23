@@ -1,45 +1,63 @@
 # ============================================================
-# Knowledge Hub - 설정 파일 예시
-# 이 파일을 config.yaml로 복사한 뒤 값을 수정하세요.
-# 또는 `khub init` 명령으로 대화형 설정을 할 수 있습니다.
+# Knowledge Hub - current config example
+# Copy this file to config.yaml and adjust values as needed.
+# `khub setup` or `khub init` can also generate and edit config.
 # ============================================================
 
-# --- Obsidian Vault ---
-vault:
-  path: ""  # Obsidian vault 경로 (예: /path/to/your/vault)
-  exclude_folders:
-    - ".obsidian"
-    - ".trash"
-    - "templates"
+translation:
+  provider: openai
+  model: gpt-5-nano
 
-# --- 임베딩 ---
+summarization:
+  provider: ollama
+  model: qwen3:14b
+
+routing:
+  llm:
+    tasks:
+      rag_answer:
+        preferred_backend: "" # set to codex_mcp to prefer Codex for external-allowed answers
+        preferred_backend_model: ""
+        codex:
+          transport: exec
+          timeout_seconds: 300
+
 embedding:
-  model: "nomic-embed-text"
-  base_url: "http://localhost:11434"
-  chunk_size: 1000
-  chunk_overlap: 200
+  provider: ollama
+  model: nomic-embed-text
 
-# --- LLM ---
-llm:
-  model: "qwen2.5:7b"
-  base_url: "http://localhost:11434"
-  temperature: 0.7
-  max_tokens: 2000
+storage:
+  papers_dir: ~/.khub/papers
+  vector_db: ~/.khub/chroma_db
+  collection_name: knowledge_hub
+  sqlite: ~/.khub/knowledge.db
 
-# --- 데이터베이스 ---
-database:
-  vector_db_path: "./data/chroma_db"
-  sqlite_path: "./data/knowledge.db"
-  collection_name: "knowledge_hub"
-  top_k: 5
+paper:
+  summary:
+    parser: auto
 
-# --- 논문 관리 ---
-papers:
-  csv_path: ""
-  download_dir: "./data/papers"
-  translate_model: "gpt-4o-mini"
+obsidian:
+  enabled: false
+  vault_path: /path/to/your/obsidian/vault
+  exclude_folders:
+    - .obsidian
+    - .trash
+    - templates
+  notes_folder: Papers
+  ko_notes_staging_folder: LearningHub/ai/ko_notes
+  web_sources_folder: Projects/AI/AI_Papers/Web_Sources
+  concepts_folder: Projects/AI/AI_Papers/Concepts
+  write_backend: filesystem
+  cli_binary: obsidian
 
-# --- 로깅 ---
-logging:
-  level: "INFO"
-  file: "./logs/knowledge_hub.log"
+providers:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+  anthropic:
+    api_key: ${ANTHROPIC_API_KEY}
+  google:
+    api_key: ${GOOGLE_API_KEY}
+  ollama:
+    base_url: http://localhost:11434
+  pplx-local:
+    base_url: http://localhost:8080

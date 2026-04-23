@@ -1,0 +1,15 @@
+# Ownership transition for core/application/domain/infrastructure/provider
+# modules outside the green-baseline slice.
+
+:(glob)knowledge_hub/application/**
+:(glob)knowledge_hub/core/**
+:(glob)knowledge_hub/domain/**
+:(glob)knowledge_hub/infrastructure/**
+:(exclude)knowledge_hub/infrastructure/config.py
+:(exclude)knowledge_hub/infrastructure/persistence/__init__.py
+:(exclude)knowledge_hub/infrastructure/persistence/store_registry.py
+:(exclude)knowledge_hub/infrastructure/persistence/sqlite_db.py
+:(exclude)knowledge_hub/infrastructure/persistence/stores/event_store.py
+:(exclude)knowledge_hub/infrastructure/persistence/stores/entity_resolution_store.py
+:(glob)knowledge_hub/providers/**
+tests/test_database.py
