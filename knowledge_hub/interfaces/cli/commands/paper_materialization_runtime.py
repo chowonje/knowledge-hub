@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import json
+import os
 import re
+import subprocess
+import sys
 import time
 from pathlib import Path
 from typing import Any, Callable
@@ -10,10 +14,161 @@ from typing import Any, Callable
 import click
 from rich.markdown import Markdown
 
+from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import (
+    _build_paper_embedding_text,
+    _resolve_summary_build_options,
+)
+from knowledge_hub.papers.source_guard import review_downloaded_source
+
 
 def _safe_title(title: str) -> str:
     normalized = re.sub(r'[\\/:*?"<>|]', "", title).strip()
     return re.sub(r"\s+", " ", normalized)[:100].strip()
+
+
+def _extract_json_payload(raw: str) -> dict[str, Any]:
+    token = str(raw or "").strip()
+    if not token:
+        raise ValueError("empty JSON payload")
+    try:
+        payload = json.loads(token)
+        if isinstance(payload, dict):
+            return payload
+    except Exception:
+        pass
+
+    lines = token.splitlines()
+    for index, line in enumerate(lines):
+        if line.lstrip().startswith("{"):
+            candidate = "\n".join(lines[index:])
+            try:
+                payload = json.loads(candidate)
+                if isinstance(payload, dict):
+                    return payload
+            except Exception:
+                continue
+
+    start = token.find("{")
+    end = token.rfind("}")
+    if start >= 0 and end > start:
+        payload = json.loads(token[start : end + 1])
+        if isinstance(payload, dict):
+            return payload
+    raise ValueError("no JSON object found in worker output")
+
+
+def _default_summary_batch_checkpoint_path(config: Any) -> Path:
+    target = Path(str(getattr(config, "papers_dir", "") or "")).expanduser() / "summaries" / "_summarize_all.checkpoint.jsonl"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    return target
+
+
+def _append_summary_batch_checkpoint(checkpoint_file: Path | None, payload: dict[str, Any]) -> None:
+    if checkpoint_file is None:
+        return
+    checkpoint_file.parent.mkdir(parents=True, exist_ok=True)
+    with checkpoint_file.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+
+def _summary_quality_target(
+    *,
+    khub: Any,
+    paper_row: dict[str, Any],
+    assess_summary_quality_fn: Callable[[str], dict[str, Any]],
+    render_structured_summary_notes_fn: Callable[[dict[str, Any]], str],
+    summary_payload: dict[str, Any],
+    build_public_summary_card_fn: Callable[..., dict[str, Any]],
+) -> dict[str, Any]:
+    paper_id = str(paper_row.get("arxiv_id") or "").strip()
+    try:
+        public_payload = build_public_summary_card_fn(khub, paper_id=paper_id)
+        quality = dict(public_payload.get("quality") or {})
+        score = quality.get("score")
+        if score is not None:
+            return {
+                "score": int(score),
+                "band": str(quality.get("band") or ""),
+                "summaryStatus": str(quality.get("summaryStatus") or ""),
+                "reasons": [str(item) for item in list(quality.get("reasons") or []) if str(item or "").strip()],
+            }
+    except Exception:
+        pass
+
+    source_text = render_structured_summary_notes_fn(summary_payload) if summary_payload else str(paper_row.get("notes") or "")
+    fallback_quality = dict(assess_summary_quality_fn(source_text) or {})
+    return {
+        "score": int(fallback_quality.get("score") or 0),
+        "band": "",
+        "summaryStatus": "",
+        "reasons": [str(item) for item in list(fallback_quality.get("reasons") or []) if str(item or "").strip()],
+    }
+
+
+def _run_structured_summary_batch_worker(
+    *,
+    config: Any,
+    paper_id: str,
+    paper_parser: str,
+    quick: bool,
+    provider: str | None,
+    model: str | None,
+    allow_external: bool,
+    llm_mode: str,
+    timeout_sec: int,
+) -> dict[str, Any]:
+    command = [
+        sys.executable,
+        "-m",
+        "knowledge_hub.interfaces.cli.main",
+        "labs",
+        "paper-summary",
+        "build",
+        "--paper-id",
+        str(paper_id).strip(),
+        "--paper-parser",
+        str(paper_parser or "auto").strip().lower(),
+        "--json",
+    ]
+    if quick:
+        command.append("--quick")
+    if provider:
+        command.extend(["--provider", str(provider)])
+    if model:
+        command.extend(["--model", str(model)])
+    command.append("--allow-external" if allow_external else "--no-allow-external")
+    command.extend(["--llm-mode", str(llm_mode or "auto")])
+
+    cwd = None
+    config_path = str(getattr(config, "config_path", "") or "").strip()
+    if config_path:
+        candidate = Path(config_path).expanduser().resolve().parent
+        if candidate.exists():
+            cwd = str(candidate)
+
+    env = dict(os.environ)
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=cwd,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=max(1, int(timeout_sec or 1)),
+            check=False,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise TimeoutError(f"summary worker timed out after {int(timeout_sec or 0)}s") from error
+
+    if completed.returncode != 0:
+        detail = (completed.stderr or completed.stdout or "").strip()
+        detail = " ".join(detail.split())[:400] or f"worker exited with code {completed.returncode}"
+        raise RuntimeError(detail)
+
+    output = completed.stdout or ""
+    if not output.strip() and completed.stderr:
+        output = completed.stderr
+    return _extract_json_payload(output)
 
 
 def run_paper_download(
@@ -39,6 +194,17 @@ def run_paper_download(
         return
 
     if result["success"]:
+        review = review_downloaded_source(
+            sqlite_db,
+            paper_id=str(arxiv_id or "").strip(),
+            title=str(title or arxiv_id).strip(),
+            pdf_path=str(result.get("pdf") or ""),
+            text_path=str(result.get("text") or ""),
+        )
+        guard = dict(review.get("guard") or {})
+        if bool(review.get("blocked")):
+            console.print(f"[yellow]source guard blocked import[/yellow]: {guard.get('reason')}")
+            return
         paper_data = {
             "arxiv_id": arxiv_id,
             "title": title,
@@ -47,12 +213,16 @@ def run_paper_download(
             "field": existing.get("field", "") if existing else "",
             "importance": existing.get("importance", 3) if existing else 3,
             "notes": existing.get("notes", "") if existing else "",
-            "pdf_path": result.get("pdf"),
-            "text_path": result.get("text"),
+            "pdf_path": str(review.get("finalPdfPath") or result.get("pdf") or "") or None,
+            "text_path": str(review.get("finalTextPath") or result.get("text") or "") or None,
             "translated_path": existing.get("translated_path") if existing else None,
         }
         sqlite_db.upsert_paper(paper_data)
-        console.print(f"[green]다운로드 완료: {result.get('pdf', 'N/A')}[/green]")
+        if str(guard.get("decision") or "") == "relink_to_canonical":
+            console.print(
+                f"[yellow]source guard relink[/yellow]: {guard.get('canonicalPaperId') or '-'}"
+            )
+        console.print(f"[green]다운로드 완료: {paper_data.get('pdf_path') or result.get('pdf', 'N/A')}[/green]")
         return
 
     console.print(f"[red]다운로드 실패: {arxiv_id}[/red]")
@@ -166,14 +336,13 @@ def run_paper_summarize(
     provider: str | None,
     model: str | None,
     quick: bool,
-    allow_external: bool,
+    allow_external: bool | None,
     llm_mode: str,
     console: Any,
     sqlite_db_fn: Callable[..., Any],
-    collect_paper_text_fn: Callable[[dict[str, Any], Any], str],
-    resolve_routed_llm_fn: Callable[..., tuple[Any, Any, list[str]]],
-    fallback_to_mini_llm_fn: Callable[..., tuple[Any, Any, list[str]]],
-    update_obsidian_summary_fn: Callable[[dict[str, Any], str, Any], None],
+    structured_summary_service_factory: Callable[[Any, Any], Any],
+    paper_summary_parser_fn: Callable[[Any], str],
+    sync_structured_summary_view_fn: Callable[..., str],
 ) -> None:
     config = khub.config
     sqlite_db = sqlite_db_fn(config, khub=khub)
@@ -184,66 +353,49 @@ def run_paper_summarize(
         return
 
     console.print(f"요약 중: [bold]{paper['title'][:60]}[/bold]")
-
-    text = collect_paper_text_fn(paper, config)
-    source_label = "전문" if len(text) > 2000 else "abstract"
-    console.print(f"[dim]입력 소스: {source_label} ({len(text):,}자)[/dim]")
-
-    llm, decision, warnings = resolve_routed_llm_fn(
+    summary_service = structured_summary_service_factory(sqlite_db, config)
+    summary_options = _resolve_summary_build_options(
         config,
-        task_type="materialization_summary" if quick else "rag_answer",
+        provider=provider,
+        model=model,
         allow_external=allow_external,
         llm_mode=llm_mode,
-        query=paper["title"],
-        context=text[:8000],
-        source_count=1,
-        provider_override=provider,
-        model_override=model,
     )
-    if llm is None:
-        raise click.ClickException("사용 가능한 요약 LLM을 초기화하지 못했습니다.")
-    console.print(f"[dim]프로바이더: {decision.provider}/{decision.model} route={decision.route}[/dim]")
-    for warning in warnings:
-        console.print(f"[yellow]{warning}[/yellow]")
-
-    with console.status("심층 요약 생성 중..."):
+    console.print(
+        f"[dim]parser={paper_summary_parser_fn(config)} "
+        f"provider={summary_options['provider_override'] or summary_options['configured_provider'] or '(router)'} "
+        f"model={summary_options['model_override'] or summary_options['configured_model'] or '(router)'} "
+        f"external={bool(summary_options['allow_external'])} "
+        f"mode={llm_mode}[/dim]"
+    )
+    with console.status("구조화 요약 생성 중..."):
         try:
-            if quick:
-                summary = llm.summarize(text, language="ko", max_sentences=5)
-            else:
-                summary = llm.summarize_paper(text, title=paper["title"], language="ko")
+            payload = summary_service.build(
+                paper_id=arxiv_id,
+                paper_parser=paper_summary_parser_fn(config),
+                refresh_parse=False,
+                quick=bool(quick),
+                allow_external=bool(summary_options["allow_external"]),
+                llm_mode=str(llm_mode or "auto"),
+                provider_override=summary_options["provider_override"],
+                model_override=summary_options["model_override"],
+            )
         except Exception as error:
-            if decision.route == "local" and allow_external:
-                fallback_llm, fallback_decision, fallback_warnings = fallback_to_mini_llm_fn(
-                    config,
-                    task_type="materialization_summary" if quick else "rag_answer",
-                    allow_external=allow_external,
-                    query=paper["title"],
-                    context=text[:8000],
-                )
-                for warning in fallback_warnings:
-                    console.print(f"[yellow]{warning}[/yellow]")
-                if fallback_llm is None:
-                    raise click.ClickException(f"요약 실패(로컬/mini fallback 모두 실패): {error}") from error
-                decision = fallback_decision
-                if quick:
-                    summary = fallback_llm.summarize(text, language="ko", max_sentences=5)
-                else:
-                    summary = fallback_llm.summarize_paper(text, title=paper["title"], language="ko")
-            else:
-                raise click.ClickException(f"요약 실패: {error}") from error
-
-    console.print(f"\n[bold]요약: {paper['title']}[/bold]\n")
-    console.print(Markdown(summary))
-
-    sqlite_db.conn.execute(
-        "UPDATE papers SET notes = ? WHERE arxiv_id = ?",
-        (summary, arxiv_id),
+            raise click.ClickException(f"요약 실패: {error}") from error
+    if str(payload.get("status") or "") == "blocked":
+        detail = "; ".join(str(item) for item in list(payload.get("warnings") or [])[:3]) or f"paper summary blocked: {arxiv_id}"
+        raise click.ClickException(detail)
+    rendered_summary = sync_structured_summary_view_fn(sqlite_db, paper=paper, payload=payload, config=config)
+    console.print(
+        f"[dim]parser={payload.get('parserUsed') or 'raw'} "
+        f"route={payload.get('llmRoute') or 'fallback-only'} "
+        f"fallback={bool(payload.get('fallbackUsed'))}[/dim]"
     )
-    sqlite_db.conn.commit()
-
-    update_obsidian_summary_fn(paper, summary, config)
-    console.print("\n[green]요약 저장 완료[/green]")
+    for warning in list(payload.get("warnings") or [])[:5]:
+        console.print(f"[yellow]{warning}[/yellow]")
+    console.print(f"\n[bold]요약: {paper['title']}[/bold]\n")
+    console.print(Markdown(rendered_summary))
+    console.print("\n[green]구조화 요약 저장 완료[/green]")
 
 
 def run_paper_embed(
@@ -264,10 +416,7 @@ def run_paper_embed(
         return
 
     console.print(f"임베딩 중: [bold]{paper['title'][:60]}[/bold]")
-
-    text = f"Title: {paper['title']}"
-    if paper.get("notes"):
-        text += f"\n\n{paper['notes']}"
+    text = _build_paper_embedding_text(sqlite_db, paper=paper, config=config)
 
     try:
         embedder = build_embedder_fn(config, khub=khub)
@@ -389,26 +538,64 @@ def run_paper_summarize_all(
     threshold: int,
     provider: str | None,
     model: str | None,
+    allow_external: bool | None,
+    llm_mode: str,
+    paper_timeout_sec: int,
+    checkpoint_file: Path | None,
     console: Any,
     sqlite_db_fn: Callable[..., Any],
-    build_llm_fn: Callable[..., Any],
-    collect_paper_text_fn: Callable[[dict[str, Any], Any], str],
     assess_summary_quality_fn: Callable[[str], dict[str, Any]],
-    update_obsidian_summary_fn: Callable[[dict[str, Any], str, Any], None],
-    requests_post_fn: Callable[..., Any],
-    log: Any,
+    structured_summary_service_factory: Callable[[Any, Any], Any],
+    paper_summary_parser_fn: Callable[[Any], str],
+    render_structured_summary_notes_fn: Callable[[dict[str, Any]], str],
+    sync_structured_summary_view_fn: Callable[..., str],
+    build_public_summary_card_fn: Callable[..., dict[str, Any]],
+    summary_batch_worker_fn: Callable[..., dict[str, Any]],
 ) -> None:
     config = khub.config
     sqlite_db = sqlite_db_fn(config, khub=khub)
+    summary_service = structured_summary_service_factory(sqlite_db, config)
+    summary_options = _resolve_summary_build_options(
+        config,
+        provider=provider,
+        model=model,
+        allow_external=allow_external,
+        llm_mode=llm_mode,
+    )
     papers = sqlite_db.list_papers(field=field, limit=999)
+    artifact_cache: dict[str, dict[str, Any]] = {}
+
+    def _artifact_for(paper_row: dict[str, Any]) -> dict[str, Any]:
+        paper_id = str(paper_row.get("arxiv_id") or "").strip()
+        if paper_id not in artifact_cache:
+            artifact_cache[paper_id] = dict(summary_service.load_artifact(paper_id=paper_id) or {})
+        return artifact_cache[paper_id]
+
+    def _quality_source_text(paper_row: dict[str, Any]) -> str:
+        payload = _artifact_for(paper_row)
+        if payload:
+            return render_structured_summary_notes_fn(payload)
+        return str(paper_row.get("notes") or "")
 
     if bad_only:
-        targets = [paper for paper in papers if assess_summary_quality_fn(paper.get("notes", ""))["score"] < threshold]
+        targets = [
+            paper
+            for paper in papers
+            if _summary_quality_target(
+                khub=khub,
+                paper_row=paper,
+                assess_summary_quality_fn=assess_summary_quality_fn,
+                render_structured_summary_notes_fn=render_structured_summary_notes_fn,
+                summary_payload=_artifact_for(paper),
+                build_public_summary_card_fn=build_public_summary_card_fn,
+            )["score"]
+            < threshold
+        ]
         console.print(f"[dim]품질 점수 {threshold}점 미만 논문 필터링[/dim]")
     elif resummary:
         targets = papers
     else:
-        targets = [paper for paper in papers if not paper.get("notes") or len(paper.get("notes", "")) < 100]
+        targets = [paper for paper in papers if not _artifact_for(paper)]
 
     if limit > 0:
         targets = targets[:limit]
@@ -417,86 +604,93 @@ def run_paper_summarize_all(
         console.print("[green]모든 논문이 이미 요약되어 있습니다.[/green]")
         return
 
-    prov = provider or config.summarization_provider
-    mdl = model or config.summarization_model
-    llm = build_llm_fn(config, prov, mdl, khub=khub)
-
     mode_label = "간단" if quick else "심층"
     if bad_only:
         mode_label += " (품질 미달 재요약)"
     elif resummary:
         mode_label += " (전체 재요약)"
     console.print(f"[bold]{len(targets)}편 {mode_label} 요약 시작[/bold]")
-    console.print(f"[dim]프로바이더: {prov}/{mdl}[/dim]\n")
-
-    missing_abstract = [
-        paper
-        for paper in targets
-        if not collect_paper_text_fn(paper, config) or len(collect_paper_text_fn(paper, config)) < 100
-    ]
-    abstract_map: dict[str, str] = {}
-    if missing_abstract:
-        arxiv_ids = [paper["arxiv_id"] for paper in missing_abstract]
-        for offset in range(0, len(arxiv_ids), 50):
-            chunk = arxiv_ids[offset:offset + 50]
-            try:
-                response = requests_post_fn(
-                    "https://api.semanticscholar.org/graph/v1/paper/batch",
-                    params={"fields": "title,abstract,externalIds"},
-                    json={"ids": [f"ArXiv:{arxiv_id}" for arxiv_id in chunk]},
-                    timeout=60,
-                )
-                if response.status_code == 200:
-                    for paper_data in response.json():
-                        if paper_data and paper_data.get("abstract"):
-                            external_ids = paper_data.get("externalIds", {})
-                            arxiv_id = external_ids.get("ArXiv", "")
-                            if arxiv_id:
-                                abstract_map[arxiv_id] = paper_data["abstract"]
-            except Exception as error:
-                log.warning("Semantic Scholar abstract backfill batch failed: %s", error)
-        console.print(f"[dim]Semantic Scholar에서 {len(abstract_map)}편 abstract 보충[/dim]\n")
+    console.print(
+        f"[dim]parser={paper_summary_parser_fn(config)} "
+        f"provider={summary_options['provider_override'] or summary_options['configured_provider'] or '(router)'} "
+        f"model={summary_options['model_override'] or summary_options['configured_model'] or '(router)'} "
+        f"external={bool(summary_options['allow_external'])} "
+        f"mode={llm_mode} "
+        f"paper-timeout={int(paper_timeout_sec or 0)}s[/dim]\n"
+    )
 
     success = 0
     failed: list[dict[str, str]] = []
+    checkpoint_target = Path(checkpoint_file).expanduser() if checkpoint_file is not None else _default_summary_batch_checkpoint_path(config)
     for index, paper in enumerate(targets, 1):
         arxiv_id = paper["arxiv_id"]
         title = paper["title"]
-
-        text = collect_paper_text_fn(paper, config)
-        if len(text) < 100:
-            extra = abstract_map.get(arxiv_id, "")
-            if extra:
-                text = f"제목: {title}\n초록: {extra}"
-
-        if len(text) < 50:
-            console.print(f"  [{index}/{len(targets)}] {arxiv_id} - 텍스트 부족, 스킵")
-            continue
-
-        source = "전문" if len(text) > 2000 else "abstract"
-        console.print(f"  [{index}/{len(targets)}] {title[:50]}... ({source})", end=" ")
+        console.print(f"  [{index}/{len(targets)}] {title[:50]}...", end=" ")
+        started_at = time.time()
 
         try:
-            if quick:
-                summary = llm.summarize(text, language="ko", max_sentences=5)
-            else:
-                summary = llm.summarize_paper(text, title=title, language="ko")
-
-            sqlite_db.conn.execute(
-                "UPDATE papers SET notes = ? WHERE arxiv_id = ?",
-                (summary, arxiv_id),
+            payload = summary_batch_worker_fn(
+                config=config,
+                paper_id=arxiv_id,
+                paper_parser=paper_summary_parser_fn(config),
+                quick=bool(quick),
+                provider=summary_options["provider_override"],
+                model=summary_options["model_override"],
+                allow_external=bool(summary_options["allow_external"]),
+                llm_mode=str(llm_mode or "auto"),
+                timeout_sec=int(paper_timeout_sec or 0),
             )
-            sqlite_db.conn.commit()
-
-            update_obsidian_summary_fn(paper, summary, config)
+            if str(payload.get("status") or "") == "blocked":
+                detail = "; ".join(str(item) for item in list(payload.get("warnings") or [])[:3]) or "blocked"
+                raise RuntimeError(detail)
+            sync_structured_summary_view_fn(sqlite_db, paper=paper, payload=payload, config=config)
+            artifact_cache[str(arxiv_id)] = dict(payload)
             success += 1
-            console.print("[green]OK[/green]")
-        except Exception as error:
-            log.error("요약 실패 %s: %s", arxiv_id, error)
+            _append_summary_batch_checkpoint(
+                checkpoint_target,
+                {
+                    "paperId": str(arxiv_id),
+                    "title": str(title or ""),
+                    "status": "ok",
+                    "parserUsed": str(payload.get("parserUsed") or ""),
+                    "llmRoute": str(payload.get("llmRoute") or ""),
+                    "fallbackUsed": bool(payload.get("fallbackUsed")),
+                    "durationSec": round(time.time() - started_at, 3),
+                },
+            )
+            console.print(
+                f"[green]OK[/green] [dim](route={payload.get('llmRoute') or 'fallback-only'} "
+                f"fallback={bool(payload.get('fallbackUsed'))})[/dim]"
+            )
+        except TimeoutError as error:
             failed.append({"arxiv_id": arxiv_id, "error": str(error)})
+            _append_summary_batch_checkpoint(
+                checkpoint_target,
+                {
+                    "paperId": str(arxiv_id),
+                    "title": str(title or ""),
+                    "status": "timeout",
+                    "error": str(error),
+                    "durationSec": round(time.time() - started_at, 3),
+                },
+            )
+            console.print(f"[red]TIMEOUT ({error})[/red]")
+        except Exception as error:
+            failed.append({"arxiv_id": arxiv_id, "error": str(error)})
+            _append_summary_batch_checkpoint(
+                checkpoint_target,
+                {
+                    "paperId": str(arxiv_id),
+                    "title": str(title or ""),
+                    "status": "failed",
+                    "error": str(error),
+                    "durationSec": round(time.time() - started_at, 3),
+                },
+            )
             console.print(f"[red]FAIL ({error})[/red]")
 
     console.print(f"\n[bold green]{success}/{len(targets)}편 요약 완료[/bold green]")
+    console.print(f"[dim]checkpoint={checkpoint_target}[/dim]")
     if failed:
         console.print(f"[bold red]실패: {len(failed)}편[/bold red]")
         for item in failed:
@@ -528,26 +722,51 @@ def run_paper_embed_all(
     vector_db = vector_db_fn(config, khub=khub)
     batch_size = 20
     success = 0
+    failed = 0
     started_at = time.time()
 
     for offset in range(0, len(unindexed), batch_size):
         batch = unindexed[offset:offset + batch_size]
-        texts = []
-        for paper in batch:
-            text = f"Title: {paper['title'] or paper['arxiv_id']}"
-            if paper.get("notes"):
-                text += f"\n\n{paper['notes']}"
-            texts.append(text)
+        texts = [_build_paper_embedding_text(sqlite_db, paper=paper, config=config) for paper in batch]
+
+        successful_items: list[tuple[dict[str, Any], str, list[float]]] = []
+        batch_failures: list[tuple[str, str]] = []
 
         try:
             raw_embeddings = embedder.embed_batch(texts, show_progress=False)
-            embeddings = [embedding for embedding in raw_embeddings if embedding is not None]
-            if len(embeddings) != len(texts):
-                raise RuntimeError(f"{len(texts) - len(embeddings)}개 텍스트 임베딩 실패")
+            if len(raw_embeddings) != len(texts):
+                raise RuntimeError(
+                    f"embed_batch returned {len(raw_embeddings)} embeddings for {len(texts)} texts"
+                )
+            for paper, text, embedding in zip(batch, texts, raw_embeddings):
+                if embedding is None:
+                    batch_failures.append((paper["arxiv_id"], "embed_batch returned None"))
+                else:
+                    successful_items.append((paper, text, embedding))
+        except Exception as error:
+            batch_failures = [(paper["arxiv_id"], str(error)) for paper in batch]
+            successful_items = []
 
-            documents, metadatas, ids = [], [], []
-            for paper, text, embedding in zip(batch, texts, embeddings):
+        if batch_failures:
+            recovered_items: list[tuple[dict[str, Any], str, list[float]]] = []
+            recovered_failures: list[tuple[str, str]] = []
+            failure_ids = {paper_id for paper_id, _ in batch_failures}
+            paper_lookup = {paper["arxiv_id"]: (paper, text) for paper, text in zip(batch, texts)}
+            for paper_id in failure_ids:
+                paper, text = paper_lookup[paper_id]
+                try:
+                    embedding = embedder.embed_text(text)
+                    recovered_items.append((paper, text, embedding))
+                except Exception as error:
+                    recovered_failures.append((paper_id, str(error)))
+            successful_items.extend(recovered_items)
+            batch_failures = recovered_failures
+
+        if successful_items:
+            documents, embeddings, metadatas, ids = [], [], [], []
+            for paper, text, embedding in successful_items:
                 documents.append(text)
+                embeddings.append(embedding)
                 metadatas.append({
                     "title": paper["title"] or "",
                     "arxiv_id": paper["arxiv_id"],
@@ -564,14 +783,23 @@ def run_paper_embed_all(
                 ids=ids,
             )
 
-            for paper in batch:
+            for paper, _, _ in successful_items:
                 sqlite_db.conn.execute("UPDATE papers SET indexed = 1 WHERE arxiv_id = ?", (paper["arxiv_id"],))
             sqlite_db.conn.commit()
+            success += len(successful_items)
 
-            success += len(batch)
-            console.print(f"  [{success}/{len(unindexed)}] 배치: [green]{len(batch)}편 OK[/green]")
-        except Exception as error:
-            console.print(f"  배치 실패: [red]{error}[/red]")
+        if batch_failures:
+            failed += len(batch_failures)
+            console.print(
+                f"  [{success}/{len(unindexed)}] 배치: "
+                f"[yellow]{len(successful_items)}편 OK[/yellow], "
+                f"[red]{len(batch_failures)}편 실패[/red]"
+            )
+        else:
+            console.print(f"  [{success}/{len(unindexed)}] 배치: [green]{len(successful_items)}편 OK[/green]")
 
     elapsed = time.time() - started_at
-    console.print(f"\n[bold green]{success}/{len(unindexed)}편 인덱싱 완료 ({elapsed:.1f}초)[/bold green]")
+    summary_line = f"\n[bold green]{success}/{len(unindexed)}편 인덱싱 완료 ({elapsed:.1f}초)[/bold green]"
+    if failed:
+        summary_line += f" [bold red](실패 {failed}편)[/bold red]"
+    console.print(summary_line)
