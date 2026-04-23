@@ -3,15 +3,21 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.won.knowledge-hub.continuous-sync</string>
+  <string>com.example.knowledge-hub.continuous-sync</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/won/Desktop/allinone/knowledge-hub/scripts/run_continuous_sync.sh</string>
+    <string>/ABSOLUTE/PATH/TO/knowledge-hub/scripts/run_continuous_sync.sh</string>
   </array>
 
   <key>WorkingDirectory</key>
-  <string>/Users/won/Desktop/allinone/knowledge-hub</string>
+  <string>/ABSOLUTE/PATH/TO/knowledge-hub</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>KHUB_CONTINUOUS_SYNC_ROOT</key>
+    <string>/ABSOLUTE/PATH/TO/external-storage/knowledge_os</string>
+  </dict>
 
   <key>StartCalendarInterval</key>
   <dict>
@@ -25,9 +31,9 @@
   <false/>
 
   <key>StandardOutPath</key>
-  <string>/Users/won/.khub/logs/launchd.continuous_sync.out.log</string>
+  <string>/ABSOLUTE/PATH/TO/khub-logs/launchd.continuous_sync.out.log</string>
 
   <key>StandardErrorPath</key>
-  <string>/Users/won/.khub/logs/launchd.continuous_sync.err.log</string>
+  <string>/ABSOLUTE/PATH/TO/khub-logs/launchd.continuous_sync.err.log</string>
 </dict>
 </plist>

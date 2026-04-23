@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 
-SCRIPT = Path("/Users/won/Desktop/allinone/knowledge-hub/eval/knowledgeos/scripts/collect_paper_regression_eval.py")
+SCRIPT = Path(__file__).resolve().parents[1] / "eval/knowledgeos/scripts/collect_paper_regression_eval.py"
 
 
 def _load_script():

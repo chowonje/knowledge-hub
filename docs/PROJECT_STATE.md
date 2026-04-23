@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-04-23
+Last updated: 2026-04-24
 
 ## What this project is
 
@@ -14,6 +14,7 @@ Last updated: 2026-04-23
 - `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental in public messaging.
 - Default top-level CLI discovery now favors the representative core loop. Personal, eval, and low-level maintenance commands remain directly invokable for compatibility, but they are hidden from the default `khub --help` output.
 - A public snapshot should be cut from a dedicated `public-preview` branch and pass `scripts/check_public_release_hygiene.py` plus `scripts/check_release_smoke.py` on a clean checkout.
+- The Opus hardening split branch now has a release-hygiene cleanup on top of the clean replay: tracked `eval/knowledgeos/review/` runtime artifacts are removed and ignored, continuous-sync launchd is a template rather than a workstation-specific plist, and unattended `.env` loading / `--apply` / `--allow-external` remain opt-in.
 
 See also:
 - `docs/maps/README.md`
@@ -51,7 +52,7 @@ The answer path now makes that evidence contract explicit in runtime payloads. `
 
 Verification is treated as a gate, not a claim-repair loop. Unsupported claims, weak claims with no supported claim, and uncertain-only answers are routed to conservative fallback instead of LLM rewrite. Rewrite remains available only for supported answers that need caution/conflict framing or citation alignment. ask-v2 card evidence with weak/missing verification plus unsupported fields now marks the packet `askV2HardGate` and returns a no-result/lack-of-evidence answer before generation.
 
-The Opus architecture-hardening replay has a clean sibling integration branch: `opus-architecture-hardening-clean-20260423` in `../knowledge-hub-opus-hardening-clean`. That branch is not just the standalone `12` overlay; it is the dependency-closed replay of checkpoint buckets `01`-`07` plus `00`, `09`, `10`, `11`, and `12`. The clean replay now passes the full Python suite (`885 passed, 5 warnings`), the affected Python suite (`287 passed`), Foundry `npm run check`, Foundry `npm test` (`56 passed`), runtime `py_compile`, and staged diff hygiene (`git diff --check --cached`). The final whitespace pass only normalized line endings/trailing spaces in replayed docs/eval artifacts and older carryover files.
+The Opus architecture-hardening replay has a clean sibling integration branch: `opus-architecture-hardening-clean-20260423` in `../knowledge-hub-opus-hardening-clean`. That branch is not just the standalone `12` overlay; it is the dependency-closed replay of checkpoint buckets `01`-`07` plus `00`, `09`, `10`, `11`, and `12`. The clean replay now passes the full Python suite (`885 passed, 5 warnings`), the affected Python suite (`287 passed`), Foundry `npm run check`, Foundry `npm test` (`56 passed`), runtime `py_compile`, and staged diff hygiene (`git diff --check --cached`). The final whitespace pass only normalized line endings/trailing spaces in replayed docs/eval artifacts and older carryover files. The follow-up split branch `opus-hardening-split-20260424` carries the same stack as reviewable commits plus a release-hygiene cleanup commit that passes public-release hygiene and release smoke locally.
 
 Additive subsystems exist behind that default surface:
 - ontology / claims / event history

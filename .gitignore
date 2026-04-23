@@ -44,6 +44,7 @@ config.yaml.bak_*
 runs/
 eval/knowledgeos/runs
 eval/knowledgeos/runs/
+eval/knowledgeos/review/
 runs/ab/
 
 # Secrets

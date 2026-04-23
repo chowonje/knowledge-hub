@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 import unicodedata
 from collections import defaultdict
@@ -62,9 +63,7 @@ from knowledge_hub.knowledge.ai_taxonomy import classify_ai_concept
 from knowledge_hub.web.ingest import make_web_note_id
 
 
-DEFAULT_DOCUMENTS_VAULT = Path(
-    "/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault"
-)
+DEFAULT_DOCUMENTS_VAULT = Path(os.environ.get("KHUB_DOCUMENTS_VAULT", "~/Documents/Obsidian Vault")).expanduser()
 CONCEPT_RELATION_PREDICATES = {
     "mentions",
     "uses",

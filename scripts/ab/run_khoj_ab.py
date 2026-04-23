@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 from typing import Iterable
 
@@ -30,8 +31,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--base-url", default="http://127.0.0.1:42111", help="Khoj base URL")
     parser.add_argument(
         "--vault-root",
-        default="/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault",
-        help="Absolute path to the Obsidian vault root",
+        default=os.environ.get("KHUB_AB_VAULT_ROOT", ""),
+        help="Absolute path to the Obsidian vault root, or KHUB_AB_VAULT_ROOT",
     )
     parser.add_argument(
         "--baseline-dir",
@@ -158,7 +159,9 @@ def main() -> int:
     base_url = args.base_url.rstrip("/")
     baseline_dir = Path(args.baseline_dir)
     output_dir = Path(args.output_dir)
-    vault_root = Path(args.vault_root)
+    if not args.vault_root:
+        raise SystemExit("--vault-root or KHUB_AB_VAULT_ROOT is required.")
+    vault_root = Path(args.vault_root).expanduser()
 
     assert_server_ready(base_url)
 

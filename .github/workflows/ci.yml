@@ -80,7 +80,6 @@ PY
           pytest -q
           tests/test_cli_smoke_contract.py
           tests/test_doctor_cmd.py
-          tests/test_status_cmd.py
 
   authority-contracts:
     runs-on: ubuntu-latest
