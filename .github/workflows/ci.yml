@@ -99,7 +99,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev,openai]"
+          pip install -e ".[dev,openai,mcp]"
 
       - name: Install TypeScript dependencies
         working-directory: foundry-core
