@@ -187,9 +187,23 @@ def verify_answer(
     )
     warnings = list(route_warnings)
     route_name = str((route_meta or {}).get("route") or "").strip().lower()
+    route_reasons = {str(item or "").strip().lower() for item in list((route_meta or {}).get("reasons") or []) if str(item or "").strip()}
     external_route = route_name in {"mini", "strong"}
 
     if verifier_llm is None:
+        if route_name == "fallback-only" and "config_missing" in route_reasons:
+            return {
+                "status": "skipped",
+                "supportedClaimCount": 0,
+                "unsupportedClaimCount": 0,
+                "uncertainClaimCount": 0,
+                "conflictMentioned": searcher._answer_mentions_conflict(answer),
+                "needsCaution": False,
+                "summary": "검증 라우트를 사용할 수 없어 답변 검증을 건너뛰었습니다.",
+                "warnings": list(dict.fromkeys(warnings)),
+                "claims": [],
+                "route": {**dict(route_meta or {}), "mode": "skipped"},
+            }
         return heuristic_answer_verification(
             searcher,
             answer=answer,
