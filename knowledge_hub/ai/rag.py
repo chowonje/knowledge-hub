@@ -523,11 +523,17 @@ class RAGSearcher:
     def _should_apply_conservative_fallback(self, verification: dict[str, Any]) -> bool:
         if not bool(verification.get("needsCaution")):
             return False
+        if int(verification.get("claimConflictCount") or 0) > 0:
+            return True
         if int(verification.get("unsupportedClaimCount") or 0) > 0:
+            return True
+        if int(verification.get("claimUnsupportedCount") or 0) > 0:
+            return True
+        if int(verification.get("claimWeakCount") or 0) > 0 and int(verification.get("supportedClaimCount") or 0) == 0:
             return True
         if int(verification.get("supportedClaimCount") or 0) == 0:
             return True
-        return False
+        return True
 
     def _apply_conservative_fallback_if_needed(
         self,

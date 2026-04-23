@@ -20,6 +20,24 @@ def _hash_text(*parts: Any, length: int = 16) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[: max(8, int(length))]
 
 
+def _normalize_classification(value: Any) -> str:
+    token = _clean_text(value).upper()
+    return token if token in {"P0", "P1", "P2", "P3"} else "UNKNOWN"
+
+
+def _bool_or_none(value: Any) -> bool | None:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    token = str(value).strip().lower()
+    if token in {"1", "true", "yes", "y", "on"}:
+        return True
+    if token in {"0", "false", "no", "n", "off"}:
+        return False
+    return None
+
+
 def _int_or_none(value: Any) -> int | None:
     try:
         return int(value)
@@ -81,11 +99,15 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
     if not source_id:
         source_id = f"source:{index}"
     source_hash = _clean_text(item.get("source_content_hash") or item.get("sourceContentHash"))
-    snippet_hash = _clean_text(item.get("snippet_hash") or item.get("snippetHash"))
-    content_hash = source_hash or snippet_hash or _hash_text(source_id, span_locator, text)
-    classification = _clean_text(item.get("policy_class") or item.get("classification")) or "P2"
+    snippet_hash = _clean_text(item.get("snippet_hash") or item.get("snippetHash")) or _hash_text(text, length=32)
+    content_hash = source_hash or None
+    classification = _normalize_classification(item.get("policy_class") or item.get("classification"))
     allow_external = item.get("allow_external") if "allow_external" in item else item.get("allowExternal")
-    policy_allowed = item.get("policy_allowed") if "policy_allowed" in item else item.get("policyAllowed", True)
+    policy_allowed = item.get("policy_allowed") if "policy_allowed" in item else item.get("policyAllowed")
+    explicit_allowed = _bool_or_none(policy_allowed)
+    explicit_external = _bool_or_none(allow_external)
+    allowed = explicit_allowed if explicit_allowed is not None else classification != "P0"
+    external_allowed = explicit_external if explicit_external is not None else classification not in {"P0", "UNKNOWN"}
     retrieval_scores = {
         "score": float(item.get("score") or 0.0),
         "semantic": float(item.get("semantic_score") or item.get("semanticScore") or 0.0),
@@ -116,14 +138,28 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
         "retrieval_scores": retrieval_scores,
         "policy": {
             "classification": classification,
-            "allowed": bool(policy_allowed),
-            "allowExternal": allow_external,
-            "external_allowed": bool(allow_external),
+            "allowed": bool(allowed),
+            "allowExternal": bool(external_allowed),
+            "external_allowed": bool(external_allowed),
         },
         "evidenceKind": _clean_text(item.get("evidence_kind") or item.get("evidenceKind")),
         "derivativeSource": dict(item.get("derivative_source") or item.get("derivativeSource") or {}),
         "snippetHash": snippet_hash,
     }
+
+
+def _span_is_stale(span: dict[str, Any]) -> bool:
+    derivative = dict(span.get("derivativeSource") or span.get("derivative_source") or {})
+    return bool(span.get("stale")) or bool(derivative.get("stale"))
+
+
+def _span_has_strict_provenance(span: dict[str, Any]) -> bool:
+    return (
+        bool(span.get("contentHashAvailable"))
+        and bool(span.get("spanOffsetAvailable"))
+        and bool(span.get("source_id") or span.get("sourceId"))
+        and not _span_is_stale(span)
+    )
 
 
 def build_evidence_packet_contract(
@@ -132,6 +168,7 @@ def build_evidence_packet_contract(
     retrieval_mode: str,
     pipeline_result: Any,
     evidence_packet: Any,
+    strict: bool = True,
 ) -> dict[str, Any]:
     try:
         plan_payload = dict(pipeline_result.plan.to_dict() or {})
@@ -139,19 +176,35 @@ def build_evidence_packet_contract(
         plan_payload = {}
     query_frame = dict(plan_payload.get("queryFrame") or {})
     evidence = [dict(item or {}) for item in list(getattr(evidence_packet, "evidence", []) or [])]
-    spans = [_evidence_span(item, index=index) for index, item in enumerate(evidence, start=1)]
+    raw_spans = [_evidence_span(item, index=index) for index, item in enumerate(evidence, start=1)]
+    excluded_low_provenance = [span for span in raw_spans if not _span_has_strict_provenance(span)]
+    spans = [span for span in raw_spans if _span_has_strict_provenance(span)] if strict else raw_spans
     policy_payload = dict(getattr(evidence_packet, "evidence_policy", {}) or {})
     query_id = _hash_text(query, retrieval_mode, [span.get("sourceId") for span in spans])
     assembled_at = datetime.now(timezone.utc).isoformat()
     answerable = bool(dict(getattr(evidence_packet, "evidence_packet", {}) or {}).get("answerable", bool(spans)))
-    policy_class = _clean_text(policy_payload.get("classification") or policy_payload.get("policyClass")) or "P2"
+    policy_class = _normalize_classification(policy_payload.get("classification") or policy_payload.get("policyClass"))
+    span_classes = {_normalize_classification((span.get("policy") or {}).get("classification")) for span in raw_spans}
+    if "P0" in span_classes:
+        policy_class = "P0"
+    elif policy_class == "UNKNOWN" and span_classes - {"UNKNOWN"}:
+        policy_class = sorted(span_classes - {"UNKNOWN"})[0]
     allow_external = policy_payload.get("allow_external") if "allow_external" in policy_payload else policy_payload.get("allowExternal")
+    explicit_external = _bool_or_none(allow_external)
+    external_allowed = explicit_external if explicit_external is not None else policy_class not in {"P0", "UNKNOWN"}
+    if any(not bool((span.get("policy") or {}).get("external_allowed")) for span in raw_spans):
+        external_allowed = False
+    explicit_allowed = _bool_or_none(policy_payload.get("allowed"))
+    policy_allowed = explicit_allowed if explicit_allowed is not None else policy_class != "P0"
     complete_spans = sum(
         1
         for span in spans
         if bool(span.get("contentHashAvailable")) and bool(span.get("spanOffsetAvailable"))
     )
     coverage_status = "none" if not spans else ("complete" if complete_spans == len(spans) else "partial")
+    if strict and raw_spans and not spans:
+        answerable = False
+        coverage_status = "insufficient"
     if not answerable:
         coverage_status = "insufficient"
     return {
@@ -164,16 +217,19 @@ def build_evidence_packet_contract(
         "spans": spans,
         "policy": {
             "classification": policy_class,
-            "allowed": bool(policy_payload.get("allowed", True)),
-            "allowExternal": allow_external,
-            "external_allowed": bool(allow_external),
+            "allowed": bool(policy_allowed),
+            "allowExternal": bool(external_allowed),
+            "external_allowed": bool(external_allowed),
             "policyKey": _clean_text(policy_payload.get("policyKey") or policy_payload.get("policy_key")),
         },
         "answerable": answerable,
         "coverage": {
             "status": coverage_status,
             "span_count": len(spans),
+            "raw_span_count": len(raw_spans),
             "source_count": len({span.get("source_id") for span in spans if span.get("source_id")}),
+            "excluded_low_provenance": len(excluded_low_provenance) if strict else 0,
+            "excluded_stale": sum(1 for span in excluded_low_provenance if _span_is_stale(span)) if strict else 0,
         },
         "assembledAt": assembled_at,
         "created_at": assembled_at,
@@ -182,14 +238,59 @@ def build_evidence_packet_contract(
 
 
 def _claim_like_sentences(answer: str) -> list[str]:
-    sentences = [part.strip() for part in re.split(r"(?<=[.!?。！？])\s+", str(answer or "")) if part.strip()]
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?。！？])\s+|\n+", str(answer or "")) if part.strip()]
     if not sentences and str(answer or "").strip():
         sentences = [str(answer or "").strip()]
     return [
         item
         for item in sentences
-        if len(item) >= 12 and not item.endswith(":")
+        if len(item) >= 4 and not item.endswith(":")
     ]
+
+
+_TOKEN_RE = re.compile(r"[A-Za-z0-9가-힣]{2,}")
+_STOP_TOKENS = {
+    "the",
+    "and",
+    "for",
+    "with",
+    "that",
+    "this",
+    "from",
+    "into",
+    "하다",
+    "있다",
+    "된다",
+    "입니다",
+    "합니다",
+}
+
+
+def _tokens(text: str) -> set[str]:
+    return {
+        token.lower()
+        for token in _TOKEN_RE.findall(str(text or ""))
+        if token.lower() not in _STOP_TOKENS
+    }
+
+
+def _citation_refs_for_claim(sentence: str, citations: list[dict[str, Any]]) -> list[str]:
+    sentence_tokens = _tokens(sentence)
+    if not sentence_tokens:
+        return []
+    refs: list[str] = []
+    for citation in citations:
+        citation_text = " ".join(
+            str(citation.get(key) or "")
+            for key in ("quote", "text", "target", "source_id", "label", "citationLabel")
+        )
+        citation_tokens = _tokens(citation_text)
+        if not citation_tokens:
+            continue
+        overlap = sentence_tokens & citation_tokens
+        if len(overlap) >= 2 or (len(sentence_tokens) <= 4 and bool(overlap)):
+            refs.append(str(citation.get("spanRef") or citation.get("span_id") or ""))
+    return [ref for ref in refs if ref]
 
 
 def build_verification_verdict(verification: dict[str, Any] | None) -> dict[str, Any]:
@@ -204,7 +305,7 @@ def build_verification_verdict(verification: dict[str, Any] | None) -> dict[str,
         verdict = "abstain"
     else:
         verdict = "fail" if (unsupported or uncertain or needs_caution or status in {"failed", "caution", "fail"}) else "abstain"
-    rewrite_allowed = verdict == "pass" or (unsupported == 0 and status == "caution")
+    rewrite_allowed = verdict == "pass"
     checked_at = datetime.now(timezone.utc).isoformat()
     return {
         "schema": VERIFICATION_VERDICT_SCHEMA,
@@ -217,7 +318,7 @@ def build_verification_verdict(verification: dict[str, Any] | None) -> dict[str,
         "reason": _clean_text(payload.get("summary") or payload.get("reason")),
         "checked_at": checked_at,
         "rewriteAllowed": bool(rewrite_allowed),
-        "rewritePolicy": "citation_alignment_or_framing_only" if rewrite_allowed else "blocked_for_unsupported_claims",
+        "rewritePolicy": "citation_alignment_or_framing_only" if rewrite_allowed else "blocked_by_verification_gate",
         "recommended_action": "return" if verdict == "pass" else "abstain",
     }
 
@@ -237,6 +338,8 @@ def build_answer_contract(
         citation = dict(raw or {})
         item = evidence[index - 1] if index - 1 < len(evidence) else {}
         span = _evidence_span(item, index=index)
+        if not _span_has_strict_provenance(span):
+            continue
         citations.append(
             {
                 "spanRef": f"span:{index}",
@@ -254,7 +357,14 @@ def build_answer_contract(
         )
     evidence_payload = dict(getattr(evidence_packet, "evidence_packet", {}) or {})
     claim_sentences = _claim_like_sentences(answer)
-    citation_backed = min(len(citations), len(claim_sentences))
+    claim_citation_map = [
+        {
+            "sentence": sentence,
+            "citationRefs": _citation_refs_for_claim(sentence, citations),
+        }
+        for sentence in claim_sentences
+    ]
+    citation_backed = sum(1 for item in claim_citation_map if item["citationRefs"])
     coverage_ratio = 1.0 if not claim_sentences else round(citation_backed / max(1, len(claim_sentences)), 4)
     unsupported = int((verification or {}).get("unsupportedClaimCount") or (verification or {}).get("claimUnsupportedCount") or 0)
     abstain = evidence_payload.get("answerable") is False or not str(answer or "").strip()
@@ -284,11 +394,14 @@ def build_answer_contract(
             "status": coverage_status,
             "citation_count": len(citations),
             "supported_span_count": citation_backed,
+            "claim_count": len(claim_sentences),
+            "unmapped_claim_count": max(0, len(claim_sentences) - citation_backed),
             "unsupported_claim_count": unsupported,
         },
         "coverageRatio": coverage_ratio,
         "claimLikeSentenceCount": len(claim_sentences),
         "citationBackedSentenceCount": citation_backed,
+        "citationClaimMap": claim_citation_map,
         "verificationVerdict": build_verification_verdict(verification),
         "rewrite": {
             "attempted": bool((rewrite or {}).get("attempted")),

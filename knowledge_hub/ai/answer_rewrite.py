@@ -19,7 +19,7 @@ def should_apply_conservative_fallback(verification: dict) -> bool:
         return True
     if int(verification.get("supportedClaimCount") or 0) == 0:
         return True
-    return False
+    return True
 
 
 def _unsupported_claim_count(verification: dict) -> int:
@@ -32,13 +32,17 @@ def _unsupported_claim_count(verification: dict) -> int:
 def _gate_fallback_warning(verification: dict) -> str:
     if _unsupported_claim_count(verification) > 0:
         return "answer rewrite skipped: unsupported claims require conservative fallback"
-    supported_count = int(verification.get("supportedClaimCount") or 0)
-    if supported_count > 0:
-        return ""
+    if bool(verification.get("needsCaution")) and not bool(verification.get("conflictMentioned")):
+        return "answer rewrite skipped: caution requires conservative fallback"
     if int(verification.get("claimWeakCount") or 0) > 0:
         return "answer rewrite skipped: weak claims require conservative fallback"
     if int(verification.get("uncertainClaimCount") or 0) > 0:
         return "answer rewrite skipped: uncertain claims require conservative fallback"
+    if bool(verification.get("needsCaution")):
+        return "answer rewrite skipped: caution requires conservative fallback"
+    supported_count = int(verification.get("supportedClaimCount") or 0)
+    if supported_count > 0:
+        return ""
     return ""
 
 

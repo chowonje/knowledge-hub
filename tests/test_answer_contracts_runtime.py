@@ -85,7 +85,7 @@ def test_answer_contract_blocks_rewrite_for_unsupported_claim_verdict():
 
     assert verdict["verdict"] == "fail"
     assert verdict["rewriteAllowed"] is False
-    assert verdict["rewritePolicy"] == "blocked_for_unsupported_claims"
+    assert verdict["rewritePolicy"] == "blocked_by_verification_gate"
     assert contract["schema"] == "knowledge-hub.answer-contract.v1"
     assert contract["verificationVerdict"]["verdict"] == "fail"
     assert contract["citations"][0]["spanRef"] == "span:1"
@@ -93,3 +93,99 @@ def test_answer_contract_blocks_rewrite_for_unsupported_claim_verdict():
     assert contract["modelId"] == "local/test"
     assert validate_payload(contract, "knowledge-hub.answer-contract.v1", strict=True).ok
     assert validate_payload(verdict, "knowledge-hub.verification-verdict.v1", strict=True).ok
+
+
+def test_verification_verdict_blocks_rewrite_for_caution_even_without_unsupported_claims():
+    verdict = build_verification_verdict(
+        {
+            "status": "caution",
+            "unsupportedClaimCount": 0,
+            "uncertainClaimCount": 0,
+            "supportedClaimCount": 1,
+            "needsCaution": True,
+            "summary": "needs caution framing",
+        }
+    )
+
+    assert verdict["verdict"] == "fail"
+    assert verdict["rewriteAllowed"] is False
+    assert verdict["rewritePolicy"] == "blocked_by_verification_gate"
+
+
+def test_evidence_packet_strict_mode_excludes_low_provenance_spans_and_fails_external_closed():
+    packet = SimpleNamespace(
+        evidence=[
+            {
+                "title": "Low provenance",
+                "excerpt": "This span has text but no canonical source hash.",
+                "source_id": "vault:low.md",
+                "span_locator": "chars:1-44",
+            }
+        ],
+        citations=[{"label": "S1", "target": "vault:low.md", "kind": "source"}],
+        evidence_packet={"answerable": True, "answerableDecisionReason": "raw evidence present"},
+        evidence_policy={},
+    )
+    pipeline_result = SimpleNamespace(plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"source_type": "vault"}}))
+
+    contract = build_evidence_packet_contract(
+        query="low provenance?",
+        retrieval_mode="keyword",
+        pipeline_result=pipeline_result,
+        evidence_packet=packet,
+    )
+
+    assert contract["spans"] == []
+    assert contract["answerable"] is False
+    assert contract["coverage"]["status"] == "insufficient"
+    assert contract["coverage"]["excluded_low_provenance"] == 1
+    assert contract["policy"]["classification"] == "UNKNOWN"
+    assert contract["policy"]["external_allowed"] is False
+    assert validate_payload(contract, "knowledge-hub.evidence-packet.v1", strict=True).ok
+
+
+def test_answer_contract_coverage_uses_claim_to_citation_mapping_not_citation_count():
+    packet = SimpleNamespace(
+        evidence=[
+            {
+                "title": "Alpha",
+                "excerpt": "Alpha evidence supports the first claim.",
+                "citation_label": "S1",
+                "citation_target": "vault:Alpha.md",
+                "source_id": "vault:Alpha.md",
+                "source_content_hash": "hash-alpha",
+                "span_locator": "chars:1-40",
+            },
+            {
+                "title": "Gamma",
+                "excerpt": "Gamma evidence is unrelated to the answer.",
+                "citation_label": "S2",
+                "citation_target": "vault:Gamma.md",
+                "source_id": "vault:Gamma.md",
+                "source_content_hash": "hash-gamma",
+                "span_locator": "chars:1-40",
+            },
+        ],
+        citations=[
+            {"label": "S1", "target": "vault:Alpha.md", "kind": "source"},
+            {"label": "S2", "target": "vault:Gamma.md", "kind": "source"},
+        ],
+        evidence_packet={"answerable": True, "answerableDecisionReason": "grounded"},
+        evidence_policy={"policyKey": "test-policy"},
+    )
+
+    contract = build_answer_contract(
+        answer="Alpha wins. Beta wins.",
+        evidence_packet=packet,
+        verification={"status": "verified", "unsupportedClaimCount": 0, "needsCaution": False},
+        rewrite={"attempted": False, "applied": False, "finalAnswerSource": "original"},
+        routing_meta={"provider": "local", "model": "test"},
+    )
+
+    assert contract["claimLikeSentenceCount"] == 2
+    assert contract["citationBackedSentenceCount"] == 1
+    assert contract["coverageRatio"] == 0.5
+    assert contract["coverage"]["status"] == "partial"
+    assert contract["coverage"]["unmapped_claim_count"] == 1
+    assert contract["citationClaimMap"][0]["citationRefs"] == ["span:1"]
+    assert contract["citationClaimMap"][1]["citationRefs"] == []

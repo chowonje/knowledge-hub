@@ -2714,20 +2714,18 @@ def test_generate_answer_rewrites_when_conflict_language_missing(monkeypatch):
     monkeypatch.setattr(
         searcher,
         "_resolve_llm_for_rewrite",
-        lambda **_kwargs: (
-            rewrite_llm,
-            {"route": "strong", "provider": "openai", "model": "gpt-5.4", "reasons": [], "fallbackUsed": False},
-            [],
-        ),
+        lambda **_kwargs: (_ for _ in ()).throw(AssertionError("caution must not call rewrite route")),
     )
 
     result = searcher.generate_answer("RAG 장단점", top_k=1, retrieval_mode="hybrid")
 
     assert result["answerRewrite"]["attempted"] is True
     assert result["answerRewrite"]["applied"] is True
+    assert result["answerRewrite"]["finalAnswerSource"] == "conservative_fallback"
     assert result["initialAnswerVerification"]["conflictMentioned"] is False
     assert result["answerVerification"]["conflictMentioned"] is True
     assert result["answerVerification"]["needsCaution"] is False
+    assert any("answer rewrite skipped: caution requires conservative fallback" in warning for warning in result["warnings"])
 
 
 def test_generate_answer_uses_conservative_fallback_for_uncertain_only_claims(monkeypatch):
