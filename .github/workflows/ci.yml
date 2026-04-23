@@ -29,17 +29,17 @@ jobs:
           fi
           test -f docs/policy/p0-detection-patterns.json
           python - <<'PY'
-from pathlib import Path
-repo = Path(".").resolve()
-expected = repo / "docs" / "policy" / "p0-detection-patterns.json"
-matches = sorted(repo.rglob("p0-detection-patterns.json"))
-extra = [path for path in matches if path != expected]
-if extra:
-    print("duplicate p0-detection-patterns.json copies detected:")
-    for path in extra:
-        print(path.relative_to(repo))
-    raise SystemExit(1)
-PY
+          from pathlib import Path
+          repo = Path(".").resolve()
+          expected = repo / "docs" / "policy" / "p0-detection-patterns.json"
+          matches = sorted(repo.rglob("p0-detection-patterns.json"))
+          extra = [path for path in matches if path != expected]
+          if extra:
+              print("duplicate p0-detection-patterns.json copies detected:")
+              for path in extra:
+                  print(path.relative_to(repo))
+              raise SystemExit(1)
+          PY
           if rg -n 'const DEFAULT_P0_PATTERNS|const DEFAULT_REDACT_KEYS' foundry-core/src/personal-foundry -S; then
             echo "duplicate TypeScript P0 defaults detected"
             exit 1
