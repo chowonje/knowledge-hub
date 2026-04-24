@@ -119,6 +119,14 @@ source-quality detail observation 운영 규칙:
   - 모든 후보 지표가 full window 동안 threshold를 통과해야 한다.
 - 현재 이 층은 관찰 전용이다. `ready_for_detail_gate_review`가 안정적으로 나오면 별도 change로 hard gate 승격한다.
 
+live retrieval-span eval 운영 규칙:
+- 목적은 deterministic CI fixture가 아니라 실제 장기 로컬 DB에서 "이 질문이 기대 source/span을 찾는가"를 operator가 주간/수동으로 확인하는 것이다.
+- canonical command:
+  - `python eval/knowledgeos/scripts/check_live_retrieval_span_eval.py --cases eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json --out-json eval/knowledgeos/runs/reports/live_retrieval_span_latest.json --out-md eval/knowledgeos/runs/reports/live_retrieval_span_latest.md --fail-on-insufficient --json`
+- `live_retrieval_span_eval_cases.local.json`은 개인 장기 corpus의 source id/path를 담을 수 있으므로 git ignore 대상이다. 시작점은 `templates/live_retrieval_span_eval_cases.template.json`을 복사해서 채운다.
+- 이 gate는 live DB와 로컬 index 상태에 의존하므로 required PR CI에는 넣지 않는다. CI는 `fixtures/retrieval_span_golden_cases.json`만 사용한다.
+- 통과 기준은 기본적으로 모든 evaluable case가 expected source id를 top-K 안에서 찾고, 지정된 expected text term이 해당 retrieved text와 overlap 되는 것이다. `expected_evidence_role=retrieval_signal_only` case는 signal row가 citation-grade evidence로 오인되지 않는지 확인한다.
+
 embedding promotion 운영 규칙:
 - 기본값 승격은 항상 현재 기본 임베딩 대비 pairwise로만 판단한다.
 - `gold_doc_ids` / `hard_negative_doc_ids`가 비어 있으면 machine draft는 만들 수 있어도 `recommended=true`는 차단된다.

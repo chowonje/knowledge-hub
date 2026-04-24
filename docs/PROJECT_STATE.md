@@ -66,6 +66,8 @@ The next mixed-store tranche now closes two more invariants. Epistemic review st
 
 Evidence-first regression is now also a required CI surface, not just an implementation intention. `.github/workflows/ci.yml` includes an `evidence-first-gates` job that runs the fixture-backed golden pack (`eval/knowledgeos/fixtures/evidence_first_golden_cases.json`) plus the protecting answer-contract, verification, epistemic, and mixed-store lifecycle tests. That gate now also includes a deterministic retrieval-span golden set (`eval/knowledgeos/fixtures/retrieval_span_golden_cases.json`) so paper/web/vault fixture queries must recover expected source ids and text terms without live providers, and it enforces the machine-readable derivative inventory at `docs/store_authority_inventory.json` through SQL introspection for lifecycle-required tables.
 
+The corresponding live-corpus retrieval-span check is intentionally an operator gate, not required PR CI. `eval/knowledgeos/scripts/check_live_retrieval_span_eval.py` reads a local ignored case file (`eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json`) and checks the active local DB/index for expected source ids, rank bounds, text-term overlap, abstention cases, and retrieval-signal-only rows. This keeps the deterministic CI guard hermetic while giving weekly/local runs a direct way to catch real corpus drift in source/span recovery.
+
 Additive subsystems exist behind that default surface:
 - ontology / claims / event history
 - document-memory / paper-memory / claim-normalization / synthesis

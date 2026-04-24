@@ -45,6 +45,7 @@ runs/
 eval/knowledgeos/runs
 eval/knowledgeos/runs/
 eval/knowledgeos/review/
+eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json
 runs/ab/
 
 # Secrets

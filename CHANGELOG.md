@@ -44,6 +44,7 @@
 
 ### Added
 
+- Added a live-corpus retrieval-span operator gate. `eval/knowledgeos/scripts/check_live_retrieval_span_eval.py` reads an ignored local case file, checks the active DB/index for expected source ids, rank bounds, text-term overlap, abstention cases, and signal-only rows, and writes JSON/Markdown reports for weekly/manual quality review without adding a live-corpus dependency to required PR CI.
 - Added `eval/knowledgeos/fixtures/retrieval_span_golden_cases.json` and `docs/store_authority_inventory.json` as small machine-readable stabilization artifacts for retrieval quality and derivative lifecycle enforcement.
 - Added a hidden `khub labs ontology contributor-audit` operator surface for dry-run auditing and optional metadata-only backfill of historical concept `contributor_hashes` gaps from live derived ontology claims/relations.
 - Added `docs/adr/2026-04-24-store-authority-inventory.md` to classify persistence stores as canonical source/audit, derivative materialized view, mixed authority, or operational canonical, and to pin the invariant that derivative semantic rows are retrieval/UI signals unless they resolve back to source-backed spans.

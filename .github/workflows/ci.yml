@@ -142,4 +142,5 @@ jobs:
           tests/test_epistemic_supersede.py
           tests/test_mixed_store_lifecycle.py
           tests/test_retrieval_span_golden.py
+          tests/test_live_retrieval_span_eval.py
           tests/test_store_authority_inventory.py
