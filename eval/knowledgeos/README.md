@@ -134,13 +134,21 @@ live retrieval-span eval 운영 규칙:
 answer-quality / compare-packet contract gate 운영 규칙:
 - answer-quality gate는 current AnswerContract가 citation coverage, abstain, verification verdict, retrievalSignals 분리를 계속 지키는지 deterministic fixture로 확인한다.
 - canonical command:
-  - `python eval/knowledgeos/scripts/check_answer_quality_gate.py --json`
+  - `python eval/knowledgeos/scripts/check_answer_quality_gate.py --min-cases 8 --json`
+- 현재 fixture는 grounded success, unsupported claim, signal-only grounding, abstain, over-citation, caution rewrite block, missing factual-claim citation, mixed non-evidence signal handling을 포함한다.
 - compare packet은 비교/종합 전에 차원별 supporting span과 retrieval signal을 분리하는 schema-backed artifact다.
 - schema:
   - `docs/schemas/compare-packet.v1.json`
 - 핵심 불변식:
   - card/ontology/learning/memory/epistemic signal은 `retrievalSignals`로만 남고, `supportingSpans` citation 후보가 되지 않는다.
   - 비교 차원은 `supported | conflict | unknown | insufficient` 중 하나를 가져야 한다.
+- production ask-v2 `paper_compare` payload는 claim cards + claim alignment가 있을 때 additive `comparePacketContract`를 붙인다. legacy compare fallback은 충분한 구조가 없으므로 이 필드를 만들지 않는다.
+
+index freshness 운영 규칙:
+- `khub doctor --json`의 `index freshness` check는 canonical SQLite source count와 vector metadata count를 비교한다.
+- source-id metadata가 있는 경우 `diagnostics.sourceIdCoverage`에서 canonical paper/vault/web source id coverage도 확인한다.
+- 현재는 source-id coverage까지만 보장한다. vector sidecar가 모든 source type의 expected span inventory를 안정적으로 들고 있지 않으므로 `spanCoverageAvailable=false`가 정상이다.
+- source type 전체가 vector에 없으면 `degraded`; partial count 차이는 informational; source-id 누락이 확인되면 `degraded`다.
 
 card/synthesis/hypothesis inventory 운영 규칙:
 - `docs/card_synthesis_hypothesis_inventory.json`은 card v1/v2, synthesis, hypothesis surface의 현재 promotion 상태를 machine-readable하게 고정한다.

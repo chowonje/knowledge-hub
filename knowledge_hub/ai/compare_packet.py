@@ -48,6 +48,140 @@ def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
     }
 
 
+def _claim_card_id(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("claimCardId") or item.get("claim_card_id") or item.get("claimId") or item.get("claim_id"))
+
+
+def _group_claim_ids(group: dict[str, Any]) -> list[str]:
+    return [_clean_text(value) for value in list(group.get("claimCardIds") or group.get("claim_card_ids") or []) if _clean_text(value)]
+
+
+def _label_from_frame(frame: dict[str, Any]) -> str:
+    for key in ("metric", "dataset", "task", "comparator"):
+        value = _clean_text(frame.get(key))
+        if value:
+            return value
+    return ""
+
+
+def _claim_text(card: dict[str, Any]) -> str:
+    parts = [
+        _clean_text(card.get("summaryText") or card.get("summary_text")),
+        _clean_text(card.get("resultValueText") or card.get("result_value_text")),
+        _clean_text(card.get("resultDirection") or card.get("result_direction")),
+    ]
+    return " | ".join(part for part in parts if part)
+
+
+def _claim_supporting_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
+    anchor_ids = [_clean_text(value) for value in list(card.get("evidenceAnchorIds") or card.get("evidence_anchor_ids") or [])]
+    excerpts = [_clean_text(value) for value in list(card.get("anchorExcerpts") or card.get("anchor_excerpts") or [])]
+    if not anchor_ids and not excerpts:
+        return []
+    count = max(len(anchor_ids), len(excerpts), 1)
+    spans: list[dict[str, Any]] = []
+    for index in range(count):
+        spans.append(
+            {
+                "spanRef": anchor_ids[index] if index < len(anchor_ids) and anchor_ids[index] else f"{_claim_card_id(card)}:anchor:{index + 1}",
+                "sourceId": _clean_text(card.get("sourceId") or card.get("source_id")),
+                "sourceType": _clean_text(card.get("sourceKind") or card.get("source_kind") or "paper"),
+                "quote": excerpts[index] if index < len(excerpts) else _clean_text(card.get("summaryText") or card.get("summary_text")),
+            }
+        )
+    return spans
+
+
+def _ordered_group_cards(*, group: dict[str, Any], claim_cards_by_id: dict[str, dict[str, Any]], resolved_source_ids: list[str]) -> list[dict[str, Any]]:
+    cards = [claim_cards_by_id[claim_id] for claim_id in _group_claim_ids(group) if claim_id in claim_cards_by_id]
+    if not cards:
+        return []
+    order = {source_id: index for index, source_id in enumerate(resolved_source_ids)}
+    return sorted(
+        cards,
+        key=lambda item: (
+            order.get(_clean_text(item.get("sourceId") or item.get("source_id")), len(order) + 1),
+            _clean_text(item.get("sourceId") or item.get("source_id")),
+            _claim_card_id(item),
+        ),
+    )
+
+
+def build_compare_packet_from_runtime(
+    *,
+    query: str,
+    source_type: str,
+    family: str,
+    runtime_execution: dict[str, Any],
+    query_frame: dict[str, Any],
+    claim_cards: list[dict[str, Any]],
+    claim_alignment: dict[str, Any],
+    evidence_policy: dict[str, Any] | None = None,
+    comparison_verification: dict[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    if _clean_text(source_type).lower() != "paper":
+        return None
+    if _clean_text(family).lower() != "paper_compare":
+        return None
+    if _clean_text(runtime_execution.get("used")).lower() != "ask_v2":
+        return None
+    cards_by_id = {_claim_card_id(item): dict(item or {}) for item in claim_cards if _claim_card_id(dict(item or {}))}
+    groups = [dict(item or {}) for item in list((claim_alignment or {}).get("groups") or [])]
+    if not cards_by_id or not groups:
+        return None
+
+    resolved_source_ids = [_clean_text(value) for value in list(query_frame.get("resolved_source_ids") or query_frame.get("resolvedSourceIds") or [])]
+    verification_conflicts = {
+        _clean_text(item.get("groupKey"))
+        for item in list((comparison_verification or {}).get("conflicts") or [])
+        if _clean_text(item.get("groupKey"))
+    }
+    dimensions: list[dict[str, Any]] = []
+    for index, group in enumerate(groups, start=1):
+        group_cards = _ordered_group_cards(group=group, claim_cards_by_id=cards_by_id, resolved_source_ids=resolved_source_ids)
+        if not group_cards:
+            continue
+        frame = dict(group.get("canonicalFrame") or group.get("frame") or {})
+        supporting_spans: list[dict[str, Any]] = []
+        for card in group_cards:
+            supporting_spans.extend(_claim_supporting_spans(card))
+        distinct_cards: list[dict[str, Any]] = []
+        seen_sources: set[str] = set()
+        for card in group_cards:
+            source_id = _clean_text(card.get("sourceId") or card.get("source_id"))
+            if source_id in seen_sources:
+                continue
+            seen_sources.add(source_id)
+            distinct_cards.append(card)
+        group_key = _clean_text(group.get("groupKey")) or f"compare-group:{index}"
+        if int(group.get("conflictingClaimCount") or 0) > 0 or group_key in verification_conflicts:
+            status = "conflict"
+        elif len(distinct_cards) >= 2 and supporting_spans:
+            status = "supported"
+        else:
+            status = "insufficient"
+        dimensions.append(
+            {
+                "dimensionId": group_key,
+                "label": _label_from_frame(frame) or f"Comparison {index}",
+                "leftClaim": _claim_text(distinct_cards[0]) if distinct_cards else "",
+                "rightClaim": _claim_text(distinct_cards[1]) if len(distinct_cards) > 1 else "",
+                "comparisonStatus": status,
+                "supportingSpans": supporting_spans,
+                "notes": _clean_text(group.get("conditionText")),
+            }
+        )
+
+    if not dimensions:
+        return None
+    return build_compare_packet_contract(
+        query=query,
+        dimensions=dimensions,
+        retrieval_signals=[],
+        policy=dict(evidence_policy or {}),
+    )
+
+
 def build_compare_packet_contract(
     *,
     query: str,
@@ -115,4 +249,4 @@ def build_compare_packet_contract(
     }
 
 
-__all__ = ["COMPARE_PACKET_SCHEMA", "build_compare_packet_contract"]
+__all__ = ["COMPARE_PACKET_SCHEMA", "build_compare_packet_contract", "build_compare_packet_from_runtime"]

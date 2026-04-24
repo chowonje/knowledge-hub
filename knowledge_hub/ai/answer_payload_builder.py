@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from knowledge_hub.ai.answer_contracts import build_evidence_packet_contract
+from knowledge_hub.ai.compare_packet import build_compare_packet_from_runtime
 from knowledge_hub.ai.answer_policy_support import (
     apply_claim_consensus_to_verification as _apply_claim_consensus_to_verification,
     evaluate_policy as _evaluate_policy,
@@ -88,7 +89,6 @@ class AnswerPayloadBuilder:
             paper_family=canonical_family,
             representative_paper=representative_paper,
         )
-        planner_status = str(query_plan.get("plannerStatus") or query_plan.get("planner_status") or "not_attempted")
         planner_fallback = _planner_fallback_payload(query_plan)
         payload = {
             "status": status,
@@ -157,6 +157,19 @@ class AnswerPayloadBuilder:
             payload["claimCards"] = list(v2.get("claimCards") or [])
         if v2.get("claimAlignment"):
             payload["claimAlignment"] = dict(v2.get("claimAlignment") or {})
+        compare_packet = build_compare_packet_from_runtime(
+            query=query,
+            source_type=normalized_source,
+            family=public_paper_family,
+            runtime_execution=runtime_execution,
+            query_frame=query_frame,
+            claim_cards=list(v2.get("claimCards") or []),
+            claim_alignment=dict(v2.get("claimAlignment") or {}),
+            evidence_policy=evidence_policy,
+            comparison_verification=dict(v2.get("comparisonVerification") or {}),
+        )
+        if compare_packet:
+            payload["comparePacketContract"] = compare_packet
         if v2.get("answerProvenance"):
             payload["answerProvenance"] = dict(v2.get("answerProvenance") or {})
         if v2.get("scopeWarnings"):

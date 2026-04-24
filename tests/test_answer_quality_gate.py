@@ -23,12 +23,12 @@ def test_answer_quality_gate_fixture_passes():
     payload = module.run_answer_quality_gate(
         cases,
         cases_path=Path("eval/knowledgeos/fixtures/answer_quality_golden_cases.json"),
-        min_cases=4,
+        min_cases=8,
     )
 
     assert payload["status"] == "ok"
-    assert payload["caseCount"] == 4
-    assert payload["passedCaseCount"] == 4
+    assert payload["caseCount"] == 8
+    assert payload["passedCaseCount"] == 8
     assert payload["failedCaseCount"] == 0
 
 
@@ -62,3 +62,36 @@ def test_answer_quality_gate_catches_unexpected_signal_citation():
     assert result["status"] == "fail"
     assert "coverage_status:none!=complete" in result["errors"]
     assert "citation_count:0!=1" in result["errors"]
+
+
+def test_answer_quality_gate_catches_unexpected_rewrite_allowed_expectation():
+    module = _load_module()
+    case = {
+        "case_id": "bad_rewrite_allowed_expectation",
+        "answer": "Alpha retrieval improves grounding.",
+        "evidence": [
+            {
+                "title": "Alpha",
+                "excerpt": "Alpha retrieval improves grounding.",
+                "citation_label": "S1",
+                "citation_target": "vault:alpha.md",
+                "source_id": "vault:alpha.md",
+                "source_type": "vault",
+                "source_content_hash": "hash-alpha",
+                "span_locator": "chars:0-36",
+            }
+        ],
+        "verification": {"status": "caution", "unsupportedClaimCount": 0, "needsCaution": True},
+        "expected": {
+            "status": "pass",
+            "coverage_status": "complete",
+            "citation_count": 1,
+            "verification_verdict": "fail",
+            "rewrite_allowed": True,
+        },
+    }
+
+    result = module.evaluate_answer_quality_case(case)
+
+    assert result["status"] == "fail"
+    assert "rewrite_allowed:False!=True" in result["errors"]

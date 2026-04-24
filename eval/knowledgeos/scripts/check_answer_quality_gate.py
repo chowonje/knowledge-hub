@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from knowledge_hub.ai.answer_contracts import build_answer_contract
+from knowledge_hub.ai.answer_contracts import build_answer_contract  # noqa: E402
 
 
 SCHEMA = "knowledge-hub.answer-quality-gate.result.v1"
@@ -86,6 +86,10 @@ def evaluate_answer_quality_case(case: dict[str, Any]) -> dict[str, Any]:
         )
     if "verification_verdict" in expected and verdict.get("verdict") != expected.get("verification_verdict"):
         errors.append(f"verification_verdict:{verdict.get('verdict')}!={expected.get('verification_verdict')}")
+    if "rewrite_allowed" in expected and bool(verdict.get("rewriteAllowed")) is not bool(
+        expected.get("rewrite_allowed")
+    ):
+        errors.append(f"rewrite_allowed:{bool(verdict.get('rewriteAllowed'))}!={expected.get('rewrite_allowed')}")
 
     failed = bool(errors)
     if expected_status == "fail" and not failed:
