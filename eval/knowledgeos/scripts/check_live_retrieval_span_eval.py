@@ -17,6 +17,7 @@ from knowledge_hub.ai.answer_contracts import NON_EVIDENCE_SOURCE_SCHEMES, NON_E
 
 
 SCHEMA = "knowledge-hub.live-retrieval-span-eval.result.v1"
+AB_SCHEMA = "knowledge-hub.live-retrieval-reranker-ab.result.v1"
 DEFAULT_CASES_PATH = "eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json"
 PUBLIC_SOURCE_TYPES = {"paper", "vault", "web", "concept"}
 
@@ -392,6 +393,111 @@ def run_live_retrieval_span_eval(
     )
 
 
+def _safe_rate(payload: dict[str, Any], key: str) -> float:
+    value = payload.get(key)
+    return float(value) if value is not None else 0.0
+
+
+def build_reranker_ab_summary(
+    *,
+    baseline: dict[str, Any],
+    reranker: dict[str, Any],
+    cases: list[dict[str, Any]],
+    cases_path: Path,
+    min_cases: int,
+    fail_on_insufficient: bool,
+) -> dict[str, Any]:
+    baseline_failed = int(baseline.get("failedCaseCount") or 0)
+    reranker_failed = int(reranker.get("failedCaseCount") or 0)
+    hit_delta = round(_safe_rate(reranker, "sourceHitAtKRate") - _safe_rate(baseline, "sourceHitAtKRate"), 6)
+    rank_delta = round(_safe_rate(reranker, "sourceHitWithinMinRankRate") - _safe_rate(baseline, "sourceHitWithinMinRankRate"), 6)
+    term_delta = round(_safe_rate(reranker, "termOverlapPassRate") - _safe_rate(baseline, "termOverlapPassRate"), 6)
+    worse = reranker_failed > baseline_failed or hit_delta < 0 or rank_delta < 0 or term_delta < 0
+    better = reranker_failed < baseline_failed or hit_delta > 0 or rank_delta > 0 or term_delta > 0
+    recommendation = "hold"
+    if better and not worse:
+        recommendation = "promote_candidate"
+    elif worse:
+        recommendation = "do_not_promote"
+    insufficient = len(cases) < int(min_cases)
+    return {
+        "schema": AB_SCHEMA,
+        "createdAt": datetime.now(timezone.utc).isoformat(),
+        "status": "failed" if insufficient and fail_on_insufficient else "ok",
+        "casesPath": str(cases_path),
+        "caseCount": len(cases),
+        "recommendation": recommendation,
+        "deltas": {
+            "failedCaseCount": reranker_failed - baseline_failed,
+            "sourceHitAtKRate": hit_delta,
+            "sourceHitWithinMinRankRate": rank_delta,
+            "termOverlapPassRate": term_delta,
+        },
+        "baseline": baseline,
+        "reranker": reranker,
+    }
+
+
+def run_reranker_ab_eval(
+    *,
+    baseline_searcher: Any,
+    reranker_searcher: Any,
+    cases: list[dict[str, Any]],
+    cases_path: Path,
+    top_k: int,
+    retrieval_mode: str,
+    alpha: float,
+    use_ontology_expansion: bool,
+    min_cases: int,
+    min_source_hit_rate: float,
+    min_term_overlap_ratio: float,
+    fail_on_insufficient: bool,
+) -> dict[str, Any]:
+    baseline = run_live_retrieval_span_eval(
+        searcher=baseline_searcher,
+        cases=cases,
+        cases_path=cases_path,
+        top_k=top_k,
+        retrieval_mode=retrieval_mode,
+        alpha=alpha,
+        use_ontology_expansion=use_ontology_expansion,
+        min_cases=min_cases,
+        min_source_hit_rate=min_source_hit_rate,
+        min_term_overlap_ratio=min_term_overlap_ratio,
+        fail_on_insufficient=fail_on_insufficient,
+    )
+    reranker = run_live_retrieval_span_eval(
+        searcher=reranker_searcher,
+        cases=cases,
+        cases_path=cases_path,
+        top_k=top_k,
+        retrieval_mode=retrieval_mode,
+        alpha=alpha,
+        use_ontology_expansion=use_ontology_expansion,
+        min_cases=min_cases,
+        min_source_hit_rate=min_source_hit_rate,
+        min_term_overlap_ratio=min_term_overlap_ratio,
+        fail_on_insufficient=fail_on_insufficient,
+    )
+    return build_reranker_ab_summary(
+        baseline=baseline,
+        reranker=reranker,
+        cases=cases,
+        cases_path=cases_path,
+        min_cases=min_cases,
+        fail_on_insufficient=fail_on_insufficient,
+    )
+
+
+def _set_searcher_reranker_enabled(searcher: Any, enabled: bool) -> None:
+    config = getattr(searcher, "config", None)
+    setter = getattr(config, "set_nested", None)
+    if callable(setter):
+        setter("labs", "retrieval", "reranker", "enabled", bool(enabled))
+    if hasattr(searcher, "_reranker_cache"):
+        searcher._reranker_cache = None
+
+
 def render_markdown(payload: dict[str, Any]) -> str:
     lines = [
         "# Live Retrieval Span Eval",
@@ -412,13 +518,32 @@ def render_markdown(payload: dict[str, Any]) -> str:
         lines.extend(["", "## Failed Cases", ""])
         for item in failed_cases:
             lines.append(f"- `{item.get('caseId')}`: {', '.join(item.get('errors') or [])}")
+    if payload.get("schema") == AB_SCHEMA:
+        deltas = dict(payload.get("deltas") or {})
+        lines.extend(
+            [
+                "",
+                "## Reranker A/B",
+                "",
+                f"- recommendation: `{payload.get('recommendation')}`",
+                f"- failed case delta: `{deltas.get('failedCaseCount')}`",
+                f"- source hit@K delta: `{deltas.get('sourceHitAtKRate')}`",
+                f"- source hit within min-rank delta: `{deltas.get('sourceHitWithinMinRankRate')}`",
+                f"- term overlap delta: `{deltas.get('termOverlapPassRate')}`",
+            ]
+        )
     return "\n".join(lines) + "\n"
 
 
-def _build_default_searcher() -> Any:
+def _build_default_searcher(*, reranker_enabled: bool | None = None) -> Any:
     from knowledge_hub.application.context import AppContextFactory
 
-    app = AppContextFactory().build(require_search=True)
+    app = AppContextFactory().build(require_search=False)
+    if reranker_enabled is not None:
+        setter = getattr(app.config, "set_nested", None)
+        if callable(setter):
+            setter("labs", "retrieval", "reranker", "enabled", bool(reranker_enabled))
+    _ = app.searcher
     return app.searcher
 
 
@@ -435,25 +560,64 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-source-hit-rate", type=float, default=1.0)
     parser.add_argument("--min-term-overlap-ratio", type=float, default=1.0)
     parser.add_argument("--fail-on-insufficient", action="store_true", default=False)
+    parser.add_argument("--reranker-ab", action="store_true", default=False, help="Run baseline vs labs reranker comparison.")
     parser.add_argument("--json", action="store_true", dest="as_json", default=False)
     args = parser.parse_args(argv)
 
     cases_path = Path(args.cases).expanduser().resolve()
     try:
         cases = _read_cases(cases_path)
-        payload = run_live_retrieval_span_eval(
-            searcher=_build_default_searcher(),
-            cases=cases,
-            cases_path=cases_path,
-            top_k=int(args.top_k),
-            retrieval_mode=str(args.mode),
-            alpha=float(args.alpha),
-            use_ontology_expansion=bool(args.use_ontology_expansion),
-            min_cases=int(args.min_cases),
-            min_source_hit_rate=float(args.min_source_hit_rate),
-            min_term_overlap_ratio=float(args.min_term_overlap_ratio),
-            fail_on_insufficient=bool(args.fail_on_insufficient),
-        )
+        if bool(args.reranker_ab):
+            searcher = _build_default_searcher(reranker_enabled=False)
+            baseline = run_live_retrieval_span_eval(
+                searcher=searcher,
+                cases=cases,
+                cases_path=cases_path,
+                top_k=int(args.top_k),
+                retrieval_mode=str(args.mode),
+                alpha=float(args.alpha),
+                use_ontology_expansion=bool(args.use_ontology_expansion),
+                min_cases=int(args.min_cases),
+                min_source_hit_rate=float(args.min_source_hit_rate),
+                min_term_overlap_ratio=float(args.min_term_overlap_ratio),
+                fail_on_insufficient=bool(args.fail_on_insufficient),
+            )
+            _set_searcher_reranker_enabled(searcher, True)
+            reranker = run_live_retrieval_span_eval(
+                searcher=searcher,
+                cases=cases,
+                cases_path=cases_path,
+                top_k=int(args.top_k),
+                retrieval_mode=str(args.mode),
+                alpha=float(args.alpha),
+                use_ontology_expansion=bool(args.use_ontology_expansion),
+                min_cases=int(args.min_cases),
+                min_source_hit_rate=float(args.min_source_hit_rate),
+                min_term_overlap_ratio=float(args.min_term_overlap_ratio),
+                fail_on_insufficient=bool(args.fail_on_insufficient),
+            )
+            payload = build_reranker_ab_summary(
+                baseline=baseline,
+                reranker=reranker,
+                cases=cases,
+                cases_path=cases_path,
+                min_cases=int(args.min_cases),
+                fail_on_insufficient=bool(args.fail_on_insufficient),
+            )
+        else:
+            payload = run_live_retrieval_span_eval(
+                searcher=_build_default_searcher(),
+                cases=cases,
+                cases_path=cases_path,
+                top_k=int(args.top_k),
+                retrieval_mode=str(args.mode),
+                alpha=float(args.alpha),
+                use_ontology_expansion=bool(args.use_ontology_expansion),
+                min_cases=int(args.min_cases),
+                min_source_hit_rate=float(args.min_source_hit_rate),
+                min_term_overlap_ratio=float(args.min_term_overlap_ratio),
+                fail_on_insufficient=bool(args.fail_on_insufficient),
+            )
     except Exception as exc:  # noqa: BLE001
         payload = {
             "schema": SCHEMA,

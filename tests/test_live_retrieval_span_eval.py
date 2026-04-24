@@ -167,3 +167,46 @@ def test_live_retrieval_span_eval_skips_missing_local_cases_without_fail_flag():
 
     assert payload["status"] == "skipped"
     assert payload["errors"] == ["insufficient_evaluable_cases:0/1"]
+
+
+def test_reranker_ab_eval_reports_promotion_candidate_when_rank_improves():
+    module = _load_module()
+    wrong = _result(document_id="paper:wrong#0", source_type="paper", text="Transformer attention distractor.")
+    expected = _result(
+        document_id="paper:1706.03762#0",
+        source_type="paper",
+        title="Attention Is All You Need",
+        text="Transformer self attention sequence modeling evidence.",
+    )
+    baseline = _FakeSearcher({"transformer attention": [wrong, expected]})
+    reranker = _FakeSearcher({"transformer attention": [expected, wrong]})
+
+    payload = module.run_reranker_ab_eval(
+        baseline_searcher=baseline,
+        reranker_searcher=reranker,
+        cases=[
+            {
+                "case_id": "paper_attention",
+                "query": "transformer attention",
+                "source_type": "paper",
+                "expected_source_ids": ["paper:1706.03762#0"],
+                "expected_text_terms": ["transformer", "attention"],
+                "min_rank": 1,
+            }
+        ],
+        cases_path=Path("cases.json"),
+        top_k=5,
+        retrieval_mode="keyword",
+        alpha=0.7,
+        use_ontology_expansion=False,
+        min_cases=1,
+        min_source_hit_rate=0.0,
+        min_term_overlap_ratio=1.0,
+        fail_on_insufficient=True,
+    )
+
+    assert payload["schema"] == module.AB_SCHEMA
+    assert payload["status"] == "ok"
+    assert payload["recommendation"] == "promote_candidate"
+    assert payload["deltas"]["failedCaseCount"] == -1
+    assert payload["deltas"]["sourceHitWithinMinRankRate"] == 1.0
