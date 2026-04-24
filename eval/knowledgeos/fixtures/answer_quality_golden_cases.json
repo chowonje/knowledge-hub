@@ -1,0 +1,281 @@
+[
+  {
+    "case_id": "grounded_two_claims_complete",
+    "answer": "Alpha retrieval improves grounding. Beta reranking improves precision.",
+    "evidence": [
+      {
+        "title": "Alpha",
+        "excerpt": "Alpha retrieval improves grounding.",
+        "citation_label": "S1",
+        "citation_target": "vault:alpha.md",
+        "source_id": "vault:alpha.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-alpha",
+        "span_locator": "chars:0-36"
+      },
+      {
+        "title": "Beta",
+        "excerpt": "Beta reranking improves precision.",
+        "citation_label": "S2",
+        "citation_target": "web:beta#0",
+        "source_id": "web:beta#0",
+        "source_type": "web",
+        "source_content_hash": "hash-beta",
+        "span_locator": "chars:0-34"
+      }
+    ],
+    "verification": {
+      "status": "verified",
+      "unsupportedClaimCount": 0,
+      "needsCaution": false
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "complete",
+      "min_coverage_ratio": 1.0,
+      "abstain": false,
+      "citation_count": 2,
+      "retrieval_signal_count": 0,
+      "verification_verdict": "pass"
+    }
+  },
+  {
+    "case_id": "over_citation_does_not_inflate_coverage",
+    "answer": "Alpha retrieval improves grounding. Delta calibration reduces drift.",
+    "evidence": [
+      {
+        "title": "Alpha",
+        "excerpt": "Alpha retrieval improves grounding.",
+        "citation_label": "S1",
+        "citation_target": "vault:alpha.md",
+        "source_id": "vault:alpha.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-alpha",
+        "span_locator": "chars:0-36"
+      },
+      {
+        "title": "Gamma",
+        "excerpt": "Gamma logging captures operator notes.",
+        "citation_label": "S2",
+        "citation_target": "vault:gamma.md",
+        "source_id": "vault:gamma.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-gamma",
+        "span_locator": "chars:0-38"
+      },
+      {
+        "title": "Epsilon",
+        "excerpt": "Epsilon dashboard tracks build status.",
+        "citation_label": "S3",
+        "citation_target": "web:epsilon#0",
+        "source_id": "web:epsilon#0",
+        "source_type": "web",
+        "source_content_hash": "hash-epsilon",
+        "span_locator": "chars:0-39"
+      }
+    ],
+    "verification": {
+      "status": "verified",
+      "unsupportedClaimCount": 0,
+      "needsCaution": false
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "partial",
+      "min_coverage_ratio": 0.5,
+      "abstain": false,
+      "citation_count": 3,
+      "retrieval_signal_count": 0,
+      "verification_verdict": "pass"
+    }
+  },
+  {
+    "case_id": "caution_blocks_rewrite_and_pass",
+    "answer": "Alpha retrieval improves grounding.",
+    "evidence": [
+      {
+        "title": "Alpha",
+        "excerpt": "Alpha retrieval improves grounding.",
+        "citation_label": "S1",
+        "citation_target": "vault:alpha.md",
+        "source_id": "vault:alpha.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-alpha",
+        "span_locator": "chars:0-36"
+      }
+    ],
+    "verification": {
+      "status": "caution",
+      "unsupportedClaimCount": 0,
+      "needsCaution": true,
+      "summary": "requires conservative framing"
+    },
+    "rewrite": {
+      "attempted": true,
+      "applied": false,
+      "finalAnswerSource": "original"
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "complete",
+      "min_coverage_ratio": 1.0,
+      "abstain": false,
+      "citation_count": 1,
+      "retrieval_signal_count": 0,
+      "verification_verdict": "fail",
+      "rewrite_allowed": false
+    }
+  },
+  {
+    "case_id": "missing_citation_for_factual_claim_lowers_coverage",
+    "answer": "Alpha retrieval improves grounding. Delta calibration reduces drift.",
+    "evidence": [
+      {
+        "title": "Alpha",
+        "excerpt": "Alpha retrieval improves grounding.",
+        "citation_label": "S1",
+        "citation_target": "vault:alpha.md",
+        "source_id": "vault:alpha.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-alpha",
+        "span_locator": "chars:0-36"
+      }
+    ],
+    "verification": {
+      "status": "verified",
+      "unsupportedClaimCount": 0,
+      "needsCaution": false
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "partial",
+      "min_coverage_ratio": 0.5,
+      "abstain": false,
+      "citation_count": 1,
+      "retrieval_signal_count": 0,
+      "verification_verdict": "pass"
+    }
+  },
+  {
+    "case_id": "mixed_non_evidence_signal_stays_retrieval_signal",
+    "answer": "Alpha retrieval improves grounding.",
+    "evidence": [
+      {
+        "title": "Alpha",
+        "excerpt": "Alpha retrieval improves grounding.",
+        "citation_label": "S1",
+        "citation_target": "vault:alpha.md",
+        "source_id": "vault:alpha.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-alpha",
+        "span_locator": "chars:0-36"
+      },
+      {
+        "title": "Memory relation",
+        "excerpt": "Alpha relates to beta in the derived memory graph.",
+        "citation_label": "S2",
+        "citation_target": "memory_relation:alpha:beta",
+        "source_id": "memory_relation:alpha:beta",
+        "source_type": "memory_relation",
+        "source_content_hash": "hash-memory-relation",
+        "span_locator": "chars:0-52"
+      }
+    ],
+    "verification": {
+      "status": "verified",
+      "unsupportedClaimCount": 0,
+      "needsCaution": false
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "complete",
+      "min_coverage_ratio": 1.0,
+      "abstain": false,
+      "citation_count": 1,
+      "retrieval_signal_count": 1,
+      "verification_verdict": "pass"
+    }
+  },
+  {
+    "case_id": "unsupported_claim_fails",
+    "answer": "Alpha retrieval improves grounding. Gamma creates a new unsupported result.",
+    "evidence": [
+      {
+        "title": "Alpha",
+        "excerpt": "Alpha retrieval improves grounding.",
+        "citation_label": "S1",
+        "citation_target": "vault:alpha.md",
+        "source_id": "vault:alpha.md",
+        "source_type": "vault",
+        "source_content_hash": "hash-alpha",
+        "span_locator": "chars:0-36"
+      }
+    ],
+    "verification": {
+      "status": "failed",
+      "unsupportedClaimCount": 1,
+      "needsCaution": true,
+      "summary": "unsupported claim"
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "partial",
+      "min_coverage_ratio": 0.5,
+      "abstain": false,
+      "citation_count": 1,
+      "retrieval_signal_count": 0,
+      "verification_verdict": "fail"
+    }
+  },
+  {
+    "case_id": "signal_only_fails",
+    "answer": "Learning graph prerequisite edges prove the answer.",
+    "evidence": [
+      {
+        "title": "Learning edge",
+        "excerpt": "Learning graph prerequisite edge links retrieval to generation.",
+        "citation_label": "S1",
+        "citation_target": "learning_edge:rag:prereq",
+        "source_id": "learning_edge:rag:prereq",
+        "source_type": "learning_edge",
+        "source_content_hash": "hash-edge",
+        "span_locator": "chars:0-64"
+      }
+    ],
+    "verification": {
+      "status": "failed",
+      "unsupportedClaimCount": 0,
+      "needsCaution": true,
+      "reasonCode": "signal_only_grounding"
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "none",
+      "min_coverage_ratio": 0.0,
+      "abstain": false,
+      "citation_count": 0,
+      "retrieval_signal_count": 1,
+      "verification_verdict": "fail"
+    }
+  },
+  {
+    "case_id": "no_answer_abstains",
+    "answer": "",
+    "evidence": [],
+    "verification": {
+      "status": "abstain",
+      "unsupportedClaimCount": 0,
+      "needsCaution": true,
+      "summary": "no evidence"
+    },
+    "expected": {
+      "status": "pass",
+      "coverage_status": "insufficient",
+      "min_coverage_ratio": 1.0,
+      "abstain": true,
+      "citation_count": 0,
+      "retrieval_signal_count": 0,
+      "verification_verdict": "abstain"
+    }
+  }
+]

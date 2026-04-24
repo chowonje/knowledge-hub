@@ -113,6 +113,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.evidence-packet.v1": "evidence-packet.v1.json",
     "knowledge-hub.answer-contract.v1": "answer-contract.v1.json",
     "knowledge-hub.verification-verdict.v1": "verification-verdict.v1.json",
+    "knowledge-hub.compare-packet.v1": "compare-packet.v1.json",
     "knowledge-hub.answer-loop.collect.result.v1": "answer-loop-collect-result.v1.json",
     "knowledge-hub.answer-loop.judge.result.v1": "answer-loop-judge-result.v1.json",
     "knowledge-hub.answer-loop.summary.result.v1": "answer-loop-summary-result.v1.json",

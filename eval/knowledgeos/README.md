@@ -126,6 +126,38 @@ live retrieval-span eval 운영 규칙:
 - `live_retrieval_span_eval_cases.local.json`은 개인 장기 corpus의 source id/path를 담을 수 있으므로 git ignore 대상이다. 시작점은 `templates/live_retrieval_span_eval_cases.template.json`을 복사해서 채운다.
 - 이 gate는 live DB와 로컬 index 상태에 의존하므로 required PR CI에는 넣지 않는다. CI는 `fixtures/retrieval_span_golden_cases.json`만 사용한다.
 - 통과 기준은 기본적으로 모든 evaluable case가 expected source id를 top-K 안에서 찾고, 지정된 expected text term이 해당 retrieved text와 overlap 되는 것이다. `expected_evidence_role=retrieval_signal_only` case는 signal row가 citation-grade evidence로 오인되지 않는지 확인한다.
+- reranker A/B는 같은 script의 operator-only 확장이다. canonical command:
+  - `python eval/knowledgeos/scripts/check_live_retrieval_span_eval.py --cases eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json --reranker-ab --out-json eval/knowledgeos/runs/reports/live_retrieval_reranker_ab_latest.json --out-md eval/knowledgeos/runs/reports/live_retrieval_reranker_ab_latest.md --fail-on-insufficient --json`
+- A/B 결과는 `sourceHitAtKRate`, `sourceHitWithinMinRankRate`, `termOverlapPassRate`, `failedCaseCount` delta로 `promote_candidate | hold | do_not_promote`를 낸다.
+- 이 command는 active Chroma/vector runtime에 접근하므로 다른 MCP 서버나 장기 실행 search process가 vector store를 잡고 있으면 lock에 걸릴 수 있다. CI가 아니라 로컬 operator 판단용으로만 사용한다.
+
+answer-quality / compare-packet contract gate 운영 규칙:
+- answer-quality gate는 current AnswerContract가 citation coverage, abstain, verification verdict, retrievalSignals 분리를 계속 지키는지 deterministic fixture로 확인한다.
+- canonical command:
+  - `python eval/knowledgeos/scripts/check_answer_quality_gate.py --min-cases 8 --json`
+- 현재 fixture는 grounded success, unsupported claim, signal-only grounding, abstain, over-citation, caution rewrite block, missing factual-claim citation, mixed non-evidence signal handling을 포함한다.
+- compare packet은 비교/종합 전에 차원별 supporting span과 retrieval signal을 분리하는 schema-backed artifact다.
+- schema:
+  - `docs/schemas/compare-packet.v1.json`
+- 핵심 불변식:
+  - card/ontology/learning/memory/epistemic signal은 `retrievalSignals`로만 남고, `supportingSpans` citation 후보가 되지 않는다.
+  - 비교 차원은 `supported | conflict | unknown | insufficient` 중 하나를 가져야 한다.
+- production ask-v2 `paper_compare` payload는 claim cards + claim alignment가 있을 때 additive `comparePacketContract`를 붙인다. legacy compare fallback은 충분한 구조가 없으므로 이 필드를 만들지 않는다.
+
+index freshness 운영 규칙:
+- `khub doctor --json`의 `index freshness` check는 canonical SQLite source count와 vector metadata count를 비교한다.
+- source-id metadata가 있는 경우 `diagnostics.sourceIdCoverage`에서 canonical paper/vault/web source id coverage도 확인한다.
+- 현재는 source-id coverage까지만 보장한다. vector sidecar가 모든 source type의 expected span inventory를 안정적으로 들고 있지 않으므로 `spanCoverageAvailable=false`가 정상이다.
+- source type 전체가 vector에 없으면 `degraded`; partial count 차이는 informational; source-id 누락이 확인되면 `degraded`다.
+
+card/synthesis/hypothesis inventory 운영 규칙:
+- `docs/card_synthesis_hypothesis_inventory.json`은 card v1/v2, synthesis, hypothesis surface의 현재 promotion 상태를 machine-readable하게 고정한다.
+- 현재 결정:
+  - card v1/v2 공존은 `hold_migration` 상태다.
+  - 모든 card surface는 `derivative`이며 citation endpoint가 아니다.
+  - synthesis는 computed projection이고 dedicated store가 아니다.
+  - first-class hypothesis store는 아직 만들지 않는다.
+- 이 inventory는 destructive migration이나 hypothesis/proposal store 추가를 막는 guard다. retrieval/compare/live baseline이 안정되기 전에는 상위 지식 조합 기능을 키우지 않는다.
 
 embedding promotion 운영 규칙:
 - 기본값 승격은 항상 현재 기본 임베딩 대비 pairwise로만 판단한다.

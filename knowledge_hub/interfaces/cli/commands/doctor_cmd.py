@@ -16,6 +16,7 @@ from knowledge_hub.application.runtime_diagnostics import parser_runtime_status
 from knowledge_hub.infrastructure.config import DEFAULT_CONFIG_PATH
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.ai.reranker import reranker_runtime_status
+from knowledge_hub.application.index_freshness import build_index_freshness_check
 from knowledge_hub.providers import registry
 
 console = Console()
@@ -394,6 +395,7 @@ def build_doctor_payload(khub_ctx) -> dict[str, object]:
         _ollama_check(config),
         _parser_check(config),
         _vector_check(runtime),
+        build_index_freshness_check(config),
         _reranker_check(config),
         _storage_check(config),
     ]
