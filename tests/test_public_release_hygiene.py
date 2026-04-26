@@ -23,8 +23,12 @@ def test_public_release_hygiene_flags_tracked_local_files_secret_literals_and_ab
     (tmp_path / "config.yaml.bak_20260412").write_text("summarization:\n  provider: openai\n", encoding="utf-8")
     fake_secret = "sk-" + "abcdefghijklmnopqrstuvwxyz123456"
     fake_path = "/Users" + "/local-user/private/project/config.yaml"
+    fake_volume_path = "/Volumes" + "/PortableDrive/knowledge_os/raw"
     (tmp_path / "notes.md").write_text(
-        f'value = "{fake_secret}"\npath: `{fake_path}`\nplist: <string>{fake_path}</string>\n',
+        (
+            f'value = "{fake_secret}"\npath: `{fake_path}`\n'
+            f"plist: <string>{fake_path}</string>\nexternal: {fake_volume_path}\n"
+        ),
         encoding="utf-8",
     )
     (tmp_path / ".env").write_text("OPENAI_API_KEY=abc\n", encoding="utf-8")
@@ -41,6 +45,7 @@ def test_public_release_hygiene_flags_tracked_local_files_secret_literals_and_ab
     assert "tracked_dotenv" in kinds
     assert "openai_style_key" in kinds
     assert "absolute_user_path" in kinds
+    assert "absolute_volume_path" in kinds
 
 
 def test_public_release_hygiene_flags_runtime_sqlite_and_generated_run_paths(tmp_path: Path):

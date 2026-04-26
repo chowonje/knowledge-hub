@@ -627,6 +627,7 @@ khub labs memory search --query "retrieval evidence" --json
 ### `khub labs eval`
 
 ```text
+khub labs eval center
 khub labs eval prepare-document-memory
 khub labs eval prepare-claim-synthesis
 khub labs eval prepare-paper-summary
@@ -641,6 +642,7 @@ khub labs eval answer-loop optimize
 ```
 
 용도:
+- `center`는 eval run/report/query/answer-loop artifact를 실행 없이 읽어 현재 품질 상태와 빠진 운영 요소를 한 화면으로 요약한다
 - retrieval / document-memory / paper-memory 평가와 user-answer answer-loop를 한 곳에서 실행
 - `memory-router-v1` 프로필은 기존 retrieval-core + document-memory + paper-memory non-regression 위에 memory-first delta를 같이 본다
 - optional claim-synthesis 수동 평가도 같은 eval surface에서 템플릿/게이트로 다룸
@@ -661,6 +663,8 @@ gate 의미:
 예:
 
 ```bash
+khub labs eval center --json
+khub labs eval center --runs-root eval/knowledgeos/runs --queries-dir eval/knowledgeos/queries --json
 khub labs eval prepare-document-memory --db data/knowledge.db --json
 khub labs eval prepare-claim-synthesis --db data/knowledge.db --paper-id 2501.00001 --paper-id 2501.00004 --json
 khub labs eval prepare-paper-summary --db data/knowledge.db --paper-id 2501.00001 --json

@@ -108,6 +108,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.doctor.result.v1": "doctor-result.v1.json",
     "knowledge-hub.retrieval.eval.report.v1": "retrieval-eval-report.v1.json",
     "knowledge-hub.eval.gate.result.v1": "eval-gate-result.v1.json",
+    "knowledge-hub.eval-center.summary.result.v1": "eval-center-summary-result.v1.json",
     "knowledge-hub.answer-eval.packet.v1": "answer-eval-packet.v1.json",
     "knowledge-hub.answer-eval.result.v1": "answer-eval-result.v1.json",
     "knowledge-hub.evidence-packet.v1": "evidence-packet.v1.json",

@@ -16,6 +16,7 @@ from knowledge_hub.application.eval_gate import (
     export_document_memory_eval_template,
     export_paper_summary_eval_template,
 )
+from knowledge_hub.application.eval_center import build_eval_center_summary
 from knowledge_hub.application.answer_loop import (
     ANSWER_BACKEND_NAMES,
     CollectRequest,
@@ -66,17 +67,17 @@ def _allow_external_default(khub, searcher) -> bool:
 def _read_jsonl(path: Path) -> list[dict]:
     items: list[dict] = []
     for line in path.read_text(encoding="utf-8").splitlines():
-        token = str(line or "").strip()
-        if not token:
+        line_text = str(line or "").strip()
+        if not line_text:
             continue
-        items.append(json.loads(token))
+        items.append(json.loads(line_text))
     return items
 
 
-def _parse_backend_models(tokens: tuple[str, ...]) -> dict[str, str]:
+def _parse_backend_models(model_overrides: tuple[str, ...]) -> dict[str, str]:
     parsed: dict[str, str] = {}
-    for token in tokens:
-        raw = str(token or "").strip()
+    for model_override in model_overrides:
+        raw = str(model_override or "").strip()
         if not raw:
             continue
         if "=" not in raw:
@@ -97,11 +98,11 @@ def _resolve_answer_backends(values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(ANSWER_BACKEND_NAMES)
     out: list[str] = []
     for item in values:
-        token = str(item or "").strip()
-        if token not in ANSWER_BACKEND_NAMES:
-            raise click.ClickException(f"unsupported answer backend: {token}")
-        if token not in out:
-            out.append(token)
+        backend_name = str(item or "").strip()
+        if backend_name not in ANSWER_BACKEND_NAMES:
+            raise click.ClickException(f"unsupported answer backend: {backend_name}")
+        if backend_name not in out:
+            out.append(backend_name)
     return tuple(out)
 
 
@@ -623,6 +624,64 @@ def run_eval_gate(
         console.print(f"[yellow]- {warning}[/yellow]")
     if payload.get("status") == "fail":
         raise click.exceptions.Exit(1)
+
+
+@eval_group.command("center")
+@click.option(
+    "--runs-root",
+    default="eval/knowledgeos/runs",
+    show_default=True,
+    help="Eval run artifact root, often a symlink to ~/.khub/eval/knowledgeos/runs.",
+)
+@click.option(
+    "--queries-dir",
+    default="eval/knowledgeos/queries",
+    show_default=True,
+    help="Eval query CSV directory.",
+)
+@click.option(
+    "--failure-bank-path",
+    default="~/.khub/eval/knowledgeos/failures/failure_bank.jsonl",
+    show_default=True,
+    help="Failure Bank JSONL path; read-only in this summary surface.",
+)
+@click.option("--json/--no-json", "as_json", default=False, show_default=True)
+@click.pass_context
+def eval_center(ctx, runs_root, queries_dir, failure_bank_path, as_json):
+    """현재 eval 자산과 최신 결과를 읽기 전용으로 요약합니다."""
+    khub = ctx.obj["khub"]
+    payload = build_eval_center_summary(
+        runs_root=runs_root,
+        queries_dir=queries_dir,
+        failure_bank_path=failure_bank_path,
+        repo_root=Path.cwd(),
+    )
+    _validate_cli_payload(khub.config, payload, payload["schema"])
+    if as_json:
+        console.print_json(data=payload)
+        return
+
+    source = payload.get("sourceQuality") or {}
+    base = source.get("baseObservation") or {}
+    detail = source.get("detailObservation") or {}
+    answer = payload.get("answerLoop") or {}
+    summary = answer.get("summary") or {}
+    inventory = payload.get("queryInventory") or {}
+    console.print(
+        f"[bold]eval center[/bold] status={payload.get('status')} "
+        f"warnings={len(payload.get('warnings') or [])}"
+    )
+    console.print(
+        f"- source_quality: base={base.get('decision') or base.get('status') or 'unknown'} "
+        f"detail={detail.get('decision') or detail.get('status') or 'unknown'}"
+    )
+    console.print(
+        f"- answer_loop: rows={summary.get('rowCount', 0)} "
+        f"status={summary.get('status') or 'missing'} run={answer.get('latestRunDir') or 'none'}"
+    )
+    console.print(f"- query_sets: {inventory.get('count', 0)} dir={payload.get('queriesDir')}")
+    for warning in list(payload.get("warnings") or [])[:10]:
+        console.print(f"[yellow]- {warning}[/yellow]")
 
 
 @eval_group.group("answer-loop")

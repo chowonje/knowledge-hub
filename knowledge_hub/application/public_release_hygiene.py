@@ -83,6 +83,11 @@ _LOCAL_PATH_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (
         re.compile(r"(" + re.escape("/" + "home/") + r"[^\"'`<>\n\r]+)"),
         "absolute home-directory path found; prefer relative paths in public docs/examples",
     ),
+    (
+        "absolute_volume_path",
+        re.compile(r"(" + re.escape("/" + "Volumes/") + r"[^\"'`<>\n\r]+)"),
+        "absolute external-volume path found; prefer config/env/default home paths in public docs/examples",
+    ),
 )
 
 _TEXT_SUFFIXES = {

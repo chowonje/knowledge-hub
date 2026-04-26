@@ -104,6 +104,17 @@ def test_cli_labs_section_cards_help_exposes_build_show_preview():
     assert "preview" in result.output
 
 
+def test_cli_labs_eval_help_exposes_eval_center():
+    module = importlib.import_module("knowledge_hub.interfaces.cli.main")
+    runner = CliRunner()
+
+    result = runner.invoke(module.cli, ["labs", "eval", "--help"])
+
+    assert result.exit_code == 0
+    assert "center" in result.output
+    assert "answer-loop" in result.output
+
+
 def test_cli_top_level_uses_lazy_command_loading(monkeypatch):
     module = importlib.import_module("knowledge_hub.interfaces.cli.main")
     fake_module = types.SimpleNamespace()
