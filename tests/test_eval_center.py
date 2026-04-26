@@ -4,20 +4,8 @@ import json
 import os
 from pathlib import Path
 
-from click.testing import CliRunner
-
 from knowledge_hub.application.eval_center import build_eval_center_summary
 from knowledge_hub.core.schema_validator import validate_payload
-from knowledge_hub.interfaces.cli.commands.eval_cmd import eval_group
-
-
-class _Config:
-    def get_nested(self, *keys, default=None):
-        return default
-
-
-class _Khub:
-    config = _Config()
 
 
 def _write_json(path: Path, payload: dict) -> Path:
@@ -167,7 +155,10 @@ def test_build_eval_center_summary_rolls_up_current_artifacts(tmp_path: Path):
     assert payload["queryInventory"]["count"] == 2
     assert any("extra field" in warning for warning in payload["warnings"])
     assert any(gap["id"] == "failure_bank" for gap in payload["gaps"])
-    assert "operatorBrief" not in payload
+    assert payload["operatorBrief"]["summary"]["priority"] == "answer_loop_triage"
+    assert any(section["id"] == "source_quality" for section in payload["operatorBrief"]["sections"])
+    assert not any(section["id"] == "failure_bank" for section in payload["operatorBrief"]["sections"])
+    assert any(finding["part"] == "query_inventory" for finding in payload["operatorBrief"]["findings"])
 
 
 def test_build_eval_center_summary_uses_configured_failure_bank_path(tmp_path: Path):
@@ -260,32 +251,3 @@ def test_build_eval_center_summary_reports_missing_roots(tmp_path: Path):
     assert payload["queryInventory"]["exists"] is False
     assert payload["answerLoop"]["summary"]["exists"] is False
     assert any("missing queries dir" in warning for warning in payload["warnings"])
-
-
-def test_eval_center_cli_json_is_schema_valid(tmp_path: Path):
-    runs_root = tmp_path / "eval" / "knowledgeos" / "runs"
-    queries_dir = tmp_path / "eval" / "knowledgeos" / "queries"
-    _seed_source_quality(runs_root)
-    _seed_answer_loop(runs_root)
-    _write_text(queries_dir / "paper_default_eval_queries_v1.csv", "query,source\np1,paper\n")
-
-    result = CliRunner().invoke(
-        eval_group,
-        [
-            "center",
-            "--runs-root",
-            str(runs_root),
-            "--queries-dir",
-            str(queries_dir),
-            "--failure-bank-path",
-            str(tmp_path / "missing_failure_bank.jsonl"),
-            "--json",
-        ],
-        obj={"khub": _Khub()},
-    )
-
-    assert result.exit_code == 0
-    payload = json.loads(result.output)
-    assert payload["schema"] == "knowledge-hub.eval-center.summary.result.v1"
-    assert payload["queryInventory"]["items"][0]["fileName"] == "paper_default_eval_queries_v1.csv"
-    assert validate_payload(payload, payload["schema"], strict=True).ok

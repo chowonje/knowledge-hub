@@ -48,6 +48,7 @@
 
 ### Added
 
+- Added an operator-readable `operatorBrief` to Eval Center summaries. The brief exposes part-level `ran`, `problem`, `nextAction`, and review-style findings for source-quality, answer-loop, query inventory, and eval maturity without adding the daily snapshot runner or Failure Bank CLI.
 - Added `khub labs eval center` as a schema-backed, read-only Eval Center summary surface. It inventories source-quality reports, answer-loop artifacts, query CSVs, report indexes, coverage tests, Failure Bank presence, and known gaps without running collectors or changing retrieval/ranking behavior.
 - Added `knowledge_hub.ai.compare_packet` plus `docs/schemas/compare-packet.v1.json` as the first schema-backed comparison artifact. Compare packets carry dimensions, source-backed supporting spans, and separate `retrievalSignals`; mixed-store/learning/ontology signal rows are filtered out of citation-grade support before synthesis.
 - Added `eval/knowledgeos/fixtures/answer_quality_golden_cases.json`, `eval/knowledgeos/scripts/check_answer_quality_gate.py`, and `docs/card_synthesis_hypothesis_inventory.json` as small machine-readable guard assets for answer-quality contracts and card/synthesis/hypothesis promotion decisions.

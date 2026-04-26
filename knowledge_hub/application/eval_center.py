@@ -71,6 +71,15 @@ def build_eval_center_summary(
     coverage = _build_coverage(root)
     gaps = _build_gaps(source_quality, answer_loop, failure_bank)
     recommendations = _build_recommendations(source_quality, answer_loop, failure_bank, gaps)
+    operator_brief = _build_operator_brief(
+        source_quality=source_quality,
+        answer_loop=answer_loop,
+        failure_bank=failure_bank,
+        query_inventory=query_inventory,
+        gaps=gaps,
+        recommendations=recommendations,
+        warnings=warnings,
+    )
 
     status = (
         "missing"
@@ -96,6 +105,7 @@ def build_eval_center_summary(
         "coverage": coverage,
         "gaps": gaps,
         "recommendations": recommendations,
+        "operatorBrief": operator_brief,
         "warnings": warnings,
     }
 
@@ -496,7 +506,10 @@ def _build_recommendations(
     if failure_bank.get("exists"):
         recommendations.append("Keep Failure Bank synced after answer-loop summarize runs.")
     else:
-        recommendations.append("Promote a first-class Failure Bank after answer-loop failure cards are consistently produced.")
+        recommendations.append(
+            "Keep first-class Failure Bank tracking deferred until answer-loop failure cards are consistently produced "
+            "and the v0 store is intentionally scheduled."
+        )
     if any(item.get("id") == "detail_quality_gate" for item in gaps):
         recommendations.append("Wait for seven stable detail-quality points before enforcing the detail gate.")
     if not (answer_loop.get("summary") or {}).get("exists"):
@@ -508,3 +521,228 @@ def _build_recommendations(
 
 def _text(value: Any) -> str:
     return str(value or "").strip()
+
+
+def _strings(value: Any) -> list[str]:
+    return [str(item).strip() for item in list(value or []) if str(item).strip()]
+
+
+def _section(
+    *,
+    section_id: str,
+    title: str,
+    status: str,
+    ran: list[str],
+    problem: list[str],
+    next_action: str,
+    details: list[str] | None = None,
+) -> dict[str, Any]:
+    return {
+        "id": section_id,
+        "title": title,
+        "status": status,
+        "ran": ran,
+        "problem": problem or ["none"],
+        "nextAction": next_action,
+        "details": details or [],
+    }
+
+
+def _finding(severity: str, part: str, title: str, body: str) -> dict[str, str]:
+    return {"severity": severity, "part": part, "title": title, "body": body}
+
+
+def _metric(value: Any) -> Any:
+    return "n/a" if value is None or value == "" else value
+
+
+def _build_operator_brief(
+    *,
+    source_quality: dict[str, Any],
+    answer_loop: dict[str, Any],
+    failure_bank: dict[str, Any],
+    query_inventory: dict[str, Any],
+    gaps: list[dict[str, str]],
+    recommendations: list[str],
+    warnings: list[str],
+) -> dict[str, Any]:
+    findings: list[dict[str, str]] = []
+    sections: list[dict[str, Any]] = []
+
+    latest_run = dict(source_quality.get("latestRun") or {})
+    base = dict(source_quality.get("baseObservation") or {})
+    detail = dict(source_quality.get("detailObservation") or {})
+    base_blockers = _strings(base.get("blockers"))
+    detail_blockers = _strings(detail.get("blockers"))
+    base_decision = _text(base.get("decision") or base.get("status") or "unknown")
+    detail_decision = _text(detail.get("decision") or detail.get("status") or "unknown")
+    source_status = "ok"
+    source_problem: list[str] = []
+    source_next = "Keep source-quality as the local daily hard gate."
+    if base_blockers or base_decision not in {"ready_for_hard_gate_review", "unknown"}:
+        source_status = "failed" if base_blockers else "warn"
+        source_problem = base_blockers or [f"base observation decision is {base_decision}"]
+        source_next = "Triage source-quality before treating research or answer-loop results as canonical."
+        findings.append(
+            _finding(
+                "P1",
+                "source_quality",
+                "Base source-quality gate is not ready",
+                "; ".join(source_problem),
+            )
+        )
+    elif detail_blockers or detail_decision != "ready_for_detail_gate_review":
+        source_status = "warn"
+        source_problem = detail_blockers or [f"detail observation decision is {detail_decision}"]
+        source_next = "Keep detail-quality observation-only until the blockers clear."
+        findings.append(
+            _finding(
+                "P2",
+                "source_quality",
+                "Detail-quality promotion is still blocked",
+                "; ".join(source_problem),
+            )
+        )
+
+    source_details = []
+    for item in list(source_quality.get("perSource") or []):
+        if not isinstance(item, dict):
+            continue
+        source_details.append(
+            "source={source} rows={rows} route={route} stale_citations={stale} legacy={legacy} capability_missing={capability}".format(
+                source=item.get("source", ""),
+                rows=item.get("rows", 0),
+                route=_metric(item.get("routeCorrectness")),
+                stale=_metric(item.get("staleCitationRate")),
+                legacy=_metric(item.get("legacyRuntimeRate")),
+                capability=_metric(item.get("capabilityMissingRate")),
+            )
+        )
+    sections.append(
+        _section(
+            section_id="source_quality",
+            title="Source Quality Gate",
+            status=source_status,
+            ran=[
+                f"latest_run={latest_run.get('path') or 'missing'}",
+                f"latest_run_modified_at={latest_run.get('modifiedAt') or 'unknown'}",
+                f"base={base_decision}",
+                f"detail={detail_decision}",
+            ],
+            problem=source_problem,
+            next_action=source_next,
+            details=source_details,
+        )
+    )
+
+    answer_summary = dict(answer_loop.get("summary") or {})
+    latest_alias = dict(answer_loop.get("latestAlias") or {})
+    failure_card_count = int(answer_summary.get("failureCardCount") or 0)
+    failure_buckets = dict(answer_summary.get("failureBucketCounts") or {})
+    answer_status = _text(answer_summary.get("status") or "missing")
+    answer_problem: list[str] = []
+    answer_section_status = "ok"
+    if answer_status != "ok":
+        answer_section_status = "failed" if answer_status == "missing" else "warn"
+        answer_problem.append(f"answer-loop summary status is {answer_status}")
+    if not latest_alias.get("exists"):
+        answer_section_status = "warn" if answer_section_status == "ok" else answer_section_status
+        answer_problem.append("answer-loop latest alias is missing")
+        findings.append(
+            _finding(
+                "P2",
+                "answer_loop",
+                "Latest answer-loop alias is missing",
+                "Eval Center must discover the latest answer-loop artifact by mtime instead of a stable alias.",
+            )
+        )
+    if failure_card_count:
+        answer_section_status = "warn" if answer_section_status == "ok" else answer_section_status
+        answer_problem.append(f"{failure_card_count} answer-loop failure card(s) are present")
+        if not failure_bank.get("exists"):
+            findings.append(
+                _finding(
+                    "P2",
+                    "answer_loop",
+                    "Answer-loop failures are still artifact-level",
+                    "Failure cards exist, but first-class failure tracking is deferred.",
+                )
+            )
+    sections.append(
+        _section(
+            section_id="answer_loop",
+            title="Answer Loop",
+            status=answer_section_status,
+            ran=[
+                f"latest_run={answer_loop.get('latestRunDir') or 'missing'}",
+                f"summary_modified_at={answer_summary.get('modifiedAt') or 'unknown'}",
+                f"status={answer_status}",
+                f"rows={answer_summary.get('rowCount', 0)}",
+            ],
+            problem=answer_problem,
+            next_action="Use the answer-loop summary artifacts for triage; first-class failure tracking remains deferred.",
+            details=[f"{key}={value}" for key, value in sorted(failure_buckets.items())],
+        )
+    )
+
+    parse_warnings = []
+    for item in list(query_inventory.get("items") or []):
+        if not isinstance(item, dict):
+            continue
+        for warning in _strings(item.get("parseWarnings")):
+            parse_warnings.append(f"{item.get('fileName')}: {warning}")
+    if parse_warnings:
+        findings.append(
+            _finding(
+                "P2",
+                "query_inventory",
+                "Query CSV parse warnings are present",
+                "; ".join(parse_warnings[:3]),
+            )
+        )
+    sections.append(
+        _section(
+            section_id="query_inventory",
+            title="Query Inventory",
+            status="warn" if parse_warnings else "ok",
+            ran=[f"query_sets={query_inventory.get('count', 0)}", f"dir={query_inventory.get('path', '')}"],
+            problem=parse_warnings,
+            next_action="Fix CSV rows with extra fields before promoting schema-backed EvalCase records.",
+        )
+    )
+
+    gap_ids = [_text(item.get("id")) for item in gaps if _text(item.get("id"))]
+    for gap in gaps:
+        gap_id = _text(gap.get("id"))
+        if gap_id in {"failure_bank", "eval_cases_store"}:
+            findings.append(_finding("P2", "eval_maturity", gap_id, _text(gap.get("summary"))))
+    sections.append(
+        _section(
+            section_id="eval_maturity",
+            title="Eval Maturity",
+            status="warn" if gap_ids else "ok",
+            ran=[f"gaps={len(gap_ids)}", f"warnings={len(warnings)}"],
+            problem=gap_ids,
+            next_action=recommendations[0] if recommendations else "No action required.",
+        )
+    )
+
+    priority = "normal"
+    if any(item.get("severity") == "P1" for item in findings):
+        priority = "quality_triage"
+    elif any(item.get("part") == "answer_loop" for item in findings):
+        priority = "answer_loop_triage"
+    elif parse_warnings:
+        priority = "eval_hygiene"
+    elif any(item.get("part") == "source_quality" for item in findings):
+        priority = "detail_observation"
+
+    return {
+        "summary": {
+            "priority": priority,
+            "findingCount": len(findings),
+            "sectionCount": len(sections),
+        },
+        "sections": sections,
+        "findings": findings,
+    }

@@ -17,6 +17,7 @@
     "coverage",
     "gaps",
     "recommendations",
+    "operatorBrief",
     "warnings"
   ],
   "properties": {
@@ -36,6 +37,7 @@
     "coverage": { "type": "object" },
     "gaps": { "type": "array", "items": { "type": "object" } },
     "recommendations": { "type": "array", "items": { "type": "string" } },
+    "operatorBrief": { "type": "object" },
     "warnings": { "type": "array", "items": { "type": "string" } },
     "schemaErrors": { "type": "array", "items": { "type": "string" } }
   },
