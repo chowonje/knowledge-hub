@@ -8,7 +8,7 @@
     "kind": "research",
     "status": "blocked",
     "priority": "high",
-    "assignee": "won",
+    "assignee": "operator",
     "blockedBy": ["waiting_for_source_fix"],
     "sourceRefs": [],
     "createdAt": "2026-04-09T00:00:00Z",

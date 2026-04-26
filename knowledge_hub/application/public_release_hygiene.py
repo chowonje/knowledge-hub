@@ -29,7 +29,7 @@ _TRACKED_PATH_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (
     ),
     (
         "tracked_runtime_database",
-        re.compile(r"(^|/).+\.db(?:-shm|-wal)?$", re.IGNORECASE),
+        re.compile(r"(^|/).+\.(?:db|sqlite|sqlite3)(?:-shm|-wal)?$", re.IGNORECASE),
         "runtime database files should not be tracked in the public branch",
     ),
     (
@@ -41,6 +41,16 @@ _TRACKED_PATH_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (
         "tracked_generated_eval_run",
         re.compile(r"(^|/)eval/knowledgeos/runs/", re.IGNORECASE),
         "generated eval run artifacts should be curated or removed before release",
+    ),
+    (
+        "tracked_generated_eval_failure_bank",
+        re.compile(r"(^|/)eval/knowledgeos/failures/", re.IGNORECASE),
+        "local failure-bank records can contain raw queries and paths; keep them outside the public branch",
+    ),
+    (
+        "tracked_generated_ab_run",
+        re.compile(r"(^|/)runs/ab/", re.IGNORECASE),
+        "generated A/B run artifacts should be externalized before release",
     ),
 )
 
@@ -65,12 +75,12 @@ _HIGH_CONFIDENCE_SECRET_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (
 _LOCAL_PATH_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (
     (
         "absolute_user_path",
-        re.compile(r"(?:(?<=\s)|(?<=\")|(?<=\')|^)(/Users/[^\s\"']+)"),
+        re.compile(r"(" + re.escape("/" + "Users/") + r"[^\"'`<>\n\r]+)"),
         "absolute macOS user path found; prefer relative paths in public docs/examples",
     ),
     (
         "absolute_home_path",
-        re.compile(r"(?:(?<=\s)|(?<=\")|(?<=\')|^)(/home/[^\s\"']+)"),
+        re.compile(r"(" + re.escape("/" + "home/") + r"[^\"'`<>\n\r]+)"),
         "absolute home-directory path found; prefer relative paths in public docs/examples",
     ),
 )
