@@ -498,8 +498,13 @@ class _FakeSQLiteDB:
 
     def search_paper_memory_cards(self, query, limit=10):  # noqa: ANN001
         items = list(self.paper_memory_cards.values())
-        token = str(query).lower()
-        matched = [item for item in items if token in str(item.get("search_text", "")).lower() or token in str(item.get("title", "")).lower()]
+        query_text = str(query).lower()
+        matched = [
+            item
+            for item in items
+            if query_text in str(item.get("search_text", "")).lower()
+            or query_text in str(item.get("title", "")).lower()
+        ]
         return matched[:limit]
 
     def list_ops_actions(self, status=None, scope=None, limit=50):
@@ -915,7 +920,9 @@ def test_tool_specs_accept_memory_mode_contract():
     paper_lookup_tool = next(tool for tool in tools if tool.name == "paper_lookup_and_summarize")
 
     assert ask_tool.inputSchema["properties"]["memory_route_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
+    assert "ask retrieval memory prefilter/prior mode" in ask_tool.inputSchema["properties"]["memory_route_mode"]["description"]
     assert ask_tool.inputSchema["properties"]["paper_memory_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
+    assert "paper-source memory prefilter mode" in ask_tool.inputSchema["properties"]["paper_memory_mode"]["description"]
     assert paper_lookup_tool.inputSchema["properties"]["memory_route_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
     assert paper_lookup_tool.inputSchema["properties"]["paper_memory_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
 
@@ -1089,6 +1096,56 @@ def test_ask_knowledge_requires_question_and_returns_answer_shape():
     assert paper_prefilter["status"] == "ok"
     assert paper_prefilter["payload"]["paper_memory_prefilter"]["applied"] is True
     assert paper_prefilter["payload"]["paper_memory_prefilter"]["matchedPaperIds"] == ["2501.00001"]
+
+
+def test_ask_knowledge_is_local_only_and_exposes_memory_contract(monkeypatch):
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    import knowledge_hub.mcp.handlers.search as search_handlers
+
+    captured: dict[str, object] = {}
+
+    def _fake_generate(searcher, question, **kwargs):  # noqa: ANN001
+        _ = (searcher, question)
+        captured.update(kwargs)
+        return {
+            "answer": "contract answer",
+            "sources": [],
+            "citations": [],
+            "warnings": [],
+        }
+
+    monkeypatch.setattr(search_handlers, "_generate_answer_compat", _fake_generate)
+
+    ok = _decode_response(
+        asyncio.run(
+            module.call_tool(
+                "ask_knowledge",
+                {
+                    "question": "RAG란?",
+                    "source": "paper",
+                    "memory_route_mode": "prefilter",
+                    "paper_memory_mode": "prefilter",
+                },
+            )
+        )
+    )
+
+    assert ok["status"] == "ok"
+    assert captured["allow_external"] is False
+    assert captured["memory_route_mode"] == "prefilter"
+    assert captured["paper_memory_mode"] == "prefilter"
+    assert ok["payload"]["allowExternal"] is False
+    assert ok["payload"]["allow_external"] is False
+    assert ok["payload"]["externalPolicy"]["policyMode"] == "local-only"
+    assert ok["payload"]["externalPolicy"]["decisionSource"] == "mcp_default_local_only"
+    assert ok["payload"]["memory_route"]["contractRole"] == "ask_retrieval_memory_prefilter"
+    assert ok["payload"]["memory_route"]["requestedMode"] == "prefilter"
+    assert ok["payload"]["memory_route"]["effectiveMode"] == "compat"
+    assert ok["payload"]["memory_route"]["aliasDeprecated"] is True
+    assert ok["payload"]["memory_prefilter"]["contractRole"] == "retrieval_memory_prefilter"
+    assert ok["payload"]["paper_memory_prefilter"]["contractRole"] == "paper_source_memory_prefilter"
 
 
 def test_ko_note_review_tools_are_exposed_and_return_payloads(monkeypatch):

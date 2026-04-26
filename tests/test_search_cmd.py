@@ -481,6 +481,9 @@ def test_search_and_ask_json_payloads_include_runtime_diagnostics(monkeypatch):
     assert ask_payload["citations"][0]["label"] == "S1"
     assert ask_payload["graph_query_signal"]["is_graph_heavy"] is True
     assert ask_payload["allowExternal"] is True
+    assert ask_payload["externalPolicy"]["contractRole"] == "answer_generation_external_policy"
+    assert ask_payload["externalPolicy"]["decisionSource"] == "configured_summarization_provider"
+    assert ask_payload["externalPolicy"]["policyMode"] == "external-allowed"
 
 
 def test_search_command_includes_runtime_diagnostics_when_no_results(monkeypatch):
@@ -684,6 +687,18 @@ def test_ask_json_payload_normalizes_memory_modes():
     payload = json.loads(result.output)
     assert payload["memoryRouteMode"] == "compat"
     assert payload["paperMemoryMode"] == "compat"
+    assert payload["memoryRoute"]["contractRole"] == "ask_retrieval_memory_prefilter"
+    assert payload["memoryRoute"]["requestedMode"] == "prefilter"
+    assert payload["memoryRoute"]["effectiveMode"] == "compat"
+    assert payload["memoryRoute"]["modeAliasApplied"] is True
+    assert payload["memoryRoute"]["aliasDeprecated"] is True
+    assert payload["memoryPrefilter"]["contractRole"] == "retrieval_memory_prefilter"
+    assert payload["memoryPrefilter"]["requestedMode"] == "prefilter"
+    assert payload["memoryPrefilter"]["effectiveMode"] == "compat"
+    assert payload["paperMemoryPrefilter"]["contractRole"] == "paper_source_memory_prefilter"
+    assert payload["paperMemoryPrefilter"]["requestedMode"] == "prefilter"
+    assert payload["paperMemoryPrefilter"]["effectiveMode"] == "compat"
+    assert payload["paperMemoryPrefilter"]["modeAliasApplied"] is True
 
 
 def test_ask_command_can_force_no_allow_external():
@@ -696,6 +711,7 @@ def test_ask_command_can_force_no_allow_external():
 
     assert result.exit_code == 0
     assert "allow_external=False" in result.output
+    assert "external policy=local-only" in result.output
 
 
 def test_ask_command_passes_codex_answer_route_override(monkeypatch):

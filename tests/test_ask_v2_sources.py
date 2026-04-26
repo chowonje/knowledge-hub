@@ -53,6 +53,16 @@ def _build_searcher(db: SQLiteDatabase) -> tuple[RAGSearcher, _SearchForbiddenVe
     return searcher, vector_db
 
 
+def _assert_paper_prefilter_inert_for_non_paper(payload: dict) -> None:
+    prefilter = dict(payload.get("paperMemoryPrefilter") or {})
+    assert prefilter["contractRole"] == "paper_source_memory_prefilter"
+    assert prefilter["requestedMode"] == "off"
+    assert prefilter["effectiveMode"] == "off"
+    assert prefilter["applied"] is False
+    assert prefilter["matchedPaperIds"] == []
+    assert prefilter["matchedMemoryIds"] == []
+
+
 def test_generate_answer_uses_web_card_v2_and_flags_observed_at_only_temporal(tmp_path):
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
     url = "https://example.com/reference-watchlist"
@@ -630,6 +640,7 @@ def test_generate_answer_uses_vault_card_v2(tmp_path):
     assert payload["v2"]["routing"]["sourceKind"] == "vault"
     assert payload["v2"]["routing"]["mode"] == "card-first"
     assert payload["v2"]["evidenceVerification"]["anchorIdsUsed"]
+    _assert_paper_prefilter_inert_for_non_paper(payload)
 
 
 def test_generate_answer_uses_ephemeral_project_cards_without_persistence(tmp_path):
@@ -663,6 +674,7 @@ def test_generate_answer_uses_ephemeral_project_cards_without_persistence(tmp_pa
     assert any(item["slotCoverage"]["symbolOwnerCore"] == "complete" for item in payload["v2"]["cardSelection"]["selected"])
     assert any(item["slotCoverage"]["callFlowCore"] == "complete" for item in payload["v2"]["cardSelection"]["selected"])
     assert db.search_notes("agent.py", limit=5) == []
+    _assert_paper_prefilter_inert_for_non_paper(payload)
 
 
 def test_generate_answer_project_path_does_not_require_claim_card_builder(tmp_path, monkeypatch):
@@ -969,6 +981,7 @@ def test_generate_answer_vault_summary_uses_vault_scope_and_payload_contract(tmp
     assert payload["familyRouteDiagnostics"]["runtimeUsed"] == "ask_v2"
     assert payload["sources"]
     assert payload["sources"][0]["title"] == "RAG Retrieval Quality"
+    _assert_paper_prefilter_inert_for_non_paper(payload)
 
 
 def test_generate_answer_vault_missing_explicit_path_returns_no_result(tmp_path):
@@ -1007,6 +1020,18 @@ def test_generate_answer_vault_missing_explicit_path_returns_no_result(tmp_path)
     assert payload["familyRouteDiagnostics"]["runtimeUsed"] == "ask_v2"
     assert payload["v2"]["runtimeExecution"]["used"] == "ask_v2"
     assert payload["v2"]["runtimeExecution"]["fallbackReason"] == "scoped_vault_no_result"
+    assert payload["candidateSources"] == []
+    assert payload["contextExpansion"]["mode"] == "none"
+    assert payload["memoryRoute"]["contractRole"] == "ask_retrieval_memory_prefilter"
+    assert payload["memoryRoute"]["reason"] == "scoped_vault_no_result"
+    assert payload["memoryPrefilter"]["contractRole"] == "retrieval_memory_prefilter"
+    assert payload["paperMemoryPrefilter"]["contractRole"] == "paper_source_memory_prefilter"
+    assert payload["paperMemoryPrefilter"]["requestedMode"] == "off"
+    assert payload["paperMemoryPrefilter"]["effectiveMode"] == "off"
+    assert payload["paperMemoryPrefilter"]["applied"] is False
+    assert payload["paperMemoryPrefilter"]["reason"] == "disabled"
+    assert payload["v2"]["answerProvenance"]["mode"] == "scoped_no_result"
+    assert payload["v2"]["fallback"]["used"] is False
     assert payload["familyRouteDiagnostics"]["vaultScopeApplied"] is True
     assert payload["familyRouteDiagnostics"]["metadataFilterApplied"]["vault_scope_missing"] is True
 

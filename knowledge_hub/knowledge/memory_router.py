@@ -260,6 +260,9 @@ def build_memory_route(*, query: str, source_type: str | None = None) -> dict[st
     return {
         "schema": "knowledge-hub.memory-route.result.v1",
         "status": "ok",
+        "contractRole": "read_only_memory_form_route_explainer",
+        "retrievalExecuted": False,
+        "canonicalWritePerformed": False,
         "query": text,
         "sourceType": normalized_source or "all",
         "queryIntent": intent,

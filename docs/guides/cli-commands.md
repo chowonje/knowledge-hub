@@ -150,6 +150,8 @@ khub ask
 - `--answer-route`는 `auto|local|api|codex`를 받는다. `codex`는 main ask runtime에서 `codex_mcp` backend를 강제 요청하는 override이며, `--allow-external`이 꺼져 있거나 Codex runtime readiness가 실패하면 기존 route resolver로 경고와 함께 fallback된다.
 - config에서 `routing.llm.tasks.rag_answer.preferred_backend: codex_mcp`를 두면 explicit override가 없을 때도 Codex를 policy-gated preferred backend로 사용할 수 있다. 이 경우에도 retrieval/evidence/policy authority는 기존 Python runtime이 유지한다.
 - `khub ask --json`은 이제 `answerRouteRequested`와 별도로 `answerRouteApplied`, `answerProviderApplied`, `answerModelApplied`를 넣어 실제 적용된 route/provider/model을 바로 확인할 수 있다. 텍스트 출력도 같은 정보를 한 줄로 보여준다.
+- `khub ask --json`은 `memoryRoute`(요청/effective mode와 alias 여부), `memoryPrefilter`(실제 retrieval 개입 결과), `paperMemoryPrefilter`(paper-source prefilter 결과)를 분리해 노출한다.
+- `khub ask`는 명시 옵션이 없으면 configured summarization provider 기준으로 `allowExternal` 기본값을 정하고, MCP `ask_knowledge`는 계속 local-only(`allow_external=false`) contract를 유지한다.
 
 예:
 

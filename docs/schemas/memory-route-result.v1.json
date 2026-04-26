@@ -4,6 +4,9 @@
   "required": [
     "schema",
     "status",
+    "contractRole",
+    "retrievalExecuted",
+    "canonicalWritePerformed",
     "query",
     "sourceType",
     "queryIntent",
@@ -15,6 +18,9 @@
   "properties": {
     "schema": { "const": "knowledge-hub.memory-route.result.v1" },
     "status": { "type": "string" },
+    "contractRole": { "const": "read_only_memory_form_route_explainer" },
+    "retrievalExecuted": { "const": false },
+    "canonicalWritePerformed": { "const": false },
     "query": { "type": "string" },
     "sourceType": { "type": "string" },
     "queryIntent": { "type": "string" },

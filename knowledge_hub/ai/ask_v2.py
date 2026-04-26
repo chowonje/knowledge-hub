@@ -27,6 +27,7 @@ from knowledge_hub.ai.ask_v2_support import (
     web_scope_from_query as _web_scope_from_query,
 )
 from knowledge_hub.ai.ask_v2_card_selectors import AskV2CardSelectorRegistry
+from knowledge_hub.ai.ask_v2_pipeline_result import build_card_v2_pipeline_result
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
 from knowledge_hub.ai.evidence_assembly import EvidenceAssemblyService
 from knowledge_hub.ai.retrieval_pipeline import RetrievalPlan, RetrievalPipelineResult
@@ -292,11 +293,11 @@ class AskV2Service:
     @staticmethod
     def _url_matches_media_platform(url: str, media_platform: str) -> bool:
         normalized_platform = _clean_text(media_platform).casefold()
-        token = _clean_text(url)
+        url_text = _clean_text(url)
         if not normalized_platform:
             return True
         if normalized_platform == "youtube":
-            return bool(token and is_youtube_url(token))
+            return bool(url_text and is_youtube_url(url_text))
         return True
 
     def _note_matches_media_platform(self, note_id: str, media_platform: str) -> bool:
@@ -440,12 +441,12 @@ class AskV2Service:
             for form in search_forms:
                 bounded_terms: list[str] = []
                 for candidate in [form, *re.findall(r"[A-Za-z0-9._+-]+|[가-힣]+", form)]:
-                    token = _clean_text(candidate)
-                    if not token or len(token) < 3:
+                    term_text = _clean_text(candidate)
+                    if not term_text or len(term_text) < 3:
                         continue
-                    if any(existing.casefold() == token.casefold() for existing in bounded_terms):
+                    if any(existing.casefold() == term_text.casefold() for existing in bounded_terms):
                         continue
-                    bounded_terms.append(token)
+                    bounded_terms.append(term_text)
                     if len(bounded_terms) >= 3:
                         break
                 for term in bounded_terms:
@@ -741,6 +742,7 @@ class AskV2Service:
         query_frame_payload: dict[str, Any],
         metadata_filter: dict[str, Any] | None,
         reason: str,
+        paper_memory_mode: str = "off",
     ) -> tuple[RetrievalPipelineResult, Any]:
         frame_payload = normalize_query_frame_dict(query_frame_payload)
         plan_payload = dict(query_plan_payload or {})
@@ -820,38 +822,18 @@ class AskV2Service:
             "evidenceVerification": {"verificationStatus": "no_evidence", "anchorIdsUsed": [], "weakSlots": []},
             "fallback": {"used": False, "reason": reason},
         }
-        pipeline_result = RetrievalPipelineResult(
+        pipeline_result = build_card_v2_pipeline_result(
             results=[],
             plan=plan,
-            candidate_sources=[],
-            memory_route={"mode": f"{route.source_kind}-card-v2", "applied": True, "reason": reason},
-            memory_prefilter={"mode": f"{route.source_kind}-card-v2", "applied": True, "memoryRelationsUsed": [], "temporalSignals": dict(plan.temporal_signals)},
-            paper_memory_prefilter={
-                "requestedMode": f"{route.source_kind}-card-v2",
-                "applied": True,
-                "fallbackUsed": False,
-                "matchedPaperIds": [],
-                "matchedMemoryIds": [],
-                "reason": reason,
-            },
-            rerank_signals={"strategy": f"{route.source_kind}-card-v2", "selectedCardCount": 0, "selectedAnchorCount": 0},
-            context_expansion={
-                "eligible": False,
-                "used": False,
-                "mode": "none",
-                "reason": route.intent,
-                "queryIntent": route.intent,
-                "enrichmentRoute": route.mode,
-                "ontologyEligible": False,
-                "clusterEligible": False,
-                "ontologyUsed": False,
-                "clusterUsed": False,
-            },
-            related_clusters=[],
-            active_profile=None,
-            source_scope_enforced=True,
-            mixed_fallback_used=False,
+            source_kind=route.source_kind,
+            route_mode=route.mode,
+            route_intent=route.intent,
+            selected_cards=[],
+            selected_anchor_count=0,
+            memory_reason=reason,
+            context_expansion_mode="none",
             v2_diagnostics=v2_diagnostics,
+            paper_memory_mode=paper_memory_mode,
         )
         evidence_packet = EvidenceAssemblyService.from_searcher(self.searcher).assemble(
             query=query,
@@ -1309,6 +1291,7 @@ class AskV2Service:
         allow_external: bool,
         metadata_filter: dict[str, Any] | None = None,
         ask_v2_mode: str | None = None,
+        paper_memory_mode: str = "off",
         query_plan: dict[str, Any] | None = None,
         query_frame: dict[str, Any] | None = None,
     ) -> tuple[RetrievalPipelineResult, Any]:
@@ -1360,6 +1343,7 @@ class AskV2Service:
                 query_frame_payload=query_frame_payload,
                 metadata_filter=metadata_filter,
                 reason="scoped_vault_no_result",
+                paper_memory_mode=paper_memory_mode,
             )
         if route.source_kind in {"vault", "project"} and not selected_cards:
             raise AskV2FallbackToLegacy("no_v2_card_candidates")
@@ -1650,47 +1634,17 @@ class AskV2Service:
             metadata_filter_applied=effective_metadata_filter,
             prefilter_reason=prefilter_reason,
         )
-        pipeline_result = RetrievalPipelineResult(
+        pipeline_result = build_card_v2_pipeline_result(
             results=anchor_results,
             plan=plan,
-            candidate_sources=[
-                {
-                    "id": _clean_text(card.get("paper_id") or card.get("document_id") or card.get("note_id") or card.get("relative_path")),
-                    "cardId": _clean_text(card.get("card_id")),
-                    "title": _clean_text(card.get("title")),
-                    "selectionScore": _stable_score(card.get("selection_score")),
-                    "qualityFlag": _clean_text(card.get("quality_flag")),
-                    "sourceKind": route.source_kind,
-                }
-                for card in selected_cards
-            ],
-            memory_route={"mode": f"{route.source_kind}-card-v2", "applied": True, "reason": route.mode},
-            memory_prefilter={"mode": f"{route.source_kind}-card-v2", "applied": True, "memoryRelationsUsed": [], "temporalSignals": dict(plan.temporal_signals)},
-            paper_memory_prefilter={
-                "requestedMode": f"{route.source_kind}-card-v2",
-                "applied": True,
-                "fallbackUsed": False,
-                "matchedPaperIds": [_clean_text(card.get("paper_id")) for card in selected_cards if _clean_text(card.get("paper_id"))],
-                "matchedMemoryIds": [_clean_text(card.get("source_memory_id")) for card in selected_cards if _clean_text(card.get("source_memory_id"))],
-                "reason": route.mode,
-            },
-            rerank_signals={"strategy": f"{route.source_kind}-card-v2", "selectedCardCount": len(selected_cards), "selectedAnchorCount": len(anchors)},
-            context_expansion={
-                "eligible": route.mode == "ontology-first",
-                "used": route.mode == "ontology-first",
-                "mode": "ontology" if route.mode == "ontology-first" else "card",
-                "reason": route.intent,
-                "queryIntent": route.intent,
-                "enrichmentRoute": route.mode,
-                "ontologyEligible": route.mode == "ontology-first",
-                "clusterEligible": False,
-                "ontologyUsed": route.mode == "ontology-first",
-                "clusterUsed": False,
-            },
-            related_clusters=[],
-            active_profile=None,
-            source_scope_enforced=True,
-            mixed_fallback_used=False,
+            source_kind=route.source_kind,
+            route_mode=route.mode,
+            route_intent=route.intent,
+            selected_cards=selected_cards,
+            selected_anchor_count=len(anchors),
+            memory_reason=route.mode,
+            context_expansion_mode="card",
+            paper_memory_mode=paper_memory_mode,
         )
         evidence_packet = EvidenceAssemblyService.from_searcher(self.searcher).assemble(
             query=query,

@@ -173,7 +173,7 @@ DEFAULT_CONFIG = {
     },
     "pipeline": {
         "storage": {
-            "root": "/Volumes/T9/knowledge_os",
+            "root": str(DEFAULT_CONFIG_DIR / "knowledge_os"),
         },
         "profile": "safe",
         "source_policy": "hybrid",
@@ -415,10 +415,10 @@ def _deep_merge(base: dict, override: dict) -> dict:
 
 
 def get_public_setup_profile(name: str) -> dict[str, Any]:
-    token = str(name or "").strip().lower()
-    if token == "custom":
+    profile_name = str(name or "").strip().lower()
+    if profile_name == "custom":
         return {}
-    profile = PUBLIC_SETUP_PROFILES.get(token)
+    profile = PUBLIC_SETUP_PROFILES.get(profile_name)
     if profile is None:
         raise ConfigError(f"unknown public setup profile: {name}")
     return deepcopy(profile)

@@ -104,16 +104,16 @@ def _paper_hint_entities(query: str) -> list[str]:
     values: list[str] = []
     seen: set[str] = set()
     for raw in re.findall(r"[A-Za-z0-9.+-]+|[가-힣]+", str(query or "").strip()):
-        token = _strip_korean_particle(raw)
-        lowered = token.casefold()
-        if not token or lowered in _PAPER_HINT_STOPWORDS:
+        hint_text = _strip_korean_particle(raw)
+        lowered = hint_text.casefold()
+        if not hint_text or lowered in _PAPER_HINT_STOPWORDS:
             continue
-        if len(token) < 2:
+        if len(hint_text) < 2:
             continue
         if lowered in seen:
             continue
         seen.add(lowered)
-        values.append(token)
+        values.append(hint_text)
         if len(values) >= 4:
             break
     return values
@@ -393,6 +393,7 @@ class RAGAnswerRuntime:
                 allow_external=request.allow_external,
                 metadata_filter=request.metadata_filter,
                 ask_v2_mode=ask_v2_mode,
+                paper_memory_mode=request.paper_memory_mode,
                 query_plan=request.query_plan,
                 query_frame=request.query_frame,
             )

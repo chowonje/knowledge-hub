@@ -240,6 +240,10 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
                     "question": "alpha retrieval",
                     "answer": "Alpha retrieval is a grounded vault smoke note.",
                     "allowExternal": False,
+                    "externalPolicy": {
+                        "contractRole": "answer_generation_external_policy",
+                        "policyMode": "local-only",
+                    },
                     "citations": [
                         {
                             "label": "S1",
@@ -255,6 +259,29 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
                             "source_type": "vault",
                         }
                     ],
+                    "evidence": [
+                        {
+                            "title": "Alpha retrieval note",
+                            "source_type": "vault",
+                        }
+                    ],
+                    "memoryRoute": {
+                        "contractRole": "ask_retrieval_memory_prefilter",
+                        "requestedMode": "off",
+                        "effectiveMode": "off",
+                    },
+                    "memoryPrefilter": {
+                        "contractRole": "retrieval_memory_prefilter",
+                        "applied": False,
+                    },
+                    "paperMemoryPrefilter": {
+                        "contractRole": "paper_source_memory_prefilter",
+                        "applied": False,
+                    },
+                    "runtimeDiagnostics": {
+                        "schema": "knowledge-hub.runtime.diagnostics.v1",
+                        "status": "ok",
+                    },
                     "warnings": [
                         "answer verification used heuristic fallback",
                         "answer rewrite skipped: rewrite route unavailable",
@@ -279,6 +306,11 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
                             "sourceType": "vault",
                         }
                     ],
+                    "runtimeDiagnostics": {
+                        "schema": "knowledge-hub.runtime.diagnostics.v1",
+                        "status": "ok",
+                    },
+                    "graphQuerySignal": {},
                 }
             ),
             stderr="",
@@ -300,6 +332,36 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
     assert payload["checkedCount"] == 6
     assert payload["passedCount"] == 6
     assert payload["mode"] == "weekly_core_loop"
+
+
+def test_validate_weekly_ask_result_requires_contract_diagnostics():
+    module = _load_script_module()
+    result = module.CommandResult(
+        name="ask",
+        argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "ask", "alpha retrieval", "--json"],
+        returncode=0,
+        stdout=json.dumps(
+            {
+                "schema": "knowledge-hub.ask.result.v1",
+                "status": "ok",
+                "question": "alpha retrieval",
+                "answer": "Alpha retrieval is grounded.",
+                "allowExternal": False,
+                "citations": [],
+                "sources": [{"title": "Alpha retrieval note", "source_type": "vault"}],
+            }
+        ),
+        stderr="",
+        duration_sec=0.01,
+    )
+
+    validation = module.validate_ask_result(result)
+
+    assert validation.ok is False
+    assert "ask missing externalPolicy diagnostics" in validation.errors
+    assert "ask evidence field is not a list" in validation.errors
+    assert "ask missing memoryRoute contract role" in validation.errors
+    assert "ask missing runtimeDiagnostics object" in validation.errors
 
 
 def test_validate_help_result_requires_surface_markers():
@@ -520,8 +582,14 @@ def test_validate_ask_result_requires_grounded_vault_output():
                 "question": "alpha retrieval",
                 "answer": "Alpha retrieval is a grounded vault smoke note.",
                 "allowExternal": False,
+                "externalPolicy": {"policyMode": "local-only"},
                 "citations": [{"source_type": "vault", "target": "alpha.md"}],
+                "evidence": [{"source_type": "vault", "title": "Alpha retrieval note"}],
                 "sources": [],
+                "memoryRoute": {"contractRole": "ask_retrieval_memory_prefilter"},
+                "memoryPrefilter": {"contractRole": "retrieval_memory_prefilter"},
+                "paperMemoryPrefilter": {"contractRole": "paper_source_memory_prefilter"},
+                "runtimeDiagnostics": {"status": "ok"},
                 "warnings": [
                     "answer verification used heuristic fallback",
                     "answer rewrite skipped: rewrite route unavailable",
