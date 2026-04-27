@@ -138,6 +138,7 @@ def test_run_release_smoke_collects_full_plan_after_first_failure(monkeypatch):
     monkeypatch.setattr(module, "validate_status_result", ok_validation)
     monkeypatch.setattr(module, "validate_doctor_result", ok_validation)
     monkeypatch.setattr(module, "validate_invalid_command_result", ok_validation)
+    monkeypatch.setattr(module, "validate_provider_recommend_result", ok_validation)
     monkeypatch.setattr(
         module,
         "validate_setup_result",
@@ -149,14 +150,16 @@ def test_run_release_smoke_collects_full_plan_after_first_failure(monkeypatch):
     assert calls == [
         "top_help",
         "setup",
+        "add_help",
+        "provider_recommend",
         "capture_help",
         "status",
         "doctor",
         "invalid_command",
     ]
     assert payload["status"] == "failed"
-    assert payload["checkedCount"] == 6
-    assert payload["passedCount"] == 5
+    assert payload["checkedCount"] == 8
+    assert payload["passedCount"] == 7
     assert [item["name"] for item in payload["commands"]] == calls
     assert payload["commands"][1]["status"] == "failed"
     assert payload["commands"][-1]["status"] == "ok"
@@ -506,6 +509,34 @@ def test_validate_invalid_command_result_requires_non_zero_error():
     assert validation.details["returncode"] == 1
 
 
+def test_validate_provider_recommend_result_requires_public_profiles():
+    module = _load_script_module()
+    result = module.CommandResult(
+        name="provider_recommend",
+        argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "provider", "recommend", "--json"],
+        returncode=0,
+        stdout=json.dumps(
+            {
+                "schema": "knowledge-hub.provider.result.v1",
+                "status": "ok",
+                "recommendations": [
+                    {"profile": "local"},
+                    {"profile": "balanced"},
+                    {"profile": "quality"},
+                    {"profile": "codex-mcp"},
+                ],
+            }
+        ),
+        stderr="",
+        duration_sec=0.1,
+    )
+
+    validation = module.validate_provider_recommend_result(result)
+
+    assert validation.ok is True
+    assert validation.details["profiles"] == ["balanced", "codex-mcp", "local", "quality"]
+
+
 def test_validate_invalid_command_result_rejects_traceback_output():
     module = _load_script_module()
     result = module.CommandResult(
@@ -544,11 +575,13 @@ def test_release_smoke_script_passes_with_local_contract():
     assert completed.returncode == 0, completed.stderr or completed.stdout
     payload = json.loads(completed.stdout)
     assert payload["status"] == "ok"
-    assert payload["checkedCount"] == 6
-    assert payload["passedCount"] == 6
+    assert payload["checkedCount"] == 8
+    assert payload["passedCount"] == 8
     assert [item["name"] for item in payload["commands"]] == [
         "top_help",
         "setup",
+        "add_help",
+        "provider_recommend",
         "capture_help",
         "status",
         "doctor",

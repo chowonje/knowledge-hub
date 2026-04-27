@@ -34,6 +34,7 @@ STATUS_REQUIRED_MARKERS = ("Knowledge Hub v", "Retrieval Runtime", "vector corpu
 DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
 TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "doctor", "status", "init")
 WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "index", "search", "ask", "doctor", "status")
+ADD_HELP_REQUIRED_MARKERS = ("Add a source with one command", "--type", "--index", "--allow-external")
 CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
 INVALID_COMMAND_REQUIRED_MARKER = "No such command"
 INVALID_COMMAND_FORBIDDEN_MARKERS = ("Traceback (most recent call last)", "예상치 못한 오류")
@@ -44,6 +45,7 @@ INDEX_REQUIRED_SCHEMA = "knowledge-hub.index.result.v1"
 SEARCH_REQUIRED_SCHEMA = "knowledge-hub.search.result.v1"
 ASK_REQUIRED_SCHEMA = "knowledge-hub.ask.result.v1"
 WEEKLY_SEARCH_QUERY = "alpha retrieval"
+PROVIDER_REQUIRED_SCHEMA = "knowledge-hub.provider.result.v1"
 
 
 @dataclass
@@ -290,6 +292,39 @@ def validate_invalid_command_result(result: CommandResult) -> ValidationResult:
     )
 
 
+def validate_provider_recommend_result(result: CommandResult) -> ValidationResult:
+    errors: list[str] = []
+    payload: dict[str, Any] = {}
+    if result.timed_out:
+        errors.append(f"provider recommend timed out after {result.timeout_sec:.0f}s")
+    if result.returncode != 0:
+        errors.append(f"provider recommend exited with {result.returncode}")
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        errors.append(f"provider recommend did not emit valid json: {exc}")
+    if errors:
+        return ValidationResult(ok=False, summary="provider recommend contract failed", details={}, errors=errors)
+    if str(payload.get("schema") or "") != PROVIDER_REQUIRED_SCHEMA:
+        errors.append("provider recommend schema mismatch")
+    if str(payload.get("status") or "") != "ok":
+        errors.append(f"provider recommend status is not ok: {payload.get('status')}")
+    recommendations = payload.get("recommendations")
+    if not isinstance(recommendations, list) or not recommendations:
+        errors.append("provider recommend returned no recommendations")
+        recommendations = []
+    profiles = {str(dict(item or {}).get("profile") or "") for item in recommendations if isinstance(item, dict)}
+    for required in ("local", "balanced", "quality", "codex-mcp"):
+        if required not in profiles:
+            errors.append(f"provider recommend missing profile: {required}")
+    return ValidationResult(
+        ok=not errors,
+        summary="provider recommendations expose the public setup profiles" if not errors else "provider recommend contract failed",
+        details={"profiles": sorted(profiles)},
+        errors=errors,
+    )
+
+
 def extract_trailing_json_object(text: str) -> dict[str, Any]:
     content = str(text or "").strip()
     errors: list[str] = []
@@ -491,6 +526,8 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
     plan = [
         ("top_help", cli_argv + ["--help"]),
         ("setup", cli_argv + ["setup", "--quick", "--non-interactive"]),
+        ("add_help", cli_argv + ["add", "--help"]),
+        ("provider_recommend", cli_argv + ["provider", "recommend", "--json"]),
         ("capture_help", cli_argv + ["dinger", "capture", "--help"]),
         ("status", cli_argv + ["--config", str(config_path), "status"]),
         ("doctor", cli_argv + ["--config", str(config_path), "doctor", "--json"]),
@@ -509,6 +546,14 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
             )
         elif name == "setup":
             validation = validate_setup_result(result, config_path=config_path)
+        elif name == "add_help":
+            validation = validate_help_result(
+                result,
+                required_markers=ADD_HELP_REQUIRED_MARKERS,
+                summary="add help exposes the public intake contract",
+            )
+        elif name == "provider_recommend":
+            validation = validate_provider_recommend_result(result)
         elif name == "capture_help":
             validation = validate_help_result(
                 result,

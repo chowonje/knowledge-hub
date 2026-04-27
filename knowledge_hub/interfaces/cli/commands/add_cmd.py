@@ -210,7 +210,7 @@ def _run_paper_url_add(
     _write_single_paper_csv(csv_path, source=source_for_import, title=topic or source_for_import)
     steps = ["register", "download"]
     if index:
-        steps.extend(["embed", "paper-memory", "document-memory"])
+        steps.append("embed")
     kwargs = {
         "khub": khub,
         "csv_path": str(csv_path),
@@ -222,11 +222,18 @@ def _run_paper_url_add(
         "document_memory_parser": str(paper_parser or "raw"),
         "rebuild_memory": False,
     }
-    if quiet:
-        with redirect_stdout(io.StringIO()):
+    try:
+        if quiet:
+            with redirect_stdout(io.StringIO()):
+                upstream = run_import_csv(**kwargs)
+        else:
             upstream = run_import_csv(**kwargs)
-    else:
-        upstream = run_import_csv(**kwargs)
+    finally:
+        try:
+            csv_path.unlink()
+        except FileNotFoundError:
+            pass
+    upstream["csvRetained"] = False
     return _wrap_result(route=route, source=source_for_import, topic=topic, index=index, upstream=upstream)
 
 

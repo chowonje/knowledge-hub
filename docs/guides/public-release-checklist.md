@@ -10,7 +10,7 @@ Why:
 
 - the supported public path is now explicit: `add -> index -> search/ask -> evidence review`
 - the core setup and proof surfaces are real and demonstrable: `doctor`, `provider`, `add`, `index`, `search`, and `ask`
-- release smoke, weekly core-loop smoke, and public-release hygiene pass on the current public-preview candidate branch
+- release smoke, weekly core-loop smoke, and public-release hygiene pass on the current public-preview candidate branch; release smoke now covers the public `add` help contract and provider recommendation payload in addition to doctor/status/setup
 - local-first evidence-contract RAG positioning is clear, and provider setup stores API keys as environment-variable references rather than raw secrets
 - remaining risk is now about preview scope, live provider variance, corpus/source variance, and the absence of OPF model-based PII scanning in the local check environment
 
@@ -125,6 +125,7 @@ Recommended first-run command set:
 
 ```bash
 pip install -e ".[ollama]"
+khub provider setup --profile local
 khub doctor
 khub add "large language model agent" --type paper -n 3
 khub index

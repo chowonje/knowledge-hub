@@ -114,7 +114,7 @@ def test_add_paper_url_uses_single_source_import_manifest(monkeypatch, tmp_path)
     assert "resolver noise" not in result.output
     payload = json.loads(result.output)
     assert payload["route"] == "paper_import"
-    assert captured["steps"] == ["register", "download", "embed", "paper-memory", "document-memory"]
+    assert captured["steps"] == ["register", "download", "embed"]
     csv_path = Path(captured["csv_path"])
-    assert csv_path.exists()
-    assert "https://arxiv.org/abs/2401.00001" in csv_path.read_text(encoding="utf-8-sig")
+    assert not csv_path.exists()
+    assert payload["upstream"]["csvRetained"] is False

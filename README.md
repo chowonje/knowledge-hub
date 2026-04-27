@@ -33,6 +33,7 @@ From a repository checkout:
 
 ```bash
 pip install -e ".[ollama]"
+khub provider setup --profile local
 khub doctor
 khub add "large language model agent" --type paper -n 3
 khub index
@@ -40,8 +41,9 @@ khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
 ```
 
-If `khub doctor` reports that the local model runtime is unavailable, start
-Ollama and pull the recommended local models:
+`khub provider setup --profile local` keeps the first-run path off hosted
+providers. If `khub doctor` reports that the local model runtime is unavailable,
+start Ollama and pull the recommended local models:
 
 ```bash
 ollama serve
