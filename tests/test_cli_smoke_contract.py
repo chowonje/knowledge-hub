@@ -179,7 +179,7 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
             name="top_help",
             argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "--help"],
             returncode=0,
-            stdout="Usage\nCommands:\n  add\n  index\n  search\n  ask\n  doctor\n  status\n",
+            stdout="Usage\nCommands:\n  add\n  provider\n  index\n  search\n  ask\n  doctor\n  status\n",
             stderr="",
             duration_sec=0.01,
         ),

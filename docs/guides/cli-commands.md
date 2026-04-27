@@ -35,6 +35,7 @@ khub add "https://youtu.be/<video-id>" --topic "agents"
 khub add "retrieval augmented generation" --type paper -n 3
 khub search "주제"
 khub ask "질문"
+khub provider recommend
 khub agent context "작업 목표" --repo-path .
 khub paper list
 khub index
@@ -52,6 +53,7 @@ khub index
 khub init
 khub labs
 khub paper
+khub provider
 khub search
 khub status
 ```
@@ -245,6 +247,49 @@ khub config get embedding.provider
 khub config set embedding.provider ollama
 khub config providers --models
 ```
+
+### `khub provider`
+
+```text
+khub provider recommend
+khub provider list
+khub provider add
+khub provider use
+khub provider key
+khub provider setup
+khub provider doctor
+```
+
+용도:
+- 역할별 AI 선택지를 `local`, `balanced`, `quality`, `codex-mcp` profile로 빠르게 설정
+- DeepSeek, OpenRouter, Together, vLLM, LM Studio, 사내 게이트웨이 같은 OpenAI-compatible 모델을 named provider로 등록
+- raw API key 대신 `api_key_env` 기반 환경변수 참조를 저장
+
+예:
+
+```bash
+khub provider recommend
+khub provider setup --profile balanced
+khub provider setup --profile codex-mcp
+
+khub provider add deepseek --from-service deepseek --use-for answer
+khub provider add qwen-api \
+  --adapter openai-compatible \
+  --base-url https://api.example.com/v1 \
+  --api-key-env QWEN_API_KEY \
+  --llm-model qwen-plus \
+  --region cn
+
+khub provider use answer deepseek/deepseek-chat
+khub provider use embedding pplx-st/perplexity-ai/pplx-embed-v1-0.6b
+khub provider key deepseek --env DEEPSEEK_API_KEY
+khub provider doctor
+```
+
+정책:
+- 임베딩은 대량 코퍼스가 외부로 나가므로 기본 추천은 로컬 provider입니다.
+- 답변/요약/정규화처럼 품질이 중요한 생성 구간은 API provider를 선택할 수 있습니다.
+- custom external provider는 기존 provider outbound policy guard를 통과하며, 답변 생성에서는 `--allow-external` 정책을 명시적으로 확인합니다.
 
 ### `khub crawl`
 

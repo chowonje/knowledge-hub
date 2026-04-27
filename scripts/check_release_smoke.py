@@ -32,8 +32,8 @@ from knowledge_hub.infrastructure.config import apply_public_setup_profile
 DOCTOR_ALLOWED_STATUSES = {"ok", "blocked", "degraded", "needs_setup"}
 STATUS_REQUIRED_MARKERS = ("Knowledge Hub v", "Retrieval Runtime", "vector corpus")
 DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
-TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "doctor", "status", "init")
-WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "index", "search", "ask", "doctor", "status")
+TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "doctor", "status", "init")
+WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "index", "search", "ask", "doctor", "status")
 CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
 INVALID_COMMAND_REQUIRED_MARKER = "No such command"
 INVALID_COMMAND_FORBIDDEN_MARKERS = ("Traceback (most recent call last)", "예상치 못한 오류")

@@ -6,6 +6,7 @@ Usage:
     khub add <source> [OPTIONS]        # URL/YouTube/논문 소스 추가
     khub paper summary|evidence|memory|related
     khub config get|set|list
+    khub provider recommend|setup|add|use
     khub search "query"
     khub ask "question"
     khub doctor                         # 일반 사용자용 설치/실패 경로 요약
@@ -308,6 +309,7 @@ cli.add_command(labs_group, "labs")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.init_cmd", "init_cmd", "init")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.add_cmd", "add_cmd", "add")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.config_cmd", "config_group", "config")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.provider_cmd", "provider_group", "provider")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.discover_cmd", "discover", "discover", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_cmd", "paper_group", "paper")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_memory_cmd", "paper_memory_group", "paper-memory", hidden=True)

@@ -34,6 +34,7 @@ def test_cli_help_hides_labs_commands_from_top_level():
     assert "search" in result.output
     assert "ask" in result.output
     assert "agent" in result.output
+    assert "provider" in result.output
     assert "doctor" in result.output
     assert "labs" in result.output
     assert "crawl" not in result.output

@@ -30,6 +30,7 @@ _EXPORTS = {
     "ops_report_run": "knowledge_hub.interfaces.cli.commands.ops_cmd",
     "outcome_group": "knowledge_hub.interfaces.cli.commands.outcome_cmd",
     "paper_group": "knowledge_hub.interfaces.cli.commands.paper_cmd",
+    "provider_group": "knowledge_hub.interfaces.cli.commands.provider_cmd",
     "run_status": "knowledge_hub.interfaces.cli.commands.status_cmd",
     "search": "knowledge_hub.interfaces.cli.commands.search_cmd",
     "setup_cmd": "knowledge_hub.interfaces.cli.commands.setup_cmd",

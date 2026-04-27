@@ -9,6 +9,11 @@ from __future__ import annotations
 from typing import Optional
 
 from knowledge_hub.providers.base import BaseLLM, BaseEmbedder, ProviderInfo
+from knowledge_hub.providers.custom_provider import (
+    configured_custom_provider_infos,
+    custom_provider_info,
+    custom_provider_runtime_kwargs,
+)
 
 _LLM_REGISTRY: dict[str, type[BaseLLM]] = {}
 _EMBEDDER_REGISTRY: dict[str, type[BaseEmbedder]] = {}
@@ -101,6 +106,12 @@ def get_llm(provider: str, model: Optional[str] = None, **kwargs) -> BaseLLM:
     provider = provider.lower().strip()
 
     if provider not in _LLM_REGISTRY:
+        info = custom_provider_info(provider, kwargs)
+        if info is not None and info.supports_llm:
+            from knowledge_hub.providers.openai_compat import OpenAICompatLLM
+
+            runtime_kwargs = custom_provider_runtime_kwargs(provider, kwargs)
+            return OpenAICompatLLM(model=model or info.default_llm_model or "", **runtime_kwargs)
         available = ", ".join(_LLM_REGISTRY.keys()) or "(없음)"
         raise ValueError(
             f"LLM 프로바이더 '{provider}' 사용 불가. "
@@ -121,6 +132,12 @@ def get_embedder(provider: str, model: Optional[str] = None, **kwargs) -> BaseEm
     provider = provider.lower().strip()
 
     if provider not in _EMBEDDER_REGISTRY:
+        info = custom_provider_info(provider, kwargs)
+        if info is not None and info.supports_embedding:
+            from knowledge_hub.providers.openai_compat import OpenAICompatEmbedder
+
+            runtime_kwargs = custom_provider_runtime_kwargs(provider, kwargs)
+            return OpenAICompatEmbedder(model=model or info.default_embed_model or "", **runtime_kwargs)
         available = ", ".join(_EMBEDDER_REGISTRY.keys()) or "(없음)"
         raise ValueError(
             f"Embedder 프로바이더 '{provider}' 사용 불가. "
@@ -135,16 +152,22 @@ def get_embedder(provider: str, model: Optional[str] = None, **kwargs) -> BaseEm
     return cls(model=model or "", **kwargs)
 
 
-def list_providers() -> dict[str, ProviderInfo]:
+def list_providers(config=None) -> dict[str, ProviderInfo]:
     """등록된 모든 프로바이더 정보 반환"""
     _discover_providers()
-    return dict(_PROVIDER_INFO)
+    providers = dict(_PROVIDER_INFO)
+    providers.update(configured_custom_provider_infos(config))
+    return providers
 
 
-def get_provider_info(name: str) -> Optional[ProviderInfo]:
+def get_provider_info(name: str, config=None) -> Optional[ProviderInfo]:
     """특정 프로바이더 정보 조회"""
     _discover_providers()
-    return _PROVIDER_INFO.get(name.lower().strip())
+    provider_name = name.lower().strip()
+    info = _PROVIDER_INFO.get(provider_name)
+    if info is not None:
+        return info
+    return configured_custom_provider_infos(config).get(provider_name)
 
 
 def is_provider_available(name: str) -> bool:

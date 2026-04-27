@@ -360,7 +360,59 @@ khub config set paper.summary.parser auto
 
 # 사용 가능한 프로바이더 + 모델 확인
 khub config providers --models
+
+# 역할별 추천/설정 surface
+khub provider recommend
+khub provider setup --profile local
+khub provider setup --profile balanced
+khub provider setup --profile quality
+khub provider setup --profile codex-mcp
 ```
+
+### Custom / 기타 AI 모델 연결
+
+OpenAI-compatible API를 제공하는 모델은 provider alias로 등록할 수 있습니다. DeepSeek, OpenRouter, Together, Fireworks, Mistral, vLLM, LM Studio 같은 서비스나 사내 게이트웨이를 같은 방식으로 연결합니다.
+
+```bash
+# preset 사용
+khub provider add deepseek \
+  --from-service deepseek \
+  --use-for answer
+
+# 완전 수동 등록
+khub provider add qwen-api \
+  --adapter openai-compatible \
+  --base-url https://api.example.com/v1 \
+  --api-key-env QWEN_API_KEY \
+  --llm-model qwen-plus \
+  --region cn
+
+# 로컬 OpenAI-compatible 서버
+khub provider add lmstudio \
+  --adapter openai-compatible \
+  --base-url http://localhost:1234/v1 \
+  --no-api-key \
+  --llm-model local-model \
+  --local
+
+# 역할에 적용
+khub provider use answer deepseek/deepseek-chat
+khub provider use translation qwen-api/qwen-plus
+khub provider use embedding pplx-st/perplexity-ai/pplx-embed-v1-0.6b
+```
+
+API 키는 raw 값보다 환경변수 참조를 권장합니다.
+
+```bash
+export DEEPSEEK_API_KEY="<provider-api-key>"
+khub provider key deepseek --env DEEPSEEK_API_KEY
+```
+
+운영 원칙:
+- 임베딩은 대량 텍스트가 외부로 나가기 쉬우므로 기본 추천은 로컬(`ollama`, `pplx-st`)입니다.
+- 답변, 요약, 정규화처럼 품질이 중요한 생성/판단 구간은 API 모델을 선택할 수 있습니다.
+- 알 수 없는 external provider는 명시적으로 설정하고, 답변 생성에서는 `--allow-external` 정책을 확인하세요.
+- Codex MCP 답변 backend는 `khub provider setup --profile codex-mcp` 뒤 `khub ask "질문" --answer-route codex --allow-external`로 확인합니다.
 
 ### 설정 파일 예시 (`~/.khub/config.yaml`)
 
@@ -400,6 +452,19 @@ providers:
   pplx-local:
     base_url: http://localhost:8080
     timeout: 60
+  deepseek:
+    adapter: openai-compatible
+    base_url: https://api.deepseek.com/v1
+    api_key_env: DEEPSEEK_API_KEY
+    supports:
+      llm: true
+      embedding: false
+    models:
+      llm:
+        - deepseek-chat
+        - deepseek-reasoner
+      embedding: []
+    default_llm_model: deepseek-chat
 ```
 
 ## AI Providers
