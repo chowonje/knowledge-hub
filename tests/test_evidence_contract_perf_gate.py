@@ -115,9 +115,10 @@ def _contract_payload(
 class _FakeSearcher:
     def __init__(self, payload_by_query: dict[str, dict]):
         self.payload_by_query = payload_by_query
+        self.calls: list[dict] = []
 
     def generate_answer(self, query: str, **kwargs):  # noqa: ANN003
-        _ = kwargs
+        self.calls.append({"query": query, **kwargs})
         return self.payload_by_query[query]
 
 
@@ -142,6 +143,22 @@ def test_latency_summary_uses_median_p50_and_nearest_rank_p95():
     assert summary["p50"] == 25.0
     assert summary["p95"] == 40.0
     assert summary["avg"] == 25.0
+
+
+def test_thermal_run_profile_selects_one_case_per_source():
+    module = _load_module()
+    cases = [
+        _case("vault_1", source="vault"),
+        _case("vault_2", source="vault"),
+        _case("paper_1", source="paper"),
+        _case("web_1", source="web"),
+        _case("mixed_1", source="mixed"),
+        _case("abstain_1", source="abstain"),
+    ]
+
+    selected = module.select_run_cases(cases, source_filter="all", run_profile="thermal")
+
+    assert [case["case_id"] for case in selected] == ["vault_1", "paper_1", "web_1", "mixed_1", "abstain_1"]
 
 
 def test_contract_validation_failure_marks_case_and_gate_failed():
@@ -225,3 +242,24 @@ def test_stub_fixture_gate_summarizes_contract_metrics():
     assert payload["citationGradeCoverageRate"] == 1.0
     assert payload["abstainCorrectRate"] == 1.0
     assert payload["timeoutCount"] == 0
+
+
+def test_run_gate_records_external_codex_route_request():
+    module = _load_module()
+    cases = [_case("codex_route", query="alpha?")]
+    searcher = _FakeSearcher({"alpha?": _contract_payload(query="alpha?")})
+
+    payload = module.run_gate(
+        cases,
+        searcher=searcher,
+        cases_path=Path("cases.json"),
+        timeout_sec=0,
+        allow_external=True,
+        answer_route="codex",
+    )
+
+    assert payload["allowExternal"] is True
+    assert payload["answerRouteRequested"] == "codex"
+    assert payload["cases"][0]["status"] == "pass"
+    assert searcher.calls[0]["allow_external"] is True
+    assert searcher.calls[0]["answer_route_override"] == "codex"

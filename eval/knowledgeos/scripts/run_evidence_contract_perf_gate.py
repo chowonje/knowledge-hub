@@ -48,6 +48,7 @@ CONTRACT_SCHEMA_BY_KEY = {
     "verificationVerdict": "knowledge-hub.verification-verdict.v1",
 }
 SOURCE_FILTERS = {"all", "paper", "vault", "web", "mixed", "abstain"}
+THERMAL_SOURCE_ORDER = ("vault", "paper", "web", "mixed", "abstain")
 
 
 def clean_text(value: Any) -> str:
@@ -136,6 +137,31 @@ def select_cases(cases: list[dict[str, Any]], *, source_filter: str) -> list[dic
     if normalized == "all":
         return list(cases)
     return [case for case in cases if normalize_source_filter(case.get("source")) == normalized]
+
+
+def select_run_cases(
+    cases: list[dict[str, Any]],
+    *,
+    source_filter: str,
+    run_profile: str,
+    max_cases: int = 0,
+    case_ids: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    selected = select_cases(cases, source_filter=source_filter)
+    wanted_ids = {clean_text(case_id) for case_id in list(case_ids or []) if clean_text(case_id)}
+    if wanted_ids:
+        return [case for case in selected if clean_text(case.get("case_id")) in wanted_ids]
+    limit = max(0, int(max_cases or 0))
+    if clean_text(run_profile).casefold() != "thermal":
+        return selected[:limit] if limit else selected
+    if normalize_source_filter(source_filter) != "all":
+        return selected[: limit or 1]
+    by_source: dict[str, dict[str, Any]] = {}
+    for case in selected:
+        source = normalize_source_filter(case.get("source"))
+        by_source.setdefault(source, case)
+    thermal_cases = [by_source[source] for source in THERMAL_SOURCE_ORDER if source in by_source]
+    return thermal_cases[: limit or len(thermal_cases)]
 
 
 def latency_summary(values: list[float]) -> dict[str, float]:
@@ -482,6 +508,8 @@ def run_ask_like_cli(
     top_k: int,
     retrieval_mode: str,
     alpha: float,
+    allow_external: bool,
+    answer_route: str,
 ) -> dict[str, Any]:
     source_type = ask_source_type(clean_text(case.get("source")))
     result = searcher.generate_answer(
@@ -490,9 +518,10 @@ def run_ask_like_cli(
         source_type=source_type,
         retrieval_mode=str(retrieval_mode),
         alpha=float(alpha),
-        allow_external=False,
+        allow_external=bool(allow_external),
         memory_route_mode="off",
         paper_memory_mode="off",
+        answer_route_override=None if clean_text(answer_route).casefold() == "auto" else clean_text(answer_route).casefold(),
     )
     payload = ensure_ask_contract_payload(
         dict(result or {}),
@@ -501,9 +530,9 @@ def run_ask_like_cli(
         paper_memory_mode="off",
         external_policy=external_policy_contract(
             surface="evidence-contract-perf-gate",
-            allow_external=False,
-            requested=False,
-            decision_source="frontier_local_gate",
+            allow_external=bool(allow_external),
+            requested=bool(allow_external),
+            decision_source="frontier_external_gate" if bool(allow_external) else "frontier_local_gate",
         ),
     )
     payload["question"] = clean_text(case.get("query"))
@@ -511,6 +540,7 @@ def run_ask_like_cli(
     payload["sourceType"] = source_type
     payload["retrievalMode"] = str(retrieval_mode)
     payload["alpha"] = float(alpha)
+    payload["answerRouteRequested"] = clean_text(answer_route).casefold() or "auto"
     return payload
 
 
@@ -525,9 +555,20 @@ def run_gate(
     timeout_sec: int = 60,
     source_filter: str = "all",
     stub_llm: bool = False,
+    run_profile: str = "full",
+    max_cases: int = 0,
+    case_ids: list[str] | None = None,
+    allow_external: bool = False,
+    answer_route: str = "auto",
     thresholds: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    selected_cases = select_cases(cases, source_filter=source_filter)
+    selected_cases = select_run_cases(
+        cases,
+        source_filter=source_filter,
+        run_profile=run_profile,
+        max_cases=max_cases,
+        case_ids=case_ids,
+    )
     thresholds = {
         "min_contract_valid_rate": 1.0,
         "min_citation_grade_coverage_rate": 0.8,
@@ -551,6 +592,8 @@ def run_gate(
                     top_k=int(top_k),
                     retrieval_mode=str(retrieval_mode),
                     alpha=float(alpha),
+                    allow_external=bool(allow_external),
+                    answer_route=str(answer_route),
                 )
             except TimeoutError:
                 timeout = True
@@ -568,11 +611,16 @@ def run_gate(
         "createdAt": datetime.now(timezone.utc).isoformat(),
         "status": "ok" if not errors else "failed",
         "mode": "stub" if stub_llm else "live",
+        "runProfile": clean_text(run_profile).casefold() or "full",
+        "thermalFriendly": clean_text(run_profile).casefold() == "thermal",
         "casesPath": str(cases_path),
         "sourceFilter": normalize_source_filter(source_filter),
+        "selectedCaseIds": [clean_text(case.get("case_id")) for case in selected_cases],
         "topK": int(top_k),
         "retrievalMode": str(retrieval_mode),
         "alpha": float(alpha),
+        "allowExternal": bool(allow_external),
+        "answerRouteRequested": clean_text(answer_route).casefold() or "auto",
         "thresholds": thresholds,
         **summary,
         "errors": errors,
@@ -587,6 +635,9 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         "",
         f"- status: `{payload.get('status')}`",
         f"- mode: `{payload.get('mode')}`",
+        f"- run profile: `{payload.get('runProfile')}`",
+        f"- allow external: `{payload.get('allowExternal')}`",
+        f"- answer route: `{payload.get('answerRouteRequested')}`",
         f"- cases: `{payload.get('passedCaseCount')}/{payload.get('caseCount')}` passed",
         f"- contract valid rate: `{payload.get('contractValidRate')}`",
         f"- citation-grade coverage rate: `{payload.get('citationGradeCoverageRate')}`",
@@ -629,13 +680,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mode", default="hybrid")
     parser.add_argument("--alpha", type=float, default=0.7)
     parser.add_argument("--source", default="all", choices=sorted(SOURCE_FILTERS))
-    parser.add_argument("--timeout-sec", "--timeout-seconds", type=int, default=60)
+    parser.add_argument("--timeout-sec", "--timeout-seconds", type=int, default=None)
+    parser.add_argument("--run-profile", choices=["auto", "thermal", "full"], default="auto")
+    parser.add_argument("--max-cases", type=int, default=0)
+    parser.add_argument("--case-id", action="append", default=[])
+    parser.add_argument("--answer-route", default="auto")
+    parser.add_argument("--allow-external", action="store_true", default=False)
     parser.add_argument("--stub-llm", action="store_true")
     parser.add_argument("--json", action="store_true", dest="as_json", default=False)
     parser.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
     args = parser.parse_args(argv)
 
     cases_path = Path(args.cases).expanduser().resolve()
+    run_profile = str(args.run_profile or "auto").strip().lower()
+    if run_profile == "auto":
+        run_profile = "full" if bool(args.stub_llm) else "thermal"
+    timeout_sec = int(args.timeout_sec) if args.timeout_sec is not None else (10 if run_profile == "thermal" else 60)
     try:
         cases = read_cases(cases_path)
         app = None if bool(args.stub_llm) else AppContextFactory().build(require_search=True)
@@ -646,9 +706,14 @@ def main(argv: list[str] | None = None) -> int:
             top_k=int(args.top_k),
             retrieval_mode=str(args.mode),
             alpha=float(args.alpha),
-            timeout_sec=int(args.timeout_sec),
+            timeout_sec=timeout_sec,
             source_filter=str(args.source),
             stub_llm=bool(args.stub_llm),
+            run_profile=run_profile,
+            max_cases=int(args.max_cases),
+            case_ids=list(args.case_id or []),
+            allow_external=bool(args.allow_external),
+            answer_route=str(args.answer_route or "auto"),
         )
     except Exception as exc:  # noqa: BLE001
         payload = {
@@ -656,7 +721,13 @@ def main(argv: list[str] | None = None) -> int:
             "createdAt": datetime.now(timezone.utc).isoformat(),
             "status": "failed",
             "mode": "stub" if bool(args.stub_llm) else "live",
+            "runProfile": run_profile,
+            "thermalFriendly": run_profile == "thermal",
             "casesPath": str(cases_path),
+            "sourceFilter": normalize_source_filter(args.source),
+            "selectedCaseIds": [],
+            "allowExternal": bool(args.allow_external),
+            "answerRouteRequested": clean_text(args.answer_route).casefold() or "auto",
             "errors": [f"evidence_contract_perf_gate_failed:{exc}"],
             "caseCount": 0,
             "passedCaseCount": 0,
