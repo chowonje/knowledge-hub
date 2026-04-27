@@ -25,6 +25,11 @@ khub labs crawl --help
 khub labs paper --help
 ```
 
+Agent-safe MCP integration is documented separately in
+[`docs/guides/agent-profile.md`](agent-profile.md). Keep the default CLI story
+focused on `add -> index -> search/ask -> evidence review`; use the agent guide
+for Codex/Claude/Cursor MCP setup.
+
 ## 매일 자주 쓰는 커맨드
 
 ```bash

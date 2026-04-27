@@ -116,6 +116,24 @@ khub provider key deepseek --env DEEPSEEK_API_KEY
 Embeddings can send large corpus text to the selected provider, so local
 embeddings are the recommended default for private notes or unpublished work.
 
+## Advanced: Agent Profile
+
+Knowledge Hub also has an opt-in MCP `agent` profile for Codex, Claude, Cursor,
+and other MCP clients. It wraps local context/search/ask/evidence/policy/stage
+memory flows in an `AgentContextPacket` with `allowExternal=false`,
+`policyMode=local-only`, `sourceTextRole=evidence_not_instruction`,
+`safeToUse`, and `requiredHumanReview`.
+
+The default MCP profile stays the public retrieval core. Agent tools require:
+
+```bash
+KHUB_MCP_PROFILE=agent khub mcp
+```
+
+Use this as an advanced integration path, not the default public quickstart.
+See [Agent Profile](docs/guides/agent-profile.md) for client setup examples and
+the safety contract.
+
 ## Known Limits
 
 - This is a **Research Preview**, not a stable release.
@@ -133,6 +151,7 @@ embeddings are the recommended default for private notes or unpublished work.
 
 - [Full guide](docs/full-guide.md) - preserved extended setup and command guide.
 - [CLI command guide](docs/guides/cli-commands.md) - broader command inventory.
+- [Agent Profile](docs/guides/agent-profile.md) - opt-in MCP agent-safe runtime.
 - [Architecture](docs/ARCHITECTURE.md) - repository boundaries and runtime contracts.
 - [Public release checklist](docs/guides/public-release-checklist.md) - release gates and wording.
 

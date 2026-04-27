@@ -48,6 +48,7 @@ This does not introduce a second MCP server and does not widen the public defaul
 - Delegated legacy `run_agentic_query` payloads now fail closed unless they carry explicit local-only external-policy proof.
 - Local task-context synthesis now wraps source text as `evidence_not_instruction` data before passing it to a synthesis call.
 - The durable security decision is recorded in `docs/adr/2026-04-27-agent-profile-security-contract.md`.
+- User-facing advanced docs now live in `docs/guides/agent-profile.md`, with Codex/Claude/Cursor MCP setup examples and the `agent_policy_check -> agent_ask_knowledge -> agent_stage_memory` demo flow.
 
 ## Verification
 
@@ -70,6 +71,11 @@ Latest security-contract follow-up checks:
 - `python -m pytest tests/test_authority_contract.py -q` (`56 passed`)
 - `python scripts/check_public_release_hygiene.py` (`status: ok`, `issues: 0`)
 - `python scripts/check_release_smoke.py --mode release` (`release smoke: ok`)
+- `git diff --check` (`passed`)
+
+Latest advanced-doc follow-up checks:
+
+- `python scripts/check_public_release_hygiene.py` (`status: ok`, `issues: 0`)
 - `git diff --check` (`passed`)
 
 ## Follow-up
