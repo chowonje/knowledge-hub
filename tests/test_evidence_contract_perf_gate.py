@@ -161,6 +161,13 @@ def test_thermal_run_profile_selects_one_case_per_source():
     assert [case["case_id"] for case in selected] == ["vault_1", "paper_1", "web_1", "mixed_1", "abstain_1"]
 
 
+def test_case_ask_source_type_uses_execution_source_override():
+    module = _load_module()
+
+    assert module.case_ask_source_type({"source": "abstain", "execution_source": "paper"}) == "paper"
+    assert module.case_ask_source_type({"source": "abstain"}) is None
+
+
 def test_contract_validation_failure_marks_case_and_gate_failed():
     module = _load_module()
     cases = [_case("missing_contracts")]
@@ -220,6 +227,32 @@ def test_expected_abstain_legacy_payload_accepts_verdict_action_without_answer_c
 
     assert result["abstainObserved"] is True
     assert result["abstainOk"] is True
+
+
+def test_temporal_hard_abstain_on_answer_case_is_corpus_dependency_when_citations_exist():
+    module = _load_module()
+    case = _case("temporal_policy_gap", expected_min_citation_count=1, expected_abstain=False)
+    payload = _contract_payload(
+        answer="The retrieved article discusses citation accuracy and faithfulness.",
+        answerable=False,
+        verification={"status": "abstain", "summary": "weak temporal grounding"},
+    )
+    payload["evidence_packet"] = {
+        "answerable": False,
+        "answerableDecisionReason": "weak_web_temporal_grounding",
+        "insufficientEvidenceReasons": ["missing_temporal_grounding"],
+    }
+    payload["v2"] = {
+        "evidenceVerification": {"unsupportedFields": ["temporal_version_grounding"]},
+        "fallback": {"reason": "weak_web_temporal_grounding"},
+    }
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0)
+
+    assert result["citationGradeOk"] is True
+    assert result["abstainObserved"] is True
+    assert result["errors"] == ["provider_corpus_dependency:temporal_grounding"]
+    assert result["failureCategories"] == ["provider/corpus_dependency"]
 
 
 def test_timeout_classification_does_not_count_derived_missing_contracts():
@@ -283,3 +316,22 @@ def test_run_gate_records_external_codex_route_request():
     assert payload["cases"][0]["status"] == "pass"
     assert searcher.calls[0]["allow_external"] is True
     assert searcher.calls[0]["answer_route_override"] == "codex"
+
+
+def test_run_gate_can_label_live_stub_llm_mode_without_fixture_searcher():
+    module = _load_module()
+    cases = [_case("live_stub", query="alpha?")]
+    searcher = _FakeSearcher({"alpha?": _contract_payload(query="alpha?")})
+
+    payload = module.run_gate(
+        cases,
+        searcher=searcher,
+        cases_path=Path("cases.json"),
+        timeout_sec=0,
+        stub_llm=True,
+        mode_label="live_stub",
+    )
+
+    assert payload["mode"] == "live_stub"
+    assert payload["llmStubbed"] is True
+    assert payload["status"] == "ok"

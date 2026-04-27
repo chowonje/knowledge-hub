@@ -17,6 +17,7 @@ from knowledge_hub.ai.section_cards import assess_section_source_quality, projec
 from knowledge_hub.core.section_card_v1_store import SectionCardV1Store
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.papers.card_v2_builder import PaperCardV2Builder
+from knowledge_hub.papers.source_text import source_hash_for_text
 from knowledge_hub.web.ingest import make_web_note_id
 from tests.test_paper_memory import _seed_paper_with_note
 from tests.test_rag_search import DummyEmbedder, FakeLLM
@@ -1252,6 +1253,43 @@ def test_anchor_results_preserve_card_v2_strict_provenance(tmp_path):
     assert evidence["source_content_hash"] == "hash-bert-source"
     assert evidence["span_locator"] == "unit-bert-method"
     assert answer_contract["citations"]
+
+
+def test_anchor_results_recovers_paper_hash_from_paper_record(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    service = PaperAskV2Service(_build_searcher(db)[0])
+    route = service._route(query="BERT 방법을 설명해줘", source_type="paper", metadata_filter=None)
+    monkeypatch.setattr(service.sqlite_db, "list_document_memory_units", lambda document_id, limit=20: [])
+    monkeypatch.setattr(
+        service.sqlite_db,
+        "get_paper",
+        lambda paper_id: {"notes": "BERT source notes", "title": "BERT"},
+    )
+
+    result = service._anchor_results(
+        cards=[
+            {
+                "paper_id": "bert",
+                "card_id": "paper-card-v2:bert",
+                "title": "BERT",
+                "quality_flag": "ok",
+            }
+        ],
+        anchors=[
+            {
+                "anchor_id": "bert-anchor-0",
+                "card_id": "paper-card-v2:bert",
+                "paper_id": "bert",
+                "document_id": "paper:bert",
+                "unit_id": "unit-bert-method",
+                "excerpt": "BERT uses bidirectional Transformer encoder pre-training.",
+                "score": 0.91,
+            }
+        ],
+        route=route,
+    )[0]
+
+    assert result.metadata["source_content_hash"] == source_hash_for_text("BERT source notes", "bert", "paper_record")
 
 
 def test_generate_answer_uses_section_native_prompt_for_explanation_query(tmp_path):

@@ -132,6 +132,11 @@ def ask_source_type(source: str) -> str | None:
     return normalized
 
 
+def case_ask_source_type(case: dict[str, Any]) -> str | None:
+    override = clean_text(case.get("execution_source") or case.get("ask_source_type"))
+    return ask_source_type(override or clean_text(case.get("source")))
+
+
 def select_cases(cases: list[dict[str, Any]], *, source_filter: str) -> list[dict[str, Any]]:
     normalized = normalize_source_filter(source_filter)
     if normalized == "all":
@@ -234,6 +239,30 @@ def conservative_fallback_used(payload: dict[str, Any]) -> bool:
     return source == "conservative_fallback"
 
 
+def provider_corpus_dependency_reason(payload: dict[str, Any]) -> str:
+    answer_contract = contract_payload(payload, "answerContract")
+    evidence_packet = dict(payload.get("evidence_packet") or payload.get("evidencePacket") or {})
+    v2 = dict(payload.get("v2") or {})
+    verification = dict(v2.get("evidenceVerification") or {})
+    fallback = dict(v2.get("fallback") or {})
+    reason_text = " ".join(
+        clean_text(value).casefold()
+        for value in [
+            answer_contract.get("abstainReason"),
+            evidence_packet.get("answerableDecisionReason"),
+            fallback.get("reason"),
+            " ".join(clean_text(item) for item in list(evidence_packet.get("insufficientEvidenceReasons") or [])),
+            " ".join(clean_text(item) for item in list(verification.get("unsupportedFields") or [])),
+        ]
+        if clean_text(value)
+    )
+    if any(token in reason_text for token in ("temporal_grounding", "weak_web_temporal_grounding", "missing_temporal_grounding")):
+        return "temporal_grounding"
+    if any(token in reason_text for token in ("no_evidence", "source_mismatch", "low_confidence_evidence")):
+        return "retrieval_or_corpus_gap"
+    return ""
+
+
 def classify_failure_categories(errors: list[str]) -> list[str]:
     categories: list[str] = []
     for error in errors:
@@ -246,6 +275,8 @@ def classify_failure_categories(errors: list[str]) -> list[str]:
             categories.append("citation_grade")
         elif token.startswith("abstain_mismatch:"):
             categories.append("abstain_mismatch")
+        elif token.startswith("provider_corpus_dependency:"):
+            categories.append("provider/corpus_dependency")
     if errors and not categories:
         categories.append("provider/corpus_dependency")
     category_set = set(categories)
@@ -278,7 +309,15 @@ def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: 
     if not citation_grade_ok:
         errors.append(f"citation_grade_below_min:{citation_grade}<{expected_min_citations}")
     if not abstain_ok:
-        errors.append(f"abstain_mismatch:{abstain_observed}!={expected_abstain}")
+        dependency_reason = (
+            provider_corpus_dependency_reason(payload)
+            if not expected_abstain and abstain_observed and contracts_valid and citation_grade_ok
+            else ""
+        )
+        if dependency_reason:
+            errors.append(f"provider_corpus_dependency:{dependency_reason}")
+        else:
+            errors.append(f"abstain_mismatch:{abstain_observed}!={expected_abstain}")
     failure_categories = classify_failure_categories(errors)
     return {
         "caseId": clean_text(case.get("case_id")),
@@ -511,7 +550,7 @@ def run_ask_like_cli(
     allow_external: bool,
     answer_route: str,
 ) -> dict[str, Any]:
-    source_type = ask_source_type(clean_text(case.get("source")))
+    source_type = case_ask_source_type(case)
     result = searcher.generate_answer(
         clean_text(case.get("query")),
         top_k=int(top_k),
@@ -560,6 +599,7 @@ def run_gate(
     case_ids: list[str] | None = None,
     allow_external: bool = False,
     answer_route: str = "auto",
+    mode_label: str | None = None,
     thresholds: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     selected_cases = select_run_cases(
@@ -610,7 +650,8 @@ def run_gate(
         "schema": SCHEMA,
         "createdAt": datetime.now(timezone.utc).isoformat(),
         "status": "ok" if not errors else "failed",
-        "mode": "stub" if stub_llm else "live",
+        "mode": mode_label or ("stub" if stub_llm else "live"),
+        "llmStubbed": bool(stub_llm),
         "runProfile": clean_text(run_profile).casefold() or "full",
         "thermalFriendly": clean_text(run_profile).casefold() == "thermal",
         "casesPath": str(cases_path),
@@ -636,6 +677,7 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         f"- status: `{payload.get('status')}`",
         f"- mode: `{payload.get('mode')}`",
         f"- run profile: `{payload.get('runProfile')}`",
+        f"- LLM stubbed: `{payload.get('llmStubbed')}`",
         f"- allow external: `{payload.get('allowExternal')}`",
         f"- answer route: `{payload.get('answerRouteRequested')}`",
         f"- cases: `{payload.get('passedCaseCount')}/{payload.get('caseCount')}` passed",
@@ -687,40 +729,47 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--answer-route", default="auto")
     parser.add_argument("--allow-external", action="store_true", default=False)
     parser.add_argument("--stub-llm", action="store_true")
+    parser.add_argument("--live-stub-llm", action="store_true")
     parser.add_argument("--json", action="store_true", dest="as_json", default=False)
     parser.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
     args = parser.parse_args(argv)
+    if bool(args.stub_llm) and bool(args.live_stub_llm):
+        parser.error("--stub-llm and --live-stub-llm are mutually exclusive")
 
     cases_path = Path(args.cases).expanduser().resolve()
     run_profile = str(args.run_profile or "auto").strip().lower()
     if run_profile == "auto":
         run_profile = "full" if bool(args.stub_llm) else "thermal"
     timeout_sec = int(args.timeout_sec) if args.timeout_sec is not None else (10 if run_profile == "thermal" else 60)
+    mode_label = "stub" if bool(args.stub_llm) else ("live_stub" if bool(args.live_stub_llm) else "live")
     try:
         cases = read_cases(cases_path)
         app = None if bool(args.stub_llm) else AppContextFactory().build(require_search=True)
+        searcher = FixtureContractSearcher(cases) if bool(args.stub_llm) else app.searcher
         payload = run_gate(
             cases,
-            searcher=FixtureContractSearcher(cases) if bool(args.stub_llm) else app.searcher,
+            searcher=searcher,
             cases_path=cases_path,
             top_k=int(args.top_k),
             retrieval_mode=str(args.mode),
             alpha=float(args.alpha),
             timeout_sec=timeout_sec,
             source_filter=str(args.source),
-            stub_llm=bool(args.stub_llm),
+            stub_llm=bool(args.stub_llm or args.live_stub_llm),
             run_profile=run_profile,
             max_cases=int(args.max_cases),
             case_ids=list(args.case_id or []),
             allow_external=bool(args.allow_external),
             answer_route=str(args.answer_route or "auto"),
+            mode_label=mode_label,
         )
     except Exception as exc:  # noqa: BLE001
         payload = {
             "schema": SCHEMA,
             "createdAt": datetime.now(timezone.utc).isoformat(),
             "status": "failed",
-            "mode": "stub" if bool(args.stub_llm) else "live",
+            "mode": mode_label,
+            "llmStubbed": bool(args.stub_llm or args.live_stub_llm),
             "runProfile": run_profile,
             "thermalFriendly": run_profile == "thermal",
             "casesPath": str(cases_path),

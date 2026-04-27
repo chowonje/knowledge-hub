@@ -53,6 +53,7 @@ from knowledge_hub.infrastructure.persistence.stores.section_card_v1_store impor
 from knowledge_hub.core.models import SearchResult
 from knowledge_hub.papers.memory_adapter import paper_memory_card_to_section_cards
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
+from knowledge_hub.papers.source_text import source_hash_for_path, source_hash_for_text
 from knowledge_hub.web.youtube_extractor import is_youtube_url
 
 
@@ -1333,7 +1334,17 @@ class AskV2Service:
                     or metadata.get("content_sha1")
                     or metadata.get("content_sha256")
                 )
-            cache[token] = unit_hash or note_hash
+            paper_hash = ""
+            if not unit_hash and not note_hash and token.startswith("paper:") and hasattr(self.sqlite_db, "get_paper"):
+                paper_id = token.split(":", 1)[1]
+                paper = dict(self.sqlite_db.get_paper(paper_id) or {})
+                for key in ("text_path", "translated_path", "pdf_path"):
+                    paper_hash = source_hash_for_path(str(paper.get(key) or ""))
+                    if paper_hash:
+                        break
+                if not paper_hash:
+                    paper_hash = source_hash_for_text(paper.get("notes"), paper_id, "paper_record")
+            cache[token] = unit_hash or note_hash or paper_hash
         return cache[token]
 
     @staticmethod
