@@ -3,7 +3,24 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from knowledge_hub.ai.ask_v2_support import classify_project_query_profile, clean_text, stable_score, slot_coverage
+from knowledge_hub.ai.ask_v2_support import classify_project_query_profile, clean_text, slot_coverage
+
+
+def _anchor_has_document_temporal_marker(anchor: dict[str, Any]) -> bool:
+    if clean_text(anchor.get("document_date") or anchor.get("event_date") or anchor.get("published_at") or anchor.get("evidence_window")):
+        return True
+    identity_text = " ".join(
+        clean_text(anchor.get(name))
+        for name in ("section_path", "source_ref", "source_url", "canonical_url", "citation_target", "title")
+    ).casefold()
+    excerpt_text = clean_text(anchor.get("excerpt")).casefold()
+    text = f"{identity_text} {excerpt_text}"
+    return bool(
+        re.search(r"\b(version\s*\d+|v\d+|updated?|latest|newest|release)\b", identity_text, re.IGNORECASE)
+        or re.search(r"\b(version\s*\d+(?:\.\d+)?|v\d+|20\d{2})\b", excerpt_text, re.IGNORECASE)
+        or re.search(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", text)
+        or re.search(r"버전|업데이트|최신|최근|개정", text)
+    )
 
 
 class AskV2Verifier:
@@ -276,22 +293,15 @@ class AskV2Verifier:
         evidence_text = " ".join(clean_text(anchor.get("excerpt")) for anchor in anchors).casefold()
         weak_slots: list[str] = []
         if route.intent == "temporal":
+            has_document_temporal_marker = any(_anchor_has_document_temporal_marker(anchor) for anchor in anchors)
             if route.source_kind == "web":
-                has_temporal_marker = any(
-                    clean_text(anchor.get("document_date") or anchor.get("event_date"))
-                    or any(
-                        token in clean_text(anchor.get("section_path") or anchor.get("excerpt") or "").casefold()
-                        for token in ("version", "updated", "release", "latest", "버전", "업데이트", "최신")
-                    )
-                    for anchor in anchors
-                )
                 observed_only = bool(anchors) and all(
-                    clean_text(anchor.get("observed_at")) and not clean_text(anchor.get("document_date") or anchor.get("event_date"))
+                    clean_text(anchor.get("observed_at")) and not _anchor_has_document_temporal_marker(anchor)
                     for anchor in anchors
                 )
-                if not has_temporal_marker or observed_only:
+                if not has_document_temporal_marker or observed_only:
                     unsupported_fields.append("temporal_version_grounding")
-            elif not any(token in evidence_text for token in ("202", "updated", "latest", "recent", "version", "최신", "업데이트")):
+            elif not has_document_temporal_marker and not any(token in evidence_text for token in ("202", "updated", "latest", "recent", "version", "최신", "업데이트")):
                 unsupported_fields.append("temporal")
         if route.source_kind == "project":
             weak_slots = sorted(

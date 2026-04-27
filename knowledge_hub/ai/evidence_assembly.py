@@ -250,15 +250,21 @@ def _has_explicit_temporal_marker(item: dict[str, Any]) -> bool:
     for name in ("event_date", "document_date", "published_at", "evidence_window"):
         if str(item.get(name) or "").strip():
             return True
-    text = " ".join(
+    identity_text = " ".join(
         [
             str(item.get("title") or ""),
             str(item.get("section_path") or ""),
-            str(item.get("excerpt") or ""),
+            str(item.get("source_ref") or ""),
+            str(item.get("source_url") or ""),
+            str(item.get("citation_target") or ""),
         ]
     )
+    excerpt_text = str(item.get("excerpt") or "")
+    text = f"{identity_text} {excerpt_text}"
     return bool(
-        re.search(r"\b(v\d+|version\s*\d+|updated?|latest|recent|newest|release)\b", text, re.IGNORECASE)
+        re.search(r"\b(v\d+|version\s*\d+|updated?|latest|newest|release)\b", identity_text, re.IGNORECASE)
+        or re.search(r"\b(v\d+|version\s*\d+(?:\.\d+)?|20\d{2})\b", excerpt_text, re.IGNORECASE)
+        or re.search(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", text)
         or re.search(r"버전|업데이트|최신|개정", text)
     )
 
@@ -277,10 +283,13 @@ def _has_web_temporal_textual_marker(item: dict[str, Any]) -> bool:
             str(item.get("title") or ""),
             str(item.get("section_path") or ""),
             str(item.get("source_url") or ""),
+            str(item.get("source_ref") or ""),
+            str(item.get("citation_target") or ""),
         ]
     )
     return bool(
         re.search(r"\b(updated?|latest|recent|newest|version|release|guide|guideline|watchlist|reference)\b", text, re.IGNORECASE)
+        or re.search(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", text)
         or re.search(r"최신|최근|업데이트|버전|개정|가이드|레퍼런스|참고", text)
     )
 
