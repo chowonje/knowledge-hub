@@ -182,14 +182,14 @@ def test_contract_validation_failure_marks_case_and_gate_failed():
     assert "failed_cases:1" in payload["errors"]
 
 
-def test_expected_abstain_accepts_verification_recommended_abstain():
+def test_answer_contract_abstain_is_source_of_truth_over_verdict_action():
     module = _load_module()
-    case = _case("abstain_by_verdict", expected_min_citation_count=0, expected_abstain=True)
+    case = _case("caution_answer", expected_min_citation_count=1, expected_abstain=False)
     verification = {
         "status": "caution",
         "unsupportedClaimCount": 1,
         "uncertainClaimCount": 0,
-        "supportedClaimCount": 0,
+        "supportedClaimCount": 1,
         "needsCaution": True,
         "summary": "unsupported",
     }
@@ -197,9 +197,29 @@ def test_expected_abstain_accepts_verification_recommended_abstain():
 
     payload = module.run_gate([case], searcher=searcher, cases_path=Path("cases.json"), timeout_sec=0)
 
-    assert payload["status"] == "ok"
-    assert payload["cases"][0]["abstainObserved"] is True
-    assert payload["abstainCorrectRate"] == 1.0
+    assert payload["cases"][0]["abstainObserved"] is False
+    assert "abstain_mismatch:True!=False" not in payload["cases"][0]["errors"]
+
+
+def test_expected_abstain_legacy_payload_accepts_verdict_action_without_answer_contract():
+    module = _load_module()
+    case = _case("legacy_abstain_by_verdict", expected_min_citation_count=0, expected_abstain=True)
+    payload = {
+        "verificationVerdict": build_verification_verdict(
+            {
+                "status": "abstain",
+                "unsupportedClaimCount": 0,
+                "uncertainClaimCount": 0,
+                "supportedClaimCount": 0,
+                "summary": "no evidence",
+            }
+        )
+    }
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0)
+
+    assert result["abstainObserved"] is True
+    assert result["abstainOk"] is True
 
 
 def test_timeout_classification_does_not_count_derived_missing_contracts():

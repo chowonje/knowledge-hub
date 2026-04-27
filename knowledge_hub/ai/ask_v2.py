@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import re
 from typing import Any
@@ -1194,20 +1195,45 @@ class AskV2Service:
 
     def _anchor_results(self, *, cards: list[dict[str, Any]], anchors: list[dict[str, Any]], route: AskV2Route) -> list[SearchResult]:
         by_card_id = {_clean_text(card.get("card_id")): dict(card) for card in cards}
+        source_hash_by_document_id: dict[str, str] = {}
         results: list[SearchResult] = []
         for index, anchor in enumerate(anchors):
             card = by_card_id.get(_clean_text(anchor.get("card_id")), {})
             excerpt = _clean_text(anchor.get("excerpt"))
             if not excerpt:
                 continue
+            anchor_id = _clean_text(anchor.get("anchor_id"))
+            document_id = _clean_text(
+                anchor.get("document_id")
+                or card.get("document_id")
+                or anchor.get("note_id")
+                or card.get("note_id")
+                or anchor.get("paper_id")
+                or card.get("paper_id")
+            )
+            source_hash = _clean_text(
+                anchor.get("source_content_hash")
+                or card.get("source_content_hash")
+                or self._source_hash_for_document(document_id, cache=source_hash_by_document_id)
+            )
+            span_locator = _clean_text(anchor.get("span_locator") or anchor.get("unit_id") or anchor.get("chunk_id") or anchor_id)
             score = max(0.01, min(0.99, _stable_score(anchor.get("score"))))
             metadata = {
                 "title": _clean_text(anchor.get("title") or card.get("title")),
                 "source_type": "project" if route.source_kind == "project" else route.source_kind,
+                "document_id": document_id,
+                "unit_id": _clean_text(anchor.get("unit_id")),
+                "chunk_id": _clean_text(anchor.get("chunk_id") or anchor.get("unit_id") or anchor_id),
+                "source_content_hash": source_hash,
+                "content_hash": source_hash,
+                "span_locator": span_locator,
+                "snippet_hash": _clean_text(anchor.get("snippet_hash")),
+                "char_start": self._int_or_default(anchor.get("char_start"), anchor.get("start_offset"), default=0),
+                "char_end": self._int_or_default(anchor.get("char_end"), anchor.get("end_offset"), default=len(excerpt)),
                 "section_path": _clean_text(anchor.get("section_path")),
                 "unit_type": _clean_text(anchor.get("unit_type")),
-                "parent_id": _clean_text(anchor.get("unit_id") or anchor.get("document_id") or anchor.get("note_id") or anchor.get("anchor_id")),
-                "resolved_parent_id": _clean_text(anchor.get("unit_id") or anchor.get("document_id") or anchor.get("note_id") or anchor.get("anchor_id")),
+                "parent_id": _clean_text(anchor.get("unit_id") or anchor.get("document_id") or anchor.get("note_id") or anchor_id),
+                "resolved_parent_id": _clean_text(anchor.get("unit_id") or anchor.get("document_id") or anchor.get("note_id") or anchor_id),
                 "resolved_parent_label": _clean_text(anchor.get("section_path") or anchor.get("evidence_role")),
                 "resolved_parent_chunk_span": _clean_text(anchor.get("span_locator") or index),
                 "record_id": _clean_text(anchor.get("claim_id")),
@@ -1218,7 +1244,10 @@ class AskV2Service:
                 metadata["published_at"] = _clean_text(card.get("published_at"))
                 metadata["updated_at"] = _clean_text(card.get("updated_at"))
             elif route.source_kind == "web":
-                metadata["source_url"] = _clean_text(anchor.get("source_url") or card.get("canonical_url"))
+                source_url = _clean_text(anchor.get("source_url") or card.get("canonical_url"))
+                metadata["source_url"] = source_url
+                metadata["url"] = source_url
+                metadata["canonical_url"] = source_url
                 metadata["document_date"] = _clean_text(anchor.get("document_date") or card.get("document_date"))
                 metadata["event_date"] = _clean_text(anchor.get("event_date") or card.get("event_date"))
                 metadata["observed_at"] = _clean_text(anchor.get("observed_at") or card.get("observed_at"))
@@ -1279,6 +1308,44 @@ class AskV2Service:
                     seen_document_ids.add(document_id)
             results = diversified
         return results[:8]
+
+    def _source_hash_for_document(self, document_id: str, *, cache: dict[str, str]) -> str:
+        token = _clean_text(document_id)
+        if not token:
+            return ""
+        if token not in cache:
+            rows = list(self.sqlite_db.list_document_memory_units(token, limit=20) or [])
+            unit_hash = next(
+                (_clean_text(row.get("source_content_hash")) for row in rows if _clean_text(row.get("source_content_hash"))),
+                "",
+            )
+            note_hash = ""
+            if not unit_hash and hasattr(self.sqlite_db, "get_note"):
+                note = dict(self.sqlite_db.get_note(token) or {})
+                metadata_value = note.get("metadata")
+                try:
+                    metadata = json.loads(metadata_value) if isinstance(metadata_value, str) else dict(metadata_value or {})
+                except Exception:
+                    metadata = {}
+                note_hash = _clean_text(
+                    metadata.get("source_content_hash")
+                    or metadata.get("content_hash")
+                    or metadata.get("content_sha1")
+                    or metadata.get("content_sha256")
+                )
+            cache[token] = unit_hash or note_hash
+        return cache[token]
+
+    @staticmethod
+    def _int_or_default(*values: Any, default: int) -> int:
+        for value in values:
+            if value is None or value == "":
+                continue
+            try:
+                return int(value)
+            except (TypeError, ValueError):
+                continue
+        return int(default)
 
     def execute(
         self,

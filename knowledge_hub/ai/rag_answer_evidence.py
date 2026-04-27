@@ -77,7 +77,7 @@ def answer_evidence_item(
     metadata = dict(result.metadata or {})
     arxiv_id = str(metadata.get("arxiv_id") or metadata.get("paper_id") or "").strip()
     file_path = str(metadata.get("file_path") or "").strip()
-    source_url = str(metadata.get("url") or "").strip()
+    source_url = str(metadata.get("url") or metadata.get("source_url") or metadata.get("canonical_url") or "").strip()
     citation_target = arxiv_id or file_path or source_url or str(metadata.get("title") or "Untitled")
     source_ref = _first_nonempty(
         metadata.get("source_ref"),
@@ -170,6 +170,8 @@ def answer_evidence_item(
         "source_id": source_id,
         "source_content_hash": source_hash,
         "span_locator": span_locator,
+        "char_start": metadata.get("char_start"),
+        "char_end": metadata.get("char_end"),
         "snippet_hash": snippet_hash,
         "evidence_kind": evidence_kind,
         "derivative_source": derivative_source,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from knowledge_hub.ai.ask_v2_support import build_project_cards
+from knowledge_hub.ai.ask_v2_support import AskV2Route, build_project_cards
 from knowledge_hub.application.query_frame import build_query_frame
 from knowledge_hub.document_memory import DocumentMemoryBuilder
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
@@ -100,6 +100,53 @@ def test_generate_answer_uses_web_card_v2_and_flags_observed_at_only_temporal(tm
     assert payload["queryFrame"]["family"] == "temporal_update"
     assert payload["evidencePolicy"]["policyKey"] == "web_temporal_update_policy"
     assert payload["familyRouteDiagnostics"]["temporalSignalsApplied"] is True
+
+
+def test_web_anchor_results_expose_url_and_strict_provenance(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    searcher, _ = _build_searcher(db)
+    service = AskV2Service(searcher)
+    route = AskV2Route(source_kind="web", intent="definition", mode="card-first", matched_entities=[], entity_ids=[])
+    cards = [
+        {
+            "document_id": "web:reference",
+            "card_id": "web-card-v2:web:reference",
+            "title": "Reference Source Watchlist",
+            "canonical_url": "https://example.com/reference-watchlist",
+        }
+    ]
+    anchors = [
+        {
+            "anchor_id": "web-anchor-0",
+            "card_id": "web-card-v2:web:reference",
+            "document_id": "web:reference",
+            "unit_id": "unit-web-overview",
+            "span_locator": "unit-web-overview",
+            "snippet_hash": "snippet-web-overview",
+            "source_url": "https://example.com/reference-watchlist",
+            "excerpt": "The reference watchlist tracks stable retrieval evaluation sources.",
+            "score": 0.88,
+        }
+    ]
+    monkeypatch.setattr(
+        service.sqlite_db,
+        "list_document_memory_units",
+        lambda document_id, limit=20: [],
+    )
+    monkeypatch.setattr(
+        service.sqlite_db,
+        "get_note",
+        lambda note_id: {"metadata": '{"content_sha1": "hash-web-source"}'},
+    )
+
+    result = service._anchor_results(cards=cards, anchors=anchors, route=route)[0]
+
+    assert result.metadata["url"] == "https://example.com/reference-watchlist"
+    assert result.metadata["canonical_url"] == "https://example.com/reference-watchlist"
+    assert result.metadata["source_content_hash"] == "hash-web-source"
+    assert result.metadata["span_locator"] == "unit-web-overview"
+    assert result.metadata["char_start"] == 0
+    assert result.metadata["char_end"] == len("The reference watchlist tracks stable retrieval evaluation sources.")
 
 
 def test_generate_answer_rebuilds_stale_web_card_when_document_summary_is_newer(tmp_path):

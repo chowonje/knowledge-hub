@@ -74,6 +74,13 @@ def _int_or_none(value: Any) -> int | None:
         return None
 
 
+def _first_present(*values: Any) -> Any:
+    for value in values:
+        if value is not None and value != "":
+            return value
+    return None
+
+
 def _source_scheme(value: Any) -> str:
     token = _clean_text(value).lower()
     if not token or ":" not in token:
@@ -111,20 +118,24 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
         or item.get("unit_id")
     )
     char_start = _int_or_none(
-        item.get("char_start")
-        or item.get("charStart")
-        or item.get("chunk_start")
-        or item.get("chunkStart")
-        or item.get("start_offset")
-        or item.get("startOffset")
+        _first_present(
+            item.get("char_start"),
+            item.get("charStart"),
+            item.get("chunk_start"),
+            item.get("chunkStart"),
+            item.get("start_offset"),
+            item.get("startOffset"),
+        )
     )
     char_end = _int_or_none(
-        item.get("char_end")
-        or item.get("charEnd")
-        or item.get("chunk_end")
-        or item.get("chunkEnd")
-        or item.get("end_offset")
-        or item.get("endOffset")
+        _first_present(
+            item.get("char_end"),
+            item.get("charEnd"),
+            item.get("chunk_end"),
+            item.get("chunkEnd"),
+            item.get("end_offset"),
+            item.get("endOffset"),
+        )
     )
     if char_start is None or char_end is None:
         parsed_start, parsed_end = parse_span_offsets(span_locator)

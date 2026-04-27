@@ -221,8 +221,8 @@ def citation_grade_count(answer_contract: dict[str, Any]) -> int:
 def answer_abstains(payload: dict[str, Any]) -> bool:
     answer_contract = contract_payload(payload, "answerContract")
     verification_verdict = contract_payload(payload, "verificationVerdict")
-    if bool(answer_contract.get("abstain")):
-        return True
+    if answer_contract:
+        return bool(answer_contract.get("abstain"))
     return clean_text(verification_verdict.get("recommended_action")).casefold() == "abstain"
 
 

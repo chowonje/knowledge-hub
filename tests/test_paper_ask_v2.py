@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from types import SimpleNamespace
 import pytest
 
 from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service
 from knowledge_hub.ai.ask_v2_support import classify_intent
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
+from knowledge_hub.ai.answer_contracts import build_answer_contract
 from knowledge_hub.ai.claim_cards import ClaimCardBuilder
 from knowledge_hub.application.query_frame import build_query_frame
+from knowledge_hub.ai.rag_answer_evidence import answer_evidence_item
 from knowledge_hub.ai.rag import RAGSearcher
 from knowledge_hub.ai.section_card_materializer import PaperSectionCardMaterializer
 from knowledge_hub.ai.section_cards import assess_section_source_quality, project_section_cards, rank_section_cards, section_coverage
@@ -1195,6 +1198,60 @@ def test_anchor_results_preserve_compare_source_diversity(tmp_path):
     results = service._anchor_results(cards=cards, anchors=anchors, route=route)
 
     assert {str(item.metadata.get("paper_id") or "") for item in results[:2]} == {"bert", "gpt"}
+
+
+def test_anchor_results_preserve_card_v2_strict_provenance(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    service = PaperAskV2Service(_build_searcher(db)[0])
+    route = service._route(query="BERT 방법을 설명해줘", source_type="paper", metadata_filter=None)
+    cards = [
+        {
+            "paper_id": "bert",
+            "card_id": "paper-card-v2:bert",
+            "title": "BERT",
+            "quality_flag": "ok",
+            "source_content_hash": "hash-bert-source",
+        }
+    ]
+    anchors = [
+        {
+            "anchor_id": "bert-anchor-0",
+            "card_id": "paper-card-v2:bert",
+            "paper_id": "bert",
+            "document_id": "paper:bert",
+            "unit_id": "unit-bert-method",
+            "span_locator": "unit-bert-method",
+            "snippet_hash": "snippet-bert-method",
+            "excerpt": "BERT uses bidirectional Transformer encoder pre-training.",
+            "score": 0.91,
+            "evidence_role": "method",
+        }
+    ]
+
+    result = service._anchor_results(cards=cards, anchors=anchors, route=route)[0]
+    evidence = answer_evidence_item(
+        result,
+        parent_ctx_by_result={},
+        result_id_fn=lambda item: item.document_id,
+        normalize_source_type_fn=lambda value: value,
+        safe_float_fn=lambda value, default: float(value or default),
+    )
+    answer_contract = build_answer_contract(
+        answer="BERT uses bidirectional Transformer encoder pre-training.",
+        evidence_packet=SimpleNamespace(
+            evidence=[evidence],
+            citations=[],
+            evidence_packet={"answerable": True},
+        ),
+        verification={"status": "verified", "supportedClaimCount": 1, "unsupportedClaimCount": 0},
+    )
+
+    assert result.metadata["source_content_hash"] == "hash-bert-source"
+    assert result.metadata["span_locator"] == "unit-bert-method"
+    assert result.metadata["snippet_hash"] == "snippet-bert-method"
+    assert evidence["source_content_hash"] == "hash-bert-source"
+    assert evidence["span_locator"] == "unit-bert-method"
+    assert answer_contract["citations"]
 
 
 def test_generate_answer_uses_section_native_prompt_for_explanation_query(tmp_path):

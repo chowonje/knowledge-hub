@@ -40,6 +40,14 @@ Add a frontier-local performance and quality gate for the Evidence-contract RAG 
 - Failure categories: `contract_missing=11`, `abstain_mismatch=7`, `citation_grade=5`.
 - Interpretation: the deterministic contract path is stable, but the live corpus/provider path is not ready for CI promotion; remaining work is contract propagation on legacy ask branches, citation-grade evidence coverage, abstain calibration, and latency control.
 
+## Follow-up Fixes
+
+- Early-exit/no-result ask branches now add `answerContract` and `verificationVerdict` alongside the existing `evidencePacketContract`, with abstain/no-result semantics and `finalAnswerSource=early_exit`.
+- AskV2 card anchors now pass source-content hash, span locator, snippet hash, char offsets, document id, and web URL/canonical URL through `SearchResult.metadata`; if older card rows lack `source_content_hash`, the runtime recovers it from document-memory units or note metadata (`source_content_hash`, `content_hash`, `content_sha1`, `content_sha256`).
+- Answer evidence now preserves char offsets so `char_start=0` is not lost before contract citation grading.
+- The perf gate now treats `answerContract.abstain` as the source of truth when present. `verificationVerdict.recommended_action=abstain` remains a compatibility fallback only for legacy payloads without an answer contract, so caution/fail verdicts are not overcounted as observed abstentions.
+- Targeted local-corpus probe after the AskV2 provenance fix: `web_general_011` improved from `citationGradeCitationCount=0` to `2`; the remaining failure is `abstain_mismatch` caused by AskV2 `temporal_version_grounding` hard abstention, not missing citation provenance.
+
 ## Verification
 
 - `python -m ruff check eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py knowledge_hub/mcp/handlers/search.py tests/test_evidence_contract_perf_gate.py tests/test_mcp_search_handler.py tests/test_mcp_server.py`
@@ -48,12 +56,14 @@ Add a frontier-local performance and quality gate for the Evidence-contract RAG 
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --stub-llm --json --timeout-sec 10` (`status=ok`, `24/24` cases passed)
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --stub-llm --run-profile thermal --json --timeout-sec 10` (`status=ok`, `5/5` source-balanced cases passed)
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --json --run-profile full --timeout-sec 20` (`status=failed`, `6/24` cases passed; baseline recorded only, not CI-required)
-- `python -m pytest tests/test_answer_contracts_runtime.py tests/test_answer_contract_schemas.py tests/test_answer_quality_gate.py tests/test_retrieval_span_golden.py tests/test_evidence_contract_perf_gate.py -q` (`26 passed`)
+- `python -m pytest tests/test_answer_contracts_runtime.py tests/test_answer_contract_schemas.py tests/test_answer_quality_gate.py tests/test_retrieval_span_golden.py tests/test_evidence_contract_perf_gate.py -q` (`27 passed`)
+- `python -m pytest tests/test_answer_orchestrator_services.py::test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_parity tests/test_answer_orchestrator_services.py::test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit_stay_in_parity tests/test_paper_ask_v2.py::test_anchor_results_preserve_compare_source_diversity tests/test_paper_ask_v2.py::test_anchor_results_preserve_card_v2_strict_provenance tests/test_ask_v2_sources.py::test_web_anchor_results_expose_url_and_strict_provenance -q` (`5 passed`)
 - `python -m pytest tests/test_mcp_server.py tests/test_mcp_search_handler.py tests/test_mcp_server_helpers.py -q` (`48 passed`)
+- `python -m ruff check knowledge_hub/ai/answer_contracts.py knowledge_hub/ai/answer_orchestrator_early_exit.py knowledge_hub/ai/ask_v2.py knowledge_hub/ai/rag_answer_evidence.py eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py tests/test_answer_orchestrator_services.py tests/test_paper_ask_v2.py tests/test_ask_v2_sources.py tests/test_evidence_contract_perf_gate.py` (`passed`)
 
 ## Follow-up
 
-- Make legacy/fast ask branches consistently emit `answerContract` and `verificationVerdict` when `evidencePacketContract` is already present.
-- Improve citation-grade coverage for live paper/web/vault cases by ensuring source ids, content hashes, and span locators survive answer synthesis.
-- Tune abstain behavior against the fixed case set without weakening conservative fallback semantics.
+- Tune AskV2 temporal hard-gate behavior against the fixed case set without weakening conservative lack-of-evidence semantics.
+- Decide whether historical card rows should get a metadata-only `source_content_hash` backfill, even though runtime recovery now covers the answer path.
+- Re-run a sanitized/public live route with `--answer-route codex --allow-external` if external generation quality/latency needs evaluation without heating the local Ollama path.
 - Decide later whether a deterministic subset should become a required CI gate.
