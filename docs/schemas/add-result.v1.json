@@ -8,11 +8,21 @@
     "status",
     "source",
     "sourceType",
+    "sourceId",
+    "canonicalUrl",
+    "canonicalPath",
+    "title",
+    "contentHash",
+    "stored",
+    "indexed",
     "route",
     "routeReason",
     "topic",
     "index",
+    "obsidianStage",
+    "warnings",
     "upstream",
+    "nextActions",
     "nextCommands"
   ],
   "properties": {
@@ -29,7 +39,28 @@
     },
     "sourceType": {
       "type": "string",
-      "enum": ["web", "youtube", "paper"]
+      "enum": ["web", "youtube", "paper", "pdf"]
+    },
+    "sourceId": {
+      "type": "string"
+    },
+    "canonicalUrl": {
+      "type": "string"
+    },
+    "canonicalPath": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "contentHash": {
+      "type": "string"
+    },
+    "stored": {
+      "type": "boolean"
+    },
+    "indexed": {
+      "type": "boolean"
     },
     "route": {
       "type": "string",
@@ -47,6 +78,49 @@
     },
     "upstream": {
       "type": "object"
+    },
+    "obsidianStage": {
+      "type": "object",
+      "required": ["requested", "status", "runId", "staged", "applied", "applyRequested", "applySkipped"],
+      "properties": {
+        "requested": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string"
+        },
+        "runId": {
+          "type": "string"
+        },
+        "staged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "applied": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "applyRequested": {
+          "type": "boolean"
+        },
+        "applySkipped": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "nextCommands": {
       "type": "array",
