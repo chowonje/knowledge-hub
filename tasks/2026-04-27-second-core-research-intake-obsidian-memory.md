@@ -32,6 +32,8 @@ This frontier branch is separate from the public-preview release branch, but `kh
 - Generic/local PDFs default to the web/document lane; paper-style hosts stay in the paper lane.
 - Explicit `--type paper` rejects non-paper URLs instead of passing them to the paper resolver, while generic PDF URLs can still be forced into the paper lane.
 - `add_cmd.py` is now a thin Click shell; routing, packet normalization, lane execution, and Obsidian staging live in dedicated `commands/add/` modules.
+- Hugging Face routing is path-aware: only `/papers/...` pages auto-route to paper import; model and dataset pages remain web sources.
+- Add result output redacts local file paths, `file://` URIs, and internal single-paper import artifact paths before the JSON/text packet is emitted.
 
 ## Verification
 
@@ -47,6 +49,7 @@ This frontier branch is separate from the public-preview release branch, but `kh
 
 - Addressed Opus review blockers by aligning the frontier/public-preview wording, tightening explicit paper/youtube routing validation, adding paper-query and local-PDF tests, warning on local-PDF excerpt-only ingest, and deleting temporary add CSV files after paper import dispatch.
 - Completed the Opus follow-up split so future lanes can be added without growing the command entrypoint again.
+- Addressed the follow-up subagent review by fixing Hugging Face non-paper page routing and path privacy leaks in local-PDF and paper-import add results.
 
 ## Follow-up
 

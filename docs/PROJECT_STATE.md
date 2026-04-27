@@ -37,7 +37,9 @@ Default post-processing remains deliberately bounded: store/source-hash/vector i
 
 Obsidian integration is stage-only by default. `khub add --to-obsidian` requests managed ko-note staging and never final apply. Final vault writes remain in the review/approve/apply family. Paper add v1 does not use direct paper writeback as a new default; paper Obsidian staging is deferred until it can reuse the same managed staging model.
 
-PDF routing is split before ingestion. arXiv/OpenReview/PapersWithCode/HuggingFace/Semantic Scholar-style paper URLs stay in the paper lane. Generic PDF URLs and local PDFs use the web/document lane by default. Operators can force a generic PDF URL into the paper lane with `--type paper`; non-paper URLs are rejected instead of being sent to the paper resolver. Local paper-PDF import is still a follow-up because the existing paper URL resolver is URL-oriented.
+PDF routing is split before ingestion. arXiv/OpenReview/PapersWithCode/HuggingFace `/papers/...`/Semantic Scholar-style paper URLs stay in the paper lane, while Hugging Face model/dataset pages remain ordinary web sources. Generic PDF URLs and local PDFs use the web/document lane by default. Operators can force a generic PDF URL into the paper lane with `--type paper`; non-paper URLs are rejected instead of being sent to the paper resolver. Local paper-PDF import is still a follow-up because the existing paper URL resolver is URL-oriented.
+
+The add facade treats local/runtime paths as private output by default. Local-PDF packets redact local file paths and `file://` URIs before printing JSON or text summaries, and paper-import packets no longer expose the raw internal manifest path from the single-source import helper.
 
 See also:
 - `docs/maps/README.md`

@@ -17,7 +17,6 @@ _PAPER_HOST_SUFFIXES = (
     "openreview.net",
     "semanticscholar.org",
     "paperswithcode.com",
-    "huggingface.co",
     "aclanthology.org",
     "doi.org",
     "proceedings.mlr.press",
@@ -63,6 +62,9 @@ def _is_paper_url(source: str) -> bool:
     host = (parsed.netloc or "").lower()
     if not host:
         return False
+    if host == "huggingface.co" or host.endswith(".huggingface.co"):
+        path = (parsed.path or "").strip("/")
+        return path == "papers" or path.startswith("papers/")
     return any(host == suffix or host.endswith(f".{suffix}") for suffix in _PAPER_HOST_SUFFIXES)
 
 

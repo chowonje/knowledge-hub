@@ -104,6 +104,8 @@ def test_detect_add_route_auto_selects_common_source_types():
     assert detect_add_route("https://youtu.be/abc123").kind == "youtube"
     assert detect_add_route("https://arxiv.org/abs/2401.00001").kind == "paper_url"
     assert detect_add_route("https://huggingface.co/papers/2401.00001").kind == "paper_url"
+    assert detect_add_route("https://huggingface.co/openai/gpt-oss-20b").kind == "web"
+    assert detect_add_route("https://huggingface.co/datasets/beans").kind == "web"
     assert detect_add_route("https://example.com/report.pdf").kind == "pdf"
     assert detect_add_route(str(Path("local-report.pdf"))).kind == "pdf"
     assert detect_add_route("https://example.com/guide").kind == "web"
@@ -211,6 +213,8 @@ def test_add_paper_url_uses_single_source_import_manifest(monkeypatch, tmp_path)
     csv_path = Path(captured["csv_path"])
     assert not csv_path.exists()
     assert payload["upstream"]["csvRetained"] is False
+    assert str(captured["manifest_path"]) not in result.output
+    assert payload["upstream"]["manifestPath"].startswith("<local>/")
 
 
 def test_add_paper_url_build_memory_is_explicit(monkeypatch, tmp_path):
@@ -371,11 +375,14 @@ def test_add_local_pdf_outputs_document_lane_payload(monkeypatch, tmp_path):
     assert payload["sourceType"] == "pdf"
     assert payload["route"] == "crawl_ingest"
     assert payload["routeReason"] == "pdf_source"
-    assert payload["canonicalPath"] == str(pdf_path.resolve())
+    assert payload["source"] == "<local>/local-report.pdf"
+    assert payload["canonicalUrl"] == ""
+    assert payload["canonicalPath"] == "<local>/local-report.pdf"
     assert payload["contentHash"] == "hash-local-pdf"
     assert payload["stored"] is True
     assert payload["indexed"] is True
-    assert payload["upstream"]["localPath"] == str(pdf_path.resolve())
+    assert payload["upstream"]["localPath"] == "<local>/local-report.pdf"
+    assert str(pdf_path.resolve()) not in result.output
     assert "excerpt only" in " ".join(payload["warnings"])
 
 
@@ -445,4 +452,8 @@ def test_add_local_pdf_empty_extraction_returns_failed_packet(monkeypatch, tmp_p
     assert payload["status"] == "failed"
     assert payload["stored"] is False
     assert payload["indexed"] is False
+    assert payload["canonicalUrl"] == ""
+    assert payload["source"] == "<local>/empty.pdf"
+    assert payload["upstream"]["failed"][0]["url"] == "<local>/empty.pdf"
+    assert str(pdf_path.resolve()) not in result.output
     assert "empty content" in " ".join(payload["warnings"])

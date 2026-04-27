@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import fallback_source_hash
@@ -85,15 +85,50 @@ def redact_local_path(path_value: str) -> str:
     token = str(path_value or "").strip()
     if not token:
         return ""
+    if token.startswith("~/") or token.startswith("<local>/"):
+        return token
     try:
-        path = Path(token).expanduser().resolve()
+        parsed = urlsplit(token)
+        if parsed.scheme == "file":
+            path = Path(unquote(parsed.path)).expanduser().resolve()
+        else:
+            raw_path = Path(token).expanduser()
+            if not raw_path.is_absolute() and not token.startswith("~"):
+                return token
+            path = raw_path.resolve()
         home = Path.home().resolve()
     except Exception:
         return token
     try:
         return f"~/{path.relative_to(home)}"
     except ValueError:
-        return str(path)
+        return f"<local>/{path.name}" if path.name else "<local>"
+
+
+def _redact_file_uri(uri: str) -> str:
+    parsed = urlsplit(str(uri or "").strip())
+    if parsed.scheme != "file":
+        return str(uri or "")
+    name = Path(unquote(parsed.path)).name
+    return f"file://<local>/{name}" if name else "file://<local>"
+
+
+def sanitize_output_value(value: Any) -> Any:
+    """Redact local-only paths before add result packets leave the process."""
+    if isinstance(value, dict):
+        return {str(key): sanitize_output_value(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [sanitize_output_value(item) for item in value]
+    if isinstance(value, tuple):
+        return [sanitize_output_value(item) for item in value]
+    if isinstance(value, str):
+        token = value.strip()
+        if token.startswith("file://"):
+            return _redact_file_uri(token)
+        raw_path = Path(token).expanduser()
+        if raw_path.is_absolute() or token.startswith("~"):
+            return redact_local_path(token)
+    return value
 
 
 def lookup_web_summary(khub, source: str) -> dict[str, str]:
@@ -216,6 +251,7 @@ def web_summary(khub, route: AddRoute, source: str, upstream: dict[str, Any]) ->
     lookup_source = str(local_path.expanduser().resolve().as_uri()) if local_path is not None else source
     summary = lookup_web_summary(khub, lookup_source)
     if local_path is not None:
+        summary["canonicalUrl"] = ""
         summary["canonicalPath"] = redact_local_path(str(local_path.expanduser().resolve()))
     crawl = upstream_crawl_payload(upstream)
     indexed_chunks = int(crawl.get("indexedChunks") or crawl.get("indexed") or 0)
@@ -303,11 +339,16 @@ def wrap_result(
         if route.source_type == "paper"
         else web_summary(khub, route, source, upstream)
     )
-    warnings = warning_list(upstream, dict(upstream.get("crawl") or {}), dict(upstream.get("materialize") or {}))
+    output_upstream = sanitize_output_value(upstream)
+    warnings = warning_list(
+        output_upstream,
+        dict(output_upstream.get("crawl") or {}),
+        dict(output_upstream.get("materialize") or {}),
+    )
     payload = {
         "schema": ADD_RESULT_SCHEMA,
         "status": status_from_upstream(upstream),
-        "source": source,
+        "source": sanitize_output_value(source),
         "sourceType": route.source_type,
         "sourceId": source_summary["sourceId"],
         "canonicalUrl": source_summary["canonicalUrl"],
@@ -320,9 +361,9 @@ def wrap_result(
         "routeReason": route.reason,
         "topic": topic,
         "index": bool(index),
-        "obsidianStage": obsidian_stage_payload(requested=bool(to_obsidian), upstream=upstream),
+        "obsidianStage": obsidian_stage_payload(requested=bool(to_obsidian), upstream=output_upstream),
         "warnings": warnings,
-        "upstream": upstream,
+        "upstream": output_upstream,
     }
     payload["nextActions"] = next_actions(payload)
     payload["nextCommands"] = list(payload["nextActions"])
