@@ -103,6 +103,12 @@ def _contract_payload(
         "answerContract": build_answer_contract(
             answer=answer,
             evidence_packet=packet,
+            evidence_packet_contract=build_evidence_packet_contract(
+                query=query,
+                retrieval_mode="hybrid",
+                pipeline_result=pipeline_result,
+                evidence_packet=packet,
+            ),
             verification=verification,
             rewrite=rewrite,
             routing_meta={"provider": "fixture", "model": "test"},
@@ -229,9 +235,46 @@ def test_expected_abstain_legacy_payload_accepts_verdict_action_without_answer_c
     assert result["abstainOk"] is True
 
 
+def test_expected_abstain_accepts_conservative_fallback_as_safe_refusal():
+    module = _load_module()
+    case = _case("fallback_abstain", expected_min_citation_count=0, expected_abstain=True)
+    payload = _contract_payload(answer="Unsupported answer.")
+    payload["answerRewrite"] = {"finalAnswerSource": "conservative_fallback"}
+    payload["answerContract"]["rewrite"] = {"finalAnswerSource": "conservative_fallback"}
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0)
+
+    assert result["hardAbstainObserved"] is False
+    assert result["safeAbstainObserved"] is True
+    assert result["abstainObserved"] is True
+    assert result["abstainOk"] is True
+
+
+def test_expected_answer_treats_conservative_fallback_as_hard_abstain():
+    module = _load_module()
+    case = _case("fallback_answer", expected_min_citation_count=1, expected_abstain=False)
+    payload = _contract_payload(
+        answer="Unsupported answer.",
+        rewrite={"attempted": True, "applied": True, "finalAnswerSource": "conservative_fallback"},
+    )
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0)
+
+    assert result["hardAbstainObserved"] is True
+    assert result["safeAbstainObserved"] is True
+    assert result["abstainObserved"] is True
+    assert result["abstainOk"] is False
+    assert result["conservativeFallbackUsed"] is True
+
+
 def test_temporal_hard_abstain_on_answer_case_is_corpus_dependency_when_citations_exist():
     module = _load_module()
-    case = _case("temporal_policy_gap", expected_min_citation_count=1, expected_abstain=False)
+    case = _case(
+        "temporal_policy_gap",
+        query="latest RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?",
+        expected_min_citation_count=1,
+        expected_abstain=False,
+    )
     payload = _contract_payload(
         answer="The retrieved article discusses citation accuracy and faithfulness.",
         answerable=False,
@@ -252,6 +295,56 @@ def test_temporal_hard_abstain_on_answer_case_is_corpus_dependency_when_citation
     assert result["citationGradeOk"] is True
     assert result["abstainObserved"] is True
     assert result["errors"] == ["provider_corpus_dependency:temporal_grounding"]
+    assert result["failureCategories"] == ["provider/corpus_dependency"]
+
+
+def test_soft_recency_temporal_abstain_is_not_hidden_as_corpus_dependency():
+    module = _load_module()
+    case = _case(
+        "soft_recency_overroute",
+        query="최근 RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?",
+        expected_min_citation_count=1,
+        expected_abstain=False,
+    )
+    payload = _contract_payload(
+        answer="The retrieved article discusses citation accuracy and faithfulness.",
+        answerable=False,
+        verification={"status": "abstain", "summary": "weak temporal grounding"},
+    )
+    payload["evidence_packet"] = {
+        "answerable": False,
+        "answerableDecisionReason": "weak_web_temporal_grounding",
+        "insufficientEvidenceReasons": ["missing_temporal_grounding"],
+    }
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0)
+
+    assert result["providerCorpusDependencyReason"] == ""
+    assert result["errors"] == ["abstain_mismatch:True!=False"]
+    assert result["failureCategories"] == ["abstain_mismatch"]
+
+
+def test_ask_v2_weak_card_abstain_on_answer_case_is_corpus_dependency():
+    module = _load_module()
+    case = _case("weak_cards", expected_min_citation_count=1, expected_abstain=False)
+    payload = _contract_payload(
+        answer="",
+        answerable=False,
+        verification={"status": "abstain", "summary": "weak card evidence"},
+    )
+    payload["evidence_packet"] = {
+        "answerable": False,
+        "answerableDecisionReason": "ask_v2_unsupported_claim_cards",
+        "insufficientEvidenceReasons": [],
+    }
+    payload["v2"] = {"fallback": {"used": True, "reason": "ask_v2_unsupported_claim_cards"}}
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0)
+
+    assert result["citationGradeOk"] is True
+    assert result["hardAbstainObserved"] is True
+    assert result["providerCorpusDependencyReason"] == "retrieval_or_corpus_gap"
+    assert result["errors"] == ["provider_corpus_dependency:retrieval_or_corpus_gap"]
     assert result["failureCategories"] == ["provider/corpus_dependency"]
 
 
@@ -334,4 +427,6 @@ def test_run_gate_can_label_live_stub_llm_mode_without_fixture_searcher():
 
     assert payload["mode"] == "live_stub"
     assert payload["llmStubbed"] is True
+    assert payload["verificationPassRate"] is None
+    assert payload["verificationPassRateRaw"] == 1.0
     assert payload["status"] == "ok"

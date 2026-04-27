@@ -444,6 +444,7 @@ def build_answer_contract(
     *,
     answer: str,
     evidence_packet: Any,
+    evidence_packet_contract: dict[str, Any] | None = None,
     verification: dict[str, Any] | None = None,
     rewrite: dict[str, Any] | None = None,
     routing_meta: dict[str, Any] | None = None,
@@ -492,7 +493,24 @@ def build_answer_contract(
     citation_backed = sum(1 for item in claim_citation_map if item["citationRefs"])
     coverage_ratio = 1.0 if not claim_sentences else round(citation_backed / max(1, len(claim_sentences)), 4)
     unsupported = int((verification or {}).get("unsupportedClaimCount") or (verification or {}).get("claimUnsupportedCount") or 0)
-    abstain = evidence_payload.get("answerable") is False or not str(answer or "").strip()
+    contract_answerable = None
+    if isinstance(evidence_packet_contract, dict) and "answerable" in evidence_packet_contract:
+        contract_answerable = bool(evidence_packet_contract.get("answerable"))
+    rewrite_source = _clean_text((rewrite or {}).get("finalAnswerSource") or (rewrite or {}).get("final_answer_source")).casefold()
+    abstain = (
+        evidence_payload.get("answerable") is False
+        or contract_answerable is False
+        or rewrite_source in {"conservative_fallback", "early_exit", "policy_blocked"}
+        or not str(answer or "").strip()
+    )
+    abstain_reason = ""
+    if abstain:
+        if evidence_payload.get("answerable") is False:
+            abstain_reason = _clean_text(evidence_payload.get("answerableDecisionReason"))
+        if not abstain_reason and contract_answerable is False:
+            abstain_reason = "evidence_packet_contract_not_answerable"
+        if not abstain_reason and rewrite_source:
+            abstain_reason = rewrite_source
     route = dict(routing_meta or {})
     model_id = _clean_text(route.get("model") or route.get("model_id") or route.get("modelId"))
     provider = _clean_text(route.get("provider"))
@@ -514,7 +532,7 @@ def build_answer_contract(
         "answer_text": str(answer or ""),
         "citations": citations,
         "abstain": bool(abstain),
-        "abstainReason": _clean_text(evidence_payload.get("answerableDecisionReason")) if abstain else "",
+        "abstainReason": abstain_reason,
         "coverage": {
             "status": coverage_status,
             "citation_count": len(citations),

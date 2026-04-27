@@ -673,6 +673,11 @@ def test_paper_ask_v2_keeps_implementation_queries_out_of_definition_lane():
     assert classify_intent("RAG 파이프라인을 설명해줘") == "implementation"
 
 
+def test_ask_v2_classifies_soft_recency_evaluation_as_evaluation_not_temporal():
+    assert classify_intent("최근 RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?") == "evaluation"
+    assert classify_intent("latest vector database retrieval best practice는 무엇인가?") == "temporal"
+
+
 def test_ask_v2_route_preserves_concept_definition_when_classifier_is_impl_or_eval(tmp_path):
     """Rule-based frame says definition; regex classifier can win on impl/eval keywords first."""
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))

@@ -18,6 +18,7 @@ from knowledge_hub.domain.vault_knowledge.scope import (
 
 
 _TEMPORAL_RE = re.compile(r"\b(latest|recent|updated|newest|before|after|since)\b|최근|최신|업데이트|이전|이후", re.IGNORECASE)
+_HARD_TEMPORAL_RE = re.compile(r"\b(latest|updated|newest|before|after|since)\b|최신|업데이트|이전|이후", re.IGNORECASE)
 _COMPARE_RE = re.compile(r"\b(compare|comparison|versus|vs|difference)\b|비교|차이", re.IGNORECASE)
 _RELATION_RE = re.compile(r"\b(related|relationship|connected|link|dependency|depends on)\b|관계|연결|의존", re.IGNORECASE)
 _DEFINITION_RE = re.compile(
@@ -513,7 +514,11 @@ def classify_intent(query: str, metadata_filter: dict[str, Any] | None = None) -
     body = str(query or "")
     if paper_scope_from_filter(metadata_filter) or paper_scope_from_query(query):
         return "paper_lookup"
-    if _TEMPORAL_RE.search(body):
+    temporal_match = bool(_TEMPORAL_RE.search(body))
+    hard_temporal_match = bool(_HARD_TEMPORAL_RE.search(body))
+    if temporal_match and not hard_temporal_match and _EVAL_RE.search(body):
+        return "evaluation"
+    if temporal_match:
         return "temporal"
     if _COMPARE_RE.search(body):
         return "comparison"

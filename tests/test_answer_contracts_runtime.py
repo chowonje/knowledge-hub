@@ -96,6 +96,36 @@ def test_answer_contract_blocks_rewrite_for_unsupported_claim_verdict():
     assert validate_payload(verdict, "knowledge-hub.verification-verdict.v1", strict=True).ok
 
 
+def test_answer_contract_abstains_when_strict_evidence_packet_is_not_answerable():
+    contract = build_answer_contract(
+        answer="Alpha is grounded.",
+        evidence_packet=_packet(),
+        evidence_packet_contract={"answerable": False},
+        verification={"status": "verified", "unsupportedClaimCount": 0, "needsCaution": False},
+        rewrite={"attempted": False, "applied": False, "finalAnswerSource": "original"},
+        routing_meta={"provider": "local", "model": "test"},
+    )
+
+    assert contract["abstain"] is True
+    assert contract["abstainReason"] == "evidence_packet_contract_not_answerable"
+    assert contract["coverage"]["status"] == "insufficient"
+    assert validate_payload(contract, "knowledge-hub.answer-contract.v1", strict=True).ok
+
+
+def test_answer_contract_marks_conservative_fallback_as_abstention():
+    contract = build_answer_contract(
+        answer="근거가 부족해 단정할 수 없습니다.",
+        evidence_packet=_packet(),
+        verification={"status": "caution", "unsupportedClaimCount": 1, "needsCaution": True},
+        rewrite={"attempted": True, "applied": True, "finalAnswerSource": "conservative_fallback"},
+        routing_meta={"provider": "local", "model": "test"},
+    )
+
+    assert contract["abstain"] is True
+    assert contract["abstainReason"] == "conservative_fallback"
+    assert validate_payload(contract, "knowledge-hub.answer-contract.v1", strict=True).ok
+
+
 def test_verification_verdict_blocks_rewrite_for_caution_even_without_unsupported_claims():
     verdict = build_verification_verdict(
         {

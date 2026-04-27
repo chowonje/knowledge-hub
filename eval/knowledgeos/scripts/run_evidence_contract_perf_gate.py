@@ -8,6 +8,7 @@ from contextlib import contextmanager, nullcontext
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import re
 import signal
 import statistics
 import sys
@@ -49,6 +50,7 @@ CONTRACT_SCHEMA_BY_KEY = {
 }
 SOURCE_FILTERS = {"all", "paper", "vault", "web", "mixed", "abstain"}
 THERMAL_SOURCE_ORDER = ("vault", "paper", "web", "mixed", "abstain")
+HARD_TEMPORAL_RE = re.compile(r"\b(latest|updated|newest|before|after|since)\b|최신|업데이트|이전|이후|오늘", re.IGNORECASE)
 
 
 def clean_text(value: Any) -> str:
@@ -239,7 +241,11 @@ def conservative_fallback_used(payload: dict[str, Any]) -> bool:
     return source == "conservative_fallback"
 
 
-def provider_corpus_dependency_reason(payload: dict[str, Any]) -> str:
+def safe_abstain_observed(payload: dict[str, Any]) -> bool:
+    return answer_abstains(payload) or conservative_fallback_used(payload)
+
+
+def provider_corpus_dependency_reason(payload: dict[str, Any], *, query: str = "") -> str:
     answer_contract = contract_payload(payload, "answerContract")
     evidence_packet = dict(payload.get("evidence_packet") or payload.get("evidencePacket") or {})
     v2 = dict(payload.get("v2") or {})
@@ -257,8 +263,24 @@ def provider_corpus_dependency_reason(payload: dict[str, Any]) -> str:
         if clean_text(value)
     )
     if any(token in reason_text for token in ("temporal_grounding", "weak_web_temporal_grounding", "missing_temporal_grounding")):
+        if query and not HARD_TEMPORAL_RE.search(query):
+            return ""
         return "temporal_grounding"
-    if any(token in reason_text for token in ("no_evidence", "source_mismatch", "low_confidence_evidence")):
+    if any(
+        token in reason_text
+        for token in (
+            "no_evidence",
+            "source_mismatch",
+            "low_confidence_evidence",
+            "weak_support_only",
+            "direct_but_incomplete",
+            "no_substantive_evidence",
+            "non_substantive_evidence",
+            "strict_abstention_threshold_not_met",
+            "insufficient_for_latest_claim",
+            "ask_v2_unsupported_claim_cards",
+        )
+    ):
         return "retrieval_or_corpus_gap"
     return ""
 
@@ -297,10 +319,17 @@ def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: 
     expected_min_citations = as_int(case.get("expected_min_citation_count"), 0)
     citation_grade_ok = citation_grade >= expected_min_citations
     expected_abstain = as_bool(case.get("expected_abstain"))
-    abstain_observed = answer_abstains(payload)
+    hard_abstain_observed = answer_abstains(payload)
+    safe_abstain = safe_abstain_observed(payload)
+    abstain_observed = safe_abstain if expected_abstain else hard_abstain_observed
     abstain_ok = abstain_observed if expected_abstain else not abstain_observed
     unsupported_count = as_int(verification_verdict.get("unsupportedClaimCount"), 0)
     verdict = clean_text(verification_verdict.get("verdict")).casefold()
+    dependency_reason = (
+        provider_corpus_dependency_reason(payload, query=clean_text(case.get("query")))
+        if not expected_abstain and hard_abstain_observed and contracts_valid and citation_grade_ok
+        else ""
+    )
     errors: list[str] = []
     if timeout:
         errors.append("timeout")
@@ -309,11 +338,6 @@ def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: 
     if not citation_grade_ok:
         errors.append(f"citation_grade_below_min:{citation_grade}<{expected_min_citations}")
     if not abstain_ok:
-        dependency_reason = (
-            provider_corpus_dependency_reason(payload)
-            if not expected_abstain and abstain_observed and contracts_valid and citation_grade_ok
-            else ""
-        )
         if dependency_reason:
             errors.append(f"provider_corpus_dependency:{dependency_reason}")
         else:
@@ -334,7 +358,10 @@ def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: 
         "citationGradeCitationCount": citation_grade,
         "citationGradeOk": citation_grade_ok,
         "abstainObserved": abstain_observed,
+        "hardAbstainObserved": hard_abstain_observed,
+        "safeAbstainObserved": safe_abstain,
         "abstainOk": abstain_ok,
+        "providerCorpusDependencyReason": dependency_reason,
         "verificationVerdict": verdict,
         "verificationPass": verdict == "pass",
         "unsupportedClaimCount": unsupported_count,
@@ -491,20 +518,22 @@ class FixtureContractSearcher:
             plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"source_type": source_type}}),
         )
         rewrite = {"attempted": False, "applied": False, "finalAnswerSource": "original"}
+        evidence_contract = build_evidence_packet_contract(
+            query=clean_text(query),
+            retrieval_mode=clean_text(kwargs.get("retrieval_mode")) or "hybrid",
+            pipeline_result=pipeline_result,
+            evidence_packet=packet,
+        )
         return {
             "answer": answer,
             "sources": evidence,
             "evidence": evidence,
             "citations": list(packet.citations),
-            "evidencePacketContract": build_evidence_packet_contract(
-                query=clean_text(query),
-                retrieval_mode=clean_text(kwargs.get("retrieval_mode")) or "hybrid",
-                pipeline_result=pipeline_result,
-                evidence_packet=packet,
-            ),
+            "evidencePacketContract": evidence_contract,
             "answerContract": build_answer_contract(
                 answer=answer,
                 evidence_packet=packet,
+                evidence_packet_contract=evidence_contract,
                 verification=verification,
                 rewrite=rewrite,
                 routing_meta={"provider": "fixture", "model": "evidence-contract-perf-gate"},
@@ -641,6 +670,9 @@ def run_gate(
             latency_ms = (time.perf_counter() - started) * 1000.0
             case_results.append(evaluate_case(case, payload, latency_ms=latency_ms, timeout=timeout))
     summary = build_summary(case_results, thresholds=thresholds)
+    if stub_llm:
+        summary["verificationPassRateRaw"] = summary.get("verificationPassRate")
+        summary["verificationPassRate"] = None
     errors = list(summary["thresholdErrors"])
     if not selected_cases:
         errors.append("no_cases_selected")
@@ -784,7 +816,8 @@ def main(argv: list[str] | None = None) -> int:
             "contractValidRate": 0.0,
             "citationGradeCoverageRate": 0.0,
             "abstainCorrectRate": 0.0,
-            "verificationPassRate": 0.0,
+            "verificationPassRate": None if bool(args.stub_llm or args.live_stub_llm) else 0.0,
+            "verificationPassRateRaw": 0.0,
             "unsupportedClaimRate": 0.0,
             "conservativeFallbackRate": 0.0,
             "failureCategories": {"provider/corpus_dependency": 1},
