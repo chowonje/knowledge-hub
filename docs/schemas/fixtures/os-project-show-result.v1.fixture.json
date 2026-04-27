@@ -8,7 +8,7 @@
     "status": "active",
     "priority": "high",
     "summary": "Ground projects, tasks, and decisions in local evidence.",
-    "owner": "won",
+    "owner": "operator",
     "createdAt": "2026-04-09T00:00:00.000Z",
     "updatedAt": "2026-04-09T00:00:00.000Z"
   },
@@ -32,7 +32,7 @@
       "kind": "delivery",
       "status": "in_progress",
       "priority": "urgent",
-      "assignee": "won",
+      "assignee": "operator",
       "dueAt": "2026-04-10T00:00:00.000Z",
       "blockedBy": [],
       "sourceRefs": [
@@ -53,7 +53,7 @@
       "kind": "review",
       "status": "blocked",
       "priority": "high",
-      "assignee": "won",
+      "assignee": "operator",
       "blockedBy": ["task_001"],
       "sourceRefs": [
         {
@@ -103,7 +103,7 @@
         }
       ],
       "createdByType": "human",
-      "createdById": "won",
+      "createdById": "operator",
       "createdAt": "2026-04-09T01:30:00.000Z",
       "updatedAt": "2026-04-09T01:30:00.000Z"
     }
@@ -230,7 +230,7 @@
       "kind": "delivery",
       "status": "in_progress",
       "priority": "urgent",
-      "assignee": "won",
+      "assignee": "operator",
       "dueAt": "2026-04-10T00:00:00.000Z",
       "blockedBy": [],
       "sourceRefs": [
@@ -253,7 +253,7 @@
       "kind": "review",
       "status": "blocked",
       "priority": "high",
-      "assignee": "won",
+      "assignee": "operator",
       "blockedBy": ["task_001"],
       "sourceRefs": [
         {
@@ -283,7 +283,7 @@
         }
       ],
       "createdByType": "human",
-      "createdById": "won",
+      "createdById": "operator",
       "createdAt": "2026-04-09T01:30:00.000Z",
       "updatedAt": "2026-04-09T01:30:00.000Z"
     }

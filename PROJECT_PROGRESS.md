@@ -1,9 +1,9 @@
 # Project Progress
 
 - Generated at: 2026-03-17T03:40:56.087759+00:00
-- CWD: `/Users/won/Desktop/allinone/knowledge-hub`
-- Repo root: `/Users/won/Desktop/allinone/knowledge-hub`
-- Git root: `/Users/won/Desktop/allinone/knowledge-hub`
+- CWD: `<repo-root>`
+- Repo root: `<repo-root>`
+- Git root: `<repo-root>`
 
 ## Current State
 - Branch: `feat/obsidian-cli-adapter...origin/feat/obsidian-cli-adapter`
@@ -15,18 +15,18 @@
 ## Session Timeline
 | When | Thread | CWD |
 | --- | --- | --- |
-| 2026-03-12T06:56:03.491867Z | Assess foundry-core runtime | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-12T06:56:03.588872Z | Assess Python knowledge hub systems | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-12T06:55:42.359991Z | 프로젝트 구현 평가하고 본질 설명 | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-11T12:14:43.544407Z | Identify foundry-core primitives | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-11T12:14:42.283378Z | List knowledge-hub product Capablilt | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-11T12:04:05.235761Z | 중장기 플랜으로 멀티에이전트 비전 구축 | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-10T13:39:17.262Z | 019cd7f9-2c84-7fc2-b0a3-f59924f4f3fa | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-10T12:58:42.921079Z | 설명하기 OpenAI Agents 안내 | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-10T11:47:31.826241Z | 지금 프로젝트 마무리 결정하기}{ | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-10T11:35:06.963Z | 019cd787-7dbd-75b1-8789-0e05508b0df3 | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-10T11:32:04.280Z | 019cd784-b415-79c0-b6f1-d91e5ca97a23 | `/Users/won/Desktop/allinone/knowledge-hub` |
-| 2026-03-06T05:08:24.056814Z | Organize ontology design questions | `/Users/won/Desktop/allinone/knowledge-hub` |
+| 2026-03-12T06:56:03.491867Z | Assess foundry-core runtime | `<repo-root>` |
+| 2026-03-12T06:56:03.588872Z | Assess Python knowledge hub systems | `<repo-root>` |
+| 2026-03-12T06:55:42.359991Z | 프로젝트 구현 평가하고 본질 설명 | `<repo-root>` |
+| 2026-03-11T12:14:43.544407Z | Identify foundry-core primitives | `<repo-root>` |
+| 2026-03-11T12:14:42.283378Z | List knowledge-hub product Capablilt | `<repo-root>` |
+| 2026-03-11T12:04:05.235761Z | 중장기 플랜으로 멀티에이전트 비전 구축 | `<repo-root>` |
+| 2026-03-10T13:39:17.262Z | 019cd7f9-2c84-7fc2-b0a3-f59924f4f3fa | `<repo-root>` |
+| 2026-03-10T12:58:42.921079Z | 설명하기 OpenAI Agents 안내 | `<repo-root>` |
+| 2026-03-10T11:47:31.826241Z | 지금 프로젝트 마무리 결정하기}{ | `<repo-root>` |
+| 2026-03-10T11:35:06.963Z | 019cd787-7dbd-75b1-8789-0e05508b0df3 | `<repo-root>` |
+| 2026-03-10T11:32:04.280Z | 019cd784-b415-79c0-b6f1-d91e5ca97a23 | `<repo-root>` |
+| 2026-03-06T05:08:24.056814Z | Organize ontology design questions | `<repo-root>` |
 
 ## Git Activity
 ### Working Tree

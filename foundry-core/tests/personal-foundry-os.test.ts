@@ -23,7 +23,7 @@ describe("personal-foundry project os", () => {
       title: "KnowledgeOS MVP",
       slug: "knowledgeos-mvp",
       summary: "first project",
-      owner: "won",
+      owner: "operator",
     });
     assert.equal(created.created, true);
 
@@ -31,7 +31,7 @@ describe("personal-foundry project os", () => {
       title: "KnowledgeOS MVP",
       slug: "knowledgeos-mvp",
       summary: "first project",
-      owner: "won",
+      owner: "operator",
     });
     assert.equal(repeated.created, false);
 
@@ -66,7 +66,7 @@ describe("personal-foundry project os", () => {
       rationale: "Canonical state should remain local and structured.",
       sourceRefs: [{ sourceType: "document", documentScopeId: "knowledge_os_definition_v1" }],
       createdByType: "human",
-      createdById: "won",
+      createdById: "operator",
     });
     assert.equal(decision.projectId, created.project.id);
 
@@ -141,7 +141,7 @@ describe("personal-foundry project os", () => {
       summary: "Keep Obsidian projection-only.",
       rationale: "Projection should stay one-way.",
       sourceRefs: [{ sourceType: "document", documentScopeId: "knowledge_os_definition_v1" }],
-      createdById: "won",
+      createdById: "operator",
     });
 
     const before = await service.listInbox({ projectId: project.project.id });
@@ -312,7 +312,7 @@ describe("personal-foundry project os", () => {
       kind: "implementation",
       summary: "Add explicit decision records",
       rationale: "Tasks alone are insufficient",
-      createdById: "won",
+      createdById: "operator",
       sourceRefs: [{ sourceType: "web", url: "https://example.com/decision-os" }],
     });
     const superseding = await service.addDecision({
@@ -409,7 +409,7 @@ describe("personal-foundry project os", () => {
       action: "to_decision",
       decisionKind: "scope",
       decisionSummary: "Keep CLI as the canonical operator interface",
-      decisionCreatedById: "won",
+      decisionCreatedById: "operator",
     });
     assert.equal(triagedDecision.item.state, "resolved");
     assert.equal(triagedDecision.createdDecision?.kind, "scope");

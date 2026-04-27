@@ -9,7 +9,7 @@
     "kind": "delivery",
     "status": "open",
     "priority": "urgent",
-    "assignee": "won",
+    "assignee": "operator",
     "dueAt": "2026-04-10T00:00:00.000Z",
     "blockedBy": [],
     "sourceRefs": [

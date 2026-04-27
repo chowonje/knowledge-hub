@@ -10,6 +10,7 @@ from rich.console import Console
 from rich.table import Table
 
 from knowledge_hub.application.claim_signals import build_claim_signal_payload
+from knowledge_hub.application.ask_contracts import ensure_ask_contract_payload, external_policy_contract
 from knowledge_hub.application.related_notes import build_related_note_suggestions
 from knowledge_hub.application.runtime_diagnostics import build_runtime_diagnostics
 from knowledge_hub.application.rag_reports import build_rag_ops_report
@@ -44,6 +45,15 @@ def _ask_allow_external_default(khub_ctx, searcher) -> bool:
     if not provider:
         return False
     return provider not in _LOCAL_PROVIDER_NAMES
+
+
+def _ask_external_policy_contract(*, surface: str, allow_external: bool, requested: bool | None) -> dict:
+    return external_policy_contract(
+        surface=surface,
+        allow_external=allow_external,
+        requested=requested,
+        decision_source="explicit_option" if requested is not None else "configured_summarization_provider",
+    )
 
 
 def _filter_supported_kwargs(func, kwargs: dict) -> dict:
@@ -454,14 +464,14 @@ def search(ctx, query, top_k, source, retrieval_mode, alpha, as_json):
     type=click.Choice(["off", "compat", "on", "prefilter"], case_sensitive=False),
     default="off",
     show_default=True,
-    help="ask 경로 memory mode: off/compat/on (prefilter는 compat alias)",
+    help="ask retrieval memory prefilter/prior mode: off/compat/on (prefilter는 deprecated compat alias)",
 )
 @click.option(
     "--paper-memory-mode",
     type=click.Choice(["off", "compat", "on", "prefilter"], case_sensitive=False),
     default="off",
     show_default=True,
-    help="paper source memory mode: off/compat/on (prefilter는 compat alias)",
+    help="paper-source memory prefilter mode: off/compat/on (prefilter는 deprecated compat alias)",
 )
 @click.option(
     "--allow-external/--no-allow-external",
@@ -505,6 +515,11 @@ def ask(ctx, question, top_k, source, retrieval_mode, alpha, memory_route_mode, 
                     "memoryRouteMode": effective_memory_route_mode,
                     "paperMemoryMode": effective_paper_memory_mode,
                     "allowExternal": False if allow_external is None else bool(allow_external),
+                    "externalPolicy": _ask_external_policy_contract(
+                        surface="cli",
+                        allow_external=False if allow_external is None else bool(allow_external),
+                        requested=allow_external,
+                    ),
                     "answerRouteRequested": str(answer_route or "auto"),
                 },
             )
@@ -535,7 +550,18 @@ def ask(ctx, question, top_k, source, retrieval_mode, alpha, memory_route_mode, 
             paper_memory_mode=paper_memory_mode,
         )
         effective_paper_memory_mode = normalize_paper_memory_mode(paper_memory_mode)
-        payload = dict(result)
+        external_policy = _ask_external_policy_contract(
+            surface="cli",
+            allow_external=allow_external_effective,
+            requested=allow_external,
+        )
+        payload = ensure_ask_contract_payload(
+            dict(result),
+            source_type=source,
+            memory_route_mode=memory_route_mode,
+            paper_memory_mode=paper_memory_mode,
+            external_policy=external_policy,
+        )
         payload["question"] = question
         payload["schema"] = "knowledge-hub.ask.result.v1"
         payload["sourceType"] = source
@@ -543,7 +569,6 @@ def ask(ctx, question, top_k, source, retrieval_mode, alpha, memory_route_mode, 
         payload["alpha"] = alpha
         payload["memoryRouteMode"] = effective_memory_route_mode
         payload["paperMemoryMode"] = effective_paper_memory_mode
-        payload["allowExternal"] = allow_external_effective
         payload["answerRouteRequested"] = str(answer_route or "auto")
         payload.update(_selected_answer_route_fields(payload))
         payload["runtimeDiagnostics"] = runtime_diagnostics
@@ -555,6 +580,12 @@ def ask(ctx, question, top_k, source, retrieval_mode, alpha, memory_route_mode, 
     console.print(f"\n[bold cyan]Q: {question}[/bold cyan]\n")
     console.print(result["answer"])
     console.print(f"[dim]allow_external={allow_external_effective}[/dim]")
+    external_policy = _ask_external_policy_contract(
+        surface="cli",
+        allow_external=allow_external_effective,
+        requested=allow_external,
+    )
+    console.print(f"[dim]external policy={external_policy['policyMode']}[/dim]")
     selected_route = _selected_answer_route_fields(result)
     if any(selected_route.values()):
         console.print(
@@ -614,15 +645,16 @@ def ask(ctx, question, top_k, source, retrieval_mode, alpha, memory_route_mode, 
     memory_route = dict(result.get("memoryRoute") or {})
     if memory_route:
         console.print(
-            "\n[dim]memory-route:"
+            "\n[dim]ask memory prefilter:"
             f" requested={memory_route.get('requestedMode', 'off')}"
             f" effective={memory_route.get('effectiveMode', memory_route.get('requestedMode', 'off'))}"
+            f" aliasDeprecated={bool(memory_route.get('aliasDeprecated'))}"
             f" applied={bool(memory_route.get('applied'))}"
             f" source={memory_route.get('sourceType', 'all')}[/dim]"
         )
     if memory_prefilter and not prefilter:
         console.print(
-            "\n[dim]memory route detail:"
+            "\n[dim]memory prefilter detail:"
             f" effective={memory_prefilter.get('effectiveMode', memory_prefilter.get('requestedMode', 'off'))}"
             f" applied={bool(memory_prefilter.get('applied'))}"
             f" fallback={bool(memory_prefilter.get('fallbackUsed'))}"

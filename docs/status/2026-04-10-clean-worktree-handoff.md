@@ -5,14 +5,14 @@ Date: 2026-04-10
 ## Current footing
 
 - Live state on 2026-04-10:
-  - main worktree: `/Users/won/Desktop/allinone/knowledge-hub`
+  - main worktree: `<repo-root>`
   - branch: `feat/obsidian-cli-adapter`
   - `HEAD`: `1975a97`
   - live worktrees:
-    - `/Users/won/Desktop/allinone/knowledge-hub` at `1975a97`
-    - `/Users/won/Desktop/allinone/knowledge-hub-wt1-obsidian-cli-adapter` at `7fdc12b`
-    - `/Users/won/Desktop/allinone/knowledge-hub-wt1-obsidian-cli-adapter-next-tranche` at `d184c8c`
-    - `/Users/won/Desktop/allinone/knowledge-hub-wt1-obsidian-cli-adapter-next-tranche-2` at `a505d67`
+    - `<repo-root>` at `1975a97`
+    - `<repo-root>-wt1-obsidian-cli-adapter` at `7fdc12b`
+    - `<repo-root>-wt1-obsidian-cli-adapter-next-tranche` at `d184c8c`
+    - `<repo-root>-wt1-obsidian-cli-adapter-next-tranche-2` at `a505d67`
 - `git status --short --untracked-files=all | wc -l` currently reports `1483`, so the main tree is still heavily dirty across product code, docs, tests, and generated/runtime artifacts.
 - That makes the current tree a bad place to start the next tranche. The goal here is a clean starting surface, not a cleanup of the existing in-flight tree.
 

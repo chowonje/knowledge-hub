@@ -8,7 +8,7 @@
     "status": "active",
     "priority": "high",
     "summary": "Ground projects, tasks, and decisions in local evidence.",
-    "owner": "won",
+    "owner": "operator",
     "createdAt": "2026-04-09T00:00:00.000Z",
     "updatedAt": "2026-04-09T00:00:00.000Z"
   },
@@ -30,7 +30,7 @@
         }
       ],
       "createdByType": "human",
-      "createdById": "won",
+      "createdById": "operator",
       "createdAt": "2026-04-09T01:30:00.000Z",
       "updatedAt": "2026-04-09T01:30:00.000Z"
     }
@@ -102,7 +102,7 @@
         }
       ],
       "createdByType": "human",
-      "createdById": "won",
+      "createdById": "operator",
       "createdAt": "2026-04-09T01:30:00.000Z",
       "updatedAt": "2026-04-09T01:30:00.000Z"
     }

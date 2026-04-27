@@ -2,18 +2,19 @@
 
 ## Repo description
 
-`Knowledge Hub is a local-first, policy-gated knowledge runtime for personal corpora. Research Preview.`
+`Knowledge Hub is a local-first evidence-contract RAG runtime for papers, web pages, vault notes, and grounded evidence review. Research Preview.`
 
 ## Status line
 
-`Status: Research Preview — the supported default path is discover -> index -> search/ask -> evidence review. APIs, quality bars, and experimental surfaces may change without notice.`
+`Status: Research Preview — the supported default path is add -> index -> search/ask -> evidence review. APIs, quality bars, and experimental surfaces may change without notice.`
 
 ## Short release note
 
 - Knowledge Hub is being opened as a **Research Preview**, not a stable release.
-- The supported default path is intentionally narrow: `discover -> index -> search/ask -> evidence review`.
+- The supported default path is intentionally narrow: `add -> index -> search/ask -> evidence review`.
 - The public green signal is limited to a narrow smoke gate / approval slice rather than full-repo green.
-- `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental surfaces.
+- `khub provider` is the supported setup surface for local/API/Codex-MCP/custom OpenAI-compatible model choices; API keys should be configured through environment-variable references.
+- Experimental and operator-facing surfaces remain outside the default public product contract.
 - Source quality is still uneven; `paper` and `project` are stronger than at least one known `vault` compare path.
 
 ## Known Limits copy
@@ -31,7 +32,6 @@ Use this wording when a short limitations section is needed:
 - `Research Preview`
 - `Public Prototype`
 - `Experimental`
-- `Labs-first`
 - `Subject to change without notice`
 - `Narrow smoke gate`
 

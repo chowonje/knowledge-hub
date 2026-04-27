@@ -862,7 +862,7 @@ def test_ts_project_cli_outputs_validate_in_python(tmp_path: Path):
             "--summary",
             "authority contract smoke",
             "--owner",
-            "won",
+            "operator",
         ],
     )
     create_result = validate_payload(created, str(created["schema"]), strict=True)

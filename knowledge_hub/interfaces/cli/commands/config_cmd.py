@@ -119,7 +119,10 @@ def config_providers(ctx, models):
     """사용 가능한 AI 프로바이더 목록"""
     from knowledge_hub.infrastructure.providers import list_providers
 
-    providers = list_providers()
+    try:
+        providers = list_providers(config=ctx.obj["khub"].config)
+    except TypeError:
+        providers = list_providers()
     if not providers:
         console.print("[yellow]설치된 프로바이더가 없습니다.[/yellow]")
         console.print("설치: pip install knowledge-hub[openai,ollama]")

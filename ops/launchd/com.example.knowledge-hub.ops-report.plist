@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.won.knowledge-hub.ops-report</string>
+  <string>com.example.knowledge-hub.ops-report</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/won/Desktop/allinone/knowledge-hub/scripts/run_ops_report.sh</string>
+    <string><repo-root>/scripts/run_ops_report.sh</string>
   </array>
 
   <key>WorkingDirectory</key>
-  <string>/Users/won/Desktop/allinone/knowledge-hub</string>
+  <string><repo-root></string>
 
   <key>StartCalendarInterval</key>
   <dict>
@@ -25,9 +25,9 @@
   <false/>
 
   <key>StandardOutPath</key>
-  <string>/Users/won/.khub/logs/launchd.ops_report.out.log</string>
+  <string>~/.khub/logs/launchd.ops_report.out.log</string>
 
   <key>StandardErrorPath</key>
-  <string>/Users/won/.khub/logs/launchd.ops_report.err.log</string>
+  <string>~/.khub/logs/launchd.ops_report.err.log</string>
 </dict>
 </plist>

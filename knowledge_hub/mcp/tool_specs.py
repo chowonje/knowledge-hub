@@ -7,11 +7,15 @@ from mcp.types import Tool
 from knowledge_hub.application.mcp.responses import DEFAULT_TOOL_NAMES
 
 
-def _resolve_tool_profile(profile: str | None = None) -> str:
+def resolve_tool_profile(profile: str | None = None) -> str:
     resolved = (profile or os.getenv("KHUB_MCP_PROFILE") or "default").strip().lower()
     if resolved not in {"default", "labs", "all"}:
         return "default"
     return resolved
+
+
+def _resolve_tool_profile(profile: str | None = None) -> str:
+    return resolve_tool_profile(profile)
 
 
 def _filter_tools(tools: list[Tool], profile: str) -> list[Tool]:
@@ -102,13 +106,13 @@ def build_tools(profile: str | None = None) -> list[Tool]:
                     },
                     "memory_route_mode": {
                         "type": "string",
-                        "description": "ask 경로 memory mode: off, compat, on (prefilter는 compat deprecated alias)",
+                        "description": "ask retrieval memory prefilter/prior mode: off, compat, on (prefilter는 deprecated compat alias)",
                         "enum": ["off", "compat", "on", "prefilter"],
                         "default": "off"
                     },
                     "paper_memory_mode": {
                         "type": "string",
-                        "description": "paper source memory mode: off, compat, on (prefilter는 compat deprecated alias)",
+                        "description": "paper-source memory prefilter mode: off, compat, on (prefilter는 deprecated compat alias)",
                         "enum": ["off", "compat", "on", "prefilter"],
                         "default": "off"
                     },
@@ -1394,13 +1398,13 @@ def build_tools(profile: str | None = None) -> list[Tool]:
                     },
                     "memory_route_mode": {
                         "type": "string",
-                        "description": "ask 경로 memory mode: off, compat, on (prefilter는 compat deprecated alias)",
+                        "description": "ask retrieval memory prefilter/prior mode: off, compat, on (prefilter는 deprecated compat alias)",
                         "enum": ["off", "compat", "on", "prefilter"],
                         "default": "off"
                     },
                     "paper_memory_mode": {
                         "type": "string",
-                        "description": "paper source memory mode: off, compat, on (prefilter는 compat deprecated alias)",
+                        "description": "paper-source memory prefilter mode: off, compat, on (prefilter는 deprecated compat alias)",
                         "enum": ["off", "compat", "on", "prefilter"],
                         "default": "off"
                     },

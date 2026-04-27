@@ -106,9 +106,12 @@ def _humanize_provider_reasons(config, provider_name: str, role: str, model: str
 
 
 def _provider_check(config, role: str, provider_name: str, model: str, state: dict[str, object]) -> dict[str, object]:
-    provider_info = registry.get_provider_info(provider_name)
-    installed = bool(provider_info)
-    requires_api_key = bool(getattr(provider_info, "requires_api_key", False))
+    try:
+        provider_info = registry.get_provider_info(provider_name, config=config)
+    except TypeError:
+        provider_info = registry.get_provider_info(provider_name)
+    installed = bool(state.get("installed", bool(provider_info)))
+    requires_api_key = bool(state.get("requires_api_key", getattr(provider_info, "requires_api_key", False)))
     api_key_status = str(state.get("api_key_status") or "not_required")
     explicit_available = state.get("available")
     available = bool(explicit_available) if explicit_available is not None else (installed and not bool(state.get("degraded")))

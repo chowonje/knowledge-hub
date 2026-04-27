@@ -32,8 +32,8 @@ from knowledge_hub.infrastructure.config import apply_public_setup_profile
 DOCTOR_ALLOWED_STATUSES = {"ok", "blocked", "degraded", "needs_setup"}
 STATUS_REQUIRED_MARKERS = ("Knowledge Hub v", "Retrieval Runtime", "vector corpus")
 DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
-TOP_HELP_REQUIRED_MARKERS = ("Commands:", "doctor", "status", "setup")
-WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "discover", "index", "search", "ask", "doctor", "status")
+TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "doctor", "status", "init")
+WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "index", "search", "ask", "doctor", "status")
 CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
 INVALID_COMMAND_REQUIRED_MARKER = "No such command"
 INVALID_COMMAND_FORBIDDEN_MARKERS = ("Traceback (most recent call last)", "예상치 못한 오류")
@@ -387,7 +387,11 @@ def validate_search_result(result: CommandResult) -> ValidationResult:
     results = list(payload.get("results") or [])
     if not results:
         errors.append("search returned no results")
-    else:
+    if not isinstance(payload.get("runtimeDiagnostics"), dict):
+        errors.append("search missing runtimeDiagnostics object")
+    if not isinstance(payload.get("graphQuerySignal"), dict):
+        errors.append("search missing graphQuerySignal object")
+    if results:
         first = dict(results[0] or {})
         if str(first.get("sourceType") or first.get("source_type") or "") != "vault":
             errors.append("top search result is not a vault document")
@@ -398,6 +402,8 @@ def validate_search_result(result: CommandResult) -> ValidationResult:
             "resultCount": len(results),
             "topTitle": str(dict(results[0] or {}).get("title") or "") if results else "",
             "topSourceType": str(dict(results[0] or {}).get("sourceType") or dict(results[0] or {}).get("source_type") or "") if results else "",
+            "hasRuntimeDiagnostics": isinstance(payload.get("runtimeDiagnostics"), dict),
+            "hasGraphQuerySignal": isinstance(payload.get("graphQuerySignal"), dict),
         },
         errors=errors,
     )
@@ -424,11 +430,30 @@ def validate_ask_result(result: CommandResult) -> ValidationResult:
         errors.append("ask question echo mismatch")
     if bool(payload.get("allowExternal", True)):
         errors.append("ask allowExternal is not false")
+    external_policy = dict(payload.get("externalPolicy") or {})
+    if not external_policy:
+        errors.append("ask missing externalPolicy diagnostics")
+    elif str(external_policy.get("policyMode") or "") != "local-only":
+        errors.append("ask externalPolicy is not local-only")
     answer = str(payload.get("answer") or "").strip()
     if not answer:
         errors.append("ask returned an empty answer")
     citations = list(payload.get("citations") or [])
     sources = list(payload.get("sources") or [])
+    evidence = payload.get("evidence")
+    if not isinstance(evidence, list):
+        errors.append("ask evidence field is not a list")
+    memory_route = dict(payload.get("memoryRoute") or {})
+    memory_prefilter = dict(payload.get("memoryPrefilter") or {})
+    paper_memory_prefilter = dict(payload.get("paperMemoryPrefilter") or {})
+    if str(memory_route.get("contractRole") or "") != "ask_retrieval_memory_prefilter":
+        errors.append("ask missing memoryRoute contract role")
+    if str(memory_prefilter.get("contractRole") or "") != "retrieval_memory_prefilter":
+        errors.append("ask missing memoryPrefilter contract role")
+    if str(paper_memory_prefilter.get("contractRole") or "") != "paper_source_memory_prefilter":
+        errors.append("ask missing paperMemoryPrefilter contract role")
+    if not isinstance(payload.get("runtimeDiagnostics"), dict):
+        errors.append("ask missing runtimeDiagnostics object")
     has_vault_citation = any(str(dict(item or {}).get("source_type") or "") == "vault" for item in citations)
     has_vault_source = any(
         str(dict(item or {}).get("source_type") or dict(item or {}).get("sourceType") or "") == "vault"
@@ -443,8 +468,14 @@ def validate_ask_result(result: CommandResult) -> ValidationResult:
             "answerLength": len(answer),
             "citationCount": len(citations),
             "sourceCount": len(sources),
+            "evidenceCount": len(evidence) if isinstance(evidence, list) else 0,
             "hasVaultCitation": has_vault_citation,
             "hasVaultSource": has_vault_source,
+            "hasExternalPolicy": bool(external_policy),
+            "hasMemoryRoute": bool(memory_route),
+            "hasMemoryPrefilter": bool(memory_prefilter),
+            "hasPaperMemoryPrefilter": bool(paper_memory_prefilter),
+            "hasRuntimeDiagnostics": isinstance(payload.get("runtimeDiagnostics"), dict),
             "warningCount": len(payload.get("warnings") or []),
         },
         errors=errors,

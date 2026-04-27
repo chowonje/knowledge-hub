@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/add-result.v1.json",
+  "title": "knowledge-hub add result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "source",
+    "sourceType",
+    "route",
+    "routeReason",
+    "topic",
+    "index",
+    "upstream",
+    "nextCommands"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.add.result.v1"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceType": {
+      "type": "string",
+      "enum": ["web", "youtube", "paper"]
+    },
+    "route": {
+      "type": "string",
+      "enum": ["crawl_ingest", "crawl_youtube_ingest", "paper_import", "discover"]
+    },
+    "routeReason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "topic": {
+      "type": "string"
+    },
+    "index": {
+      "type": "boolean"
+    },
+    "upstream": {
+      "type": "object"
+    },
+    "nextCommands": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

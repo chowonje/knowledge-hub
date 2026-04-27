@@ -90,7 +90,7 @@ Current first replay target:
 
 ## First replay evidence
 
-Clean replay into `/Users/won/Desktop/allinone/knowledge-hub-ask-runtime-first-v1` has already produced useful closure evidence:
+Clean replay into `<repo-root>-ask-runtime-first-v1` has already produced useful closure evidence:
 
 - `weekly_core_loop` regressed at `search`, not at help/doctor/status/index
 - first missing module was `knowledge_hub.knowledge.contracts`

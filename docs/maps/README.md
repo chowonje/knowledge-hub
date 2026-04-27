@@ -43,5 +43,5 @@ long-form docs.
 - `docs/repo-layout.md`
   - Canonical package ownership and root-level layout rules.
 
-`/Users/won/Desktop/allinone/KnowledgeOS/PROJECT_MINDMAP.md` remains a planning
+`<workspace-root>/PROJECT_MINDMAP.md` remains a planning
 workbench, not the canonical architecture-map source.

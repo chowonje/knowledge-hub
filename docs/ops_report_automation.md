@@ -51,7 +51,7 @@ receipt:
 - `scripts/run_ops_report.sh`
 
 launchd 템플릿:
-- `ops/launchd/com.won.knowledge-hub.ops-report.plist`
+- `ops/launchd/com.example.knowledge-hub.ops-report.plist`
 
 기본 스케줄:
 - 매일 `09:30` 로컬 시간
