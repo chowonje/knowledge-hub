@@ -389,7 +389,7 @@ def main() -> int:
         "--summary",
         "authority contract probe",
         "--owner",
-        "won",
+        "operator",
     ]
     create_candidate = _npx_tsx_candidate(create_script_args)
     _emit(

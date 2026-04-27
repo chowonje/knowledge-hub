@@ -29,6 +29,10 @@ def _decode_response(contents):
     return json.loads(text)
 
 
+def _enable_labs_profile(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "labs")
+
+
 class _FakeSearcher:
     def __init__(self):
         self.database = SimpleNamespace(get_stats=lambda: {"total_documents": 3, "collection_name": "knowledge_hub"})
@@ -498,8 +502,13 @@ class _FakeSQLiteDB:
 
     def search_paper_memory_cards(self, query, limit=10):  # noqa: ANN001
         items = list(self.paper_memory_cards.values())
-        token = str(query).lower()
-        matched = [item for item in items if token in str(item.get("search_text", "")).lower() or token in str(item.get("title", "")).lower()]
+        query_text = str(query).lower()
+        matched = [
+            item
+            for item in items
+            if query_text in str(item.get("search_text", "")).lower()
+            or query_text in str(item.get("title", "")).lower()
+        ]
         return matched[:limit]
 
     def list_ops_actions(self, status=None, scope=None, limit=50):
@@ -915,7 +924,9 @@ def test_tool_specs_accept_memory_mode_contract():
     paper_lookup_tool = next(tool for tool in tools if tool.name == "paper_lookup_and_summarize")
 
     assert ask_tool.inputSchema["properties"]["memory_route_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
+    assert "ask retrieval memory prefilter/prior mode" in ask_tool.inputSchema["properties"]["memory_route_mode"]["description"]
     assert ask_tool.inputSchema["properties"]["paper_memory_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
+    assert "paper-source memory prefilter mode" in ask_tool.inputSchema["properties"]["paper_memory_mode"]["description"]
     assert paper_lookup_tool.inputSchema["properties"]["memory_route_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
     assert paper_lookup_tool.inputSchema["properties"]["paper_memory_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
 
@@ -966,7 +977,8 @@ def test_build_task_context_returns_schema_valid_payload(tmp_path):
     assert ok["payload"]["runtimeDiagnostics"]["schema"] == "knowledge-hub.runtime.diagnostics.v1"
 
 
-def test_learn_map_requires_topic_and_returns_trunks_branches():
+def test_learn_map_requires_topic_and_returns_trunks_branches(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -981,7 +993,8 @@ def test_learn_map_requires_topic_and_returns_trunks_branches():
     assert ok["payload"]["trunks"][0]["canonical_id"] == "c1"
 
 
-def test_learning_start_resume_explain_and_checkpoint_tools():
+def test_learning_start_resume_explain_and_checkpoint_tools(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1011,7 +1024,8 @@ def test_learning_start_resume_explain_and_checkpoint_tools():
     assert checkpoint["payload"]["saved"] is True
 
 
-def test_learn_reinforce_requires_topic_and_session_id():
+def test_learn_reinforce_requires_topic_and_session_id(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1091,7 +1105,58 @@ def test_ask_knowledge_requires_question_and_returns_answer_shape():
     assert paper_prefilter["payload"]["paper_memory_prefilter"]["matchedPaperIds"] == ["2501.00001"]
 
 
+def test_ask_knowledge_is_local_only_and_exposes_memory_contract(monkeypatch):
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    import knowledge_hub.mcp.handlers.search as search_handlers
+
+    captured: dict[str, object] = {}
+
+    def _fake_generate(searcher, question, **kwargs):  # noqa: ANN001
+        _ = (searcher, question)
+        captured.update(kwargs)
+        return {
+            "answer": "contract answer",
+            "sources": [],
+            "citations": [],
+            "warnings": [],
+        }
+
+    monkeypatch.setattr(search_handlers, "_generate_answer_compat", _fake_generate)
+
+    ok = _decode_response(
+        asyncio.run(
+            module.call_tool(
+                "ask_knowledge",
+                {
+                    "question": "RAG란?",
+                    "source": "paper",
+                    "memory_route_mode": "prefilter",
+                    "paper_memory_mode": "prefilter",
+                },
+            )
+        )
+    )
+
+    assert ok["status"] == "ok"
+    assert captured["allow_external"] is False
+    assert captured["memory_route_mode"] == "prefilter"
+    assert captured["paper_memory_mode"] == "prefilter"
+    assert ok["payload"]["allowExternal"] is False
+    assert ok["payload"]["allow_external"] is False
+    assert ok["payload"]["externalPolicy"]["policyMode"] == "local-only"
+    assert ok["payload"]["externalPolicy"]["decisionSource"] == "mcp_default_local_only"
+    assert ok["payload"]["memory_route"]["contractRole"] == "ask_retrieval_memory_prefilter"
+    assert ok["payload"]["memory_route"]["requestedMode"] == "prefilter"
+    assert ok["payload"]["memory_route"]["effectiveMode"] == "compat"
+    assert ok["payload"]["memory_route"]["aliasDeprecated"] is True
+    assert ok["payload"]["memory_prefilter"]["contractRole"] == "retrieval_memory_prefilter"
+    assert ok["payload"]["paper_memory_prefilter"]["contractRole"] == "paper_source_memory_prefilter"
+
+
 def test_ko_note_review_tools_are_exposed_and_return_payloads(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1124,7 +1189,8 @@ def test_ko_note_review_tools_are_exposed_and_return_payloads(monkeypatch):
     assert remediated["payload"]["strategy"] == "section"
 
 
-def test_ops_report_tools_are_exposed_and_return_payloads():
+def test_ops_report_tools_are_exposed_and_return_payloads(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1140,7 +1206,8 @@ def test_ops_report_tools_are_exposed_and_return_payloads():
     assert rag_report["payload"]["recommendedActions"][0]["actionType"] == "inspect_verification_routes"
 
 
-def test_search_papers_requires_query_and_returns_items():
+def test_search_papers_requires_query_and_returns_items(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1155,7 +1222,8 @@ def test_search_papers_requires_query_and_returns_items():
     assert ok["payload"]["items"][0]["arxiv_id"] == "2501.00001"
 
 
-def test_paper_memory_tools_are_exposed_and_return_payloads():
+def test_paper_memory_tools_are_exposed_and_return_payloads(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1183,7 +1251,8 @@ def test_paper_memory_tools_are_exposed_and_return_payloads():
     assert validate_payload(searched["payload"], searched["payload"]["schema"], strict=True).ok
 
 
-def test_paper_memory_tools_handle_missing_and_empty_paths():
+def test_paper_memory_tools_handle_missing_and_empty_paths(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1289,19 +1358,39 @@ def test_paper_lookup_and_summarize_scopes_answer_generation_to_selected_paper(m
     assert ok["payload"]["summary"]["paper_memory_prefilter"]["matchedPaperIds"] == ["2501.00001"]
 
 
-def test_list_tools_contains_paper_lookup_and_summarize(monkeypatch):
+def test_default_tool_profile_exposes_public_retrieval_core(monkeypatch):
     monkeypatch.delenv("KHUB_MCP_PROFILE", raising=False)
     module = _import_mcp_server()
 
     tools = asyncio.run(module.list_tools())
     names = {tool.name for tool in tools}
-    assert "paper_lookup_and_summarize" in names
-    assert "build_paper_memory" in names
-    assert "get_paper_memory_card" in names
-    assert "search_paper_memory" in names
+    assert names == {
+        "search_knowledge",
+        "ask_knowledge",
+        "build_task_context",
+        "discover_and_ingest",
+        "get_paper_detail",
+        "paper_lookup_and_summarize",
+        "get_hub_stats",
+        "mcp_job_status",
+        "mcp_job_list",
+        "mcp_job_cancel",
+    }
 
 
-def test_foundry_conflict_list_response_shape():
+def test_default_tool_profile_blocks_hidden_direct_calls(monkeypatch):
+    monkeypatch.delenv("KHUB_MCP_PROFILE", raising=False)
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    blocked = _decode_response(asyncio.run(module.call_tool("run_agentic_query", {"goal": "RAG 비교"})))
+    assert blocked["status"] == "blocked"
+    assert blocked["payload"]["profile"] == "default"
+    assert "KHUB_MCP_PROFILE=labs" in blocked["payload"]["hint"]
+
+
+def test_foundry_conflict_list_response_shape(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1310,7 +1399,8 @@ def test_foundry_conflict_list_response_shape():
     assert ok["payload"]["schema"] == "knowledge-hub.foundry.conflict.list.result.v1"
 
 
-def test_entity_merge_tools_response_shape():
+def test_entity_merge_tools_response_shape(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1338,14 +1428,22 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "search_knowledge" in names
     assert "ask_knowledge" in names
     assert "build_task_context" in names
-    assert "run_agentic_query" in names
-    assert "learning_start_or_resume_topic" in names
-    assert "learning_get_session_state" in names
-    assert "learning_explain_topic" in names
-    assert "learning_checkpoint" in names
-    assert "crawl_web_ingest" in names
-    assert "crawl_youtube_ingest" not in names
+    assert "discover_and_ingest" in names
+    assert "get_paper_detail" in names
     assert "paper_lookup_and_summarize" in names
+    assert "get_hub_stats" in names
+    assert "run_agentic_query" not in names
+    assert "learning_start_or_resume_topic" not in names
+    assert "learning_get_session_state" not in names
+    assert "learning_explain_topic" not in names
+    assert "learning_checkpoint" not in names
+    assert "crawl_web_ingest" not in names
+    assert "crawl_youtube_ingest" not in names
+    assert "build_paper_memory" not in names
+    assert "get_paper_memory_card" not in names
+    assert "search_paper_memory" not in names
+    assert "search_papers" not in names
+    assert "get_paper_citations" not in names
     assert "learn_map" not in names
     assert "belief_list" not in names
     assert "ontology_profile_list" not in names
@@ -1371,10 +1469,15 @@ def test_list_tools_includes_labs_profile(monkeypatch):
     assert "search_knowledge" in names
     assert "ask_knowledge" in names
     assert "build_task_context" in names
+    assert "run_agentic_query" in names
     assert "learning_start_or_resume_topic" in names
     assert "learning_get_session_state" in names
     assert "learning_explain_topic" in names
     assert "learning_checkpoint" in names
+    assert "build_paper_memory" in names
+    assert "get_paper_memory_card" in names
+    assert "search_paper_memory" in names
+    assert "search_papers" in names
     assert "learn_map" in names
     assert "belief_list" in names
     assert "ontology_profile_list" in names
@@ -1382,6 +1485,7 @@ def test_list_tools_includes_labs_profile(monkeypatch):
     assert "ops_action_list" in names
     assert "rag_report" in names
     assert "mcp_job_list" in names
+    assert "crawl_web_ingest" in names
     assert "crawl_pipeline_run" in names
     assert "crawl_youtube_ingest" in names
     assert "transform_run" in names
@@ -1389,7 +1493,22 @@ def test_list_tools_includes_labs_profile(monkeypatch):
     assert "notebook_workbench_chat" in names
 
 
-def test_crawl_youtube_ingest_returns_schema_backed_payload():
+def test_all_tool_profile_allows_hidden_direct_calls(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "all")
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    tools = asyncio.run(module.list_tools())
+    names = {tool.name for tool in tools}
+    assert "run_agentic_query" in names
+
+    failed = _decode_response(asyncio.run(module.call_tool("run_agentic_query", {})))
+    assert failed["status"] == "failed"
+    assert "goal" in failed["payload"]["error"]
+
+
+def test_crawl_youtube_ingest_returns_schema_backed_payload(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
     _FakeWebIngestService.last_crawl_kwargs = None
@@ -1419,7 +1538,8 @@ def test_crawl_youtube_ingest_returns_schema_backed_payload():
     assert _FakeWebIngestService.last_crawl_kwargs["index_autofix_mode"] == "youtube_single_retry"
 
 
-def test_transform_and_workbench_tools_return_schema_backed_payloads():
+def test_transform_and_workbench_tools_return_schema_backed_payloads(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1450,7 +1570,8 @@ def test_transform_and_workbench_tools_return_schema_backed_payloads():
     assert workbench["payload"]["schema"] == "knowledge-hub.workbench.chat.result.v1"
 
 
-def test_ops_action_tools_response_shape():
+def test_ops_action_tools_response_shape(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1471,6 +1592,7 @@ def test_ops_action_tools_response_shape():
 
 
 def test_ops_action_execute_and_receipts_tools_response_shape(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 
@@ -1496,6 +1618,7 @@ def test_ops_action_execute_and_receipts_tools_response_shape(monkeypatch):
 
 
 def test_ops_action_execute_auto_resolves_agent_writeback_request_after_success(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
     from knowledge_hub.mcp.handlers import jobs as jobs_handler
@@ -1604,6 +1727,7 @@ def test_ops_action_execute_auto_resolves_agent_writeback_request_after_success(
 
 
 def test_run_agentic_query_requires_goal_and_returns_queued(monkeypatch):
+    _enable_labs_profile(monkeypatch)
     module = _import_mcp_server()
     _setup_fakes(module)
 

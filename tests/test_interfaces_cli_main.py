@@ -8,6 +8,25 @@ import types
 from click.testing import CliRunner
 
 
+def _command_lines(output: str) -> set[str]:
+    commands: set[str] = set()
+    in_commands = False
+    for line in output.splitlines():
+        if line.strip() == "Commands:":
+            in_commands = True
+            continue
+        if not in_commands:
+            continue
+        if not line.startswith("  "):
+            if line.strip():
+                break
+            continue
+        stripped = line.strip()
+        if stripped and not stripped.startswith("-"):
+            commands.add(stripped.split()[0])
+    return commands
+
+
 def test_interfaces_cli_main_exports_canonical_entrypoint():
     module = importlib.import_module("knowledge_hub.interfaces.cli.main")
     assert module.cli is not None
@@ -30,24 +49,54 @@ def test_cli_help_hides_labs_commands_from_top_level():
     result = runner.invoke(module.cli, ["--help"])
 
     assert result.exit_code == 0
-    assert "search" in result.output
-    assert "ask" in result.output
-    assert "agent" in result.output
-    assert "crawl" in result.output
-    assert "doctor" in result.output
-    assert "labs" in result.output
-    assert "dinger" not in result.output
-    assert "eval" not in result.output
-    assert "learn" not in result.output
-    assert "belief" not in result.output
-    assert "decision" not in result.output
-    assert "outcome" not in result.output
-    assert "ontology" not in result.output
-    assert "graph" not in result.output
-    assert "claims" not in result.output
-    assert "feature" not in result.output
-    assert "rag-report" not in result.output
-    assert "ops-report-run" not in result.output
+    command_lines = _command_lines(result.output)
+    assert "add" in command_lines
+    assert "search" in command_lines
+    assert "ask" in command_lines
+    assert "context" in command_lines
+    assert "agent" not in command_lines
+    assert "provider" in command_lines
+    assert "doctor" in command_lines
+    assert "labs" in command_lines
+    assert "crawl" not in command_lines
+    assert "discover" not in command_lines
+    assert "dinger" not in command_lines
+    assert "eval" not in command_lines
+    assert "learn" not in command_lines
+    assert "belief" not in command_lines
+    assert "decision" not in command_lines
+    assert "outcome" not in command_lines
+    assert "ontology" not in command_lines
+    assert "graph" not in command_lines
+    assert "claims" not in command_lines
+    assert "feature" not in command_lines
+    assert "rag-report" not in command_lines
+    assert "ops-report-run" not in command_lines
+
+
+def test_hidden_agent_group_remains_directly_invokable():
+    module = importlib.import_module("knowledge_hub.interfaces.cli.main")
+    runner = CliRunner()
+
+    result = runner.invoke(module.cli, ["agent", "--help"])
+
+    assert result.exit_code == 0
+    command_lines = _command_lines(result.output)
+    assert "context" in command_lines
+    assert "run" in command_lines
+    assert "writeback-request" in command_lines
+
+
+def test_top_level_context_facade_exposes_read_only_task_context_help():
+    module = importlib.import_module("knowledge_hub.interfaces.cli.main")
+    runner = CliRunner()
+
+    result = runner.invoke(module.cli, ["context", "--help"])
+
+    assert result.exit_code == 0
+    assert "Assemble read-only task context" in result.output
+    assert "--repo-path" in result.output
+    assert "--include-workspace" in result.output
 
 
 def test_cli_labs_help_exposes_demoted_groups():
@@ -72,7 +121,7 @@ def test_cli_labs_help_exposes_demoted_groups():
     assert "ask-graph" in result.output
     assert "memory" in result.output
     assert "paper" in result.output
-    assert "eval" in result.output
+    assert "eval" not in result.output
     assert "foundry" in result.output
 
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import inspect
 from typing import Any
 
+from knowledge_hub.application.ask_contracts import ensure_ask_contract_payload, external_policy_contract
 from knowledge_hub.application.related_notes import build_related_note_suggestions
 from knowledge_hub.application.runtime_diagnostics import build_runtime_diagnostics
 from knowledge_hub.application.rag_reports import build_rag_ops_report
@@ -153,7 +154,19 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
             memory_route_mode=memory_route_mode,
             paper_memory_mode=paper_memory_mode,
         )
-        normalized_result = result if isinstance(result, dict) else {"answer": str(result), "sources": []}
+        external_policy = external_policy_contract(
+            surface="mcp",
+            allow_external=False,
+            requested=False,
+            decision_source="mcp_default_local_only",
+        )
+        normalized_result = ensure_ask_contract_payload(
+            result if isinstance(result, dict) else {"answer": str(result), "sources": []},
+            source_type=source,
+            memory_route_mode=memory_route_mode,
+            paper_memory_mode=paper_memory_mode,
+            external_policy=external_policy,
+        )
         sources = [
             {
                 "title": s.get("title", ""),
@@ -175,6 +188,10 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         payload = {
             "question": question,
             "answer": normalized_result.get("answer"),
+            "allowExternal": normalized_result.get("allowExternal", False),
+            "allow_external": bool(normalized_result.get("allowExternal", False)),
+            "externalPolicy": normalized_result.get("externalPolicy", {}),
+            "external_policy": normalized_result.get("externalPolicy", {}),
             "sources": sources,
             "evidence": normalized_result.get("evidence", sources),
             "citations": normalized_result.get("citations", []),
@@ -204,6 +221,10 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         artifact = {
             "question": question,
             "answer": normalized_result.get("answer"),
+            "allowExternal": normalized_result.get("allowExternal", False),
+            "allow_external": bool(normalized_result.get("allowExternal", False)),
+            "externalPolicy": normalized_result.get("externalPolicy", {}),
+            "external_policy": normalized_result.get("externalPolicy", {}),
             "sources": sources,
             "evidence": normalized_result.get("evidence", sources),
             "citations": normalized_result.get("citations", []),

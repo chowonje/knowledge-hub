@@ -32,8 +32,9 @@ from knowledge_hub.infrastructure.config import apply_public_setup_profile
 DOCTOR_ALLOWED_STATUSES = {"ok", "blocked", "degraded", "needs_setup"}
 STATUS_REQUIRED_MARKERS = ("Knowledge Hub v", "Retrieval Runtime", "vector corpus")
 DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
-TOP_HELP_REQUIRED_MARKERS = ("Commands:", "doctor", "status", "setup")
-WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "discover", "index", "search", "ask", "doctor", "status")
+TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "doctor", "status", "init")
+WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "add", "provider", "index", "search", "ask", "doctor", "status")
+ADD_HELP_REQUIRED_MARKERS = ("Add a source with one command", "--type", "--index", "--allow-external")
 CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
 INVALID_COMMAND_REQUIRED_MARKER = "No such command"
 INVALID_COMMAND_FORBIDDEN_MARKERS = ("Traceback (most recent call last)", "예상치 못한 오류")
@@ -44,6 +45,7 @@ INDEX_REQUIRED_SCHEMA = "knowledge-hub.index.result.v1"
 SEARCH_REQUIRED_SCHEMA = "knowledge-hub.search.result.v1"
 ASK_REQUIRED_SCHEMA = "knowledge-hub.ask.result.v1"
 WEEKLY_SEARCH_QUERY = "alpha retrieval"
+PROVIDER_REQUIRED_SCHEMA = "knowledge-hub.provider.result.v1"
 
 
 @dataclass
@@ -290,6 +292,39 @@ def validate_invalid_command_result(result: CommandResult) -> ValidationResult:
     )
 
 
+def validate_provider_recommend_result(result: CommandResult) -> ValidationResult:
+    errors: list[str] = []
+    payload: dict[str, Any] = {}
+    if result.timed_out:
+        errors.append(f"provider recommend timed out after {result.timeout_sec:.0f}s")
+    if result.returncode != 0:
+        errors.append(f"provider recommend exited with {result.returncode}")
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        errors.append(f"provider recommend did not emit valid json: {exc}")
+    if errors:
+        return ValidationResult(ok=False, summary="provider recommend contract failed", details={}, errors=errors)
+    if str(payload.get("schema") or "") != PROVIDER_REQUIRED_SCHEMA:
+        errors.append("provider recommend schema mismatch")
+    if str(payload.get("status") or "") != "ok":
+        errors.append(f"provider recommend status is not ok: {payload.get('status')}")
+    recommendations = payload.get("recommendations")
+    if not isinstance(recommendations, list) or not recommendations:
+        errors.append("provider recommend returned no recommendations")
+        recommendations = []
+    profiles = {str(dict(item or {}).get("profile") or "") for item in recommendations if isinstance(item, dict)}
+    for required in ("local", "balanced", "quality", "codex-mcp"):
+        if required not in profiles:
+            errors.append(f"provider recommend missing profile: {required}")
+    return ValidationResult(
+        ok=not errors,
+        summary="provider recommendations expose the public setup profiles" if not errors else "provider recommend contract failed",
+        details={"profiles": sorted(profiles)},
+        errors=errors,
+    )
+
+
 def extract_trailing_json_object(text: str) -> dict[str, Any]:
     content = str(text or "").strip()
     errors: list[str] = []
@@ -387,7 +422,11 @@ def validate_search_result(result: CommandResult) -> ValidationResult:
     results = list(payload.get("results") or [])
     if not results:
         errors.append("search returned no results")
-    else:
+    if not isinstance(payload.get("runtimeDiagnostics"), dict):
+        errors.append("search missing runtimeDiagnostics object")
+    if not isinstance(payload.get("graphQuerySignal"), dict):
+        errors.append("search missing graphQuerySignal object")
+    if results:
         first = dict(results[0] or {})
         if str(first.get("sourceType") or first.get("source_type") or "") != "vault":
             errors.append("top search result is not a vault document")
@@ -398,6 +437,8 @@ def validate_search_result(result: CommandResult) -> ValidationResult:
             "resultCount": len(results),
             "topTitle": str(dict(results[0] or {}).get("title") or "") if results else "",
             "topSourceType": str(dict(results[0] or {}).get("sourceType") or dict(results[0] or {}).get("source_type") or "") if results else "",
+            "hasRuntimeDiagnostics": isinstance(payload.get("runtimeDiagnostics"), dict),
+            "hasGraphQuerySignal": isinstance(payload.get("graphQuerySignal"), dict),
         },
         errors=errors,
     )
@@ -424,11 +465,30 @@ def validate_ask_result(result: CommandResult) -> ValidationResult:
         errors.append("ask question echo mismatch")
     if bool(payload.get("allowExternal", True)):
         errors.append("ask allowExternal is not false")
+    external_policy = dict(payload.get("externalPolicy") or {})
+    if not external_policy:
+        errors.append("ask missing externalPolicy diagnostics")
+    elif str(external_policy.get("policyMode") or "") != "local-only":
+        errors.append("ask externalPolicy is not local-only")
     answer = str(payload.get("answer") or "").strip()
     if not answer:
         errors.append("ask returned an empty answer")
     citations = list(payload.get("citations") or [])
     sources = list(payload.get("sources") or [])
+    evidence = payload.get("evidence")
+    if not isinstance(evidence, list):
+        errors.append("ask evidence field is not a list")
+    memory_route = dict(payload.get("memoryRoute") or {})
+    memory_prefilter = dict(payload.get("memoryPrefilter") or {})
+    paper_memory_prefilter = dict(payload.get("paperMemoryPrefilter") or {})
+    if str(memory_route.get("contractRole") or "") != "ask_retrieval_memory_prefilter":
+        errors.append("ask missing memoryRoute contract role")
+    if str(memory_prefilter.get("contractRole") or "") != "retrieval_memory_prefilter":
+        errors.append("ask missing memoryPrefilter contract role")
+    if str(paper_memory_prefilter.get("contractRole") or "") != "paper_source_memory_prefilter":
+        errors.append("ask missing paperMemoryPrefilter contract role")
+    if not isinstance(payload.get("runtimeDiagnostics"), dict):
+        errors.append("ask missing runtimeDiagnostics object")
     has_vault_citation = any(str(dict(item or {}).get("source_type") or "") == "vault" for item in citations)
     has_vault_source = any(
         str(dict(item or {}).get("source_type") or dict(item or {}).get("sourceType") or "") == "vault"
@@ -443,8 +503,14 @@ def validate_ask_result(result: CommandResult) -> ValidationResult:
             "answerLength": len(answer),
             "citationCount": len(citations),
             "sourceCount": len(sources),
+            "evidenceCount": len(evidence) if isinstance(evidence, list) else 0,
             "hasVaultCitation": has_vault_citation,
             "hasVaultSource": has_vault_source,
+            "hasExternalPolicy": bool(external_policy),
+            "hasMemoryRoute": bool(memory_route),
+            "hasMemoryPrefilter": bool(memory_prefilter),
+            "hasPaperMemoryPrefilter": bool(paper_memory_prefilter),
+            "hasRuntimeDiagnostics": isinstance(payload.get("runtimeDiagnostics"), dict),
             "warningCount": len(payload.get("warnings") or []),
         },
         errors=errors,
@@ -460,6 +526,8 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
     plan = [
         ("top_help", cli_argv + ["--help"]),
         ("setup", cli_argv + ["setup", "--quick", "--non-interactive"]),
+        ("add_help", cli_argv + ["add", "--help"]),
+        ("provider_recommend", cli_argv + ["provider", "recommend", "--json"]),
         ("capture_help", cli_argv + ["dinger", "capture", "--help"]),
         ("status", cli_argv + ["--config", str(config_path), "status"]),
         ("doctor", cli_argv + ["--config", str(config_path), "doctor", "--json"]),
@@ -478,6 +546,14 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
             )
         elif name == "setup":
             validation = validate_setup_result(result, config_path=config_path)
+        elif name == "add_help":
+            validation = validate_help_result(
+                result,
+                required_markers=ADD_HELP_REQUIRED_MARKERS,
+                summary="add help exposes the public intake contract",
+            )
+        elif name == "provider_recommend":
+            validation = validate_provider_recommend_result(result)
         elif name == "capture_help":
             validation = validate_help_result(
                 result,

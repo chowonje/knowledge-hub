@@ -17,6 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_ROOT = PROJECT_ROOT / "docs" / "schemas"
 
 SCHEMA_NAME_BY_ID = {
+    "knowledge-hub.add.result.v1": "add-result.v1.json",
     "knowledge-hub.document-memory.build.result.v1": "document-memory-build-result.v1.json",
     "knowledge-hub.document-memory.card.result.v1": "document-memory-card-result.v1.json",
     "knowledge-hub.document-memory.search.result.v1": "document-memory-search-result.v1.json",

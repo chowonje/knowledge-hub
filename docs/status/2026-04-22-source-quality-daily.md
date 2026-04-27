@@ -9,7 +9,7 @@ Run the daily source-quality observation loop and confirm whether the promoted b
 ## Result
 
 - Daily run completed after repairing the derived local vector index.
-- Latest completed run: `/Users/won/.khub/eval/knowledgeos/runs/source_quality_battery_20260422_044630`
+- Latest completed run: `~/.khub/eval/knowledgeos/runs/source_quality_battery_20260422_044630`
 - Base observation decision: `ready_for_hard_gate_review`
 - Hard gate status: `ok`
 - Detail observation decision: `not_ready_for_detail_gate_review`
@@ -19,8 +19,8 @@ Run the daily source-quality observation loop and confirm whether the promoted b
 The first daily attempt failed before evaluation collection because the active Chroma vector store could not initialize:
 
 - error: `range start index 10 out of range for slice of length 9`
-- affected derived store: `/Users/won/.khub/chroma_db_bge_m3`
-- preserved copy: `/Users/won/.khub/chroma_db_bge_m3.pre_rebuild.20260422_134222`
+- affected derived store: `~/.khub/chroma_db_bge_m3`
+- preserved copy: `~/.khub/chroma_db_bge_m3.pre_rebuild.20260422_134222`
 
 The vector store was rebuilt with `khub index --all`.
 
@@ -30,7 +30,7 @@ Rebuild result:
 - papers indexed: `387`
 - concepts indexed: `66`
 - vector documents: `453`
-- report: `/Users/won/.khub/runs/index-idx_068fe710c5ca.json`
+- report: `~/.khub/runs/index-idx_068fe710c5ca.json`
 
 ## Verification
 

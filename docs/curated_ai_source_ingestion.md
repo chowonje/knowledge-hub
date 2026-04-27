@@ -49,9 +49,9 @@ Use hub pages for discovery and follow-up extraction. Do not materialize them di
 ## Raw Source Storage
 Original fetched source artifacts are stored on the external drive under:
 
-- raw: `/Volumes/T9/knowledge_os/raw/{source}/{yyyy}/{mm}/{dd}/{record_id}/`
-- normalized: `/Volumes/T9/knowledge_os/normalized/{source}/{yyyy}/{mm}/{dd}/{record_id}.json`
-- indexed: `/Volumes/T9/knowledge_os/indexed/{source}/{yyyy}/{mm}/{dd}/{record_id}.json`
+- raw: `<pipeline-storage-root>/raw/{source}/{yyyy}/{mm}/{dd}/{record_id}/`
+- normalized: `<pipeline-storage-root>/normalized/{source}/{yyyy}/{mm}/{dd}/{record_id}.json`
+- indexed: `<pipeline-storage-root>/indexed/{source}/{yyyy}/{mm}/{dd}/{record_id}.json`
 
 ### Raw folder contents
 Typical raw folder contents:
@@ -59,11 +59,11 @@ Typical raw folder contents:
 - `metadata.json`
 
 Example:
-- `/Volumes/T9/knowledge_os/raw/web/2026/03/05/<record_id>/content.raw`
-- `/Volumes/T9/knowledge_os/raw/web/2026/03/05/<record_id>/metadata.json`
+- `<pipeline-storage-root>/raw/web/2026/03/05/<record_id>/content.raw`
+- `<pipeline-storage-root>/raw/web/2026/03/05/<record_id>/metadata.json`
 
 ## Truth Sources
-- raw source of truth: external drive `T9`
+- raw source of truth: configured local storage root
 - state/ontology source of truth: `~/.khub/knowledge.db`
 - final human-readable notes: Obsidian vault under `AI/AI_Papers`
 

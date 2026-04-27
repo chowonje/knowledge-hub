@@ -69,9 +69,11 @@ def memory_route_payload(
         paper_memory_mode=paper_memory_mode,
     )
     return {
+        "contractRole": "ask_retrieval_memory_prefilter",
         "requestedMode": requested_token,
         "effectiveMode": effective_mode,
         "modeAliasApplied": mode_alias_applied,
+        "aliasDeprecated": bool(mode_alias_applied and requested_token == MEMORY_ROUTE_MODE_PREFILTER),
         "sourceType": str(normalize_source_type(source_type) or "all"),
         "formsTried": [],
         "fallbackUsed": False,
@@ -81,13 +83,13 @@ def memory_route_payload(
 
 
 def _parse_iso(value: Any) -> datetime | None:
-    token = str(value or "").strip()
-    if not token:
+    text_value = str(value or "").strip()
+    if not text_value:
         return None
     try:
-        if token.endswith("Z"):
-            return datetime.fromisoformat(token.replace("Z", "+00:00")).astimezone(timezone.utc)
-        parsed = datetime.fromisoformat(token)
+        if text_value.endswith("Z"):
+            return datetime.fromisoformat(text_value.replace("Z", "+00:00")).astimezone(timezone.utc)
+        parsed = datetime.fromisoformat(text_value)
         return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
     except Exception:
         pass
@@ -177,16 +179,16 @@ def _normalize_web_filter(filter_dict: dict[str, Any] | None) -> dict[str, Any]:
 
 def _fallback_parent_key(metadata: dict[str, Any], doc_id: str) -> str:
     for key in ("file_path", "arxiv_id", "url", "title"):
-        token = str(metadata.get(key) or "").strip()
-        if token:
-            return token
+        metadata_value = str(metadata.get(key) or "").strip()
+        if metadata_value:
+            return metadata_value
     return str(doc_id or "").strip()
 
 
 def _is_explainer_query(query: str) -> bool:
-    token = str(query or "").casefold()
+    query_text = str(query or "").casefold()
     return any(
-        marker in token
+        marker in query_text
         for marker in ("explain", "purpose", "reason", "role", "difference", "compare", "summary", "설명", "목적", "이유", "역할", "차이", "비교", "요약")
     )
 
@@ -315,10 +317,10 @@ def _dedupe_filters(filters: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def _query_intent_hints(query: str) -> dict[str, bool]:
-    token = str(query or "").casefold()
+    query_text = str(query or "").casefold()
     return {
         "implementation": any(
-            marker in token
+            marker in query_text
             for marker in (
                 "implementation",
                 "implement",
@@ -342,7 +344,7 @@ def _query_intent_hints(query: str) -> dict[str, bool]:
             )
         ),
         "disambiguation": any(
-            marker in token
+            marker in query_text
             for marker in (
                 "distinguish",
                 "difference",

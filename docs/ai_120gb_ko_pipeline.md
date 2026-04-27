@@ -7,10 +7,10 @@
 ## 단계 (실행 순서)
 1. 입력 수집 (Connector)
 - `khub crawl run`으로 원본 수집
-- 저장: `/Volumes/T9/knowledge_os/raw`
+- 저장: `<pipeline-storage-root>/raw`
 
 2. 정규화/중복 제거
-- 저장: `/Volumes/T9/knowledge_os/normalized`
+- 저장: `<pipeline-storage-root>/normalized`
 - `record_id`, `canonical_url_hash`, `content_sha256`로 추적/중복 차단
 
 3. 온톨로지 추출 (Meaning Kernel)
@@ -18,7 +18,7 @@
 - 미승인 관계는 pending 큐로 분리
 
 4. 임베딩/인덱싱
-- 저장: `/Volumes/T9/knowledge_os/indexed`
+- 저장: `<pipeline-storage-root>/indexed`
 - 검색 가능한 벡터 인덱스 구축
 
 5. 중요도 점수화 (노트 생성 후보 선정)

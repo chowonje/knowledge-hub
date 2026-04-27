@@ -138,6 +138,7 @@ def test_run_release_smoke_collects_full_plan_after_first_failure(monkeypatch):
     monkeypatch.setattr(module, "validate_status_result", ok_validation)
     monkeypatch.setattr(module, "validate_doctor_result", ok_validation)
     monkeypatch.setattr(module, "validate_invalid_command_result", ok_validation)
+    monkeypatch.setattr(module, "validate_provider_recommend_result", ok_validation)
     monkeypatch.setattr(
         module,
         "validate_setup_result",
@@ -149,14 +150,16 @@ def test_run_release_smoke_collects_full_plan_after_first_failure(monkeypatch):
     assert calls == [
         "top_help",
         "setup",
+        "add_help",
+        "provider_recommend",
         "capture_help",
         "status",
         "doctor",
         "invalid_command",
     ]
     assert payload["status"] == "failed"
-    assert payload["checkedCount"] == 6
-    assert payload["passedCount"] == 5
+    assert payload["checkedCount"] == 8
+    assert payload["passedCount"] == 7
     assert [item["name"] for item in payload["commands"]] == calls
     assert payload["commands"][1]["status"] == "failed"
     assert payload["commands"][-1]["status"] == "ok"
@@ -179,7 +182,7 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
             name="top_help",
             argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "--help"],
             returncode=0,
-            stdout="Usage\nCommands:\n  discover\n  index\n  search\n  ask\n  doctor\n  status\n",
+            stdout="Usage\nCommands:\n  add\n  provider\n  index\n  search\n  ask\n  doctor\n  status\n",
             stderr="",
             duration_sec=0.01,
         ),
@@ -240,6 +243,10 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
                     "question": "alpha retrieval",
                     "answer": "Alpha retrieval is a grounded vault smoke note.",
                     "allowExternal": False,
+                    "externalPolicy": {
+                        "contractRole": "answer_generation_external_policy",
+                        "policyMode": "local-only",
+                    },
                     "citations": [
                         {
                             "label": "S1",
@@ -255,6 +262,29 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
                             "source_type": "vault",
                         }
                     ],
+                    "evidence": [
+                        {
+                            "title": "Alpha retrieval note",
+                            "source_type": "vault",
+                        }
+                    ],
+                    "memoryRoute": {
+                        "contractRole": "ask_retrieval_memory_prefilter",
+                        "requestedMode": "off",
+                        "effectiveMode": "off",
+                    },
+                    "memoryPrefilter": {
+                        "contractRole": "retrieval_memory_prefilter",
+                        "applied": False,
+                    },
+                    "paperMemoryPrefilter": {
+                        "contractRole": "paper_source_memory_prefilter",
+                        "applied": False,
+                    },
+                    "runtimeDiagnostics": {
+                        "schema": "knowledge-hub.runtime.diagnostics.v1",
+                        "status": "ok",
+                    },
                     "warnings": [
                         "answer verification used heuristic fallback",
                         "answer rewrite skipped: rewrite route unavailable",
@@ -279,6 +309,11 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
                             "sourceType": "vault",
                         }
                     ],
+                    "runtimeDiagnostics": {
+                        "schema": "knowledge-hub.runtime.diagnostics.v1",
+                        "status": "ok",
+                    },
+                    "graphQuerySignal": {},
                 }
             ),
             stderr="",
@@ -300,6 +335,36 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
     assert payload["checkedCount"] == 6
     assert payload["passedCount"] == 6
     assert payload["mode"] == "weekly_core_loop"
+
+
+def test_validate_weekly_ask_result_requires_contract_diagnostics():
+    module = _load_script_module()
+    result = module.CommandResult(
+        name="ask",
+        argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "ask", "alpha retrieval", "--json"],
+        returncode=0,
+        stdout=json.dumps(
+            {
+                "schema": "knowledge-hub.ask.result.v1",
+                "status": "ok",
+                "question": "alpha retrieval",
+                "answer": "Alpha retrieval is grounded.",
+                "allowExternal": False,
+                "citations": [],
+                "sources": [{"title": "Alpha retrieval note", "source_type": "vault"}],
+            }
+        ),
+        stderr="",
+        duration_sec=0.01,
+    )
+
+    validation = module.validate_ask_result(result)
+
+    assert validation.ok is False
+    assert "ask missing externalPolicy diagnostics" in validation.errors
+    assert "ask evidence field is not a list" in validation.errors
+    assert "ask missing memoryRoute contract role" in validation.errors
+    assert "ask missing runtimeDiagnostics object" in validation.errors
 
 
 def test_validate_help_result_requires_surface_markers():
@@ -330,9 +395,25 @@ def test_top_level_help_hides_operator_surfaces():
 
     assert result.exit_code == 0
     command_lines = _command_lines(result.output)
-    for token in ("dinger", "os", "eval", "paper-memory", "math-memory", "vector-compare", "vector-restore"):
+    for token in (
+        "crawl",
+        "discover",
+        "dinger",
+        "eval",
+        "explore",
+        "health",
+        "math-memory",
+        "mcp",
+        "os",
+        "paper-memory",
+        "setup",
+        "vault",
+        "vector-compare",
+        "vector-restore",
+        "agent",
+    ):
         assert token not in command_lines
-    for token in ("discover", "index", "search", "ask", "doctor", "status", "paper", "labs"):
+    for token in ("add", "index", "search", "ask", "context", "doctor", "status", "paper", "labs"):
         assert token in command_lines
 
 
@@ -349,13 +430,13 @@ def test_hidden_eval_compat_alias_remains_directly_invokable():
     assert _command_lines(root_result.output) == _command_lines(labs_result.output)
 
 
-def test_labs_help_keeps_eval_visible():
+def test_labs_help_hides_internal_eval_surface():
     runner = CliRunner()
 
     result = runner.invoke(cli, ["labs", "--help"])
 
     assert result.exit_code == 0
-    assert "eval" in _command_lines(result.output)
+    assert "eval" not in _command_lines(result.output)
 
 
 def test_labs_help_keeps_foundry_visible():
@@ -428,6 +509,34 @@ def test_validate_invalid_command_result_requires_non_zero_error():
     assert validation.details["returncode"] == 1
 
 
+def test_validate_provider_recommend_result_requires_public_profiles():
+    module = _load_script_module()
+    result = module.CommandResult(
+        name="provider_recommend",
+        argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "provider", "recommend", "--json"],
+        returncode=0,
+        stdout=json.dumps(
+            {
+                "schema": "knowledge-hub.provider.result.v1",
+                "status": "ok",
+                "recommendations": [
+                    {"profile": "local"},
+                    {"profile": "balanced"},
+                    {"profile": "quality"},
+                    {"profile": "codex-mcp"},
+                ],
+            }
+        ),
+        stderr="",
+        duration_sec=0.1,
+    )
+
+    validation = module.validate_provider_recommend_result(result)
+
+    assert validation.ok is True
+    assert validation.details["profiles"] == ["balanced", "codex-mcp", "local", "quality"]
+
+
 def test_validate_invalid_command_result_rejects_traceback_output():
     module = _load_script_module()
     result = module.CommandResult(
@@ -466,11 +575,13 @@ def test_release_smoke_script_passes_with_local_contract():
     assert completed.returncode == 0, completed.stderr or completed.stdout
     payload = json.loads(completed.stdout)
     assert payload["status"] == "ok"
-    assert payload["checkedCount"] == 6
-    assert payload["passedCount"] == 6
+    assert payload["checkedCount"] == 8
+    assert payload["passedCount"] == 8
     assert [item["name"] for item in payload["commands"]] == [
         "top_help",
         "setup",
+        "add_help",
+        "provider_recommend",
         "capture_help",
         "status",
         "doctor",
@@ -520,8 +631,14 @@ def test_validate_ask_result_requires_grounded_vault_output():
                 "question": "alpha retrieval",
                 "answer": "Alpha retrieval is a grounded vault smoke note.",
                 "allowExternal": False,
+                "externalPolicy": {"policyMode": "local-only"},
                 "citations": [{"source_type": "vault", "target": "alpha.md"}],
+                "evidence": [{"source_type": "vault", "title": "Alpha retrieval note"}],
                 "sources": [],
+                "memoryRoute": {"contractRole": "ask_retrieval_memory_prefilter"},
+                "memoryPrefilter": {"contractRole": "retrieval_memory_prefilter"},
+                "paperMemoryPrefilter": {"contractRole": "paper_source_memory_prefilter"},
+                "runtimeDiagnostics": {"status": "ok"},
                 "warnings": [
                     "answer verification used heuristic fallback",
                     "answer rewrite skipped: rewrite route unavailable",

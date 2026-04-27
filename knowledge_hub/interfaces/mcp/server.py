@@ -195,6 +195,17 @@ async def list_tools_impl() -> list[Tool]:
     return build_tools()
 
 
+def _mcp_tool_profile_access(name: str) -> tuple[str, bool, bool]:
+    from knowledge_hub.mcp.tool_specs import build_tools, resolve_tool_profile
+
+    profile = resolve_tool_profile()
+    active_tool_names = {tool.name for tool in build_tools(profile)}
+    if name in active_tool_names:
+        return profile, True, True
+    all_tool_names = {tool.name for tool in build_tools("all")}
+    return profile, False, name in all_tool_names
+
+
 async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[TextContent]:
     if arguments is None:
         arguments = {}
@@ -214,6 +225,36 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
         "tool": name,
         "arguments": redact_payload(dict(arguments)),
     }
+    profile, profile_allowed, known_tool = _mcp_tool_profile_access(name)
+    if not known_tool:
+        return build_text_response(
+            _build_mcp_tool_response(
+                tool=name,
+                status=MCP_TOOL_STATUS_FAILED,
+                payload={"error": f"알 수 없는 도구: {name}"},
+                started_at=started_at,
+                request_echo=request_echo,
+                status_message="unknown tool",
+            ),
+            compact=compact,
+        )
+    if not profile_allowed:
+        return build_text_response(
+            _build_mcp_tool_response(
+                tool=name,
+                status=MCP_TOOL_STATUS_BLOCKED,
+                payload={
+                    "blockReason": "profile",
+                    "error": f"tool is not available in current MCP profile: {name}",
+                    "profile": profile,
+                    "hint": "Set KHUB_MCP_PROFILE=labs or KHUB_MCP_PROFILE=all to use experimental/operator tools.",
+                },
+                started_at=started_at,
+                request_echo=request_echo,
+                status_message="tool blocked by MCP profile",
+            ),
+            compact=compact,
+        )
     initialize_fn = getattr(state, "initialize", None)
     if not callable(initialize_fn):
         initialize_fn = lambda: initialize(state)

@@ -12,9 +12,9 @@ def pipeline_root(service) -> Path:
             "pipeline",
             "storage",
             "root",
-            default="/Volumes/T9/knowledge_os",
+            default="~/.khub/knowledge_os",
         )
-        or "/Volumes/T9/knowledge_os"
+        or "~/.khub/knowledge_os"
     ).strip()
     path = Path(raw).expanduser().resolve()
     path.mkdir(parents=True, exist_ok=True)
@@ -125,25 +125,25 @@ def is_domain_allowed(
     allowlist: set[str],
 ) -> tuple[bool, str]:
     del service
-    token = str(domain or "").strip().lower()
-    if not token:
+    domain_name = str(domain or "").strip().lower()
+    if not domain_name:
         return False, "invalid_domain"
 
     # CLI exposes fixed | hybrid | keyword; only "fixed" is allowlist-only. "keyword" shares
     # the hybrid path (allowlist OR approved row OR pending/rejected in crawl_domain_policy).
     policy = str(source_policy or "hybrid").strip().lower()
     if policy == "fixed":
-        if token in allowlist:
-            sqlite_db.upsert_crawl_domain_policy(token, "approved", reason="allowlist")
+        if domain_name in allowlist:
+            sqlite_db.upsert_crawl_domain_policy(domain_name, "approved", reason="allowlist")
             return True, "approved_allowlist"
-        sqlite_db.upsert_crawl_domain_policy(token, "pending", reason="not-in-allowlist")
+        sqlite_db.upsert_crawl_domain_policy(domain_name, "pending", reason="not-in-allowlist")
         return False, "pending_domain"
 
-    if token in allowlist:
-        sqlite_db.upsert_crawl_domain_policy(token, "approved", reason="allowlist")
+    if domain_name in allowlist:
+        sqlite_db.upsert_crawl_domain_policy(domain_name, "approved", reason="allowlist")
         return True, "approved_allowlist"
 
-    row = sqlite_db.get_crawl_domain_policy(token)
+    row = sqlite_db.get_crawl_domain_policy(domain_name)
     if row:
         status = str(row.get("status", "pending")).strip().lower()
         if status == "approved":
@@ -152,7 +152,7 @@ def is_domain_allowed(
             return False, "rejected_domain"
         return False, "pending_domain"
 
-    sqlite_db.upsert_crawl_domain_policy(token, "pending", reason="new-domain-needs-approval")
+    sqlite_db.upsert_crawl_domain_policy(domain_name, "pending", reason="new-domain-needs-approval")
     return False, "pending_domain"
 
 

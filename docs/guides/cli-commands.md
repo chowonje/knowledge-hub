@@ -19,8 +19,8 @@ khub <command> <subcommand> --help
 예:
 
 ```bash
+khub add --help
 khub paper --help
-khub discover --help
 khub labs crawl --help
 khub labs paper --help
 ```
@@ -30,59 +30,97 @@ khub labs paper --help
 ```bash
 khub doctor
 khub status
-khub dinger ingest --paper "주제"
-khub dinger ask "질문"
-khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
+khub add "https://example.com/guide" --topic "rag"
+khub add "https://youtu.be/<video-id>" --topic "agents"
+khub add "retrieval augmented generation" --type paper -n 3
 khub search "주제"
 khub ask "질문"
-khub agent context "작업 목표" --repo-path .
-khub discover "주제" -n 5 --judge
+khub provider recommend
+khub context "작업 목표" --repo-path .
 khub paper list
-khub paper board-export --json
 khub index
 ```
 
 ## 기본 Top-Level Help
 
 ```text
-khub agent
+khub add
 khub ask
 khub config
-khub crawl
-khub discover
+khub context
 khub doctor
-khub explore
-khub health
 khub index
 khub init
 khub labs
-khub mcp
 khub paper
+khub provider
 khub search
-khub setup
 khub status
-khub vault
 ```
 
-기본 `khub --help`는 representative core loop를 우선 노출합니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
+기본 `khub --help`는 representative core loop를 우선 노출합니다. `khub add`가 URL/YouTube/논문 URL/논문 검색의 기본 intake facade입니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
 
 ## Direct But Hidden Top-Level
 
 ```text
+khub crawl
+khub discover
 khub dinger
-khub eval
+khub agent
+khub explore
+khub health
 khub math-memory
+khub mcp
 khub os
 khub paper-memory
+khub setup
+khub vault
 khub vector-compare
 khub vector-restore
 ```
 
-`khub eval`은 hidden compatibility alias이고, canonical eval surface는 `khub labs eval`입니다.
-
 ## 기본 Surface
 
-### `khub agent`
+### `khub add`
+
+```text
+khub add <source>
+```
+
+용도:
+- 웹 URL, YouTube URL, 논문 URL, 논문 검색어를 하나의 직관적인 intake 명령으로 처리
+- `auto` route가 YouTube, paper URL/arXiv id, 일반 web URL, paper query를 구분
+- 기존 `khub crawl ingest`, `khub labs crawl youtube-ingest`, `khub paper import-csv`, `khub discover` 기능을 얇게 감싸며 기존 명령을 제거하지 않음
+
+예:
+
+```bash
+khub add "https://example.com/guide" --topic "rag"
+khub add "https://youtu.be/<video-id>" --topic "agents"
+khub add "https://arxiv.org/abs/2401.00001"
+khub add "retrieval augmented generation" --type paper -n 3
+khub add "https://example.com/paper.pdf" --type web --topic "paper-notes"
+```
+
+### `khub context`
+
+```text
+khub context
+```
+
+용도:
+- repo + 지식 문맥을 읽기 전용으로 조립
+- coding/research 작업 전에 근거와 workspace context를 한 번에 묶어 확인
+- hidden compatibility alias인 `khub agent context`와 같은 backend를 쓰는 공개용 얇은 facade
+
+예:
+
+```bash
+khub context "작업 목표" --repo-path .
+khub context "RAG fallback flow를 리팩터링하기 전에 관련 근거를 모아줘" --repo-path . --json
+```
+
+### `khub agent` direct hidden compatibility
 
 ```text
 khub agent context
@@ -90,16 +128,15 @@ khub agent run
 khub agent writeback-request
 ```
 
-기본 `khub agent --help`는 gateway-oriented subcommand만 노출합니다.
-
-용도:
-- `context`: repo + 지식 문맥 조립
-- `run`: gateway-facing agent/foundry bridge 실행 엔벨로프
-- `writeback-request`: `Agent Gateway v2`의 approval-gated repo-local writeback lane 진입점. 현재 first-consumer 안전 범위는 **docs-only**이며 (`docs/adr/`, `docs/status/`, `reviews/`, `worklog/`), dry-run plan을 기반으로 pending request를 만들고 advisory `writebackPreview`로 허용된 문서 대상만 예측해 노출한 뒤, `khub labs ops action-ack -> action-execute`로 좁은 execution lane을 탄다. 성공 실행은 agent queue item을 자동 `resolved`로 닫는다.
+`khub agent`는 default top-level help에서는 숨겨져 있지만 직접 호출은 유지합니다.
+공개 코어는 `khub context`이고, `run` / `writeback-request`는 gateway/operator 성격의 고급 경로입니다.
+새 quickstart와 공개 문서는 `khub context`를 기준으로 작성합니다.
 
 예:
 
 ```bash
+khub agent --help
+khub context "작업 목표" --repo-path .
 khub agent writeback-request "Refactor the RAG fallback flow" --repo-path . --json
 khub labs ops action-list --scope agent --json
 khub labs ops action-ack --action-id <id> --actor cli-user
@@ -150,13 +187,15 @@ khub ask
 - `--answer-route`는 `auto|local|api|codex`를 받는다. `codex`는 main ask runtime에서 `codex_mcp` backend를 강제 요청하는 override이며, `--allow-external`이 꺼져 있거나 Codex runtime readiness가 실패하면 기존 route resolver로 경고와 함께 fallback된다.
 - config에서 `routing.llm.tasks.rag_answer.preferred_backend: codex_mcp`를 두면 explicit override가 없을 때도 Codex를 policy-gated preferred backend로 사용할 수 있다. 이 경우에도 retrieval/evidence/policy authority는 기존 Python runtime이 유지한다.
 - `khub ask --json`은 이제 `answerRouteRequested`와 별도로 `answerRouteApplied`, `answerProviderApplied`, `answerModelApplied`를 넣어 실제 적용된 route/provider/model을 바로 확인할 수 있다. 텍스트 출력도 같은 정보를 한 줄로 보여준다.
+- `khub ask --json`은 `memoryRoute`(요청/effective mode와 alias 여부), `memoryPrefilter`(실제 retrieval 개입 결과), `paperMemoryPrefilter`(paper-source prefilter 결과)를 분리해 노출한다.
+- `khub ask`는 명시 옵션이 없으면 configured summarization provider 기준으로 `allowExternal` 기본값을 정하고, MCP `ask_knowledge`는 계속 local-only(`allow_external=false`) contract를 유지한다.
 
 예:
 
 ```bash
 khub ask "Transformer의 핵심 아이디어는?"
 khub ask "RAG implementation의 핵심 tradeoff는?" --json
-khub ask "최근 업데이트된 RAG benchmark 차이" --source paper --memory-route-mode compat --json
+khub ask "최근 업데이트된 RAG 방법 차이" --source paper --memory-route-mode compat --json
 khub ask "트랜스포머를 대체할 차세대 아키텍처 논문들을 찾아서 정리해줘" --source paper --json
 khub ask "최근 벡터 검색 품질 개선 글은 rerank를 어떤 역할로 설명하나?" --source web --json
 khub ask "web card v2에서 version grounding이 필요한 이유는 무엇인가?" --source web --json
@@ -223,6 +262,49 @@ khub config get embedding.provider
 khub config set embedding.provider ollama
 khub config providers --models
 ```
+
+### `khub provider`
+
+```text
+khub provider recommend
+khub provider list
+khub provider add
+khub provider use
+khub provider key
+khub provider setup
+khub provider doctor
+```
+
+용도:
+- 역할별 AI 선택지를 `local`, `balanced`, `quality`, `codex-mcp` profile로 빠르게 설정
+- DeepSeek, OpenRouter, Together, vLLM, LM Studio, 사내 게이트웨이 같은 OpenAI-compatible 모델을 named provider로 등록
+- raw API key 대신 `api_key_env` 기반 환경변수 참조를 저장
+
+예:
+
+```bash
+khub provider recommend
+khub provider setup --profile balanced
+khub provider setup --profile codex-mcp
+
+khub provider add deepseek --from-service deepseek --use-for answer
+khub provider add qwen-api \
+  --adapter openai-compatible \
+  --base-url https://api.example.com/v1 \
+  --api-key-env QWEN_API_KEY \
+  --llm-model qwen-plus \
+  --region cn
+
+khub provider use answer deepseek/deepseek-chat
+khub provider use embedding pplx-st/perplexity-ai/pplx-embed-v1-0.6b
+khub provider key deepseek --env DEEPSEEK_API_KEY
+khub provider doctor
+```
+
+정책:
+- 임베딩은 대량 코퍼스가 외부로 나가므로 기본 추천은 로컬 provider입니다.
+- 답변/요약/정규화처럼 품질이 중요한 생성 구간은 API provider를 선택할 수 있습니다.
+- custom external provider는 기존 provider outbound policy guard를 통과하며, 답변 생성에서는 `--allow-external` 정책을 명시적으로 확인합니다.
 
 ### `khub crawl`
 
@@ -399,10 +481,12 @@ khub discover
 용도:
 - 논문 검색 -> 다운로드 -> 요약/번역 -> 인덱싱 -> 옵시디언 연결
 - `--judge`로 optional paper discovery filter 사용 가능
+- 기본 intake는 `khub add "topic" --type paper -n 3`이고, `discover`는 세부 discovery 옵션이 필요할 때 직접 호출하는 compatibility surface
 
 예:
 
 ```bash
+khub add "large language model agent" --type paper -n 3
 khub discover "large language model agent" -n 3
 khub discover "retrieval agent" -n 5 --judge
 khub discover "scientific taste" -n 5 --judge --json
@@ -503,7 +587,7 @@ khub doctor --json
 - local-first 진단에서 허용되는 상태 집합은 `ok|blocked|degraded|needs_setup`다
 - local-first profile에서 Ollama가 꺼져 있으면 `blocked/degraded`를 그대로 유지한 채 원인과 다음 명령을 보여준다
 - typical recovery order: `ollama serve` -> `ollama pull <each configured model>` -> `python -m knowledge_hub.interfaces.cli.main doctor`
-- vector corpus가 아직 `needs_setup`이면 현재 안내된 fix command를 따라 `khub discover "AI agent" --max-papers 1`로 최소 corpus를 만든다
+- vector corpus가 아직 `needs_setup`이면 현재 안내된 fix command를 따라 `khub add "AI agent" --type paper -n 1`로 최소 corpus를 만든다
 
 ### `khub mcp`
 
@@ -612,7 +696,7 @@ khub labs memory search
 - 문서 summary와 section/block 단위 메모리 유닛을 조회
 - additive `semanticUnits` payload로 `Document / Element / MemoryCard` 계약을 inspectable하게 노출
 - 기본 `search`/`ask`와 별개로 summary-first 메모리 검색 실험
-- 수동 평가는 `khub labs eval prepare-document-memory`로 CSV 템플릿을 생성한 뒤 `khub labs eval run`으로 gate를 본다
+- 승격 판단용 체크는 내부 유지보수 경로이며 공개 CLI discovery surface로 문서화하지 않는다
 
 예:
 
@@ -622,56 +706,6 @@ khub labs memory build --paper-id 2603.13017 --json
 khub labs memory build --canonical-url "https://example.com/rag" --json
 khub labs memory show --document-id "paper:2603.13017" --json
 khub labs memory search --query "retrieval evidence" --json
-```
-
-### `khub labs eval`
-
-```text
-khub labs eval prepare-document-memory
-khub labs eval prepare-claim-synthesis
-khub labs eval prepare-paper-summary
-khub labs eval run
-khub labs eval sectioncards
-khub labs eval answer-loop collect
-khub labs eval answer-loop judge
-khub labs eval answer-loop summarize
-khub labs eval answer-loop autofix
-khub labs eval answer-loop run
-khub labs eval answer-loop optimize
-```
-
-용도:
-- retrieval / document-memory / paper-memory 평가와 user-answer answer-loop를 한 곳에서 실행
-- `memory-router-v1` 프로필은 기존 retrieval-core + document-memory + paper-memory non-regression 위에 memory-first delta를 같이 본다
-- optional claim-synthesis 수동 평가도 같은 eval surface에서 템플릿/게이트로 다룸
-- `answer-loop`는 retrieval을 한 번만 freeze한 packet으로 고정하고, 여러 answer backend를 같은 evidence에서 비교한다
-- `judge`는 `pred_*`만 채우고, `final_*`는 human review 전용으로 남긴다
-- `run`은 `collect -> judge -> summarize -> autofix`를 최대 시도 수까지 반복하고 dirty worktree는 기본 차단한다
-- `optimize`는 retrieval을 한 번 freeze한 뒤 Codex-only answer revision + Codex-only judge를 비파괴적으로 반복하고, judge estimated-token 사용량을 일일 예산 대비 제한된 비율로 묶은 채 review pack만 남긴다
-- supporting capability 승격 판단을 같은 프레임으로 읽기 위한 내부 운영 surface
-- core runtime 동작을 바꾸지 않고 `pass|warn|fail` 상태만 제공
-
-`khub eval`은 기존 스크립트/메모 호환을 위한 hidden compatibility alias만 남기고, canonical path는 `khub labs eval`로 고정한다.
-
-gate 의미:
-- `pass`: 현재 프로파일이 정의된 기준을 통과
-- `warn`: 치명적 실패는 아니지만 승격 근거로는 약함
-- `fail`: 현재 상태로는 승격/신뢰 판단을 내리면 안 됨
-
-예:
-
-```bash
-khub labs eval prepare-document-memory --db data/knowledge.db --json
-khub labs eval prepare-claim-synthesis --db data/knowledge.db --paper-id 2501.00001 --paper-id 2501.00004 --json
-khub labs eval prepare-paper-summary --db data/knowledge.db --paper-id 2501.00001 --json
-khub labs eval run --profile memory-promotion --db data/knowledge.db --document-memory-csv docs/experiments/document_memory_eval_template.csv --json
-khub labs eval run --profile memory-promotion --db data/knowledge.db --document-memory-csv docs/experiments/document_memory_eval_template.csv --claim-synthesis-csv docs/experiments/claim_synthesis_eval_template.csv --json
-khub labs eval run --profile retrieval-core --retrieval-csv docs/eval_precision_template.csv --json
-khub labs eval run --profile memory-router-v1 --db data/knowledge.db --retrieval-csv docs/eval_precision_template.csv --document-memory-csv docs/experiments/document_memory_eval_template.csv --paper-memory-cases tests/fixtures/paper_memory_eval/cases.json --memory-router-csv docs/experiments/memory_router_candidate.csv --memory-router-baseline-csv docs/experiments/memory_router_baseline.csv --json
-khub labs eval answer-loop collect --answer-backend openai_gpt5_mini --json
-khub labs eval answer-loop judge --collect-manifest eval/knowledgeos/runs/answer_loop/latest/answer_loop_collect_manifest.json --json
-khub labs eval answer-loop run --answer-backend codex_mcp --answer-backend openai_gpt5_mini --answer-backend ollama_gemma4 --max-attempts 3 --repo-path . --json
-khub labs eval answer-loop optimize --queries eval/knowledgeos/queries/user_answer_eval_queries_v1.csv --daily-token-budget-estimate 120000 --judge-budget-ratio 0.10 --generator-model gpt-5.4 --judge-model gpt-5.4 --json
 ```
 
 ### `khub search`
@@ -742,7 +776,6 @@ khub labs belief
 khub labs claims
 khub labs crawl
 khub labs decision
-khub labs eval
 khub labs feature
 khub labs graph
 khub labs learn
@@ -787,7 +820,6 @@ khub labs claims pending list
 ### `khub labs crawl`
 
 ```text
-khub labs crawl benchmark
 khub labs crawl domain-policy
 khub labs crawl domain-policy approve
 khub labs crawl domain-policy list
@@ -921,13 +953,13 @@ khub ask "질문"
 ### 2. 코딩/작업 문맥
 
 ```bash
-khub agent context "작업 목표" --repo-path .
+khub context "작업 목표" --repo-path .
 ```
 
 ### 3. 논문 수집
 
 ```bash
-khub discover "주제" -n 5 --judge
+khub add "주제" --type paper -n 5
 khub paper list
 ```
 

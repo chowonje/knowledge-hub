@@ -3,8 +3,8 @@
 
 Usage example:
   python scripts/download_assets_from_raw.py \
-    --raw-dir /Volumes/T9/khub/raw_web \
-    --out-dir /Volumes/T9/khub/assets \
+    --raw-dir <asset-raw-root> \
+    --out-dir <asset-output-root> \
     --workers 24 \
     --max-total-gb 300
 """
@@ -378,8 +378,8 @@ def _iter_tasks(raw_dir: Path, allow_all: bool) -> Iterable[tuple[str, str, str]
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Download linked assets from raw HTML archive")
-    parser.add_argument("--raw-dir", default="/Volumes/T9/khub/raw_web")
-    parser.add_argument("--out-dir", default="/Volumes/T9/khub/assets")
+    parser.add_argument("--raw-dir", default="~/.khub/raw_web")
+    parser.add_argument("--out-dir", default="~/.khub/assets")
     parser.add_argument("--manifest", default="")
     parser.add_argument("--workers", type=int, default=24)
     parser.add_argument("--timeout", type=int, default=20)
@@ -398,7 +398,7 @@ def main() -> int:
     manifest = args.manifest.strip()
     if not manifest:
         manifest = str(
-            (Path("/Volumes/T9/khub/runs") / f"asset_download_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json").resolve()
+            (Path("~/.khub/runs").expanduser() / f"asset_download_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json").resolve()
         )
     manifest_path = Path(manifest)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)

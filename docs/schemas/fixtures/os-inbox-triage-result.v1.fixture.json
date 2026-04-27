@@ -22,7 +22,7 @@
     "kind": "research",
     "status": "open",
     "priority": "high",
-    "assignee": "won",
+    "assignee": "operator",
     "blockedBy": [],
     "sourceRefs": [
       { "sourceType": "paper", "paperId": "1706.03762" }

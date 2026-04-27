@@ -603,6 +603,17 @@ def test_execute_paper_discover_prefers_doc_summary_anchors_without_claim_cards(
 
     assert pipeline_result.results
     assert pipeline_result.results[0].metadata["unit_type"] == "document_summary"
+    diagnostics = pipeline_result.diagnostics()
+    assert diagnostics["candidateSources"]
+    assert diagnostics["candidateSources"][0]["sourceKind"] == "paper"
+    assert diagnostics["memoryRoute"]["contractRole"] == "ask_retrieval_memory_prefilter"
+    assert diagnostics["memoryPrefilter"]["contractRole"] == "retrieval_memory_prefilter"
+    assert diagnostics["paperMemoryPrefilter"]["contractRole"] == "paper_source_memory_prefilter"
+    assert diagnostics["paperMemoryPrefilter"]["requestedMode"] == "off"
+    assert diagnostics["paperMemoryPrefilter"]["applied"] is False
+    assert diagnostics["paperMemoryPrefilter"]["matchedPaperIds"] == []
+    assert "2603.13017" in [item["id"] for item in diagnostics["candidateSources"]]
+    assert diagnostics["contextExpansion"]["mode"] in {"card", "ontology"}
     assert pipeline_result.v2_diagnostics["runtimeExecution"]["used"] == "ask_v2"
 
 
@@ -796,7 +807,9 @@ def test_generate_answer_uses_card_first_v2_and_anchor_scoped_evidence(tmp_path)
     assert payload["v2"]["routing"]["mode"] == "card-first"
     assert payload["v2"]["routing"]["selected_card_ids"]
     assert payload["v2"]["evidenceVerification"]["anchorIdsUsed"]
-    assert payload["paperMemoryPrefilter"]["requestedMode"] == "paper-card-v2"
+    assert payload["paperMemoryPrefilter"]["requestedMode"] == "off"
+    assert payload["paperMemoryPrefilter"]["effectiveMode"] == "off"
+    assert payload["paperMemoryPrefilter"]["applied"] is False
     assert payload["queryFrame"]["family"] == "paper_lookup"
     assert payload["evidencePolicy"]["policyKey"] == "paper_lookup_policy"
 
