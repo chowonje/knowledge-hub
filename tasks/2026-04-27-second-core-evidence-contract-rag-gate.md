@@ -12,8 +12,13 @@ Add a frontier-local performance and quality gate for the Evidence-contract RAG 
 - `eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py`
 - `eval/knowledgeos/queries/evidence_contract_perf_gate_cases_v1.json`
 - `knowledge_hub/ai/ask_v2.py`
+- `knowledge_hub/ai/ask_v2_support.py`
+- `knowledge_hub/ai/evidence_assembly.py`
+- `knowledge_hub/ai/rag_answer_evidence.py`
 - `knowledge_hub/mcp/handlers/search.py`
 - `tests/test_evidence_contract_perf_gate.py`
+- `tests/test_evidence_assembly_temporal.py`
+- `tests/test_rag_answer_evidence.py`
 - `tests/test_paper_ask_v2.py`
 - `tests/test_mcp_search_handler.py`
 - `tests/test_mcp_server.py`
@@ -64,6 +69,11 @@ Add a frontier-local performance and quality gate for the Evidence-contract RAG 
 - Older paper-card anchors can now recover source-content hashes from paper `text_path`, `translated_path`, `pdf_path`, or paper notes, so historical paper rows do not fail citation-grade checks only because their card metadata predates strict provenance.
 - Soft recency evaluation prompts such as “최근 RAG evaluation article...” no longer enter the hard temporal route only because they contain `최근`; explicit latest/update/before/after signals remain temporal.
 - `answerContract.abstain` now treats strict `evidencePacketContract.answerable=false`, `early_exit`, `policy_blocked`, and `conservative_fallback` as abstention states, so raw packet answerability can no longer contradict the strict evidence contract.
+- Stubbed live-corpus generation now reports a local route instead of a fixed/external route, avoiding false P0 external-call policy blocks during no-generation validation.
+- AskV2 no longer hard-abstains solely because claim cards include unsupported items when scoped evidence verification has anchors and no concrete unsupported field; unsupported claim cards remain diagnostics and answer post-processing can still fall back if generated text is unsupported.
+- Metadata-only retrieved evidence now gets a deterministic retrieved-document content hash and span range, so mixed/paper fallback rows can be contract-graded when no older source hash exists.
+- EvidenceAssembly now matches the AskV2 soft-recency rule for evaluation prompts: soft `recent/최근` evaluation questions are not treated as hard temporal latest claims, while explicit `latest/최신/update/after/year` prompts still require temporal grounding.
+- Current full no-generation baseline: `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --live-stub-llm --run-profile full --json --timeout-sec 10` produced `status=failed`, `20/24` passed, `contractValidRate=1.0`, `citationGradeCoverageRate=1.0`, `abstainCorrectRate=1.0`, `verificationPassRate=null`, `verificationPassRateRaw=0.0`, `timeoutCount=0`, `latencyMs.p95=1069.924ms`, `generationDependencyRate=0.5`, and `failureCategories={"provider/corpus_dependency": 4}`.
 
 ## Verification
 
@@ -76,12 +86,17 @@ Add a frontier-local performance and quality gate for the Evidence-contract RAG 
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --stub-llm --run-profile thermal --json --timeout-sec 10` (`status=ok`, `5/5` source-balanced cases passed)
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --live-stub-llm --run-profile thermal --json --timeout-sec 10` (`status=failed`, `4/5` cases passed; contract/citation/abstain/timeout thresholds green; remaining failure classified as `provider/corpus_dependency:temporal_grounding`)
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --live-stub-llm --run-profile full --json --timeout-sec 10` (`status=failed`, `8/24` cases passed; contract/citation/abstain/timeout thresholds green; current blockers are answerability/fallback calibration, hard-temporal web grounding, and one mixed citation-grade row)
+- `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --live-stub-llm --run-profile full --json --timeout-sec 10` (`status=failed`, `20/24` cases passed; contract/citation/abstain/timeout thresholds green; remaining failures are provider/corpus dependency only)
 - `python eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py --json --run-profile full --timeout-sec 20` (`status=failed`, `6/24` cases passed; baseline recorded only, not CI-required)
 - `python -m pytest tests/test_answer_contracts_runtime.py tests/test_answer_contract_schemas.py tests/test_answer_quality_gate.py tests/test_retrieval_span_golden.py tests/test_evidence_contract_perf_gate.py -q` (`30 passed`)
+- `python -m pytest tests/test_answer_contracts_runtime.py tests/test_answer_contract_schemas.py tests/test_answer_quality_gate.py tests/test_retrieval_span_golden.py tests/test_evidence_contract_perf_gate.py tests/test_evidence_assembly_temporal.py tests/test_rag_answer_evidence.py -q` (`41 passed`)
+- `python -m pytest tests/test_paper_ask_v2.py -q` (`46 passed`)
 - `python -m pytest tests/test_answer_contracts_runtime.py tests/test_answer_contract_schemas.py tests/test_answer_quality_gate.py tests/test_retrieval_span_golden.py tests/test_evidence_contract_perf_gate.py tests/test_paper_ask_v2.py::test_ask_v2_classifies_soft_recency_evaluation_as_evaluation_not_temporal -q` (`37 passed`)
 - `python -m pytest tests/test_answer_orchestrator_services.py::test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_parity tests/test_answer_orchestrator_services.py::test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit_stay_in_parity tests/test_paper_ask_v2.py::test_anchor_results_preserve_compare_source_diversity tests/test_paper_ask_v2.py::test_anchor_results_preserve_card_v2_strict_provenance tests/test_ask_v2_sources.py::test_web_anchor_results_expose_url_and_strict_provenance -q` (`5 passed`)
 - `python -m pytest tests/test_answer_orchestrator_services.py::test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_parity tests/test_answer_orchestrator_services.py::test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit_stay_in_parity -q` (`2 passed`)
 - `python -m pytest tests/test_mcp_server.py tests/test_mcp_search_handler.py tests/test_mcp_server_helpers.py -q` (`48 passed`)
+- `python -m ruff check eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py knowledge_hub/ai/ask_v2.py knowledge_hub/ai/ask_v2_support.py knowledge_hub/ai/evidence_assembly.py knowledge_hub/ai/rag_answer_evidence.py tests/test_evidence_contract_perf_gate.py tests/test_paper_ask_v2.py tests/test_evidence_assembly_temporal.py tests/test_rag_answer_evidence.py` (`passed`)
+- `python -m py_compile eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py knowledge_hub/ai/ask_v2.py knowledge_hub/ai/ask_v2_support.py knowledge_hub/ai/evidence_assembly.py knowledge_hub/ai/rag_answer_evidence.py` (`passed`)
 - `python -m ruff check knowledge_hub/ai/ask_v2.py eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py tests/test_evidence_contract_perf_gate.py tests/test_paper_ask_v2.py` (`passed`)
 - `python -m ruff check knowledge_hub/ai/answer_contracts.py knowledge_hub/ai/answer_orchestrator_payload_slices.py knowledge_hub/ai/ask_v2_support.py eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py tests/test_answer_contracts_runtime.py tests/test_evidence_contract_perf_gate.py tests/test_paper_ask_v2.py` (`passed`)
 - `python -m ruff check knowledge_hub/ai/answer_contracts.py knowledge_hub/ai/answer_orchestrator_early_exit.py knowledge_hub/ai/ask_v2.py knowledge_hub/ai/rag_answer_evidence.py eval/knowledgeos/scripts/run_evidence_contract_perf_gate.py tests/test_answer_orchestrator_services.py tests/test_paper_ask_v2.py tests/test_ask_v2_sources.py tests/test_evidence_contract_perf_gate.py` (`passed`)

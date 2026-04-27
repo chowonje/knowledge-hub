@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 import re
 from typing import Any
 
@@ -208,9 +208,20 @@ def _normalize_family_anchor(value: Any) -> str:
 
 
 def _is_temporal_query(query: str) -> bool:
+    body = str(query or "")
+    if (
+        re.search(r"\b(evaluate|evaluation|benchmark|metric|metrics|faithfulness|citation accuracy|accuracy)\b|평가|지표", body, re.IGNORECASE)
+        and re.search(r"\b(recent)\b|최근", body, re.IGNORECASE)
+        and not re.search(
+            r"\b(latest|updated|update|newest|changed since|before|after|since|today|current|now)\b|최신|업데이트|이전|이후|당시|오늘|현재|\b\d{4}\b|\d+\s*년",
+            body,
+            re.IGNORECASE,
+        )
+    ):
+        return False
     return bool(
-        re.search(r"\b(latest|recent|updated|update|newest|changed since|before|after|since)\b", str(query or ""), re.IGNORECASE)
-        or re.search(r"최근|최신|업데이트|이전|이후|당시", str(query or ""))
+        re.search(r"\b(latest|recent|updated|update|newest|changed since|before|after|since)\b", body, re.IGNORECASE)
+        or re.search(r"최근|최신|업데이트|이전|이후|당시", body)
     )
 
 
@@ -445,7 +456,6 @@ def _derive_paper_answer_scope(
         "paper_lookup" if intent == "paper_lookup" else "paper_discover" if intent == "paper_topic" else "concept_explainer" if normalize_source_type(source_type) == "paper" and intent == "definition" else "general"
     )
     policy_payload = normalize_evidence_policy(evidence_policy, family=paper_family)
-    normalized_source = normalize_source_type(source_type)
     scoped_filter = dict(metadata_filter or {})
     explicit_paper_id = str(scoped_filter.get("arxiv_id") or scoped_filter.get("paper_id") or "").strip()
     planned_paper_ids = [

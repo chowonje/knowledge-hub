@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from types import SimpleNamespace
 import pytest
 
-from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service
+from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service, _ask_v2_hard_gate_reason
 from knowledge_hub.ai.ask_v2_support import classify_intent
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
 from knowledge_hub.ai.answer_contracts import build_answer_contract
@@ -678,6 +678,11 @@ def test_ask_v2_classifies_soft_recency_evaluation_as_evaluation_not_temporal():
     assert classify_intent("latest vector database retrieval best practice는 무엇인가?") == "temporal"
 
 
+def test_ask_v2_classifies_structural_after_pipeline_as_implementation_not_temporal():
+    assert classify_intent("AnswerOrchestrator는 retrieval pipeline 이후 어떤 역할을 하는가?") == "implementation"
+    assert classify_intent("2026년 이후 retrieval pipeline 변화는 무엇인가?") == "temporal"
+
+
 def test_ask_v2_route_preserves_concept_definition_when_classifier_is_impl_or_eval(tmp_path):
     """Rule-based frame says definition; regex classifier can win on impl/eval keywords first."""
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
@@ -858,6 +863,24 @@ def test_generate_answer_v2_fallback_does_not_trigger_on_weak_claim_only_when_ve
     assert int(payload["v2"]["consensus"].get("weakClaimCount") or 0) >= 1
     assert payload["v2"]["evidenceVerification"].get("verificationStatus") == "strong"
     assert payload["v2"]["fallback"]["used"] is False
+
+
+def test_ask_v2_hard_gate_keeps_unsupported_claim_cards_diagnostic_when_evidence_has_no_unsupported_fields():
+    reason = _ask_v2_hard_gate_reason(
+        verification={"verificationStatus": "weak", "unsupportedFields": [], "anchorIdsUsed": ["anchor-1"]},
+        claim_consensus={"unsupportedClaimCount": 1, "conflictCount": 0},
+    )
+
+    assert reason == ""
+
+
+def test_ask_v2_hard_gate_blocks_concrete_unsupported_verification_field():
+    reason = _ask_v2_hard_gate_reason(
+        verification={"verificationStatus": "weak", "unsupportedFields": ["temporal_version_grounding"]},
+        claim_consensus={"unsupportedClaimCount": 0, "conflictCount": 0},
+    )
+
+    assert reason == "ask_v2_weak_evidence:temporal_version_grounding"
 
 
 def test_select_paper_cards_prefers_resolved_compare_scope_over_broad_search(tmp_path, monkeypatch):

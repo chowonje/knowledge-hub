@@ -241,6 +241,13 @@ def conservative_fallback_used(payload: dict[str, Any]) -> bool:
     return source == "conservative_fallback"
 
 
+def strict_evidence_answerable(payload: dict[str, Any]) -> bool | None:
+    evidence_contract = contract_payload(payload, "evidencePacketContract")
+    if "answerable" not in evidence_contract:
+        return None
+    return bool(evidence_contract.get("answerable"))
+
+
 def safe_abstain_observed(payload: dict[str, Any]) -> bool:
     return answer_abstains(payload) or conservative_fallback_used(payload)
 
@@ -279,6 +286,7 @@ def provider_corpus_dependency_reason(payload: dict[str, Any], *, query: str = "
             "strict_abstention_threshold_not_met",
             "insufficient_for_latest_claim",
             "ask_v2_unsupported_claim_cards",
+            "ask_v2_weak_evidence",
         )
     ):
         return "retrieval_or_corpus_gap"
@@ -310,7 +318,14 @@ def classify_failure_categories(errors: list[str]) -> list[str]:
     return [category for category in ordered if category in category_set]
 
 
-def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: float, timeout: bool = False) -> dict[str, Any]:
+def evaluate_case(
+    case: dict[str, Any],
+    payload: dict[str, Any],
+    *,
+    latency_ms: float,
+    timeout: bool = False,
+    llm_stubbed: bool = False,
+) -> dict[str, Any]:
     required_contracts = [clean_text(item) for item in list(case.get("required_contracts") or [])]
     contracts_valid, contract_errors = validate_required_contracts(payload, required_contracts)
     answer_contract = contract_payload(payload, "answerContract")
@@ -325,6 +340,19 @@ def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: 
     abstain_ok = abstain_observed if expected_abstain else not abstain_observed
     unsupported_count = as_int(verification_verdict.get("unsupportedClaimCount"), 0)
     verdict = clean_text(verification_verdict.get("verdict")).casefold()
+    strict_answerable = strict_evidence_answerable(payload)
+    conservative_fallback = conservative_fallback_used(payload)
+    generation_dependency_reason = ""
+    if (
+        llm_stubbed
+        and not expected_abstain
+        and conservative_fallback
+        and strict_answerable is True
+        and citation_grade_ok
+    ):
+        generation_dependency_reason = "stubbed_generation_conservative_fallback"
+        abstain_observed = False
+        abstain_ok = True
     dependency_reason = (
         provider_corpus_dependency_reason(payload, query=clean_text(case.get("query")))
         if not expected_abstain and hard_abstain_observed and contracts_valid and citation_grade_ok
@@ -361,11 +389,13 @@ def evaluate_case(case: dict[str, Any], payload: dict[str, Any], *, latency_ms: 
         "hardAbstainObserved": hard_abstain_observed,
         "safeAbstainObserved": safe_abstain,
         "abstainOk": abstain_ok,
+        "strictEvidenceAnswerable": strict_answerable,
+        "generationDependencyReason": generation_dependency_reason,
         "providerCorpusDependencyReason": dependency_reason,
         "verificationVerdict": verdict,
         "verificationPass": verdict == "pass",
         "unsupportedClaimCount": unsupported_count,
-        "conservativeFallbackUsed": conservative_fallback_used(payload),
+        "conservativeFallbackUsed": conservative_fallback,
         "latencyMs": round(float(latency_ms), 3),
         "timeout": bool(timeout),
     }
@@ -384,6 +414,7 @@ def build_summary(case_results: list[dict[str, Any]], *, thresholds: dict[str, A
     verification_pass_rate = _rate(sum(1 for item in case_results if item.get("verificationPass")), case_count)
     unsupported_claim_rate = _rate(sum(1 for item in case_results if as_int(item.get("unsupportedClaimCount"), 0) > 0), case_count)
     conservative_fallback_rate = _rate(sum(1 for item in case_results if item.get("conservativeFallbackUsed")), case_count)
+    generation_dependency_rate = _rate(sum(1 for item in case_results if clean_text(item.get("generationDependencyReason"))), case_count)
     failure_categories: dict[str, int] = {}
     for item in failed:
         for category in list(item.get("failureCategories") or []):
@@ -414,6 +445,7 @@ def build_summary(case_results: list[dict[str, Any]], *, thresholds: dict[str, A
         "verificationPassRate": verification_pass_rate,
         "unsupportedClaimRate": unsupported_claim_rate,
         "conservativeFallbackRate": conservative_fallback_rate,
+        "generationDependencyRate": generation_dependency_rate,
         "failureCategories": dict(sorted(failure_categories.items())),
         "latencyMs": latency,
         "timeoutCount": timeout_count,
@@ -558,7 +590,7 @@ def stubbed_answer_runtime(searcher: Any):
         searcher.llm = llm
         searcher._resolve_llm_for_request = lambda **kwargs: (  # type: ignore[method-assign]
             llm,
-            {"route": "fixed", "provider": "stub", "model": "evidence-contract-perf-gate"},
+            {"route": "local", "provider": "stub", "model": "evidence-contract-perf-gate"},
             [],
         )
         if hasattr(searcher, "_record_answer_log"):
@@ -668,7 +700,9 @@ def run_gate(
                 timeout = True
                 payload = {}
             latency_ms = (time.perf_counter() - started) * 1000.0
-            case_results.append(evaluate_case(case, payload, latency_ms=latency_ms, timeout=timeout))
+            case_results.append(
+                evaluate_case(case, payload, latency_ms=latency_ms, timeout=timeout, llm_stubbed=bool(stub_llm))
+            )
     summary = build_summary(case_results, thresholds=thresholds)
     if stub_llm:
         summary["verificationPassRateRaw"] = summary.get("verificationPassRate")
@@ -719,6 +753,7 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         f"- verification pass rate: `{payload.get('verificationPassRate')}`",
         f"- unsupported claim rate: `{payload.get('unsupportedClaimRate')}`",
         f"- conservative fallback rate: `{payload.get('conservativeFallbackRate')}`",
+        f"- generation dependency rate: `{payload.get('generationDependencyRate')}`",
         f"- failure categories: `{json.dumps(payload.get('failureCategories') or {}, ensure_ascii=False)}`",
         f"- latency p50/p95: `{latency.get('p50', 0)}` / `{latency.get('p95', 0)}` ms",
         f"- timeout count: `{payload.get('timeoutCount')}`",
@@ -820,6 +855,7 @@ def main(argv: list[str] | None = None) -> int:
             "verificationPassRateRaw": 0.0,
             "unsupportedClaimRate": 0.0,
             "conservativeFallbackRate": 0.0,
+            "generationDependencyRate": 0.0,
             "failureCategories": {"provider/corpus_dependency": 1},
             "latencyMs": latency_summary([]),
             "timeoutCount": 0,

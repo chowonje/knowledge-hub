@@ -28,6 +28,11 @@ _DEFINITION_RE = re.compile(
 _EXPLAIN_RE = re.compile(r"\b(explain|explainer)\b|설명", re.IGNORECASE)
 _EVAL_RE = re.compile(r"\b(result|benchmark|metric|evaluate|evaluation|performance|accuracy)\b|결과|평가|성능|지표", re.IGNORECASE)
 _IMPL_RE = re.compile(r"\b(implement|implementation|architecture|pipeline|how works|how to build)\b|구현|아키텍처|파이프라인", re.IGNORECASE)
+_STRUCTURAL_SEQUENCE_RE = re.compile(r"\b(before|after)\b|이전|이후", re.IGNORECASE)
+_EXPLICIT_TEMPORAL_CONTEXT_RE = re.compile(
+    r"\b(latest|recent|updated|newest|since|today|current|now)\b|최근|최신|업데이트|오늘|현재|\b\d{4}\b|\d+\s*년",
+    re.IGNORECASE,
+)
 _ARXIV_RE = re.compile(r"\b\d{4}\.\d{4,5}\b")
 _URL_RE = re.compile(r"https?://[^\s]+", re.IGNORECASE)
 _NUMBER_RE = re.compile(r"\b\d+(?:\.\d+)?%?\b")
@@ -516,6 +521,9 @@ def classify_intent(query: str, metadata_filter: dict[str, Any] | None = None) -
         return "paper_lookup"
     temporal_match = bool(_TEMPORAL_RE.search(body))
     hard_temporal_match = bool(_HARD_TEMPORAL_RE.search(body))
+    if temporal_match and _STRUCTURAL_SEQUENCE_RE.search(body) and _IMPL_RE.search(body) and not _EXPLICIT_TEMPORAL_CONTEXT_RE.search(body):
+        temporal_match = False
+        hard_temporal_match = False
     if temporal_match and not hard_temporal_match and _EVAL_RE.search(body):
         return "evaluation"
     if temporal_match:

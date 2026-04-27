@@ -267,6 +267,25 @@ def test_expected_answer_treats_conservative_fallback_as_hard_abstain():
     assert result["conservativeFallbackUsed"] is True
 
 
+def test_stubbed_expected_answer_separates_conservative_fallback_generation_dependency():
+    module = _load_module()
+    case = _case("stubbed_fallback_answer", expected_min_citation_count=1, expected_abstain=False)
+    payload = _contract_payload(
+        answer="Unsupported answer.",
+        rewrite={"attempted": True, "applied": True, "finalAnswerSource": "conservative_fallback"},
+    )
+
+    result = module.evaluate_case(case, payload, latency_ms=0.0, llm_stubbed=True)
+
+    assert result["strictEvidenceAnswerable"] is True
+    assert result["hardAbstainObserved"] is True
+    assert result["abstainObserved"] is False
+    assert result["abstainOk"] is True
+    assert result["generationDependencyReason"] == "stubbed_generation_conservative_fallback"
+    assert result["conservativeFallbackUsed"] is True
+    assert result["status"] == "pass"
+
+
 def test_temporal_hard_abstain_on_answer_case_is_corpus_dependency_when_citations_exist():
     module = _load_module()
     case = _case(
@@ -429,4 +448,5 @@ def test_run_gate_can_label_live_stub_llm_mode_without_fixture_searcher():
     assert payload["llmStubbed"] is True
     assert payload["verificationPassRate"] is None
     assert payload["verificationPassRateRaw"] == 1.0
+    assert payload["generationDependencyRate"] == 0.0
     assert payload["status"] == "ok"

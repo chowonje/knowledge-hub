@@ -78,8 +78,10 @@ def _ask_v2_hard_gate_reason(
         return f"ask_v2_{status}"
     if status == "weak" and unsupported_fields:
         return f"ask_v2_weak_evidence:{unsupported_fields[0]}"
-    if int(claim_consensus.get("unsupportedClaimCount") or 0) > 0:
-        return "ask_v2_unsupported_claim_cards"
+    # Unsupported claim cards should remain diagnostic when the scoped evidence
+    # verifier found anchors and no concrete unsupported slot. Answer
+    # post-processing can still reject generated text if unsupported claims leak
+    # into the final answer.
     return ""
 
 
