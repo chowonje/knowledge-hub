@@ -63,6 +63,17 @@
     "ok": true,
     "detail": ""
   },
+  "externalPolicy": {
+    "contractRole": "agent_run_external_policy",
+    "surface": "mcp-agent-run",
+    "scope": "agent_run",
+    "allowExternal": false,
+    "allowExternalRequested": false,
+    "externalSendAllowed": false,
+    "decisionSource": "fixture_local_only",
+    "policyMode": "local-only",
+    "mode": "local-only"
+  },
   "artifact": {
     "id": "artifact_fixture_001",
     "jsonContent": {

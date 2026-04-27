@@ -3,15 +3,36 @@ from __future__ import annotations
 from datetime import datetime
 import json
 from pathlib import Path
+import re
 from typing import Any, Callable
 
 from knowledge_hub.application.agent_gateway import build_gateway_metadata
+from knowledge_hub.core.sanitizer import redact_payload
 
 AGENT_CONTEXT_PACKET_SCHEMA = "knowledge-hub.agent.context-packet.v1"
+AGENT_SOURCE_TEXT_ROLE = "evidence_not_instruction"
 PLAYBOOK_SCHEMA = "knowledge-hub.foundry.agent.run.playbook.v1"
 VALID_AGENT_ROLES = {"planner", "researcher", "analyst", "summarizer", "auditor", "coach"}
 VALID_ORCHESTRATOR_MODES = {"single-pass", "adaptive", "strict"}
 VALID_PLAYBOOK_TOOLS = {"ask_knowledge", "search_knowledge", "build_task_context"}
+_RAW_TEXT_KEYS = {
+    "body",
+    "content",
+    "full_text",
+    "fulltext",
+    "note_body",
+    "notebody",
+    "raw",
+    "raw_body",
+    "rawbody",
+    "raw_text",
+    "rawtext",
+}
+_MACOS_USER_ROOT = "/" + "Users"
+_FILE_URI_RE = re.compile(r"file://[^\s\"'<>)]*", re.IGNORECASE)
+_LOCAL_USER_PATH_RE = re.compile(rf"{re.escape(_MACOS_USER_ROOT)}/[^/\s\"'<>)]*(/[^\s\"'<>)]*)?")
+_ARTIFACT_PATH_RE = re.compile(rf"(?:~|{re.escape(_MACOS_USER_ROOT)}/[^/]+)/(?:(?:\.khub/)?runs|artifacts|eval/knowledgeos/runs)/[^\s\"'<>)]*")
+_SECRET_VALUE_RE = re.compile(r"\b(?:sk|xox[baprs]|gh[pousr])-[A-Za-z0-9_=-]{6,}\b")
 
 
 def default_agent_policy(
@@ -36,6 +57,61 @@ def default_agent_policy(
         "finalApplyAllowed": False,
         "errors": errors,
     }
+
+
+def _redact_local_path_token(match: re.Match[str]) -> str:
+    token = match.group(0)
+    tail = token.split("/")[-1]
+    if tail and "." in tail:
+        return f"~/[REDACTED_LOCAL_PATH]/{tail}"
+    return "~/[REDACTED_LOCAL_PATH]"
+
+
+def sanitize_agent_string(value: str) -> tuple[str, bool]:
+    text = str(value)
+    sanitized = redact_payload(text)
+    if not isinstance(sanitized, str):
+        sanitized = text
+    home = str(Path.home())
+    if home and home in sanitized:
+        sanitized = sanitized.replace(home, "~")
+    sanitized = _FILE_URI_RE.sub("[REDACTED_FILE_URI]", sanitized)
+    sanitized = _ARTIFACT_PATH_RE.sub("~/[REDACTED_ARTIFACT_PATH]", sanitized)
+    sanitized = _LOCAL_USER_PATH_RE.sub(_redact_local_path_token, sanitized)
+    sanitized = _SECRET_VALUE_RE.sub("[REDACTED_SECRET]", sanitized)
+    return sanitized, sanitized != text
+
+
+def sanitize_agent_packet_value(value: Any, *, key: str = "") -> tuple[Any, bool]:
+    normalized_key = key.replace("-", "_").replace(" ", "_").lower()
+    if normalized_key in _RAW_TEXT_KEYS and value not in (None, "", [], {}):
+        return "[OMITTED_RAW_TEXT]", True
+    if isinstance(value, str):
+        return sanitize_agent_string(value)
+    if isinstance(value, dict):
+        changed = False
+        output: dict[str, Any] = {}
+        redacted = redact_payload(value)
+        source = redacted if isinstance(redacted, dict) else value
+        if source is not value:
+            changed = True
+        for nested_key, nested_value in source.items():
+            sanitized, nested_changed = sanitize_agent_packet_value(nested_value, key=str(nested_key))
+            output[str(nested_key)] = sanitized
+            changed = changed or nested_changed
+        return output, changed
+    if isinstance(value, list):
+        changed = False
+        output = []
+        for item in value:
+            sanitized, nested_changed = sanitize_agent_packet_value(item)
+            output.append(sanitized)
+            changed = changed or nested_changed
+        return output, changed
+    if isinstance(value, tuple):
+        sanitized_list, changed = sanitize_agent_packet_value(list(value))
+        return tuple(sanitized_list), changed
+    return value, False
 
 
 def _contract_present(value: object | None) -> bool:
@@ -112,6 +188,11 @@ def build_agent_context_packet(
     warnings: list[str] | None = None,
     next_actions: list[str] | None = None,
     require_answer_contracts: bool = False,
+    stage_only: bool = False,
+    final_apply: bool = False,
+    source_text_role: str = AGENT_SOURCE_TEXT_ROLE,
+    redaction_applied: bool | None = None,
+    blocked_reason: str | None = None,
 ) -> dict[str, object]:
     packet_policy = policy or default_agent_policy()
     inferred_safe, inferred_review, inferred_warnings = infer_agent_safety(
@@ -133,20 +214,50 @@ def build_agent_context_packet(
         safe = False
     if not safe and required_human_review is None:
         review = True
+    sanitized_context, context_redacted = sanitize_agent_packet_value(context or {})
+    sanitized_evidence_packet, evidence_redacted = sanitize_agent_packet_value(evidence_packet_contract or {})
+    sanitized_answer_contract, answer_redacted = sanitize_agent_packet_value(answer_contract or {})
+    sanitized_verification, verification_redacted = sanitize_agent_packet_value(verification_verdict or {})
+    sanitized_goal, goal_redacted = sanitize_agent_string(str(goal or ""))
+    sanitized_query, query_redacted = sanitize_agent_string(str(query or ""))
+    sanitizer_changed = any(
+        [
+            context_redacted,
+            evidence_redacted,
+            answer_redacted,
+            verification_redacted,
+            goal_redacted,
+            query_redacted,
+        ]
+    )
+    if redaction_applied is None:
+        redaction_applied = sanitizer_changed
+    resolved_blocked_reason = str(blocked_reason or "").strip()
+    if not resolved_blocked_reason and not safe:
+        policy_errors = packet_policy.get("errors")
+        if isinstance(policy_errors, list):
+            resolved_blocked_reason = next((str(item) for item in policy_errors if str(item).strip()), "")
+        if not resolved_blocked_reason:
+            resolved_blocked_reason = next((item for item in merged_warnings if item), "not_safe_to_use")
 
     return {
         "schema": AGENT_CONTEXT_PACKET_SCHEMA,
         "requestId": str(request_id or ""),
         "tool": str(tool or ""),
-        "goal": str(goal or ""),
-        "query": str(query or ""),
+        "goal": sanitized_goal,
+        "query": sanitized_query,
         "policy": packet_policy,
-        "context": context or {},
-        "evidencePacketContract": evidence_packet_contract or {},
-        "answerContract": answer_contract or {},
-        "verificationVerdict": verification_verdict or {},
+        "context": sanitized_context,
+        "evidencePacketContract": sanitized_evidence_packet,
+        "answerContract": sanitized_answer_contract,
+        "verificationVerdict": sanitized_verification,
         "safeToUse": bool(safe),
         "requiredHumanReview": bool(review),
+        "stageOnly": bool(stage_only),
+        "finalApply": bool(final_apply),
+        "sourceTextRole": AGENT_SOURCE_TEXT_ROLE if source_text_role != AGENT_SOURCE_TEXT_ROLE else source_text_role,
+        "redactionApplied": bool(redaction_applied),
+        "blockedReason": resolved_blocked_reason,
         "warnings": merged_warnings,
         "nextActions": [str(item) for item in (next_actions or []) if str(item).strip()],
     }
@@ -410,6 +521,65 @@ def _normalize_artifact(value: object | None, *, now: str) -> dict[str, object] 
     return artifact
 
 
+def _local_only_agent_run_policy(*, decision_source: str, requested: bool | None = False) -> dict[str, object]:
+    return {
+        "contractRole": "agent_run_external_policy",
+        "surface": "mcp-agent-run",
+        "scope": "agent_run",
+        "allowExternal": False,
+        "allowExternalRequested": requested,
+        "externalSendAllowed": False,
+        "decisionSource": str(decision_source or "local_only_default"),
+        "policyMode": "local-only",
+        "mode": "local-only",
+    }
+
+
+def _normalize_agent_run_external_policy(payload: dict[str, object], *, default_source: str) -> tuple[dict[str, object], bool, list[str]]:
+    raw = payload.get("externalPolicy")
+    explicit = isinstance(raw, dict)
+    if explicit:
+        allow_external = bool(raw.get("allowExternal", raw.get("allow_external", False)))
+        external_send_allowed = bool(raw.get("externalSendAllowed", raw.get("external_send_allowed", allow_external)))
+        policy_mode = str(
+            raw.get("policyMode")
+            or raw.get("mode")
+            or ("external-allowed" if allow_external else "local-only")
+        ).strip().lower()
+        requested = raw.get("allowExternalRequested", raw.get("allow_external_requested", allow_external))
+        policy = {
+            "contractRole": str(raw.get("contractRole") or "agent_run_external_policy"),
+            "surface": str(raw.get("surface") or "mcp-agent-run"),
+            "scope": str(raw.get("scope") or "agent_run"),
+            "allowExternal": allow_external,
+            "allowExternalRequested": bool(requested) if requested is not None else None,
+            "externalSendAllowed": external_send_allowed,
+            "decisionSource": str(raw.get("decisionSource") or raw.get("decision_source") or "delegated_payload"),
+            "policyMode": policy_mode,
+            "mode": str(raw.get("mode") or policy_mode).strip().lower(),
+        }
+    else:
+        policy = _local_only_agent_run_policy(decision_source="missing_delegated_policy")
+
+    errors: list[str] = []
+    local_only_ok = (
+        explicit
+        and bool(policy.get("allowExternal")) is False
+        and bool(policy.get("externalSendAllowed")) is False
+        and str(policy.get("policyMode") or "").strip().lower() == "local-only"
+    )
+    source = str(payload.get("source") or default_source or "")
+    delegated = source.startswith("foundry-core/")
+    if delegated and not explicit:
+        errors.append("agent run blocked: delegated payload missing local-only externalPolicy")
+    if bool(policy.get("allowExternal")) or bool(policy.get("externalSendAllowed")) or str(policy.get("policyMode") or "").strip().lower() != "local-only":
+        errors.append("agent run blocked: external calls are disabled for agent runtime v1")
+    if not delegated and not explicit:
+        local_only_ok = True
+        policy = _local_only_agent_run_policy(decision_source="knowledge_hub_fallback_local_only")
+    return policy, local_only_ok, errors
+
+
 def normalize_foundry_payload(
     payload: dict[str, object],
     *,
@@ -520,6 +690,10 @@ def normalize_foundry_payload(
         }
 
     artifact = _normalize_artifact(payload.get("artifact"), now=now)
+    external_policy, external_policy_ok, external_policy_errors = _normalize_agent_run_external_policy(
+        payload,
+        default_source=source,
+    )
 
     policy_allowed, policy_errors, _artifact_classification = evaluate_policy_gate_fn(artifact)
     if not policy_allowed:
@@ -539,13 +713,18 @@ def normalize_foundry_payload(
     merged_errors = list(verify.get("schemaErrors") or [])
     if policy_errors:
         merged_errors.extend(policy_errors)
+    if external_policy_errors:
+        merged_errors.extend(external_policy_errors)
+        status = "blocked"
+        stage = "VERIFY"
 
-    verify["policyAllowed"] = bool(policy_allowed)
-    verify["allowed"] = bool(verify.get("allowed", status == "completed")) and policy_allowed
-    verify["schemaValid"] = bool(verify.get("schemaValid", status == "completed")) and policy_allowed
+    combined_policy_allowed = bool(policy_allowed and external_policy_ok)
+    verify["policyAllowed"] = combined_policy_allowed
+    verify["allowed"] = bool(verify.get("allowed", status == "completed")) and combined_policy_allowed
+    verify["schemaValid"] = bool(verify.get("schemaValid", status == "completed")) and combined_policy_allowed
     verify["schemaErrors"] = merged_errors
 
-    if policy_errors:
+    if policy_errors or external_policy_errors:
         writeback["ok"] = False
         writeback["detail"] = "policy gate blocked"
 
@@ -572,6 +751,7 @@ def normalize_foundry_payload(
         "transitions": transitions,
         "verify": verify,
         "writeback": writeback,
+        "externalPolicy": external_policy,
         "artifact": artifact,
         "createdAt": str(payload.get("createdAt", now)),
         "updatedAt": str(payload.get("updatedAt", now)),

@@ -183,6 +183,27 @@
       },
       "additionalProperties": true
     },
+    "externalPolicy": {
+      "type": "object",
+      "required": ["allowExternal", "externalSendAllowed", "policyMode", "decisionSource"],
+      "properties": {
+        "contractRole": { "type": "string" },
+        "surface": { "type": "string" },
+        "scope": { "type": "string" },
+        "allowExternal": { "type": "boolean" },
+        "allowExternalRequested": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "type": "null" }
+          ]
+        },
+        "externalSendAllowed": { "type": "boolean" },
+        "decisionSource": { "type": "string" },
+        "policyMode": { "type": "string", "enum": ["local-only", "external-allowed"] },
+        "mode": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
     "artifact": {
       "oneOf": [
         {

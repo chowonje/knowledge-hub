@@ -58,6 +58,12 @@ def test_agent_handler_uses_delegated_foundry_payload():
                 "runId": "run_001",
                 "status": "completed",
                 "goal": "rag",
+                "externalPolicy": {
+                    "allowExternal": False,
+                    "externalSendAllowed": False,
+                    "policyMode": "local-only",
+                    "decisionSource": "test_local_only",
+                },
                 "verify": {"allowed": True, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
                 "transitions": [{"stage": "PLAN", "status": "PLAN", "message": "plan"}],
             }
@@ -82,8 +88,52 @@ def test_agent_handler_uses_delegated_foundry_payload():
     assert result["status"] == "queued"
     assert result["meta"]["job_id"] == "job1"
     assert captured["normalized"]["source"] == "foundry-core/cli-agent"
+    assert captured["normalized"]["externalPolicy"]["policyMode"] == "local-only"
     assert "gateway" not in captured["normalized"]
     assert module.validate_payload(captured["normalized"], captured["normalized"]["schema"], strict=True).ok
+
+
+def test_agent_handler_delegated_foundry_payload_without_local_policy_blocks():
+    module = _import_mcp_server()
+    captured = {}
+
+    async def _fake_run_async_tool(name, request_echo, sync_job):  # noqa: ANN001
+        _ = (name, request_echo)
+        captured["normalized"] = await sync_job()
+        return "job1-missing-policy", {"payload": {"message": "queued"}}
+
+    def _fake_run_foundry_agent_goal(**kwargs):  # noqa: ANN003
+        _ = kwargs
+        return json.dumps(
+            {
+                "runId": "run_missing_policy",
+                "status": "completed",
+                "goal": "rag",
+                "verify": {"allowed": True, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
+                "transitions": [{"stage": "PLAN", "status": "PLAN", "message": "plan"}],
+            }
+        ), None
+
+    ctx = {
+        "emit": _emit,
+        "to_bool": module._to_bool,
+        "to_int": module._to_int,
+        "run_async_tool": _fake_run_async_tool,
+        "request_echo": {"tool": "run_agentic_query"},
+        "searcher": SimpleNamespace(search=lambda *_a, **_k: [], generate_answer=lambda *_a, **_k: {"answer": "ok"}),
+        "run_foundry_agent_goal": _fake_run_foundry_agent_goal,
+        "coerce_foundry_payload": module._coerce_foundry_payload,
+        "normalize_foundry_payload": module._normalize_foundry_payload,
+        "write_agent_run_report": module._write_agent_run_report,
+        "build_fallback_agent_payload": module._build_fallback_agent_payload,
+        "MCP_TOOL_STATUS_FAILED": module.MCP_TOOL_STATUS_FAILED,
+        "MCP_TOOL_STATUS_QUEUED": module.MCP_TOOL_STATUS_QUEUED,
+    }
+    result = asyncio.run(agent_handler.handle_tool("run_agentic_query", {"goal": "rag"}, ctx))
+    assert result["status"] == "queued"
+    assert captured["normalized"]["status"] == "blocked"
+    assert captured["normalized"]["verify"]["allowed"] is False
+    assert any("missing local-only externalPolicy" in item for item in captured["normalized"]["verify"]["schemaErrors"])
 
 
 def test_agent_handler_dry_run_adds_gateway_metadata_on_delegated_payload():
@@ -103,6 +153,12 @@ def test_agent_handler_dry_run_adds_gateway_metadata_on_delegated_payload():
                 "status": "blocked",
                 "goal": "rag",
                 "dryRun": True,
+                "externalPolicy": {
+                    "allowExternal": False,
+                    "externalSendAllowed": False,
+                    "policyMode": "local-only",
+                    "decisionSource": "test_local_only",
+                },
                 "verify": {"allowed": False, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
                 "transitions": [{"stage": "PLAN", "status": "PLAN", "message": "plan"}],
             }

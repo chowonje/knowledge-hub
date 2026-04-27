@@ -44,6 +44,49 @@ def test_normalize_foundry_payload_blocks_p0_artifact():
     assert normalized["writeback"]["ok"] is False
 
 
+def test_normalize_foundry_payload_blocks_delegated_external_policy_gaps():
+    module = _import_mcp_server()
+    missing = module._normalize_foundry_payload(
+        {
+            "status": "completed",
+            "source": "foundry-core/cli-agent",
+            "runId": "run_missing_policy",
+            "goal": "test",
+            "verify": {"allowed": True, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
+            "transitions": [{"stage": "PLAN", "status": "PLAN", "message": "init"}],
+        },
+        goal="test",
+        max_rounds=2,
+        dry_run=False,
+    )
+    external = module._normalize_foundry_payload(
+        {
+            "status": "completed",
+            "source": "foundry-core/cli-agent",
+            "runId": "run_external_policy",
+            "goal": "test",
+            "externalPolicy": {
+                "allowExternal": True,
+                "externalSendAllowed": True,
+                "policyMode": "external-allowed",
+                "decisionSource": "test",
+            },
+            "verify": {"allowed": True, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
+            "transitions": [{"stage": "PLAN", "status": "PLAN", "message": "init"}],
+        },
+        goal="test",
+        max_rounds=2,
+        dry_run=False,
+    )
+
+    assert missing["status"] == "blocked"
+    assert missing["verify"]["allowed"] is False
+    assert any("missing local-only externalPolicy" in item for item in missing["verify"]["schemaErrors"])
+    assert external["status"] == "blocked"
+    assert external["verify"]["allowed"] is False
+    assert any("external calls are disabled" in item for item in external["verify"]["schemaErrors"])
+
+
 def test_build_fallback_agent_payload_includes_verify_and_trace():
     module = _import_mcp_server()
     payload_text = module._build_fallback_agent_payload(

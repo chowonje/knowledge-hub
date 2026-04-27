@@ -14,6 +14,7 @@ from knowledge_hub.application.mcp.agent_payloads import (
     build_fallback_agent_payload,
     coerce_foundry_payload,
     normalize_foundry_payload,
+    sanitize_agent_packet_value,
     transition_code,
     write_agent_run_report,
 )
@@ -222,6 +223,9 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
     compact = to_bool(arguments.get("compact"), default=False)
     started_at = now_iso()
     echo_arguments = redact_payload(dict(arguments))
+    if name.startswith("agent_"):
+        sanitized_echo, _ = sanitize_agent_packet_value(echo_arguments)
+        echo_arguments = sanitized_echo if isinstance(sanitized_echo, dict) else echo_arguments
     if name in {"agent_policy_check", "agent_stage_memory"} and isinstance(echo_arguments, dict) and "payload" in echo_arguments:
         echo_arguments["payload"] = {
             "omitted": True,

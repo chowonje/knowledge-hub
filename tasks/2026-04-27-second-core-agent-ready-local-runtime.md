@@ -41,6 +41,13 @@ This does not introduce a second MCP server and does not widen the public defaul
 - Review follow-up: `agent_policy_check` now keeps the schema-backed decision packet even when the inspected payload is P0, while omitting inspected payload bodies from MCP request echo and artifact content.
 - `agent_stage_memory` is proposal/stage-only and never performs final Obsidian/vault apply.
 - The default MCP profile continues to expose only the public retrieval core. Agent tools require `KHUB_MCP_PROFILE=agent`, `labs`, or `all`; default direct calls return a profile-blocked hint.
+- Follow-up branch `frontier/agent-runtime-security-contract-20260427` hardens the agent security contract without merging it into `main`.
+- `AgentContextPacket v1` now explicitly records `stageOnly`, `finalApply=false`, `sourceTextRole=evidence_not_instruction`, `redactionApplied`, and `blockedReason`.
+- Agent MCP request echoes and artifacts now use common agent sanitization for local paths, `file://` URIs, secret-like values, and raw stage/policy payload bodies.
+- `agent_stage_memory` now returns a schema-backed stage-only decision packet for sensitive inputs while still omitting the inspected proposal body and forbidding final apply.
+- Delegated legacy `run_agentic_query` payloads now fail closed unless they carry explicit local-only external-policy proof.
+- Local task-context synthesis now wraps source text as `evidence_not_instruction` data before passing it to a synthesis call.
+- The durable security decision is recorded in `docs/adr/2026-04-27-agent-profile-security-contract.md`.
 
 ## Verification
 
@@ -51,6 +58,18 @@ This does not introduce a second MCP server and does not widen the public defaul
 - `python -m pytest tests/test_cli_add_facade.py tests/test_cli_smoke_contract.py tests/test_interfaces_cli_main.py -q` (`49 passed`)
 - `python -m pytest tests/test_mcp_agent_runtime.py tests/test_cli_add_facade.py -q` (`21 passed`)
 - `ruff check knowledge_hub/application/mcp/agent_payloads.py knowledge_hub/mcp/handlers/agent.py knowledge_hub/mcp/tool_specs.py knowledge_hub/interfaces/mcp/server.py tests/test_mcp_agent_runtime.py` (`passed`)
+- `git diff --check` (`passed`)
+
+Latest security-contract follow-up checks:
+
+- `python -m py_compile knowledge_hub/application/mcp/agent_payloads.py knowledge_hub/mcp/handlers/agent.py knowledge_hub/interfaces/mcp/server.py knowledge_hub/application/mcp/responses.py` (`passed`)
+- `ruff check knowledge_hub/application/mcp/agent_payloads.py knowledge_hub/mcp/handlers/agent.py knowledge_hub/interfaces/mcp/server.py knowledge_hub/application/mcp/responses.py tests/test_mcp_agent_runtime.py tests/test_mcp_agent_handler.py tests/test_mcp_server_helpers.py` (`passed`)
+- `python -m pytest tests/test_mcp_agent_runtime.py tests/test_mcp_agent_handler.py tests/test_mcp_server_helpers.py -q` (`44 passed`)
+- `python -m pytest tests/test_mcp_agent_runtime.py tests/test_mcp_agent_handler.py tests/test_mcp_server_helpers.py tests/test_mcp_server.py tests/test_mcp_search_handler.py -q` (`78 passed`)
+- `python -m pytest tests/test_answer_contracts_runtime.py tests/test_answer_contract_schemas.py tests/test_evidence_contract_perf_gate.py -q` (`32 passed`)
+- `python -m pytest tests/test_authority_contract.py -q` (`56 passed`)
+- `python scripts/check_public_release_hygiene.py` (`status: ok`, `issues: 0`)
+- `python scripts/check_release_smoke.py --mode release` (`release smoke: ok`)
 - `git diff --check` (`passed`)
 
 ## Follow-up

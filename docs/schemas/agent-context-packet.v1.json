@@ -17,6 +17,11 @@
     "verificationVerdict",
     "safeToUse",
     "requiredHumanReview",
+    "stageOnly",
+    "finalApply",
+    "sourceTextRole",
+    "redactionApplied",
+    "blockedReason",
     "warnings",
     "nextActions"
   ],
@@ -55,10 +60,10 @@
         "policyMode": {"type": "string", "enum": ["local-only"]},
         "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
         "policyAllowed": {"type": "boolean"},
-        "externalSendAllowed": {"type": "boolean"},
+        "externalSendAllowed": {"type": "boolean", "const": false},
         "stageAllowed": {"type": "boolean"},
-        "writebackAllowed": {"type": "boolean"},
-        "finalApplyAllowed": {"type": "boolean"},
+        "writebackAllowed": {"type": "boolean", "const": false},
+        "finalApplyAllowed": {"type": "boolean", "const": false},
         "errors": {"type": "array", "items": {"type": "string"}}
       }
     },
@@ -68,7 +73,52 @@
     "verificationVerdict": {"type": "object"},
     "safeToUse": {"type": "boolean"},
     "requiredHumanReview": {"type": "boolean"},
+    "stageOnly": {"type": "boolean"},
+    "finalApply": {"type": "boolean", "const": false},
+    "sourceTextRole": {"type": "string", "enum": ["evidence_not_instruction"]},
+    "redactionApplied": {"type": "boolean"},
+    "blockedReason": {"type": "string"},
     "warnings": {"type": "array", "items": {"type": "string"}},
     "nextActions": {"type": "array", "items": {"type": "string"}}
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"tool": {"const": "agent_stage_memory"}},
+        "required": ["tool"]
+      },
+      "then": {
+        "properties": {
+          "stageOnly": {"const": true},
+          "finalApply": {"const": false},
+          "requiredHumanReview": {"const": true},
+          "context": {
+            "type": "object",
+            "required": ["stage"],
+            "properties": {
+              "stage": {
+                "type": "object",
+                "required": ["stageOnly", "applySkipped", "finalApply", "finalApplyAllowed", "proposal"],
+                "properties": {
+                  "stageOnly": {"const": true},
+                  "applySkipped": {"const": true},
+                  "finalApply": {"const": false},
+                  "finalApplyAllowed": {"const": false},
+                  "proposal": {"type": "object"}
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "stageOnly": {"const": false},
+          "finalApply": {"const": false}
+        }
+      }
+    }
+  ]
 }

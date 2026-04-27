@@ -18,7 +18,7 @@ MCP_TOOL_STATUS_FAILED = "failed"
 MCP_TOOL_STATUS_DONE = "done"
 MCP_TOOL_STATUS_EXPIRED = "expired"
 DEFAULT_MCP_TOOL_TIMEOUT_SECONDS = 1800
-POLICY_REPORT_TOOL_NAMES = {"agent_policy_check"}
+POLICY_REPORT_TOOL_NAMES = {"agent_policy_check", "agent_stage_memory"}
 
 LEARNING_TOOL_NAMES = {
     "learning_start_or_resume_topic",
