@@ -36,7 +36,7 @@ khub add "retrieval augmented generation" --type paper -n 3
 khub search "주제"
 khub ask "질문"
 khub provider recommend
-khub agent context "작업 목표" --repo-path .
+khub context "작업 목표" --repo-path .
 khub paper list
 khub index
 ```
@@ -45,9 +45,9 @@ khub index
 
 ```text
 khub add
-khub agent
 khub ask
 khub config
+khub context
 khub doctor
 khub index
 khub init
@@ -66,6 +66,7 @@ khub status
 khub crawl
 khub discover
 khub dinger
+khub agent
 khub explore
 khub health
 khub math-memory
@@ -101,7 +102,25 @@ khub add "retrieval augmented generation" --type paper -n 3
 khub add "https://example.com/paper.pdf" --type web --topic "paper-notes"
 ```
 
-### `khub agent`
+### `khub context`
+
+```text
+khub context
+```
+
+용도:
+- repo + 지식 문맥을 읽기 전용으로 조립
+- coding/research 작업 전에 근거와 workspace context를 한 번에 묶어 확인
+- hidden compatibility alias인 `khub agent context`와 같은 backend를 쓰는 공개용 얇은 facade
+
+예:
+
+```bash
+khub context "작업 목표" --repo-path .
+khub context "RAG fallback flow를 리팩터링하기 전에 관련 근거를 모아줘" --repo-path . --json
+```
+
+### `khub agent` direct hidden compatibility
 
 ```text
 khub agent context
@@ -109,16 +128,15 @@ khub agent run
 khub agent writeback-request
 ```
 
-기본 `khub agent --help`는 gateway-oriented subcommand만 노출합니다.
-
-용도:
-- `context`: repo + 지식 문맥 조립
-- `run`: gateway-facing agent/foundry bridge 실행 엔벨로프
-- `writeback-request`: `Agent Gateway v2`의 approval-gated repo-local writeback lane 진입점. 현재 first-consumer 안전 범위는 **docs-only**이며 (`docs/adr/`, `docs/status/`, `reviews/`, `worklog/`), dry-run plan을 기반으로 pending request를 만들고 advisory `writebackPreview`로 허용된 문서 대상만 예측해 노출한 뒤, `khub labs ops action-ack -> action-execute`로 좁은 execution lane을 탄다. 성공 실행은 agent queue item을 자동 `resolved`로 닫는다.
+`khub agent`는 default top-level help에서는 숨겨져 있지만 직접 호출은 유지합니다.
+공개 코어는 `khub context`이고, `run` / `writeback-request`는 gateway/operator 성격의 고급 경로입니다.
+새 quickstart와 공개 문서는 `khub context`를 기준으로 작성합니다.
 
 예:
 
 ```bash
+khub agent --help
+khub context "작업 목표" --repo-path .
 khub agent writeback-request "Refactor the RAG fallback flow" --repo-path . --json
 khub labs ops action-list --scope agent --json
 khub labs ops action-ack --action-id <id> --actor cli-user
@@ -935,7 +953,7 @@ khub ask "질문"
 ### 2. 코딩/작업 문맥
 
 ```bash
-khub agent context "작업 목표" --repo-path .
+khub context "작업 목표" --repo-path .
 ```
 
 ### 3. 논문 수집

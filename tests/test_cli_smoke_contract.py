@@ -407,9 +407,10 @@ def test_top_level_help_hides_operator_surfaces():
         "vault",
         "vector-compare",
         "vector-restore",
+        "agent",
     ):
         assert token not in command_lines
-    for token in ("add", "index", "search", "ask", "doctor", "status", "paper", "labs"):
+    for token in ("add", "index", "search", "ask", "context", "doctor", "status", "paper", "labs"):
         assert token in command_lines
 
 

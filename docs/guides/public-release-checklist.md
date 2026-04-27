@@ -10,8 +10,8 @@ Why:
 
 - the supported public path is now explicit: `add -> index -> search/ask -> evidence review`
 - the core setup and proof surfaces are real and demonstrable: `doctor`, `provider`, `add`, `index`, `search`, and `ask`
-- full Python tests, Foundry checks, release smoke, weekly core-loop smoke, and public-release hygiene pass on the current public-preview candidate branch
-- local-first / policy-first positioning is clear, and provider setup stores API keys as environment-variable references rather than raw secrets
+- release smoke, weekly core-loop smoke, and public-release hygiene pass on the current public-preview candidate branch
+- local-first evidence-contract RAG positioning is clear, and provider setup stores API keys as environment-variable references rather than raw secrets
 - remaining risk is now about preview scope, live provider variance, corpus/source variance, and the absence of OPF model-based PII scanning in the local check environment
 
 ## Recommended public posture
@@ -132,12 +132,11 @@ khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
 ```
 
-Optional advanced sections can stay below that:
+Optional advanced sections should stay short and link to the full guide:
 
 - paper ingestion
 - provider setup
 - MCP
-- labs surfaces
 
 ### 5. Verify the public smoke gate
 
@@ -145,13 +144,13 @@ Minimum public release verification:
 
 ```bash
 cd knowledge-hub
-python -m pytest -q
-cd foundry-core && npm ci && npm run check && npm test
-cd ..
 python scripts/check_release_smoke.py --json
 python scripts/check_release_smoke.py --mode weekly_core_loop --json
 python scripts/check_public_release_hygiene.py
 ```
+
+Run broader Python and delegated-runtime checks before merging code changes, but
+do not present them as the public first-run proof for this Research Preview.
 
 ### 6. Document the current limits honestly
 
@@ -161,7 +160,7 @@ Keep a short `Known Limits` section in `README.md` or a linked guide:
 - `paper` and `project` quality signals are ahead of `vault`
 - at least one known `vault` compare path can still collapse to `0 source`
 - local model quality and latency vary by machine
-- heavy labs flows are additive, not the default stable surface
+- heavy experimental/operator flows are additive, not the default public surface
 - some Python / TypeScript boundary areas and operator surfaces remain in transition
 
 ### 7. Curate examples, do not dump artifacts
@@ -184,7 +183,7 @@ These are the main risks that keep the release in Research Preview language:
    - custom OpenAI-compatible aliases depend on external service behavior, model ids, auth scopes, and regional API differences
    - do not imply every provider preset has full live coverage
 
-3. **Source-quality unevenness**
+3. **Source-family unevenness**
    - `paper` and `project` answer quality are demonstrably improving
    - at least one `vault` comparison path still produces `0 source`
 
@@ -193,7 +192,7 @@ These are the main risks that keep the release in Research Preview language:
    - the first-time story must stay limited to the supported core loop
 
 5. **Additive surfaces are still too visible**
-   - labs, agent, audit, and operator flows exist for real internal use
+   - experimental, audit, and operator flows exist for real internal use
    - they still compete with the core public story unless the snapshot is curated
 
 ## Follow-up areas
@@ -205,7 +204,7 @@ These are the main risks that keep the release in Research Preview language:
   - `paper` and `project` are the strongest paths today, while `vault` still has weaker comparison reliability
 
 - **Public scope reduction**
-  - the repo still contains more labs/operator surfaces than a first external user needs
+  - the repo still contains more experimental/operator surfaces than a first external user needs
 
 - **Provider live checks**
   - add a small opt-in live-provider matrix for OpenAI-compatible aliases before claiming broad provider support

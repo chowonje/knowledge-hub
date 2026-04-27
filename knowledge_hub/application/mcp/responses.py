@@ -128,32 +128,13 @@ ENTITY_MERGE_TOOL_NAMES = {
     "entity_merge_reject",
 }
 DEFAULT_TOOL_NAMES = {
-    "build_paper_memory",
-    "get_paper_memory_card",
-    "search_paper_memory",
     "search_knowledge",
     "ask_knowledge",
     "build_task_context",
-    "run_agentic_query",
-    "learning_start_or_resume_topic",
-    "learning_get_session_state",
-    "learning_explain_topic",
-    "learning_checkpoint",
-    "search_papers",
-    "index_paper_keywords",
-    "crawl_web_ingest",
-    "get_hub_stats",
-    "search_authors",
-    "get_author_papers",
+    "discover_and_ingest",
     "get_paper_detail",
     "paper_lookup_and_summarize",
-    "get_paper_citations",
-    "get_paper_references",
-    "analyze_citation_network",
-    "batch_paper_lookup",
-    "discover_and_ingest",
-    "check_paper_duplicate",
-    "run_paper_ingest_flow",
+    "get_hub_stats",
     "mcp_job_status",
     "mcp_job_list",
     "mcp_job_cancel",
@@ -381,10 +362,10 @@ def to_bool(value: Any, default: bool = False) -> bool:
         return value
     if isinstance(value, (int, float)):
         return bool(value)
-    token = str(value).strip().lower()
-    if token in {"1", "true", "yes", "y", "on"}:
+    bool_text = str(value).strip().lower()
+    if bool_text in {"1", "true", "yes", "y", "on"}:
         return True
-    if token in {"0", "false", "no", "n", "off"}:
+    if bool_text in {"0", "false", "no", "n", "off"}:
         return False
     return default
 
@@ -505,7 +486,8 @@ def build_verify_block(
     if status in {MCP_TOOL_STATUS_FAILED, MCP_TOOL_STATUS_EXPIRED, MCP_TOOL_STATUS_BLOCKED}:
         schema_valid = False
 
-    if status == MCP_TOOL_STATUS_BLOCKED:
+    profile_block = bool(status == MCP_TOOL_STATUS_BLOCKED and materialized.get("blockReason") == "profile")
+    if status == MCP_TOOL_STATUS_BLOCKED and not profile_block:
         policy_allowed = False
         schema_valid = False
 

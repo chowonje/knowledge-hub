@@ -7,11 +7,15 @@ from mcp.types import Tool
 from knowledge_hub.application.mcp.responses import DEFAULT_TOOL_NAMES
 
 
-def _resolve_tool_profile(profile: str | None = None) -> str:
+def resolve_tool_profile(profile: str | None = None) -> str:
     resolved = (profile or os.getenv("KHUB_MCP_PROFILE") or "default").strip().lower()
     if resolved not in {"default", "labs", "all"}:
         return "default"
     return resolved
+
+
+def _resolve_tool_profile(profile: str | None = None) -> str:
+    return resolve_tool_profile(profile)
 
 
 def _filter_tools(tools: list[Tool], profile: str) -> list[Tool]:

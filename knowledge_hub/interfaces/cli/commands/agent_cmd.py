@@ -64,10 +64,10 @@ def _coerce_bool(value: Any) -> bool:
         return value
     if isinstance(value, (int, float)):
         return bool(value)
-    token = str(value or "").strip().lower()
-    if token in {"1", "true", "yes", "on"}:
+    bool_text = str(value or "").strip().lower()
+    if bool_text in {"1", "true", "yes", "on"}:
         return True
-    if token in {"0", "false", "no", "off"}:
+    if bool_text in {"0", "false", "no", "off"}:
         return False
     return False
 
@@ -701,6 +701,11 @@ def agent_context(
         console.print("[yellow]warnings:[/yellow]")
         for warning in warnings[:5]:
             console.print(f"  - {warning}")
+
+
+context_cmd = copy(agent_context)
+context_cmd.help = "Assemble read-only task context from knowledge + workspace evidence."
+context_cmd.short_help = "Assemble read-only task context."
 
 
 @agent_group.command("run")

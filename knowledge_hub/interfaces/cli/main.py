@@ -333,7 +333,13 @@ cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.crawl_cmd", "crawl_g
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.dinger_cmd", "dinger_group", "dinger", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.mcp_cmd", "mcp_cmd", "mcp", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vault_cmd", "vault_group", "vault", hidden=True)
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.agent_cmd", "agent_group", "agent")
+cli.add_lazy_command(
+    "knowledge_hub.interfaces.cli.commands.agent_cmd",
+    "context_cmd",
+    "context",
+    short_help="Assemble read-only task context.",
+)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.agent_cmd", "agent_group", "agent", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.os_cmd", "os_group", "os", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.eval_cmd", "eval_compat_group", "eval", hidden=True)
 
