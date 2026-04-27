@@ -7,10 +7,149 @@ from typing import Any, Callable
 
 from knowledge_hub.application.agent_gateway import build_gateway_metadata
 
+AGENT_CONTEXT_PACKET_SCHEMA = "knowledge-hub.agent.context-packet.v1"
 PLAYBOOK_SCHEMA = "knowledge-hub.foundry.agent.run.playbook.v1"
 VALID_AGENT_ROLES = {"planner", "researcher", "analyst", "summarizer", "auditor", "coach"}
 VALID_ORCHESTRATOR_MODES = {"single-pass", "adaptive", "strict"}
 VALID_PLAYBOOK_TOOLS = {"ask_knowledge", "search_knowledge", "build_task_context"}
+
+
+def default_agent_policy(
+    *,
+    classification: str = "P2",
+    allow_external: bool = False,
+    policy_mode: str = "local-only",
+    policy_allowed: bool = True,
+    policy_errors: list[str] | None = None,
+    stage_allowed: bool = False,
+    writeback_allowed: bool = False,
+) -> dict[str, object]:
+    errors = [str(item) for item in (policy_errors or []) if str(item).strip()]
+    return {
+        "allowExternal": bool(allow_external),
+        "policyMode": str(policy_mode or "local-only"),
+        "classification": str(classification or "P2").upper(),
+        "policyAllowed": bool(policy_allowed and not errors),
+        "externalSendAllowed": False,
+        "stageAllowed": bool(stage_allowed),
+        "writebackAllowed": bool(writeback_allowed),
+        "finalApplyAllowed": False,
+        "errors": errors,
+    }
+
+
+def _contract_present(value: object | None) -> bool:
+    return isinstance(value, dict) and bool(value)
+
+
+def _verification_is_unsafe(verification_verdict: dict[str, object] | None) -> bool:
+    if not isinstance(verification_verdict, dict) or not verification_verdict:
+        return False
+    verdict = str(
+        verification_verdict.get("verdict")
+        or verification_verdict.get("status")
+        or verification_verdict.get("result")
+        or ""
+    ).strip().lower()
+    recommended = str(
+        verification_verdict.get("recommended_action")
+        or verification_verdict.get("recommendedAction")
+        or verification_verdict.get("action")
+        or ""
+    ).strip().lower()
+    unsupported_count = verification_verdict.get("unsupportedClaimCount")
+    if unsupported_count is None:
+        unsupported_count = verification_verdict.get("unsupported_claim_count")
+    try:
+        unsupported = int(unsupported_count or 0)
+    except Exception:
+        unsupported = 0
+    unsupported_claims = verification_verdict.get("unsupportedClaims") or verification_verdict.get("unsupported_claims")
+    if isinstance(unsupported_claims, list):
+        unsupported = max(unsupported, len(unsupported_claims))
+    return verdict in {"fail", "failed", "abstain", "blocked"} or recommended in {"abstain", "block"} or unsupported > 0
+
+
+def infer_agent_safety(
+    *,
+    policy: dict[str, object],
+    evidence_packet_contract: dict[str, object] | None = None,
+    answer_contract: dict[str, object] | None = None,
+    verification_verdict: dict[str, object] | None = None,
+    require_answer_contracts: bool = False,
+) -> tuple[bool, bool, list[str]]:
+    warnings: list[str] = []
+    if not bool(policy.get("policyAllowed", True)):
+        warnings.extend(str(item) for item in policy.get("errors", []) if str(item).strip())
+        warnings.append("policy gate blocked this packet")
+    if bool(policy.get("externalSendAllowed", False)):
+        warnings.append("external sends are disabled for agent runtime v1")
+    if require_answer_contracts and not _contract_present(evidence_packet_contract):
+        warnings.append("missing evidencePacketContract for answer-mode agent packet")
+    if require_answer_contracts and not _contract_present(answer_contract):
+        warnings.append("missing answerContract for answer-mode agent packet")
+    if _verification_is_unsafe(verification_verdict):
+        warnings.append("verification verdict requires human review")
+
+    safe = not warnings
+    required_review = not safe
+    return safe, required_review, warnings
+
+
+def build_agent_context_packet(
+    *,
+    request_id: str,
+    tool: str,
+    goal: str = "",
+    query: str = "",
+    policy: dict[str, object] | None = None,
+    context: dict[str, object] | None = None,
+    evidence_packet_contract: dict[str, object] | None = None,
+    answer_contract: dict[str, object] | None = None,
+    verification_verdict: dict[str, object] | None = None,
+    safe_to_use: bool | None = None,
+    required_human_review: bool | None = None,
+    warnings: list[str] | None = None,
+    next_actions: list[str] | None = None,
+    require_answer_contracts: bool = False,
+) -> dict[str, object]:
+    packet_policy = policy or default_agent_policy()
+    inferred_safe, inferred_review, inferred_warnings = infer_agent_safety(
+        policy=packet_policy,
+        evidence_packet_contract=evidence_packet_contract,
+        answer_contract=answer_contract,
+        verification_verdict=verification_verdict,
+        require_answer_contracts=require_answer_contracts,
+    )
+    merged_warnings: list[str] = []
+    for item in [*(warnings or []), *inferred_warnings]:
+        text = str(item).strip()
+        if text and text not in merged_warnings:
+            merged_warnings.append(text)
+
+    safe = inferred_safe if safe_to_use is None else bool(safe_to_use)
+    review = inferred_review if required_human_review is None else bool(required_human_review)
+    if merged_warnings and safe_to_use is None:
+        safe = False
+    if not safe and required_human_review is None:
+        review = True
+
+    return {
+        "schema": AGENT_CONTEXT_PACKET_SCHEMA,
+        "requestId": str(request_id or ""),
+        "tool": str(tool or ""),
+        "goal": str(goal or ""),
+        "query": str(query or ""),
+        "policy": packet_policy,
+        "context": context or {},
+        "evidencePacketContract": evidence_packet_contract or {},
+        "answerContract": answer_contract or {},
+        "verificationVerdict": verification_verdict or {},
+        "safeToUse": bool(safe),
+        "requiredHumanReview": bool(review),
+        "warnings": merged_warnings,
+        "nextActions": [str(item) for item in (next_actions or []) if str(item).strip()],
+    }
 
 
 def transition_code(item: dict[str, object], stage_fallback: str = "PLAN", status_fallback: str = "STEP") -> str:

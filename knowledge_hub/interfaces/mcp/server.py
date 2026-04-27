@@ -221,9 +221,15 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
 
     compact = to_bool(arguments.get("compact"), default=False)
     started_at = now_iso()
+    echo_arguments = redact_payload(dict(arguments))
+    if name in {"agent_policy_check", "agent_stage_memory"} and isinstance(echo_arguments, dict) and "payload" in echo_arguments:
+        echo_arguments["payload"] = {
+            "omitted": True,
+            "reason": f"{name} does not echo inspected payload",
+        }
     request_echo = {
         "tool": name,
-        "arguments": redact_payload(dict(arguments)),
+        "arguments": echo_arguments,
     }
     profile, profile_allowed, known_tool = _mcp_tool_profile_access(name)
     if not known_tool:
@@ -239,6 +245,9 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
             compact=compact,
         )
     if not profile_allowed:
+        profile_hint = "Set KHUB_MCP_PROFILE=labs or KHUB_MCP_PROFILE=all to use experimental/operator tools."
+        if name.startswith("agent_"):
+            profile_hint = "Set KHUB_MCP_PROFILE=agent, KHUB_MCP_PROFILE=labs, or KHUB_MCP_PROFILE=all to use agent-safe tools."
         return build_text_response(
             _build_mcp_tool_response(
                 tool=name,
@@ -247,7 +256,7 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
                     "blockReason": "profile",
                     "error": f"tool is not available in current MCP profile: {name}",
                     "profile": profile,
-                    "hint": "Set KHUB_MCP_PROFILE=labs or KHUB_MCP_PROFILE=all to use experimental/operator tools.",
+                    "hint": profile_hint,
                 },
                 started_at=started_at,
                 request_echo=request_echo,
@@ -257,10 +266,14 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
         )
     initialize_fn = getattr(state, "initialize", None)
     if not callable(initialize_fn):
-        initialize_fn = lambda: initialize(state)
+        def initialize_fn() -> None:
+            initialize(state)
+
     initialize_core_only_fn = getattr(state, "initialize_core_only", None)
     if not callable(initialize_core_only_fn):
-        initialize_core_only_fn = lambda: initialize_core_only(state)
+        def initialize_core_only_fn() -> None:
+            initialize_core_only(state)
+
     learning_service_cls = getattr(state, "LearningCoachService", LearningCoachService)
     web_ingest_service_cls = getattr(state, "WebIngestService", WebIngestService)
     from knowledge_hub.notes import KoNoteEnricher, KoNoteMaterializer
@@ -279,15 +292,17 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
     )
     normalize_foundry_payload_fn = getattr(state, "_normalize_foundry_payload", None)
     if not callable(normalize_foundry_payload_fn):
-        normalize_foundry_payload_fn = lambda payload, goal, max_rounds, dry_run: normalize_foundry_payload(
-            payload,
-            goal=goal,
-            max_rounds=max_rounds,
-            dry_run=dry_run,
-            default_source="knowledge-hub/interfaces.mcp.server",
-            evaluate_policy_gate_fn=evaluate_policy_gate,
-            transition_code_fn=transition_code,
-        )
+        def normalize_foundry_payload_fn(payload, goal, max_rounds, dry_run):  # noqa: ANN001
+            return normalize_foundry_payload(
+                payload,
+                goal=goal,
+                max_rounds=max_rounds,
+                dry_run=dry_run,
+                default_source="knowledge-hub/interfaces.mcp.server",
+                evaluate_policy_gate_fn=evaluate_policy_gate,
+                transition_code_fn=transition_code,
+            )
+
     write_agent_run_report_fn = getattr(state, "_write_agent_run_report", None) or getattr(
         state,
         "write_agent_run_report",
@@ -295,7 +310,8 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
     )
     build_fallback_agent_payload_fn = getattr(state, "_build_fallback_agent_payload", None)
     if not callable(build_fallback_agent_payload_fn):
-        build_fallback_agent_payload_fn = lambda **kwargs: _build_fallback_agent_payload(**kwargs)
+        def build_fallback_agent_payload_fn(**kwargs):  # noqa: ANN003
+            return _build_fallback_agent_payload(**kwargs)
 
     ensure_tool_runtime(
         state,

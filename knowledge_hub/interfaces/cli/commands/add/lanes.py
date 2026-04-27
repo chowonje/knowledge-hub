@@ -277,10 +277,11 @@ def run_paper_url_add(
         else:
             upstream = run_import_csv(**kwargs)
     finally:
-        try:
-            csv_path.unlink()
-        except FileNotFoundError:
-            pass
+        for temp_path in (csv_path, manifest_path):
+            try:
+                temp_path.unlink()
+            except FileNotFoundError:
+                pass
     if to_obsidian:
         upstream = {
             **upstream,
@@ -290,6 +291,7 @@ def run_paper_url_add(
             ],
         }
     upstream["csvRetained"] = False
+    upstream["manifestRetained"] = False
     return wrap_result(
         khub=khub,
         route=route,

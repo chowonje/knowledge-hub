@@ -47,7 +47,7 @@ This frontier branch is separate from the public-preview release branch, but `kh
 
 ## Review Follow-up
 
-- Addressed Opus review blockers by aligning the frontier/public-preview wording, tightening explicit paper/youtube routing validation, adding paper-query and local-PDF tests, warning on local-PDF excerpt-only ingest, and deleting temporary add CSV files after paper import dispatch.
+- Addressed Opus review blockers by aligning the frontier/public-preview wording, tightening explicit paper/youtube routing validation, adding paper-query and local-PDF tests, warning on local-PDF excerpt-only ingest, and deleting temporary add CSV plus manifest files after paper import dispatch.
 - Completed the Opus follow-up split so future lanes can be added without growing the command entrypoint again.
 - Addressed the follow-up subagent review by fixing Hugging Face non-paper page routing and path privacy leaks in local-PDF and paper-import add results.
 

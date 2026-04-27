@@ -177,6 +177,10 @@ def test_add_paper_url_uses_single_source_import_manifest(monkeypatch, tmp_path)
     def _fake_run_import_csv(**kwargs):  # noqa: ANN003
         print("resolver noise")
         captured.update(kwargs)
+        Path(kwargs["manifest_path"]).write_text(
+            json.dumps({"source_url": "https://arxiv.org/abs/2401.00001"}),
+            encoding="utf-8",
+        )
         return {
             "status": "ok",
             "counts": {"completed": 1, "failed": 0, "skipped": 0},
@@ -211,8 +215,11 @@ def test_add_paper_url_uses_single_source_import_manifest(monkeypatch, tmp_path)
     assert payload["stored"] is True
     assert captured["steps"] == ["register", "download", "embed"]
     csv_path = Path(captured["csv_path"])
+    manifest_path = Path(captured["manifest_path"])
     assert not csv_path.exists()
+    assert not manifest_path.exists()
     assert payload["upstream"]["csvRetained"] is False
+    assert payload["upstream"]["manifestRetained"] is False
     assert str(captured["manifest_path"]) not in result.output
     assert payload["upstream"]["manifestPath"].startswith("<local>/")
 

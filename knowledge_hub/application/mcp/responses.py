@@ -18,6 +18,7 @@ MCP_TOOL_STATUS_FAILED = "failed"
 MCP_TOOL_STATUS_DONE = "done"
 MCP_TOOL_STATUS_EXPIRED = "expired"
 DEFAULT_MCP_TOOL_TIMEOUT_SECONDS = 1800
+POLICY_REPORT_TOOL_NAMES = {"agent_policy_check"}
 
 LEARNING_TOOL_NAMES = {
     "learning_start_or_resume_topic",
@@ -127,6 +128,18 @@ ENTITY_MERGE_TOOL_NAMES = {
     "entity_merge_apply",
     "entity_merge_reject",
 }
+AGENT_TOOL_NAMES = {
+    "agent_build_context",
+    "agent_search_knowledge",
+    "agent_ask_knowledge",
+    "agent_get_evidence",
+    "agent_policy_check",
+    "agent_stage_memory",
+}
+AGENT_CORE_ONLY_TOOL_NAMES = {
+    "agent_policy_check",
+    "agent_stage_memory",
+}
 DEFAULT_TOOL_NAMES = {
     "search_knowledge",
     "ask_knowledge",
@@ -150,6 +163,7 @@ LABS_TOOL_NAMES = (
     | CRAWL_LABS_TOOL_NAMES
     | TRANSFORM_TOOL_NAMES
     | PAPER_LABS_TOOL_NAMES
+    | AGENT_TOOL_NAMES
 )
 HEAVY_TOOL_NAMES = {
     "crawl_web_ingest",
@@ -178,7 +192,7 @@ CORE_RUNTIME_TOOL_NAMES = (
     | ENTITY_MERGE_TOOL_NAMES
     | OPS_TOOL_NAMES
 )
-CORE_ONLY_TOOL_NAMES = CORE_RUNTIME_TOOL_NAMES
+CORE_ONLY_TOOL_NAMES = CORE_RUNTIME_TOOL_NAMES | AGENT_CORE_ONLY_TOOL_NAMES
 JOB_TOOLS = JOB_TOOL_NAMES
 SCHEMA_BY_TOOL = {
     "build_paper_memory": "knowledge-hub.paper-memory.build.result.v1",
@@ -237,6 +251,12 @@ SCHEMA_BY_TOOL = {
     "entity_merge_apply": "knowledge-hub.entity.merge.apply.result.v1",
     "entity_merge_reject": "knowledge-hub.entity.merge.reject.result.v1",
     "paper_topic_synthesize": "knowledge-hub.paper-topic-synthesis.result.v1",
+    "agent_build_context": "knowledge-hub.agent.context-packet.v1",
+    "agent_search_knowledge": "knowledge-hub.agent.context-packet.v1",
+    "agent_ask_knowledge": "knowledge-hub.agent.context-packet.v1",
+    "agent_get_evidence": "knowledge-hub.agent.context-packet.v1",
+    "agent_policy_check": "knowledge-hub.agent.context-packet.v1",
+    "agent_stage_memory": "knowledge-hub.agent.context-packet.v1",
 }
 
 
@@ -457,7 +477,14 @@ def build_verify_block(
     validate_payload_fn: Callable[[dict[str, Any], str], Any] | None = None,
 ) -> dict[str, Any]:
     materialized = payload if isinstance(payload, dict) else {}
+    policy_report = tool_name in POLICY_REPORT_TOOL_NAMES and materialized.get("schema") == "knowledge-hub.agent.context-packet.v1"
     policy_allowed, policy_errors, inferred_classification = evaluate_policy_gate(materialized)
+    if policy_report:
+        policy_node = materialized.get("policy")
+        if isinstance(policy_node, dict):
+            policy_allowed = bool(policy_node.get("policyAllowed", True))
+            policy_errors = [str(item) for item in list(policy_node.get("errors") or []) if str(item).strip()]
+            inferred_classification = _normalize_classification(policy_node.get("classification"))
     schema_id = SCHEMA_BY_TOOL.get(tool_name)
     if not schema_id:
         payload_schema = materialized.get("schema")
@@ -477,11 +504,12 @@ def build_verify_block(
             for item in schema_errors:
                 if item not in materialized["schemaErrors"]:
                     materialized["schemaErrors"].append(item)
-    for item in policy_errors:
-        if item not in schema_errors:
-            schema_errors.append(item)
-            if isinstance(materialized.get("schemaErrors"), list):
-                materialized["schemaErrors"].append(item)
+    if not policy_report:
+        for item in policy_errors:
+            if item not in schema_errors:
+                schema_errors.append(item)
+                if isinstance(materialized.get("schemaErrors"), list):
+                    materialized["schemaErrors"].append(item)
 
     if status in {MCP_TOOL_STATUS_FAILED, MCP_TOOL_STATUS_EXPIRED, MCP_TOOL_STATUS_BLOCKED}:
         schema_valid = False
@@ -493,7 +521,7 @@ def build_verify_block(
 
     allowed = bool(status == MCP_TOOL_STATUS_OK and schema_valid and policy_allowed)
     return {
-        "schemaValid": bool(schema_valid and policy_allowed),
+        "schemaValid": bool(schema_valid if policy_report else schema_valid and policy_allowed),
         "policyAllowed": bool(policy_allowed),
         "allowed": allowed,
         "schemaErrors": schema_errors,
@@ -530,19 +558,31 @@ def build_mcp_tool_response(
     else:
         run_time_ms = None
 
+    policy_report = tool in POLICY_REPORT_TOOL_NAMES and safe_payload.get("schema") == "knowledge-hub.agent.context-packet.v1"
     verify = (build_verify_block_fn or build_verify_block)(safe_payload, status, tool)
     policy_allowed, policy_errors, classification = evaluate_policy_gate(artifact if artifact is not None else safe_payload)
-    policy_blocked = (not verify["policyAllowed"]) or (not policy_allowed)
+    if policy_report:
+        policy_node = safe_payload.get("policy")
+        if isinstance(policy_node, dict):
+            policy_allowed = bool(policy_node.get("policyAllowed", True))
+            policy_errors = [str(item) for item in list(policy_node.get("errors") or []) if str(item).strip()]
+            classification = _normalize_classification(policy_node.get("classification"))
+    policy_blocked = False if policy_report else (not verify["policyAllowed"]) or (not policy_allowed)
     if not policy_allowed:
         verify["policyAllowed"] = False
-        verify["schemaValid"] = False
         verify["allowed"] = False
-        for error in policy_errors:
-            if error not in verify["schemaErrors"]:
-                verify["schemaErrors"].append(error)
+        if not policy_report:
+            verify["schemaValid"] = False
+            for error in policy_errors:
+                if error not in verify["schemaErrors"]:
+                    verify["schemaErrors"].append(error)
 
     safe_request = redact_payload(request_echo or {})
     warnings = [str(item) for item in verify["schemaErrors"]] if verify["schemaErrors"] else []
+    if policy_report:
+        for error in policy_errors:
+            if error not in warnings:
+                warnings.append(error)
     payload_for_artifact = safe_payload if artifact is None else artifact
     if policy_blocked:
         status = MCP_TOOL_STATUS_BLOCKED

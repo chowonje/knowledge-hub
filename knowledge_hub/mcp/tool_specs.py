@@ -4,12 +4,12 @@ import os
 
 from mcp.types import Tool
 
-from knowledge_hub.application.mcp.responses import DEFAULT_TOOL_NAMES
+from knowledge_hub.application.mcp.responses import AGENT_TOOL_NAMES, DEFAULT_TOOL_NAMES
 
 
 def resolve_tool_profile(profile: str | None = None) -> str:
     resolved = (profile or os.getenv("KHUB_MCP_PROFILE") or "default").strip().lower()
-    if resolved not in {"default", "labs", "all"}:
+    if resolved not in {"default", "agent", "labs", "all"}:
         return "default"
     return resolved
 
@@ -21,6 +21,9 @@ def _resolve_tool_profile(profile: str | None = None) -> str:
 def _filter_tools(tools: list[Tool], profile: str) -> list[Tool]:
     if profile == "default":
         return [tool for tool in tools if tool.name in DEFAULT_TOOL_NAMES]
+    if profile == "agent":
+        allowed = DEFAULT_TOOL_NAMES | AGENT_TOOL_NAMES
+        return [tool for tool in tools if tool.name in allowed]
     return tools
 
 
@@ -135,6 +138,108 @@ def build_tools(profile: str | None = None) -> list[Tool]:
                     "include_web": {"type": "boolean", "default": True},
                     "max_workspace_files": {"type": "integer", "default": 8},
                     "max_knowledge_hits": {"type": "integer", "default": 5}
+                },
+                "required": ["goal"],
+            },
+        ),
+        Tool(
+            name="agent_build_context",
+            description="Agent-safe local-only task context packet with policy and evidence readiness.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "goal": {"type": "string", "description": "Agent goal or task question"},
+                    "repo_path": {"type": "string"},
+                    "include_workspace": {"type": "boolean", "default": True},
+                    "include_vault": {"type": "boolean", "default": True},
+                    "include_papers": {"type": "boolean", "default": True},
+                    "include_web": {"type": "boolean", "default": True},
+                    "max_workspace_files": {"type": "integer", "default": 8},
+                    "max_knowledge_hits": {"type": "integer", "default": 5},
+                },
+                "required": ["goal"],
+            },
+        ),
+        Tool(
+            name="agent_search_knowledge",
+            description="Agent-safe local-only knowledge search packet.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"},
+                    "top_k": {"type": "integer", "default": 5},
+                    "source": {"type": "string", "enum": ["all", "note", "paper", "web"], "default": "all"},
+                    "mode": {"type": "string", "enum": ["semantic", "keyword", "hybrid"], "default": "hybrid"},
+                    "alpha": {"type": "number", "default": 0.7},
+                },
+                "required": ["query"],
+            },
+        ),
+        Tool(
+            name="agent_ask_knowledge",
+            description="Agent-safe local-only RAG answer packet with evidence and verification contracts.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "question": {"type": "string"},
+                    "top_k": {"type": "integer", "default": 5},
+                    "source": {"type": "string", "enum": ["all", "note", "paper", "web"], "default": "all"},
+                    "mode": {"type": "string", "enum": ["semantic", "keyword", "hybrid"], "default": "hybrid"},
+                    "alpha": {"type": "number", "default": 0.7},
+                    "memory_route_mode": {
+                        "type": "string",
+                        "enum": ["off", "compat", "on", "prefilter"],
+                        "default": "off",
+                    },
+                    "paper_memory_mode": {
+                        "type": "string",
+                        "enum": ["off", "compat", "on", "prefilter"],
+                        "default": "off",
+                    },
+                    "min_score": {"type": "number", "default": 0.3},
+                },
+                "required": ["question"],
+            },
+        ),
+        Tool(
+            name="agent_get_evidence",
+            description="Agent-safe local-only evidence packet derived from the ask path.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "question": {"type": "string"},
+                    "top_k": {"type": "integer", "default": 5},
+                    "source": {"type": "string", "enum": ["all", "note", "paper", "web"], "default": "all"},
+                    "mode": {"type": "string", "enum": ["semantic", "keyword", "hybrid"], "default": "hybrid"},
+                    "alpha": {"type": "number", "default": 0.7},
+                    "min_score": {"type": "number", "default": 0.3},
+                },
+                "required": ["question"],
+            },
+        ),
+        Tool(
+            name="agent_policy_check",
+            description="Classify an agent payload and report local-only external/writeback policy decisions.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "payload": {"type": "object"},
+                    "goal": {"type": "string"},
+                    "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+                },
+                "required": ["payload"],
+            },
+        ),
+        Tool(
+            name="agent_stage_memory",
+            description="Create an agent memory staging proposal without applying vault writeback.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "goal": {"type": "string"},
+                    "payload": {"type": "object"},
+                    "target": {"type": "string", "enum": ["obsidian", "vault"], "default": "obsidian"},
+                    "sourceId": {"type": "string"},
                 },
                 "required": ["goal"],
             },

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.agent.context-packet.v1",
+  "title": "Agent Context Packet v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "requestId",
+    "tool",
+    "goal",
+    "query",
+    "policy",
+    "context",
+    "evidencePacketContract",
+    "answerContract",
+    "verificationVerdict",
+    "safeToUse",
+    "requiredHumanReview",
+    "warnings",
+    "nextActions"
+  ],
+  "properties": {
+    "schema": {"const": "knowledge-hub.agent.context-packet.v1"},
+    "requestId": {"type": "string", "minLength": 1},
+    "tool": {
+      "type": "string",
+      "enum": [
+        "agent_build_context",
+        "agent_search_knowledge",
+        "agent_ask_knowledge",
+        "agent_get_evidence",
+        "agent_policy_check",
+        "agent_stage_memory"
+      ]
+    },
+    "goal": {"type": "string"},
+    "query": {"type": "string"},
+    "policy": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "allowExternal",
+        "policyMode",
+        "classification",
+        "policyAllowed",
+        "externalSendAllowed",
+        "stageAllowed",
+        "writebackAllowed",
+        "finalApplyAllowed",
+        "errors"
+      ],
+      "properties": {
+        "allowExternal": {"type": "boolean"},
+        "policyMode": {"type": "string", "enum": ["local-only"]},
+        "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+        "policyAllowed": {"type": "boolean"},
+        "externalSendAllowed": {"type": "boolean"},
+        "stageAllowed": {"type": "boolean"},
+        "writebackAllowed": {"type": "boolean"},
+        "finalApplyAllowed": {"type": "boolean"},
+        "errors": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "context": {"type": "object"},
+    "evidencePacketContract": {"type": "object"},
+    "answerContract": {"type": "object"},
+    "verificationVerdict": {"type": "object"},
+    "safeToUse": {"type": "boolean"},
+    "requiredHumanReview": {"type": "boolean"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "nextActions": {"type": "array", "items": {"type": "string"}}
+  }
+}

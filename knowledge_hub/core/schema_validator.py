@@ -48,6 +48,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.claim-synthesis.result.v1": "claim-synthesis-result.v1.json",
     "knowledge-hub.ai-watchlist-batch.v2": "ai-watchlist-batch.v2.json",
     "knowledge-hub.foundry.agent.run.result.v1": "agent-run-result.v1.json",
+    "knowledge-hub.agent.context-packet.v1": "agent-context-packet.v1.json",
     "knowledge-hub.agent.writeback.request.result.v1": "agent-writeback-request-result.v1.json",
     "knowledge-hub.agent.discover.result.v1": "agent-discover-result.v1.json",
     "knowledge-hub.foundry.connector.sync.result.v2": "connector-sync-result.v2.json",
