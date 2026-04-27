@@ -113,6 +113,67 @@ def test_build_doctor_payload_prioritizes_actionable_ollama_recovery(monkeypatch
     assert payload["nextActions"][3].startswith("python -m knowledge_hub.interfaces.cli.main doctor")
 
 
+def test_build_doctor_payload_accepts_configured_custom_provider(monkeypatch, tmp_path):
+    config = _config(tmp_path)
+    config.summarization_provider = "deepseek"
+    config.summarization_model = "deepseek-chat"
+    monkeypatch.setattr(
+        doctor_module,
+        "build_runtime_diagnostics",
+        lambda config, searcher=None, searcher_error="": {
+            "providers": [
+                {
+                    "role": "summarization",
+                    "provider": "deepseek",
+                    "model": "deepseek-chat",
+                    "installed": True,
+                    "requires_api_key": True,
+                    "api_key_status": "ok",
+                    "degraded": False,
+                    "reasons": [],
+                    "available": True,
+                },
+                {
+                    "role": "embedding",
+                    "provider": "ollama",
+                    "model": "nomic-embed-text",
+                    "installed": True,
+                    "requires_api_key": False,
+                    "api_key_status": "not_required",
+                    "degraded": False,
+                    "reasons": [],
+                    "available": True,
+                },
+            ],
+            "vectorCorpus": {"available": True, "reasons": [], "total_documents": 5, "collection_name": "knowledge_hub"},
+            "warnings": [],
+        },
+    )
+    monkeypatch.setattr(
+        doctor_module,
+        "parser_runtime_status",
+        lambda name: {"available": True, "status": "ok", "detail": f"{name} ok", "fixCommand": ""},
+    )
+    monkeypatch.setattr(doctor_module, "_ollama_ok", lambda url: True)
+    monkeypatch.setattr(doctor_module, "_ollama_available", lambda url: True)
+
+    def fake_provider_info(name, config=None):
+        if name == "deepseek" and config is not None:
+            return SimpleNamespace(requires_api_key=True, display_name="deepseek", is_local=False)
+        if name == "ollama":
+            return SimpleNamespace(requires_api_key=False, display_name="ollama", is_local=True)
+        return None
+
+    monkeypatch.setattr(doctor_module.registry, "get_provider_info", fake_provider_info)
+
+    payload = doctor_module.build_doctor_payload(_FakeKhub(config))
+
+    checks = {item["area"]: item for item in payload["checks"]}
+    assert checks["summary"]["status"] == "ok"
+    assert "deepseek/deepseek-chat" in checks["summary"]["summary"]
+    assert not any("knowledge-hub[deepseek]" in action for action in payload["nextActions"])
+
+
 def test_build_doctor_payload_prefers_vector_restore_when_restorable_backup_exists(monkeypatch, tmp_path):
     config = _config(tmp_path)
     monkeypatch.setattr(
