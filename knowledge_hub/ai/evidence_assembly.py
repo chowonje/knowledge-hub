@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 import re
 from typing import Any
 
@@ -208,9 +208,20 @@ def _normalize_family_anchor(value: Any) -> str:
 
 
 def _is_temporal_query(query: str) -> bool:
+    body = str(query or "")
+    if (
+        re.search(r"\b(evaluate|evaluation|benchmark|metric|metrics|faithfulness|citation accuracy|accuracy)\b|평가|지표", body, re.IGNORECASE)
+        and re.search(r"\b(recent)\b|최근", body, re.IGNORECASE)
+        and not re.search(
+            r"\b(latest|updated|update|newest|changed since|before|after|since|today|current|now)\b|최신|업데이트|이전|이후|당시|오늘|현재|\b\d{4}\b|\d+\s*년",
+            body,
+            re.IGNORECASE,
+        )
+    ):
+        return False
     return bool(
-        re.search(r"\b(latest|recent|updated|update|newest|changed since|before|after|since)\b", str(query or ""), re.IGNORECASE)
-        or re.search(r"최근|최신|업데이트|이전|이후|당시", str(query or ""))
+        re.search(r"\b(latest|recent|updated|update|newest|changed since|before|after|since)\b", body, re.IGNORECASE)
+        or re.search(r"최근|최신|업데이트|이전|이후|당시", body)
     )
 
 
@@ -239,15 +250,21 @@ def _has_explicit_temporal_marker(item: dict[str, Any]) -> bool:
     for name in ("event_date", "document_date", "published_at", "evidence_window"):
         if str(item.get(name) or "").strip():
             return True
-    text = " ".join(
+    identity_text = " ".join(
         [
             str(item.get("title") or ""),
             str(item.get("section_path") or ""),
-            str(item.get("excerpt") or ""),
+            str(item.get("source_ref") or ""),
+            str(item.get("source_url") or ""),
+            str(item.get("citation_target") or ""),
         ]
     )
+    excerpt_text = str(item.get("excerpt") or "")
+    text = f"{identity_text} {excerpt_text}"
     return bool(
-        re.search(r"\b(v\d+|version\s*\d+|updated?|latest|recent|newest|release)\b", text, re.IGNORECASE)
+        re.search(r"\b(v\d+|version\s*\d+|updated?|latest|newest|release)\b", identity_text, re.IGNORECASE)
+        or re.search(r"\b(v\d+|version\s*\d+(?:\.\d+)?|20\d{2})\b", excerpt_text, re.IGNORECASE)
+        or re.search(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", text)
         or re.search(r"버전|업데이트|최신|개정", text)
     )
 
@@ -266,10 +283,13 @@ def _has_web_temporal_textual_marker(item: dict[str, Any]) -> bool:
             str(item.get("title") or ""),
             str(item.get("section_path") or ""),
             str(item.get("source_url") or ""),
+            str(item.get("source_ref") or ""),
+            str(item.get("citation_target") or ""),
         ]
     )
     return bool(
         re.search(r"\b(updated?|latest|recent|newest|version|release|guide|guideline|watchlist|reference)\b", text, re.IGNORECASE)
+        or re.search(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", text)
         or re.search(r"최신|최근|업데이트|버전|개정|가이드|레퍼런스|참고", text)
     )
 
@@ -445,7 +465,6 @@ def _derive_paper_answer_scope(
         "paper_lookup" if intent == "paper_lookup" else "paper_discover" if intent == "paper_topic" else "concept_explainer" if normalize_source_type(source_type) == "paper" and intent == "definition" else "general"
     )
     policy_payload = normalize_evidence_policy(evidence_policy, family=paper_family)
-    normalized_source = normalize_source_type(source_type)
     scoped_filter = dict(metadata_filter or {})
     explicit_paper_id = str(scoped_filter.get("arxiv_id") or scoped_filter.get("paper_id") or "").strip()
     planned_paper_ids = [

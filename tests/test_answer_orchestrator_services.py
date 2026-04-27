@@ -713,8 +713,16 @@ def test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_pa
     assert generated["status"] == "no_result"
     assert generated["claimVerification"] == [{"claim": "missing"}]
     assert generated["claimConsensus"] == {"status": "empty"}
+    assert generated["verificationVerdict"]["verdict"] == "abstain"
+    assert generated["answerContract"]["abstain"] is True
+    assert generated["answerContract"]["rewrite"]["finalAnswerSource"] == "early_exit"
     assert streamed == generated["answer"]
-    assert logged_payloads == [generated, generated]
+    assert len(logged_payloads) == 2
+    for payload in logged_payloads:
+        assert payload["answer"] == generated["answer"]
+        assert payload["status"] == "no_result"
+        assert payload["verificationVerdict"]["verdict"] == "abstain"
+        assert payload["answerContract"]["abstain"] is True
 
 
 def test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit_stay_in_parity(monkeypatch):
@@ -773,8 +781,16 @@ def test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit
     assert generated["status"] == "no_result"
     assert generated["claimVerification"] == [{"claim": "compare"}]
     assert generated["claimConsensus"] == {"status": "need_more"}
+    assert generated["verificationVerdict"]["verdict"] == "abstain"
+    assert generated["answerContract"]["abstain"] is True
+    assert generated["answerContract"]["rewrite"]["finalAnswerSource"] == "early_exit"
     assert streamed == generated["answer"]
-    assert logged_payloads == [generated, generated]
+    assert len(logged_payloads) == 2
+    for payload in logged_payloads:
+        assert payload["answer"] == generated["answer"]
+        assert payload["status"] == "no_result"
+        assert payload["verificationVerdict"]["verdict"] == "abstain"
+        assert payload["answerContract"]["abstain"] is True
 
 
 def test_answer_orchestrator_generate_and_stream_plain_answer_stay_in_parity(monkeypatch):

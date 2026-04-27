@@ -1,19 +1,23 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from types import SimpleNamespace
 import pytest
 
-from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service
+from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service, _ask_v2_hard_gate_reason
 from knowledge_hub.ai.ask_v2_support import classify_intent
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
+from knowledge_hub.ai.answer_contracts import build_answer_contract
 from knowledge_hub.ai.claim_cards import ClaimCardBuilder
 from knowledge_hub.application.query_frame import build_query_frame
+from knowledge_hub.ai.rag_answer_evidence import answer_evidence_item
 from knowledge_hub.ai.rag import RAGSearcher
 from knowledge_hub.ai.section_card_materializer import PaperSectionCardMaterializer
 from knowledge_hub.ai.section_cards import assess_section_source_quality, project_section_cards, rank_section_cards, section_coverage
 from knowledge_hub.core.section_card_v1_store import SectionCardV1Store
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.papers.card_v2_builder import PaperCardV2Builder
+from knowledge_hub.papers.source_text import source_hash_for_text
 from knowledge_hub.web.ingest import make_web_note_id
 from tests.test_paper_memory import _seed_paper_with_note
 from tests.test_rag_search import DummyEmbedder, FakeLLM
@@ -669,6 +673,16 @@ def test_paper_ask_v2_keeps_implementation_queries_out_of_definition_lane():
     assert classify_intent("RAG 파이프라인을 설명해줘") == "implementation"
 
 
+def test_ask_v2_classifies_soft_recency_evaluation_as_evaluation_not_temporal():
+    assert classify_intent("최근 RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?") == "evaluation"
+    assert classify_intent("latest vector database retrieval best practice는 무엇인가?") == "temporal"
+
+
+def test_ask_v2_classifies_structural_after_pipeline_as_implementation_not_temporal():
+    assert classify_intent("AnswerOrchestrator는 retrieval pipeline 이후 어떤 역할을 하는가?") == "implementation"
+    assert classify_intent("2026년 이후 retrieval pipeline 변화는 무엇인가?") == "temporal"
+
+
 def test_ask_v2_route_preserves_concept_definition_when_classifier_is_impl_or_eval(tmp_path):
     """Rule-based frame says definition; regex classifier can win on impl/eval keywords first."""
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
@@ -849,6 +863,24 @@ def test_generate_answer_v2_fallback_does_not_trigger_on_weak_claim_only_when_ve
     assert int(payload["v2"]["consensus"].get("weakClaimCount") or 0) >= 1
     assert payload["v2"]["evidenceVerification"].get("verificationStatus") == "strong"
     assert payload["v2"]["fallback"]["used"] is False
+
+
+def test_ask_v2_hard_gate_keeps_unsupported_claim_cards_diagnostic_when_evidence_has_no_unsupported_fields():
+    reason = _ask_v2_hard_gate_reason(
+        verification={"verificationStatus": "weak", "unsupportedFields": [], "anchorIdsUsed": ["anchor-1"]},
+        claim_consensus={"unsupportedClaimCount": 1, "conflictCount": 0},
+    )
+
+    assert reason == ""
+
+
+def test_ask_v2_hard_gate_blocks_concrete_unsupported_verification_field():
+    reason = _ask_v2_hard_gate_reason(
+        verification={"verificationStatus": "weak", "unsupportedFields": ["temporal_version_grounding"]},
+        claim_consensus={"unsupportedClaimCount": 0, "conflictCount": 0},
+    )
+
+    assert reason == "ask_v2_weak_evidence:temporal_version_grounding"
 
 
 def test_select_paper_cards_prefers_resolved_compare_scope_over_broad_search(tmp_path, monkeypatch):
@@ -1195,6 +1227,97 @@ def test_anchor_results_preserve_compare_source_diversity(tmp_path):
     results = service._anchor_results(cards=cards, anchors=anchors, route=route)
 
     assert {str(item.metadata.get("paper_id") or "") for item in results[:2]} == {"bert", "gpt"}
+
+
+def test_anchor_results_preserve_card_v2_strict_provenance(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    service = PaperAskV2Service(_build_searcher(db)[0])
+    route = service._route(query="BERT 방법을 설명해줘", source_type="paper", metadata_filter=None)
+    cards = [
+        {
+            "paper_id": "bert",
+            "card_id": "paper-card-v2:bert",
+            "title": "BERT",
+            "quality_flag": "ok",
+            "source_content_hash": "hash-bert-source",
+        }
+    ]
+    anchors = [
+        {
+            "anchor_id": "bert-anchor-0",
+            "card_id": "paper-card-v2:bert",
+            "paper_id": "bert",
+            "document_id": "paper:bert",
+            "unit_id": "unit-bert-method",
+            "span_locator": "unit-bert-method",
+            "snippet_hash": "snippet-bert-method",
+            "excerpt": "BERT uses bidirectional Transformer encoder pre-training.",
+            "score": 0.91,
+            "evidence_role": "method",
+        }
+    ]
+
+    result = service._anchor_results(cards=cards, anchors=anchors, route=route)[0]
+    evidence = answer_evidence_item(
+        result,
+        parent_ctx_by_result={},
+        result_id_fn=lambda item: item.document_id,
+        normalize_source_type_fn=lambda value: value,
+        safe_float_fn=lambda value, default: float(value or default),
+    )
+    answer_contract = build_answer_contract(
+        answer="BERT uses bidirectional Transformer encoder pre-training.",
+        evidence_packet=SimpleNamespace(
+            evidence=[evidence],
+            citations=[],
+            evidence_packet={"answerable": True},
+        ),
+        verification={"status": "verified", "supportedClaimCount": 1, "unsupportedClaimCount": 0},
+    )
+
+    assert result.metadata["source_content_hash"] == "hash-bert-source"
+    assert result.metadata["span_locator"] == "unit-bert-method"
+    assert result.metadata["snippet_hash"] == "snippet-bert-method"
+    assert evidence["source_content_hash"] == "hash-bert-source"
+    assert evidence["span_locator"] == "unit-bert-method"
+    assert answer_contract["citations"]
+
+
+def test_anchor_results_recovers_paper_hash_from_paper_record(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    service = PaperAskV2Service(_build_searcher(db)[0])
+    route = service._route(query="BERT 방법을 설명해줘", source_type="paper", metadata_filter=None)
+    monkeypatch.setattr(service.sqlite_db, "list_document_memory_units", lambda document_id, limit=20: [])
+    monkeypatch.setattr(
+        service.sqlite_db,
+        "get_paper",
+        lambda paper_id: {"notes": "BERT source notes", "title": "BERT"},
+    )
+
+    result = service._anchor_results(
+        cards=[
+            {
+                "paper_id": "bert",
+                "card_id": "paper-card-v2:bert",
+                "title": "BERT",
+                "quality_flag": "ok",
+            }
+        ],
+        anchors=[
+            {
+                "anchor_id": "bert-anchor-0",
+                "card_id": "paper-card-v2:bert",
+                "paper_id": "bert",
+                "document_id": "paper:bert",
+                "unit_id": "unit-bert-method",
+                "excerpt": "BERT uses bidirectional Transformer encoder pre-training.",
+                "score": 0.91,
+            }
+        ],
+        route=route,
+    )[0]
+
+    assert result.metadata["source_content_hash"] == source_hash_for_text("BERT source notes", "bert", "paper_record")
 
 
 def test_generate_answer_uses_section_native_prompt_for_explanation_query(tmp_path):

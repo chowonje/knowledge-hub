@@ -1147,6 +1147,9 @@ def test_ask_knowledge_is_local_only_and_exposes_memory_contract(monkeypatch):
     assert ok["payload"]["allow_external"] is False
     assert ok["payload"]["externalPolicy"]["policyMode"] == "local-only"
     assert ok["payload"]["externalPolicy"]["decisionSource"] == "mcp_default_local_only"
+    assert ok["payload"]["evidencePacketContract"] == {}
+    assert ok["payload"]["answerContract"] == {}
+    assert ok["payload"]["verificationVerdict"] == {}
     assert ok["payload"]["memory_route"]["contractRole"] == "ask_retrieval_memory_prefilter"
     assert ok["payload"]["memory_route"]["requestedMode"] == "prefilter"
     assert ok["payload"]["memory_route"]["effectiveMode"] == "compat"

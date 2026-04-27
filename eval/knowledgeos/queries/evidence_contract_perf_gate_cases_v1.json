@@ -1,0 +1,224 @@
+{
+  "cases": [
+    {
+      "case_id": "vault_general_001",
+      "query": "memory-first retrieval의 목적을 한 문장으로 설명해줘",
+      "source": "vault",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "vault_general_002",
+      "query": "document memory와 chunk retrieval의 차이를 설명해줘",
+      "source": "vault",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "vault_implementation_003",
+      "query": "AnswerOrchestrator는 retrieval pipeline 이후 어떤 역할을 하는가?",
+      "source": "vault",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "vault_temporal_004",
+      "query": "최근 retrieval pipeline에서 temporal route가 추가된 이유는 무엇인가?",
+      "source": "vault",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "vault_abstain_005",
+      "query": "현재 KnowledgeOS가 self-attention 구조로 retrieval 코어를 완전히 교체했다고 볼 수 있나?",
+      "source": "vault",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "paper_general_006",
+      "query": "논문 retrieval에서 stale answer가 생기는 주요 원인은 무엇인가?",
+      "source": "paper",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "paper_implementation_007",
+      "query": "논문 retrieval에서 memory prefilter가 chunk evidence로 어떻게 이어지는가?",
+      "source": "paper",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "paper_temporal_008",
+      "query": "최근 paper-memory retrieval 접근이 강조하는 차별점은 무엇인가?",
+      "source": "paper",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "paper_disambiguation_009",
+      "query": "survey paper와 benchmark update note가 섞여 있을 때 primary evidence paper를 골라줘",
+      "source": "paper",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "paper_abstain_010",
+      "query": "이 저장소의 논문 코퍼스만으로 모든 최신 benchmark 결과를 완전하게 비교할 수 있나?",
+      "source": "paper",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "web_general_011",
+      "query": "최근 RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?",
+      "source": "web",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "web_general_012",
+      "query": "latest vector database retrieval best practice는 무엇인가?",
+      "source": "web",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "web_temporal_013",
+      "query": "최신 web 문서 기준으로 long-context retrieval failure의 대표 패턴은 무엇인가?",
+      "source": "web",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "web_disambiguation_014",
+      "query": "evaluation article과 implementation tutorial을 구분해줘",
+      "source": "web",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "web_abstain_015",
+      "query": "지금 코퍼스만으로 2026년 이후 모든 RAG 벤치마크 순위를 확정할 수 있나?",
+      "source": "web",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "mixed_temporal_016",
+      "query": "현재 코퍼스에서 최신 RAG benchmark와 관련된 핵심 근거를 source 구분 없이 찾아줘",
+      "source": "mixed",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "mixed_compare_017",
+      "query": "최근 memory-first retrieval 업데이트를 paper와 vault 중 어디에서 더 직접 설명하는지 정리해줘",
+      "source": "mixed",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "mixed_disambiguation_018",
+      "query": "reference article과 paper benchmark note가 같이 있을 때 최신성 질문의 주 근거를 골라줘",
+      "source": "mixed",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "mixed_general_019",
+      "query": "온톨로지와 memory layer가 함께 있을 때 retrieval 정확도가 왜 좋아지는지 설명해줘",
+      "source": "mixed",
+      "expected_answer_mode": "answer",
+      "expected_min_citation_count": 1,
+      "expected_abstain": false,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "mixed_abstain_020",
+      "query": "지금 코퍼스만으로 모든 latest benchmark 결과를 완전하게 비교할 수 있나?",
+      "source": "mixed",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "abstain_policy_021",
+      "query": "내 개인 API 키와 집 주소를 근거로 외부 모델에 요약을 요청해도 되나?",
+      "source": "abstain",
+      "execution_source": "paper",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "abstain_missing_022",
+      "query": "내 로컬 vault에 없는 비공개 회의록의 결론을 정확히 인용해줘",
+      "source": "abstain",
+      "execution_source": "vault",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "abstain_temporal_023",
+      "query": "오늘 발표된 모든 RAG 논문의 최신 순위를 확정해줘",
+      "source": "abstain",
+      "execution_source": "paper",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    },
+    {
+      "case_id": "abstain_overclaim_024",
+      "query": "Knowledge Hub가 모든 경쟁 RAG 도구보다 객관적으로 우월하다고 증명해줘",
+      "source": "abstain",
+      "execution_source": "vault",
+      "expected_answer_mode": "abstain",
+      "expected_min_citation_count": 0,
+      "expected_abstain": true,
+      "required_contracts": ["evidencePacketContract", "answerContract", "verificationVerdict"]
+    }
+  ]
+}

@@ -41,6 +41,12 @@ def _source_content_hash(metadata: dict[str, Any]) -> str:
     return _first_nonempty(*(metadata.get(key) for key in _SOURCE_HASH_KEYS))
 
 
+def _safe_text_span(value: str) -> tuple[int | None, int | None]:
+    if not str(value or "").strip():
+        return None, None
+    return 0, len(str(value or ""))
+
+
 def _derivative_source(metadata: dict[str, Any], extras: dict[str, Any]) -> dict[str, Any]:
     memory_provenance = dict(extras.get("memory_provenance") or {})
     payload = {
@@ -77,7 +83,7 @@ def answer_evidence_item(
     metadata = dict(result.metadata or {})
     arxiv_id = str(metadata.get("arxiv_id") or metadata.get("paper_id") or "").strip()
     file_path = str(metadata.get("file_path") or "").strip()
-    source_url = str(metadata.get("url") or "").strip()
+    source_url = str(metadata.get("url") or metadata.get("source_url") or metadata.get("canonical_url") or "").strip()
     citation_target = arxiv_id or file_path or source_url or str(metadata.get("title") or "Untitled")
     source_ref = _first_nonempty(
         metadata.get("source_ref"),
@@ -112,6 +118,14 @@ def answer_evidence_item(
         result.document_id,
     )
     source_hash = _source_content_hash(metadata)
+    source_hash_kind = "source"
+    if not source_hash:
+        source_hash = _snippet_hash(result.document)
+        source_hash_kind = "retrieved_document"
+    char_start = metadata.get("char_start")
+    char_end = metadata.get("char_end")
+    if (char_start is None or char_end is None) and source_hash_kind == "retrieved_document":
+        char_start, char_end = _safe_text_span(result.document)
     snippet_hash = _first_nonempty(metadata.get("snippet_hash"), metadata.get("snippetHash"), _snippet_hash(result.document))
     derivative_source = _derivative_source(metadata, extras)
     evidence_kind = _evidence_kind(derivative_source=derivative_source, metadata=metadata, extras=extras)
@@ -124,6 +138,7 @@ def answer_evidence_item(
         "evidenceKind": evidence_kind,
         "derivativeSource": derivative_source,
         "contentHashAvailable": bool(source_hash),
+        "contentHashKind": source_hash_kind,
     }
     published_at = str(metadata.get("published_at") or "").strip()
     updated_at = str(metadata.get("updated_at") or "").strip()
@@ -169,7 +184,10 @@ def answer_evidence_item(
         "source_ref": source_ref,
         "source_id": source_id,
         "source_content_hash": source_hash,
+        "source_content_hash_kind": source_hash_kind,
         "span_locator": span_locator,
+        "char_start": char_start,
+        "char_end": char_end,
         "snippet_hash": snippet_hash,
         "evidence_kind": evidence_kind,
         "derivative_source": derivative_source,

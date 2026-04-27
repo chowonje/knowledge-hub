@@ -54,6 +54,7 @@ class AnswerPayloadSlices:
         payload["answerContract"] = build_answer_contract(
             answer=answer,
             evidence_packet=evidence_packet,
+            evidence_packet_contract=payload.get("evidencePacketContract"),
             verification=answer_verification,
             rewrite=answer_rewrite,
             routing_meta=routing_meta,
@@ -119,6 +120,7 @@ class AnswerPayloadSlices:
         payload["answerContract"] = build_answer_contract(
             answer=answer,
             evidence_packet=evidence_packet,
+            evidence_packet_contract=payload.get("evidencePacketContract"),
             verification=payload["verificationVerdict"],
             rewrite={"attempted": False, "applied": False, "finalAnswerSource": "policy_blocked"},
             routing_meta=routing_meta,
@@ -160,6 +162,7 @@ class AnswerPayloadSlices:
         payload["answerContract"] = build_answer_contract(
             answer=answer,
             evidence_packet=evidence_packet,
+            evidence_packet_contract=payload.get("evidencePacketContract"),
             verification=answer_verification,
             rewrite=answer_rewrite,
             routing_meta=routing_meta,

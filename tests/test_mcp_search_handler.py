@@ -75,6 +75,9 @@ class _FakeSearcher:
                 }
             ],
             "citations": [{"label": "S1", "title": "RAG Note", "target": "Projects/AI/RAG Note.md", "kind": "file"}],
+            "evidencePacketContract": {"schema": "knowledge-hub.evidence-packet.v1", "fixture": "evidence"},
+            "answerContract": {"schema": "knowledge-hub.answer-contract.v1", "fixture": "answer"},
+            "verificationVerdict": {"schema": "knowledge-hub.verification-verdict.v1", "fixture": "verdict"},
             "answerGeneration": {"status": "fallback", "fallbackUsed": True, "stage": "initial_answer", "errorType": "TimeoutError"},
             "claimVerification": [{"claimId": "claim:1", "status": "supported"}],
             "claimConsensus": {"supportCount": 1, "claimVerificationSummary": "supported"},
@@ -135,6 +138,12 @@ def test_mcp_ask_handler_exposes_graph_signal_and_answer_diagnostics(monkeypatch
     assert result["status"] == "ok"
     payload = result["payload"]
     assert payload["graph_query_signal"]["recommended_mode"] == "baseline"
+    assert payload["evidencePacketContract"]["fixture"] == "evidence"
+    assert payload["answerContract"]["fixture"] == "answer"
+    assert payload["verificationVerdict"]["fixture"] == "verdict"
+    assert result["meta"]["artifact"]["evidencePacketContract"]["fixture"] == "evidence"
+    assert result["meta"]["artifact"]["answerContract"]["fixture"] == "answer"
+    assert result["meta"]["artifact"]["verificationVerdict"]["fixture"] == "verdict"
     assert payload["citations"][0]["label"] == "S1"
     assert payload["answer_generation"]["fallbackUsed"] is True
     assert payload["claim_verification"][0]["claimId"] == "claim:1"

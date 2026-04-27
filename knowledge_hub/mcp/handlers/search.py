@@ -185,6 +185,11 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         ]
         runtime_diagnostics = _runtime_diagnostics(searcher)
         graph_query_signal = _graph_query_signal(searcher, question)
+        contract_fields = {
+            "evidencePacketContract": normalized_result.get("evidencePacketContract", {}),
+            "answerContract": normalized_result.get("answerContract", {}),
+            "verificationVerdict": normalized_result.get("verificationVerdict", {}),
+        }
         payload = {
             "question": question,
             "answer": normalized_result.get("answer"),
@@ -192,6 +197,7 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
             "allow_external": bool(normalized_result.get("allowExternal", False)),
             "externalPolicy": normalized_result.get("externalPolicy", {}),
             "external_policy": normalized_result.get("externalPolicy", {}),
+            **contract_fields,
             "sources": sources,
             "evidence": normalized_result.get("evidence", sources),
             "citations": normalized_result.get("citations", []),
@@ -225,6 +231,7 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
             "allow_external": bool(normalized_result.get("allowExternal", False)),
             "externalPolicy": normalized_result.get("externalPolicy", {}),
             "external_policy": normalized_result.get("externalPolicy", {}),
+            **contract_fields,
             "sources": sources,
             "evidence": normalized_result.get("evidence", sources),
             "citations": normalized_result.get("citations", []),
