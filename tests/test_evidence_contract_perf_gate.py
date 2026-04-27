@@ -160,6 +160,8 @@ def test_contract_validation_failure_marks_case_and_gate_failed():
     assert payload["status"] == "failed"
     assert payload["failedCaseCount"] == 1
     assert "missing_contract:answerContract" in payload["cases"][0]["errors"]
+    assert payload["cases"][0]["failureCategories"] == ["contract_missing"]
+    assert payload["failureCategories"] == {"contract_missing": 1}
     assert "failed_cases:1" in payload["errors"]
 
 
@@ -181,6 +183,16 @@ def test_expected_abstain_accepts_verification_recommended_abstain():
     assert payload["status"] == "ok"
     assert payload["cases"][0]["abstainObserved"] is True
     assert payload["abstainCorrectRate"] == 1.0
+
+
+def test_timeout_classification_does_not_count_derived_missing_contracts():
+    module = _load_module()
+    case = _case("timeout", expected_min_citation_count=0, expected_abstain=True)
+
+    result = module.evaluate_case(case, {}, latency_ms=20_000.0, timeout=True)
+
+    assert result["errors"][0] == "timeout"
+    assert result["failureCategories"] == ["latency_timeout"]
 
 
 def test_stub_fixture_gate_summarizes_contract_metrics():
