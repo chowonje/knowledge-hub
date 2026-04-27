@@ -83,9 +83,9 @@ The default `khub --help` surface now favors the representative core loop. `khub
 - **Grounded retrieval** - vault, paper, web에서 evidence를 찾아 질의응답
 - **Task context assembly** - repo context까지 읽기 전용으로 묶어 Codex-style assistance 지원
 - **Paper ingestion** - Semantic Scholar + arXiv 기반 검색, 다운로드, 요약, 인덱싱
-- **Obsidian 연결** - vault를 canonical memory로 유지하고 결과를 writeback
-- **Notebook workbench bridge** - Open Notebook에 topic bundle export
-- **MCP 서버** - 기본 product surface는 retrieval-assistant-first, 고급 기능은 labs profile로 노출
+- **Obsidian 연결** - vault note를 로컬 source로 인덱싱하고 writeback은 명시 옵션으로만 수행
+- **Provider setup** - 로컬/Ollama, API provider, Codex MCP, OpenAI-compatible custom 모델을 역할별로 설정
+- **MCP 서버** - 기본 profile은 retrieval-assistant-first, 고급 기능은 labs profile로 노출
 
 ## Extended Setup and Product Flow
 

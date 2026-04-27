@@ -1,18 +1,18 @@
 # Public Release Checklist
 
-Last updated: 2026-04-20
+Last updated: 2026-04-27
 
 ## Current verdict
 
-`knowledge-hub` is ready for a **public prototype / research preview** release, but not yet for a **clean first-time-user stable release**.
+`knowledge-hub` is ready to publish as a **Research Preview** from a reviewed branch, but not as a stable release.
 
 Why:
 
-- the core product surface is real and demonstrable: `doctor`, `search`, `ask`, paper/document-memory flows, and answer-loop eval all run
-- targeted regression checks are passing
-- local-first / policy-first positioning is clear
-- but the active worktree is still too broad and mixed for a clean public snapshot
-- answer quality is still uneven by source: `paper` and `project` are credible, while at least one `vault` compare question still collapses to `0 source`
+- the supported public path is now explicit: `add -> index -> search/ask -> evidence review`
+- the core setup and proof surfaces are real and demonstrable: `doctor`, `provider`, `add`, `index`, `search`, and `ask`
+- full Python tests, Foundry checks, release smoke, weekly core-loop smoke, and public-release hygiene pass on the current public-preview candidate branch
+- local-first / policy-first positioning is clear, and provider setup stores API keys as environment-variable references rather than raw secrets
+- remaining risk is now about preview scope, live provider variance, source-quality variance, and the absence of OPF model-based PII scanning in the local check environment
 
 ## Recommended public posture
 
@@ -24,7 +24,7 @@ Use one of these labels in the GitHub repo before opening it:
 
 Recommended status line:
 
-> `Status: Research Preview — the supported default path is discover -> index -> search/ask -> evidence review. APIs, quality bars, and experimental surfaces may change without notice.`
+> `Status: Research Preview — the supported default path is add -> index -> search/ask -> evidence review. APIs, quality bars, and experimental surfaces may change without notice.`
 
 Do not present the current state as:
 
@@ -66,7 +66,7 @@ The public branch should satisfy all of the following:
 
 ### 1. Scope the public snapshot
 
-- cut a dedicated `public-preview` branch from a known commit, not from the current mixed worktree
+- cut a dedicated `public-preview` branch from a reviewed commit or PR branch, not from an unreviewed local workspace
 - decide the public promise:
   - CLI-only retrieval assistant
   - local-first knowledge runtime
@@ -118,15 +118,17 @@ Interpretation:
 README should answer four questions fast:
 
 1. what this project is
-2. what is stable today
+2. what is supported today
 3. how to install the smallest supported profile
-4. which three commands prove it works
+4. which small command sequence proves it works
 
 Recommended first-run command set:
 
 ```bash
 pip install -e ".[ollama]"
 khub doctor
+khub add "large language model agent" --type paper -n 3
+khub index
 khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
 ```
@@ -134,6 +136,7 @@ khub ask "Transformer의 핵심 아이디어는?"
 Optional advanced sections can stay below that:
 
 - paper ingestion
+- provider setup
 - MCP
 - answer-loop eval
 - labs surfaces
@@ -144,9 +147,12 @@ Minimum public release verification:
 
 ```bash
 cd knowledge-hub
-khub doctor
-python scripts/check_release_smoke.py
-pytest tests/test_answer_loop.py tests/test_runtime_diagnostics.py tests/test_pymupdf_adapter.py -q
+python -m pytest -q
+cd foundry-core && npm ci && npm run check && npm test
+cd ..
+python scripts/check_release_smoke.py --json
+python scripts/check_release_smoke.py --mode weekly_core_loop --json
+python scripts/check_public_release_hygiene.py
 ```
 
 If the public branch promises answer-loop demos, also run:
@@ -179,45 +185,43 @@ Public examples should be small and intentional:
 
 Do not ship large local run directories as if they were canonical product assets.
 
-## Current blocker summary
+## Remaining release risks
 
-These are the main things still preventing a clean public snapshot:
+These are the main risks that keep the release in Research Preview language:
 
-1. **Mixed worktree**
-   - too many unrelated changes are staged only as local progress, not as a coherent public slice
+1. **Model-based PII scanning**
+   - deterministic privacy/hygiene scans can pass while OPF is unavailable
+   - report this as a residual risk unless OPF has been installed and run
 
-2. **Source-quality unevenness**
+2. **Live provider variance**
+   - custom OpenAI-compatible aliases depend on external service behavior, model ids, auth scopes, and regional API differences
+   - do not imply every provider preset has full live coverage
+
+3. **Source-quality unevenness**
    - `paper` and `project` answer quality are demonstrably improving
    - at least one `vault` comparison path still produces `0 source`
 
-3. **Public narrative drift**
+4. **Public narrative drift**
    - the repo contains many implemented surfaces
-   - the first-time story needs a smaller stable subset
+   - the first-time story must stay limited to the supported core loop
 
-4. **Additive surfaces are still too visible**
+5. **Additive surfaces are still too visible**
    - labs, agent, audit, and operator flows exist for real internal use
    - they still compete with the core public story unless the snapshot is curated
 
-5. **Verification is still narrow**
-   - targeted smoke checks pass
-   - a clean full-repo release gate is not yet the claim this repository can honestly make
+## Follow-up areas
 
-## Current unfinished areas
-
-- **Clean branch cut is unfinished**
-  - the active worktree is still mixed, so the release branch should be cut from a reviewed subset rather than pushed as-is
-
-- **First-run packaging is unfinished**
-  - the README still needs to behave like a small product entrypoint, not a map of every subsystem
+- **Release branch cut**
+  - cut or merge from the reviewed public-preview PR branch rather than publishing a mixed local workspace
 
 - **Source-family quality remains uneven**
   - `paper` and `project` are the strongest paths today, while `vault` still has weaker comparison reliability
 
-- **Public scope reduction is unfinished**
+- **Public scope reduction**
   - the repo still contains more labs/operator surfaces than a first external user needs
 
-- **Artifact hygiene is unfinished**
-  - local tasks, reviews, worklogs, generated runs, and machine-specific paths still need a deliberate public/public-not-public decision
+- **Provider live checks**
+  - add a small opt-in live-provider matrix for OpenAI-compatible aliases before claiming broad provider support
 
 ## Suggested branch strategy
 
