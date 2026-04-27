@@ -2,13 +2,13 @@
 
 Knowledge Hub는 Obsidian, papers, web, and optional project context를 근거로 LLM assistance를 제공하는 **local-first, policy-gated, retrieval-assistant-first** knowledge runtime입니다.
 
-Status: **Research Preview**. The supported default path is `discover -> index -> search/ask -> evidence review`. APIs, quality bars, and experimental surfaces may change without notice.
+Status: **Research Preview**. The supported default path is `add -> index -> search/ask -> evidence review`. APIs, quality bars, and experimental surfaces may change without notice.
 
 ## Supported Default Path
 
 Knowledge Hub의 public product promise는 의도적으로 좁습니다:
 
-`discover -> index -> search/ask -> evidence review`
+`add -> index -> search/ask -> evidence review`
 
 현재 대표 시나리오는 다음입니다.
 
@@ -18,7 +18,7 @@ Knowledge Hub의 public product promise는 의도적으로 좁습니다:
 
 이 기본 경로의 현재 success 기준은 아래와 같습니다.
 
-- `discover`: 최소 1개의 source item이 canonical local storage에 등록된다.
+- `add`: 최소 1개의 source item이 canonical local storage에 등록된다.
 - `index`: retrieval-facing vector/document surface가 비어 있지 않다.
 - `search` or `ask`: grounded result 또는 explicit lack-of-evidence outcome을 반환한다.
 - `evidence review`: source trace나 후속 reading surface로 grounding path를 다시 확인할 수 있다.
@@ -37,7 +37,7 @@ khub ask "Transformer의 핵심 아이디어는?"
 실제 코퍼스를 넣고 representative result를 확인하려면 최소 1개 source ingest 후 indexing을 먼저 수행하세요.
 
 ```bash
-khub discover "large language model agent" -n 3
+khub add "large language model agent" --type paper -n 3
 khub index
 ```
 
@@ -76,7 +76,7 @@ The repository also contains broader capabilities, but they are not the default 
 
 These surfaces stay visible for transparency, but they should be treated as `experimental`, `labs-first`, and `subject to change without notice`.
 
-The default `khub --help` surface now favors the representative core loop. Operator-heavy personal or eval commands still exist and remain documented, but they are hidden from the default top-level help and are expected to be invoked directly when needed.
+The default `khub --help` surface now favors the representative core loop. `khub add` is the preferred intake facade for web URLs, YouTube URLs, paper URLs, and paper discovery queries. Lower-level ingestion commands such as `khub discover`, `khub crawl`, `khub health`, `khub setup`, `khub vault`, and `khub mcp` still exist for compatibility or advanced use, but they are hidden from the default top-level help. Operator-heavy personal or eval commands remain directly invokable when needed.
 
 ## Features
 
@@ -116,7 +116,7 @@ pip install -e .
 
 ```bash
 # 1. 초기 설정
-khub setup --profile local      # local | hybrid | custom
+khub init
 
 # 2. 사용자용 환경 진단
 khub doctor
@@ -124,8 +124,10 @@ khub doctor
 # 3. 상세 상태 확인(엔지니어용)
 khub status
 
-# 4. 논문 검색 + 수집
-khub discover "large language model agent" -n 3
+# 4. 소스 추가(URL / YouTube / 논문 URL / 논문 검색)
+khub add "large language model agent" --type paper -n 3
+khub add "https://example.com/guide" --topic "rag"
+khub add "https://youtu.be/<video-id>" --topic "agents"
 
 # 5. 수집 결과 확인
 khub paper list
@@ -164,7 +166,6 @@ khub labs --help
 khub labs crawl --help
 khub labs learn --help
 khub labs ops --help
-khub labs crawl youtube-ingest --url "https://youtu.be/<video-id>" --topic "agents"
 ```
 
 MCP에서도 labs 도구는 기본적으로 숨겨지며, 필요하면 profile을 명시합니다.
@@ -174,7 +175,7 @@ export KHUB_MCP_PROFILE=default  # default | labs | all
 ```
 
 ko-note는 기본적으로 `generate -> inspect staged notes in Obsidian -> apply` 흐름을 권장합니다. review/remediation/manual enrich는 `khub labs crawl ...` 아래의 고급 운영 명령으로 남아 있습니다.
-YouTube URL ingest는 현재 labs-first입니다. 구현은 `caption-first + description/chapters merge + optional local ASR fallback`이며, 로컬 fallback을 쓰려면 `yt-dlp`, `ffmpeg`, `openai-whisper`가 필요합니다.
+YouTube URL ingest는 기본 intake에서는 `khub add <youtube-url>`로 진입하고, 고급 운영 옵션은 `khub labs crawl youtube-ingest ...`에 남아 있습니다. 구현은 `caption-first + description/chapters merge + optional local ASR fallback`이며, 로컬 fallback을 쓰려면 `yt-dlp`, `ffmpeg`, `openai-whisper`가 필요합니다.
 
 ### Stability Notes
 
@@ -393,7 +394,7 @@ obsidian:
 
 providers:
   openai:
-    api_key: ${OPENAI_API_KEY}
+    api_key_env: OPENAI_API_KEY
   ollama:
     base_url: http://localhost:11434
   pplx-local:
@@ -470,7 +471,9 @@ khub index --all
 
 ## Commands
 
-### `khub discover` - 핵심 파이프라인
+### `khub discover` - direct paper discovery compatibility
+
+기본 intake는 `khub add "topic" --type paper -n 3`입니다. `khub discover`는 judge, 연도/인용수 필터, 정렬 등 paper discovery 세부 옵션이 필요할 때 직접 호출하는 compatibility surface입니다.
 
 ```bash
 # 기본 사용
@@ -681,6 +684,7 @@ Cursor 예시 설정:
 
 | 명령 | LLM 필요 | 임베딩 필요 | Obsidian 필요 | API 키 |
 |---|---|---|---|---|
+| `khub add` | 소스/옵션에 따라 | O (기본 `--index`) | 선택 | 프로바이더에 따라 |
 | `khub discover` | O (번역/요약) | O (인덱싱) | 선택 | 프로바이더에 따라 |
 | `khub paper list/info` | - | - | - | - |
 | `khub paper translate` | O | - | - | 프로바이더에 따라 |
@@ -698,9 +702,9 @@ Cursor 예시 설정:
 |---|---|---|
 | `ModuleNotFoundError: ollama` | ollama extra 미설치 | `pip install -e ".[ollama]"` 또는 다른 프로바이더로 변경 |
 | `khub search` 실패 | 임베딩 프로바이더 미설정 | `khub init` → 임베딩 프로바이더 선택 |
-| `OPENAI_API_KEY` 오류 | 환경변수 미설정 | `export OPENAI_API_KEY=sk-...` 또는 `.env` 파일 생성 |
+| `OPENAI_API_KEY` 오류 | 환경변수 미설정 | `export OPENAI_API_KEY=<openai-api-key>` 또는 `.env` 파일 생성 |
 | Obsidian 관련 명령 실패 | vault 경로 미설정 | `khub config set obsidian.vault_path /path/to/vault` |
-| 인덱싱 0건 | 논문 미수집 | `khub discover "topic" -n 3` 먼저 실행 |
+| 인덱싱 0건 | 소스 미수집 | `khub add "topic" --type paper -n 3` 또는 `khub add "https://example.com/guide" --topic "topic"` 먼저 실행 |
 
 ## Runtime Mode: CLI + MCP Only
 

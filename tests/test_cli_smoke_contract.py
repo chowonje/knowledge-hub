@@ -179,7 +179,7 @@ def test_run_weekly_core_loop_smoke_collects_full_plan_after_failure(monkeypatch
             name="top_help",
             argv=["python", "-m", "knowledge_hub.interfaces.cli.main", "--help"],
             returncode=0,
-            stdout="Usage\nCommands:\n  discover\n  index\n  search\n  ask\n  doctor\n  status\n",
+            stdout="Usage\nCommands:\n  add\n  index\n  search\n  ask\n  doctor\n  status\n",
             stderr="",
             duration_sec=0.01,
         ),
@@ -392,9 +392,24 @@ def test_top_level_help_hides_operator_surfaces():
 
     assert result.exit_code == 0
     command_lines = _command_lines(result.output)
-    for token in ("dinger", "os", "eval", "paper-memory", "math-memory", "vector-compare", "vector-restore"):
+    for token in (
+        "crawl",
+        "discover",
+        "dinger",
+        "eval",
+        "explore",
+        "health",
+        "math-memory",
+        "mcp",
+        "os",
+        "paper-memory",
+        "setup",
+        "vault",
+        "vector-compare",
+        "vector-restore",
+    ):
         assert token not in command_lines
-    for token in ("discover", "index", "search", "ask", "doctor", "status", "paper", "labs"):
+    for token in ("add", "index", "search", "ask", "doctor", "status", "paper", "labs"):
         assert token in command_lines
 
 

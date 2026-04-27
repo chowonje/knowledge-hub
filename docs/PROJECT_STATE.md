@@ -9,10 +9,10 @@ Last updated: 2026-04-27
 ## Current public release posture
 
 - Public-facing posture is **Research Preview**, not stable-release language.
-- The supported default path for public docs is `discover -> index -> search/ask -> evidence review`.
+- The supported default path for public docs is `add -> index -> search/ask -> evidence review`.
 - The current green signal is intentionally narrow: public release trust comes from the smoke gate / approval slice, not a full-repo green claim.
 - `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental in public messaging.
-- Default top-level CLI discovery now favors the representative core loop. Personal, eval, and low-level maintenance commands remain directly invokable for compatibility, but they are hidden from the default `khub --help` output.
+- Default top-level CLI discovery now favors the representative core loop. `khub add` is the visible source-intake facade for web URLs, YouTube URLs, paper URLs, and paper discovery queries; lower-level `discover`, `crawl`, `health`, `setup`, `vault`, and `mcp` commands remain directly invokable for compatibility or advanced use but are hidden from the default `khub --help` output.
 - A public snapshot should be cut from a dedicated `public-preview` branch and pass `scripts/check_public_release_hygiene.py` plus `scripts/check_release_smoke.py` on a clean checkout.
 - The Opus hardening split branch now has a release-hygiene cleanup on top of the clean replay: tracked `eval/knowledgeos/review/` runtime artifacts are removed and ignored, continuous-sync launchd is a template rather than a workstation-specific plist, and unattended `.env` loading / `--apply` / `--allow-external` remain opt-in.
 - The public-release hygiene gate now blocks `.sqlite` / `.sqlite3` runtime databases, repo-local eval failure-bank records, generated A/B run artifacts, and absolute home paths even when they appear inside Markdown backticks or plist strings. Public candidate files should use placeholders such as `<repo-root>`, `<vault-root>`, `~/.khub`, `com.example...`, or sample ids like `operator` instead of workstation-specific macOS home paths, launchd labels, or fixture owner ids.
@@ -41,11 +41,11 @@ The current product story is intentionally narrower than the full implementation
 
 The representative default loop is:
 
-`discover -> index -> search/ask -> evidence review`
+`add -> index -> search/ask -> evidence review`
 
 Current success criteria for that loop:
 
-- `discover`: at least one source item lands in canonical local storage.
+- `add`: at least one source item lands in canonical local storage.
 - `index`: the retrieval-facing vector/document surface is non-empty and readable by the runtime.
 - `search/ask`: the runtime returns either a grounded result or an explicit lack-of-evidence outcome.
 - `evidence review`: the answer/result exposes enough source trace to inspect the grounding path.
@@ -93,7 +93,7 @@ Additive subsystems exist behind that default surface:
 
 The default product shape is now intentionally split into three layers:
 
-- `Core Runtime`: the local grounded loop (`discover -> index -> search/ask -> evidence review`) plus read-only task-context assembly and policy/provenance surfaces
+- `Core Runtime`: the local grounded loop (`add -> index -> search/ask -> evidence review`) plus read-only task-context assembly and policy/provenance surfaces
 - `Agent Gateway`: a narrow future-facing adapter layer for context packs, grounded tool access, approval/policy checks, and result receipts
 - `Labs`: experimental or operator-heavy surfaces that remain additive and do not redefine the default promise
 
@@ -133,9 +133,9 @@ This means two things operationally:
 
 ## Current default contract
 
-- Default CLI/MCP discovery stays retrieval-assistant-first: ingest, search, ask, task-context, vault, health.
+- Default CLI/MCP discovery stays retrieval-assistant-first: add/intake, search, ask, task-context, and diagnostics.
 - Advanced workflows stay behind `khub labs ...` or profile-gated MCP discovery.
-- Some additive compatibility commands still exist at the root CLI for direct invocation, but the default top-level help now hides personal/eval/maintenance surfaces such as `dinger`, `os`, `eval`, `paper-memory`, `math-memory`, and `vector-*`.
+- Some additive compatibility commands still exist at the root CLI for direct invocation, but the default top-level help now hides low-level ingestion or operator surfaces such as `discover`, `crawl`, `health`, `setup`, `vault`, `mcp`, `dinger`, `os`, `eval`, `paper-memory`, `math-memory`, and `vector-*`.
 - Within the visible root `agent` group, the default help now favors gateway-facing subcommands (`context`, `run`, `writeback-request`). Foundry operator subcommands such as `sync`, `discover*`, and `foundry-conflict-*` remain directly invokable for compatibility but are hidden from the default `khub agent --help` output.
 - The canonical foundry/operator CLI surface now lives under `khub labs foundry`. Legacy `khub agent sync|discover|discover-validate|foundry-conflict-*` paths remain as hidden compatibility aliases, but the intended split is now explicit in the command tree instead of existing only as hidden help policy.
 - That split now also exists at the implementation boundary: `knowledge_hub.interfaces.cli.commands.foundry_cmd` owns the foundry/operator command callbacks plus sync/discover helper stack, while `knowledge_hub.interfaces.cli.commands.agent_cmd` is back to gateway-facing commands and alias registration only.
@@ -541,7 +541,8 @@ After changing architecture or core behavior:
 
 ## Decisions
 
-- 2026-04-17: Product direction is now explicitly framed as `Core Runtime`, `Agent Gateway`, and `Labs`. The default product promise remains the narrow local-first grounded loop (`discover -> index -> search/ask -> evidence review`) plus read-only task-context assembly and policy/provenance surfaces. Future agentic or AGI alignment stays in scope through a narrow gateway for context packs, grounded tool access, approval/policy enforcement, and result receipts, not as a reason to redefine the core product around broad orchestration or hidden automation.
+- 2026-04-17: Product direction was framed as `Core Runtime`, `Agent Gateway`, and `Labs`. The product promise was narrowed to a local-first grounded loop plus read-only task-context assembly and policy/provenance surfaces. Future agentic or AGI alignment stays in scope through a narrow gateway for context packs, grounded tool access, approval/policy enforcement, and result receipts, not as a reason to redefine the core product around broad orchestration or hidden automation.
+- 2026-04-27: The default local-first grounded loop now uses `khub add` as the intake facade: `add -> index -> search/ask -> evidence review`. Lower-level `discover`, `crawl`, `health`, `setup`, `vault`, `mcp`, and `explore` remain direct compatibility/advanced commands but are hidden from default top-level help.
 - 2026-04-17: `Agent Gateway v1` is now formalized as a read-only/dry-run contract on top of the existing surfaces rather than as a new command family. `build_task_context` / `khub agent context` remain the official context-pack surface, and `run_agentic_query(dry_run=true)` / `khub agent run --dry-run` remain the official execution-free plan envelope. Both surfaces now carry additive `gateway` metadata so the gateway contract is explicit without changing the existing task-context or agent-run payload cores.
 - 2026-04-17: `Agent Gateway v1` now has its first real consumer instead of being documentation plus producer metadata only. `scripts/preview_agent_gateway.py` consumes the official CLI JSON contracts (`agent context --json` and `agent run --dry-run --json`), checks the additive `gateway` contract on both payloads, and gives a human-operator preview surface plus an optional merged JSON view. This stays intentionally outside the product command surface: no new `khub gateway` command, no new MCP tool, and no runtime ownership change.
 - 2026-04-17: The first `Agent Gateway v2` lane now spans request plus explicit approved execution without widening into a general agent platform. `khub agent writeback-request` still creates the pending `agent_repo_writeback_request` from the normalized dry-run envelope, but the existing `ops` queue can now execute that action type after an explicit `acked` approval state. The safe runner blocks unacked execution, blocks `--dry-run`/`--report-path` variants, keeps the repo-local scope on the stored `agent run` args, and records the result through the existing `knowledge-hub.ops.action.execute.result.v1` receipt path instead of adding a new dedicated execution surface.

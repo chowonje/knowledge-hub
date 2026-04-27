@@ -30,12 +30,14 @@ def test_cli_help_hides_labs_commands_from_top_level():
     result = runner.invoke(module.cli, ["--help"])
 
     assert result.exit_code == 0
+    assert "add" in result.output
     assert "search" in result.output
     assert "ask" in result.output
     assert "agent" in result.output
-    assert "crawl" in result.output
     assert "doctor" in result.output
     assert "labs" in result.output
+    assert "crawl" not in result.output
+    assert "discover" not in result.output
     assert "dinger" not in result.output
     assert "eval" not in result.output
     assert "learn" not in result.output

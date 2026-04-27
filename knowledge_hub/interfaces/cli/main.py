@@ -3,14 +3,12 @@ khub CLI - Knowledge Hub canonical entrypoint.
 
 Usage:
     khub init                          # 초기 설정
-    khub discover "topic" [OPTIONS]    # 논문 검색 → 다운로드 → 요약 → 연결
+    khub add <source> [OPTIONS]        # URL/YouTube/논문 소스 추가
     khub paper summary|evidence|memory|related
     khub config get|set|list
     khub search "query"
     khub ask "question"
-    khub health                         # 설정/의존성 진단
     khub doctor                         # 일반 사용자용 설치/실패 경로 요약
-    khub setup [--quick]               # 초보자용 빠른 시작
 """
 
 from __future__ import annotations
@@ -282,7 +280,7 @@ class _LazyCommandGroup(_ErrorHandlingGroup):
 @click.version_option(version=get_version(), prog_name="knowledge-hub")
 @click.pass_context
 def cli(ctx, config_path, verbose):
-    """Knowledge Hub - AI 논문 검색, 번역, 요약, 지식 연결 파이프라인"""
+    """Knowledge Hub - local-first source intake, search, ask, and evidence review"""
     _setup_logging(verbose)
     ctx.ensure_object(dict)
     ctx.obj["khub"] = KhubContext(config_path)
@@ -308,16 +306,17 @@ def labs_ops_group():
 cli.add_command(labs_group, "labs")
 
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.init_cmd", "init_cmd", "init")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.add_cmd", "add_cmd", "add")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.config_cmd", "config_group", "config")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.discover_cmd", "discover", "discover")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.discover_cmd", "discover", "discover", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_cmd", "paper_group", "paper")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_memory_cmd", "paper_memory_group", "paper-memory", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.math_memory_cmd", "math_memory_group", "math-memory", hidden=True)
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.explore_cmd", "explore_group", "explore")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.explore_cmd", "explore_group", "explore", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "search", "search")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "ask", "ask")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.index_cmd", "index_cmd", "index")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.health_cmd", "health_cmd", "health")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.health_cmd", "health_cmd", "health", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.doctor_cmd", "doctor_cmd", "doctor")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vector_compare_cmd", "vector_compare_cmd", "vector-compare", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vector_cmd", "vector_restore_cmd", "vector-restore", hidden=True)
@@ -327,11 +326,11 @@ cli.add_lazy_command(
     "vector-source-metadata",
     hidden=True,
 )
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.setup_cmd", "setup_cmd", "setup")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.crawl_cmd", "crawl_group", "crawl")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.setup_cmd", "setup_cmd", "setup", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.crawl_cmd", "crawl_group", "crawl", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.dinger_cmd", "dinger_group", "dinger", hidden=True)
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.mcp_cmd", "mcp_cmd", "mcp")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vault_cmd", "vault_group", "vault")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.mcp_cmd", "mcp_cmd", "mcp", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vault_cmd", "vault_group", "vault", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.agent_cmd", "agent_group", "agent")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.os_cmd", "os_group", "os", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.eval_cmd", "eval_compat_group", "eval", hidden=True)

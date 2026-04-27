@@ -19,8 +19,8 @@ khub <command> <subcommand> --help
 예:
 
 ```bash
+khub add --help
 khub paper --help
-khub discover --help
 khub labs crawl --help
 khub labs paper --help
 ```
@@ -30,50 +30,49 @@ khub labs paper --help
 ```bash
 khub doctor
 khub status
-khub dinger ingest --paper "주제"
-khub dinger ask "질문"
-khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
+khub add "https://example.com/guide" --topic "rag"
+khub add "https://youtu.be/<video-id>" --topic "agents"
+khub add "retrieval augmented generation" --type paper -n 3
 khub search "주제"
 khub ask "질문"
 khub agent context "작업 목표" --repo-path .
-khub discover "주제" -n 5 --judge
 khub paper list
-khub paper board-export --json
 khub index
 ```
 
 ## 기본 Top-Level Help
 
 ```text
+khub add
 khub agent
 khub ask
 khub config
-khub crawl
-khub discover
 khub doctor
-khub explore
-khub health
 khub index
 khub init
 khub labs
-khub mcp
 khub paper
 khub search
-khub setup
 khub status
-khub vault
 ```
 
-기본 `khub --help`는 representative core loop를 우선 노출합니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
+기본 `khub --help`는 representative core loop를 우선 노출합니다. `khub add`가 URL/YouTube/논문 URL/논문 검색의 기본 intake facade입니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
 
 ## Direct But Hidden Top-Level
 
 ```text
+khub crawl
+khub discover
 khub dinger
 khub eval
+khub explore
+khub health
 khub math-memory
+khub mcp
 khub os
 khub paper-memory
+khub setup
+khub vault
 khub vector-compare
 khub vector-restore
 ```
@@ -81,6 +80,27 @@ khub vector-restore
 `khub eval`은 hidden compatibility alias이고, canonical eval surface는 `khub labs eval`입니다.
 
 ## 기본 Surface
+
+### `khub add`
+
+```text
+khub add <source>
+```
+
+용도:
+- 웹 URL, YouTube URL, 논문 URL, 논문 검색어를 하나의 직관적인 intake 명령으로 처리
+- `auto` route가 YouTube, paper URL/arXiv id, 일반 web URL, paper query를 구분
+- 기존 `khub crawl ingest`, `khub labs crawl youtube-ingest`, `khub paper import-csv`, `khub discover` 기능을 얇게 감싸며 기존 명령을 제거하지 않음
+
+예:
+
+```bash
+khub add "https://example.com/guide" --topic "rag"
+khub add "https://youtu.be/<video-id>" --topic "agents"
+khub add "https://arxiv.org/abs/2401.00001"
+khub add "retrieval augmented generation" --type paper -n 3
+khub add "https://example.com/paper.pdf" --type web --topic "paper-notes"
+```
 
 ### `khub agent`
 
@@ -401,10 +421,12 @@ khub discover
 용도:
 - 논문 검색 -> 다운로드 -> 요약/번역 -> 인덱싱 -> 옵시디언 연결
 - `--judge`로 optional paper discovery filter 사용 가능
+- 기본 intake는 `khub add "topic" --type paper -n 3`이고, `discover`는 세부 discovery 옵션이 필요할 때 직접 호출하는 compatibility surface
 
 예:
 
 ```bash
+khub add "large language model agent" --type paper -n 3
 khub discover "large language model agent" -n 3
 khub discover "retrieval agent" -n 5 --judge
 khub discover "scientific taste" -n 5 --judge --json
@@ -505,7 +527,7 @@ khub doctor --json
 - local-first 진단에서 허용되는 상태 집합은 `ok|blocked|degraded|needs_setup`다
 - local-first profile에서 Ollama가 꺼져 있으면 `blocked/degraded`를 그대로 유지한 채 원인과 다음 명령을 보여준다
 - typical recovery order: `ollama serve` -> `ollama pull <each configured model>` -> `python -m knowledge_hub.interfaces.cli.main doctor`
-- vector corpus가 아직 `needs_setup`이면 현재 안내된 fix command를 따라 `khub discover "AI agent" --max-papers 1`로 최소 corpus를 만든다
+- vector corpus가 아직 `needs_setup`이면 현재 안내된 fix command를 따라 `khub add "AI agent" --type paper -n 1`로 최소 corpus를 만든다
 
 ### `khub mcp`
 
@@ -929,7 +951,7 @@ khub agent context "작업 목표" --repo-path .
 ### 3. 논문 수집
 
 ```bash
-khub discover "주제" -n 5 --judge
+khub add "주제" --type paper -n 5
 khub paper list
 ```
 
