@@ -1235,6 +1235,9 @@ class WebIngestService:
         index: bool = True,
         extract_concepts: bool = True,
         allow_external: bool = False,
+        input_source: str = "web",
+        transcript_language: str | None = None,
+        asr_model: str = "tiny",
         resume_job_id: str | None = None,
     ) -> dict[str, Any]:
         started_mono = time.monotonic()
@@ -1479,6 +1482,9 @@ class WebIngestService:
                     engine=engine,
                     timeout=max(1, int(timeout)),
                     delay=max(0.0, float(delay)),
+                    input_source=input_source,
+                    transcript_language=transcript_language,
+                    asr_model=asr_model,
                 )
                 warnings.extend(crawl_warnings or [])
                 doc = next((item for item in docs if item.ok and str(item.content or "").strip()), None)

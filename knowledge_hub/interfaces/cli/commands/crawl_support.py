@@ -133,6 +133,9 @@ def collect_to_obsidian_payload(
     index: bool,
     extract_concepts: bool,
     allow_external: bool,
+    input_source: str = "web",
+    transcript_language: str | None = None,
+    asr_model: str = "tiny",
     max_source_notes: int,
     max_concept_notes: int,
     llm_mode: str,
@@ -158,6 +161,9 @@ def collect_to_obsidian_payload(
         index=bool(index),
         extract_concepts=bool(extract_concepts),
         allow_external=bool(allow_external),
+        input_source=str(input_source or "web").strip() or "web",
+        transcript_language=str(transcript_language or "").strip() or None,
+        asr_model=str(asr_model or "tiny").strip() or "tiny",
     )
     validate_cli_payload(khub.config, crawl_payload, "knowledge-hub.crawl.pipeline.run.result.v1")
 

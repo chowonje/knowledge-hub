@@ -23,6 +23,24 @@ Last updated: 2026-04-27
 - The public-release hygiene gate now blocks `.sqlite` / `.sqlite3` runtime databases, repo-local eval failure-bank records, generated A/B run artifacts, and absolute home paths even when they appear inside Markdown backticks or plist strings. Public candidate files should use placeholders such as `<repo-root>`, `<vault-root>`, `~/.khub`, `com.example...`, or sample ids like `operator` instead of workstation-specific macOS home paths, launchd labels, or fixture owner ids.
 - Public candidates should also avoid workstation-specific external-volume paths. High-volume local storage examples should use placeholders such as `<pipeline-storage-root>` or config/home defaults such as `~/.khub/knowledge_os`.
 
+## Current frontier expansion posture
+
+The first post-preview expansion track is **Second Core #1: Research Intake + Obsidian Memory** on a dedicated `frontier/...` branch. It is separate from the public-preview **release branch**, but it intentionally builds on the already-visible `khub add` intake facade. Public-preview README/release material should not broadly market the new PDF/Obsidian staging behavior until this frontier track is promoted.
+
+The v1 implementation is router-first. `khub add <source>` is the unified convenience facade for paper URLs/queries, web URLs, YouTube URLs, generic PDF URLs, and local PDFs. It delegates to the existing paper import, web ingest, YouTube ingest, and ko-note staging paths instead of introducing a new application service too early.
+
+The add result contract is now source-agnostic: `sourceType`, `sourceId`, `canonicalUrl`, `canonicalPath`, `title`, `contentHash`, `stored`, `indexed`, `obsidianStage`, `warnings`, and `nextActions` are present on every `knowledge-hub.add.result.v1` payload. The upstream paper-discover, paper-import, crawl-ingest, or crawl-collect payload remains nested under `upstream` for compatibility and debugging.
+
+The add facade is now internally split by responsibility. `knowledge_hub.interfaces.cli.commands.add_cmd` owns the Click command and text summary only; `commands/add/route.py` owns source routing, `result.py` owns the common packet contract, `lanes.py` owns paper/web/YouTube/PDF lane execution, and `obsidian_stage.py` owns the stage-only ko-note shim for sources that did not enter through the crawl pipeline.
+
+Default post-processing remains deliberately bounded: store/source-hash/vector indexing/result packet. Heavy paper-memory, document-memory, card, and claim builds are not automatic in add v1; paper add uses `--build-memory` when the operator wants those derivative artifacts.
+
+Obsidian integration is stage-only by default. `khub add --to-obsidian` requests managed ko-note staging and never final apply. Final vault writes remain in the review/approve/apply family. Paper add v1 does not use direct paper writeback as a new default; paper Obsidian staging is deferred until it can reuse the same managed staging model.
+
+PDF routing is split before ingestion. arXiv/OpenReview/PapersWithCode/HuggingFace `/papers/...`/Semantic Scholar-style paper URLs stay in the paper lane, while Hugging Face model/dataset pages remain ordinary web sources. Generic PDF URLs and local PDFs use the web/document lane by default. Operators can force a generic PDF URL into the paper lane with `--type paper`; non-paper URLs are rejected instead of being sent to the paper resolver. Local paper-PDF import is still a follow-up because the existing paper URL resolver is URL-oriented.
+
+The add facade treats local/runtime paths as private output by default. Local-PDF packets redact local file paths and `file://` URIs before printing JSON or text summaries, and paper-import packets no longer expose the raw internal manifest path from the single-source import helper.
+
 See also:
 - `docs/maps/README.md`
 - `docs/maps/canonical-ownership-map.md`
