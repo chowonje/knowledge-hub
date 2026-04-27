@@ -75,7 +75,7 @@ def test_cli_labs_help_exposes_demoted_groups():
     assert "ask-graph" in result.output
     assert "memory" in result.output
     assert "paper" in result.output
-    assert "eval" in result.output
+    assert "eval" not in result.output
     assert "foundry" in result.output
 
 

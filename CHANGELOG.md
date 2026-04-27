@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Hid internal verification tooling from the public/labs surface. `khub labs eval` now stays directly invokable for trusted scripts but no longer appears in `khub labs --help`, and public-facing README/release/CLI docs no longer advertise eval, answer-loop, benchmark, or source-quality tooling as product features.
 - Added a first-class provider setup surface. `khub provider recommend|setup|add|use|key|doctor` now gives users local/balanced/quality/Codex-MCP profiles, lets them register named OpenAI-compatible providers such as DeepSeek/OpenRouter/vLLM/LM Studio without hard-coding new adapters, stores API keys through environment-variable references, and lets configured custom aliases participate in the existing LLM/embedder registry and outbound policy guard.
 - Fixed `khub doctor` to resolve config-defined custom provider aliases through the same config-aware provider registry used by runtime diagnostics, so OpenAI-compatible aliases such as DeepSeek are not incorrectly reported as missing install extras.
 - Tightened public-preview messaging. README feature bullets and the public release checklist/draft now consistently frame the supported path as `add -> index -> search/ask -> evidence review`, keep notebook/workbench and labs surfaces out of the default product promise, and record remaining Research Preview risks around OPF scanning, live provider variance, and source-quality unevenness.

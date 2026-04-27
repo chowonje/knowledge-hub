@@ -426,13 +426,13 @@ def test_hidden_eval_compat_alias_remains_directly_invokable():
     assert _command_lines(root_result.output) == _command_lines(labs_result.output)
 
 
-def test_labs_help_keeps_eval_visible():
+def test_labs_help_hides_internal_eval_surface():
     runner = CliRunner()
 
     result = runner.invoke(cli, ["labs", "--help"])
 
     assert result.exit_code == 0
-    assert "eval" in _command_lines(result.output)
+    assert "eval" not in _command_lines(result.output)
 
 
 def test_labs_help_keeps_foundry_visible():

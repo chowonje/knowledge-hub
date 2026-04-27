@@ -47,7 +47,7 @@ khub index
 - We do not claim full-repo green; the current green signal is limited to a narrow smoke gate / approval slice.
 - Source quality is uneven. `paper` and `project` are currently stronger than at least one known `vault` compare path, which can still degrade to `0 source`.
 - The Python / TypeScript boundary is structurally defined but still mid-migration in some areas, so less-traveled paths can still have rough edges.
-- Several surfaces remain experimental or operator-facing: `khub labs ...`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core`.
+- Several surfaces remain experimental or operator-facing: `khub labs ...`, `Agent Gateway`, learning workflows, and `foundry-core`.
 - Not recommended for production use without internal validation.
 
 ## Default vs Experimental Surfaces
@@ -70,13 +70,12 @@ The repository also contains broader capabilities, but they are not the default 
 
 - `khub labs ...` operator and experimental workflows
 - `Agent Gateway` context packing and approval-gated writeback lanes
-- answer-loop evaluation and backend experiments
 - learning workflows
 - `foundry-core` delegated runtime and bridge-facing execution
 
 These surfaces stay visible for transparency, but they should be treated as `experimental`, `labs-first`, and `subject to change without notice`.
 
-The default `khub --help` surface now favors the representative core loop. `khub add` is the preferred intake facade for web URLs, YouTube URLs, paper URLs, and paper discovery queries. Lower-level ingestion commands such as `khub discover`, `khub crawl`, `khub health`, `khub setup`, `khub vault`, and `khub mcp` still exist for compatibility or advanced use, but they are hidden from the default top-level help. Operator-heavy personal or eval commands remain directly invokable when needed.
+The default `khub --help` surface now favors the representative core loop. `khub add` is the preferred intake facade for web URLs, YouTube URLs, paper URLs, and paper discovery queries. Lower-level ingestion commands such as `khub discover`, `khub crawl`, `khub health`, `khub setup`, `khub vault`, and `khub mcp` still exist for compatibility or advanced use, but they are hidden from the default top-level help. Internal verification and operator-heavy personal commands remain outside public discovery.
 
 ## Features
 
@@ -205,10 +204,6 @@ Default `paper` ask is intentionally conservative:
 - `concept_explainer` keeps the legacy hybrid route as the default, but now uses bounded fan-out on the paper path: at most `base + 2 planned terms + 1 rescue query`, at most 2 lexical forms, and at most one representative-paper scoped extra search
 - `khub ask --json` keeps the existing paper diagnostics and now also exposes `retrievalObjectsAvailable`, `retrievalObjectsUsed`, and `representativeRole`
 
-Paper eval is split into two gates:
-
-- hard gate: `python eval/knowledgeos/scripts/collect_paper_default_eval.py --gate-mode stub_hard --out ...`
-- live gate: `python eval/knowledgeos/scripts/collect_paper_default_eval.py --gate-mode live_smoke --out ...`
 - deep multi-paper synthesis stays on `khub labs paper topic-synthesize`
 - `khub ask ... --json` exposes `paperFamily`, `queryPlan`, `representativePaper`, `plannerFallback`, and `familyRouteDiagnostics`
 
@@ -228,10 +223,6 @@ Default `web` ask is also conservative:
 - weak `observed_at`-only signals do not justify a strong “latest” answer
 - `SectionCard` and `ClaimCard` are support objects only; the current default keeps raw/document-memory verification in charge
 
-Web eval currently uses a route-first split:
-
-- hard gate: `python eval/knowledgeos/scripts/collect_web_default_eval.py --gate-mode stub_hard --out ...`
-- live smoke: `python eval/knowledgeos/scripts/collect_web_default_eval.py --gate-mode live_smoke --out ...`
 - `khub ask ... --json` uses `queryFrame.family`, `evidencePolicy`, and `familyRouteDiagnostics` as the canonical cross-source diagnostics, and web diagnostics add `temporalSignalsApplied`, `referenceSourceApplied`, and `watchlistScopeApplied`
 
 The implementation boundary is now split on purpose:
@@ -704,7 +695,7 @@ khub labs crawl pending reject --id 13
 - 기본 실행에서 웹 온톨로지 추출이 동작하며 고신뢰만 즉시 반영, 저신뢰는 `pending` 큐로 저장됩니다.
 - `--writeback` 활성 시 Obsidian `LearningHub/<topic-slug>/03_Web_Sources.md`, `04_Web_Concepts.md`를 멱등 갱신합니다.
 - `--index` 활성 시 vector DB까지 즉시 인덱싱됩니다.
-- `pending`, `domain-policy`, `reference-sync`, `benchmark` 같은 고급 운영 명령은 `khub labs crawl ...` 아래에 있습니다.
+- `pending`, `domain-policy`, `reference-sync` 같은 고급 운영 명령은 `khub labs crawl ...` 아래에 있습니다.
 - 결과 JSON 스키마: `docs/schemas/crawl-ingest-result.v1.json` (`knowledge-hub.crawl.ingest.result.v1`)
 
 백엔드 전략(A안):

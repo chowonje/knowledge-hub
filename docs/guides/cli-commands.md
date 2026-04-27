@@ -66,7 +66,6 @@ khub status
 khub crawl
 khub discover
 khub dinger
-khub eval
 khub explore
 khub health
 khub math-memory
@@ -78,8 +77,6 @@ khub vault
 khub vector-compare
 khub vector-restore
 ```
-
-`khub eval`은 hidden compatibility alias이고, canonical eval surface는 `khub labs eval`입니다.
 
 ## 기본 Surface
 
@@ -180,7 +177,7 @@ khub ask
 ```bash
 khub ask "Transformer의 핵심 아이디어는?"
 khub ask "RAG implementation의 핵심 tradeoff는?" --json
-khub ask "최근 업데이트된 RAG benchmark 차이" --source paper --memory-route-mode compat --json
+khub ask "최근 업데이트된 RAG 방법 차이" --source paper --memory-route-mode compat --json
 khub ask "트랜스포머를 대체할 차세대 아키텍처 논문들을 찾아서 정리해줘" --source paper --json
 khub ask "최근 벡터 검색 품질 개선 글은 rerank를 어떤 역할로 설명하나?" --source web --json
 khub ask "web card v2에서 version grounding이 필요한 이유는 무엇인가?" --source web --json
@@ -681,7 +678,7 @@ khub labs memory search
 - 문서 summary와 section/block 단위 메모리 유닛을 조회
 - additive `semanticUnits` payload로 `Document / Element / MemoryCard` 계약을 inspectable하게 노출
 - 기본 `search`/`ask`와 별개로 summary-first 메모리 검색 실험
-- 수동 평가는 `khub labs eval prepare-document-memory`로 CSV 템플릿을 생성한 뒤 `khub labs eval run`으로 gate를 본다
+- 승격 판단용 체크는 내부 유지보수 경로이며 공개 CLI discovery surface로 문서화하지 않는다
 
 예:
 
@@ -691,56 +688,6 @@ khub labs memory build --paper-id 2603.13017 --json
 khub labs memory build --canonical-url "https://example.com/rag" --json
 khub labs memory show --document-id "paper:2603.13017" --json
 khub labs memory search --query "retrieval evidence" --json
-```
-
-### `khub labs eval`
-
-```text
-khub labs eval prepare-document-memory
-khub labs eval prepare-claim-synthesis
-khub labs eval prepare-paper-summary
-khub labs eval run
-khub labs eval sectioncards
-khub labs eval answer-loop collect
-khub labs eval answer-loop judge
-khub labs eval answer-loop summarize
-khub labs eval answer-loop autofix
-khub labs eval answer-loop run
-khub labs eval answer-loop optimize
-```
-
-용도:
-- retrieval / document-memory / paper-memory 평가와 user-answer answer-loop를 한 곳에서 실행
-- `memory-router-v1` 프로필은 기존 retrieval-core + document-memory + paper-memory non-regression 위에 memory-first delta를 같이 본다
-- optional claim-synthesis 수동 평가도 같은 eval surface에서 템플릿/게이트로 다룸
-- `answer-loop`는 retrieval을 한 번만 freeze한 packet으로 고정하고, 여러 answer backend를 같은 evidence에서 비교한다
-- `judge`는 `pred_*`만 채우고, `final_*`는 human review 전용으로 남긴다
-- `run`은 `collect -> judge -> summarize -> autofix`를 최대 시도 수까지 반복하고 dirty worktree는 기본 차단한다
-- `optimize`는 retrieval을 한 번 freeze한 뒤 Codex-only answer revision + Codex-only judge를 비파괴적으로 반복하고, judge estimated-token 사용량을 일일 예산 대비 제한된 비율로 묶은 채 review pack만 남긴다
-- supporting capability 승격 판단을 같은 프레임으로 읽기 위한 내부 운영 surface
-- core runtime 동작을 바꾸지 않고 `pass|warn|fail` 상태만 제공
-
-`khub eval`은 기존 스크립트/메모 호환을 위한 hidden compatibility alias만 남기고, canonical path는 `khub labs eval`로 고정한다.
-
-gate 의미:
-- `pass`: 현재 프로파일이 정의된 기준을 통과
-- `warn`: 치명적 실패는 아니지만 승격 근거로는 약함
-- `fail`: 현재 상태로는 승격/신뢰 판단을 내리면 안 됨
-
-예:
-
-```bash
-khub labs eval prepare-document-memory --db data/knowledge.db --json
-khub labs eval prepare-claim-synthesis --db data/knowledge.db --paper-id 2501.00001 --paper-id 2501.00004 --json
-khub labs eval prepare-paper-summary --db data/knowledge.db --paper-id 2501.00001 --json
-khub labs eval run --profile memory-promotion --db data/knowledge.db --document-memory-csv docs/experiments/document_memory_eval_template.csv --json
-khub labs eval run --profile memory-promotion --db data/knowledge.db --document-memory-csv docs/experiments/document_memory_eval_template.csv --claim-synthesis-csv docs/experiments/claim_synthesis_eval_template.csv --json
-khub labs eval run --profile retrieval-core --retrieval-csv docs/eval_precision_template.csv --json
-khub labs eval run --profile memory-router-v1 --db data/knowledge.db --retrieval-csv docs/eval_precision_template.csv --document-memory-csv docs/experiments/document_memory_eval_template.csv --paper-memory-cases tests/fixtures/paper_memory_eval/cases.json --memory-router-csv docs/experiments/memory_router_candidate.csv --memory-router-baseline-csv docs/experiments/memory_router_baseline.csv --json
-khub labs eval answer-loop collect --answer-backend openai_gpt5_mini --json
-khub labs eval answer-loop judge --collect-manifest eval/knowledgeos/runs/answer_loop/latest/answer_loop_collect_manifest.json --json
-khub labs eval answer-loop run --answer-backend codex_mcp --answer-backend openai_gpt5_mini --answer-backend ollama_gemma4 --max-attempts 3 --repo-path . --json
-khub labs eval answer-loop optimize --queries eval/knowledgeos/queries/user_answer_eval_queries_v1.csv --daily-token-budget-estimate 120000 --judge-budget-ratio 0.10 --generator-model gpt-5.4 --judge-model gpt-5.4 --json
 ```
 
 ### `khub search`
@@ -811,7 +758,6 @@ khub labs belief
 khub labs claims
 khub labs crawl
 khub labs decision
-khub labs eval
 khub labs feature
 khub labs graph
 khub labs learn
@@ -856,7 +802,6 @@ khub labs claims pending list
 ### `khub labs crawl`
 
 ```text
-khub labs crawl benchmark
 khub labs crawl domain-policy
 khub labs crawl domain-policy approve
 khub labs crawl domain-policy list

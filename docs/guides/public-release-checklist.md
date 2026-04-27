@@ -12,7 +12,7 @@ Why:
 - the core setup and proof surfaces are real and demonstrable: `doctor`, `provider`, `add`, `index`, `search`, and `ask`
 - full Python tests, Foundry checks, release smoke, weekly core-loop smoke, and public-release hygiene pass on the current public-preview candidate branch
 - local-first / policy-first positioning is clear, and provider setup stores API keys as environment-variable references rather than raw secrets
-- remaining risk is now about preview scope, live provider variance, source-quality variance, and the absence of OPF model-based PII scanning in the local check environment
+- remaining risk is now about preview scope, live provider variance, corpus/source variance, and the absence of OPF model-based PII scanning in the local check environment
 
 ## Recommended public posture
 
@@ -70,7 +70,6 @@ The public branch should satisfy all of the following:
 - decide the public promise:
   - CLI-only retrieval assistant
   - local-first knowledge runtime
-  - eval / answer-loop demo
 - remove or defer unfinished surfaces that make the README noisier without helping the first run
 
 ### 2. Remove non-public material
@@ -85,10 +84,10 @@ Review and exclude these categories before pushing:
   - `*.db-shm`
   - `*.db-wal`
   - `.khub/` runtime outputs if they are copied into the repo
-- generated eval runs and local experiment dumps unless they are intentionally curated examples:
-  - `eval/knowledgeos/runs/*`
-  - repo-local compatibility symlinks that point generated eval artifacts outside the checkout
-  - ad hoc benchmark outputs
+- generated verification runs and local experiment dumps unless they are intentionally curated examples:
+  - ignored run-output directories
+  - repo-local compatibility symlinks that point generated verification artifacts outside the checkout
+  - ad hoc comparison outputs
 - personal work management notes unless you explicitly want them public:
   - `tasks/*`
   - `worklog/*`
@@ -107,7 +106,7 @@ rg -n --hidden -g '!node_modules' -g '!.git' '(OPENAI_API_KEY|ANTHROPIC_API_KEY|
 
 Interpretation:
 
-- `check_public_release_hygiene.py` is the repo-local gate for tracked local files, literal high-confidence secrets, generated eval runs, and absolute user-path leaks
+- `check_public_release_hygiene.py` is the repo-local gate for tracked local files, literal high-confidence secrets, generated verification runs, and absolute user-path leaks
 - environment variable names in docs/examples are fine
 - real token values are not
 - backup configs deserve a second look even if they only contain `${ENV_VAR}` placeholders
@@ -138,7 +137,6 @@ Optional advanced sections can stay below that:
 - paper ingestion
 - provider setup
 - MCP
-- answer-loop eval
 - labs surfaces
 
 ### 5. Verify the public smoke gate
@@ -155,21 +153,12 @@ python scripts/check_release_smoke.py --mode weekly_core_loop --json
 python scripts/check_public_release_hygiene.py
 ```
 
-If the public branch promises answer-loop demos, also run:
-
-```bash
-cd knowledge-hub
-khub labs eval answer-loop collect --queries eval/knowledgeos/queries/user_answer_eval_queries_v1.csv --out-dir /tmp/khub-answer-loop-smoke --answer-backend codex_mcp --backend-model codex_mcp=gpt-5.4 --json
-```
-
-Use a reduced query set if cost or latency matters.
-
 ### 6. Document the current limits honestly
 
 Keep a short `Known Limits` section in `README.md` or a linked guide:
 
 - some source families are stronger than others
-- `paper` and `project` eval quality are ahead of `vault`
+- `paper` and `project` quality signals are ahead of `vault`
 - at least one known `vault` compare path can still collapse to `0 source`
 - local model quality and latency vary by machine
 - heavy labs flows are additive, not the default stable surface
@@ -179,8 +168,6 @@ Keep a short `Known Limits` section in `README.md` or a linked guide:
 
 Public examples should be small and intentional:
 
-- one example answer-loop query set
-- one example judged CSV or summary
 - one example parser workflow
 
 Do not ship large local run directories as if they were canonical product assets.
@@ -228,7 +215,7 @@ These are the main risks that keep the release in Research Preview language:
 Recommended sequence:
 
 1. cut `public-preview`
-2. keep only the stable CLI/runtime/eval slice you want to show
+2. keep only the stable CLI/runtime slice you want to show
 3. prune local artifacts and private notes
 4. tighten README to the small supported path
 5. run the smoke gate on a clean checkout

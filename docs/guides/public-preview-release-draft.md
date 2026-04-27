@@ -14,7 +14,7 @@
 - The supported default path is intentionally narrow: `add -> index -> search/ask -> evidence review`.
 - The public green signal is limited to a narrow smoke gate / approval slice rather than full-repo green.
 - `khub provider` is the supported setup surface for local/API/Codex-MCP/custom OpenAI-compatible model choices; API keys should be configured through environment-variable references.
-- `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental surfaces.
+- `labs`, `Agent Gateway`, learning workflows, and `foundry-core` remain additive or experimental surfaces.
 - Source quality is still uneven; `paper` and `project` are stronger than at least one known `vault` compare path.
 
 ## Known Limits copy
