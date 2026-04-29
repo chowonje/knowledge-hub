@@ -345,6 +345,94 @@ class RepresentativeFilterSQLite(DummySQLite):
         return []
 
 
+class CompareResolverConflictSQLite(RepresentativeFilterSQLite):
+    def search_paper_cards_v2(self, query, limit=5):
+        _ = limit
+        token = str(query or "").strip()
+        if token == "GPT":
+            return [
+                {
+                    "paper_id": "2303.08774",
+                    "title": "GPT-4 Technical Report",
+                    "search_text": "gpt gpt-4 technical report",
+                }
+            ]
+        if token == "Language Models are Few-Shot Learners":
+            return [
+                {
+                    "paper_id": "2005.14165",
+                    "title": "Language Models are Few-Shot Learners",
+                    "search_text": "gpt language models are few-shot learners",
+                }
+            ]
+        return super().search_paper_cards_v2(query, limit=limit)
+
+    def search_papers(self, query, limit=20):
+        _ = limit
+        token = str(query or "").strip()
+        if token == "GPT":
+            return [
+                {
+                    "arxiv_id": "2303.08774",
+                    "title": "GPT-4 Technical Report",
+                }
+            ]
+        if token == "Language Models are Few-Shot Learners":
+            return [
+                {
+                    "arxiv_id": "2005.14165",
+                    "title": "Language Models are Few-Shot Learners",
+                }
+            ]
+        return []
+
+
+class TransformerMambaResolverSQLite(DummySQLite):
+    def list_ontology_entities(self, limit=5000):
+        _ = limit
+        return [
+            {
+                "entity_id": "transformers",
+                "entity_type": "concept",
+                "canonical_name": "Transformers",
+            }
+        ]
+
+    def get_entity_aliases(self, entity_id):
+        if str(entity_id or "").strip() == "transformers":
+            return ["Transformer"]
+        return []
+
+    def get_concept_papers(self, concept_id):
+        if str(concept_id or "").strip() == "transformers":
+            return [
+                {
+                    "arxiv_id": "1706.03762",
+                    "title": "Attention Is All You Need",
+                },
+                {
+                    "arxiv_id": "attnres2026",
+                    "title": "Attention Residuals",
+                },
+            ]
+        return []
+
+    def search_paper_cards_v2(self, query, limit=5):
+        _ = limit
+        token = str(query or "").strip()
+        if token == "Attention Is All You Need":
+            return [
+                {
+                    "paper_id": "1706.03762",
+                    "title": "Attention Is All You Need",
+                    "search_text": "transformer attention is all you need",
+                }
+            ]
+        if token == "Mamba: Linear-Time Sequence Modeling with Selective State Spaces":
+            return []
+        return []
+
+
 class PrefixTitleSQLite(DummySQLite):
     def search_papers(self, query, limit=20):
         _ = limit
@@ -672,6 +760,32 @@ def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_gpt_and_ppo(
     assert dqn_ppo["family"] == PAPER_FAMILY_COMPARE
     assert "Proximal Policy Optimization Algorithms" in dqn_ppo["expanded_terms"]
     assert "1707.06347" in dqn_ppo["resolved_source_ids"]
+
+
+def test_build_rule_based_query_frame_prefers_gpt3_anchor_over_gpt4_lookup_overlap():
+    frame = build_rule_based_query_frame(
+        "BERT와 GPT 계열의 차이를 논문 기준으로 비교해줘",
+        source_type="paper",
+        sqlite_db=CompareResolverConflictSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["1810.04805", "2005.14165"]
+    assert "2303.08774" not in frame["resolved_source_ids"][:2]
+    assert "Language Models are Few-Shot Learners" in frame["expanded_terms"]
+
+
+def test_build_rule_based_query_frame_uses_mamba_anchor_before_second_transformer_related_paper():
+    frame = build_rule_based_query_frame(
+        "Transformer와 Mamba를 비교해줘",
+        source_type="paper",
+        sqlite_db=TransformerMambaResolverSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["1706.03762", "2312.00752"]
+    assert "attnres2026" not in frame["resolved_source_ids"][:2]
+    assert "Mamba: Linear-Time Sequence Modeling with Selective State Spaces" in frame["expanded_terms"]
 
 
 def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_rag_and_fid():

@@ -1,0 +1,2 @@
+bucket_ko,title,year,theme_ko,priority,why_selected,source_url
+v0 paper baseline,Mamba: Linear-Time Sequence Modeling with Selective State Spaces,2023,sequence models,5,D14 Transformer vs Mamba expected comparison target,https://arxiv.org/abs/2312.00752

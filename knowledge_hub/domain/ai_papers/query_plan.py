@@ -61,6 +61,10 @@ _COMMON_ENTITY_RESCUE_FORMS = {
     "gpt": [
         "Language Models are Few-Shot Learners",
     ],
+    "mamba": [
+        "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+        "Selective State Space",
+    ],
     "gan": [
         "Generative Adversarial Nets",
         "GAN",

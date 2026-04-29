@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-04-28
+Last updated: 2026-04-29
 
 ## What this project is
 
@@ -82,6 +82,26 @@ Current success criteria for that loop:
 - `index`: the retrieval-facing vector/document surface is non-empty and readable by the runtime.
 - `search/ask`: the runtime returns either a grounded result or an explicit lack-of-evidence outcome.
 - `evidence review`: the answer/result exposes enough source trace to inspect the grounding path.
+
+### First product validation slice: AI paper / technical knowledge research assistant v0
+
+Knowledge Hub is not a paper-only product. The product identity remains a local-first research knowledge system over paper, web, and vault knowledge. The first product validation slice is paper-first because the current paper route has the clearest hard contract and eval evidence.
+
+The v0 hard contract is `source=paper` over exactly four families:
+
+- `concept_explainer`
+- `paper_lookup`
+- `paper_compare`
+- `paper_discover`
+
+The v0 hard eval starts from the existing 36 query rows:
+
+- `eval/knowledgeos/queries/paper_default_eval_queries_v1.csv`
+- `eval/knowledgeos/queries/paper_regression_eval_queries_v1.csv`
+
+The current route-ready result is local and eval-backed: the latest stub-hard paper baseline reports `good=36`, `partial=0`, `bad=0`, and `no_result=0`. The path includes paper-family ask-v2 claim-card hard-gate relaxation with target guards, compare resolver/selector stabilization, and Mamba `2312.00752` materialization so the D14 Transformer-vs-Mamba row preserves `1706.03762 | 2312.00752`.
+
+RAG vNext corrective retry, answerability rerank, and graph/global retrieval remain labs/shadow observation surfaces. They may inform later review, but they are not v0 default behavior and not v0 acceptance criteria. Heavy multi-paper synthesis, autonomous research workflow, cloud/GPT dependency, and graph/global retrieval are explicit v0 non-goals.
 
 The answer path now makes that evidence contract explicit in runtime payloads. `khub ask` carries additive `EvidencePacket`, `AnswerContract`, and `VerificationVerdict` objects that pin source ids, real source-content hashes, span offsets, citation refs, pass/fail/abstain verdicts, and conservative-fallback state. In strict mode, spans without canonical source hash/offset provenance or spans flagged stale are excluded from evidence rather than treated as citation-grade grounding; snippet hashes stay separate from source-content hashes. Mixed-store signal rows are now excluded too: blocked mixed-store source schemes/types (`belief`, `decision`, `outcome`, `ontology`, `learning_*`, `memory_relation`, `entity_merge`, `entity_split`) can no longer appear in contract `spans` or `citations`, and the answer contract records them under `retrievalSignals` instead. These objects are registered in the JSON schema validator and are intentionally additive so older top-level answer payload fields remain compatible.
 
