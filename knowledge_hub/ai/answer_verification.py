@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import re
 from typing import Any
 
-from knowledge_hub.ai.answer_contracts import NON_EVIDENCE_SOURCE_SCHEMES, NON_EVIDENCE_SOURCE_TYPES
 from knowledge_hub.ai.rag_support import (
     clean_text as _clean_text,
     extract_json_payload as _extract_json_payload,
@@ -15,92 +13,86 @@ from knowledge_hub.core.sanitizer import redact_p0
 from knowledge_hub.learning.policy import evaluate_policy_for_payload
 
 
-def _source_scheme(value: Any) -> str:
-    token = str(value or "").strip().lower()
-    if ":" not in token:
-        return ""
-    scheme = token.split(":", 1)[0]
-    return scheme if re.fullmatch(r"[a-z_][a-z0-9_+.-]*", scheme) else ""
+_TRACE_PREFIXES = (
+    "주요 근거",
+    "근거",
+    "출처",
+    "참고 근거",
+    "citations",
+    "citation",
+    "sources",
+    "source",
+)
+_INSUFFICIENT_EVIDENCE_MARKERS = (
+    "제공된 근거만으로는",
+    "단정적인 결론을 내리기 어렵",
+    "직접 지지되는 핵심 claim을 충분히 확인하지 못",
+    "답변을 보수적으로",
+    "부분적 근거만 있어",
+    "보수적으로 해석해야",
+    "현재 근거에서는",
+    "현재 근거에서 직접 확인되는 점",
+)
 
 
-def _non_evidence_signal_reason(item: dict[str, Any]) -> str:
-    source_type = str(item.get("source_type") or item.get("sourceType") or "").strip().lower()
-    if source_type in NON_EVIDENCE_SOURCE_TYPES:
-        return f"non_evidence_source_type:{source_type}"
-    source_scheme = _source_scheme(
-        item.get("source_id")
-        or item.get("sourceId")
-        or item.get("source_ref")
-        or item.get("sourceRef")
-        or item.get("title")
-    )
-    if source_scheme in NON_EVIDENCE_SOURCE_SCHEMES:
-        return f"non_evidence_source_scheme:{source_scheme}"
-    return ""
+def _normalize_claim_line(text: str) -> str:
+    return _clean_text(str(text or "")).strip(" -:*#[](){}.,;:\"'`")
 
 
-def _apply_verification_guards(
-    searcher,
-    payload: dict[str, Any],
-    *,
-    answer: str,
-    evidence: list[dict[str, Any]],
-    contradicting_beliefs: list[dict[str, Any]],
-) -> dict[str, Any]:
-    result = dict(payload or {})
-    warnings = list(result.get("warnings") or [])
-    signal_count = sum(1 for item in evidence if _non_evidence_signal_reason(item))
-    grounding_evidence_count = max(0, len(evidence) - signal_count)
-    rejected_beliefs = [
-        dict(item or {})
-        for item in contradicting_beliefs or []
-        if str((item or {}).get("status") or "").strip().lower() == "rejected"
-    ]
-    rejected_count = len(rejected_beliefs)
-    conflict_mentioned = bool(result.get("conflictMentioned"))
-    if "conflictMentioned" not in result:
-        conflict_mentioned = searcher._answer_mentions_conflict(answer)
-        result["conflictMentioned"] = conflict_mentioned
-    status = str(result.get("status") or "").strip().lower() or "unknown"
-    needs_caution = bool(result.get("needsCaution"))
-    reason_code = str(result.get("reasonCode") or "").strip().lower()
-    summary = str(result.get("summary") or "").strip()
+def _title_only_claim_body(claim: str) -> str:
+    body = _normalize_claim_line(claim)
+    lowered = body.casefold()
+    for prefix in _TRACE_PREFIXES:
+        token = prefix.casefold()
+        if lowered.startswith(token):
+            body = _normalize_claim_line(body[len(prefix) :])
+            break
+    return body
 
-    result["retrievalSignalCount"] = int(signal_count)
-    result["groundingEvidenceCount"] = int(grounding_evidence_count)
-    result["rejectedBeliefConflictCount"] = int(rejected_count)
-    result["contradictsRejectedBelief"] = bool(rejected_count)
 
-    if rejected_count > 0:
-        if not conflict_mentioned:
-            needs_caution = True
-            status = "failed"
-            reason_code = reason_code or "contradicts_rejected_belief"
-            warnings.append("answer verification failed: contradicts rejected belief without explicit conflict framing")
-            if not summary:
-                summary = "기존에 rejected 처리된 belief와 충돌하는 답변인데, 답변 본문이 충돌/불확실성을 드러내지 않았습니다."
-        else:
-            warnings.append("answer verification caution: answer conflicts with a rejected belief")
-            if not summary:
-                summary = "기존에 rejected 처리된 belief와 충돌하는 신호가 있어 답변을 보수적으로 읽어야 합니다."
+def _is_trace_or_boilerplate_claim(claim: str, *, evidence_titles: list[str]) -> bool:
+    body = _normalize_claim_line(claim)
+    if not body:
+        return True
+    lowered = body.casefold()
+    if any(marker.casefold() in lowered for marker in _INSUFFICIENT_EVIDENCE_MARKERS):
+        return True
 
-    if signal_count > 0 and grounding_evidence_count == 0 and status not in {"skipped", "abstain"}:
-        needs_caution = True
-        if status not in {"failed", "caution"}:
-            status = "failed"
-        elif status == "caution" and int(result.get("supportedClaimCount") or 0) == 0:
-            status = "failed"
-        reason_code = reason_code or "signal_only_grounding"
-        warnings.append("answer verification failed: retrieval signals are not citation-grade evidence")
-        if not summary:
-            summary = "답변 검증 입력이 retrieval signal에만 의존하고 있어 citation-grade evidence 기반 grounding으로 취급할 수 없습니다."
+    title_body = _title_only_claim_body(body)
+    if not title_body:
+        return True
+    normalized_title_body = title_body.casefold()
+    normalized_titles = [_normalize_claim_line(title).casefold() for title in evidence_titles if _normalize_claim_line(title)]
+    if normalized_title_body in normalized_titles:
+        return True
+    if normalized_title_body and normalized_titles:
+        remaining = normalized_title_body
+        for title in sorted(normalized_titles, key=len, reverse=True):
+            remaining = remaining.replace(title, "")
+        remaining = remaining.replace(",", " ").replace("|", " ").replace("/", " ")
+        if not _tokenize(remaining):
+            return True
+    return False
 
-    result["status"] = status
-    result["needsCaution"] = bool(needs_caution)
-    result["reasonCode"] = reason_code
-    result["summary"] = summary
-    result["warnings"] = list(dict.fromkeys(warnings))
-    return result
+
+def _claim_support_signal(
+    claim_tokens: set[str],
+    evidence_rows: list[tuple[str, set[str], str]],
+) -> tuple[str, float, float, list[str]]:
+    best_title = ""
+    best_jaccard = 0.0
+    best_coverage = 0.0
+    best_overlap: list[str] = []
+    for title, evidence_tokens, _excerpt in evidence_rows:
+        overlap = sorted(claim_tokens & evidence_tokens)
+        jaccard_score = _jaccard(claim_tokens, evidence_tokens)
+        coverage = len(overlap) / max(1, len(claim_tokens))
+        if coverage > best_coverage or (coverage == best_coverage and jaccard_score > best_jaccard):
+            best_title = title
+            best_jaccard = jaccard_score
+            best_coverage = coverage
+            best_overlap = overlap
+    return best_title, best_jaccard, best_coverage, best_overlap
 
 
 def heuristic_answer_verification(
@@ -113,59 +105,88 @@ def heuristic_answer_verification(
     route_meta: dict[str, Any],
     warnings: list[str] | None = None,
 ) -> dict[str, Any]:
-    claim_texts = searcher._split_answer_claims(answer)
-    if not claim_texts:
-        return _apply_verification_guards(
-            searcher,
-            {
-            "status": "skipped",
-            "supportedClaimCount": 0,
-            "unsupportedClaimCount": 0,
-            "uncertainClaimCount": 0,
-            "conflictMentioned": searcher._answer_mentions_conflict(answer),
-            "needsCaution": bool(answer_signals.get("caution_required")),
-            "summary": "답변에서 검증 가능한 구체 claim을 충분히 추출하지 못했습니다.",
-            "warnings": list(dict.fromkeys([*(warnings or []), "answer verification skipped: no concrete claims found"])),
-            "claims": [],
-            "route": {**dict(route_meta or {}), "mode": "heuristic"},
-            },
-            answer=answer,
-            evidence=evidence,
-            contradicting_beliefs=contradicting_beliefs,
-        )
-
     evidence_rows: list[tuple[str, set[str], str]] = []
+    evidence_titles: list[str] = []
     for item in evidence:
-        excerpt = _clean_text(f"{item.get('title', '')} {item.get('excerpt', '')}")
+        title = str(item.get("title") or "")
+        evidence_titles.append(title)
+        excerpt = _clean_text(
+            " ".join(
+                str(item.get(key) or "")
+                for key in ("title", "excerpt", "summary", "document")
+            )
+        )
         evidence_rows.append((str(item.get("title") or ""), _tokenize(excerpt), excerpt))
 
     claims: list[dict[str, Any]] = []
-    for claim in claim_texts:
+    skipped_meta_count = 0
+    for claim in searcher._split_answer_claims(answer):
+        if _is_trace_or_boilerplate_claim(claim, evidence_titles=evidence_titles):
+            skipped_meta_count += 1
+            continue
         claim_tokens = _tokenize(claim)
-        best_title = ""
-        best_score = 0.0
-        for title, evidence_tokens, _excerpt in evidence_rows:
-            overlap = _jaccard(claim_tokens, evidence_tokens)
-            if overlap > best_score:
-                best_score = overlap
-                best_title = title
-        if best_score < 0.08:
+        if not claim_tokens:
+            skipped_meta_count += 1
+            continue
+        best_title, best_score, best_coverage, best_overlap = _claim_support_signal(claim_tokens, evidence_rows)
+        if len(best_overlap) >= 2 and best_coverage >= 0.65:
+            verdict = "supported"
+            reason = "claim 핵심 토큰이 근거 title/excerpt와 직접 겹칩니다."
+            titles = [best_title] if best_title else []
+        elif best_overlap:
+            verdict = "uncertain"
+            reason = "일부 토큰은 근거와 겹치지만 직접 지지를 보수적으로 확정하지 않았습니다."
+            titles = [best_title] if best_title else []
+        else:
             verdict = "unsupported"
             reason = "근거 excerpt/summary와의 어휘 중첩이 매우 낮아 직접 지지를 확인하지 못했습니다."
             titles: list[str] = []
-        else:
-            verdict = "uncertain"
-            reason = "일부 유사 근거는 있으나 직접 지지 여부를 보수적으로 확정하지 않았습니다."
-            titles = [best_title] if best_title else []
         claims.append(
             {
                 "claim": claim,
                 "verdict": verdict,
                 "evidenceTitles": titles,
                 "reason": reason,
+                "heuristic": {
+                    "claimCoverage": round(best_coverage, 6),
+                    "jaccard": round(best_score, 6),
+                    "overlapTokenCount": len(best_overlap),
+                },
             }
         )
 
+    if not claims:
+        caution_required = (
+            bool(answer_signals.get("contradictory_source_count"))
+            or bool(answer_signals.get("contradicting_belief_count"))
+            or bool(contradicting_beliefs)
+        )
+        return {
+            "status": "caution" if caution_required else "skipped",
+            "supportedClaimCount": 0,
+            "unsupportedClaimCount": 0,
+            "uncertainClaimCount": 0,
+            "conflictMentioned": searcher._answer_mentions_conflict(answer),
+            "needsCaution": caution_required,
+            "summary": "답변에서 검증 가능한 구체 claim을 충분히 추출하지 못했습니다.",
+            "warnings": list(
+                dict.fromkeys(
+                    [
+                        *(warnings or []),
+                        "answer verification skipped: no concrete claims found",
+                        *(
+                            ["answer verification ignored trace/boilerplate lines"]
+                            if skipped_meta_count
+                            else []
+                        ),
+                    ]
+                )
+            ),
+            "claims": [],
+            "route": {**dict(route_meta or {}), "mode": "heuristic"},
+        }
+
+    supported_count = sum(1 for item in claims if item["verdict"] == "supported")
     unsupported_count = sum(1 for item in claims if item["verdict"] == "unsupported")
     uncertain_count = sum(1 for item in claims if item["verdict"] == "uncertain")
     contradiction_present = bool(answer_signals.get("contradictory_source_count")) or bool(contradicting_beliefs)
@@ -177,24 +198,30 @@ def heuristic_answer_verification(
         if needs_caution
         else "휴리스틱 검증에서 뚜렷한 위험 신호는 찾지 못했습니다."
     )
-    return _apply_verification_guards(
-        searcher,
-        {
+    return {
         "status": "caution" if needs_caution else "verified",
-        "supportedClaimCount": 0,
+        "supportedClaimCount": supported_count,
         "unsupportedClaimCount": unsupported_count,
         "uncertainClaimCount": uncertain_count,
         "conflictMentioned": bool(conflict_mentioned),
         "needsCaution": bool(needs_caution),
         "summary": summary,
-        "warnings": list(dict.fromkeys([*(warnings or []), "answer verification used heuristic fallback"])),
+        "warnings": list(
+            dict.fromkeys(
+                [
+                    *(warnings or []),
+                    "answer verification used heuristic fallback",
+                    *(
+                        ["answer verification ignored trace/boilerplate lines"]
+                        if skipped_meta_count
+                        else []
+                    ),
+                ]
+            )
+        ),
         "claims": claims,
         "route": {**dict(route_meta or {}), "mode": "heuristic"},
-        },
-        answer=answer,
-        evidence=evidence,
-        contradicting_beliefs=contradicting_beliefs,
-    )
+    }
 
 
 def normalize_answer_verification(
@@ -202,7 +229,6 @@ def normalize_answer_verification(
     *,
     raw: dict[str, Any],
     answer: str,
-    evidence: list[dict[str, Any]],
     answer_signals: dict[str, Any],
     contradicting_beliefs: list[dict[str, Any]],
     route_meta: dict[str, Any],
@@ -253,9 +279,7 @@ def normalize_answer_verification(
             summary = f"검증 결과 {supported_count}건의 claim이 근거와 직접 연결되었습니다."
         else:
             summary = f"검증 결과 unsupported {unsupported_count}건, uncertain {uncertain_count}건이 있어 답변을 보수적으로 읽어야 합니다."
-    return _apply_verification_guards(
-        searcher,
-        {
+    return {
         "status": status,
         "supportedClaimCount": supported_count,
         "unsupportedClaimCount": unsupported_count,
@@ -266,11 +290,7 @@ def normalize_answer_verification(
         "warnings": list(dict.fromkeys(warnings or [])),
         "claims": normalized_claims,
         "route": {**dict(route_meta or {}), "mode": "llm"},
-        },
-        answer=answer,
-        evidence=evidence,
-        contradicting_beliefs=contradicting_beliefs,
-    )
+    }
 
 
 def verify_answer(
@@ -296,29 +316,9 @@ def verify_answer(
     )
     warnings = list(route_warnings)
     route_name = str((route_meta or {}).get("route") or "").strip().lower()
-    route_reasons = {str(item or "").strip().lower() for item in list((route_meta or {}).get("reasons") or []) if str(item or "").strip()}
     external_route = route_name in {"mini", "strong"}
 
     if verifier_llm is None:
-        if route_name == "fallback-only" and "config_missing" in route_reasons:
-            return _apply_verification_guards(
-                searcher,
-                {
-                "status": "skipped",
-                "supportedClaimCount": 0,
-                "unsupportedClaimCount": 0,
-                "uncertainClaimCount": 0,
-                "conflictMentioned": searcher._answer_mentions_conflict(answer),
-                "needsCaution": False,
-                "summary": "검증 라우트를 사용할 수 없어 답변 검증을 건너뛰었습니다.",
-                "warnings": list(dict.fromkeys(warnings)),
-                "claims": [],
-                "route": {**dict(route_meta or {}), "mode": "skipped"},
-                },
-                answer=answer,
-                evidence=evidence,
-                contradicting_beliefs=contradicting_beliefs,
-            )
         return heuristic_answer_verification(
             searcher,
             answer=answer,
@@ -347,9 +347,7 @@ def verify_answer(
             external_policy = redacted_policy
         else:
             warnings.append("answer verification skipped external verifier due to P0 policy block")
-            return _apply_verification_guards(
-                searcher,
-                {
+            return {
                 "status": "skipped",
                 "supportedClaimCount": 0,
                 "unsupportedClaimCount": 0,
@@ -360,11 +358,7 @@ def verify_answer(
                 "warnings": list(dict.fromkeys(warnings)),
                 "claims": [],
                 "route": {**dict(route_meta or {}), "mode": "skipped"},
-                },
-                answer=answer,
-                evidence=evidence,
-                contradicting_beliefs=contradicting_beliefs,
-            )
+            }
 
     try:
         raw_output = verifier_llm.generate(
@@ -400,7 +394,6 @@ def verify_answer(
         searcher,
         raw=parsed,
         answer=answer,
-        evidence=evidence,
         answer_signals=answer_signals,
         contradicting_beliefs=contradicting_beliefs,
         route_meta=route_meta,

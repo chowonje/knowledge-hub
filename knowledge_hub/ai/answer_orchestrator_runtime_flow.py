@@ -45,6 +45,7 @@ class AnswerRuntimeFlow:
         routing_meta: dict[str, Any],
         routing_warnings: list[str],
         stream: bool = False,
+        answer_max_tokens: int | None = None,
     ) -> AnswerRuntimeFlowResult:
         if not external_policy.allowed:
             payload = self._deps.build_blocked_payload_fn(
@@ -74,6 +75,7 @@ class AnswerRuntimeFlow:
             routing_meta=routing_meta,
             stage=stage,
             stream=stream,
+            answer_max_tokens=answer_max_tokens,
         )
         if generation_result.is_fallback:
             if generation_result.fallback_kind == "no_route":
@@ -120,6 +122,7 @@ class AnswerRuntimeFlow:
             claim_consensus=claim_consensus,
             claim_consensus_merge_mode=claim_consensus_merge_mode,
             allow_external=allow_external,
+            routing_meta=routing_meta,
         )
         final_answer = postprocess.final_answer or initial_answer if stream else postprocess.final_answer
         payload = self._deps.build_success_payload_fn(

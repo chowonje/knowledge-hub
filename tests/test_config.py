@@ -157,3 +157,31 @@ class TestConfigCompatibility:
         assert config.sqlite_path == str(tmp_path / "db" / "knowledge.db")
         assert config.collection_name == "legacy_db_collection"
         assert config.papers_dir == str(tmp_path / "papers")
+
+    def test_paper_answer_readiness_p1_flag_defaults_off(self, tmp_path):
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text(yaml.dump({}), encoding="utf-8")
+
+        config = Config(str(cfg_path))
+
+        assert config.get_nested("labs", "answer_readiness", "paper_short_citation_first", "enabled") is False
+        assert (
+            config.get_nested("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "enabled")
+            is False
+        )
+        assert config.get_nested("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "max_bullets") == 2
+        assert (
+            config.get_nested("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "output_max_tokens")
+            == 256
+        )
+        assert config.get_nested("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "context_items") == 2
+        assert (
+            config.get_nested(
+                "labs",
+                "answer_readiness",
+                "paper_short_citation_first",
+                "budget_v2",
+                "context_excerpt_chars",
+            )
+            == 160
+        )

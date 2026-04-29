@@ -39,6 +39,7 @@ class AnswerInitialGeneration:
         routing_meta: dict[str, Any],
         stage: str,
         stream: bool = False,
+        answer_max_tokens: int | None = None,
     ) -> AnswerInitialGenerationResult:
         if selected_llm is None:
             (
@@ -66,9 +67,12 @@ class AnswerInitialGeneration:
 
         try:
             if stream:
+                # Stream providers do not expose a consistent per-call output cap yet.
                 initial_answer = "".join(
                     str(chunk or "") for chunk in selected_llm.stream_generate(answer_prompt, safe_context)
                 )
+            elif answer_max_tokens is not None:
+                initial_answer = selected_llm.generate(answer_prompt, safe_context, max_tokens=answer_max_tokens)
             else:
                 initial_answer = selected_llm.generate(answer_prompt, safe_context)
         except Exception as error:

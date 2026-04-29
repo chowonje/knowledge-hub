@@ -36,6 +36,17 @@ paper:
   summary:
     parser: auto
 
+labs:
+  answer_readiness:
+    paper_short_citation_first:
+      enabled: false
+      budget_v2:
+        enabled: false
+        max_bullets: 2
+        output_max_tokens: 256
+        context_items: 2
+        context_excerpt_chars: 160
+
 obsidian:
   enabled: false
   vault_path: /path/to/your/obsidian/vault
