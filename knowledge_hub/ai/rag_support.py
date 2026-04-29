@@ -403,6 +403,448 @@ def build_section_native_prompt(*, query: str, answer_provenance: str) -> str:
     )
 
 
+PAPER_ANSWER_READINESS_P1_CONFIG_PATH = ("labs", "answer_readiness", "paper_short_citation_first")
+PAPER_ANSWER_READINESS_P1_FLAG_PATH = (*PAPER_ANSWER_READINESS_P1_CONFIG_PATH, "enabled")
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONFIG_PATH = (*PAPER_ANSWER_READINESS_P1_CONFIG_PATH, "budget_v2")
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_ENABLED_PATH = (*PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONFIG_PATH, "enabled")
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_MAX_BULLETS_PATH = (
+    *PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONFIG_PATH,
+    "max_bullets",
+)
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_OUTPUT_MAX_TOKENS_PATH = (
+    *PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONFIG_PATH,
+    "output_max_tokens",
+)
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONTEXT_ITEMS_PATH = (
+    *PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONFIG_PATH,
+    "context_items",
+)
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONTEXT_EXCERPT_CHARS_PATH = (
+    *PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONFIG_PATH,
+    "context_excerpt_chars",
+)
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_MAX_BULLETS = 2
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_OUTPUT_MAX_TOKENS = 256
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_CONTEXT_ITEMS = 2
+PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_CONTEXT_EXCERPT_CHARS = 160
+PAPER_ANSWER_READINESS_P1_SENTINEL = "답변 준비도 P1 short/citation-first 규칙"
+
+
+def _config_value(config: Any, *keys: str, default: Any = None) -> Any:
+    if not config or not hasattr(config, "get_nested"):
+        return default
+    try:
+        return config.get_nested(*keys, default=default)
+    except Exception:
+        return default
+
+
+def _config_bool(config: Any, *keys: str, default: bool = False) -> bool:
+    return bool(_config_value(config, *keys, default=default))
+
+
+def _pipeline_plan_payload(pipeline_result: Any) -> dict[str, Any]:
+    plan = getattr(pipeline_result, "plan", None)
+    if isinstance(plan, dict):
+        return dict(plan)
+    if plan is not None and hasattr(plan, "to_dict"):
+        try:
+            return dict(plan.to_dict() or {})
+        except Exception:
+            return {}
+    return {}
+
+
+def _evidence_packet_answer_signals(evidence_packet: Any) -> dict[str, Any]:
+    try:
+        return dict(getattr(evidence_packet, "answer_signals", {}) or {})
+    except Exception:
+        return {}
+
+
+def paper_answer_readiness_p1_paper_scope(*, pipeline_result: Any, evidence_packet: Any) -> bool:
+    plan_payload = _pipeline_plan_payload(pipeline_result)
+    query_frame = dict(plan_payload.get("queryFrame") or {})
+    answer_signals = _evidence_packet_answer_signals(evidence_packet)
+    source_type = str(
+        query_frame.get("source_type")
+        or query_frame.get("sourceType")
+        or plan_payload.get("source_type")
+        or plan_payload.get("sourceType")
+        or ""
+    ).strip()
+    family = str(
+        query_frame.get("family")
+        or plan_payload.get("paperFamily")
+        or plan_payload.get("family")
+        or answer_signals.get("paper_family")
+        or ""
+    ).strip().lower()
+    if normalize_source_type(source_type) == "paper":
+        return True
+    if family == "paper" or family.startswith("paper_"):
+        return True
+    return bool(answer_signals.get("paper_definition_mode"))
+
+
+def paper_answer_readiness_p1_enabled(
+    *,
+    config: Any,
+    pipeline_result: Any,
+    evidence_packet: Any,
+    allow_external: bool,
+    route_mode: str,
+) -> bool:
+    if not _config_bool(config, *PAPER_ANSWER_READINESS_P1_FLAG_PATH, default=False):
+        return False
+    if bool(allow_external):
+        return False
+    if str(route_mode or "").strip().lower() != "local":
+        return False
+    return paper_answer_readiness_p1_paper_scope(
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+    )
+
+
+def paper_answer_readiness_p1_budget_v2_enabled(
+    *,
+    config: Any,
+    pipeline_result: Any,
+    evidence_packet: Any,
+    allow_external: bool,
+    route_mode: str,
+) -> bool:
+    if not _config_bool(config, *PAPER_ANSWER_READINESS_P1_BUDGET_V2_ENABLED_PATH, default=False):
+        return False
+    return paper_answer_readiness_p1_enabled(
+        config=config,
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+        allow_external=allow_external,
+        route_mode=route_mode,
+    )
+
+
+def paper_answer_readiness_p1_budget_v2_max_bullets(config: Any) -> int:
+    raw = _config_value(
+        config,
+        *PAPER_ANSWER_READINESS_P1_BUDGET_V2_MAX_BULLETS_PATH,
+        default=PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_MAX_BULLETS,
+    )
+    parsed = safe_int(raw, PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_MAX_BULLETS)
+    return min(2, max(1, parsed))
+
+
+def paper_answer_readiness_p1_budget_v2_output_max_tokens(config: Any) -> int:
+    raw = _config_value(
+        config,
+        *PAPER_ANSWER_READINESS_P1_BUDGET_V2_OUTPUT_MAX_TOKENS_PATH,
+        default=PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_OUTPUT_MAX_TOKENS,
+    )
+    parsed = safe_int(raw, PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_OUTPUT_MAX_TOKENS)
+    return max(1, parsed)
+
+
+def paper_answer_readiness_p1_budget_v2_context_items(config: Any) -> int:
+    raw = _config_value(
+        config,
+        *PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONTEXT_ITEMS_PATH,
+        default=PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_CONTEXT_ITEMS,
+    )
+    parsed = safe_int(raw, PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_CONTEXT_ITEMS)
+    return max(1, parsed)
+
+
+def paper_answer_readiness_p1_budget_v2_context_excerpt_chars(config: Any) -> int:
+    raw = _config_value(
+        config,
+        *PAPER_ANSWER_READINESS_P1_BUDGET_V2_CONTEXT_EXCERPT_CHARS_PATH,
+        default=PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_CONTEXT_EXCERPT_CHARS,
+    )
+    parsed = safe_int(raw, PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_CONTEXT_EXCERPT_CHARS)
+    return max(1, parsed)
+
+
+def paper_answer_readiness_p1_answer_max_tokens(
+    *,
+    config: Any,
+    pipeline_result: Any,
+    evidence_packet: Any,
+    allow_external: bool,
+    route_mode: str,
+) -> int | None:
+    if not paper_answer_readiness_p1_budget_v2_enabled(
+        config=config,
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+        allow_external=allow_external,
+        route_mode=route_mode,
+    ):
+        return None
+    return paper_answer_readiness_p1_budget_v2_output_max_tokens(config)
+
+
+def _paper_answer_readiness_p1_plan_family(pipeline_result: Any, evidence_packet: Any) -> str:
+    plan_payload = _pipeline_plan_payload(pipeline_result)
+    query_frame = dict(plan_payload.get("queryFrame") or {})
+    answer_signals = _evidence_packet_answer_signals(evidence_packet)
+    return str(
+        query_frame.get("family")
+        or plan_payload.get("paperFamily")
+        or plan_payload.get("family")
+        or answer_signals.get("paper_family")
+        or ""
+    ).strip().lower()
+
+
+def _paper_answer_readiness_p1_resolved_paper_ids(pipeline_result: Any) -> list[str]:
+    plan_payload = _pipeline_plan_payload(pipeline_result)
+    query_frame = dict(plan_payload.get("queryFrame") or {})
+    raw_values = (
+        query_frame.get("resolved_source_ids")
+        or query_frame.get("resolvedSourceIds")
+        or query_frame.get("resolved_paper_ids")
+        or query_frame.get("resolvedPaperIds")
+        or plan_payload.get("resolved_source_ids")
+        or plan_payload.get("resolvedSourceIds")
+        or plan_payload.get("resolved_paper_ids")
+        or plan_payload.get("resolvedPaperIds")
+        or []
+    )
+    seen: set[str] = set()
+    resolved: list[str] = []
+    for item in list(raw_values or []):
+        token = clean_text(str(item or ""))
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        resolved.append(token)
+    return resolved
+
+
+def _paper_answer_readiness_p1_evidence_source_ids(item: dict[str, Any]) -> set[str]:
+    values = {
+        clean_text(str(item.get("paper_id") or "")),
+        clean_text(str(item.get("paperId") or "")),
+        clean_text(str(item.get("arxiv_id") or "")),
+        clean_text(str(item.get("arxivId") or "")),
+        clean_text(str(item.get("source_id") or "")),
+        clean_text(str(item.get("sourceId") or "")),
+        clean_text(str(item.get("id") or "")),
+    }
+    return {value for value in values if value}
+
+
+def _paper_answer_readiness_p1_budget_evidence_items(
+    *,
+    evidence: list[dict[str, Any]],
+    pipeline_result: Any,
+    evidence_packet: Any,
+    context_items: int,
+) -> list[dict[str, Any]]:
+    family = _paper_answer_readiness_p1_plan_family(pipeline_result, evidence_packet)
+    resolved_pair = _paper_answer_readiness_p1_resolved_paper_ids(pipeline_result)[:2]
+    effective_limit = max(context_items, 2 if family == "paper_compare" and len(resolved_pair) >= 2 else context_items)
+    selected: list[dict[str, Any]] = []
+    selected_tokens: set[tuple[str, str]] = set()
+
+    def _append(item: dict[str, Any]) -> None:
+        title = clean_text(str(item.get("title") or item.get("source_title") or item.get("source") or "근거"))
+        excerpt = clean_text(
+            str(
+                item.get("excerpt")
+                or item.get("source_excerpt")
+                or item.get("summary")
+                or item.get("document")
+                or ""
+            )
+        )
+        token = (title, excerpt)
+        if token in selected_tokens:
+            return
+        selected_tokens.add(token)
+        selected.append(dict(item))
+
+    if family == "paper_compare" and len(resolved_pair) >= 2:
+        for paper_id in resolved_pair:
+            match = next((item for item in evidence if paper_id in _paper_answer_readiness_p1_evidence_source_ids(item)), None)
+            if match:
+                _append(match)
+
+    for item in evidence:
+        if len(selected) >= effective_limit:
+            break
+        _append(item)
+    return selected[:effective_limit]
+
+
+def paper_answer_readiness_p1_budget_v2_context(
+    *,
+    config: Any,
+    pipeline_result: Any,
+    evidence_packet: Any,
+    answer_context: str,
+    allow_external: bool,
+    route_mode: str,
+) -> tuple[str, dict[str, Any]] | None:
+    if not paper_answer_readiness_p1_budget_v2_enabled(
+        config=config,
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+        allow_external=allow_external,
+        route_mode=route_mode,
+    ):
+        return None
+    context_items = paper_answer_readiness_p1_budget_v2_context_items(config)
+    excerpt_chars = paper_answer_readiness_p1_budget_v2_context_excerpt_chars(config)
+    evidence = [dict(item or {}) for item in list(getattr(evidence_packet, "evidence", []) or [])]
+    selected = _paper_answer_readiness_p1_budget_evidence_items(
+        evidence=evidence,
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+        context_items=context_items,
+    )
+    if not selected:
+        return clean_text(answer_context), {
+            "enabled": True,
+            "contextItems": context_items,
+            "contextExcerptChars": excerpt_chars,
+            "selectedEvidenceCount": 0,
+        }
+
+    lines = ["=== Evidence Context ==="]
+    for index, item in enumerate(selected, 1):
+        title = truncate_text(
+            clean_text(str(item.get("title") or item.get("source_title") or item.get("source") or "근거")),
+            120,
+        )
+        source_ids = sorted(_paper_answer_readiness_p1_evidence_source_ids(item))
+        source_id = source_ids[0] if source_ids else "-"
+        excerpt = truncate_text(
+            clean_text(
+                str(
+                    item.get("excerpt")
+                    or item.get("source_excerpt")
+                    or item.get("summary")
+                    or item.get("document")
+                    or ""
+                )
+            ),
+            excerpt_chars,
+        )
+        lines.append(f"{index}. title={title}\nsource_id={source_id}\nexcerpt={excerpt or '(none)'}")
+    return "\n\n".join(lines), {
+        "enabled": True,
+        "contextItems": context_items,
+        "contextExcerptChars": excerpt_chars,
+        "selectedEvidenceCount": len(selected),
+    }
+
+
+def paper_answer_readiness_p1_fallback_enabled(
+    *,
+    config: Any,
+    answer_signals: dict[str, Any],
+    evidence: list[dict[str, Any]],
+    allow_external: bool,
+    routing_meta: dict[str, Any] | None = None,
+) -> bool:
+    if not _config_bool(config, *PAPER_ANSWER_READINESS_P1_FLAG_PATH, default=False):
+        return False
+    if bool(allow_external):
+        return False
+    route_mode = str((routing_meta or {}).get("route") or "").strip().lower()
+    if route_mode != "local":
+        return False
+    signals = dict(answer_signals or {})
+    family = str(signals.get("paper_family") or "").strip().lower()
+    if bool(signals.get("paper_definition_mode")) or family == "paper" or family.startswith("paper_"):
+        return True
+    for item in evidence[:6]:
+        source_type = str(item.get("source_type") or item.get("normalized_source_type") or "").strip()
+        if normalize_source_type(source_type) == "paper":
+            return True
+        if item.get("paper_id") or item.get("paperId") or item.get("arxiv_id"):
+            return True
+    return False
+
+
+def apply_paper_answer_readiness_p1_prompt_overlay(
+    prompt: str,
+    *,
+    config: Any = None,
+    budget_v2: bool | None = None,
+    max_bullets: int | None = None,
+) -> str:
+    base = str(prompt or "").rstrip()
+    if PAPER_ANSWER_READINESS_P1_SENTINEL in base:
+        return base
+    budget_enabled = (
+        bool(budget_v2)
+        if budget_v2 is not None
+        else _config_bool(config, *PAPER_ANSWER_READINESS_P1_BUDGET_V2_ENABLED_PATH, default=False)
+    )
+    if budget_enabled:
+        bullet_count = (
+            min(2, max(1, safe_int(max_bullets, PAPER_ANSWER_READINESS_P1_BUDGET_V2_DEFAULT_MAX_BULLETS)))
+            if max_bullets is not None
+            else paper_answer_readiness_p1_budget_v2_max_bullets(config)
+        )
+        overlay = (
+            f"{PAPER_ANSWER_READINESS_P1_SENTINEL} v2:\n"
+            f"- 출력은 최대 {bullet_count}개의 bullet만 사용한다.\n"
+            "- 각 bullet은 '- [근거: <제목>] <근거에서 직접 확인되는 한 문장>' 형식으로 쓴다.\n"
+            "- 근거 title/excerpt에 없는 숫자, 연도, 성능 비교, 배경지식은 쓰지 않는다.\n"
+            "- 근거가 부족하면 '근거에서 확인되는 범위'만 말한다.\n"
+        ).rstrip()
+        if not base:
+            return overlay
+        return f"{base}\n\n{overlay}"
+    overlay = (
+        f"{PAPER_ANSWER_READINESS_P1_SENTINEL}:\n"
+        "- 출력은 최대 4개의 짧은 bullet만 사용한다.\n"
+        "- 각 bullet은 '- [근거: <논문 또는 출처 제목>] ...' 형식으로 시작한다.\n"
+        "- bullet마다 근거 title/source 또는 excerpt에 직접 연결되는 내용만 쓴다.\n"
+        "- 근거에 없는 수치, 연도, 성능 비교, 역사적 확장, 구현 세부를 추가하지 않는다.\n"
+        "- 근거가 부족하면 '근거에서 확인되는 범위' 안에서만 답한다.\n"
+        "- 사용자 답변에는 synthetic_fallback, verification, unsupported, claim card 같은 내부 진단 표현을 쓰지 않는다.\n"
+    ).rstrip()
+    if not base:
+        return overlay
+    return f"{base}\n\n{overlay}"
+
+
+def build_paper_answer_readiness_p1_conservative_answer(*, evidence: list[dict[str, Any]]) -> str:
+    lines: list[str] = ["근거에서 확인되는 범위:"]
+    seen: set[tuple[str, str]] = set()
+    for item in evidence[:4]:
+        title = clean_text(str(item.get("title") or item.get("source_title") or item.get("source") or "근거"))
+        excerpt = clean_text(
+            str(
+                item.get("excerpt")
+                or item.get("source_excerpt")
+                or item.get("summary")
+                or item.get("document")
+                or ""
+            )
+        )
+        excerpt = truncate_text(excerpt, 180)
+        if not title and not excerpt:
+            continue
+        token = (title, excerpt)
+        if token in seen:
+            continue
+        seen.add(token)
+        if excerpt:
+            lines.append(f"- [근거: {title or '근거'}] {excerpt}")
+        else:
+            lines.append(f"- [근거: {title}]")
+    if len(lines) == 1:
+        lines.append("- [근거: 없음] 현재 제공된 근거에서 직접 확인할 수 있는 문장이 부족합니다.")
+    return "\n".join(lines).strip()
+
+
 def build_claim_native_context(
     *,
     claim_cards: list[dict[str, Any]],

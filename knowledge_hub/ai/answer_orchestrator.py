@@ -48,9 +48,13 @@ from knowledge_hub.ai.answer_payload_builder import AnswerPayloadBuilder
 from knowledge_hub.ai.answer_verification import verify_answer as _verify_answer_impl
 from knowledge_hub.ai.rag_answer_route_resolver import resolve_llm_for_request as _resolve_llm_for_request_impl
 from knowledge_hub.ai.rag_support import (
+    apply_paper_answer_readiness_p1_prompt_overlay as _apply_paper_answer_readiness_p1_prompt_overlay_impl,
     build_answer_generation_fallback as _build_answer_generation_fallback_impl,
     build_answer_prompt as _build_answer_prompt_impl,
     build_paper_definition_context as _build_paper_definition_context_impl,
+    paper_answer_readiness_p1_answer_max_tokens as _paper_answer_readiness_p1_answer_max_tokens_impl,
+    paper_answer_readiness_p1_budget_v2_context as _paper_answer_readiness_p1_budget_v2_context_impl,
+    paper_answer_readiness_p1_enabled as _paper_answer_readiness_p1_enabled_impl,
     record_answer_log as _record_answer_log_impl,
 )
 from knowledge_hub.learning.model_router import get_llm_for_hybrid_routing
@@ -371,6 +375,7 @@ class AnswerOrchestrator:
         answer_signals: dict[str, Any],
         contradicting_beliefs: list[dict[str, Any]],
         allow_external: bool,
+        routing_meta: dict[str, Any] | None = None,
     ) -> tuple[str, dict[str, Any], dict[str, Any]]:
         if self._method_overridden("_apply_conservative_fallback_if_needed"):
             return self.searcher._apply_conservative_fallback_if_needed(
@@ -393,6 +398,7 @@ class AnswerOrchestrator:
             answer_signals=answer_signals,
             contradicting_beliefs=contradicting_beliefs,
             allow_external=allow_external,
+            routing_meta=routing_meta,
         )
 
     @staticmethod
@@ -537,6 +543,62 @@ class AnswerOrchestrator:
             route_mode=route_mode,
         )
 
+    def _paper_answer_readiness_p1_enabled(
+        self,
+        *,
+        pipeline_result: Any,
+        evidence_packet: Any,
+        allow_external: bool,
+        route_mode: str,
+    ) -> bool:
+        return _paper_answer_readiness_p1_enabled_impl(
+            config=getattr(self.searcher, "config", None),
+            pipeline_result=pipeline_result,
+            evidence_packet=evidence_packet,
+            allow_external=allow_external,
+            route_mode=route_mode,
+        )
+
+    def _paper_answer_readiness_p1_prompt_overlay(self, prompt: str) -> str:
+        return _apply_paper_answer_readiness_p1_prompt_overlay_impl(
+            prompt,
+            config=getattr(self.searcher, "config", None),
+        )
+
+    def _paper_answer_readiness_p1_answer_max_tokens(
+        self,
+        *,
+        pipeline_result: Any,
+        evidence_packet: Any,
+        allow_external: bool,
+        route_mode: str,
+    ) -> int | None:
+        return _paper_answer_readiness_p1_answer_max_tokens_impl(
+            config=getattr(self.searcher, "config", None),
+            pipeline_result=pipeline_result,
+            evidence_packet=evidence_packet,
+            allow_external=allow_external,
+            route_mode=route_mode,
+        )
+
+    def _paper_answer_readiness_p1_context_budget(
+        self,
+        *,
+        answer_context: str,
+        pipeline_result: Any,
+        evidence_packet: Any,
+        allow_external: bool,
+        route_mode: str,
+    ) -> tuple[str, dict[str, Any]] | None:
+        return _paper_answer_readiness_p1_budget_v2_context_impl(
+            config=getattr(self.searcher, "config", None),
+            pipeline_result=pipeline_result,
+            evidence_packet=evidence_packet,
+            answer_context=answer_context,
+            allow_external=allow_external,
+            route_mode=route_mode,
+        )
+
     def _prepare_answer_execution_inputs(
         self,
         *,
@@ -557,6 +619,10 @@ class AnswerOrchestrator:
                 claim_native_inputs_fn=self._claim_native_inputs,
                 default_answer_inputs_fn=self._default_answer_inputs,
                 evaluate_policy_fn=self._evaluate_policy,
+                paper_answer_readiness_p1_enabled_fn=self._paper_answer_readiness_p1_enabled,
+                paper_answer_readiness_p1_prompt_overlay_fn=self._paper_answer_readiness_p1_prompt_overlay,
+                paper_answer_readiness_p1_answer_max_tokens_fn=self._paper_answer_readiness_p1_answer_max_tokens,
+                paper_answer_readiness_p1_context_budget_fn=self._paper_answer_readiness_p1_context_budget,
             )
         )
         return setup.prepare_inputs(
@@ -580,6 +646,7 @@ class AnswerOrchestrator:
         claim_consensus: dict[str, Any],
         claim_consensus_merge_mode: str,
         allow_external: bool,
+        routing_meta: dict[str, Any] | None = None,
     ) -> AnswerPostprocessResult:
         return AnswerPostprocess(
             AnswerPostprocessDeps(
@@ -595,6 +662,7 @@ class AnswerOrchestrator:
             claim_consensus=claim_consensus,
             claim_consensus_merge_mode=claim_consensus_merge_mode,
             allow_external=allow_external,
+            routing_meta=routing_meta,
         )
 
     def _payload_slices(self) -> AnswerPayloadSlices:
@@ -616,6 +684,7 @@ class AnswerOrchestrator:
         routing_meta: dict[str, Any],
         stage: str,
         stream: bool = False,
+        answer_max_tokens: int | None = None,
     ) -> AnswerInitialGenerationResult:
         return AnswerInitialGeneration(
             AnswerInitialGenerationDeps(
@@ -630,6 +699,7 @@ class AnswerOrchestrator:
             routing_meta=routing_meta,
             stage=stage,
             stream=stream,
+            answer_max_tokens=answer_max_tokens,
         )
 
     def _runtime_flow_result(
@@ -651,6 +721,7 @@ class AnswerOrchestrator:
         routing_meta: dict[str, Any],
         routing_warnings: list[str],
         stream: bool = False,
+        answer_max_tokens: int | None = None,
     ) -> AnswerRuntimeFlowResult:
         payload_slices = self._payload_slices()
         return AnswerRuntimeFlow(
@@ -678,6 +749,7 @@ class AnswerOrchestrator:
             routing_meta=routing_meta,
             routing_warnings=routing_warnings,
             stream=stream,
+            answer_max_tokens=answer_max_tokens,
         )
 
     def generate(
@@ -733,6 +805,7 @@ class AnswerOrchestrator:
             safe_context = prepared_inputs.safe_context
             external_policy = prepared_inputs.external_policy
             original_classification = prepared_inputs.original_classification
+            answer_max_tokens = getattr(prepared_inputs, "answer_max_tokens", None)
             flow_result = self._runtime_flow_result(
                 query=query,
                 retrieval_mode=retrieval_mode,
@@ -749,6 +822,7 @@ class AnswerOrchestrator:
                 allow_external=allow_external,
                 routing_meta=routing_meta,
                 routing_warnings=routing_warnings,
+                answer_max_tokens=answer_max_tokens,
             )
             self._record_answer_log(
                 query=query,
@@ -815,6 +889,7 @@ class AnswerOrchestrator:
             safe_context = prepared_inputs.safe_context
             external_policy = prepared_inputs.external_policy
             original_classification = prepared_inputs.original_classification
+            answer_max_tokens = getattr(prepared_inputs, "answer_max_tokens", None)
             flow_result = self._runtime_flow_result(
                 query=query,
                 retrieval_mode=retrieval_mode,
@@ -832,6 +907,7 @@ class AnswerOrchestrator:
                 routing_meta=routing_meta,
                 routing_warnings=_routing_warnings,
                 stream=True,
+                answer_max_tokens=answer_max_tokens,
             )
             self._record_answer_log(
                 query=query,

@@ -17,6 +17,42 @@ from tests.test_rag_search import (
 )
 
 
+class _ConfigStub:
+    def __init__(
+        self,
+        *,
+        paper_short_citation_first: bool = False,
+        paper_short_citation_first_budget_v2_enabled: bool = False,
+        paper_short_citation_first_budget_v2_max_bullets: int = 2,
+        paper_short_citation_first_budget_v2_output_max_tokens: int | None = 256,
+        paper_short_citation_first_budget_v2_context_items: int = 2,
+        paper_short_citation_first_budget_v2_context_excerpt_chars: int = 160,
+    ):
+        self.paper_short_citation_first = paper_short_citation_first
+        self.paper_short_citation_first_budget_v2_enabled = paper_short_citation_first_budget_v2_enabled
+        self.paper_short_citation_first_budget_v2_max_bullets = paper_short_citation_first_budget_v2_max_bullets
+        self.paper_short_citation_first_budget_v2_output_max_tokens = paper_short_citation_first_budget_v2_output_max_tokens
+        self.paper_short_citation_first_budget_v2_context_items = paper_short_citation_first_budget_v2_context_items
+        self.paper_short_citation_first_budget_v2_context_excerpt_chars = (
+            paper_short_citation_first_budget_v2_context_excerpt_chars
+        )
+
+    def get_nested(self, *keys, default=None):
+        if keys == ("labs", "answer_readiness", "paper_short_citation_first", "enabled"):
+            return self.paper_short_citation_first
+        if keys == ("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "enabled"):
+            return self.paper_short_citation_first_budget_v2_enabled
+        if keys == ("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "max_bullets"):
+            return self.paper_short_citation_first_budget_v2_max_bullets
+        if keys == ("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "output_max_tokens"):
+            return self.paper_short_citation_first_budget_v2_output_max_tokens
+        if keys == ("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "context_items"):
+            return self.paper_short_citation_first_budget_v2_context_items
+        if keys == ("labs", "answer_readiness", "paper_short_citation_first", "budget_v2", "context_excerpt_chars"):
+            return self.paper_short_citation_first_budget_v2_context_excerpt_chars
+        return default
+
+
 class _AllowedPolicy:
     allowed = True
     classification = "P1"
@@ -65,6 +101,20 @@ def _evidence_packet(*, answer_signals=None, context="context", evidence=None, f
 
 def _pipeline_result():
     return SimpleNamespace(v2_diagnostics={}, plan=None)
+
+
+def _paper_pipeline_result():
+    return SimpleNamespace(
+        v2_diagnostics={},
+        plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"source_type": "paper", "family": "paper_lookup"}}),
+    )
+
+
+def _vault_pipeline_result():
+    return SimpleNamespace(
+        v2_diagnostics={},
+        plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"source_type": "vault", "family": "general"}}),
+    )
 
 
 def test_answer_orchestrator_default_inputs_use_direct_builder_path_without_override(monkeypatch):
@@ -659,6 +709,415 @@ def test_answer_orchestrator_prepare_answer_execution_inputs_updates_claim_nativ
     assert prepared.original_classification == "P1"
 
 
+def test_answer_orchestrator_answer_readiness_p1_flag_off_leaves_prompt_unchanged(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM(), config=_ConfigStub())
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("default-prompt", "default-context"))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt == "default-prompt"
+    assert prepared.answer_max_tokens is None
+    assert "answerReadinessP1" not in pipeline_result.v2_diagnostics
+
+
+def test_answer_orchestrator_answer_readiness_p1_skips_non_paper_prompt(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(
+            paper_short_citation_first=True,
+            paper_short_citation_first_budget_v2_enabled=True,
+        ),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _vault_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("default-prompt", "default-context"))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt == "default-prompt"
+    assert prepared.answer_max_tokens is None
+    assert "answerReadinessP1" not in pipeline_result.v2_diagnostics
+
+
+def test_answer_orchestrator_answer_readiness_p1_overlays_default_prompt(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(paper_short_citation_first=True),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("default-prompt", "default-context"))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt.startswith("default-prompt")
+    assert "답변 준비도 P1 short/citation-first 규칙" in prepared.answer_prompt
+    assert "최대 4개의 짧은 bullet" in prepared.answer_prompt
+    assert "- [근거: <논문 또는 출처 제목>]" in prepared.answer_prompt
+    assert prepared.answer_max_tokens is None
+    assert pipeline_result.v2_diagnostics["answerReadinessP1"] == {
+        "enabled": True,
+        "mode": "paper_short_citation_first",
+        "promptOverlayApplied": True,
+        "route": "local",
+    }
+
+
+def test_answer_orchestrator_answer_readiness_p1_budget_v2_sets_output_cap_and_context_for_paper_local(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(
+            paper_short_citation_first=True,
+            paper_short_citation_first_budget_v2_enabled=True,
+            paper_short_citation_first_budget_v2_max_bullets=2,
+            paper_short_citation_first_budget_v2_output_max_tokens=192,
+            paper_short_citation_first_budget_v2_context_items=1,
+            paper_short_citation_first_budget_v2_context_excerpt_chars=32,
+        ),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("default-prompt", "RAW LONG CONTEXT"))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(
+            evidence=[
+                {
+                    "title": "Paper A",
+                    "excerpt": "A direct excerpt about attention mechanisms that should be trimmed.",
+                    "arxiv_id": "1111.1111",
+                }
+            ]
+        ),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert "답변 준비도 P1 short/citation-first 규칙 v2" in prepared.answer_prompt
+    assert "최대 2개의 bullet" in prepared.answer_prompt
+    assert "- [근거: <제목>] <근거에서 직접 확인되는 한 문장>" in prepared.answer_prompt
+    assert prepared.answer_max_tokens == 192
+    assert "RAW LONG CONTEXT" not in prepared.safe_context
+    assert "=== Evidence Context ===" in prepared.safe_context
+    assert "title=Paper A" in prepared.safe_context
+    assert "excerpt=A direct excerpt about attent..." in prepared.safe_context
+    diagnostics = pipeline_result.v2_diagnostics["answerReadinessP1"]
+    assert diagnostics["outputMaxTokens"] == 192
+    assert diagnostics["budgetV2"] == {
+        "enabled": True,
+        "contextItems": 1,
+        "contextExcerptChars": 32,
+        "selectedEvidenceCount": 1,
+        "outputMaxTokens": 192,
+    }
+
+
+def test_answer_orchestrator_answer_readiness_p1_budget_v2_skips_output_cap_for_external_or_non_local(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(
+            paper_short_citation_first=True,
+            paper_short_citation_first_budget_v2_enabled=True,
+            paper_short_citation_first_budget_v2_output_max_tokens=192,
+        ),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+
+    assert (
+        orchestrator._paper_answer_readiness_p1_answer_max_tokens(
+            pipeline_result=_paper_pipeline_result(),
+            evidence_packet=_evidence_packet(),
+            allow_external=True,
+            route_mode="local",
+        )
+        is None
+    )
+    assert (
+        orchestrator._paper_answer_readiness_p1_answer_max_tokens(
+            pipeline_result=_paper_pipeline_result(),
+            evidence_packet=_evidence_packet(),
+            allow_external=False,
+            route_mode="fixed",
+        )
+        is None
+    )
+    assert (
+        orchestrator._paper_answer_readiness_p1_answer_max_tokens(
+            pipeline_result=_vault_pipeline_result(),
+            evidence_packet=_evidence_packet(answer_signals={}, filtered_results=[]),
+            allow_external=False,
+            route_mode="local",
+        )
+        is None
+    )
+
+
+def test_answer_orchestrator_answer_readiness_p1_overlays_claim_native_prompt(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(paper_short_citation_first=True),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(
+        orchestrator,
+        "_claim_native_inputs",
+        lambda **_kwargs: ("claim-prompt", "claim-context", [{"claim": "native"}], {"status": "native"}, []),
+    )
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt.startswith("claim-prompt")
+    assert "답변 준비도 P1 short/citation-first 규칙" in prepared.answer_prompt
+    assert prepared.claim_verification == [{"claim": "native"}]
+
+
+def test_answer_orchestrator_answer_readiness_p1_budget_v2_overlays_claim_native_prompt(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(
+            paper_short_citation_first=True,
+            paper_short_citation_first_budget_v2_enabled=True,
+        ),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(
+        orchestrator,
+        "_claim_native_inputs",
+        lambda **_kwargs: ("claim-prompt", "claim-context", [{"claim": "native"}], {"status": "native"}, []),
+    )
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(
+            evidence=[{"title": "Claim Paper", "excerpt": "Claim-native evidence excerpt.", "arxiv_id": "claim-a"}]
+        ),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt.startswith("claim-prompt")
+    assert "답변 준비도 P1 short/citation-first 규칙 v2" in prepared.answer_prompt
+    assert "title=Claim Paper" in prepared.safe_context
+    assert "claim-context" not in prepared.safe_context
+    assert prepared.answer_max_tokens == 256
+
+
+def test_answer_orchestrator_answer_readiness_p1_overlays_section_native_prompt(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(paper_short_citation_first=True),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: ("section-prompt", "section-context", {}))
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt.startswith("section-prompt")
+    assert "답변 준비도 P1 short/citation-first 규칙" in prepared.answer_prompt
+    assert prepared.safe_context == "section-context"
+
+
+def test_answer_orchestrator_answer_readiness_p1_budget_v2_overlays_section_native_prompt(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(
+            paper_short_citation_first=True,
+            paper_short_citation_first_budget_v2_enabled=True,
+        ),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = _paper_pipeline_result()
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: ("section-prompt", "section-context", {}))
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(
+            evidence=[{"title": "Section Paper", "excerpt": "Section-native evidence excerpt.", "arxiv_id": "section-a"}]
+        ),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert prepared.answer_prompt.startswith("section-prompt")
+    assert "답변 준비도 P1 short/citation-first 규칙 v2" in prepared.answer_prompt
+    assert "title=Section Paper" in prepared.safe_context
+    assert "section-context" not in prepared.safe_context
+    assert prepared.answer_max_tokens == 256
+
+
+def test_answer_orchestrator_answer_readiness_p1_budget_v2_preserves_compare_resolved_pair_context(monkeypatch):
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(_build_records()),
+        llm=FakeLLM(),
+        config=_ConfigStub(
+            paper_short_citation_first=True,
+            paper_short_citation_first_budget_v2_enabled=True,
+            paper_short_citation_first_budget_v2_context_items=1,
+        ),
+    )
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = SimpleNamespace(
+        v2_diagnostics={},
+        plan=SimpleNamespace(
+            to_dict=lambda: {
+                "queryFrame": {
+                    "source_type": "paper",
+                    "family": "paper_compare",
+                    "resolved_source_ids": ["paper-a", "paper-b"],
+                }
+            }
+        ),
+    )
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("default-prompt", "compare-context"))
+    monkeypatch.setattr(orchestrator, "_evaluate_policy", lambda **kwargs: (kwargs["context"], _AllowedPolicy(), "P1"))
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="compare papers",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(
+            evidence=[
+                {"title": "Paper C", "excerpt": "C excerpt.", "arxiv_id": "paper-c"},
+                {"title": "Paper B", "excerpt": "B excerpt.", "arxiv_id": "paper-b"},
+                {"title": "Paper A", "excerpt": "A excerpt.", "arxiv_id": "paper-a"},
+            ]
+        ),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={},
+        claim_context="",
+        allow_external=False,
+        route_mode="local",
+    )
+
+    assert "title=Paper A" in prepared.safe_context
+    assert "title=Paper B" in prepared.safe_context
+    assert "title=Paper C" not in prepared.safe_context
+    assert pipeline_result.v2_diagnostics["answerReadinessP1"]["budgetV2"]["selectedEvidenceCount"] == 2
+
+
 def test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_parity(monkeypatch):
     searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM())
     orchestrator = AnswerOrchestrator(searcher)
@@ -713,16 +1172,8 @@ def test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_pa
     assert generated["status"] == "no_result"
     assert generated["claimVerification"] == [{"claim": "missing"}]
     assert generated["claimConsensus"] == {"status": "empty"}
-    assert generated["verificationVerdict"]["verdict"] == "abstain"
-    assert generated["answerContract"]["abstain"] is True
-    assert generated["answerContract"]["rewrite"]["finalAnswerSource"] == "early_exit"
     assert streamed == generated["answer"]
-    assert len(logged_payloads) == 2
-    for payload in logged_payloads:
-        assert payload["answer"] == generated["answer"]
-        assert payload["status"] == "no_result"
-        assert payload["verificationVerdict"]["verdict"] == "abstain"
-        assert payload["answerContract"]["abstain"] is True
+    assert logged_payloads == [generated, generated]
 
 
 def test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit_stay_in_parity(monkeypatch):
@@ -781,16 +1232,8 @@ def test_answer_orchestrator_generate_and_stream_need_multiple_papers_early_exit
     assert generated["status"] == "no_result"
     assert generated["claimVerification"] == [{"claim": "compare"}]
     assert generated["claimConsensus"] == {"status": "need_more"}
-    assert generated["verificationVerdict"]["verdict"] == "abstain"
-    assert generated["answerContract"]["abstain"] is True
-    assert generated["answerContract"]["rewrite"]["finalAnswerSource"] == "early_exit"
     assert streamed == generated["answer"]
-    assert len(logged_payloads) == 2
-    for payload in logged_payloads:
-        assert payload["answer"] == generated["answer"]
-        assert payload["status"] == "no_result"
-        assert payload["verificationVerdict"]["verdict"] == "abstain"
-        assert payload["answerContract"]["abstain"] is True
+    assert logged_payloads == [generated, generated]
 
 
 def test_answer_orchestrator_generate_and_stream_plain_answer_stay_in_parity(monkeypatch):
@@ -1157,6 +1600,40 @@ def test_answer_orchestrator_initial_generation_stream_error_returns_fallback(mo
     assert result.generation_meta == {"stage": "initial_stream_answer"}
     assert result.generation_warnings == ["stream fallback warning"]
     assert result.initial_answer is None
+
+
+def test_answer_orchestrator_initial_generation_passes_answer_max_tokens_to_generate(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM())
+    orchestrator = AnswerOrchestrator(searcher)
+    evidence_packet = _evidence_packet()
+    observed: dict[str, object] = {}
+
+    class _CappedLLM:
+        def generate(self, prompt, context="", max_tokens=None):  # noqa: ANN001
+            observed["prompt"] = prompt
+            observed["context"] = context
+            observed["max_tokens"] = max_tokens
+            return "capped answer"
+
+    monkeypatch.setattr(
+        orchestrator,
+        "_build_answer_generation_fallback",
+        lambda **_kwargs: (_ for _ in ()).throw(AssertionError("fallback should not run")),
+    )
+
+    result = orchestrator._initial_generation_result(
+        query="attention mechanism",
+        selected_llm=_CappedLLM(),
+        answer_prompt="prompt",
+        safe_context="context",
+        evidence_packet=evidence_packet,
+        routing_meta={"route": "local"},
+        stage="initial_answer",
+        answer_max_tokens=192,
+    )
+
+    assert result.initial_answer == "capped answer"
+    assert observed == {"prompt": "prompt", "context": "context", "max_tokens": 192}
 
 
 def test_answer_runtime_flow_no_route_merges_warnings_for_generate_and_stream():

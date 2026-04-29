@@ -34,6 +34,7 @@ class AnswerPostprocess:
         claim_consensus: dict[str, Any],
         claim_consensus_merge_mode: str,
         allow_external: bool,
+        routing_meta: dict[str, Any] | None = None,
     ) -> AnswerPostprocessResult:
         deps = self._deps
         initial_answer_verification = deps.verify_answer_fn(
@@ -82,6 +83,7 @@ class AnswerPostprocess:
             answer_signals=evidence_packet.answer_signals,
             contradicting_beliefs=evidence_packet.contradicting_beliefs,
             allow_external=allow_external,
+            routing_meta=routing_meta,
         )
         final_answer_verification = deps.apply_claim_consensus_to_verification_fn(
             final_answer_verification,

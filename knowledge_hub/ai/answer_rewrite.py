@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 from knowledge_hub.ai.answer_verification import verify_answer
-from knowledge_hub.ai.rag_support import clean_text as _clean_text
+from knowledge_hub.ai.rag_support import (
+    build_paper_answer_readiness_p1_conservative_answer,
+    clean_text as _clean_text,
+    paper_answer_readiness_p1_fallback_enabled,
+)
 from knowledge_hub.core.sanitizer import redact_p0
 from knowledge_hub.learning.policy import evaluate_policy_for_payload
 
@@ -19,7 +23,7 @@ def should_apply_conservative_fallback(verification: dict) -> bool:
         return True
     if int(verification.get("supportedClaimCount") or 0) == 0:
         return True
-    return True
+    return False
 
 
 def _unsupported_claim_count(verification: dict) -> int:
@@ -30,23 +34,15 @@ def _unsupported_claim_count(verification: dict) -> int:
 
 
 def _gate_fallback_warning(verification: dict) -> str:
-    if bool(verification.get("contradictsRejectedBelief")):
-        return "answer rewrite skipped: rejected belief conflict requires conservative fallback"
-    if int(verification.get("retrievalSignalCount") or 0) > 0 and int(verification.get("groundingEvidenceCount") or 0) == 0:
-        return "answer rewrite skipped: retrieval signals without citation-grade evidence require conservative fallback"
     if _unsupported_claim_count(verification) > 0:
         return "answer rewrite skipped: unsupported claims require conservative fallback"
-    if bool(verification.get("needsCaution")) and not bool(verification.get("conflictMentioned")):
-        return "answer rewrite skipped: caution requires conservative fallback"
+    supported_count = int(verification.get("supportedClaimCount") or 0)
+    if supported_count > 0:
+        return ""
     if int(verification.get("claimWeakCount") or 0) > 0:
         return "answer rewrite skipped: weak claims require conservative fallback"
     if int(verification.get("uncertainClaimCount") or 0) > 0:
         return "answer rewrite skipped: uncertain claims require conservative fallback"
-    if bool(verification.get("needsCaution")):
-        return "answer rewrite skipped: caution requires conservative fallback"
-    supported_count = int(verification.get("supportedClaimCount") or 0)
-    if supported_count > 0:
-        return ""
     return ""
 
 
@@ -61,6 +57,7 @@ def apply_conservative_fallback_if_needed(
     answer_signals: dict,
     contradicting_beliefs: list[dict],
     allow_external: bool,
+    routing_meta: dict | None = None,
 ):
     rewrite_applied = bool((rewrite_meta or {}).get("applied"))
     fallback_required = bool((rewrite_meta or {}).get("requiresConservativeFallback"))
@@ -69,10 +66,19 @@ def apply_conservative_fallback_if_needed(
     if not should_apply_conservative_fallback(verification):
         return answer, rewrite_meta, verification
 
-    conservative_answer = searcher._build_conservative_answer(
-        verification=verification,
+    if paper_answer_readiness_p1_fallback_enabled(
+        config=getattr(searcher, "config", None),
+        answer_signals=answer_signals,
         evidence=evidence,
-    )
+        allow_external=allow_external,
+        routing_meta=routing_meta,
+    ):
+        conservative_answer = build_paper_answer_readiness_p1_conservative_answer(evidence=evidence)
+    else:
+        conservative_answer = searcher._build_conservative_answer(
+            verification=verification,
+            evidence=evidence,
+        )
     if not conservative_answer or conservative_answer == _clean_text(answer):
         return answer, rewrite_meta, verification
 

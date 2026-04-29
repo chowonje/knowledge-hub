@@ -173,7 +173,7 @@ DEFAULT_CONFIG = {
     },
     "pipeline": {
         "storage": {
-            "root": str(DEFAULT_CONFIG_DIR / "knowledge_os"),
+            "root": "/Volumes/T9/knowledge_os",
         },
         "profile": "safe",
         "source_policy": "hybrid",
@@ -354,6 +354,20 @@ DEFAULT_CONFIG = {
             "strong_learning_item_usd": 0.03,
         },
     },
+    "labs": {
+        "answer_readiness": {
+            "paper_short_citation_first": {
+                "enabled": False,
+                "budget_v2": {
+                    "enabled": False,
+                    "max_bullets": 2,
+                    "output_max_tokens": 256,
+                    "context_items": 2,
+                    "context_excerpt_chars": 160,
+                },
+            },
+        },
+    },
     "providers": {
         "openai": {
             "api_key": "${OPENAI_API_KEY}",
@@ -415,10 +429,10 @@ def _deep_merge(base: dict, override: dict) -> dict:
 
 
 def get_public_setup_profile(name: str) -> dict[str, Any]:
-    profile_name = str(name or "").strip().lower()
-    if profile_name == "custom":
+    token = str(name or "").strip().lower()
+    if token == "custom":
         return {}
-    profile = PUBLIC_SETUP_PROFILES.get(profile_name)
+    profile = PUBLIC_SETUP_PROFILES.get(token)
     if profile is None:
         raise ConfigError(f"unknown public setup profile: {name}")
     return deepcopy(profile)
@@ -542,13 +556,7 @@ class Config:
     def get_provider_config(self, provider_name: str) -> dict:
         """특정 프로바이더의 설정 반환 (env var 확장 적용)"""
         raw = self.get_nested("providers", provider_name, default={})
-        if not isinstance(raw, dict):
-            return {}
-        expanded = _expand_env_vars(raw)
-        api_key_env = str(expanded.get("api_key_env") or "").strip()
-        if api_key_env and not str(expanded.get("api_key") or "").strip():
-            expanded["api_key"] = os.environ.get(api_key_env, "")
-        return expanded
+        return _expand_env_vars(raw) if isinstance(raw, dict) else {}
 
     # --- 편의 프로퍼티 ---
 
@@ -745,10 +753,7 @@ class Config:
         for provider in (require_providers or []):
             from knowledge_hub.providers import registry
 
-            try:
-                info = registry.get_provider_info(provider, config=self)
-            except TypeError:
-                info = registry.get_provider_info(provider)
+            info = registry.get_provider_info(provider)
             if info is not None and not bool(info.requires_api_key):
                 log.debug("Skipping API key validation for local provider [%s]", provider)
                 continue
