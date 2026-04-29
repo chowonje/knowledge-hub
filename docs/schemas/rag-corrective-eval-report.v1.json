@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "evalPath",
+    "readOnly",
+    "rowCount",
+    "passCount",
+    "failCount",
+    "metrics",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.corrective-eval.report.v1" },
+    "status": { "type": "string" },
+    "evalPath": { "type": "string" },
+    "readOnly": { "type": "boolean" },
+    "rowCount": { "type": "integer" },
+    "passCount": { "type": "integer" },
+    "failCount": { "type": "integer" },
+    "metrics": { "type": "object" },
+    "rows": { "type": "array" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

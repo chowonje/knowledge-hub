@@ -7,6 +7,13 @@ from typing import Any
 
 from knowledge_hub.ai.ask_v2_support import clean_text, stable_score
 from knowledge_hub.ai.retrieval_pipeline import RetrievalPlan, RetrievalPipelineResult
+from knowledge_hub.ai.retrieval_strategy_diagnostics import (
+    build_answerability_rerank_diagnostics,
+    build_artifact_health_diagnostics,
+    build_corrective_retrieval_diagnostics,
+    build_retrieval_quality_diagnostics,
+    build_retrieval_strategy_diagnostics,
+)
 from knowledge_hub.core.models import SearchResult
 from knowledge_hub.papers.prefilter import normalize_paper_memory_mode_details
 
@@ -83,27 +90,50 @@ def build_card_v2_pipeline_result(
         paper_prefilter_reason = "disabled"
     matched_paper_ids = [clean_text(card.get("paper_id")) for card in cards if clean_text(card.get("paper_id"))] if paper_prefilter_applied else []
     matched_memory_ids = [clean_text(card.get("source_memory_id")) for card in cards if clean_text(card.get("source_memory_id"))] if paper_prefilter_applied else []
+    candidate_sources = _card_v2_candidate_sources(
+        selected_cards=cards,
+        source_kind=normalized_source_kind,
+    )
+    memory_prefilter = {
+        "contractRole": "retrieval_memory_prefilter",
+        "mode": card_v2_mode,
+        "applied": True,
+        "memoryInfluenceApplied": True,
+        "memoryRelationsUsed": [],
+        "temporalSignals": dict(plan.temporal_signals),
+    }
+    rerank_signals = {
+        "strategy": card_v2_mode,
+        "selectedCardCount": len(cards),
+        "selectedAnchorCount": int(selected_anchor_count),
+    }
+    retrieval_strategy = build_retrieval_strategy_diagnostics(plan)
+    retrieval_quality = build_retrieval_quality_diagnostics(
+        plan=plan,
+        results=results,
+        candidate_sources=candidate_sources,
+        rerank_signals=rerank_signals,
+        memory_prefilter=memory_prefilter,
+    )
+    answerability_rerank = build_answerability_rerank_diagnostics(plan=plan, results=results)
+    artifact_health = build_artifact_health_diagnostics(plan=plan, results=results)
+    corrective_retrieval = build_corrective_retrieval_diagnostics(
+        retrieval_quality=retrieval_quality,
+        answerability_rerank=answerability_rerank,
+        artifact_health=artifact_health,
+    )
 
     return RetrievalPipelineResult(
         results=results,
         plan=plan,
-        candidate_sources=_card_v2_candidate_sources(
-            selected_cards=cards,
-            source_kind=normalized_source_kind,
-        ),
+        candidate_sources=candidate_sources,
         memory_route={
             "contractRole": "ask_retrieval_memory_prefilter",
             "mode": card_v2_mode,
             "applied": True,
             "reason": reason,
         },
-        memory_prefilter={
-            "contractRole": "retrieval_memory_prefilter",
-            "mode": card_v2_mode,
-            "applied": True,
-            "memoryRelationsUsed": [],
-            "temporalSignals": dict(plan.temporal_signals),
-        },
+        memory_prefilter=memory_prefilter,
         paper_memory_prefilter={
             "contractRole": "paper_source_memory_prefilter",
             "requestedMode": paper_requested_mode,
@@ -120,11 +150,7 @@ def build_card_v2_pipeline_result(
             "verificationCouplingApplied": False,
             "fallbackReason": "",
         },
-        rerank_signals={
-            "strategy": card_v2_mode,
-            "selectedCardCount": len(cards),
-            "selectedAnchorCount": int(selected_anchor_count),
-        },
+        rerank_signals=rerank_signals,
         context_expansion=_card_v2_context_expansion(
             route_mode=normalized_route_mode,
             route_intent=normalized_route_intent,
@@ -135,6 +161,11 @@ def build_card_v2_pipeline_result(
         source_scope_enforced=True,
         mixed_fallback_used=False,
         v2_diagnostics=dict(v2_diagnostics or {}),
+        retrieval_strategy=retrieval_strategy,
+        retrieval_quality=retrieval_quality,
+        answerability_rerank=answerability_rerank,
+        corrective_retrieval=corrective_retrieval,
+        artifact_health=artifact_health,
     )
 
 

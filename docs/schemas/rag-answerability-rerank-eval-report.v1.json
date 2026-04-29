@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "readOnly",
+    "writeFree",
+    "labsOnly",
+    "runtimeApplied",
+    "evalPath",
+    "request",
+    "summary",
+    "rows",
+    "promotionReadiness",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.answerability-rerank-eval.report.v1" },
+    "status": { "type": "string" },
+    "generatedAt": { "type": "string" },
+    "readOnly": { "type": "boolean" },
+    "writeFree": { "type": "boolean" },
+    "labsOnly": { "type": "boolean" },
+    "runtimeApplied": { "type": "boolean" },
+    "evalPath": { "type": "string" },
+    "request": { "type": "object" },
+    "summary": { "type": "object" },
+    "rows": { "type": "array" },
+    "promotionReadiness": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

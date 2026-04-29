@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "evalPath",
+    "readOnly",
+    "writeFree",
+    "labsOnly",
+    "runtimeApplied",
+    "defaultRuntimeApplied",
+    "request",
+    "summary",
+    "correctiveEval",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.corrective-execution-review.result.v1" },
+    "status": { "type": "string" },
+    "generatedAt": { "type": "string" },
+    "evalPath": { "type": "string" },
+    "readOnly": { "type": "boolean" },
+    "writeFree": { "type": "boolean" },
+    "labsOnly": { "type": "boolean" },
+    "runtimeApplied": { "type": "boolean" },
+    "defaultRuntimeApplied": { "type": "boolean" },
+    "request": { "type": "object" },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "rowCount": { "type": "integer" },
+        "retryCandidateCount": { "type": "integer" },
+        "retryAppliedCount": { "type": "integer" },
+        "retrySkippedCount": { "type": "integer" },
+        "executionSkippedCount": { "type": "integer" },
+        "actionsAppliedCount": { "type": "integer" },
+        "retrievalImprovedCount": { "type": "integer" },
+        "retrievalNoHarmCount": { "type": "integer" },
+        "retrievalRegressedCount": { "type": "integer" },
+        "contextRequiredCount": { "type": "integer" },
+        "improvementRate": { "type": "number" },
+        "noHarmRate": { "type": "number" },
+        "latencyMsTotal": { "type": "integer" },
+        "estimatedCostClass": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "correctiveEval": { "type": "object" },
+    "rows": { "type": "array" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

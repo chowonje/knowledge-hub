@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "readOnly",
+    "writeFree",
+    "queriesPath",
+    "request",
+    "summary",
+    "correctiveEval",
+    "correctiveRuns",
+    "answerabilityReranks",
+    "graphGlobalPlans",
+    "promotionReadiness",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.vnext-observation.report.v1" },
+    "status": { "type": "string" },
+    "generatedAt": { "type": "string" },
+    "readOnly": { "type": "boolean" },
+    "writeFree": { "type": "boolean" },
+    "queriesPath": { "type": "string" },
+    "request": { "type": "object" },
+    "summary": { "type": "object" },
+    "correctiveEval": { "type": "object" },
+    "correctiveRuns": { "type": "array" },
+    "answerabilityReranks": { "type": "array" },
+    "answerabilityRerankShadowEval": { "type": "object" },
+    "graphGlobalPlans": { "type": "array" },
+    "promotionReadiness": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
