@@ -128,6 +128,59 @@ class _PaperCardSelector(_BaseCardSelector):
             return False
         return target in title or title in target
 
+    @staticmethod
+    def _compare_selected_paper_ids(cards: list[dict[str, Any]]) -> set[str]:
+        return {
+            _clean_text(card.get("paper_id"))
+            for card in cards
+            if _clean_text(card.get("paper_id"))
+        }
+
+    @staticmethod
+    def _with_compare_selection_stage(
+        card: dict[str, Any],
+        *,
+        diagnostics: dict[str, Any],
+        stage: str,
+        reason: str,
+    ) -> dict[str, Any]:
+        enriched = dict(card)
+        enriched["selection_diagnostics"] = {
+            **dict(diagnostics),
+            "stage": stage,
+            "reason": reason,
+        }
+        return enriched
+
+    def _finalize_compare_selection(
+        self,
+        cards: list[dict[str, Any]],
+        *,
+        diagnostics: dict[str, Any],
+    ) -> list[dict[str, Any]]:
+        selected = list(cards)
+        resolved_pair = [
+            _clean_text(item)
+            for item in list(diagnostics.get("resolvedPaperIds") or [])[:2]
+            if _clean_text(item)
+        ]
+        selected_paper_ids = self._compare_selected_paper_ids(selected)
+        resolved_pair_preserved = bool(
+            len(resolved_pair) >= 2
+            and all(paper_id in selected_paper_ids for paper_id in resolved_pair)
+        )
+        finalized: list[dict[str, Any]] = []
+        for card in selected:
+            enriched = dict(card)
+            existing = dict(enriched.get("selection_diagnostics") or {})
+            enriched["selection_diagnostics"] = {
+                **dict(diagnostics),
+                **existing,
+                "resolvedPairPreserved": resolved_pair_preserved,
+            }
+            finalized.append(enriched)
+        return finalized
+
     def _select_compare_cards(
         self,
         *,
@@ -147,42 +200,92 @@ class _PaperCardSelector(_BaseCardSelector):
             identity_key="paper_id",
             limit=max(limit * 4, 8),
         )
+        selection_diagnostics = {
+            "resolvedPaperIds": [
+                _clean_text(item)
+                for item in resolved_paper_ids
+                if _clean_text(item)
+            ],
+            "candidateCountBeforeRerank": len(candidates),
+            "candidateCountAfterRerank": len(ranked_candidates),
+        }
         compare_limit = 2
         selected: list[dict[str, Any]] = []
         seen: set[str] = set()
+        resolved_candidate_pool = [*candidates, *ranked_candidates]
+        cleaned_resolved_paper_ids = [
+            _clean_text(item)
+            for item in resolved_paper_ids
+            if _clean_text(item)
+        ]
+        resolved_pair = cleaned_resolved_paper_ids[:2]
+        resolved_pair_set = set(resolved_pair)
+        restrict_focus_to_resolved_pair = len(cleaned_resolved_paper_ids) == 2 and len(resolved_pair_set) == 2
         for focus_form in focus_forms:
-            for card in ranked_candidates:
+            for card in resolved_candidate_pool:
                 paper_id = _clean_text(card.get("paper_id"))
                 if not paper_id or paper_id in seen:
                     continue
+                if restrict_focus_to_resolved_pair and paper_id not in resolved_pair_set:
+                    continue
                 if not self._card_matches_focus_form(card, focus_form):
                     continue
-                selected.append(card)
+                selected.append(
+                    self._with_compare_selection_stage(
+                        card,
+                        diagnostics=selection_diagnostics,
+                        stage="compare_focus_form",
+                        reason=f"matched_focus_form:{focus_form}",
+                    )
+                )
                 seen.add(paper_id)
                 if len(selected) >= compare_limit:
-                    return selected[:compare_limit]
+                    return self._finalize_compare_selection(
+                        selected[:compare_limit],
+                        diagnostics=selection_diagnostics,
+                    )
                 break
         for paper_id in resolved_paper_ids:
             token = _clean_text(paper_id)
             if not token or token in seen:
                 continue
-            for card in ranked_candidates:
+            for card in resolved_candidate_pool:
                 if _clean_text(card.get("paper_id")) != token:
                     continue
-                selected.append(card)
+                selected.append(
+                    self._with_compare_selection_stage(
+                        card,
+                        diagnostics=selection_diagnostics,
+                        stage="compare_resolved_paper_id",
+                        reason=f"matched_resolved_paper_id:{token}",
+                    )
+                )
                 seen.add(token)
                 if len(selected) >= compare_limit:
-                    return selected[:compare_limit]
+                    return self._finalize_compare_selection(
+                        selected[:compare_limit],
+                        diagnostics=selection_diagnostics,
+                    )
                 break
         for card in ranked_candidates:
             paper_id = _clean_text(card.get("paper_id"))
             if not paper_id or paper_id in seen:
                 continue
-            selected.append(card)
+            selected.append(
+                self._with_compare_selection_stage(
+                    card,
+                    diagnostics=selection_diagnostics,
+                    stage="compare_ranked_diversity",
+                    reason="filled_from_ranked_candidate_diversity",
+                )
+            )
             seen.add(paper_id)
             if len(selected) >= compare_limit:
                 break
-        return selected[:compare_limit]
+        return self._finalize_compare_selection(
+            selected[:compare_limit],
+            diagnostics=selection_diagnostics,
+        )
 
     def select(self, request: CardSelectionRequest) -> list[dict[str, Any]]:
         query = request.query
@@ -229,8 +332,10 @@ class _PaperCardSelector(_BaseCardSelector):
                 )
         deduped_lookup_forms = list(selection_inputs.get("lookup_forms") or [])
         candidates: list[dict[str, Any]] = []
+        resolved_cards_for_compare: list[dict[str, Any]] = []
         if resolved_paper_ids:
-            candidates.extend(self.service._ensure_cards_for_papers(resolved_paper_ids))
+            resolved_cards_for_compare = self.service._ensure_cards_for_papers(resolved_paper_ids)
+            candidates.extend(resolved_cards_for_compare)
         compare_focus_forms: list[str] = []
         if paper_family == "paper_compare":
             compare_focus_forms = [
@@ -258,7 +363,10 @@ class _PaperCardSelector(_BaseCardSelector):
                     ),
                 )
                 if reranked:
-                    candidates = reranked
+                    if paper_family == "paper_compare" and resolved_cards_for_compare:
+                        candidates = [*resolved_cards_for_compare, *reranked]
+                    else:
+                        candidates = reranked
         else:
             candidates = self._extend_with_search_results(
                 candidates,
@@ -285,6 +393,8 @@ class _PaperCardSelector(_BaseCardSelector):
                 search_fn=lambda form: self.service.sqlite_db.search_paper_cards_v2(form, limit=max(limit * 4, 8)),
             )
             candidates = self._merge_fallback_cards(candidates, fallback_cards, replace_when_empty=True)
+        if paper_family == "paper_compare" and resolved_cards_for_compare:
+            candidates = self._merge_fallback_cards(candidates, resolved_cards_for_compare, prepend=True)
         if paper_family == "paper_compare" and len(resolved_paper_ids) >= 2:
             selected = self._select_compare_cards(
                 request=request,

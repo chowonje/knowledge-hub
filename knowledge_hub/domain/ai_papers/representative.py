@@ -29,6 +29,14 @@ _CURATED_REPRESENTATIVE_ANCHORS: dict[str, dict[str, str]] = {
         "paperId": "2007.01282",
         "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
     },
+    "gpt": {
+        "paperId": "2005.14165",
+        "title": "Language Models are Few-Shot Learners",
+    },
+    "mamba": {
+        "paperId": "2312.00752",
+        "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    },
     "vit": {
         "paperId": "2010.11929",
         "title": "An Image is Worth 16x16 Words",

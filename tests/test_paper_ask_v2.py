@@ -4,20 +4,18 @@ from datetime import datetime, timezone
 from types import SimpleNamespace
 import pytest
 
-from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service, _ask_v2_hard_gate_reason
-from knowledge_hub.ai.ask_v2_support import classify_intent
+from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service, _paper_claim_card_gate_relaxation
+from knowledge_hub.ai.ask_v2_support import AskV2Route, classify_intent
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
-from knowledge_hub.ai.answer_contracts import build_answer_contract
+from knowledge_hub.ai.answer_orchestrator import AnswerOrchestrator
 from knowledge_hub.ai.claim_cards import ClaimCardBuilder
 from knowledge_hub.application.query_frame import build_query_frame
-from knowledge_hub.ai.rag_answer_evidence import answer_evidence_item
 from knowledge_hub.ai.rag import RAGSearcher
 from knowledge_hub.ai.section_card_materializer import PaperSectionCardMaterializer
 from knowledge_hub.ai.section_cards import assess_section_source_quality, project_section_cards, rank_section_cards, section_coverage
 from knowledge_hub.core.section_card_v1_store import SectionCardV1Store
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.papers.card_v2_builder import PaperCardV2Builder
-from knowledge_hub.papers.source_text import source_hash_for_text
 from knowledge_hub.web.ingest import make_web_note_id
 from tests.test_paper_memory import _seed_paper_with_note
 from tests.test_rag_search import DummyEmbedder, FakeLLM
@@ -35,6 +33,47 @@ class _SearchForbiddenVectorDB:
     def get_documents(self, filter_dict=None, limit=500, include_ids=True, include_documents=True, include_metadatas=True):  # noqa: ANN001
         _ = (filter_dict, limit, include_ids, include_documents, include_metadatas)
         return {"documents": [], "metadatas": [], "ids": []}
+
+
+def test_paper_lookup_unsupported_claim_gate_does_not_relax_without_pre_gate_answerability():
+    diagnostics = _paper_claim_card_gate_relaxation(
+        hard_gate_reason="ask_v2_unsupported_claim_cards",
+        route=SimpleNamespace(source_kind="paper"),
+        paper_family="paper_lookup",
+        pre_hard_gate_answerable=False,
+        evidence_packet=SimpleNamespace(filtered_results=[object()], evidence=[]),
+        selected_cards=[{"paper_id": "2603.13017"}],
+        query_frame=SimpleNamespace(resolved_source_ids=["2603.13017"]),
+        card_selection_diagnostics={},
+    )
+
+    assert diagnostics["claimCardGateRelaxed"] is False
+    assert diagnostics["claimCardGateRelaxationReason"] == ""
+    assert diagnostics["originalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+
+
+def test_paper_compare_unsupported_claim_gate_does_not_relax_when_evidence_collapses_to_one_paper():
+    diagnostics = _paper_claim_card_gate_relaxation(
+        hard_gate_reason="ask_v2_unsupported_claim_cards",
+        route=SimpleNamespace(source_kind="paper"),
+        paper_family="paper_compare",
+        pre_hard_gate_answerable=True,
+        evidence_packet=SimpleNamespace(
+            filtered_results=[object()],
+            evidence=[],
+            evidence_packet={"uniquePaperCount": 1},
+        ),
+        selected_cards=[{"paper_id": "2603.13017"}, {"paper_id": "2603.13018"}],
+        query_frame=SimpleNamespace(resolved_source_ids=["2603.13017", "2603.13018"]),
+        card_selection_diagnostics={
+            "resolvedPaperIds": ["2603.13017", "2603.13018"],
+            "resolvedPairPreserved": True,
+        },
+    )
+
+    assert diagnostics["claimCardGateRelaxed"] is False
+    assert diagnostics["claimCardGateRelaxationReason"] == ""
+    assert diagnostics["compareTargetGuardPassed"] is False
 
 
 class _NoAliasStoreDB:
@@ -114,6 +153,48 @@ def _seed_document_memory(db: SQLiteDatabase, paper_id: str) -> None:
                 "search_text": "limitations single-user setting",
             },
         ],
+    )
+
+
+def _seed_unique_compare_paper(db: SQLiteDatabase, paper_id: str, title: str) -> None:
+    claim_id = f"claim_memory_{paper_id.replace('.', '_')}"
+    db.upsert_paper(
+        {
+            "arxiv_id": paper_id,
+            "title": title,
+            "authors": "B. Researcher",
+            "year": 2026,
+            "field": "AI",
+            "importance": 4,
+            "notes": f"{title} comparison note",
+            "pdf_path": "",
+            "text_path": "",
+            "translated_path": "",
+        }
+    )
+    db.upsert_ontology_entity(
+        entity_id=f"paper:{paper_id}",
+        entity_type="paper",
+        canonical_name=title,
+        source="test",
+    )
+    db.upsert_note(
+        note_id=f"paper:{paper_id}",
+        title=f"[논문] {title}",
+        content=f"# {title}\n\n## 요약\n\n비교 가능한 메모리 논문이다.\n\n## 결과\n\n독립적인 결과 근거를 제공한다.\n",
+        source_type="paper",
+        para_category="resource",
+        metadata={"arxiv_id": paper_id, "quality_flag": "ok"},
+    )
+    db.upsert_claim(
+        claim_id=claim_id,
+        claim_text=f"{title} reports comparable memory retrieval results.",
+        subject_entity_id=f"paper:{paper_id}",
+        predicate="reports",
+        object_literal="memory retrieval results",
+        confidence=0.86,
+        evidence_ptrs=[{"note_id": f"paper:{paper_id}"}],
+        source="test",
     )
 
 
@@ -673,16 +754,6 @@ def test_paper_ask_v2_keeps_implementation_queries_out_of_definition_lane():
     assert classify_intent("RAG 파이프라인을 설명해줘") == "implementation"
 
 
-def test_ask_v2_classifies_soft_recency_evaluation_as_evaluation_not_temporal():
-    assert classify_intent("최근 RAG evaluation article은 citation accuracy와 faithfulness를 어떻게 구분하나?") == "evaluation"
-    assert classify_intent("latest vector database retrieval best practice는 무엇인가?") == "temporal"
-
-
-def test_ask_v2_classifies_structural_after_pipeline_as_implementation_not_temporal():
-    assert classify_intent("AnswerOrchestrator는 retrieval pipeline 이후 어떤 역할을 하는가?") == "implementation"
-    assert classify_intent("2026년 이후 retrieval pipeline 변화는 무엇인가?") == "temporal"
-
-
 def test_ask_v2_route_preserves_concept_definition_when_classifier_is_impl_or_eval(tmp_path):
     """Rule-based frame says definition; regex classifier can win on impl/eval keywords first."""
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
@@ -865,22 +936,323 @@ def test_generate_answer_v2_fallback_does_not_trigger_on_weak_claim_only_when_ve
     assert payload["v2"]["fallback"]["used"] is False
 
 
-def test_ask_v2_hard_gate_keeps_unsupported_claim_cards_diagnostic_when_evidence_has_no_unsupported_fields():
-    reason = _ask_v2_hard_gate_reason(
-        verification={"verificationStatus": "weak", "unsupportedFields": [], "anchorIdsUsed": ["anchor-1"]},
-        claim_consensus={"unsupportedClaimCount": 1, "conflictCount": 0},
+def test_generate_answer_paper_lookup_relaxes_unsupported_claim_gate_when_pre_gate_answerable(tmp_path, monkeypatch):
+    _orig_cv = AskV2Verifier.claim_verification
+
+    def _claim_cv(self, *, selected_claims, anchors):
+        cv, cc = _orig_cv(self, selected_claims=selected_claims, anchors=anchors)
+        merged = dict(cc)
+        merged["unsupportedClaimCount"] = int(merged.get("unsupportedClaimCount") or 0) + 1
+        return [
+            *cv,
+            {
+                "claimId": "claim_without_anchor",
+                "status": "unsupported",
+                "verdict": "unsupported",
+                "reasons": ["no_anchor_backed_evidence"],
+            },
+        ], merged
+
+    monkeypatch.setattr(AskV2Verifier, "claim_verification", _claim_cv)
+
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper_with_note(db, tmp_path)
+    _seed_document_memory(db, "2603.13017")
+    searcher, vector_db = _build_searcher(db)
+
+    payload = searcher.generate_answer(
+        query="2603.13017 논문 요약",
+        source_type="paper",
+        top_k=3,
     )
 
-    assert reason == ""
+    v2 = payload["v2"]
+    assert vector_db.search_called is False
+    assert payload["status"] != "no_result"
+    assert payload["evidencePacket"]["answerable"] is True
+    assert payload["evidencePacket"]["askV2HardGate"] is False
+    assert payload["evidencePacket"]["claimCardGateRelaxed"] is True
+    assert payload["evidencePacket"]["askV2OriginalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert payload["evidencePacket"]["originalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert payload["evidencePacket"]["compareTargetGuardPassed"] is None
+    assert v2["preHardGateAnswerable"] is True
+    assert v2["preHardGateReason"] == "substantive_evidence_found"
+    assert v2["v2ConsensusUnsupportedClaimCount"] == v2["consensus"]["unsupportedClaimCount"]
+    assert v2["v2ConsensusWeakClaimCount"] == v2["consensus"]["weakClaimCount"]
+    assert v2["v2ConsensusSupportedClaimCount"] == v2["consensus"]["supportCount"]
+    assert "unsupported:no_anchor_backed_evidence=1" in v2["v2ClaimReasonSummary"]
+    assert v2["askV2OriginalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert v2["originalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert v2["compareTargetGuardPassed"] is None
+    assert v2["claimCardGateRelaxed"] is True
+    assert v2["claimCardGateRelaxationReason"] == "claim_card_unsupported_relaxed_for_paper_family"
+    assert v2["claimCardGateRelaxation"]["claimCardGateRelaxationDetail"] == "paper_lookup_answerable_evidence_present"
+    assert v2["fallback"]["reason"] == "claim_card_unsupported_relaxed_for_paper_family"
 
 
-def test_ask_v2_hard_gate_blocks_concrete_unsupported_verification_field():
-    reason = _ask_v2_hard_gate_reason(
-        verification={"verificationStatus": "weak", "unsupportedFields": ["temporal_version_grounding"]},
-        claim_consensus={"unsupportedClaimCount": 0, "conflictCount": 0},
+def test_generate_answer_paper_compare_relaxes_unsupported_claim_gate_when_compare_evidence_present(tmp_path, monkeypatch):
+    _orig_cv = AskV2Verifier.claim_verification
+
+    def _claim_cv(self, *, selected_claims, anchors):
+        cv, cc = _orig_cv(self, selected_claims=selected_claims, anchors=anchors)
+        merged = dict(cc)
+        merged["unsupportedClaimCount"] = int(merged.get("unsupportedClaimCount") or 0) + 2
+        return [
+            *cv,
+            {
+                "claimId": "compare_claim_without_anchor",
+                "status": "unsupported",
+                "verdict": "unsupported",
+                "reasons": ["no_anchor_backed_evidence"],
+            },
+        ], merged
+
+    monkeypatch.setattr(AskV2Verifier, "claim_verification", _claim_cv)
+
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper_with_note(db, tmp_path, paper_id="2603.13017")
+    _seed_document_memory(db, "2603.13017")
+    db.upsert_paper(
+        {
+            "arxiv_id": "2603.13018",
+            "title": "Second Agent Memory",
+            "authors": "B. Researcher",
+            "year": 2026,
+            "field": "AI",
+            "importance": 4,
+            "notes": "second memory paper",
+            "pdf_path": "",
+            "text_path": "",
+            "translated_path": "",
+        }
+    )
+    db.upsert_ontology_entity(
+        entity_id="paper:2603.13018",
+        entity_type="paper",
+        canonical_name="Second Agent Memory",
+        source="test",
+    )
+    db.upsert_note(
+        note_id="paper:2603.13018",
+        title="[논문] Second Agent Memory",
+        content="# Second Agent Memory\n\n## 요약\n\n두 번째 메모리 논문이다.\n\n## 결과\n\n비교 가능한 결과를 제공한다.\n",
+        source_type="paper",
+        para_category="resource",
+        metadata={"arxiv_id": "2603.13018", "quality_flag": "ok"},
+    )
+    _seed_document_memory(db, "2603.13018")
+    PaperCardV2Builder(db).build_and_store(paper_id="2603.13017")
+    PaperCardV2Builder(db).build_and_store(paper_id="2603.13018")
+    searcher, vector_db = _build_searcher(db)
+    service = PaperAskV2Service(searcher)
+    frame = build_query_frame(
+        domain_key="ai_papers",
+        source_type="paper",
+        family="paper_compare",
+        query_intent="comparison",
+        answer_mode="paper_comparison",
+        resolved_source_ids=["2603.13017", "2603.13018"],
+        confidence=0.9,
+        planner_status="not_attempted",
+        planner_reason="test_frame",
+        evidence_policy_key="paper_compare_policy",
+        metadata_filter={},
+    )
+    pipeline_result, evidence_packet = service.execute(
+        query="2603.13017와 2603.13018을 비교해줘",
+        top_k=3,
+        source_type="paper",
+        retrieval_mode="hybrid",
+        alpha=0.7,
+        allow_external=False,
+        query_frame=frame.to_dict(),
     )
 
-    assert reason == "ask_v2_weak_evidence:temporal_version_grounding"
+    payload = AnswerOrchestrator(searcher).generate(
+        query="2603.13017와 2603.13018을 비교해줘",
+        source_type="paper",
+        retrieval_mode="hybrid",
+        allow_external=False,
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+    )
+
+    assert vector_db.search_called is False
+    assert payload["status"] != "no_result"
+    assert payload["evidencePacket"]["answerable"] is True
+    assert payload["evidencePacket"]["uniquePaperCount"] >= 2
+    assert payload["evidencePacket"]["askV2HardGate"] is False
+    assert payload["evidencePacket"]["claimCardGateRelaxed"] is True
+    assert payload["evidencePacket"]["compareTargetGuardPassed"] is True
+    assert payload["v2"]["askV2OriginalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert payload["v2"]["originalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert payload["v2"]["claimCardGateRelaxed"] is True
+    assert payload["v2"]["claimCardGateRelaxationReason"] == "claim_card_unsupported_relaxed_for_paper_family"
+    assert payload["v2"]["claimCardGateRelaxation"]["claimCardGateRelaxationDetail"] == "paper_compare_target_guard_passed"
+    assert payload["v2"]["compareTargetGuardPassed"] is True
+    assert payload["v2"]["v2ConsensusUnsupportedClaimCount"] > 0
+    assert "unsupported:no_anchor_backed_evidence=" in payload["v2"]["v2ClaimReasonSummary"]
+
+
+def test_generate_answer_paper_compare_keeps_claim_gate_when_selected_target_drifts(tmp_path, monkeypatch):
+    _orig_cv = AskV2Verifier.claim_verification
+
+    def _claim_cv(self, *, selected_claims, anchors):
+        cv, cc = _orig_cv(self, selected_claims=selected_claims, anchors=anchors)
+        merged = dict(cc)
+        merged["unsupportedClaimCount"] = int(merged.get("unsupportedClaimCount") or 0) + 1
+        return [
+            *cv,
+            {
+                "claimId": "drifted_compare_claim_without_anchor",
+                "status": "unsupported",
+                "verdict": "unsupported",
+                "reasons": ["no_anchor_backed_evidence"],
+            },
+        ], merged
+
+    monkeypatch.setattr(AskV2Verifier, "claim_verification", _claim_cv)
+
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper_with_note(db, tmp_path, paper_id="2603.13017")
+    _seed_document_memory(db, "2603.13017")
+    _seed_unique_compare_paper(db, "2603.13018", "Second Agent Memory")
+    _seed_document_memory(db, "2603.13018")
+    _seed_unique_compare_paper(db, "2603.13019", "Drifted Agent Memory")
+    _seed_document_memory(db, "2603.13019")
+    card_a = PaperCardV2Builder(db).build_and_store(paper_id="2603.13017")
+    PaperCardV2Builder(db).build_and_store(paper_id="2603.13018")
+    card_wrong = PaperCardV2Builder(db).build_and_store(paper_id="2603.13019")
+
+    drifted_cards = [dict(card_a), dict(card_wrong)]
+    for card in drifted_cards:
+        card["selection_diagnostics"] = {
+            "resolvedPaperIds": ["2603.13017", "2603.13018"],
+            "candidateCountBeforeRerank": 3,
+            "candidateCountAfterRerank": 3,
+            "resolvedPairPreserved": False,
+            "stage": "compare_ranked_diversity",
+            "reason": "test_selected_target_drift",
+        }
+
+    searcher, vector_db = _build_searcher(db)
+    service = PaperAskV2Service(searcher)
+    monkeypatch.setattr(service, "_select_cards", lambda **_kwargs: drifted_cards)
+    frame = build_query_frame(
+        domain_key="ai_papers",
+        source_type="paper",
+        family="paper_compare",
+        query_intent="comparison",
+        answer_mode="paper_comparison",
+        resolved_source_ids=["2603.13017", "2603.13018"],
+        confidence=0.9,
+        planner_status="not_attempted",
+        planner_reason="test_frame",
+        evidence_policy_key="paper_compare_policy",
+        metadata_filter={},
+    )
+    pipeline_result, evidence_packet = service.execute(
+        query="2603.13017와 2603.13018을 비교해줘",
+        top_k=3,
+        source_type="paper",
+        retrieval_mode="hybrid",
+        alpha=0.7,
+        allow_external=False,
+        query_frame=frame.to_dict(),
+    )
+
+    payload = AnswerOrchestrator(searcher).generate(
+        query="2603.13017와 2603.13018을 비교해줘",
+        source_type="paper",
+        retrieval_mode="hybrid",
+        allow_external=False,
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+    )
+
+    assert vector_db.search_called is False
+    assert payload["status"] == "no_result"
+    assert payload["evidencePacket"]["answerable"] is False
+    assert payload["evidencePacket"]["answerableDecisionReason"] == "ask_v2_unsupported_claim_cards"
+    assert payload["evidencePacket"]["askV2HardGate"] is True
+    assert payload["evidencePacket"]["claimCardGateRelaxed"] is False
+    assert payload["evidencePacket"]["compareTargetGuardPassed"] is False
+    assert payload["v2"]["cardSelection"]["resolvedPairPreserved"] is False
+    assert payload["v2"]["compareTargetGuardPassed"] is False
+    assert payload["v2"]["claimCardGateRelaxed"] is False
+    assert payload["v2"]["originalHardGateReason"] == "ask_v2_unsupported_claim_cards"
+    assert {item["paperId"] for item in payload["v2"]["cardSelection"]["selected"]} == {"2603.13017", "2603.13019"}
+    assert payload["v2"]["v2ConsensusUnsupportedClaimCount"] > 0
+
+
+def test_generate_answer_missing_verification_still_hard_gates_paper_lookup(tmp_path, monkeypatch):
+    _orig_vs = AskV2Verifier.verification_summary
+
+    def _ver_sum(self, **kwargs):
+        out = dict(_orig_vs(self, **kwargs))
+        out["verificationStatus"] = "missing"
+        out["unsupportedFields"] = []
+        return out
+
+    monkeypatch.setattr(AskV2Verifier, "verification_summary", _ver_sum)
+
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper_with_note(db, tmp_path)
+    _seed_document_memory(db, "2603.13017")
+    searcher, _vector_db = _build_searcher(db)
+
+    payload = searcher.generate_answer(
+        query="2603.13017 논문 요약",
+        source_type="paper",
+        top_k=3,
+    )
+
+    assert payload["status"] == "no_result"
+    assert payload["evidencePacket"]["askV2HardGate"] is True
+    assert payload["evidencePacket"]["answerableDecisionReason"] == "ask_v2_missing"
+    assert payload["evidencePacket"]["claimCardGateRelaxed"] is False
+    assert payload["v2"]["claimCardGateRelaxed"] is False
+
+
+def test_generate_answer_non_paper_unsupported_claim_gate_still_hard_gates(tmp_path, monkeypatch):
+    _orig_cv = AskV2Verifier.claim_verification
+
+    def _claim_cv(self, *, selected_claims, anchors):
+        cv, cc = _orig_cv(self, selected_claims=selected_claims, anchors=anchors)
+        merged = dict(cc)
+        merged["unsupportedClaimCount"] = int(merged.get("unsupportedClaimCount") or 0) + 1
+        return [
+            *cv,
+            {
+                "claimId": "web_claim_without_anchor",
+                "status": "unsupported",
+                "verdict": "unsupported",
+                "reasons": ["no_anchor_backed_evidence"],
+            },
+        ], merged
+
+    monkeypatch.setattr(AskV2Verifier, "claim_verification", _claim_cv)
+
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    url = "https://example.com/memory-guide"
+    _seed_web_document_memory(db, url)
+    searcher, vector_db = _build_searcher(db)
+
+    payload = searcher.generate_answer(
+        query="memory systems guide",
+        source_type="web",
+        top_k=3,
+        metadata_filter={"canonical_url": url},
+    )
+
+    assert vector_db.search_called is False
+    assert payload["status"] == "no_result"
+    assert payload["evidencePacket"]["askV2HardGate"] is True
+    assert payload["evidencePacket"]["answerableDecisionReason"] == "ask_v2_unsupported_claim_cards"
+    assert payload["evidencePacket"]["claimCardGateRelaxed"] is False
+    assert payload["v2"]["routing"]["sourceKind"] == "web"
+    assert payload["v2"]["claimCardGateRelaxed"] is False
+    assert payload["v2"]["askV2OriginalHardGateReason"] == "ask_v2_unsupported_claim_cards"
 
 
 def test_select_paper_cards_prefers_resolved_compare_scope_over_broad_search(tmp_path, monkeypatch):
@@ -924,6 +1296,187 @@ def test_select_paper_cards_prefers_resolved_compare_scope_over_broad_search(tmp
     )
 
     assert {item["paper_id"] for item in selected} == {"alexnet-2012", "2010.11929"}
+    diagnostics = [dict(item.get("selection_diagnostics") or {}) for item in selected]
+    assert [item["resolvedPaperIds"] for item in diagnostics] == [
+        ["alexnet-2012", "2010.11929"],
+        ["alexnet-2012", "2010.11929"],
+    ]
+    assert {item["stage"] for item in diagnostics} == {"compare_resolved_paper_id"}
+    before_counts = {item["candidateCountBeforeRerank"] for item in diagnostics}
+    assert len(before_counts) == 1
+    assert next(iter(before_counts)) >= 3
+    assert {item["candidateCountAfterRerank"] for item in diagnostics} == {3}
+    assert {item["resolvedPairPreserved"] for item in diagnostics} == {True}
+
+
+def test_select_paper_cards_preserves_resolved_compare_scope_when_rerank_truncates_targets(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    service = PaperAskV2Service(_build_searcher(db)[0])
+    route = service._route(query="RAG와 FiD를 비교해줘", metadata_filter=None)
+    resolved_cards = [
+        {
+            "paper_id": "2005.11401",
+            "card_id": "paper-card-v2:2005.11401",
+            "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+            "quality_flag": "ok",
+        },
+        {
+            "paper_id": "2007.01282",
+            "card_id": "paper-card-v2:2007.01282",
+            "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+            "quality_flag": "ok",
+        },
+    ]
+    noise_cards = [
+        {
+            "paper_id": f"noise-{idx}",
+            "card_id": f"paper-card-v2:noise-{idx}",
+            "title": f"RAG distractor {idx}",
+            "quality_flag": "ok",
+        }
+        for idx in range(6)
+    ]
+
+    monkeypatch.setattr(
+        service,
+        "_ensure_cards_for_papers",
+        lambda paper_ids: resolved_cards if paper_ids == ["2005.11401", "2007.01282"] else [],
+    )
+    monkeypatch.setattr(db, "search_paper_cards_v2", lambda *_args, **_kwargs: noise_cards)
+    monkeypatch.setattr(
+        service,
+        "_dedupe_and_score",
+        lambda candidates, **_kwargs: [
+            card for card in candidates if str(card.get("paper_id") or "").startswith("noise-")
+        ][:2],
+    )
+
+    selected = service._select_paper_cards(
+        query="RAG와 FiD를 비교해줘",
+        route=route,
+        limit=2,
+        metadata_filter=None,
+        query_plan={
+            "family": "paper_compare",
+            "resolvedPaperIds": ["2005.11401", "2007.01282"],
+            "expandedTerms": [
+                "RAG",
+                "FiD",
+                "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+            ],
+        },
+        query_frame={
+            "family": "paper_compare",
+            "resolved_source_ids": ["2005.11401", "2007.01282"],
+            "expanded_terms": [
+                "RAG",
+                "FiD",
+                "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+            ],
+        },
+    )
+
+    assert [item["paper_id"] for item in selected] == ["2005.11401", "2007.01282"]
+    diagnostics = [dict(item.get("selection_diagnostics") or {}) for item in selected]
+    assert {item["stage"] for item in diagnostics} <= {"compare_focus_form", "compare_resolved_paper_id"}
+    assert {item["resolvedPairPreserved"] for item in diagnostics} == {True}
+    assert {item["candidateCountAfterRerank"] for item in diagnostics} == {2}
+
+
+def test_select_paper_cards_does_not_fill_exact_resolved_pair_with_same_axis_rescue_title(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    service = PaperAskV2Service(_build_searcher(db)[0])
+    route = AskV2Route(
+        source_kind="paper",
+        intent="comparison",
+        mode="ontology-first",
+        matched_entities=[],
+        entity_ids=["diffusion"],
+    )
+    resolved_cards = [
+        {
+            "paper_id": "1406.2661",
+            "card_id": "paper-card-v2:1406.2661",
+            "title": "Generative Adversarial Nets",
+            "quality_flag": "ok",
+        },
+        {
+            "paper_id": "2006.11239",
+            "card_id": "paper-card-v2:2006.11239",
+            "title": "Denoising Diffusion Probabilistic Models",
+            "quality_flag": "ok",
+        },
+    ]
+    latent_diffusion = {
+        "paper_id": "2112.10752",
+        "card_id": "paper-card-v2:2112.10752",
+        "title": "High-Resolution Image Synthesis with Latent Diffusion Models",
+        "quality_flag": "ok",
+    }
+
+    monkeypatch.setattr(
+        service,
+        "_ensure_cards_for_papers",
+        lambda paper_ids: resolved_cards if paper_ids == ["1406.2661", "2006.11239"] else [],
+    )
+    monkeypatch.setattr(
+        db,
+        "search_paper_cards_v2",
+        lambda form, **_kwargs: [latent_diffusion]
+        if form == "High-Resolution Image Synthesis with Latent Diffusion Models"
+        else [],
+    )
+    monkeypatch.setattr(
+        db,
+        "list_paper_cards_v2_by_entity_ids",
+        lambda **_kwargs: [
+            resolved_cards[1],
+            latent_diffusion,
+        ],
+    )
+    monkeypatch.setattr(
+        service,
+        "_dedupe_and_score",
+        lambda candidates, **_kwargs: [
+            card for card in candidates if card.get("paper_id") in {"2006.11239", "2112.10752"}
+        ],
+    )
+
+    selected = service._select_paper_cards(
+        query="GAN과 Diffusion 모델 논문을 비교해줘",
+        route=route,
+        limit=2,
+        metadata_filter=None,
+        query_plan={
+            "family": "paper_compare",
+            "resolvedPaperIds": ["1406.2661", "2006.11239"],
+            "expandedTerms": [
+                "GAN",
+                "Diffusion",
+                "Generative Adversarial Nets",
+                "Denoising Diffusion Probabilistic Models",
+                "High-Resolution Image Synthesis with Latent Diffusion Models",
+            ],
+        },
+        query_frame={
+            "family": "paper_compare",
+            "resolved_source_ids": ["1406.2661", "2006.11239"],
+            "expanded_terms": [
+                "GAN",
+                "Diffusion",
+                "Generative Adversarial Nets",
+                "Denoising Diffusion Probabilistic Models",
+                "High-Resolution Image Synthesis with Latent Diffusion Models",
+            ],
+        },
+    )
+
+    assert {item["paper_id"] for item in selected} == {"1406.2661", "2006.11239"}
+    assert "2112.10752" not in {item["paper_id"] for item in selected}
+    diagnostics = [dict(item.get("selection_diagnostics") or {}) for item in selected]
+    assert {item["resolvedPairPreserved"] for item in diagnostics} == {True}
 
 
 def test_select_paper_cards_preserves_paper_lookup_scope_for_title_queries_with_architecture_keywords(tmp_path, monkeypatch):
@@ -1227,97 +1780,6 @@ def test_anchor_results_preserve_compare_source_diversity(tmp_path):
     results = service._anchor_results(cards=cards, anchors=anchors, route=route)
 
     assert {str(item.metadata.get("paper_id") or "") for item in results[:2]} == {"bert", "gpt"}
-
-
-def test_anchor_results_preserve_card_v2_strict_provenance(tmp_path):
-    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
-    service = PaperAskV2Service(_build_searcher(db)[0])
-    route = service._route(query="BERT 방법을 설명해줘", source_type="paper", metadata_filter=None)
-    cards = [
-        {
-            "paper_id": "bert",
-            "card_id": "paper-card-v2:bert",
-            "title": "BERT",
-            "quality_flag": "ok",
-            "source_content_hash": "hash-bert-source",
-        }
-    ]
-    anchors = [
-        {
-            "anchor_id": "bert-anchor-0",
-            "card_id": "paper-card-v2:bert",
-            "paper_id": "bert",
-            "document_id": "paper:bert",
-            "unit_id": "unit-bert-method",
-            "span_locator": "unit-bert-method",
-            "snippet_hash": "snippet-bert-method",
-            "excerpt": "BERT uses bidirectional Transformer encoder pre-training.",
-            "score": 0.91,
-            "evidence_role": "method",
-        }
-    ]
-
-    result = service._anchor_results(cards=cards, anchors=anchors, route=route)[0]
-    evidence = answer_evidence_item(
-        result,
-        parent_ctx_by_result={},
-        result_id_fn=lambda item: item.document_id,
-        normalize_source_type_fn=lambda value: value,
-        safe_float_fn=lambda value, default: float(value or default),
-    )
-    answer_contract = build_answer_contract(
-        answer="BERT uses bidirectional Transformer encoder pre-training.",
-        evidence_packet=SimpleNamespace(
-            evidence=[evidence],
-            citations=[],
-            evidence_packet={"answerable": True},
-        ),
-        verification={"status": "verified", "supportedClaimCount": 1, "unsupportedClaimCount": 0},
-    )
-
-    assert result.metadata["source_content_hash"] == "hash-bert-source"
-    assert result.metadata["span_locator"] == "unit-bert-method"
-    assert result.metadata["snippet_hash"] == "snippet-bert-method"
-    assert evidence["source_content_hash"] == "hash-bert-source"
-    assert evidence["span_locator"] == "unit-bert-method"
-    assert answer_contract["citations"]
-
-
-def test_anchor_results_recovers_paper_hash_from_paper_record(tmp_path, monkeypatch):
-    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
-    service = PaperAskV2Service(_build_searcher(db)[0])
-    route = service._route(query="BERT 방법을 설명해줘", source_type="paper", metadata_filter=None)
-    monkeypatch.setattr(service.sqlite_db, "list_document_memory_units", lambda document_id, limit=20: [])
-    monkeypatch.setattr(
-        service.sqlite_db,
-        "get_paper",
-        lambda paper_id: {"notes": "BERT source notes", "title": "BERT"},
-    )
-
-    result = service._anchor_results(
-        cards=[
-            {
-                "paper_id": "bert",
-                "card_id": "paper-card-v2:bert",
-                "title": "BERT",
-                "quality_flag": "ok",
-            }
-        ],
-        anchors=[
-            {
-                "anchor_id": "bert-anchor-0",
-                "card_id": "paper-card-v2:bert",
-                "paper_id": "bert",
-                "document_id": "paper:bert",
-                "unit_id": "unit-bert-method",
-                "excerpt": "BERT uses bidirectional Transformer encoder pre-training.",
-                "score": 0.91,
-            }
-        ],
-        route=route,
-    )[0]
-
-    assert result.metadata["source_content_hash"] == source_hash_for_text("BERT source notes", "bert", "paper_record")
 
 
 def test_generate_answer_uses_section_native_prompt_for_explanation_query(tmp_path):

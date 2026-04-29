@@ -78,11 +78,203 @@ def _ask_v2_hard_gate_reason(
         return f"ask_v2_{status}"
     if status == "weak" and unsupported_fields:
         return f"ask_v2_weak_evidence:{unsupported_fields[0]}"
-    # Unsupported claim cards should remain diagnostic when the scoped evidence
-    # verifier found anchors and no concrete unsupported slot. Answer
-    # post-processing can still reject generated text if unsupported claims leak
-    # into the final answer.
+    if int(claim_consensus.get("unsupportedClaimCount") or 0) > 0:
+        return "ask_v2_unsupported_claim_cards"
     return ""
+
+
+def _int_or_zero(value: Any) -> int:
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _clean_unique_values(values: list[Any]) -> list[str]:
+    result: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        token = _clean_text(value)
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        result.append(token)
+    return result
+
+
+def _first_int_value(values: list[Any]) -> int | None:
+    for value in values:
+        if value in (None, ""):
+            continue
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _selection_diagnostic_payload(card: dict[str, Any]) -> dict[str, Any]:
+    payload = card.get("selection_diagnostics")
+    return dict(payload) if isinstance(payload, dict) else {}
+
+
+def _card_selection_diagnostics(cards: list[dict[str, Any]]) -> dict[str, Any]:
+    diagnostics = [
+        _selection_diagnostic_payload(card)
+        for card in cards
+        if _selection_diagnostic_payload(card)
+    ]
+    if not diagnostics:
+        return {}
+    resolved_paper_ids = _clean_unique_values(
+        [
+            item
+            for diagnostics_item in diagnostics
+            for item in list(diagnostics_item.get("resolvedPaperIds") or [])
+        ]
+    )
+    stages = _clean_unique_values([item.get("stage") for item in diagnostics])
+    reasons = _clean_unique_values([item.get("reason") for item in diagnostics])
+    before_count = _first_int_value([item.get("candidateCountBeforeRerank") for item in diagnostics])
+    after_count = _first_int_value([item.get("candidateCountAfterRerank") for item in diagnostics])
+    selected_paper_ids = {
+        _clean_text(card.get("paper_id"))
+        for card in cards
+        if _clean_text(card.get("paper_id"))
+    }
+    resolved_pair = resolved_paper_ids[:2]
+    resolved_pair_preserved = (
+        bool(len(resolved_pair) >= 2 and all(paper_id in selected_paper_ids for paper_id in resolved_pair))
+        if len(resolved_pair) >= 2
+        else None
+    )
+    if resolved_pair_preserved is None:
+        for diagnostics_item in diagnostics:
+            if "resolvedPairPreserved" in diagnostics_item:
+                resolved_pair_preserved = bool(diagnostics_item.get("resolvedPairPreserved"))
+                break
+    payload: dict[str, Any] = {
+        "selectionStage": " | ".join(stages),
+        "selectionReason": " | ".join(reasons),
+        "resolvedPaperIds": resolved_paper_ids,
+    }
+    if before_count is not None:
+        payload["candidateCountBeforeRerank"] = before_count
+    if after_count is not None:
+        payload["candidateCountAfterRerank"] = after_count
+    if resolved_pair_preserved is not None:
+        payload["resolvedPairPreserved"] = resolved_pair_preserved
+    return payload
+
+
+def _v2_claim_reason_summary(claim_verification: list[dict[str, Any]], *, limit: int = 6, max_length: int = 360) -> str:
+    reason_counts: dict[str, int] = {}
+    for item in claim_verification:
+        status = _clean_text(item.get("status")) or "unknown"
+        reasons = [_clean_text(reason) for reason in list(item.get("reasons") or []) if _clean_text(reason)]
+        if not reasons:
+            reasons = [_clean_text(item.get("verdict")) or "no_reason"]
+        for reason in reasons:
+            key = f"{status}:{reason}"
+            reason_counts[key] = reason_counts.get(key, 0) + 1
+    parts = [
+        f"{reason}={count}"
+        for reason, count in sorted(reason_counts.items(), key=lambda entry: (-entry[1], entry[0]))[: max(1, int(limit))]
+    ]
+    summary = " | ".join(parts)
+    if len(summary) <= max_length:
+        return summary
+    return f"{summary[: max(0, max_length - 1)].rstrip()}..."
+
+
+def _evidence_present(evidence_packet: Any) -> bool:
+    return bool(getattr(evidence_packet, "filtered_results", []) or getattr(evidence_packet, "evidence", []))
+
+
+def _selected_paper_ids(cards: list[dict[str, Any]]) -> set[str]:
+    return {
+        _clean_text(card.get("paper_id"))
+        for card in cards
+        if _clean_text(card.get("paper_id"))
+    }
+
+
+def _compare_target_guard_passed(
+    *,
+    paper_family: str,
+    selected_cards: list[dict[str, Any]],
+    query_frame: Any,
+    evidence_packet: Any,
+    card_selection_diagnostics: dict[str, Any],
+) -> bool | None:
+    if _clean_text(paper_family) != PAPER_FAMILY_COMPARE:
+        return None
+    evidence_payload = dict(getattr(evidence_packet, "evidence_packet", {}) or {})
+    if _int_or_zero(evidence_payload.get("uniquePaperCount")) < 2:
+        return False
+    resolved_ids = _clean_unique_values(
+        [
+            *list(getattr(query_frame, "resolved_source_ids", []) or []),
+            *list(card_selection_diagnostics.get("resolvedPaperIds") or []),
+        ]
+    )
+    resolved_pair = resolved_ids[:2]
+    if len(resolved_pair) < 2:
+        return False
+    selected_ids = _selected_paper_ids(selected_cards)
+    if not all(paper_id in selected_ids for paper_id in resolved_pair):
+        return False
+    resolved_pair_preserved = card_selection_diagnostics.get("resolvedPairPreserved")
+    if resolved_pair_preserved is False:
+        return False
+    return True
+
+
+def _paper_claim_card_gate_relaxation(
+    *,
+    hard_gate_reason: str,
+    route: Any,
+    paper_family: str,
+    pre_hard_gate_answerable: bool,
+    evidence_packet: Any,
+    selected_cards: list[dict[str, Any]],
+    query_frame: Any,
+    card_selection_diagnostics: dict[str, Any],
+) -> dict[str, Any]:
+    compare_target_guard = _compare_target_guard_passed(
+        paper_family=paper_family,
+        selected_cards=selected_cards,
+        query_frame=query_frame,
+        evidence_packet=evidence_packet,
+        card_selection_diagnostics=card_selection_diagnostics,
+    )
+    diagnostics: dict[str, Any] = {
+        "claimCardGateRelaxed": False,
+        "claimCardGateRelaxationReason": "",
+        "compareTargetGuardPassed": compare_target_guard,
+        "originalHardGateReason": hard_gate_reason,
+    }
+    if hard_gate_reason != "ask_v2_unsupported_claim_cards":
+        return diagnostics
+    if getattr(route, "source_kind", "") != "paper":
+        return diagnostics
+    family = _clean_text(paper_family)
+    if family not in {"paper_lookup", PAPER_FAMILY_COMPARE}:
+        return diagnostics
+    if not pre_hard_gate_answerable:
+        return diagnostics
+    if not selected_cards or not _evidence_present(evidence_packet):
+        return diagnostics
+    if family == "paper_lookup":
+        diagnostics["claimCardGateRelaxed"] = True
+        diagnostics["claimCardGateRelaxationReason"] = "claim_card_unsupported_relaxed_for_paper_family"
+        diagnostics["claimCardGateRelaxationDetail"] = "paper_lookup_answerable_evidence_present"
+        return diagnostics
+    if family == PAPER_FAMILY_COMPARE and compare_target_guard is True:
+        diagnostics["claimCardGateRelaxed"] = True
+        diagnostics["claimCardGateRelaxationReason"] = "claim_card_unsupported_relaxed_for_paper_family"
+        diagnostics["claimCardGateRelaxationDetail"] = "paper_compare_target_guard_passed"
+    return diagnostics
 
 
 class AskV2Service:
@@ -297,11 +489,11 @@ class AskV2Service:
     @staticmethod
     def _url_matches_media_platform(url: str, media_platform: str) -> bool:
         normalized_platform = _clean_text(media_platform).casefold()
-        url_text = _clean_text(url)
+        token = _clean_text(url)
         if not normalized_platform:
             return True
         if normalized_platform == "youtube":
-            return bool(url_text and is_youtube_url(url_text))
+            return bool(token and is_youtube_url(token))
         return True
 
     def _note_matches_media_platform(self, note_id: str, media_platform: str) -> bool:
@@ -445,12 +637,12 @@ class AskV2Service:
             for form in search_forms:
                 bounded_terms: list[str] = []
                 for candidate in [form, *re.findall(r"[A-Za-z0-9._+-]+|[가-힣]+", form)]:
-                    term_text = _clean_text(candidate)
-                    if not term_text or len(term_text) < 3:
+                    token = _clean_text(candidate)
+                    if not token or len(token) < 3:
                         continue
-                    if any(existing.casefold() == term_text.casefold() for existing in bounded_terms):
+                    if any(existing.casefold() == token.casefold() for existing in bounded_terms):
                         continue
-                    bounded_terms.append(term_text)
+                    bounded_terms.append(token)
                     if len(bounded_terms) >= 3:
                         break
                 for term in bounded_terms:
@@ -1745,16 +1937,60 @@ class AskV2Service:
             evidence_packet=evidence_packet,
             claim_consensus=claim_consensus,
         )
+        pre_hard_gate_packet = dict(evidence_packet.evidence_packet or {})
+        pre_hard_gate_answerable = bool(pre_hard_gate_packet.get("answerable"))
+        pre_hard_gate_reason = _clean_text(pre_hard_gate_packet.get("answerableDecisionReason"))
+        v2_consensus_unsupported_claim_count = _int_or_zero(claim_consensus.get("unsupportedClaimCount"))
+        v2_consensus_weak_claim_count = _int_or_zero(claim_consensus.get("weakClaimCount"))
+        v2_consensus_supported_claim_count = _int_or_zero(
+            claim_consensus.get("supportedClaimCount")
+            or claim_consensus.get("supportCount")
+        )
         hard_gate_reason = _ask_v2_hard_gate_reason(
             verification=verification,
             claim_consensus=claim_consensus,
         )
-        if hard_gate_reason:
+        card_selection_diagnostics = _card_selection_diagnostics(selected_cards)
+        claim_card_gate_diagnostics = _paper_claim_card_gate_relaxation(
+            hard_gate_reason=hard_gate_reason,
+            route=route,
+            paper_family=_clean_text(query_frame_obj.family or paper_family),
+            pre_hard_gate_answerable=pre_hard_gate_answerable,
+            evidence_packet=evidence_packet,
+            selected_cards=selected_cards,
+            query_frame=query_frame_obj,
+            card_selection_diagnostics=card_selection_diagnostics,
+        )
+        claim_card_gate_relaxed = bool(claim_card_gate_diagnostics.get("claimCardGateRelaxed"))
+        claim_card_gate_relaxation_reason = _clean_text(
+            claim_card_gate_diagnostics.get("claimCardGateRelaxationReason")
+        )
+        compare_target_guard_passed = claim_card_gate_diagnostics.get("compareTargetGuardPassed")
+        original_hard_gate_reason = _clean_text(
+            claim_card_gate_diagnostics.get("originalHardGateReason")
+        )
+        if hard_gate_reason and claim_card_gate_relaxed:
+            evidence_packet.evidence_packet = {
+                **dict(evidence_packet.evidence_packet or {}),
+                "askV2HardGate": False,
+                "askV2OriginalHardGateReason": hard_gate_reason,
+                "originalHardGateReason": hard_gate_reason,
+                "claimCardGateRelaxed": True,
+                "claimCardGateRelaxationReason": claim_card_gate_relaxation_reason,
+                "compareTargetGuardPassed": compare_target_guard_passed,
+                "askV2VerificationStatus": _clean_text(verification.get("verificationStatus")),
+            }
+        elif hard_gate_reason:
             evidence_packet.evidence_packet = {
                 **dict(evidence_packet.evidence_packet or {}),
                 "answerable": False,
                 "answerableDecisionReason": hard_gate_reason,
                 "askV2HardGate": True,
+                "askV2OriginalHardGateReason": hard_gate_reason,
+                "originalHardGateReason": hard_gate_reason,
+                "claimCardGateRelaxed": False,
+                "claimCardGateRelaxationReason": "",
+                "compareTargetGuardPassed": compare_target_guard_passed,
                 "askV2VerificationStatus": _clean_text(verification.get("verificationStatus")),
             }
         # Keep fallback signal aligned with hard-fail cues; weak-only claims stay diagnostic-only.
@@ -1786,13 +2022,17 @@ class AskV2Service:
                 "selected_card_ids": [_clean_text(card.get("card_id")) for card in selected_cards if _clean_text(card.get("card_id"))],
             },
             "cardSelection": {
+                **card_selection_diagnostics,
                 "selected": [
                     {
                         "cardId": _clean_text(card.get("card_id")),
                         "sourceId": _clean_text(card.get("paper_id") or card.get("document_id") or card.get("note_id") or card.get("relative_path")),
+                        "paperId": _clean_text(card.get("paper_id")),
                         "title": _clean_text(card.get("title")),
                         "slotCoverage": _slot_coverage(card),
                         "qualityFlag": _clean_text(card.get("quality_flag")),
+                        "selectionStage": _clean_text(_selection_diagnostic_payload(card).get("stage")),
+                        "selectionReason": _clean_text(_selection_diagnostic_payload(card).get("reason")),
                     }
                     for card in selected_cards
                 ]
@@ -1850,6 +2090,18 @@ class AskV2Service:
                     else "claim_cards_verified"
                 )
             },
+            "preHardGateAnswerable": pre_hard_gate_answerable,
+            "preHardGateReason": pre_hard_gate_reason,
+            "v2ConsensusUnsupportedClaimCount": v2_consensus_unsupported_claim_count,
+            "v2ConsensusWeakClaimCount": v2_consensus_weak_claim_count,
+            "v2ConsensusSupportedClaimCount": v2_consensus_supported_claim_count,
+            "v2ClaimReasonSummary": _v2_claim_reason_summary(claim_verification),
+            "askV2OriginalHardGateReason": original_hard_gate_reason,
+            "originalHardGateReason": original_hard_gate_reason,
+            "claimCardGateRelaxed": claim_card_gate_relaxed,
+            "claimCardGateRelaxationReason": claim_card_gate_relaxation_reason,
+            "claimCardGateRelaxation": claim_card_gate_diagnostics,
+            "compareTargetGuardPassed": compare_target_guard_passed,
             "runtimeExecution": {
                 "used": "ask_v2",
                 "sectionDecision": (
@@ -1943,7 +2195,12 @@ class AskV2Service:
             "evidenceVerification": verification,
             "fallback": {
                 "used": v2_fallback_used,
-                "reason": str((evidence_packet.evidence_packet or {}).get("answerableDecisionReason") or verification.get("verificationStatus") or ""),
+                "reason": str(
+                    claim_card_gate_relaxation_reason
+                    or (evidence_packet.evidence_packet or {}).get("answerableDecisionReason")
+                    or verification.get("verificationStatus")
+                    or ""
+                ),
             },
         }
         if route.source_kind == "project":
