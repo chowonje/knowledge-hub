@@ -3,14 +3,18 @@ Project instructions for `knowledge-hub`.
 Purpose:
 - This repository is a local-first knowledge system that combines notes, papers, web ingestion, ontology storage, RAG search, MCP tools, and a Foundry-style agent runtime.
 - Protect local-first and policy-first behavior. Do not trade privacy or auditability for convenience without saying so explicitly.
+- This repo is also surfaced through the KnowledgeOS workspace symlink at `/Users/won/Desktop/allinone/KnowledgeOS/knowledge-hub`.
+- Workspace vault, sibling-worktree, and source-of-truth fences live in `/Users/won/Desktop/allinone/KnowledgeOS/AGENTS.md`.
 
 Read this first:
 - `README.md`
 - `docs/PROJECT_STATE.md`
 - `docs/foundry-knowledge-hub-integration.md`
 - `docs/guides/cli-commands.md`
+- Broken paths in this list are documentation defects; verify before assuming the guidance moved.
 
 Common CLI:
+- `pip install -e .`
 - `khub status`
 - `khub search "query"`
 - `khub ask "question"`
@@ -19,6 +23,8 @@ Common CLI:
 - `khub paper list`
 - `khub index`
 - Full command inventory: `docs/guides/cli-commands.md`
+- Baseline checks: `pytest`, `khub status`, and `khub doctor`.
+- Eval examples: `python eval/knowledgeos/scripts/collect_paper_default_eval.py --help` and `python eval/knowledgeos/scripts/collect_web_default_eval.py --help`.
 
 Working rules:
 1. Preserve architectural boundaries
@@ -28,6 +34,8 @@ Working rules:
 
 2. Protect policy guarantees
 - Treat `P0` as blocked from external model calls by default.
+- If classification cannot be determined, default to `P0` and no external call.
+- `P0` means private or sensitive local material that must not leave the machine unless a narrower policy explicitly permits it; preserve or link the canonical P0-P3 definition when editing policy docs.
 - Prefer local processing for sensitive data.
 - If a change affects classification, policy gating, or outbound provider behavior, update tests and call out the risk.
 
@@ -53,6 +61,9 @@ Working rules:
 7. Verify the relevant surface
 - For Python changes, run targeted `pytest` coverage for the affected area when feasible.
 - For TypeScript runtime changes in `foundry-core/`, run the relevant tests.
+- For MCP or CLI payload changes, verify the affected handler or command tests and inspect representative JSON/schema output.
+- For provider, classification, retrieval, ranking, prompt, generation, or eval behavior changes, add or update the protecting regression/eval.
+- Benchmark before and after when performance, ranking quality, or model cost may shift.
 - If you cannot verify, say so clearly.
 
 8. Prefer project sources over assumptions
@@ -75,8 +86,22 @@ Preferred skills:
 - Use `verification-gate` before calling a change ready.
 - Use `project-mindmap` only when the user needs a system map or subsystem placement discussion rather than immediate implementation.
 
+Verification map:
+- `knowledge_hub/mcp/` changes: run focused MCP tests and inspect schema-backed payloads.
+- `knowledge_hub/cli/` changes: run focused CLI tests plus one representative `khub ... --json` or text smoke when feasible.
+- `knowledge_hub/providers/` or policy changes: run provider/policy tests and verify classification and `allow_external` behavior.
+- `knowledge_hub/core/`, retrieval, ranking, prompt, or generation changes: run the targeted unit tests plus the relevant `eval/knowledgeos` collector or smoke script when feasible.
+- `foundry-core/` changes: run the relevant Foundry TypeScript tests.
+
 When adding new work:
 - Prefer schema-backed payloads for MCP and agent outputs.
 - Keep external-call behavior explicit, especially `allow_external`, provider policy guards, and classification handling.
 - Avoid introducing hosted storage assumptions that conflict with local-first design unless the user explicitly asks for that tradeoff.
 - In the final response, name which project record was updated: `CHANGELOG.md`, `docs/PROJECT_STATE.md`, ADR, or the protecting test/eval.
+
+Pre-commit checklist:
+- Targeted tests or checks were run, or the verification gap is explicitly stated.
+- `CHANGELOG.md` was updated under `Unreleased` for code, behavior, or durable workflow changes.
+- `docs/PROJECT_STATE.md` was updated when architecture, runtime behavior, policy semantics, tool contracts, retrieval/eval strategy, or stabilization direction changed.
+- Protecting tests/evals were added or updated for regressions and production-facing fixes.
+- The final response names updated records and residual risks.

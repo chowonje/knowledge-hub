@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Refined `AGENTS.md` with the KnowledgeOS symlink note, P0 default handling, product-owned CLI/eval guidance, surface-specific verification mapping, and a pre-commit checklist for product changes.
 - Added an answer-loop eval packet hardening tranche. Vault/paper comparison packets now promote resolved target sources before support evidence, comparison guidance recognizes non-paper source ids, and summary metrics now report both all-row abstain agreement and required-abstain agreement counts.
 - Added an ask-v2 retrieval diagnostics tranche without changing MCP/search runtime routing or removing evidence-contract guards. Retrieval plans/results now expose additive phase-0 strategy, quality, answerability-rerank, corrective-retrieval, and artifact-health diagnostics; ask-v2 card paths share a pipeline-result builder and surface compare-selection diagnostics for paper card selection.
 - Extended the core quality-gates tranche with the first follow-up hardening slice. The answer-quality fixture now covers over-citation, caution rewrite blocking, missing factual-claim citations, and mixed non-evidence signals. `index freshness` diagnostics now include source-id coverage when vector metadata can identify canonical paper/vault/web source ids, while still documenting that exact span coverage is not yet available. Production paper compare payloads now attach an additive `comparePacketContract` for ask-v2 `paper_compare` claim-card comparisons, leaving legacy compare payloads untouched.
