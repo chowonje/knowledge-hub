@@ -358,6 +358,15 @@ def test_labs_help_keeps_eval_visible():
     assert "eval" in _command_lines(result.output)
 
 
+def test_labs_help_keeps_rag_visible():
+    runner = CliRunner()
+
+    result = runner.invoke(cli, ["labs", "--help"])
+
+    assert result.exit_code == 0
+    assert "rag" in _command_lines(result.output)
+
+
 def test_labs_help_keeps_foundry_visible():
     runner = CliRunner()
 

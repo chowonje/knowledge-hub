@@ -47,6 +47,7 @@ def test_cli_help_hides_labs_commands_from_top_level():
     assert "claims" not in result.output
     assert "feature" not in result.output
     assert "rag-report" not in result.output
+    assert "corrective-report" not in result.output
     assert "ops-report-run" not in result.output
 
 
@@ -71,9 +72,27 @@ def test_cli_labs_help_exposes_demoted_groups():
     assert "transform" in result.output
     assert "ask-graph" in result.output
     assert "memory" in result.output
+    assert "rag" in result.output
     assert "paper" in result.output
     assert "eval" in result.output
     assert "foundry" in result.output
+
+
+def test_cli_labs_rag_help_exposes_corrective_report():
+    module = importlib.import_module("knowledge_hub.interfaces.cli.main")
+    runner = CliRunner()
+
+    result = runner.invoke(module.cli, ["labs", "rag", "--help"])
+
+    assert result.exit_code == 0
+    assert "corrective-report" in result.output
+    assert "eval-corrective" in result.output
+    assert "adaptive-plan" in result.output
+    assert "corrective-run" in result.output
+    assert "answerability-rerank" in result.output
+    assert "eval-answerability-rerank" in result.output
+    assert "graph-global-plan" in result.output
+    assert "observe-loop" in result.output
 
 
 def test_cli_labs_ops_help_exposes_operator_commands():

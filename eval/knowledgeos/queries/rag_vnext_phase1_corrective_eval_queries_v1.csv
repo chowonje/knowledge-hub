@@ -1,0 +1,13 @@
+query,source,expected_complexity_class,expected_retry_candidate,expected_candidate_action,scenario,notes
+RAG와 Fusion-in-Decoder를 논문 기준으로 비교해줘,paper,multi_source_compare,false,none,compare_coverage,"resolved compare should show source coverage, not retry"
+RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?,vault,local_lookup,false,none,local_lookup,"vault note lookup should be answerable with local evidence"
+최근 RAG benchmark update에서 새로 강조된 metric은 무엇인가?,paper,update_sensitive,true,broaden_search,temporal_no_result,"latest/update query should surface weak temporal retrieval"
+존재하지 않는 internal project codename의 최신 논문 근거를 찾아줘,paper,update_sensitive,true,broaden_search,no_result,"missing source should remain read-only retry candidate"
+GraphRAG와 LightRAG가 global question을 처리하는 방식 차이를 설명해줘,paper,multi_source_compare,false,none,compare_coverage,"known paper comparison should prefer coverage over default retry"
+내 vault 전체에서 RAG 구조 변화 흐름을 묶어서 설명해줘,vault,global_sensemaking,true,graph_or_hierarchy_probe,global_sensemaking,"global/cross-note synthesis should suggest hierarchy or graph inspection when weak"
+paper memory card의 목적을 설명해줘,paper,exact_lookup,false,none,exact_lookup,"single topic paper-memory lookup should stay direct"
+CRAG가 말하는 corrective action을 현재 구조에 적용하면 무엇이 바뀌나?,paper,local_explainer,false,none,concept_explainer,"concept explainer should observe quality before any retry"
+특정 논문 하나의 exact arxiv id 9999.99999를 요약해줘,paper,exact_lookup,true,source_scope_rescue,missing_exact_scope,"missing exact scope should suggest source-scope rescue if detected"
+최근 vault retrieval pipeline에서 temporal route가 추가된 이유는 무엇인가?,vault,update_sensitive,false,none,temporal_vault,"known temporal local history should be answerable without retry"
+web source만으로 오늘 발표된 RAG 논문 수치를 단정할 수 있나?,web,update_sensitive,true,broaden_search,temporal_abstention,"external recency should remain conservative when evidence is weak"
+RAG implementation guide와 논문 survey를 같이 참고해서 구현 순서를 정리해줘,all,procedural_lookup,false,none,mixed_howto,"mixed source procedural planning should expose budget without default retry"

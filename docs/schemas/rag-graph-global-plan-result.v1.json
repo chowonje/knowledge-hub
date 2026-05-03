@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "query",
+    "sourceType",
+    "retrievalMode",
+    "topK",
+    "alpha",
+    "readOnly",
+    "labsOnly",
+    "graphGlobalLane",
+    "adaptivePlan",
+    "actionsApplied",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.graph-global-plan.result.v1" },
+    "status": { "type": "string" },
+    "query": { "type": "string" },
+    "sourceType": { "type": "string" },
+    "retrievalMode": { "type": "string" },
+    "topK": { "type": "integer" },
+    "alpha": { "type": "number" },
+    "readOnly": { "type": "boolean" },
+    "labsOnly": { "type": "boolean" },
+    "graphGlobalLane": { "type": "object" },
+    "adaptivePlan": { "type": "object" },
+    "actionsApplied": { "type": "array" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "query",
+    "sourceType",
+    "retrievalMode",
+    "topK",
+    "alpha",
+    "readOnly",
+    "labsOnly",
+    "runtimeApplied",
+    "artifactWritten",
+    "artifactPath",
+    "resultCount",
+    "summary",
+    "retrievalStrategy",
+    "retrievalQuality",
+    "answerabilityRerank",
+    "correctiveRetrieval",
+    "artifactHealth",
+    "graph",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.rag.visualization.result.v1" },
+    "status": { "type": "string" },
+    "query": { "type": "string" },
+    "sourceType": { "type": "string" },
+    "retrievalMode": { "type": "string" },
+    "topK": { "type": "integer" },
+    "alpha": { "type": "number" },
+    "readOnly": { "type": "boolean" },
+    "labsOnly": { "type": "boolean" },
+    "runtimeApplied": { "type": "boolean" },
+    "artifactWritten": { "type": "boolean" },
+    "artifactPath": { "type": "string" },
+    "createdAt": { "type": "string" },
+    "resultCount": { "type": "integer" },
+    "summary": { "type": "object" },
+    "retrievalStrategy": { "type": "object" },
+    "retrievalQuality": { "type": "object" },
+    "answerabilityRerank": { "type": "object" },
+    "correctiveRetrieval": { "type": "object" },
+    "artifactHealth": { "type": "object" },
+    "graph": {
+      "type": "object",
+      "required": ["layout", "encoding", "nodes", "edges"],
+      "properties": {
+        "layout": { "type": "string" },
+        "encoding": { "type": "object" },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "kind", "title", "sourceType", "score", "position"],
+            "properties": {
+              "id": { "type": "string" },
+              "kind": { "type": "string" },
+              "rank": { "type": "integer" },
+              "title": { "type": "string" },
+              "sourceType": { "type": "string" },
+              "score": { "type": "number" },
+              "semanticScore": { "type": "number" },
+              "lexicalScore": { "type": "number" },
+              "distance": { "type": "number" },
+              "documentId": { "type": "string" },
+              "parentId": { "type": "string" },
+              "parentLabel": { "type": "string" },
+              "snippet": { "type": "string" },
+              "position": {
+                "type": "object",
+                "required": ["x", "y", "z"],
+                "properties": {
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "z": { "type": "number" }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "source", "target", "kind", "weight"],
+            "properties": {
+              "id": { "type": "string" },
+              "source": { "type": "string" },
+              "target": { "type": "string" },
+              "kind": { "type": "string" },
+              "weight": { "type": "number" }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
