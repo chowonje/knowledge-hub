@@ -1,0 +1,165 @@
+{
+  "schema": "knowledge-hub.dinger.capture-cleanup.result.v1",
+  "status": "ok",
+  "dryRun": true,
+  "confirmed": false,
+  "queueDir": "/tmp/khub/dinger_capture_intake/queue",
+  "runtimeDir": "/tmp/khub/dinger_capture_intake/runtime",
+  "policy": {
+    "dryRunDefault": true,
+    "requiresExplicitConfirmation": true,
+    "deletableKinds": [
+      "orphan_runtime_artifact",
+      "stale_claim_file",
+      "incomplete_runtime_junk"
+    ],
+    "protectedKinds": [
+      "queue_packet_present_capture",
+      "recoverable_orphan",
+      "active_claim_file"
+    ],
+    "neverDeleteCanonicalSurfaces": [
+      "queue_packet",
+      "dinger_projection_page",
+      "os_item",
+      "canonical_store_content"
+    ]
+  },
+  "counts": {
+    "scannedCaptureGroups": 3,
+    "scannedClaimFiles": 2,
+    "deleteEligibleEntries": 2,
+    "deleteEligiblePaths": 3,
+    "deletedEntries": 0,
+    "deletedPaths": 0,
+    "keptEntries": 3,
+    "failedEntries": 0
+  },
+  "delete": [
+    {
+      "entryType": "capture_runtime",
+      "captureId": "cap_orphan",
+      "cleanupKind": "orphan_runtime_artifact",
+      "disposition": "delete",
+      "action": "planned_delete",
+      "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_orphan.json",
+      "packetPresent": false,
+      "packetSnapshotPresent": false,
+      "recoverability": "unrecoverable",
+      "runtimeArtifactPaths": [
+        "/tmp/khub/dinger_capture_intake/runtime/cap_orphan.state.json",
+        "/tmp/khub/dinger_capture_intake/runtime/cap_orphan.normalized.json"
+      ],
+      "canonicalRefs": {
+        "dingerProjectionPresent": false,
+        "dingerProjectionRef": "",
+        "osItemPresent": false,
+        "osItemId": ""
+      },
+      "recommendedAction": "cleanup_runtime_artifacts",
+      "reasonCodes": [
+        "missing_queue_packet",
+        "orphan_runtime_artifact"
+      ],
+      "targetPathCount": 2,
+      "deletedPaths": []
+    },
+    {
+      "entryType": "claim_file",
+      "captureId": "cap_claim",
+      "cleanupKind": "stale_claim_file",
+      "disposition": "delete",
+      "action": "planned_delete",
+      "claimPath": "/tmp/khub/dinger_capture_intake/runtime/cap_claim.claim.json",
+      "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_claim.json",
+      "packetPresent": false,
+      "stale": true,
+      "staleReason": "claim_timed_out",
+      "recommendedAction": "remove_stale_claim_file",
+      "reasonCodes": [
+        "stale_claim_file",
+        "claim_timed_out"
+      ],
+      "deletedPaths": []
+    }
+  ],
+  "keep": [
+    {
+      "entryType": "capture_runtime",
+      "captureId": "cap_live",
+      "cleanupKind": "queue_packet_present_capture",
+      "disposition": "keep",
+      "action": "skipped",
+      "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_live.json",
+      "packetPresent": true,
+      "packetSnapshotPresent": true,
+      "recoverability": "protected",
+      "runtimeArtifactPaths": [
+        "/tmp/khub/dinger_capture_intake/runtime/cap_live.state.json"
+      ],
+      "canonicalRefs": {
+        "dingerProjectionPresent": true,
+        "dingerProjectionRef": "KnowledgeOS/Dinger/Pages/cap-live.md",
+        "osItemPresent": false,
+        "osItemId": ""
+      },
+      "recommendedAction": "leave_runtime_artifacts_attached_to_live_queue_packet",
+      "reasonCodes": [
+        "queue_packet_present"
+      ]
+    },
+    {
+      "entryType": "capture_runtime",
+      "captureId": "cap_recoverable",
+      "cleanupKind": "recoverable_orphan",
+      "disposition": "keep",
+      "action": "skipped",
+      "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_recoverable.json",
+      "packetPresent": false,
+      "packetSnapshotPresent": true,
+      "packetSnapshot": {
+        "present": true,
+        "source": "normalized",
+        "title": "Recoverable Capture",
+        "captureUrl": "https://example.com/recoverable",
+        "relativePath": "",
+        "sourceRefCount": 1
+      },
+      "recoverability": "recoverable",
+      "runtimeArtifactPaths": [
+        "/tmp/khub/dinger_capture_intake/runtime/cap_recoverable.state.json",
+        "/tmp/khub/dinger_capture_intake/runtime/cap_recoverable.normalized.json"
+      ],
+      "canonicalRefs": {
+        "dingerProjectionPresent": false,
+        "dingerProjectionRef": "",
+        "osItemPresent": false,
+        "osItemId": ""
+      },
+      "recommendedAction": "requeue_capture_from_runtime_snapshot_before_cleanup",
+      "reasonCodes": [
+        "missing_queue_packet",
+        "recoverable_from_runtime_snapshot"
+      ]
+    },
+    {
+      "entryType": "claim_file",
+      "captureId": "cap_active_claim",
+      "cleanupKind": "active_claim_file",
+      "disposition": "keep",
+      "action": "skipped",
+      "claimPath": "/tmp/khub/dinger_capture_intake/runtime/cap_active_claim.claim.json",
+      "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_active_claim.json",
+      "packetPresent": true,
+      "stale": false,
+      "staleReason": "process_alive",
+      "recommendedAction": "leave_claim_file",
+      "reasonCodes": [
+        "claim_not_stale",
+        "process_alive"
+      ]
+    }
+  ],
+  "errors": [],
+  "createdAt": "2026-04-09T12:00:00+00:00"
+}

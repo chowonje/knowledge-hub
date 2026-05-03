@@ -16,7 +16,7 @@ class _FakeKhub:
         self.config = config
 
     def searcher(self):
-        return SimpleNamespace(config=self.config)
+        raise AssertionError("doctor must not initialize the searcher")
 
 
 def _config(tmp_path: Path) -> SimpleNamespace:
@@ -111,6 +111,47 @@ def test_build_doctor_payload_prioritizes_actionable_ollama_recovery(monkeypatch
         "ollama pull nomic-embed-text",
     ]
     assert payload["nextActions"][3].startswith("python -m knowledge_hub.interfaces.cli.main doctor")
+
+
+def test_build_doctor_payload_prefers_vector_restore_when_restorable_backup_exists(monkeypatch, tmp_path):
+    config = _config(tmp_path)
+    monkeypatch.setattr(
+        doctor_module,
+        "build_runtime_diagnostics",
+        lambda config, searcher=None, searcher_error="": {
+            "providers": [
+                {"role": "translation", "provider": "openai", "model": "gpt-5-nano", "installed": True, "requires_api_key": False, "api_key_status": "not_required", "degraded": False, "reasons": [], "available": True},
+                {"role": "summarization", "provider": "openai", "model": "gpt-5-nano", "installed": True, "requires_api_key": False, "api_key_status": "not_required", "degraded": False, "reasons": [], "available": True},
+                {"role": "embedding", "provider": "ollama", "model": "nomic-embed-text", "installed": True, "requires_api_key": False, "api_key_status": "not_required", "degraded": False, "reasons": [], "available": True},
+            ],
+            "vectorCorpus": {
+                "available": False,
+                "reasons": ["vector_corpus_empty"],
+                "total_documents": 0,
+                "collection_name": "knowledge_hub",
+                "recovery_backup": {
+                    "path": str(tmp_path / "vector.corrupt.20260416_150415"),
+                    "total_documents": 2436,
+                    "restorable": True,
+                },
+            },
+            "warnings": [],
+        },
+    )
+    monkeypatch.setattr(
+        doctor_module,
+        "parser_runtime_status",
+        lambda name: {"available": True, "status": "ok", "detail": f"{name} ok", "fixCommand": ""},
+    )
+    monkeypatch.setattr(doctor_module, "_ollama_ok", lambda url: True)
+    monkeypatch.setattr(doctor_module, "_ollama_available", lambda url: True)
+    monkeypatch.setattr(doctor_module.registry, "get_provider_info", lambda name: SimpleNamespace(requires_api_key=False, display_name=name, is_local=(name == "ollama")))
+
+    payload = doctor_module.build_doctor_payload(_FakeKhub(config))
+
+    checks = {item["area"]: item for item in payload["checks"]}
+    assert checks["vector corpus"]["status"] == "needs_setup"
+    assert checks["vector corpus"]["fixCommand"] == "khub vector-compare --latest-backup"
 
 
 def test_doctor_cmd_json_outputs_public_shape(monkeypatch, tmp_path):

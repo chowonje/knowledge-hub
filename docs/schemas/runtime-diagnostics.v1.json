@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.runtime.diagnostics.v1",
+  "type": "object",
+  "required": ["schema", "status", "degraded", "providers", "semanticRetrieval", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.runtime.diagnostics.v1" },
+    "status": { "type": "string" },
+    "degraded": { "type": "boolean" },
+    "providers": { "type": "array", "items": { "type": "object" } },
+    "semanticRetrieval": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

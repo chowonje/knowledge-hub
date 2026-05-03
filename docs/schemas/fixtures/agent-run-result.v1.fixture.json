@@ -1,0 +1,79 @@
+{
+  "schema": "knowledge-hub.foundry.agent.run.result.v1",
+  "source": "foundry-core/cli-agent",
+  "runId": "run_fixture_001",
+  "status": "completed",
+  "goal": "Summarize project state",
+  "role": "planner",
+  "orchestratorMode": "adaptive",
+  "stage": "DONE",
+  "plan": [
+    "search_knowledge",
+    "ask_knowledge"
+  ],
+  "playbook": {
+    "schema": "knowledge-hub.foundry.agent.run.playbook.v1",
+    "source": "foundry-core/cli-agent",
+    "goal": "Summarize project state",
+    "role": "planner",
+    "orchestratorMode": "adaptive",
+    "maxRounds": 2,
+    "assumptions": [
+      "role=planner",
+      "orchestratorMode=adaptive"
+    ],
+    "warnings": [],
+    "steps": [
+      {
+        "order": 1,
+        "tool": "search_knowledge",
+        "objective": "collect evidence",
+        "rationale": "gather candidate sources before synthesis"
+      },
+      {
+        "order": 2,
+        "tool": "ask_knowledge",
+        "objective": "synthesize answer",
+        "rationale": "build answer from collected evidence"
+      }
+    ],
+    "generatedAt": "2026-04-08T00:00:00.000Z"
+  },
+  "transitions": [
+    {
+      "stage": "PLAN",
+      "status": "PLAN",
+      "message": "plan produced 2 tools",
+      "at": "2026-04-08T00:00:00.000Z"
+    },
+    {
+      "stage": "VERIFY",
+      "status": "PASS",
+      "message": "verify passed",
+      "at": "2026-04-08T00:00:01.000Z"
+    }
+  ],
+  "verify": {
+    "allowed": true,
+    "schemaValid": true,
+    "policyAllowed": true,
+    "schemaErrors": []
+  },
+  "writeback": {
+    "ok": true,
+    "detail": ""
+  },
+  "artifact": {
+    "id": "artifact_fixture_001",
+    "jsonContent": {
+      "answer": "ok"
+    },
+    "classification": "P2",
+    "generatedAt": "2026-04-08T00:00:01.000Z",
+    "metadata": {}
+  },
+  "maxRounds": 2,
+  "createdAt": "2026-04-08T00:00:00.000Z",
+  "updatedAt": "2026-04-08T00:00:01.000Z",
+  "dryRun": false
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-explain-result.v1.json",
+  "title": "knowledge-hub learning explain result v1",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "status", "question", "answer", "session_id", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.explain.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "error"]},
+    "session_id": {"type": "string"},
+    "sessionId": {"type": "string"},
+    "question": {"type": "string"},
+    "answer": {"type": "string"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "evidenceRefs": {"type": "array", "items": {"type": "string"}},
+    "supplemental_model_knowledge": {"type": "array", "items": {"type": "string"}},
+    "supplementalModelKnowledge": {"type": "array", "items": {"type": "string"}},
+    "followup_checks": {"type": "array", "items": {"type": "string"}},
+    "followupChecks": {"type": "array", "items": {"type": "string"}},
+    "stateSummary": {"type": "object"},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "runId",
+    "crawlJobId",
+    "sourceCandidates",
+    "sourceGenerated",
+    "conceptCandidates",
+    "conceptGenerated",
+    "blocked",
+    "warnings",
+    "ts"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ko-note.generate.result.v1" },
+    "status": { "type": "string" },
+    "runId": { "type": "string" },
+    "crawlJobId": { "type": "string" },
+    "sourceCandidates": { "type": "integer" },
+    "sourceGenerated": { "type": "integer" },
+    "conceptCandidates": { "type": "integer" },
+    "conceptGenerated": { "type": "integer" },
+    "blocked": { "type": "integer" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

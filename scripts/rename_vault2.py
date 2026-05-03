@@ -1,8 +1,20 @@
+import os
 import re, requests, time, xml.etree.ElementTree as ET
 from pathlib import Path
 
-VAULT_AI = Path("/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/Projects/AI/AI_Papers")
-VAULT_PAPERS = Path("/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/Papers")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+VAULT_AI = Path(
+    os.environ.get(
+        "KHUB_VAULT_AI_PAPERS_DIR",
+        str(REPO_ROOT.parent / "vault" / "Projects" / "AI" / "AI_Papers"),
+    )
+).expanduser()
+VAULT_PAPERS = Path(
+    os.environ.get(
+        "KHUB_VAULT_PAPERS_DIR",
+        str(REPO_ROOT.parent / "vault" / "Papers"),
+    )
+).expanduser()
 
 def safe_title(title):
     safe = re.sub(r'[\\/:*?"<>|]', '', title).strip()

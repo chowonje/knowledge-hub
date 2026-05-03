@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-run-result.v1.json",
+  "title": "knowledge-hub learning run result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "topic",
+    "status",
+    "steps",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.learning.run.result.v1"
+    },
+    "runId": {"type": "string", "minLength": 1},
+    "topic": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["ok", "partial", "error", "blocked"]},
+    "steps": {
+      "type": "object",
+      "required": ["map", "assessTemplate"],
+      "properties": {
+        "map": {"type": "object"},
+        "assessTemplate": {"type": "object"},
+        "grade": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+        "next": {"anyOf": [{"type": "object"}, {"type": "null"}]}
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

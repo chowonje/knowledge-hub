@@ -28,11 +28,34 @@ Usage in config.yaml:
 from __future__ import annotations
 
 import os
+import logging
 from typing import Generator, List, Optional
 
 import requests
 
 from knowledge_hub.providers.base import BaseLLM, BaseEmbedder, ProviderInfo
+from knowledge_hub.providers.policy_guard import enforce_outbound_policy, evaluate_outbound_policy_batch
+
+log = logging.getLogger("khub.providers.openai_compat")
+
+
+def _embed_blocked_with_local_fallback(texts: List[str]) -> List[Optional[List[float]]]:
+    if not texts:
+        return []
+    try:
+        from knowledge_hub.infrastructure.config import Config
+        from knowledge_hub.infrastructure.providers import get_embedder, get_provider_info
+
+        config = Config()
+        provider = str(config.embedding_provider or "").strip()
+        info = get_provider_info(provider)
+        if not info or not info.is_local:
+            return [None] * len(texts)
+        embedder = get_embedder(provider, model=config.embedding_model, **config.get_provider_config(provider))
+        return embedder.embed_batch(texts, show_progress=False)
+    except Exception as error:
+        log.warning("local embed fallback unavailable: %s", error)
+        return [None] * len(texts)
 
 
 KNOWN_SERVICES: dict[str, dict] = {
@@ -155,6 +178,10 @@ class OpenAICompatLLM(BaseLLM):
         return os.getenv("OPENAI_COMPAT_API_KEY", "")
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
+        decision = enforce_outbound_policy(provider="openai-compat", model=self.model, prompt=prompt, context=context)
+        self.last_policy = decision.to_dict()
+        if decision.classification == "P1":
+            log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
         messages = []
         if context:
             messages.append({"role": "system", "content": f"참고 문서:\n{context}"})
@@ -175,6 +202,10 @@ class OpenAICompatLLM(BaseLLM):
         return resp.json()["choices"][0]["message"]["content"]
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
+        decision = enforce_outbound_policy(provider="openai-compat", model=self.model, prompt=prompt, context=context)
+        self.last_policy = decision.to_dict()
+        if decision.classification == "P1":
+            log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
         messages = []
         if context:
             messages.append({"role": "system", "content": f"참고 문서:\n{context}"})
@@ -246,6 +277,10 @@ class OpenAICompatEmbedder(BaseEmbedder):
     def embed_text(self, text: str) -> List[float]:
         if not text or not text.strip():
             raise ValueError("빈 텍스트는 임베딩할 수 없습니다")
+        decision = enforce_outbound_policy(provider="openai-compat", model=self.model, prompt=text, context="")
+        self.last_policy = decision.to_dict()
+        if decision.classification == "P1":
+            log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
         resp = requests.post(
             f"{self.base_url}/embeddings",
             headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
@@ -256,24 +291,47 @@ class OpenAICompatEmbedder(BaseEmbedder):
         return resp.json()["data"][0]["embedding"]
 
     def embed_batch(self, texts: List[str], show_progress: bool = False) -> List[Optional[List[float]]]:
-        clean = [t for t in texts if t and t.strip()]
+        clean_pairs = [(idx, text) for idx, text in enumerate(texts) if text and text.strip()]
+        clean = [text for _, text in clean_pairs]
         if not clean:
             return [None] * len(texts)
-        resp = requests.post(
-            f"{self.base_url}/embeddings",
-            headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
-            json={"model": self.model, "input": clean},
-            timeout=60,
-        )
-        resp.raise_for_status()
-        embeddings = [x["embedding"] for x in sorted(resp.json()["data"], key=lambda x: x["index"])]
-        results, ci = [], 0
-        for t in texts:
-            if t and t.strip():
-                results.append(embeddings[ci] if ci < len(embeddings) else None)
-                ci += 1
+        report = evaluate_outbound_policy_batch(provider="openai-compat", model=self.model, texts=clean)
+        blocked_positions = set(report.blocked_indices)
+        self.last_policy = report.to_dict()
+        if report.blocked_count or any("P1 warning" in warning for warning in report.warnings):
+            log.warning(
+                "Provider batch outbound trace_id=%s allowed=%s blocked=%s warnings=%s",
+                report.trace_id,
+                report.allowed_count,
+                report.blocked_count,
+                report.warnings,
+            )
+
+        safe_texts = [text for pos, text in enumerate(clean) if pos not in blocked_positions]
+        embeddings: List[Optional[List[float]]] = []
+        if safe_texts:
+            resp = requests.post(
+                f"{self.base_url}/embeddings",
+                headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
+                json={"model": self.model, "input": safe_texts},
+                timeout=60,
+            )
+            resp.raise_for_status()
+            embeddings = [x["embedding"] for x in sorted(resp.json()["data"], key=lambda x: x["index"])]
+
+        blocked_texts = [text for pos, text in enumerate(clean) if pos in blocked_positions]
+        blocked_embeddings = _embed_blocked_with_local_fallback(blocked_texts)
+
+        results: List[Optional[List[float]]] = [None] * len(texts)
+        safe_idx = 0
+        blocked_idx = 0
+        for pos, (original_idx, _) in enumerate(clean_pairs):
+            if pos in blocked_positions:
+                results[original_idx] = blocked_embeddings[blocked_idx] if blocked_idx < len(blocked_embeddings) else None
+                blocked_idx += 1
             else:
-                results.append(None)
+                results[original_idx] = embeddings[safe_idx] if safe_idx < len(embeddings) else None
+                safe_idx += 1
         return results
 
     @classmethod

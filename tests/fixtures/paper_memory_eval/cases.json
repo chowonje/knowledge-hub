@@ -1,0 +1,23 @@
+[
+  {
+    "case_id": "exact_title",
+    "query": "Personalized Agent Memory",
+    "expected_paper_id": "2603.13017",
+    "category": "exact_metadata_lookup",
+    "artifact_profile": "note_rich_claim_rich"
+  },
+  {
+    "case_id": "thematic_korean",
+    "query": "검색 가능한 압축 계층",
+    "expected_paper_id": "2603.13017",
+    "category": "thematic_recall",
+    "artifact_profile": "note_rich_claim_rich"
+  },
+  {
+    "case_id": "metadata_fallback",
+    "query": "compact memory card for paper retrieval",
+    "expected_paper_id": "2603.13019",
+    "category": "metadata_fallback",
+    "artifact_profile": "metadata_only"
+  }
+]

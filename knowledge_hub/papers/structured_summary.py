@@ -10,18 +10,38 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import difflib
 import hashlib
 import json
 import re
 from pathlib import Path
 from typing import Any
 
+from knowledge_hub.core.sanitizer import detect_p0, redact_p0
 from knowledge_hub.document_memory import DocumentMemoryBuilder, DocumentMemoryRetriever
 from knowledge_hub.document_memory.payloads import semantic_units_payload
-from knowledge_hub.learning.task_router import get_llm_for_task
+from knowledge_hub.infrastructure.providers import get_llm, get_provider_info
+from knowledge_hub.learning.task_router import TaskRouteDecision, get_llm_for_task
 from knowledge_hub.knowledge.claim_normalization import ClaimNormalizationService
-from knowledge_hub.papers.memory_builder import PaperMemoryBuilder
+from knowledge_hub.papers.memory_builder import (
+    PaperMemoryBuilder,
+    _parsed_markdown_slot_values,
+    _slot_quality_score,
+    _slot_supports_quality,
+    _summary_value_is_unusable,
+)
 from knowledge_hub.papers.memory_payloads import card_payload
+from knowledge_hub.papers.text_quality import (
+    contains_hangul as _contains_hangul,
+    looks_author_contribution as _looks_author_contribution,
+    looks_caption_stub as _looks_caption_stub,
+    looks_page_stub as _looks_page_stub,
+    looks_table_heavy as _looks_table_heavy,
+    numeric_token_count as _numeric_token_count,
+    spillover_issues as _spillover_issues,
+    word_like_count as _word_like_count,
+)
+from knowledge_hub.papers.text_sanitizer import extract_keyword_window
 
 _NEGATIVE_HINTS = (
     "limitation",
@@ -48,6 +68,34 @@ _COMPARATOR_HINTS = ("baseline", "over", "compared to", "vs", "outperform", "out
 _WRAPPER_HINTS = ("\\begin{figure", "\\begin{subfigure", "\\includegraphics", "\\caption{", "label{fig:", "figure[", "table[")
 _LATEX_HINTS = ("\\documentclass", "\\usepackage", "\\begin{table", "\\begin{figure", "\\section{", "\\subsection{")
 _METADATA_HINTS = ("arxiv id", "status:", "translated_path", "pdf_path", "metadata", "번역 완료", "논문 키워드")
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+|[\r\n]+|(?:\s*[;•]\s*)+")
+_PAGE_REF_RE = re.compile(r"\[[^\]]*page\s+\d+\]", re.IGNORECASE)
+_OUTBOUND_CONTEXT_SPLIT_RE = re.compile(
+    r"(?<!\w)(Instruction|Input|Output|Task|Question|Answer|Example(?:\s+\d+)?|Figure|Table|Abstract|Introduction|Method|Results?|Limitations?|Discussion|Conclusion|Supplemental Material)\b"
+)
+_GENERIC_BACKGROUND_HINTS = (
+    "general reasoning represents",
+    "recent breakthroughs",
+    "in recent years, the research community has achieved impressive progress",
+    "in this work, we discuss",
+    "reasoning capability, the cornerstone of human intelligence",
+    "recent advances in artificial intelligence have demonstrated",
+)
+_SUMMARY_SLOT_FIELDS = {
+    "oneLine": "paper_core",
+    "problem": "problem_context",
+    "coreIdea": "method_core",
+    "methodSteps": "method_core",
+    "keyResults": "evidence_core",
+    "limitations": "limitations",
+    "whenItMatters": "evidence_core",
+    "whatIsNew": "method_core",
+}
+_SUMMARY_LIST_LIMITS = {
+    "methodSteps": 4,
+    "keyResults": 4,
+    "limitations": 3,
+}
 _DEPTH_MAP = {
     "oneLine": "shallow",
     "coreIdea": "shallow",
@@ -63,6 +111,24 @@ _DEPTH_COMPONENTS = {
     "medium": ["paper_memory", "document_memory", "claim_evidence"],
     "deep": ["paper_memory", "document_memory", "claim_evidence", "chunk"],
 }
+_LOCAL_PROVIDER_NAMES = {"ollama", "pplx-local", "pplx-st"}
+_OUTBOUND_SUMMARY_NOISE_HINTS = (
+    "instruction:",
+    "input:",
+    "output:",
+    "task:",
+    "question:",
+    "answer:",
+    "application form",
+    "phone number",
+    "email address",
+    "temporary password",
+    "prompt used for generating",
+    "prompting templates",
+    "generate a random password",
+    "recover the password",
+    "compose an email",
+)
 
 
 def _clean_text(value: Any) -> str:
@@ -92,6 +158,359 @@ def _clean_list(values: Any) -> list[str]:
     return result
 
 
+def _usable_summary_text(value: Any) -> str:
+    token = _clean_text(value)
+    if not token or _summary_value_is_unusable(token):
+        return ""
+    return token
+
+
+def _usable_summary_list(values: Any) -> list[str]:
+    return [token for token in _clean_list(values) if not _summary_value_is_unusable(token)]
+
+
+def _summary_slot_field(field: str) -> str:
+    return str(_SUMMARY_SLOT_FIELDS.get(str(field or "").strip(), "paper_core"))
+
+
+def _has_summary_spillover(value: Any, *, title: str = "") -> bool:
+    token = _clean_text(value)
+    if not token:
+        return False
+    return bool(_spillover_issues(token, title=title))
+
+
+def _filtered_summary_entries(
+    entries: list[tuple[tuple[int, int, int], int, str]],
+    *,
+    field: str = "",
+    title: str = "",
+) -> list[tuple[tuple[int, int, int], int, str]]:
+    if not entries:
+        return entries
+    issue_map = {
+        entry[2]: set(_spillover_issues(entry[2], title=title))
+        for entry in entries
+    }
+    blocked_issues = {"table_caption_spillover"}
+    if field != "keyResults":
+        blocked_issues.add("front_matter_spillover")
+    without_structural_noise = [
+        entry
+        for entry in entries
+        if not (blocked_issues & issue_map.get(entry[2], set()))
+    ]
+    pool = without_structural_noise or entries
+    if any(_contains_hangul(entry[2]) for entry in pool):
+        without_raw_english = [
+            entry
+            for entry in pool
+            if "raw_english_spillover" not in issue_map.get(entry[2], set())
+        ]
+        if without_raw_english:
+            pool = without_raw_english
+    return pool
+
+
+def _summary_candidate_rank(value: Any, *, field: str, title: str = "") -> tuple[int, int, int]:
+    token = _usable_summary_text(value)
+    if not token:
+        return (0, -99, -9999)
+    slot_field = _summary_slot_field(field)
+    lowered = token.casefold()
+    word_count = _word_like_count(token)
+    page_stub = _looks_page_stub(token)
+    table_heavy = _looks_table_heavy(token)
+    author_contribution = _looks_author_contribution(token)
+    caption_stub = _looks_caption_stub(token)
+    generic_background = any(marker in lowered for marker in _GENERIC_BACKGROUND_HINTS)
+    supports = _slot_supports_quality(token, field=slot_field, title=title)
+    score = _slot_quality_score(token, field=slot_field, title=title)
+    if author_contribution or caption_stub:
+        score -= 6
+        supports = False
+    if field in {"coreIdea", "methodSteps", "whatIsNew"}:
+        has_method_signal = any(marker in lowered for marker in _METHOD_HINTS) or any(
+            marker in lowered
+            for marker in (
+                "train",
+                "training",
+                "pretraining",
+                "pre-train",
+                "fine-tuning",
+                "supervised fine-tuning",
+                "reinforcement learning",
+                "grpo",
+                "group relative policy optimization",
+                "optimiz",
+                "distill",
+                "build",
+                "construct",
+                "apply",
+                "applies",
+                "introduce",
+                "propose",
+                "develop",
+                "reward signal",
+                "rejection sampling",
+                "image encoder",
+                "connector",
+                "resolution",
+                "data mixture",
+                "multi-stage",
+                "강화학습",
+                "보상",
+                "사전학습",
+                "파인튜닝",
+                "미세조정",
+                "커넥터",
+                "인코더",
+                "디코더",
+                "아키텍처",
+                "데이터 혼합",
+                "멀티스케일",
+                "해상도",
+            )
+        )
+        specific_method_markers = (
+            "grpo",
+            "group relative policy optimization",
+            "ppo",
+            "distill",
+            "distillation",
+            "reward signal",
+            "rejection sampling",
+            "image encoder",
+            "vl connector",
+            "c-abstractor",
+            "attention pooling",
+            "average pooling",
+            "data mixture",
+            "multi-stage",
+            "강화학습",
+            "사전학습",
+            "파인튜닝",
+            "커넥터",
+            "인코더",
+            "디코더",
+            "아키텍처",
+            "데이터 혼합",
+        )
+        specificity_hits = sum(1 for marker in specific_method_markers if marker in lowered)
+        if not has_method_signal:
+            score -= 2
+            supports = False
+        elif specificity_hits:
+            score += min(3, specificity_hits)
+    if field == "problem":
+        problem_markers = (
+            "to tackle these issues",
+            "aim to",
+            "we aim",
+            "minimal reliance on human labeling efforts",
+            "goal",
+            "objective",
+            "motivation",
+            "dependence on human-annotated",
+            "human labeling efforts",
+            "human-annotated",
+            "의존",
+            "문제",
+            "과제",
+            "목표",
+        )
+        problem_hits = sum(1 for marker in problem_markers if marker in lowered)
+        if problem_hits:
+            score += min(3, problem_hits)
+        elif generic_background:
+            score -= 4
+            supports = False
+        if page_stub or table_heavy:
+            score -= 5
+            supports = False
+    if field in {"coreIdea", "whatIsNew"}:
+        if len(token) > 220:
+            score -= 2
+        if len(token) > 320:
+            score -= 4
+            supports = False
+        if generic_background and len(token) > 160:
+            score -= 3
+        if page_stub or table_heavy:
+            score -= 5
+            supports = False
+    if field == "whatIsNew":
+        novelty_markers = (
+            "novel",
+            "new",
+            "first",
+            "rather than",
+            "instead of",
+            "baseline",
+            "compared to",
+            "surpassing",
+            "difference",
+            "차이",
+            "대신",
+            "기존",
+            "새로운",
+        )
+        novelty_hits = sum(1 for marker in novelty_markers if marker in lowered)
+        if novelty_hits:
+            score += min(3, novelty_hits)
+        elif len(token) > 120:
+            score -= 3
+    if field == "keyResults":
+        has_result_signal = (
+            any(marker in lowered for marker in _RESULT_HINTS)
+            or any(marker in lowered for marker in _DATASET_HINTS)
+            or any(marker in lowered for marker in _COMPARATOR_HINTS)
+            or _has_digit_signal(lowered)
+        )
+        if not has_result_signal:
+            score -= 3
+            supports = False
+        if "introduction" in lowered:
+            score -= 4
+            supports = False
+        if page_stub and not (
+            any(marker in lowered for marker in _RESULT_HINTS)
+            or any(marker in lowered for marker in _DATASET_HINTS)
+            or any(marker in lowered for marker in _COMPARATOR_HINTS)
+        ):
+            score -= 4
+            supports = False
+        if table_heavy:
+            score -= 5
+            supports = False
+    if field == "whenItMatters":
+        if page_stub or table_heavy or caption_stub:
+            score -= 5
+            supports = False
+        if generic_background and len(token) > 160:
+            score -= 3
+        if not _contains_hangul(token) and word_count >= 10:
+            score -= 2
+    if field == "limitations":
+        has_limitation_signal = _has_negative_signal(lowered) or "limitation" in lowered or "한계" in lowered
+        if not has_limitation_signal:
+            score -= 3
+            supports = False
+        if lowered.strip(" .") in {"limitation", "limitations"} or word_count < 3:
+            score -= 4
+            supports = False
+        if table_heavy or page_stub or caption_stub:
+            score -= 5
+            supports = False
+    if field == "methodSteps":
+        if generic_background and not any(marker in lowered for marker in ("grpo", "connector", "image encoder", "reward signal", "fine-tuning", "reinforcement learning")):
+            score -= 4
+            supports = False
+        if "introduction" in lowered:
+            score -= 4
+            supports = False
+        if page_stub or table_heavy or caption_stub or word_count < 4:
+            score -= 4
+            supports = False
+    if field in {"methodSteps", "keyResults", "limitations"}:
+        if len(token) > 420:
+            score -= 2
+        if len(token) > 900:
+            supports = False
+    return (1 if supports else 0, score, -len(token))
+
+
+def _best_summary_text(
+    *,
+    field: str,
+    title: str = "",
+    candidates: list[Any] | tuple[Any, ...],
+    prefer_hangul: bool = False,
+) -> str:
+    entries: list[tuple[tuple[int, int, int], int, str]] = []
+    for index, raw in enumerate(list(candidates or [])):
+        token = _usable_summary_text(raw)
+        if not token:
+            continue
+        entries.append((_summary_candidate_rank(token, field=field, title=title), -index, token))
+    if not entries:
+        return ""
+    entries = _filtered_summary_entries(entries, field=field, title=title)
+    supporting = [entry for entry in entries if entry[0][0] > 0]
+    non_negative = [entry for entry in entries if entry[0][1] >= 0]
+    pool = supporting or non_negative or entries
+    pool.sort(key=lambda item: (item[0][0], item[0][1], item[0][2], item[1]), reverse=True)
+    if prefer_hangul:
+        localized = [entry for entry in pool if _contains_hangul(entry[2])]
+        if localized:
+            pool = localized
+    return pool[0][2]
+
+
+def _summary_sentences(value: Any, *, max_items: int) -> list[str]:
+    token = _usable_summary_text(value)
+    if not token:
+        return []
+    pieces = [token] if len(token) <= 220 else re.split(_SENTENCE_SPLIT_RE, token)
+    out: list[str] = []
+    seen: set[str] = set()
+    for piece in pieces:
+        item = _clean_text(str(piece or "").strip(" -*"))
+        if not item or _summary_value_is_unusable(item):
+            continue
+        lowered = item.casefold()
+        if lowered in seen:
+            continue
+        seen.add(lowered)
+        out.append(item)
+        if len(out) >= max(1, int(max_items)):
+            break
+    if out:
+        return out
+    return [token]
+
+
+def _best_summary_list(
+    *,
+    field: str,
+    title: str = "",
+    candidates: list[Any] | tuple[Any, ...],
+    limit: int | None = None,
+    prefer_hangul: bool = False,
+) -> list[str]:
+    max_items = int(limit or _SUMMARY_LIST_LIMITS.get(field, 4) or 4)
+    entries: list[tuple[tuple[int, int, int], int, str]] = []
+    seen: set[str] = set()
+    for index, raw in enumerate(list(candidates or [])):
+        for token in _summary_sentences(raw, max_items=2 if field == "methodSteps" else 1):
+            lowered = token.casefold()
+            if lowered in seen:
+                continue
+            seen.add(lowered)
+            entries.append((_summary_candidate_rank(token, field=field, title=title), -index, token))
+    if not entries:
+        return []
+    entries = _filtered_summary_entries(entries, field=field, title=title)
+    supporting = [entry for entry in entries if entry[0][0] > 0]
+    non_negative = [entry for entry in entries if entry[0][1] >= 0]
+    pool = supporting or non_negative or entries
+    pool.sort(key=lambda item: (item[0][0], item[0][1], item[0][2], item[1]), reverse=True)
+    if prefer_hangul:
+        localized = [entry for entry in pool if _contains_hangul(entry[2])]
+        if localized:
+            pool = localized
+    out: list[str] = []
+    for item in pool:
+        token = item[2]
+        lowered = token.casefold()
+        if any(difflib.SequenceMatcher(None, lowered, existing.casefold()).ratio() >= 0.84 for existing in out):
+            continue
+        out.append(token)
+        if len(out) >= max(1, max_items):
+            break
+    return out
+
+
 def _excerpt(text: Any, *, limit: int = 240) -> str:
     body = _clean_text(text)
     if len(body) <= limit:
@@ -119,6 +538,19 @@ def _extract_json_object(text: str) -> dict[str, Any]:
     return dict(value) if isinstance(value, dict) else {}
 
 
+def _provider_is_local(name: Any) -> bool:
+    token = _clean_text(name).lower()
+    if not token:
+        return False
+    if token in _LOCAL_PROVIDER_NAMES:
+        return True
+    try:
+        info = get_provider_info(token)
+    except Exception:
+        info = None
+    return bool(info and info.is_local)
+
+
 def _artifact_root(config: Any, *, paper_id: str) -> Path:
     papers_dir = Path(str(getattr(config, "papers_dir", "") or "")).expanduser()
     return papers_dir / "summaries" / str(paper_id).strip()
@@ -127,6 +559,166 @@ def _artifact_root(config: Any, *, paper_id: str) -> Path:
 def _parsed_artifact_root(config: Any, *, paper_id: str) -> Path:
     papers_dir = Path(str(getattr(config, "papers_dir", "") or "")).expanduser()
     return papers_dir / "parsed" / str(paper_id).strip()
+
+
+def _keyword_window_candidates(
+    text: str,
+    keywords: tuple[str, ...],
+    *,
+    limit: int,
+    max_windows: int = 6,
+) -> list[str]:
+    prepared = re.sub(r"(?m)^\s{0,3}#{1,6}\s*", ". ", str(text or ""))
+    prepared = re.sub(r"\n{2,}", ". ", prepared)
+    clean = _clean_text(prepared)
+    if not clean:
+        return []
+    lowered = clean.casefold()
+    seen: set[str] = set()
+    out: list[str] = []
+    for keyword in keywords:
+        token = _clean_text(keyword).casefold()
+        if not token:
+            continue
+        start_at = 0
+        while len(out) < max_windows:
+            index = lowered.find(token, start_at)
+            if index < 0:
+                break
+            start = index
+            end = index + len(token)
+            while start > 0 and clean[start - 1] not in ".!?":
+                start -= 1
+            while start < len(clean) and clean[start] in " .!?":
+                start += 1
+            while end < len(clean) and clean[end - 1] not in ".!?":
+                end += 1
+            candidate = _clean_text(clean[start:end])
+            if candidate and len(candidate) < max(80, int(limit / 3)):
+                next_start = end
+                while next_start < len(clean) and clean[next_start] in " .!?":
+                    next_start += 1
+                next_end = next_start
+                while next_end < len(clean) and clean[next_end - 1] not in ".!?":
+                    next_end += 1
+                expanded = _clean_text(clean[start:next_end])
+                if expanded and len(expanded) <= limit:
+                    candidate = expanded
+            if candidate:
+                lowered_candidate = candidate.casefold()
+                if lowered_candidate not in seen:
+                    seen.add(lowered_candidate)
+                    out.append(candidate)
+            start_at = index + len(token)
+    return out
+
+
+def _parsed_markdown_slots(config: Any, *, paper_id: str) -> dict[str, Any]:
+    path = _parsed_artifact_root(config, paper_id=paper_id) / "document.md"
+    if not path.exists():
+        return {}
+    try:
+        text = path.read_text(encoding="utf-8")
+    except Exception:
+        return {}
+    slots = dict(_parsed_markdown_slot_values(text) or {})
+    clean = _clean_text(text)
+    if not clean:
+        return slots
+    slots["problem_context"] = _best_summary_text(
+        field="problem",
+        candidates=[
+            *_keyword_window_candidates(
+                text,
+                (
+                    "to tackle these issues",
+                    "we aim to",
+                    "aim to explore",
+                    "human-annotated",
+                    "human labeling efforts",
+                    "minimal reliance on human labeling efforts",
+                    "dependence on human-annotated",
+                    "goal",
+                    "objective",
+                    "motivation",
+                ),
+                limit=520,
+                max_windows=6,
+            ),
+            slots.get("problem_context"),
+            slots.get("paper_core"),
+        ],
+    )
+    slots["method_core"] = _best_summary_text(
+        field="coreIdea",
+        candidates=[
+            *_keyword_window_candidates(
+                text,
+                (
+                    "group relative policy optimization",
+                    "grpo",
+                    "pure reinforcement learning",
+                    "reinforcement learning",
+                    "multi-stage learning framework",
+                    "reward signal",
+                    "build upon deepseek-v3-base",
+                    "employ group relative policy optimization",
+                    "deepseek-r1-zero",
+                    "vl connector",
+                    "image encoder",
+                    "data mixture",
+                    "multimodal pre-training",
+                ),
+                limit=520,
+                max_windows=8,
+            ),
+            *_keyword_window_candidates(
+                text,
+                (
+                    "training pipeline",
+                    "architecture",
+                    "connector",
+                    "pre-training",
+                ),
+                limit=520,
+                max_windows=4,
+            ),
+            slots.get("method_core"),
+            slots.get("paper_core"),
+        ],
+    )
+    slots["evidence_core"] = _best_summary_text(
+        field="keyResults",
+        candidates=[
+            slots.get("evidence_core"),
+            extract_keyword_window(
+                clean,
+                (
+                    "superior performance",
+                    "competitive performance",
+                    "results",
+                    "benchmark",
+                    "accuracy",
+                    "outperforms",
+                    "state-of-the-art",
+                    "sota",
+                ),
+                limit=520,
+            ),
+        ],
+    )
+    slots["limitations"] = _best_summary_text(
+        field="limitations",
+        candidates=[
+            slots.get("limitations"),
+            extract_keyword_window(
+                clean,
+                ("limitation", "limitations", "poor readability", "language mixing", "future work"),
+                limit=420,
+            ),
+        ],
+    )
+    return slots
 
 
 def _classify_parser_failure(error: Any) -> str:
@@ -447,7 +1039,10 @@ def _paper_memory_payload(sqlite_db: Any, *, paper_id: str) -> tuple[dict[str, A
         except Exception as error:
             warnings.append(f"paper memory unavailable: {error}")
             row = None
-    return card_payload(row), warnings
+    payload = card_payload(row)
+    for key in ("paperCore", "problemContext", "methodCore", "evidenceCore", "limitations"):
+        payload[key] = _usable_summary_text(payload.get(key))
+    return payload, warnings
 
 
 def _build_context(
@@ -526,6 +1121,109 @@ def _build_context(
     return "\n\n".join(part for part in sections if _clean_text(part))
 
 
+def _prepare_outbound_summary_inputs(*, provider: str, prompt: str, context: str) -> tuple[str, str, bool]:
+    provider_name = _clean_text(provider).lower()
+    if not provider_name or _provider_is_local(provider_name):
+        return prompt, context, False
+    safe_prompt = redact_p0(prompt)
+    safe_context = _sanitize_outbound_summary_context(redact_p0(context))
+    return safe_prompt, safe_context, safe_prompt != prompt or safe_context != context
+
+
+def _split_outbound_context_line(line: str) -> tuple[str, str, str, bool]:
+    token = _clean_text(line)
+    if not token:
+        return "", "", "", False
+    bullet = token.startswith("- ")
+    prefix = "- " if bullet else ""
+    body = token[2:].strip() if bullet else token
+    if body.endswith(":"):
+        label = _clean_text(body[:-1])
+        if label and label.replace("_", "").replace(" ", "").isalnum() and label.upper() == label:
+            return prefix, label, "", True
+    if ":" not in body:
+        return prefix, "", body, False
+    label, payload = body.split(":", 1)
+    clean_label = _clean_text(label)
+    if clean_label and clean_label.replace("_", "").replace(" ", "").isalnum() and clean_label.upper() == clean_label:
+        return prefix, clean_label, _clean_text(payload), False
+    return prefix, "", body, False
+
+
+def _split_outbound_summary_fragments(value: str) -> list[str]:
+    prepared = _OUTBOUND_CONTEXT_SPLIT_RE.sub(lambda match: f". {match.group(1)}", str(value or ""))
+    return [
+        _clean_text(piece)
+        for piece in re.split(_SENTENCE_SPLIT_RE, prepared)
+        if _clean_text(piece)
+    ]
+
+
+def _outbound_summary_fragment_is_noise(value: str) -> bool:
+    token = _clean_text(value)
+    if not token:
+        return True
+    lowered = token.casefold()
+    if detect_p0(token):
+        return True
+    if (
+        _looks_author_contribution(token)
+        or _looks_page_stub(token)
+        or _looks_caption_stub(token)
+        or _looks_table_heavy(token)
+    ):
+        return True
+    if any(marker in lowered for marker in _OUTBOUND_SUMMARY_NOISE_HINTS):
+        return True
+    if "supplemental material" in lowered or "implementation details" in lowered:
+        return True
+    if token.count("[REDACTED]") >= 2:
+        return True
+    if lowered.startswith(("def ", "class ")) or " return " in lowered:
+        return True
+    if token.count(":") >= 5 and len(token) >= 120:
+        return True
+    return False
+
+
+def _sanitize_outbound_summary_fragment(value: str) -> str:
+    kept: list[str] = []
+    for fragment in _split_outbound_summary_fragments(value):
+        token = _clean_text(redact_p0(fragment))
+        if not token or _outbound_summary_fragment_is_noise(token):
+            continue
+        kept.append(token)
+        if len(kept) >= 2:
+            break
+    return " ".join(kept)
+
+
+def _sanitize_outbound_summary_context(context: str) -> str:
+    lines: list[str] = []
+    used = 0
+    raw_context = str(context or "")
+    for raw_line in raw_context.splitlines():
+        prefix, label, payload, is_header = _split_outbound_context_line(raw_line)
+        if is_header:
+            lines.append(f"{prefix}{label}:")
+            continue
+        token = _sanitize_outbound_summary_fragment(payload)
+        if not token:
+            continue
+        if label:
+            candidate = f"{prefix}{label}: {token}"
+        elif prefix:
+            candidate = f"{prefix}{token}"
+        else:
+            candidate = token
+        if used + len(candidate) > 9000 and lines:
+            break
+        lines.append(candidate)
+        used += len(candidate)
+    compact = "\n".join(lines).strip()
+    return compact or redact_p0(raw_context)
+
+
 def _has_result_claim_hints(claim_hints: list[dict[str, Any]]) -> bool:
     for claim in claim_hints:
         if _clean_text(claim.get("metric")) or _clean_text(claim.get("resultDirection")) or _clean_text(claim.get("comparator")):
@@ -590,17 +1288,21 @@ def _evidence_summary_for_field(
     claim_hints: list[dict[str, Any]],
     paper_memory: dict[str, Any],
 ) -> dict[str, Any]:
+    preferred_fallback = ""
     claim_lines: list[str] = []
     if field == "keyResults":
         claim_lines = _claim_text_block(claim_hints, kind="results", limit=4)
+        preferred_fallback = _clean_text(paper_memory.get("evidenceCore"))
     elif field == "limitations":
         claim_lines = _claim_text_block(claim_hints, kind="limitations", limit=3)
+        preferred_fallback = _clean_text(paper_memory.get("limitations"))
     elif field == "whatIsNew":
         claim_lines = [
             text
             for text in _claim_text_block(claim_hints, kind="results", limit=4)
             if _has_novelty_signal(text) or _has_comparator_signal(text)
         ][:3]
+        preferred_fallback = _clean_text(paper_memory.get("methodCore")) or _clean_text(paper_memory.get("paperCore"))
 
     unit_lines = [
         _excerpt(
@@ -612,11 +1314,11 @@ def _evidence_summary_for_field(
         if _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
     ]
     unit_lines = [line for line in unit_lines if line]
-    summary_lines = list(dict.fromkeys([*claim_lines, *unit_lines]))[:4]
-    if field == "whatIsNew" and not summary_lines:
-        summary_lines = [
-            _clean_text(paper_memory.get("methodCore")) or _clean_text(paper_memory.get("paperCore"))
-        ]
+    summary_lines = _best_summary_list(
+        field=field,
+        candidates=[*claim_lines, *unit_lines, preferred_fallback],
+        limit=4,
+    )
     evidence_refs = [
         {
             "unitId": _clean_text(unit.get("unitId")),
@@ -1025,6 +1727,7 @@ def _summary_prompt(*, language: str = "ko") -> str:
 - 출력 언어는 {language}
 - 사실을 과장하지 말고 context에 있는 정보만 사용
 - 모호한 항목은 빈 문자열 또는 짧은 주의 문구로 처리
+- source가 영문이어도 최종 답변은 자연스러운 한국어로 다시 써라
 - methodSteps, keyResults, limitations, confidenceNotes는 배열
 - keyResults는 수치/데이터셋/비교 기준이 있으면 최대한 포함
 - limitations는 실패 조건/적용 한계를 우선
@@ -1032,6 +1735,9 @@ def _summary_prompt(*, language: str = "ko") -> str:
 - methodSteps에는 결과 비교 문장을 넣지 말고 방법 설명만 사용
 - keyResults에는 가능한 경우 benchmark/dataset/comparator/수치를 포함
 - whatIsNew에는 baseline 대비 차이 또는 새로운 설계 포인트를 직접 써라
+- coreIdea와 whatIsNew는 1-2개의 짧은 문장으로 쓰고, abstract 첫 문장이나 배경 설명을 길게 복사하지 마라
+- methodSteps, keyResults, limitations의 각 bullet은 한국어 완결 문장으로 쓰고 영문 원문을 그대로 두지 마라
+- author contribution 줄, page header, raw table row, table caption, 통계 유의성 footer, "Introduction" 문장, figure/table wrapper, acknowledgement 문장을 그대로 넣지 마라
 - context 안의 ONE_LINE_CANDIDATE가 있으면 다듬어서 쓰되 그대로 복사하지는 마라
 
 JSON schema:
@@ -1061,17 +1767,81 @@ JSON schema:
 }}"""
 
 
-def _normalize_summary(value: dict[str, Any], *, fallback: dict[str, Any]) -> dict[str, Any]:
+def _normalize_summary(value: dict[str, Any], *, fallback: dict[str, Any], title: str = "") -> dict[str, Any]:
     out = {
-        "oneLine": _clean_text(value.get("oneLine")) or _clean_text(fallback.get("oneLine")),
-        "problem": _clean_text(value.get("problem")) or _clean_text(fallback.get("problem")),
-        "coreIdea": _clean_text(value.get("coreIdea")) or _clean_text(fallback.get("coreIdea")),
-        "methodSteps": _clean_list(value.get("methodSteps")) or _clean_list(fallback.get("methodSteps")),
-        "keyResults": _clean_list(value.get("keyResults")) or _clean_list(fallback.get("keyResults")),
-        "limitations": _clean_list(value.get("limitations")) or _clean_list(fallback.get("limitations")),
-        "whenItMatters": _clean_text(value.get("whenItMatters")) or _clean_text(fallback.get("whenItMatters")),
-        "whatIsNew": _clean_text(value.get("whatIsNew")) or _clean_text(fallback.get("whatIsNew")),
-        "confidenceNotes": _clean_list(value.get("confidenceNotes")) or _clean_list(fallback.get("confidenceNotes")),
+        "oneLine": _best_summary_text(
+            field="oneLine",
+            title=title,
+            candidates=[value.get("oneLine"), fallback.get("oneLine")],
+            prefer_hangul=True,
+        ),
+        "problem": _best_summary_text(
+            field="problem",
+            title=title,
+            candidates=[value.get("problem"), fallback.get("problem")],
+            prefer_hangul=True,
+        ),
+        "coreIdea": _best_summary_text(
+            field="coreIdea",
+            title=title,
+            candidates=[
+                value.get("coreIdea"),
+                value.get("whatIsNew"),
+                fallback.get("coreIdea"),
+                fallback.get("whatIsNew"),
+                value.get("oneLine"),
+                fallback.get("oneLine"),
+            ],
+            prefer_hangul=True,
+        ),
+        "methodSteps": _best_summary_list(
+            field="methodSteps",
+            title=title,
+            candidates=[*list(value.get("methodSteps") or []), *list(fallback.get("methodSteps") or [])],
+            limit=4,
+            prefer_hangul=True,
+        ),
+        "keyResults": _best_summary_list(
+            field="keyResults",
+            title=title,
+            candidates=[*list(value.get("keyResults") or []), *list(fallback.get("keyResults") or [])],
+            limit=4,
+            prefer_hangul=True,
+        ),
+        "limitations": _best_summary_list(
+            field="limitations",
+            title=title,
+            candidates=[*list(value.get("limitations") or []), *list(fallback.get("limitations") or [])],
+            limit=3,
+            prefer_hangul=True,
+        ),
+        "whenItMatters": _best_summary_text(
+            field="whenItMatters",
+            title=title,
+            candidates=[
+                value.get("whenItMatters"),
+                fallback.get("whenItMatters"),
+                value.get("coreIdea"),
+                fallback.get("coreIdea"),
+                value.get("oneLine"),
+                fallback.get("oneLine"),
+            ],
+            prefer_hangul=True,
+        ),
+        "whatIsNew": _best_summary_text(
+            field="whatIsNew",
+            title=title,
+            candidates=[
+                value.get("whatIsNew"),
+                value.get("coreIdea"),
+                fallback.get("whatIsNew"),
+                fallback.get("coreIdea"),
+                value.get("oneLine"),
+                fallback.get("oneLine"),
+            ],
+            prefer_hangul=True,
+        ),
+        "confidenceNotes": _usable_summary_list(value.get("confidenceNotes")) or _usable_summary_list(fallback.get("confidenceNotes")),
     }
     return out
 
@@ -1245,6 +2015,16 @@ class StructuredPaperSummaryService:
             return None
         return dict(payload) if isinstance(payload, dict) else None
 
+    def load_manifest(self, *, paper_id: str) -> dict[str, Any] | None:
+        path = self.artifact_dir_for(paper_id=paper_id) / "manifest.json"
+        if not path.exists():
+            return None
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+        return dict(payload) if isinstance(payload, dict) else None
+
     def _document_memory_payload(
         self,
         *,
@@ -1260,7 +2040,7 @@ class StructuredPaperSummaryService:
         parser_fallback_reason = ""
         if requested_parser == "auto":
             attempted: list[str] = []
-            for candidate in ("mineru", "opendataloader"):
+            for candidate in ("pymupdf", "mineru", "opendataloader"):
                 attempted.append(candidate)
                 try:
                     self._builder.build_and_store_paper(
@@ -1308,7 +2088,7 @@ class StructuredPaperSummaryService:
             "parserAttempted": attempted_parser,
             "parserFallbackReason": parser_fallback_reason,
             "parseArtifactPath": str(_parsed_artifact_root(self.config, paper_id=paper_id))
-            if parser_used in {"opendataloader", "mineru"}
+            if parser_used in {"opendataloader", "mineru", "pymupdf"}
             else "",
         }
         return document, diagnostics, warnings
@@ -1324,32 +2104,72 @@ class StructuredPaperSummaryService:
         llm_warning: str = "",
     ) -> dict[str, Any]:
         summary = dict(document.get("summary") or {})
+        parsed_slots = _parsed_markdown_slots(self.config, paper_id=paper_id)
         thesis = _clean_text(summary.get("documentThesis") or summary.get("contextualSummary"))
-        problem = (
-            _clean_text((bundles.get("problem") or [{}])[0].get("contextualSummary"))
-            if bundles.get("problem")
-            else _clean_text(paper_memory.get("problemContext")) or thesis
+        title = _clean_text(document.get("documentTitle"))
+        problem = _best_summary_text(
+            field="problem",
+            title=title,
+            candidates=[
+                _clean_text(parsed_slots.get("problem_context")),
+                _clean_text(paper_memory.get("problemContext")),
+                _clean_text((bundles.get("problem") or [{}])[0].get("contextualSummary")) if bundles.get("problem") else "",
+            ],
+            prefer_hangul=True,
         )
-        core_idea = (
-            _clean_text(paper_memory.get("paperCore"))
-            or _clean_text(paper_memory.get("methodCore"))
-            or (_clean_text((bundles.get("method") or [{}])[0].get("contextualSummary")) if bundles.get("method") else thesis)
+        core_idea = _best_summary_text(
+            field="coreIdea",
+            title=title,
+            candidates=[
+                _clean_text(parsed_slots.get("method_core")),
+                _clean_text(paper_memory.get("methodCore")),
+                _clean_text(paper_memory.get("paperCore")),
+                _clean_text((bundles.get("method") or [{}])[0].get("contextualSummary")) if bundles.get("method") else "",
+            ],
+            prefer_hangul=True,
         )
-        method_steps = [
-            _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
-            for unit in list(bundles.get("method") or [])[:4]
-            if _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
-        ]
-        key_results = [
-            _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
-            for unit in list(bundles.get("results") or [])[:4]
-            if _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
-        ]
-        limitations = [
-            _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
-            for unit in list(bundles.get("limitations") or [])[:3]
-            if _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
-        ]
+        method_steps = _best_summary_list(
+            field="methodSteps",
+            title=title,
+            candidates=[
+                _clean_text(parsed_slots.get("method_core")),
+                _clean_text(paper_memory.get("methodCore")),
+                *[
+                    _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
+                    for unit in list(bundles.get("method") or [])[:4]
+                ],
+            ],
+            limit=4,
+            prefer_hangul=True,
+        )
+        key_results = _best_summary_list(
+            field="keyResults",
+            title=title,
+            candidates=[
+                _clean_text(parsed_slots.get("evidence_core")),
+                _clean_text(paper_memory.get("evidenceCore")),
+                *[
+                    _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
+                    for unit in list(bundles.get("results") or [])[:4]
+                ],
+            ],
+            limit=4,
+            prefer_hangul=True,
+        )
+        limitations = _best_summary_list(
+            field="limitations",
+            title=title,
+            candidates=[
+                _clean_text(parsed_slots.get("limitations")),
+                _clean_text(paper_memory.get("limitations")),
+                *[
+                    _clean_text(unit.get("contextualSummary") or unit.get("sourceExcerpt"))
+                    for unit in list(bundles.get("limitations") or [])[:3]
+                ],
+            ],
+            limit=3,
+            prefer_hangul=True,
+        )
         confidence_notes = []
         if llm_warning:
             confidence_notes.append(llm_warning)
@@ -1358,31 +2178,130 @@ class StructuredPaperSummaryService:
         if not limitations:
             confidence_notes.append("한계 섹션 신호가 약해 limitation coverage가 제한적일 수 있습니다.")
         return {
-            "oneLine": _clean_text(paper_memory.get("paperCore")) or thesis or f"{paper_id} 논문의 구조화 요약",
+            "oneLine": _best_summary_text(
+                field="oneLine",
+                title=title,
+                candidates=[
+                    _clean_text(parsed_slots.get("paper_core")),
+                    _clean_text(paper_memory.get("paperCore")),
+                    thesis,
+                ],
+                prefer_hangul=True,
+            )
+            or thesis
+            or f"{paper_id} 논문의 구조화 요약",
             "problem": problem or thesis,
             "coreIdea": core_idea or thesis,
             "methodSteps": method_steps,
             "keyResults": key_results,
             "limitations": limitations,
-            "whenItMatters": key_results[0] if key_results else (_clean_text(paper_memory.get("evidenceCore")) or thesis),
-            "whatIsNew": _clean_text(paper_memory.get("methodCore")) or core_idea or thesis,
+            "whenItMatters": _best_summary_text(
+                field="whenItMatters",
+                title=title,
+                candidates=[
+                    core_idea,
+                    _clean_text(parsed_slots.get("paper_core")),
+                    _clean_text(paper_memory.get("paperCore")),
+                    key_results[0] if key_results else "",
+                    _clean_text(parsed_slots.get("evidence_core")),
+                    _clean_text(paper_memory.get("evidenceCore")),
+                    thesis,
+                ],
+                prefer_hangul=True,
+            ),
+            "whatIsNew": _best_summary_text(
+                field="whatIsNew",
+                title=title,
+                candidates=[
+                    _clean_text(parsed_slots.get("method_core")),
+                    _clean_text(paper_memory.get("methodCore")),
+                    core_idea,
+                    _clean_text(parsed_slots.get("paper_core")),
+                    _clean_text(paper_memory.get("paperCore")),
+                    thesis,
+                ],
+                prefer_hangul=True,
+            ),
             "confidenceNotes": confidence_notes,
         }
 
-    def _llm_summary(self, *, title: str, context: str) -> tuple[dict[str, Any], dict[str, Any], list[str], bool]:
-        llm, decision, warnings = get_llm_for_task(
-            self.config,
-            task_type="materialization_summary",
-            allow_external=True,
-            query=title,
-            context=context[:12000],
-            source_count=1,
-            timeout_sec=90,
-        )
+    def _llm_summary(
+        self,
+        *,
+        title: str,
+        context: str,
+        quick: bool,
+        allow_external: bool,
+        llm_mode: str = "auto",
+        provider_override: str | None = None,
+        model_override: str | None = None,
+        timeout_sec: int = 90,
+    ) -> tuple[dict[str, Any], dict[str, Any], list[str], bool]:
+        task_type = "materialization_summary" if quick else "rag_answer"
+        route_mode = _clean_text(llm_mode).lower() or "auto"
+        if route_mode not in {"fallback-only", "local", "mini", "strong", "auto"}:
+            route_mode = "auto"
+        provider = _clean_text(provider_override)
+        model = _clean_text(model_override)
+        if provider:
+            if not _provider_is_local(provider) and not allow_external:
+                raise ValueError("외부 프로바이더 사용은 --allow-external 이 필요합니다.")
+            provider_cfg = dict(self.config.get_provider_config(provider))
+            provider_cfg["timeout"] = float(timeout_sec)
+            provider_cfg["request_timeout"] = float(timeout_sec)
+            try:
+                llm = get_llm(provider, model=model or None, **provider_cfg)
+            except Exception as error:
+                decision = TaskRouteDecision(
+                    task_type=task_type,
+                    route="fallback-only",
+                    provider="",
+                    model="",
+                    timeout_sec=0,
+                    fallback_chain=["fallback-only"],
+                    reasons=["provider_override", "provider_initialization_failed"],
+                    allow_external_effective=bool(allow_external),
+                    complexity_score=0,
+                    policy_mode="external-allowed" if allow_external else "local-only",
+                )
+                return {}, decision.to_dict(), [f"route unavailable ({provider}/{model or '(default)'}): {error}"], True
+            decision = TaskRouteDecision(
+                task_type=task_type,
+                route="local" if _provider_is_local(provider) else "strong",
+                provider=provider,
+                model=model or _clean_text(getattr(llm, "model", "")),
+                timeout_sec=int(timeout_sec),
+                fallback_chain=["local" if _provider_is_local(provider) else "strong", "fallback-only"],
+                reasons=["provider_override"],
+                allow_external_effective=bool(allow_external),
+                complexity_score=0,
+                policy_mode="external-allowed" if allow_external else "local-only",
+            )
+            warnings: list[str] = []
+        else:
+            llm, decision, warnings = get_llm_for_task(
+                self.config,
+                task_type=task_type,
+                allow_external=allow_external,
+                query=title,
+                context=context[:12000],
+                source_count=1,
+                force_route=route_mode,  # type: ignore[arg-type]
+                timeout_sec=timeout_sec,
+            )
         if llm is None:
             return {}, decision.to_dict(), [*warnings, "요약 LLM을 사용할 수 없어 deterministic fallback으로 요약했습니다."], True
+        resolved_provider = provider or _clean_text(getattr(decision, "provider", "")) or _clean_text(getattr(llm, "provider", ""))
+        prompt_text = _summary_prompt(language="ko")
+        prompt_text, outbound_context, outbound_redacted = _prepare_outbound_summary_inputs(
+            provider=resolved_provider,
+            prompt=prompt_text,
+            context=context,
+        )
+        if outbound_redacted:
+            warnings = [*warnings, "외부 요약 호출 전에 P0 패턴을 redaction했습니다."]
         try:
-            text = llm.generate(_summary_prompt(language="ko"), context=context, max_tokens=2200)
+            text = llm.generate(prompt_text, context=outbound_context, max_tokens=2200)
         except Exception as error:
             return {}, decision.to_dict(), [*warnings, f"요약 LLM 호출 실패: {error}"], True
         parsed = _extract_json_object(text)
@@ -1401,6 +2320,11 @@ class StructuredPaperSummaryService:
         refresh_parse: bool = False,
         quick: bool = False,
         opendataloader_options: dict[str, Any] | None = None,
+        allow_external: bool = False,
+        llm_mode: str = "auto",
+        provider_override: str | None = None,
+        model_override: str | None = None,
+        timeout_sec: int = 90,
     ) -> dict[str, Any]:
         token = str(paper_id).strip()
         paper = self.sqlite_db.get_paper(token)
@@ -1417,7 +2341,7 @@ class StructuredPaperSummaryService:
             )
         except Exception as error:
             parser_failure = _classify_parser_failure(error)
-            if requested_parser in {"opendataloader", "mineru"}:
+            if requested_parser in {"opendataloader", "mineru", "pymupdf"}:
                 blocked_memory_route = {
                     "decisionOrder": "memory_form_first",
                     "fieldRoutes": [],
@@ -1541,7 +2465,16 @@ class StructuredPaperSummaryService:
             supplemental_context_packet,
             quick=bool(quick),
         )
-        llm_value, llm_decision, warnings, llm_fallback_used = self._llm_summary(title=_clean_text(paper.get("title")), context=context)
+        llm_value, llm_decision, warnings, llm_fallback_used = self._llm_summary(
+            title=_clean_text(paper.get("title")),
+            context=context,
+            quick=bool(quick),
+            allow_external=bool(allow_external),
+            llm_mode=llm_mode,
+            provider_override=provider_override,
+            model_override=model_override,
+            timeout_sec=int(timeout_sec or 90),
+        )
         warnings = [*parser_warnings, *paper_memory_warnings, *warnings]
         fallback = self._fallback_summary(
             document,
@@ -1551,7 +2484,7 @@ class StructuredPaperSummaryService:
             parser_used=parser_used,
             llm_warning=warnings[0] if warnings else "",
         )
-        summary = _normalize_summary(llm_value, fallback=fallback)
+        summary = _normalize_summary(llm_value, fallback=fallback, title=_clean_text(paper.get("title")))
         evidence_map = []
         evidence_map.extend(_field_evidence("oneLine", (bundles.get("problem", [])[:1] or bundles.get("novelty", [])[:1] or bundles.get("results", [])[:1]), document_id=f"paper:{token}", limit=1))
         evidence_map.extend(_field_evidence("problem", bundles.get("problem", [])[:2], document_id=f"paper:{token}", limit=2))

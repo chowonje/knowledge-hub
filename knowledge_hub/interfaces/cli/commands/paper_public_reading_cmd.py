@@ -6,12 +6,11 @@ import click
 from rich.console import Console
 from rich.markdown import Markdown
 
-from .paper_shared_runtime import (
-    _compact_evidence_summary,
-    _ensure_public_paper_summary,
-    _public_paper_memory,
-    _public_related_knowledge,
-    _sqlite_db,
+from knowledge_hub.papers.public_surface import (
+    build_public_evidence_card,
+    build_public_memory_card,
+    build_public_related_card,
+    build_public_summary_card,
 )
 
 console = Console()
@@ -23,20 +22,7 @@ console = Console()
 @click.pass_context
 def paper_public_summary(ctx, paper_id, as_json):
     """사용자용 논문 요약 카드"""
-    summary_payload, user_card = _ensure_public_paper_summary(ctx.obj["khub"], str(paper_id).strip())
-    payload = {
-        "schema": "knowledge-hub.paper.public.summary.v1",
-        "status": user_card.get("status") or summary_payload.get("status"),
-        "paperId": user_card.get("paperId"),
-        "paperTitle": user_card.get("paperTitle"),
-        "parserUsed": user_card.get("parserUsed"),
-        "fallbackUsed": user_card.get("fallbackUsed"),
-        "llmRoute": user_card.get("llmRoute"),
-        "summary": user_card.get("summary"),
-        "evidenceSummary": _compact_evidence_summary(summary_payload, include_refs=False),
-        "claimCoverage": user_card.get("claimCoverage") or summary_payload.get("claimCoverage"),
-        "warnings": user_card.get("warnings"),
-    }
+    payload = build_public_summary_card(ctx.obj["khub"], paper_id=str(paper_id).strip())
     if as_json:
         console.print_json(data=payload)
         return
@@ -72,7 +58,7 @@ def paper_public_summary(ctx, paper_id, as_json):
         lines.append(f"- {item}")
     lines.extend(["", "## 근거 요약", ""])
     for field in ("keyResults", "limitations", "whatIsNew"):
-        entries = list((payload.get("evidenceSummary") or {}).get(field) or [])
+        entries = list(((payload.get("evidenceSummary") or {}).get(field) or {}).get("summaryLines") or [])
         if not entries:
             continue
         lines.append(f"### {field}")
@@ -87,17 +73,7 @@ def paper_public_summary(ctx, paper_id, as_json):
 @click.pass_context
 def paper_public_evidence(ctx, paper_id, as_json):
     """사용자용 논문 근거 카드"""
-    summary_payload, user_card = _ensure_public_paper_summary(ctx.obj["khub"], str(paper_id).strip())
-    payload = {
-        "schema": "knowledge-hub.paper.public.evidence.v1",
-        "status": user_card.get("status") or summary_payload.get("status"),
-        "paperId": user_card.get("paperId"),
-        "paperTitle": user_card.get("paperTitle"),
-        "evidenceSummary": _compact_evidence_summary(summary_payload, include_refs=True),
-        "evidenceMap": list(summary_payload.get("evidenceMap") or []),
-        "claimCoverage": user_card.get("claimCoverage") or summary_payload.get("claimCoverage"),
-        "warnings": user_card.get("warnings"),
-    }
+    payload = build_public_evidence_card(ctx.obj["khub"], paper_id=str(paper_id).strip())
     if as_json:
         console.print_json(data=payload)
         return
@@ -107,10 +83,10 @@ def paper_public_evidence(ctx, paper_id, as_json):
         "## 결과 근거 요약",
         "",
     ]
-    for item in list((payload.get("evidenceSummary") or {}).get("keyResults") or []):
+    for item in list(((payload.get("evidenceSummary") or {}).get("keyResults") or {}).get("summaryLines") or []):
         lines.append(f"- {item}")
     lines.extend(["", "## 한계 근거 요약", ""])
-    for item in list((payload.get("evidenceSummary") or {}).get("limitations") or []):
+    for item in list(((payload.get("evidenceSummary") or {}).get("limitations") or {}).get("summaryLines") or []):
         lines.append(f"- {item}")
     lines.extend(["", "## Evidence Map", ""])
     for item in list(payload.get("evidenceMap") or []):
@@ -126,48 +102,18 @@ def paper_public_evidence(ctx, paper_id, as_json):
 @click.pass_context
 def paper_public_memory(ctx, paper_id, as_json):
     """사용자용 논문 기억 카드"""
-    khub = ctx.obj["khub"]
-    payload, user_card = _ensure_public_paper_summary(khub, str(paper_id).strip())
-    memory_card = _public_paper_memory(_sqlite_db(khub.config, khub=khub), config=khub.config, paper_id=str(paper_id).strip())
-    claim_coverage = dict(user_card.get("claimCoverage") or {})
-    evidence_map = list(user_card.get("evidenceMap") or [])
-    page_grounded = sum(1 for item in evidence_map if item.get("page") is not None)
-    result = {
-        "schema": "knowledge-hub.paper.public.memory.v1",
-        "status": user_card.get("status") or payload.get("status"),
-        "paperId": user_card.get("paperId"),
-        "paperTitle": user_card.get("paperTitle"),
-        "claimCoverage": claim_coverage,
-        "provenance": {
-            "evidenceRefCount": len(evidence_map),
-            "pageGroundedCount": page_grounded,
-            "parserUsed": payload.get("parserUsed"),
-            "paperSummaryAvailable": bool(payload),
-            "paperMemoryAvailable": bool(memory_card),
-        },
-        "memory": {
-            "paperCore": memory_card.get("paperCore", ""),
-            "problemContext": memory_card.get("problemContext", ""),
-            "methodCore": memory_card.get("methodCore", ""),
-            "evidenceCore": memory_card.get("evidenceCore", ""),
-        },
-        "memoryCard": {
-            "paperCore": memory_card.get("paperCore", ""),
-            "problemContext": memory_card.get("problemContext", ""),
-            "methodCore": memory_card.get("methodCore", ""),
-            "evidenceCore": memory_card.get("evidenceCore", ""),
-        },
-        "warnings": user_card.get("warnings"),
-    }
+    payload = build_public_memory_card(ctx.obj["khub"], paper_id=str(paper_id).strip())
     if as_json:
-        console.print_json(data=result)
+        console.print_json(data=payload)
         return
-    memory = dict(result.get("memoryCard") or {})
+    claim_coverage = dict(payload.get("claimCoverage") or {})
+    memory = dict(payload.get("memoryCard") or {})
     lines = [
-        f"# {result.get('paperTitle') or result.get('paperId')}",
+        f"# {payload.get('paperTitle') or payload.get('paperId')}",
         "",
         f"- claims: {claim_coverage.get('normalizedClaims', 0)}/{claim_coverage.get('totalClaims', 0)} normalized",
-        f"- evidence refs: {result['provenance']['evidenceRefCount']}",
+        f"- summary status: {((payload.get('artifactStatus') or {}).get('summary') or 'missing')}",
+        f"- memory status: {((payload.get('artifactStatus') or {}).get('memory') or 'missing')}",
         "",
         "## 기억",
         "",
@@ -186,34 +132,12 @@ def paper_public_memory(ctx, paper_id, as_json):
 @click.pass_context
 def paper_public_related(ctx, paper_id, top_k, as_json):
     """사용자용 연결된 지식 카드"""
-    khub = ctx.obj["khub"]
-    summary_payload, user_card = _ensure_public_paper_summary(khub, str(paper_id).strip())
-    related_groups = _public_related_knowledge(
-        khub,
-        paper_id=str(paper_id).strip(),
-        paper_title=str(user_card.get("paperTitle") or ""),
-        top_k=max(1, int(top_k)),
-    )
-    related = [
-        {**dict(item or {}), "group": group}
-        for group, items in related_groups.items()
-        for item in list(items or [])
-    ]
-    payload = {
-        "schema": "knowledge-hub.paper.public.related.v1",
-        "status": user_card.get("status") or summary_payload.get("status"),
-        "paperId": user_card.get("paperId"),
-        "paperTitle": user_card.get("paperTitle"),
-        "query": str(user_card.get("paperTitle") or paper_id),
-        "relatedKnowledge": related,
-        "claimCoverage": user_card.get("claimCoverage") or summary_payload.get("claimCoverage"),
-        "warnings": user_card.get("warnings"),
-    }
+    payload = build_public_related_card(ctx.obj["khub"], paper_id=str(paper_id).strip(), top_k=max(1, int(top_k)))
     if as_json:
         console.print_json(data=payload)
         return
     lines = [f"# {payload.get('paperTitle') or payload.get('paperId')}", "", "## 연결된 지식", ""]
-    for item in list(related or []):
+    for item in list(payload.get("relatedKnowledge") or []):
         lines.append(f"- {item.get('title')} ({item.get('sourceType')}, score={float(item.get('score') or 0.0):.3f})")
     console.print(Markdown("\n".join(lines)))
 

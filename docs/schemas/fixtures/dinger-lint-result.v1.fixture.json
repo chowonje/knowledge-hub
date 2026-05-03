@@ -1,0 +1,30 @@
+{
+  "schema": "knowledge-hub.dinger.lint.result.v1",
+  "status": "ok",
+  "checks": {
+    "reviewQueued": 2,
+    "alertCount": 1,
+    "papersMissingSummary": 3,
+    "papersNotIndexed": 1,
+    "papersMissingMemoryCard": 2
+  },
+  "latestKoNoteRun": {
+    "runId": "run_123",
+    "status": "completed",
+    "updatedAt": "2026-04-09T00:00:00Z",
+    "warnings": [
+      "review queue pending"
+    ]
+  },
+  "samples": {
+    "paperIdsMissingSummary": ["2501.00001"],
+    "paperIdsMissingMemoryCard": ["2501.00002"],
+    "paperIdsNotIndexed": ["2501.00003"],
+    "recommendedActions": [
+      {
+        "summary": "review staged notes"
+      }
+    ]
+  },
+  "createdAt": "2026-04-09T00:00:00Z"
+}

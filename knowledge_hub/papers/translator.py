@@ -6,12 +6,14 @@ OpenAI API를 사용하여 논문을 한국어로 번역합니다.
 
 import os
 import time
+import logging
 from pathlib import Path
 from typing import Optional
 
 from rich.console import Console
 
 console = Console()
+log = logging.getLogger("khub.papers.translator")
 
 
 def _load_env():
@@ -31,8 +33,8 @@ def _load_env():
                         value = value.strip().strip('"').strip("'")
                         if key and key not in os.environ:
                             os.environ[key] = value
-            except Exception:
-                pass
+            except Exception as error:
+                log.warning("failed to parse env file %s: %s", env_path, error)
 
 
 class PaperTranslator:

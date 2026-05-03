@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.ops.action.receipts.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "actionId", "count", "receipts"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ops.action.receipts.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "actionId": { "type": "string" },
+    "count": { "type": "integer", "minimum": 0 },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["receiptId", "actionId", "executedAt", "mode", "status", "runner", "command", "args", "mcpJobId", "resultSummary", "errorSummary", "artifact", "actor", "updatedAt"],
+        "properties": {
+          "receiptId": { "type": "string" },
+          "actionId": { "type": "string" },
+          "executedAt": { "type": "string" },
+          "mode": { "type": "string", "enum": ["sync", "async"] },
+          "status": { "type": "string", "enum": ["started", "succeeded", "failed"] },
+          "runner": { "type": "string", "enum": ["cli", "mcp"] },
+          "command": { "type": "string" },
+          "args": { "type": "array", "items": { "type": "string" } },
+          "mcpJobId": { "type": "string" },
+          "resultSummary": { "type": "string" },
+          "errorSummary": { "type": "string" },
+          "artifact": { "type": "object" },
+          "actor": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

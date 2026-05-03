@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.transform.list.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "count", "items", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.transform.list.result.v1" },
+    "status": { "type": "string" },
+    "count": { "type": "integer" },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

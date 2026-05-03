@@ -1,0 +1,46 @@
+{
+  "schema": "knowledge-hub.evidence-packet.v1",
+  "packet_id": "epkt_fixture_001",
+  "query": "What does RAG require for grounded answers?",
+  "created_at": "2026-04-23T00:00:00+00:00",
+  "answerable": true,
+  "coverage": {
+    "status": "partial",
+    "span_count": 1,
+    "source_count": 1
+  },
+  "policy": {
+    "classification": "P2",
+    "allowed": true,
+    "external_allowed": false,
+    "redaction_required": false,
+    "reasons": []
+  },
+  "spans": [
+    {
+      "span_id": "span_001",
+      "source_id": "paper:rag-survey",
+      "source_type": "paper",
+      "content_hash": "sha256:5f3b8d9f0d6a4e4d9a0a3db11d2dfd91d832f0e54d8a4d40f3dd0a01804f2a55",
+      "char_start": 128,
+      "char_end": 246,
+      "text": "RAG systems ground generation in retrieved passages and cite evidence.",
+      "retrieval_scores": {
+        "score": 0.91,
+        "semantic": 0.88,
+        "lexical": 0.42,
+        "rerank": 0.93,
+        "mode": "hybrid"
+      },
+      "policy": {
+        "classification": "P2",
+        "allowed": true,
+        "external_allowed": false,
+        "redaction_required": false,
+        "reasons": []
+      },
+      "citation_label": "S1",
+      "locator": "chars:128-246"
+    }
+  ]
+}

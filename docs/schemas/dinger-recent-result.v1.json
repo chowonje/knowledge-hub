@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.recent.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "recentPapers", "recentKoNoteRuns", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.recent.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "recentPapers": { "type": "array", "items": { "type": "object" } },
+    "recentKoNoteRuns": { "type": "array", "items": { "type": "object" } },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

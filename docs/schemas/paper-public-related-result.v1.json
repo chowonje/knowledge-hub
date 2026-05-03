@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.public.related.v1",
+  "type": "object",
+  "required": ["schema", "status", "paperId", "paperTitle", "query", "relatedKnowledge", "claimCoverage", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.public.related.v1" },
+    "status": { "type": "string" },
+    "paperId": { "type": "string" },
+    "paperTitle": { "type": "string" },
+    "query": { "type": "string" },
+    "relatedKnowledge": { "type": "array", "items": { "type": "object" } },
+    "conceptsDetailed": { "type": "array" },
+    "quality": { "type": "object" },
+    "claimCoverage": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

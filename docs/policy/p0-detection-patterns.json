@@ -1,0 +1,41 @@
+{
+  "version": "2026-04-08",
+  "patterns": [
+    {
+      "id": "email",
+      "regex": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+    },
+    {
+      "id": "phone_like",
+      "regex": "\\b(?:\\+?\\d{1,3}[-\\s]?)?(?:\\(?\\d{2,4}\\)?[-\\s]?)\\d{3,4}[-\\s]?\\d{4}\\b"
+    },
+    {
+      "id": "card_like",
+      "regex": "\\b(?:\\d[ -]*?){13,19}\\b"
+    },
+    {
+      "id": "ssn_like",
+      "regex": "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+    },
+    {
+      "id": "secret_keyword",
+      "regex": "\\b(password|passwd|api[_-]?key|access[_-]?token|refresh[_-]?token|secret(?:[_-]?key)?|주민등록번호|계좌번호)\\b",
+      "flags": "i"
+    }
+  ],
+  "redactKeys": [
+    "password",
+    "passwd",
+    "secret",
+    "secret_key",
+    "token",
+    "access_token",
+    "refresh_token",
+    "api_key",
+    "ssn",
+    "card_number",
+    "account_number",
+    "phone",
+    "email"
+  ]
+}

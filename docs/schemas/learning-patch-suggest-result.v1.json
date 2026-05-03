@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-patch-suggest-result.v1.json",
+  "title": "knowledge-hub learning patch suggest result v1",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "status", "policy", "session", "mode", "suggestions", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.patch.suggest.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "blocked", "error"]},
+    "policy": {"type": "object"},
+    "session": {"type": "object"},
+    "mode": {"type": "string", "enum": ["proposal-only"]},
+    "summary": {"type": "object"},
+    "suggestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "targetPath", "sectionTitle", "reason", "confidence", "mode", "patchText"],
+        "properties": {
+          "id": {"type": "string"},
+          "targetPath": {"type": "string"},
+          "sectionTitle": {"type": "string"},
+          "reason": {"type": "string"},
+          "confidence": {"type": "number"},
+          "mode": {"type": "string"},
+          "patchText": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "sourceRefs": {"type": "array", "items": {"type": "string"}},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "outPath", "paperCount", "rowCount", "paperIds", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-summary.eval.prepare.result.v1" },
+    "status": { "type": "string" },
+    "outPath": { "type": "string" },
+    "paperCount": { "type": "integer" },
+    "rowCount": { "type": "integer" },
+    "paperIds": { "type": "array", "items": { "type": "string" } },
+    "rowFields": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

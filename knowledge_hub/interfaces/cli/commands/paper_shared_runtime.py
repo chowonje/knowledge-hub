@@ -18,10 +18,11 @@ from rich.console import Console
 
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.learning.task_router import TaskRouteDecision, get_llm_for_task
-from knowledge_hub.papers.memory_payloads import card_payload
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
-from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
+from knowledge_hub.papers.memory_payloads import shared_slot_payload
+from knowledge_hub.papers.source_text import extract_pdf_text_excerpt, extract_salient_paper_text, usable_paper_notes
 from knowledge_hub.papers.structured_summary import StructuredPaperSummaryService
+from knowledge_hub.vault.concepts import normalize_concept_wikilink_target
 
 console = Console()
 log = logging.getLogger("khub.paper")
@@ -31,6 +32,7 @@ _ARXIV_ID_RE = re.compile(r"^\d{4}\.\d{4,5}(v\d+)?$")
 API_MAX_RETRIES = 3
 API_RETRY_BASE_SEC = 2.0
 MAX_SUMMARIZE_CHARS = 30000
+MAX_PAPER_EMBED_CHARS = 8000
 _LOCAL_PROVIDER_NAMES = {"ollama", "pplx-local", "pplx-st"}
 
 
@@ -69,6 +71,66 @@ def _build_embedder(config, *, khub=None):
 
 def _paper_summary_parser(config) -> str:
     return str(getattr(config, "paper_summary_parser", "") or config.get_nested("paper", "summary", "parser", default="auto"))
+
+
+def _summary_provider(config) -> str:
+    token = str(getattr(config, "summarization_provider", "") or "").strip()
+    if token:
+        return token
+    getter = getattr(config, "get_nested", None)
+    if callable(getter):
+        return str(getter("summarization", "provider", default="") or "").strip()
+    return ""
+
+
+def _summary_model(config) -> str:
+    token = str(getattr(config, "summarization_model", "") or "").strip()
+    if token:
+        return token
+    getter = getattr(config, "get_nested", None)
+    if callable(getter):
+        return str(getter("summarization", "model", default="") or "").strip()
+    return ""
+
+
+def _resolve_summary_build_options(
+    config,
+    *,
+    provider: str | None,
+    model: str | None,
+    allow_external: bool | None,
+    llm_mode: str = "auto",
+) -> dict[str, object]:
+    explicit_provider = str(provider or "").strip()
+    explicit_model = str(model or "").strip()
+    route_mode = str(llm_mode or "auto").strip().lower() or "auto"
+    configured_provider = _summary_provider(config)
+    configured_model = _summary_model(config)
+
+    provider_override = ""
+    model_override = ""
+    if explicit_provider or explicit_model:
+        provider_override = explicit_provider or configured_provider
+        model_override = explicit_model or (configured_model if provider_override == configured_provider else "")
+    elif route_mode == "auto":
+        provider_override = configured_provider
+        model_override = configured_model
+
+    provider_is_local = _provider_is_local(provider_override) if provider_override else True
+    allow_external_effective = (not provider_is_local) if allow_external is None else bool(allow_external)
+
+    # Respect an explicit local-only request by dropping implicit external provider overrides.
+    if provider_override and not provider_is_local and not allow_external_effective and not explicit_provider:
+        provider_override = ""
+        model_override = ""
+
+    return {
+        "provider_override": provider_override or None,
+        "model_override": model_override or None,
+        "allow_external": allow_external_effective,
+        "configured_provider": configured_provider,
+        "configured_model": configured_model,
+    }
 
 
 def _derive_user_card_from_payload(payload: dict) -> dict:
@@ -134,27 +196,24 @@ def _ensure_public_paper_summary(khub, paper_id: str) -> tuple[dict, dict]:
     service = StructuredPaperSummaryService(_sqlite_db(khub.config, khub=khub), khub.config)
     payload = service.load_artifact(paper_id=paper_id) or {}
     if not payload:
-        payload = service.build(
-            paper_id=paper_id,
-            paper_parser=_paper_summary_parser(khub.config),
-            refresh_parse=False,
-            quick=False,
-        )
-    if str(payload.get("status") or "") == "blocked":
-        detail = "; ".join(str(item) for item in (payload.get("warnings") or [])[:3]) or f"paper summary blocked: {paper_id}"
-        raise click.ClickException(detail)
+        payload = {
+            "schema": "knowledge-hub.paper-summary.build.result.v1",
+            "status": "missing",
+            "paperId": str(paper_id).strip(),
+            "paperTitle": str(((_sqlite_db(khub.config, khub=khub).get_paper(str(paper_id).strip()) or {}).get("title")) or "").strip(),
+            "summary": {},
+            "evidenceMap": [],
+            "warnings": ["summary_artifact_missing"],
+        }
     return payload, _load_user_card(payload)
 
 
 def _public_paper_memory(sqlite_db, *, config=None, paper_id: str) -> dict:
     retriever = PaperMemoryRetriever(sqlite_db)
     card = retriever.get(paper_id, include_refs=True)
-    if card is not None:
-        return dict(card)
-    row = build_paper_memory_builder(sqlite_db, config=config).build_and_store(paper_id=paper_id)
-    if row is None:
+    if card is None:
         return {}
-    return card_payload(row)
+    return dict(card)
 
 
 def _public_related_knowledge(khub, *, paper_id: str, paper_title: str, top_k: int) -> dict:
@@ -345,13 +404,7 @@ def _resolve_vault_concepts_dir(vault_path: str) -> Path:
 
 
 def _normalize_wikilink_target(raw: str) -> str:
-    token = str(raw or "").strip()
-    if not token:
-        return ""
-    token = token.split("|", 1)[0].strip()
-    if token.endswith(".md"):
-        token = token[:-3].strip()
-    return token
+    return normalize_concept_wikilink_target(raw)
 
 
 def _extract_note_concepts(content: str) -> list[str]:
@@ -377,11 +430,6 @@ def _extract_note_concepts(content: str) -> list[str]:
                 not name
                 or lowered == "00_concept_index"
                 or lowered == "00_concept_index.md"
-                or "/" in name
-                or lowered.startswith("learninghub/")
-                or lowered.startswith("papers/")
-                or lowered.startswith("projects/")
-                or lowered.startswith("archives/")
             ):
                 continue
             if lowered not in seen:
@@ -393,7 +441,7 @@ def _extract_note_concepts(content: str) -> list[str]:
 def _collect_paper_text(paper: dict, config) -> str:
     translated = paper.get("translated_path")
     if translated and Path(translated).exists():
-        text = Path(translated).read_text(encoding="utf-8")
+        text = extract_salient_paper_text(Path(translated).read_text(encoding="utf-8"), max_chars=MAX_SUMMARIZE_CHARS)
         if len(text) > 200:
             return text[:MAX_SUMMARIZE_CHARS]
 
@@ -405,9 +453,13 @@ def _collect_paper_text(paper: dict, config) -> str:
 
     text_path = paper.get("text_path")
     if text_path and Path(text_path).exists():
-        text = Path(text_path).read_text(encoding="utf-8")
+        text = extract_salient_paper_text(Path(text_path).read_text(encoding="utf-8"), max_chars=MAX_SUMMARIZE_CHARS)
         if len(text) > 200:
             return text[:MAX_SUMMARIZE_CHARS]
+
+    pdf_text = extract_pdf_text_excerpt(str(paper.get("pdf_path") or ""), max_chars=MAX_SUMMARIZE_CHARS)
+    if len(pdf_text) > 200:
+        return pdf_text[:MAX_SUMMARIZE_CHARS]
 
     papers_dir = Path(config.papers_dir)
     for pattern in [f"*{paper['arxiv_id']}*.txt", f"*{paper['title'][:30]}*.txt"]:
@@ -419,8 +471,85 @@ def _collect_paper_text(paper: dict, config) -> str:
     title = paper.get("title", "")
     authors = paper.get("authors", "")
     field = paper.get("field", "")
-    notes = paper.get("notes", "")
+    notes = usable_paper_notes(paper.get("notes", ""))
     return f"제목: {title}\n저자: {authors}\n분야: {field}\n{notes}"
+
+
+def _build_paper_embedding_text(sqlite_db, *, paper: dict, config, keywords: list[str] | None = None) -> str:
+    token = str(paper.get("arxiv_id") or "").strip()
+    title = str(paper.get("title") or token).strip()
+    field = str(paper.get("field") or "").strip()
+    year = str(paper.get("year") or "").strip()
+    keyword_values = [str(item).strip() for item in list(keywords or []) if str(item or "").strip()]
+
+    lines: list[str] = [f"Title: {title}"]
+    if field:
+        lines.append(f"Field: {field}")
+    if year:
+        lines.append(f"Year: {year}")
+    if keyword_values:
+        lines.append(f"Keywords: {', '.join(keyword_values[:10])}")
+
+    summary_payload = StructuredPaperSummaryService(sqlite_db, config).load_artifact(paper_id=token) or {}
+    if str(summary_payload.get("status") or "").strip().lower() in {"ok", "success"}:
+        rendered_summary = _render_structured_summary_notes(summary_payload).strip()
+        if rendered_summary:
+            lines.extend(["", "Structured Summary", rendered_summary[:4000]])
+
+    memory_payload = _public_paper_memory(sqlite_db, config=config, paper_id=token)
+    if memory_payload:
+        slot_bundle = shared_slot_payload(memory_payload)
+        slots = dict(slot_bundle.get("slots") or {})
+        memory_lines = [
+            f"Paper Core: {str(slots.get('overview') or memory_payload.get('paperCore') or '').strip()}",
+            f"Problem Context: {str(slots.get('problem') or memory_payload.get('problemContext') or '').strip()}",
+            f"Method Core: {str(slots.get('method') or memory_payload.get('methodCore') or '').strip()}",
+            f"Evidence Core: {str(slots.get('evidence') or memory_payload.get('evidenceCore') or '').strip()}",
+            f"Limitations: {str(slots.get('limitations') or memory_payload.get('limitations') or '').strip()}",
+        ]
+        concept_links = [str(item).strip() for item in list(slot_bundle.get("concept_links") or memory_payload.get("conceptLinks") or []) if str(item or "").strip()]
+        if concept_links:
+            memory_lines.append(f"Concepts: {', '.join(concept_links[:8])}")
+        compact_memory = "\n".join(line for line in memory_lines if not line.endswith(": "))
+        if compact_memory.strip():
+            lines.extend(["", "Paper Memory", compact_memory[:3000]])
+
+    fallback_text = _collect_paper_text(paper, config).strip()
+    if fallback_text:
+        lines.extend(["", "Source Excerpt", fallback_text[:4000]])
+
+    rendered = "\n".join(line for line in lines if str(line).strip()).strip()
+    return rendered[:MAX_PAPER_EMBED_CHARS]
+
+
+def _render_structured_summary_notes(payload: dict) -> str:
+    summary = dict(payload.get("summary") or {})
+    lines = [
+        "## 한줄 요약",
+        "",
+        str(summary.get("oneLine") or ""),
+        "",
+        "## 문제",
+        "",
+        str(summary.get("problem") or ""),
+        "",
+        "## 핵심 아이디어",
+        "",
+        str(summary.get("coreIdea") or ""),
+        "",
+        "## 방법",
+        "",
+    ]
+    for item in list(summary.get("methodSteps") or []):
+        lines.append(f"- {item}")
+    lines.extend(["", "## 주요 결과", ""])
+    for item in list(summary.get("keyResults") or []):
+        lines.append(f"- {item}")
+    lines.extend(["", "## 한계", ""])
+    for item in list(summary.get("limitations") or []):
+        lines.append(f"- {item}")
+    rendered = "\n".join(lines).strip()
+    return rendered + ("\n" if rendered else "")
 
 
 def _update_obsidian_summary(paper: dict, summary: str, config):
@@ -462,6 +591,17 @@ def _update_obsidian_summary(paper: dict, summary: str, config):
                 console.print(f"[dim]Obsidian 노트 업데이트: {note_path.name}[/dim]")
 
 
+def _sync_structured_summary_view(sqlite_db, *, paper: dict, payload: dict, config) -> str:
+    rendered = _render_structured_summary_notes(payload)
+    sqlite_db.conn.execute(
+        "UPDATE papers SET notes = ? WHERE arxiv_id = ?",
+        (rendered, str(paper.get("arxiv_id") or "").strip()),
+    )
+    sqlite_db.conn.commit()
+    _update_obsidian_summary(paper, rendered, config)
+    return rendered
+
+
 def _validate_cli_payload(config, payload: dict, schema_id: str) -> None:
     strict = bool(config.get_nested("validation", "schema", "strict", default=False))
     result = annotate_schema_errors(payload, schema_id, strict=strict)
@@ -473,6 +613,7 @@ def _validate_cli_payload(config, payload: dict, schema_id: str) -> None:
 __all__ = [
     "MAX_SUMMARIZE_CHARS",
     "_api_call_with_retry",
+    "_build_paper_embedding_text",
     "_build_embedder",
     "_build_llm",
     "_collect_paper_text",
@@ -485,12 +626,15 @@ __all__ = [
     "_normalize_wikilink_target",
     "_paper_summary_parser",
     "_provider_is_local",
+    "_resolve_summary_build_options",
     "_public_paper_memory",
     "_public_related_knowledge",
+    "_render_structured_summary_notes",
     "_resolve_routed_llm",
     "_resolve_vault_concepts_dir",
     "_resolve_vault_papers_dir",
     "_sqlite_db",
+    "_sync_structured_summary_view",
     "_update_obsidian_summary",
     "_validate_arxiv_id",
     "_validate_cli_payload",

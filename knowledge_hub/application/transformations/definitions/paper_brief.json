@@ -1,0 +1,15 @@
+{
+  "id": "paper_brief",
+  "version": "v1",
+  "title": "Paper Brief",
+  "description": "Turn bounded paper-related evidence into a short reading brief.",
+  "prompt_template": "Create a paper brief for {query}. Highlight the paper's problem, method, evidence, and why it matters. Use only the supplied evidence. Sources selected: {source_count}.",
+  "declared_inputs": {
+    "query": "string",
+    "sources": "paper_or_related_context"
+  },
+  "declared_output": {
+    "type": "markdown_brief",
+    "sections": ["problem", "method", "evidence", "takeaways"]
+  }
+}

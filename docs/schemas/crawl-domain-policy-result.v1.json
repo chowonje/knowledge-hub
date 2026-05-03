@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/crawl-domain-policy-result.v1.json",
+  "title": "knowledge-hub crawl domain policy result v1",
+  "type": "object",
+  "required": ["schema", "status", "ts"],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.crawl.domain.policy.result.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "blocked", "failed"]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "action": {
+      "type": "string",
+      "enum": ["approve", "reject", "list"]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["domain", "status"],
+        "properties": {
+          "domain": {"type": "string"},
+          "status": {"type": "string", "enum": ["approved", "pending", "rejected"]},
+          "reason": {"type": "string"},
+          "updated_at": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "item": {
+      "type": "object",
+      "properties": {
+        "domain": {"type": "string"},
+        "status": {"type": "string", "enum": ["approved", "pending", "rejected"]},
+        "reason": {"type": "string"},
+        "updated_at": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "ts": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

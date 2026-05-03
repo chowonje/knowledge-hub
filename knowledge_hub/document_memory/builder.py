@@ -16,7 +16,12 @@ from knowledge_hub.document_memory.extraction import DocumentMemoryExtractionV1
 from knowledge_hub.document_memory.models import DocumentMemoryUnit
 from knowledge_hub.papers.mineru_adapter import MinerUPDFAdapter
 from knowledge_hub.papers.opendataloader_adapter import OpenDataLoaderPDFAdapter, resolve_opendataloader_convert_options
-from knowledge_hub.vault.parser import ObsidianParser
+from knowledge_hub.papers.pymupdf_adapter import PyMuPDFAdapter
+from knowledge_hub.papers.source_text import (
+    extract_pdf_text_excerpt,
+    resolve_paper_source_snapshot,
+    source_hash_for_path,
+)
 from knowledge_hub.web.ingest import make_web_note_id
 
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
@@ -438,6 +443,7 @@ class DocumentMemoryBuilder:
         config: Any | None = None,
         pdf_parser_adapter: OpenDataLoaderPDFAdapter | None = None,
         mineru_parser_adapter: MinerUPDFAdapter | None = None,
+        pymupdf_adapter: PyMuPDFAdapter | None = None,
         schema_extractor: Any | None = None,
         extraction_mode: str = "deterministic",
     ):
@@ -445,6 +451,7 @@ class DocumentMemoryBuilder:
         self.config = config
         self._pdf_parser_adapter = pdf_parser_adapter
         self._mineru_parser_adapter = mineru_parser_adapter
+        self._pymupdf_adapter = pymupdf_adapter
         self._schema_extractor = schema_extractor
         self._extraction_mode = str(extraction_mode or "deterministic").strip().lower()
         self._last_extraction_diagnostics: dict[str, dict[str, Any]] = {}
@@ -491,6 +498,12 @@ class DocumentMemoryBuilder:
             self._mineru_parser_adapter = MinerUPDFAdapter(papers_dir=str(papers_dir or ""))
         return self._mineru_parser_adapter
 
+    def _paper_pymupdf_adapter(self) -> PyMuPDFAdapter:
+        if self._pymupdf_adapter is None:
+            papers_dir = getattr(self.config, "papers_dir", "") if self.config is not None else ""
+            self._pymupdf_adapter = PyMuPDFAdapter(papers_dir=str(papers_dir or ""))
+        return self._pymupdf_adapter
+
     def _document_from_paper(
         self,
         paper_id: str,
@@ -502,14 +515,19 @@ class DocumentMemoryBuilder:
         note_id = f"paper:{str(paper_id).strip()}"
         token = str(paper_id).strip()
         parser_token = str(paper_parser or "raw").strip().lower()
-        if parser_token in {"opendataloader", "mineru"}:
+        if parser_token in {"opendataloader", "mineru", "pymupdf"}:
             paper = self.sqlite_db.get_paper(token)
             if not paper:
                 raise ValueError(f"paper not found: {paper_id}")
             pdf_path = str(paper.get("pdf_path") or "").strip()
             if not pdf_path:
                 raise ValueError(f"paper pdf not found: {paper_id}")
-            adapter = self._paper_parser_adapter() if parser_token == "opendataloader" else self._paper_mineru_adapter()
+            if parser_token == "opendataloader":
+                adapter = self._paper_parser_adapter()
+            elif parser_token == "mineru":
+                adapter = self._paper_mineru_adapter()
+            else:
+                adapter = self._paper_pymupdf_adapter()
             if parser_token == "opendataloader":
                 parsed = adapter.ensure_artifacts(
                     paper_id=token,
@@ -531,6 +549,7 @@ class DocumentMemoryBuilder:
                 "year": paper.get("year"),
                 "field": str(paper.get("field") or ""),
                 "published_at": _iso_utc(paper.get("year")),
+                "source_content_hash": source_hash_for_path(pdf_path),
                 "parser_meta": dict(parsed.parser_meta),
             },
                 file_path=str(parsed.markdown_path),
@@ -547,31 +566,23 @@ class DocumentMemoryBuilder:
         paper = self.sqlite_db.get_paper(token)
         if not paper:
             raise ValueError(f"paper not found: {paper_id}")
-        text = ""
-        for key in ("translated_path", "text_path"):
-            path_value = str(paper.get(key) or "").strip()
-            if not path_value:
-                continue
-            path = Path(path_value)
-            if not path.exists():
-                continue
-            try:
-                text = path.read_text(encoding="utf-8")
-                break
-            except Exception:
-                continue
-        if not text:
-            text = str(paper.get("notes") or paper.get("title") or "")
+        snapshot = resolve_paper_source_snapshot(
+            paper,
+            pdf_text_extractor=extract_pdf_text_excerpt,
+        )
         return Document(
-            content=text,
+            content=snapshot.content,
             metadata={
                 "paper_id": token,
                 "authors": str(paper.get("authors") or ""),
                 "year": paper.get("year"),
                 "field": str(paper.get("field") or ""),
                 "published_at": _iso_utc(paper.get("year")),
+                "raw_fallback_source": snapshot.source_key,
+                "source_content_hash": snapshot.source_content_hash,
+                "source_warnings": list(snapshot.warnings),
             },
-            file_path=str(paper.get("text_path") or paper.get("translated_path") or f"paper:{paper_id}"),
+            file_path=snapshot.path or str(paper.get("pdf_path") or f"paper:{paper_id}"),
             title=str(paper.get("title") or paper_id),
             tags=["paper"],
             links=[],
@@ -646,6 +657,7 @@ class DocumentMemoryBuilder:
         parser_meta = dict((parser_payload or {}).get("parser_meta") or {})
         structured_elements = list(structured_elements or [])
         metadata = dict(document.metadata or {})
+        source_content_hash = _clean_text(metadata.get("source_content_hash"))
         document_date = _metadata_date(
             metadata,
             "document_date",
@@ -696,6 +708,7 @@ class DocumentMemoryBuilder:
                         "source_type": document.source_type.value,
                         "source_ref": source_ref,
                         "file_path": document.file_path,
+                        "source_content_hash": source_content_hash,
                         "parser": str(parser_meta.get("parser") or ""),
                         "page": section_signals.get("page"),
                         "bbox": section_signals.get("bbox"),
@@ -782,6 +795,7 @@ class DocumentMemoryBuilder:
                 "source_type": document.source_type.value,
                 "source_ref": source_ref,
                 "file_path": document.file_path,
+                "source_content_hash": source_content_hash,
                 "parser": str(parser_meta.get("parser") or ""),
                 "source_pdf": str(parser_meta.get("source_pdf") or ""),
                 "elements_imported": len(structured_elements),
@@ -823,6 +837,9 @@ class DocumentMemoryBuilder:
             ),
         )
         records = [summary.to_record()] + [unit.to_record() for unit in child_units]
+        if source_content_hash:
+            for record in records:
+                record["source_content_hash"] = source_content_hash
         records = self._apply_schema_extraction(
             document=document,
             document_id=document_id,

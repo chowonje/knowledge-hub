@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Knowledge Hub Learning Reinforcement Result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "topic",
+    "sessionId",
+    "status",
+    "actions",
+    "summary",
+    "policy",
+    "createdAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.learning.reinforcement.result.v1"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "blocked",
+        "error"
+      ]
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "actionType",
+          "priority",
+          "targetEntityId",
+          "targetEntityName",
+          "reason",
+          "suggestedSources",
+          "estimatedImpact"
+        ],
+        "properties": {
+          "actionType": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "targetEntityId": {
+            "type": "string"
+          },
+          "targetEntityName": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "suggestedSources": {
+            "type": "array"
+          },
+          "estimatedImpact": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "allowed",
+        "classification"
+      ],
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "classification": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verify": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "writeback": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

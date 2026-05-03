@@ -1,0 +1,21 @@
+query,source,query_type,expected_primary_source,expected_answer_style,difficulty,regression_bucket
+document memory와 paper memory의 차이를 논문 관점에서 설명해줘,paper,comparison,paper,compare_summary,medium,paper_compare_summary
+논문 retrieval에서 memory prefilter가 chunk evidence로 어떻게 이어지는가?,paper,implementation,paper,implementation_steps,hard,paper_implementation
+paper summary path에서 evidence packet이 왜 필요한가?,paper,implementation,paper,implementation_steps,medium,paper_evidence_packet
+최신 paper memory 변경이 질의 응답에 어떤 영향을 주나?,paper,temporal,paper,timeline_compare,medium,paper_temporal_latest
+현재 코퍼스만으로 특정 최신 논문의 정확한 수치 비교를 단정할 수 있나?,paper,abstention,paper,abstain,medium,paper_abstention
+최근 벡터 검색 품질 개선 글은 rerank를 어떤 역할로 설명하나?,web,temporal,web,timeline_compare,medium,web_temporal_latest
+web card v2에서 version grounding이 필요한 이유는 무엇인가?,web,definition,web,concise_summary,medium,web_version_grounding
+observed_at만 있는 web source는 왜 강한 최신 답변을 피해야 하나?,web,abstention,web,abstain,medium,web_abstention
+web ask v2에서 ontology-first routing은 언제 도움이 되나?,web,relation,web,concept_explainer,medium,web_relation
+latest/update 질문에서 web evidence anchor는 어떤 필드를 봐야 하나?,web,temporal,web,implementation_steps,medium,web_temporal_fields
+RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?,vault,definition,vault,concise_summary,easy,vault_summary
+ontology layer가 임베딩 검색에서 보완하는 것은 무엇인가?,vault,relation,vault,concept_explainer,medium,vault_relation
+document memory와 chunk retrieval의 차이를 설명해줘,vault,comparison,vault,compare_summary,medium,vault_compare
+최근 retrieval pipeline에서 temporal route가 추가된 이유는 무엇인가?,vault,temporal,vault,timeline_compare,medium,vault_temporal
+memory-first retrieval의 목적을 한 문장으로 설명해줘,vault,definition,vault,concise_summary,easy,vault_summary_short
+repo 구조에서 entrypoint와 adapter 경계를 어떻게 찾나?,project,implementation,project,implementation_steps,hard,project_architecture
+project ask v2가 README보다 구조 파일을 우선해야 하는 이유는?,project,architecture,project,concise_summary,medium,project_architecture
+symbol owner와 call flow slot이 project 답변에 왜 중요한가?,project,definition,project,concept_explainer,medium,project_slots
+테스트 파일만으로 아키텍처를 단정하면 왜 위험한가?,project,abstention,project,abstain,medium,project_abstention
+service architecture entrypoint pipeline 설명해줘,project,architecture,project,implementation_steps,medium,project_entrypoint

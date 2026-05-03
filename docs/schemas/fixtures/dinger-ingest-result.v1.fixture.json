@@ -1,0 +1,16 @@
+{
+  "schema": "knowledge-hub.dinger.ingest.result.v1",
+  "status": "ok",
+  "mode": "web",
+  "target": {
+    "topic": "rag",
+    "urlCount": 2,
+    "apply": false
+  },
+  "underlyingSchema": "knowledge-hub.crawl.collect.result.v1",
+  "payload": {
+    "schema": "knowledge-hub.crawl.collect.result.v1",
+    "status": "ok"
+  },
+  "createdAt": "2026-04-09T00:00:00Z"
+}

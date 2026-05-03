@@ -1,0 +1,19 @@
+{
+  "schema": "knowledge-hub.os.decide.result.v1",
+  "status": "ok",
+  "decision": {
+    "id": "decision_123",
+    "projectId": "proj_123",
+    "kind": "scope",
+    "summary": "Keep workflow commands operator-first.",
+    "rationale": "CLI remains the canonical OS interface.",
+    "sourceRefs": [
+      { "sourceType": "document", "documentScopeId": "knowledge_os_definition_v1" }
+    ],
+    "createdByType": "human",
+    "createdById": "won",
+    "createdAt": "2026-04-09T00:00:00Z",
+    "updatedAt": "2026-04-09T00:00:00Z"
+  },
+  "createdAt": "2026-04-09T00:00:00Z"
+}

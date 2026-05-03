@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-quiz-grade-result.v1.json",
+  "title": "knowledge-hub learning quiz grade result v1",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "status", "policy", "session", "quiz", "grading", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": {"const": "knowledge-hub.learning.quiz.grade.result.v1"},
+    "runId": {"type": "string"},
+    "topic": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "blocked", "error"]},
+    "policy": {"type": "object"},
+    "session": {"type": "object"},
+    "quiz": {"type": "object"},
+    "grading": {
+      "type": "object",
+      "required": ["score", "total", "correct", "passed", "details"],
+      "properties": {
+        "score": {"type": "number"},
+        "total": {"type": "integer"},
+        "correct": {"type": "integer"},
+        "passed": {"type": "boolean"},
+        "details": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": true
+    },
+    "router": {"type": "object"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "sourceRefs": {"type": "array", "items": {"type": "string"}},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

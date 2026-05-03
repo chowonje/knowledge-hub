@@ -1,0 +1,121 @@
+{
+  "schema": "knowledge-hub.policy-conformance-cases.v1",
+  "version": "2026-04-24",
+  "cases": [
+    {
+      "id": "detected-p0-agent-verify",
+      "action": "agent_verify",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p0-detected",
+      "classification": "P2",
+      "payload": {
+        "classification": "P2",
+        "jsonContent": "password: fixture-only"
+      },
+      "expected": {
+        "allowed": false,
+        "classification": "P0",
+        "tsPolicyCode": "AGENT_VERIFY_P0_DENY"
+      }
+    },
+    {
+      "id": "declared-p0-writeback",
+      "action": "agent_writeback",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p0-declared",
+      "classification": "P0",
+      "payload": {
+        "classification": "P0",
+        "jsonContent": "public summary text"
+      },
+      "expected": {
+        "allowed": false,
+        "classification": "P0",
+        "tsPolicyCode": "WRITEBACK_CLASSIFICATION_DENY"
+      }
+    },
+    {
+      "id": "nested-policy-p0-agent-verify",
+      "action": "agent_verify",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p0-policy-node",
+      "classification": "P2",
+      "payload": {
+        "classification": "P2",
+        "policy": {
+          "classification": "P0"
+        },
+        "jsonContent": "public summary text"
+      },
+      "expected": {
+        "allowed": false,
+        "classification": "P0",
+        "tsPolicyCode": "AGENT_VERIFY_P0_DENY"
+      }
+    },
+    {
+      "id": "detected-p1-json-content",
+      "action": "agent_writeback",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p1-detected",
+      "classification": "P3",
+      "payload": {
+        "classification": "P3",
+        "jsonContent": "{\"id\":\"paper-1\",\"score\":0.91}"
+      },
+      "expected": {
+        "allowed": true,
+        "classification": "P1",
+        "tsPolicyCode": "ALLOW"
+      }
+    },
+    {
+      "id": "declared-p1-summary",
+      "action": "agent_verify",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p1-declared",
+      "classification": "P1",
+      "payload": {
+        "classification": "P1",
+        "jsonContent": "plain public summary"
+      },
+      "expected": {
+        "allowed": true,
+        "classification": "P1",
+        "tsPolicyCode": "ALLOW"
+      }
+    },
+    {
+      "id": "detected-p2-summary-shape",
+      "action": "agent_verify",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p2-summary",
+      "classification": "P3",
+      "payload": {
+        "classification": "P3",
+        "summary": "weekly focus report"
+      },
+      "expected": {
+        "allowed": true,
+        "classification": "P2",
+        "tsPolicyCode": "ALLOW"
+      }
+    },
+    {
+      "id": "public-url-p3",
+      "action": "agent_verify",
+      "resourceType": "artifact",
+      "resourceId": "fixture-p3-public-url",
+      "classification": "P3",
+      "payload": {
+        "classification": "P3",
+        "jsonContent": "https://arxiv.org/abs/2301.12345"
+      },
+      "expected": {
+        "allowed": true,
+        "classification": "P3",
+        "tsPolicyCode": "ALLOW"
+      }
+    }
+  ]
+}

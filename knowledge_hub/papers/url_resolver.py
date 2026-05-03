@@ -8,6 +8,7 @@ URL 기반 논문 소스 해석 모듈
 from __future__ import annotations
 
 import re
+import logging
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 from urllib.parse import urlparse, parse_qs
@@ -16,6 +17,7 @@ import requests
 from rich.console import Console
 
 console = Console()
+log = logging.getLogger("khub.papers.url_resolver")
 
 RESOLVE_TIMEOUT = 30
 
@@ -243,8 +245,8 @@ def resolve_direct_pdf(url: str) -> Optional[ResolvedPaper]:
                 pdf_url=url,
                 source="direct_pdf",
             )
-    except Exception:
-        pass
+    except Exception as error:
+        log.warning("direct pdf resolution failed for %s: %s", url, error)
     return None
 
 

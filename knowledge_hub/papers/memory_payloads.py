@@ -69,3 +69,41 @@ def hydrated_card_payload(
         )
     payload["claims"] = claims
     return payload
+
+
+def shared_slot_payload(value: dict[str, Any] | PaperMemoryCard | None) -> dict[str, Any]:
+    if isinstance(value, PaperMemoryCard):
+        card = value
+    elif isinstance(value, dict):
+        card = PaperMemoryCard.from_row(value)
+    else:
+        card = None
+    if card is None:
+        return {}
+
+    slots = {
+        "overview": str(card.paper_core),
+        "problem": str(card.problem_context),
+        "method": str(card.method_core),
+        "evidence": str(card.evidence_core),
+        "limitations": str(card.limitations),
+    }
+
+    return {
+        "memory_id": str(card.memory_id),
+        "paper_id": str(card.paper_id),
+        "title": str(card.title),
+        "paper_core": str(card.paper_core),
+        "problem_core": str(card.problem_context),
+        "method_core": str(card.method_core),
+        "evidence_core": str(card.evidence_core),
+        "limitations_core": str(card.limitations),
+        "slots": slots,
+        "concept_links": list(card.concept_links),
+        "claim_refs": list(card.claim_refs),
+        "published_at": str(card.published_at),
+        "search_text": str(card.search_text),
+        "quality_flag": str(card.quality_flag),
+        "version": str(card.version),
+        "updated_at": str(card.updated_at),
+    }

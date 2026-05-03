@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.canon-quality-audit.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "apply",
+    "manifestPath",
+    "outputDir",
+    "reportPath",
+    "selectorPath",
+    "targetCount",
+    "needsReviewCount",
+    "counts",
+    "defaults",
+    "items"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.canon-quality-audit.result.v1" },
+    "status": { "type": "string" },
+    "apply": { "type": "boolean" },
+    "dryRun": { "type": "boolean" },
+    "manifestPath": { "type": "string" },
+    "outputDir": { "type": "string" },
+    "reportPath": { "type": "string" },
+    "selectorPath": { "type": "string" },
+    "targetCount": { "type": "integer", "minimum": 0 },
+    "needsReviewCount": { "type": "integer", "minimum": 0 },
+    "counts": { "type": "object" },
+    "defaults": { "type": "object" },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/auditItem" }
+    },
+    "remediation": { "type": "object" }
+  },
+  "$defs": {
+    "auditItem": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "title",
+        "tranche",
+        "summaryStatus",
+        "memoryStatus",
+        "memoryQualityFlag",
+        "issues",
+        "proposedActions",
+        "blockedReasons",
+        "needsReview"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "title": { "type": "string" },
+        "tranche": { "type": "string" },
+        "summaryStatus": { "type": "string" },
+        "memoryStatus": { "type": "string" },
+        "memoryQualityFlag": { "type": "string" },
+        "issues": { "type": "array", "items": { "type": "string" } },
+        "spilloverFindings": { "type": "array", "items": { "type": "object" } },
+        "observedWarnings": { "type": "array", "items": { "type": "string" } },
+        "proposedActions": { "type": "array", "items": { "type": "string" } },
+        "blockedReasons": { "type": "array", "items": { "type": "string" } },
+        "needsReview": { "type": "boolean" },
+        "manifest": { "type": "object" },
+        "remediation": { "type": "object" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,8 +1,10 @@
 # Personal Foundry v1.0 (Knowledge-Hub 전용, CLI 우선) 통합 설계
 
-작성일: 2026-02-18  
-범위: `/Users/won/Desktop/allinone/knowledge-hub` 만 사용  
+작성일: 2026-02-18
+범위: 현재 `knowledge-hub` 저장소만 사용
 목표: **`ai-hub` 비결합**, 순수 CLI 기반으로 지식/개인 데이터가 연결되는 Foundry 스타일 실행 환경 구현
+
+현재 구현 기준으로 `foundry-core`는 preferred delegated runtime이며, Python fallback이 제거된 상태가 아니다. 아래 설명은 sole-runtime 가정이 아니라 현재의 delegated-first reality를 기준으로 읽어야 한다.
 
 ## 1. 핵심 목표
 
@@ -17,15 +19,15 @@
 ```mermaid
 flowchart LR
   subgraph KH["knowledge-hub"]
-    KCLI["cli.py"]
-    MCP["mcp_server.py"]
+    KCLI["khub / interfaces/cli"]
+    MCP["khub-mcp / interfaces/mcp"]
     KV["Vault / Papers / Web crawler"]
     DB["SQLite + Chroma"]
   end
 
   subgraph FC["foundry-core"]
     FS["connector-sdk.ts"]
-    RT["runtime.ts"]
+    RT["personal-foundry/agent-runtime.ts"]
     ON["ontology store (event+snp+ts)"]
     BUS["FoundryEventBus"]
     PL["policy engine + audit"]
@@ -44,22 +46,29 @@ flowchart LR
   MCP --> RT
 ```
 
+보정 설명:
+- 실제 제품 기본 런타임은 여전히 Python `knowledge_hub/` 이다.
+- `foundry-core`는 stricter runtime/policy boundary를 제공하는 delegated path다.
+- CLI와 MCP는 모두 Foundry-first delegation을 시도하지만, 실패 시 Python fallback이 존재한다.
+
 ## 3. 데이터 흐름
 
 ### 3.1 Sync (knowledge-hub ↔ foundry)
 
-1. CLI: `python cli.py agent sync --source ... --limit ... --cursor ...`
+1. CLI: `khub agent sync --source ... --limit ... --cursor ...`
 2. `foundry-core/src/cli-agent.ts`의 sync 모드가 해당 소스에 대해 `runConnectorSync` 실행.
-3. knowledge-hub connector가 `cli.py agent sync` 출력(payload)을 받아 `rawRecords` 생성.
+3. knowledge-hub connector가 `khub agent sync` 출력(payload)을 받아 `rawRecords` 생성.
 4. `mapToOntology`에서 `KnowledgeItem` 엔티티/`DocumentIngested` 이벤트로 변환.
 5. `emitOntologyBatchToBus`로 버스에 발행 + 감사 로그 + 커서 저장.
 
 ### 3.2 Query/Action (agent run)
 
-1. CLI: `python cli.py agent run "<goal>" --max-rounds N --dump-json`
-2. `foundry-core/src/runtime.ts`의 Plan→Act→Verify→Writeback 파이프라인 실행.
-3. tool은 knowledge-hub의 `ask_knowledge`, `search_knowledge` 사용.
-4. policy → schema 검증 → writeback. 결과는 통일된 envelope로 출력.
+1. CLI: `khub agent run "<goal>" --max-rounds N --dump-json`
+2. 우선 `foundry-core/src/personal-foundry/agent-runtime.ts` 기반 delegated path를 시도한다.
+3. delegated path가 실패하거나 unavailable이면 Python fallback이 실행된다.
+4. tool은 knowledge-hub의 `ask_knowledge`, `search_knowledge`, `task_context` 계열을 사용한다.
+5. Foundry 경로에서는 policy -> schema 검증 -> writeback이 가장 명시적으로 실행된다. Python fallback은 실제 경로이지만 writeback semantics가 더 약하고 report/envelope 중심이다.
+6. 결과는 통일된 envelope로 출력된다.
 
 ## 4. 온톨로지 스키마(요약)
 
@@ -89,9 +98,9 @@ flowchart LR
 ## 6. CLI 계약(운영 기준)
 
 - Sync
-  - `python cli.py agent sync --source all|note|paper|web|expense|sleep|schedule|behavior --limit 200`
-  - `python cli.py agent sync --source all --limit 200 --cursor <ts> --json`
-  - `python cli.py agent sync --source all --foundry --event-log .foundry-ontology-events.jsonl --json`
+  - `khub agent sync --source all|note|paper|web|expense|sleep|schedule|behavior --limit 200`
+  - `khub agent sync --source all --limit 200 --cursor <ts> --json`
+  - `khub agent sync --source all --foundry --event-log .foundry-ontology-events.jsonl --json`
   - 동적 소스 JSONL 파일(`data/dynamic/<source>.jsonl`)도 동일 `--source`로 동기화.
   - 내부 `foundry-core/src/cli-agent.ts`는
     - `--state-file`
@@ -102,24 +111,29 @@ flowchart LR
     - `--event-log <path>`
     를 지원.
 - Feature
-  - `python cli.py agent feature list`
-  - `python cli.py agent feature daily_coach --days 7 --source all --json`
-  - `python cli.py agent feature risk_alert --expense-threshold 200000 --min-sleep-hours 6 --from 2026-02-01T00:00:00 --to 2026-02-18T23:59:59`
+  - `khub agent feature list`
+  - `khub agent feature daily_coach --days 7 --source all --json`
+  - `khub agent feature risk_alert --expense-threshold 200000 --min-sleep-hours 6 --from 2026-02-01T00:00:00 --to 2026-02-18T23:59:59`
 - Discover
-  - `python cli.py agent discover --feature all --days 7 --source all`
-  - `python cli.py agent discover --feature daily_coach --feature focus_analytics --state-file .foundry-sync-state.json --event-log .foundry-ontology-events.jsonl`
-  - `python cli.py agent discover --output .tmp-discover.json --source all --days 7`
-  - `python cli.py agent discover --resume .tmp-discover.json --feature daily_coach`
-  - `python cli.py agent discover --source all --days 7 --fail-on-partial`
-  - `python cli.py agent discover --source all --days 7 --fail-on-error --no-fail-on-partial`
-  - `python cli.py agent discover-validate --input .tmp-discover.json`
+  - `khub agent discover --feature all --days 7 --source all`
+  - `khub agent discover --feature daily_coach --feature focus_analytics --state-file .foundry-sync-state.json --event-log .foundry-ontology-events.jsonl`
+  - `khub agent discover --output .tmp-discover.json --source all --days 7`
+  - `khub agent discover --resume .tmp-discover.json --feature daily_coach`
+  - `khub agent discover --source all --days 7 --fail-on-partial`
+  - `khub agent discover --source all --days 7 --fail-on-error --no-fail-on-partial`
+  - `khub agent discover-validate --input .tmp-discover.json`
   - `agent discover` 결과 스키마: `foundry-core/docs/schemas/agent-discover-result.schema.json`
   - 결과 스키마: `knowledge-hub.agent.discover.result.v1`(sync summary + feature array)
   - `--resume` 시점 규칙: 기본적으로 이전 결과의 `request`를 사용하되, 현재 명령의 `--from/--to/.../--feature` 등 명시 옵션이 우선합니다.
 - Agent run
-  - `python cli.py agent run "<goal>" [--max-rounds N] [--dry-run] [--dump-json] [--compact]`
+  - `khub agent run "<goal>" [--max-rounds N] [--dry-run] [--dump-json] [--compact]`
   - foundry-core fallback이 없을 경우 기존 python 폴백 동작 사용.
   - feature 이벤트 로그: `.foundry-ontology-events.jsonl`
+
+- MCP run
+  - `run_agentic_query(...)`는 async job surface다.
+  - `mcp_jobs`를 통해 queued -> running -> done/blocked/failed 상태를 기록한다.
+  - 이 job store는 MCP transport/persistence 레이어이지 범용 agent session store는 아니다.
 
 ## 7. TypeScript 인터페이스 확장 포인트
 
@@ -173,20 +187,20 @@ flowchart LR
 #### 대안 B: Python에 agent runtime을 몰아서 통합하고 TypeScript는 최소화
 - 장점
   - 런타임 스택 단일화로 배포/운영 단순
-  - `cli.py` 하나로 모든 경로 제어 가능
+  - `khub` 하나로 모든 경로 제어 가능
 - 리스크
   - 기존 TS connector runtime 설계가 가진 타입/도구 체계 재작성 부담
   - 향후 Electron/Tauri 앱 전환 시 재작업 비용 상승
 
 ## 10. 결정
 
-`대안 A`를 우선 적용한다.  
+`대안 A`를 우선 적용한다.
 이유: 현재 요구사항(터미널 중심 연결 + knowledge-hub 유지 + 빠른 결합)에 가장 적합하며, 점진적으로 동적 데이터 커넥터를 추가해도 구조가 안정적이다.
 
 ## 11. 최소 실행 체크리스트
 
 1. `node cli-agent.ts ... sync --all-sources --persist ...`로 동기화
-2. `python cli.py agent run "..." --dump-json`으로 단일 query 실행
-3. `python cli.py agent feature daily_coach --source all --days 7`로 통합 지표 실행
-4. `python cli.py agent discover --feature all --source all --days 7`로 1회성 진단 수행
+2. `khub agent run "..." --dump-json`으로 단일 query 실행
+3. `khub agent feature daily_coach --source all --days 7`로 통합 지표 실행
+4. `khub agent discover --feature all --source all --days 7`로 1회성 진단 수행
 5. policy deny가 발생하면 deny 이유와 runId를 바로 로그에서 조회

@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import importlib.metadata
 import json
+import os
 from pathlib import Path
 import shutil
 import tempfile
@@ -104,6 +105,30 @@ def _normalize_choice(value: Any, *, allowed: tuple[str, ...], default: str) -> 
     if token in allowed:
         return token
     return default
+
+
+def _prefer_homebrew_java() -> None:
+    current = shutil.which("java")
+    candidates = [
+        current,
+        "/opt/homebrew/opt/openjdk/bin/java",
+        "/usr/local/opt/openjdk/bin/java",
+    ]
+    chosen = ""
+    for candidate in candidates:
+        token = str(candidate or "").strip()
+        if token and Path(token).exists():
+            chosen = token
+            break
+    if not chosen:
+        return
+    java_bin = str(Path(chosen).expanduser().resolve().parent)
+    current_path = os.environ.get("PATH", "")
+    path_parts = current_path.split(":") if current_path else []
+    if java_bin not in path_parts:
+        os.environ["PATH"] = f"{java_bin}:{current_path}" if current_path else java_bin
+    java_home = str(Path(chosen).expanduser().resolve().parents[1])
+    os.environ.setdefault("JAVA_HOME", java_home)
 
 
 def normalize_opendataloader_convert_options(options: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -367,6 +392,7 @@ class OpenDataLoaderPDFAdapter:
             import opendataloader_pdf  # type: ignore
         except Exception as error:
             raise RuntimeError("opendataloader-pdf is not installed; install it to use --paper-parser opendataloader") from error
+        _prefer_homebrew_java()
 
         artifact_dir = self.artifact_dir_for(paper_id=token)
         artifact_dir.mkdir(parents=True, exist_ok=True)

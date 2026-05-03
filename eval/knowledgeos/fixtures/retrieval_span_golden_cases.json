@@ -1,0 +1,137 @@
+[
+  {
+    "case_id": "paper_transformer_attention",
+    "query": "transformer self attention sequence transduction",
+    "source_type": "paper",
+    "expected_source_id": "paper:1706.03762#0",
+    "expected_text_terms": ["transformer", "attention", "sequence"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "paper_rag_non_parametric_memory",
+    "query": "retrieval augmented generation non parametric memory",
+    "source_type": "paper",
+    "expected_source_id": "paper:2005.11401#0",
+    "expected_text_terms": ["retrieval", "generation", "memory"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "paper_cnn_imagenet",
+    "query": "cnn convolutional neural network imagenet",
+    "source_type": "paper",
+    "expected_source_id": "paper:alexnet#0",
+    "expected_text_terms": ["convolutional", "imagenet", "cnn"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "paper_vit_patches",
+    "query": "vit vision transformer image patches encoder",
+    "source_type": "paper",
+    "expected_source_id": "paper:vit#0",
+    "expected_text_terms": ["vision", "transformer", "patches"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "paper_dqn_q_learning",
+    "query": "dqn atari deep reinforcement q learning",
+    "source_type": "paper",
+    "expected_source_id": "paper:dqn#0",
+    "expected_text_terms": ["atari", "reinforcement", "q-learning"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "web_version_grounding",
+    "query": "web runtime version grounding latest update evidence",
+    "source_type": "web",
+    "expected_source_id": "web:version-grounding#0",
+    "expected_text_terms": ["version", "grounding", "update"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "web_reference_source",
+    "query": "reference explainer stable documentation guide api",
+    "source_type": "web",
+    "expected_source_id": "web:reference-source#0",
+    "expected_text_terms": ["reference", "documentation", "guide"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "web_observed_at_guard",
+    "query": "observed_at weak temporal evidence cannot prove latest",
+    "source_type": "web",
+    "expected_source_id": "web:observed-at-guard#0",
+    "expected_text_terms": ["observed_at", "temporal", "latest"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "web_rerank_signal",
+    "query": "rerank cross encoder signal precision not canonical evidence",
+    "source_type": "web",
+    "expected_source_id": "web:rerank-signal#0",
+    "expected_text_terms": ["rerank", "signal", "canonical"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "vault_default_loop",
+    "query": "discover index search ask evidence review default loop",
+    "source_type": "vault",
+    "expected_source_id": "vault:Project State.md#0",
+    "expected_text_terms": ["discover", "index", "evidence"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "vault_signal_not_citation",
+    "query": "ontology learning graph memory relation retrieval signals citations",
+    "source_type": "vault",
+    "expected_source_id": "vault:Architecture.md#0",
+    "expected_text_terms": ["ontology", "signals", "citations"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "vault_math_kl",
+    "query": "kl divergence variational inference evidence lower bound",
+    "source_type": "vault",
+    "expected_source_id": "vault:KL Divergence.md#0",
+    "expected_text_terms": ["divergence", "variational", "bound"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "vault_learning_coach",
+    "query": "learning coach progress weak areas quiz checkpoint",
+    "source_type": "vault",
+    "expected_source_id": "vault:Learning Coach.md#0",
+    "expected_text_terms": ["learning", "quiz", "checkpoint"],
+    "min_rank": 1,
+    "must_abstain": false
+  },
+  {
+    "case_id": "paper_missing_scope_abstains",
+    "query": "unavailable lattice tokenizer theorem",
+    "source_type": "paper",
+    "expected_source_id": "",
+    "expected_text_terms": ["unavailable", "lattice", "tokenizer"],
+    "min_rank": 0,
+    "must_abstain": true
+  },
+  {
+    "case_id": "non_evidence_learning_edge_signal",
+    "query": "rag prerequisite learning edge",
+    "source_type": "learning_edge",
+    "expected_source_id": "learning_edge:rag:prereq#0",
+    "expected_text_terms": ["prerequisite", "retrieval", "generation"],
+    "min_rank": 1,
+    "must_abstain": true
+  }
+]

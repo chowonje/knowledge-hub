@@ -1,0 +1,15 @@
+{
+  "id": "module_brief",
+  "version": "v1",
+  "title": "Module Brief",
+  "description": "Explain a code module using bounded repo and knowledge context.",
+  "prompt_template": "Create a module brief for {query}. Explain ownership, inputs/outputs, dependencies, and risks. Use only the supplied bounded context. Sources selected: {source_count}.",
+  "declared_inputs": {
+    "query": "string",
+    "sources": "repo_plus_knowledge_context"
+  },
+  "declared_output": {
+    "type": "markdown_brief",
+    "sections": ["ownership", "inputs_outputs", "dependencies", "risks"]
+  }
+}

@@ -1,0 +1,40 @@
+flowchart LR
+    subgraph CLI["CLI lane: khub agent run"]
+        C1["Parse goal and flags"] --> C2["Try Foundry bridge first"]
+        C2 --> C3{"Foundry usable?"}
+        C3 -->|yes| C4["Normalize run envelope"]
+        C4 --> C5["Apply local artifact redaction guard"]
+        C5 --> C6["Sync output and report path"]
+        C3 -->|no| C7["Build Python fallback envelope"]
+        C7 --> C5
+    end
+
+    subgraph MCP["MCP lane: run_agentic_query"]
+        M1["Receive MCP tool call"] --> M2["Create queued mcp_jobs row"]
+        M2 --> M3["Run async tool worker"]
+        M3 --> M4["Try Foundry bridge first"]
+        M4 --> M5{"Foundry usable?"}
+        M5 -->|yes| M6["Normalize delegated payload"]
+        M5 -->|no| M7{"Task mode"}
+        M7 -->|coding design debug| M8["Build task context"]
+        M8 --> M9["Synthesize from task context"]
+        M7 -->|general| M10["Run search_knowledge and or ask_knowledge"]
+        M9 --> M11["Build fallback envelope"]
+        M10 --> M11
+        M6 --> M12["MCP verify and persistence gate"]
+        M11 --> M12
+        M12 --> M13["Update mcp_jobs status and artifact"]
+    end
+
+    subgraph FOUNDRY["Preferred delegated runtime"]
+        F1["Plan"] --> F2["Act"]
+        F2 --> F3["Verify"]
+        F3 --> F4["Writeback"]
+    end
+
+    C2 -.-> F1
+    M4 -.-> F1
+
+    P1["Foundry preferred, not exclusive"] -.-> FOUNDRY
+    P2["CLI is synchronous"] -.-> C6
+    P3["MCP queue is MCP-specific, not a global session store"] -.-> M13

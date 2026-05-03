@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/ontology-event.v1.json",
+  "title": "Ontology Event Contract v1",
+  "description": "JSONL event schema contract for foundry-core synchronization",
+  "type": "object",
+  "required": [
+    "event_id",
+    "timestamp",
+    "event_type",
+    "entity_id",
+    "entity_type",
+    "actor",
+    "data",
+    "policy_class"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique event identifier",
+      "pattern": "^evt_[a-f0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO 8601 timestamp",
+      "format": "date-time"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Type of ontology event",
+      "enum": [
+        "entity_created",
+        "entity_updated",
+        "entity_deleted",
+        "claim_added",
+        "claim_updated",
+        "claim_deleted",
+        "relation_added",
+        "relation_updated",
+        "relation_deleted"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the entity affected by this event"
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Type of the entity",
+      "enum": [
+        "concept",
+        "claim",
+        "paper",
+        "person",
+        "organization",
+        "event",
+        "relation"
+      ]
+    },
+    "actor": {
+      "type": "string",
+      "description": "Who/what triggered this event",
+      "examples": ["user", "agent", "system", "web_extractor", "migration"]
+    },
+    "data": {
+      "type": "object",
+      "description": "Event-specific data payload",
+      "additionalProperties": true
+    },
+    "policy_class": {
+      "type": "string",
+      "description": "Privacy classification level",
+      "enum": ["P0", "P1", "P2", "P3"],
+      "default": "P2"
+    },
+    "run_id": {
+      "type": ["string", "null"],
+      "description": "Optional run/session ID for grouping related events"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "event_id": "evt_abc123",
+      "timestamp": "2026-03-01T10:00:00Z",
+      "event_type": "entity_created",
+      "entity_id": "webc_xyz789",
+      "entity_type": "concept",
+      "actor": "web_extractor",
+      "data": {
+        "canonical_name": "Retrieval Augmented Generation",
+        "entity_type": "concept",
+        "description": "A technique that combines retrieval and generation",
+        "properties": {},
+        "confidence": 0.95
+      },
+      "policy_class": "P2",
+      "run_id": "run_20260301_001"
+    },
+    {
+      "event_id": "evt_def456",
+      "timestamp": "2026-03-01T10:05:00Z",
+      "event_type": "claim_added",
+      "entity_id": "claim_001",
+      "entity_type": "claim",
+      "actor": "system",
+      "data": {
+        "claim_id": "claim_001",
+        "claim_text": "RAG reduces hallucination",
+        "subject_entity_id": "webc_xyz789",
+        "predicate": "reduces",
+        "object_entity_id": "webc_hal123",
+        "confidence": 0.85,
+        "evidence_ptrs": [
+          {
+            "type": "note",
+            "path": "/vault/papers/rag-paper.md",
+            "snippet_hash": "abc123"
+          }
+        ]
+      },
+      "policy_class": "P2",
+      "run_id": null
+    },
+    {
+      "event_id": "evt_ghi789",
+      "timestamp": "2026-03-01T10:10:00Z",
+      "event_type": "relation_added",
+      "entity_id": "webc_xyz789_webc_abc",
+      "entity_type": "relation",
+      "actor": "system",
+      "data": {
+        "source_id": "webc_xyz789",
+        "source_type": "concept",
+        "relation": "requires",
+        "target_id": "webc_abc",
+        "target_type": "concept",
+        "confidence": 0.9
+      },
+      "policy_class": "P2",
+      "run_id": "run_20260301_001"
+    }
+  ]
+}

@@ -1,8 +1,15 @@
 """Obsidian AI_Papers 폴더의 arxiv ID 파일들을 논문 제목으로 리네임"""
+import os
 import re, requests, time
 from pathlib import Path
 
-VAULT_DIR = Path("/Users/won/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/Projects/AI/AI_Papers")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+VAULT_DIR = Path(
+    os.environ.get(
+        "KHUB_VAULT_AI_PAPERS_DIR",
+        str(REPO_ROOT.parent / "vault" / "Projects" / "AI" / "AI_Papers"),
+    )
+).expanduser()
 
 def safe_title(title):
     safe = re.sub(r'[\\/:*?"<>|]', '', title).strip()

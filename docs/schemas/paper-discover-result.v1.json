@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "topic", "discovered", "duplicates_skipped", "ingested", "failed", "obsidian_notes_created", "judge", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.discover.result.v1" },
+    "status": { "type": "string" },
+    "topic": { "type": "string" },
+    "discovered": { "type": "integer" },
+    "duplicates_skipped": { "type": "integer" },
+    "ingested": { "type": "array", "items": { "type": "object" } },
+    "failed": { "type": "array", "items": { "type": "object" } },
+    "obsidian_notes_created": { "type": "array", "items": { "type": "string" } },
+    "message": { "type": "string" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "judge": {
+      "type": "object",
+      "required": ["enabled", "backend", "threshold", "candidateCount", "selectedCount", "degraded", "warnings", "items"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "backend": { "type": "string" },
+        "threshold": { "type": "number" },
+        "candidateCount": { "type": "integer" },
+        "selectedCount": { "type": "integer" },
+        "degraded": { "type": "boolean" },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "items": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

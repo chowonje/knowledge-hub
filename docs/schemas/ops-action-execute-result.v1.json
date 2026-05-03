@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.ops.action.execute.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "actionId", "executionMode", "item", "receipt", "result", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ops.action.execute.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed", "queued"] },
+    "actionId": { "type": "string" },
+    "executionMode": { "type": "string", "enum": ["sync", "async"] },
+    "item": {
+      "type": "object",
+      "required": ["actionId", "scope", "actionType", "status", "targetKind", "targetKey", "summary", "reasonCodes", "command", "args", "alerts", "seenCount", "firstSeenAt", "lastSeenAt", "ackedAt", "ackedBy", "resolvedAt", "resolvedBy", "note", "lastExecutionAt", "lastExecutionStatus", "lastResultSummary", "lastReceiptId", "lastMcpJobId"],
+      "properties": {
+        "actionId": { "type": "string" },
+        "scope": { "type": "string" },
+        "actionType": { "type": "string" },
+        "status": { "type": "string" },
+        "targetKind": { "type": "string" },
+        "targetKey": { "type": "string" },
+        "summary": { "type": "string" },
+        "reasonCodes": { "type": "array", "items": { "type": "string" } },
+        "command": { "type": "string" },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "alerts": { "type": "array", "items": { "type": "object" } },
+        "action": { "type": "object" },
+        "seenCount": { "type": "integer", "minimum": 0 },
+        "firstSeenAt": { "type": "string" },
+        "lastSeenAt": { "type": "string" },
+        "ackedAt": { "type": "string" },
+        "ackedBy": { "type": "string" },
+        "resolvedAt": { "type": "string" },
+        "resolvedBy": { "type": "string" },
+        "note": { "type": "string" },
+        "lastExecutionAt": { "type": "string" },
+        "lastExecutionStatus": { "type": "string" },
+        "lastResultSummary": { "type": "string" },
+        "lastReceiptId": { "type": "string" },
+        "lastMcpJobId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "required": ["receiptId", "actionId", "executedAt", "mode", "status", "runner", "command", "args", "mcpJobId", "resultSummary", "errorSummary", "artifact", "actor", "updatedAt"],
+      "properties": {
+        "receiptId": { "type": "string" },
+        "actionId": { "type": "string" },
+        "executedAt": { "type": "string" },
+        "mode": { "type": "string", "enum": ["sync", "async"] },
+        "status": { "type": "string", "enum": ["started", "succeeded", "failed"] },
+        "runner": { "type": "string", "enum": ["cli", "mcp"] },
+        "command": { "type": "string" },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "mcpJobId": { "type": "string" },
+        "resultSummary": { "type": "string" },
+        "errorSummary": { "type": "string" },
+        "artifact": { "type": "object" },
+        "actor": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "required": ["summary", "artifact", "warnings"],
+      "properties": {
+        "summary": { "type": "string" },
+        "artifact": { "type": "object" },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

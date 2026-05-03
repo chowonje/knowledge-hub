@@ -1,0 +1,12 @@
+# Legacy CLI/MCP compatibility shims and the remaining command-surface move.
+
+:(glob)knowledge_hub/cli/**
+knowledge_hub/mcp_server.py
+:(glob)knowledge_hub/mcp/**
+:(glob)knowledge_hub/interfaces/cli/commands/**
+:(exclude,glob)knowledge_hub/interfaces/cli/commands/paper*
+:(exclude,glob)knowledge_hub/interfaces/cli/commands/health_cmd.py
+:(glob)tests/test_*cmd.py
+:(glob)tests/test_mcp*.py
+tests/test_cli_error_handler.py
+tests/test_index_retry.py

@@ -1,0 +1,56 @@
+profile_id: research
+kind: domain
+title: Research Profile
+entity_types:
+  - paper
+  - method
+  - benchmark
+  - dataset
+  - finding
+predicates:
+  - id: uses
+    description: A paper or method uses another artifact.
+    domain: paper
+    range: method
+  - id: evaluates
+    description: A paper evaluates on a benchmark or dataset.
+    domain: paper
+    range: benchmark
+  - id: cites
+    description: A paper cites another paper.
+    domain: paper
+    range: paper
+  - id: improves
+    description: A method or paper improves another method.
+    domain: method
+    range: method
+  - id: compares
+    description: A paper compares methods or systems.
+    domain: paper
+    range: method
+aliases:
+  paper:
+    - article
+    - publication
+  method:
+    - technique
+    - approach
+extraction_hints:
+  paper:
+    preferred_entities:
+      - paper
+      - method
+      - dataset
+      - benchmark
+cluster_label_hints:
+  research_bias:
+    - method
+    - benchmark
+    - dataset
+retrieval_facets:
+  preferred_sources:
+    - paper
+    - vault
+  entity_boost:
+    - paper
+    - method

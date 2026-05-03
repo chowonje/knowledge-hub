@@ -1,0 +1,28 @@
+{
+  "schema": "knowledge-hub.os.decision.list.result.v1",
+  "status": "ok",
+  "count": 1,
+  "items": [
+    {
+      "id": "decision_001",
+      "projectId": "proj_001",
+      "goalId": "goal_001",
+      "taskId": "task_001",
+      "kind": "architecture",
+      "summary": "Keep Obsidian projection-only for OS v1.",
+      "rationale": "Canonical state remains under personal-foundry.",
+      "sourceRefs": [
+        {
+          "sourceType": "document",
+          "documentScopeId": "knowledge_os_definition_v1",
+          "title": "Knowledge OS definition"
+        }
+      ],
+      "createdByType": "human",
+      "createdById": "won",
+      "createdAt": "2026-04-09T02:00:00.000Z",
+      "updatedAt": "2026-04-09T02:00:00.000Z"
+    }
+  ],
+  "createdAt": "2026-04-09T02:00:00.000Z"
+}

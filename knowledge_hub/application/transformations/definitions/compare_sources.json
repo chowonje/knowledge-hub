@@ -1,0 +1,15 @@
+{
+  "id": "compare_sources",
+  "version": "v1",
+  "title": "Compare Sources",
+  "description": "Compare bounded evidence sources and surface agreement/disagreement.",
+  "prompt_template": "Compare the selected sources for {query}. Identify overlap, disagreement, and what appears most grounded. Sources selected: {source_count}.",
+  "declared_inputs": {
+    "query": "string",
+    "sources": "bounded_context_pack"
+  },
+  "declared_output": {
+    "type": "markdown_comparison",
+    "sections": ["overlap", "differences", "best_supported_points"]
+  }
+}

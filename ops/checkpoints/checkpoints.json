@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "buckets": [
+    {
+      "order": 1,
+      "slug": "contract-entrypoints",
+      "title": "contract + entrypoints",
+      "description": "Green-baseline slice for packaging, canonical entrypoints, health semantics, and explicit event-integrity repair.",
+      "patterns": [
+        ".gitignore",
+        "AGENTS.md",
+        "PROJECT_PROGRESS.md",
+        "README.md",
+        "config.yaml.example",
+        "package.json",
+        "pyproject.toml",
+        "requirements.txt",
+        "docs/PROJECT_STATE.md",
+        "docs/status/**",
+        "ops/checkpoints/**",
+        "scripts/repair_event_integrity.py",
+        "scripts/report_checkpoint_split.py",
+        "knowledge_hub/interfaces/__init__.py",
+        "knowledge_hub/interfaces/cli/__init__.py",
+        "knowledge_hub/interfaces/cli/main.py",
+        "knowledge_hub/interfaces/cli/commands/health_cmd.py",
+        "knowledge_hub/interfaces/mcp/__init__.py",
+        "knowledge_hub/interfaces/mcp/server.py",
+        "knowledge_hub/cli/main.py",
+        "knowledge_hub/cli/health_cmd.py",
+        "knowledge_hub/mcp_server.py",
+        "knowledge_hub/infrastructure/config.py",
+        "knowledge_hub/infrastructure/persistence/stores/entity_resolution_store.py",
+        "knowledge_hub/infrastructure/persistence/stores/event_store.py",
+        "tests/test_checkpoint_split_report.py",
+        "tests/test_config.py",
+        "tests/test_entity_resolution.py",
+        "tests/test_event_store.py",
+        "tests/test_health_cmd.py",
+        "tests/test_interfaces_cli_main.py",
+        "tests/test_interfaces_mcp_server.py",
+        "tests/test_pyproject_metadata.py"
+      ],
+      "exclude_patterns": [
+        "docs/status/*ask-tranche*",
+        "ops/checkpoints/10-*"
+      ]
+    },
+    {
+      "order": 2,
+      "slug": "cli-mcp-surface-migration",
+      "title": "CLI/MCP surface migration",
+      "description": "Legacy CLI/MCP command modules, command registration, and migration of public surfaces onto interfaces-backed modules.",
+      "patterns": [
+        "docs/guides/**",
+        "knowledge_hub/cli/**",
+        "knowledge_hub/mcp/**",
+        "knowledge_hub/interfaces/cli/commands/**",
+        "knowledge_hub/interfaces/cli/index_worker.py",
+        "knowledge_hub/interfaces/mcp/**",
+        "tests/test_cli*.py",
+        "tests/test_mcp*.py"
+      ],
+      "exclude_patterns": [
+        "knowledge_hub/cli/health_cmd.py",
+        "knowledge_hub/cli/main.py",
+        "knowledge_hub/interfaces/cli/commands/health_cmd.py",
+        "knowledge_hub/interfaces/mcp/__init__.py",
+        "knowledge_hub/interfaces/mcp/server.py"
+      ]
+    },
+    {
+      "order": 3,
+      "slug": "infrastructure-core-ownership",
+      "title": "infrastructure/core ownership",
+      "description": "Ownership migration between infrastructure/core/application/domain plus low-level persistence primitives.",
+      "patterns": [
+        "docs/ARCHITECTURE.md",
+        "docs/maps/**",
+        "docs/repo-layout.md",
+        "docs/schemas/**",
+        "knowledge_hub/application/**",
+        "knowledge_hub/core/**",
+        "knowledge_hub/domain/**",
+        "knowledge_hub/infrastructure/**",
+        "knowledge_hub/providers/**",
+        "tests/test_database.py",
+        "tests/test_index_retry.py"
+      ],
+      "exclude_patterns": [
+        "knowledge_hub/infrastructure/config.py",
+        "knowledge_hub/infrastructure/persistence/stores/entity_resolution_store.py",
+        "knowledge_hub/infrastructure/persistence/stores/event_store.py"
+      ]
+    },
+    {
+      "order": 4,
+      "slug": "paper-public-reading",
+      "title": "paper/public reading",
+      "description": "Paper ingestion, public reading surfaces, paper-memory operators, and paper-specific docs/tests.",
+      "patterns": [
+        "docs/ko_note_materialization.md",
+        "docs/source_input_model_v1.md",
+        "knowledge_hub/papers/**",
+        "knowledge_hub/interfaces/cli/commands/paper*.py",
+        "knowledge_hub/cli/paper_cmd.py",
+        "scripts/paper_memory_audit.py",
+        "scripts/repair_paper_sources.py",
+        "scripts/run_paper_memory_batch_runner.py",
+        "scripts/run_paper_memory_phase3_recovery.py",
+        "scripts/batch_summarize.py",
+        "tests/test_paper*.py"
+      ]
+    },
+    {
+      "order": 5,
+      "slug": "retrieval-ask-v2",
+      "title": "retrieval/ask-v2",
+      "description": "Retrieval, answer orchestration, claim/section-card reasoning, and evaluation surfaces.",
+      "patterns": [
+        "docs/eval_*",
+        "docs/experiments/**",
+        "docs/research/**",
+        "eval/**",
+        "knowledge_hub/agent_memory/**",
+        "knowledge_hub/ai/**",
+        "knowledge_hub/curation/**",
+        "knowledge_hub/knowledge/**",
+        "scripts/ab/**",
+        "scripts/benchmark_pplx_context_models.py",
+        "scripts/build_human_review_sheet.py",
+        "scripts/build_memory_router_failure_taxonomy.py",
+        "scripts/build_multi_model_priority_review.py",
+        "scripts/collect_memory_router_eval.py",
+        "scripts/compare_paper_memory_extractors.py",
+        "scripts/eval_document_memory.py",
+        "scripts/eval_embedding_collections.py",
+        "tests/test_knowledge_graph.py"
+      ]
+    },
+    {
+      "order": 6,
+      "slug": "ingest-learning-vault-web",
+      "title": "ingest/learning/vault/web",
+      "description": "Ingest pipelines, document memory, vault/web workflows, and related ops docs.",
+      "patterns": [
+        "docs/ai_120gb_ko_pipeline.md",
+        "docs/continuous_sync_launchd.md",
+        "docs/curated_ai_source_ingestion.md",
+        "docs/learning-coach-mvp-v2.md",
+        "docs/ops_report_automation.md",
+        "knowledge_hub/document_memory/**",
+        "knowledge_hub/integrations/**",
+        "knowledge_hub/learning/**",
+        "knowledge_hub/notes/**",
+        "knowledge_hub/vault/**",
+        "knowledge_hub/web/**",
+        "scripts/download_assets_from_raw.py",
+        "scripts/rebuild_memory_stores.py",
+        "scripts/rename_vault.py",
+        "scripts/rename_vault2.py",
+        "scripts/run_continuous_sync.sh",
+        "scripts/transcribe_media.py",
+        "tests/test_task_context.py",
+        "tests/test_transformations.py",
+        "tests/test_vault_parser_fallback.py"
+      ]
+    },
+    {
+      "order": 7,
+      "slug": "foundry-satellites",
+      "title": "foundry/ops",
+      "description": "TypeScript bridge runtime, CI/workflow glue, and operational docs outside the Python green-baseline slice.",
+      "patterns": [
+        ".github/**",
+        "docs/foundry-knowledge-hub-integration.md",
+        "foundry-core/**",
+        "ops/**",
+        "package-lock.json"
+      ]
+    }
+  ]
+}

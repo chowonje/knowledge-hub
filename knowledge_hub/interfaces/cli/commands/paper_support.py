@@ -5,9 +5,403 @@ from __future__ import annotations
 import json as _json
 import re
 from pathlib import Path
+from typing import Any
 
 from knowledge_hub.knowledge.ai_taxonomy import classify_ai_concept, merge_ai_classification_properties
 from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import MAX_SUMMARIZE_CHARS
+from knowledge_hub.vault.concepts import iter_concept_note_paths
+
+_FILELIKE_SUFFIX_RE = re.compile(r"\.(?:md|markdown|txt|json|ya?ml|toml|csv|pdf|docx?|py|ipynb|js|ts|tsx)$", re.IGNORECASE)
+_JSON_FENCE_RE = re.compile(r"```(?:json)?\s*([\s\S]*?)\s*```", re.IGNORECASE)
+_ACRONYM_STOP_WORDS = {"a", "an", "and", "for", "in", "of", "on", "the", "to", "via", "with"}
+_SENTENCE_LIKE_TOKEN_RE = re.compile(
+    r"\b(?:across|advanced|advancing|affordable|analyzing|analysing|beyond|can|designing|efficient|evaluating|improving|revisiting|scaling|towards?|understanding)\b",
+    re.IGNORECASE,
+)
+_GENERIC_CONCEPT_BLACKLIST = {
+    "agents",
+    "benchmark",
+    "benchmarks",
+    "standard",
+    "standards",
+    "survey",
+    "surveys",
+}
+_PROTECTED_HEURISTIC_NAMES = {
+    "AMA-Bench",
+    "AgentDyn",
+    "FIRE-Bench",
+    "Gaia2",
+    "LoCoMo",
+    "Locomo-Plus",
+    "Magma",
+    "MemoryArena",
+    "ProjDevBench",
+}
+_CURATED_CANONICAL_ALIASES = {
+    "AI Agent": {"AI Agents"},
+    "AI Coding Agent": {"AI Coding Agents"},
+    "AI Scientist": {"AI scientists"},
+    "Agent Benchmark": {"agent benchmarks"},
+    "Agent Memory": {"agent memory", "Agent Memory"},
+    "Coding Agent": {"Coding Agents", "Coding Agents?"},
+    "Dense representation": {"Dense Representations"},
+    "Evaluation metric": {"Evaluation Metrics"},
+    "Foundation Model": {"Foundation Models"},
+    "Language Model": {"Language Models"},
+    "Large Language Model": {"Large Language Models", "LLMs"},
+    "Large Reasoning Model": {"Large Reasoning Models"},
+    "LLM Agent": {"LLM Agents", "LLM-based agents", "LLM- Agents"},
+    "Memory-Augmented Generation": {"memory-augmented generation"},
+    "Mistral 7B": {"mistral 7b", "Mistral 7b"},
+    "Neural Network": {"Neural Networks"},
+    "Object-centric representation": {"Object-Centric Representations"},
+    "Open X-Embodiment": {"open x-embodiment"},
+    "Prompt Injection": {"prompt injection attacks", "prompt injection attack"},
+    "Reinforcement Learning": {"reinforcement learning"},
+    "Retrieval-Augmented Generation": {"RAG", "retrieval-augmented generation"},
+    "Segment Anything": {"segment anything"},
+    "Small Language Model": {"Small Language Models"},
+    "Table Reasoning": {"table reasoning"},
+    "Vision-Language-Action Model": {"Vision-Language-Action Models"},
+}
+
+
+def _clean_text(value: Any) -> str:
+    return " ".join(str(value or "").strip().split())
+
+
+def _clean_list(values: list[str], *, limit: int | None = None) -> list[str]:
+    result: list[str] = []
+    seen: set[str] = set()
+    for raw in values:
+        token = _clean_text(raw)
+        if not token:
+            continue
+        lowered = token.casefold()
+        if lowered in seen:
+            continue
+        seen.add(lowered)
+        result.append(token)
+        if limit is not None and len(result) >= limit:
+            break
+    return result
+
+
+def _is_acronym_like(name: Any) -> bool:
+    token = _clean_text(name)
+    if " " in token or not token:
+        return False
+    compact = re.sub(r"[^A-Za-z0-9]", "", token)
+    if len(compact) < 2 or len(compact) > 8:
+        return False
+    letters = [char for char in compact if char.isalpha()]
+    if not letters:
+        return False
+    if all(char.isupper() for char in letters):
+        return True
+    if compact.endswith("s") and len(compact) > 2:
+        stem = compact[:-1]
+        stem_letters = [char for char in stem if char.isalpha()]
+        return bool(stem_letters) and all(char.isupper() for char in stem_letters)
+    return False
+
+
+def _is_noise_concept_name(name: Any) -> bool:
+    token = _clean_text(name).strip(" -:;,.")
+    if not token:
+        return True
+    if "/" in token or "\\" in token:
+        return True
+    lowered = token.casefold()
+    if _FILELIKE_SUFFIX_RE.search(lowered):
+        return True
+    if any(marker in token for marker in ("$", "\\", "{", "}", "<", ">", "=")):
+        return True
+    if "_" in token:
+        return True
+    if not re.search(r"[A-Za-z가-힣]", token):
+        return True
+    if token.casefold() in _GENERIC_CONCEPT_BLACKLIST:
+        return True
+    if len(re.findall(r"[A-Za-z0-9가-힣]+", token)) >= 3 and _SENTENCE_LIKE_TOKEN_RE.search(token):
+        return True
+    return False
+
+
+def _is_protected_proper_noun_concept(name: Any) -> bool:
+    token = _clean_text(name).strip(" -:;,.")
+    if not token:
+        return False
+    if token in _PROTECTED_HEURISTIC_NAMES:
+        return True
+    if token.endswith("-Bench") or token.endswith("Bench"):
+        return True
+    if re.search(r"[A-Za-z]+\d", token):
+        return True
+    if re.search(r"[A-Z][a-z]+[A-Z][A-Za-z0-9-]*", token):
+        return True
+    return False
+
+
+def _singularize_token(token: str) -> str:
+    word = token.casefold()
+    if len(word) <= 3:
+        return word
+    if word.endswith("ies") and len(word) > 4:
+        return word[:-3] + "y"
+    if word.endswith("s") and not word.endswith(("ss", "us", "is")):
+        return word[:-1]
+    return word
+
+
+def _concept_signature(name: Any) -> str:
+    token = _clean_text(name)
+    words = re.findall(r"[A-Za-z0-9가-힣]+", token.casefold())
+    normalized = [_singularize_token(word) for word in words if word]
+    return " ".join(normalized)
+
+
+def _concept_acronym(name: Any) -> str:
+    token = _clean_text(name)
+    words = re.findall(r"[A-Za-z][A-Za-z0-9-]*", token)
+    if len(words) < 2:
+        return ""
+    initials = [word[0].upper() for word in words if word.casefold() not in _ACRONYM_STOP_WORDS]
+    if len(initials) < 2:
+        return ""
+    return "".join(initials)
+
+
+def _pick_canonical_name(names: list[str]) -> str:
+    candidates = _clean_list(names)
+    if not candidates:
+        return ""
+    return sorted(
+        candidates,
+        key=lambda item: (
+            _is_acronym_like(item),
+            -len(re.findall(r"[A-Za-z0-9가-힣]+", item)),
+            len(item),
+            item.casefold(),
+        ),
+    )[0]
+
+
+def _dedupe_synonym_groups(groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: dict[str, list[str]] = {}
+    alias_to_canonical: dict[str, str] = {}
+    for group in groups:
+        canonical = _clean_text(group.get("canonical"))
+        aliases = _clean_list(list(group.get("aliases") or []))
+        if not canonical or not aliases:
+            continue
+        canonical_key = canonical.casefold()
+        bucket = merged.setdefault(canonical_key, [canonical])
+        for alias in aliases:
+            alias_key = alias.casefold()
+            if alias_key == canonical_key:
+                continue
+            existing = alias_to_canonical.get(alias_key)
+            if existing and existing != canonical_key:
+                continue
+            alias_to_canonical[alias_key] = canonical_key
+            if alias not in bucket[1:]:
+                bucket.append(alias)
+    result: list[dict[str, Any]] = []
+    for values in merged.values():
+        canonical = values[0]
+        aliases = _clean_list(values[1:])
+        if aliases:
+            result.append({"canonical": canonical, "aliases": aliases})
+    return result
+
+
+def _detect_local_synonym_groups(concept_names: list[str]) -> tuple[list[dict[str, Any]], set[str]]:
+    groups: list[dict[str, Any]] = []
+    grouped_names: set[str] = set()
+
+    present_by_casefold = {name.casefold(): name for name in concept_names}
+    for canonical, aliases in _CURATED_CANONICAL_ALIASES.items():
+        matched_aliases: list[str] = []
+        for alias in aliases:
+            resolved = present_by_casefold.get(alias.casefold())
+            if resolved:
+                matched_aliases.append(resolved)
+        if not matched_aliases:
+            continue
+        groups.append({"canonical": canonical, "aliases": _clean_list(matched_aliases)})
+        grouped_names.update(matched_aliases)
+
+    by_signature: dict[str, list[str]] = {}
+    for name in concept_names:
+        if name in grouped_names:
+            continue
+        signature = _concept_signature(name)
+        if not signature:
+            continue
+        by_signature.setdefault(signature, []).append(name)
+    for names in by_signature.values():
+        unique_names = _clean_list(names)
+        if len(unique_names) < 2:
+            continue
+        canonical = _pick_canonical_name(unique_names)
+        aliases = [name for name in unique_names if name.casefold() != canonical.casefold()]
+        if aliases:
+            groups.append({"canonical": canonical, "aliases": aliases})
+            grouped_names.update(unique_names)
+
+    remaining = [name for name in concept_names if name not in grouped_names]
+    full_names_by_acronym: dict[str, list[str]] = {}
+    acronym_names: dict[str, list[str]] = {}
+    for name in remaining:
+        if _is_acronym_like(name):
+            compact = re.sub(r"[^A-Za-z0-9]", "", name).upper().rstrip("S")
+            if compact:
+                acronym_names.setdefault(compact, []).append(name)
+            continue
+        acronym = _concept_acronym(name)
+        if acronym:
+            full_names_by_acronym.setdefault(acronym, []).append(name)
+
+    for acronym, aliases in acronym_names.items():
+        full_names = _clean_list(full_names_by_acronym.get(acronym, []))
+        if len(full_names) != 1:
+            continue
+        names = _clean_list(full_names + aliases)
+        if len(names) < 2:
+            continue
+        canonical = _pick_canonical_name(names)
+        alias_names = [name for name in names if name.casefold() != canonical.casefold()]
+        if alias_names:
+            groups.append({"canonical": canonical, "aliases": alias_names})
+            grouped_names.update(names)
+
+    return _dedupe_synonym_groups(groups), grouped_names
+
+
+def _extract_json_candidates(raw: Any) -> list[str]:
+    body = str(raw or "").strip()
+    if not body:
+        return []
+    body = re.sub(r"<think>[\s\S]*?</think>", " ", body, flags=re.IGNORECASE).strip()
+    candidates = [body]
+    for match in _JSON_FENCE_RE.finditer(body):
+        token = match.group(1).strip()
+        if token:
+            candidates.append(token)
+    array_start = body.find("[")
+    array_end = body.rfind("]")
+    if array_start >= 0 and array_end > array_start:
+        candidates.append(body[array_start: array_end + 1])
+    obj_start = body.find("{")
+    obj_end = body.rfind("}")
+    if obj_start >= 0 and obj_end > obj_start:
+        candidates.append(body[obj_start: obj_end + 1])
+    result: list[str] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        token = str(candidate or "").strip()
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        result.append(token)
+    return result
+
+
+def _resolve_known_concept_name(raw: Any, known_names: list[str]) -> str:
+    token = _clean_text(raw)
+    if not token:
+        return ""
+    for name in known_names:
+        if name.casefold() == token.casefold():
+            return name
+    return ""
+
+
+def _trusted_synonym_pair(canonical: Any, alias: Any) -> bool:
+    canonical_name = _clean_text(canonical)
+    alias_name = _clean_text(alias)
+    if not canonical_name or not alias_name:
+        return False
+    if canonical_name.casefold() == alias_name.casefold():
+        return False
+    if _is_protected_proper_noun_concept(canonical_name) or _is_protected_proper_noun_concept(alias_name):
+        return False
+    if _concept_signature(canonical_name) == _concept_signature(alias_name):
+        return True
+
+    canonical_acronym = re.sub(r"[^A-Za-z0-9]", "", canonical_name).upper().rstrip("S")
+    alias_acronym = re.sub(r"[^A-Za-z0-9]", "", alias_name).upper().rstrip("S")
+    if canonical_acronym and alias_acronym and canonical_acronym == alias_acronym:
+        return True
+
+    if _is_acronym_like(canonical_name) and _concept_acronym(alias_name) == canonical_acronym:
+        return True
+    if _is_acronym_like(alias_name) and _concept_acronym(canonical_name) == alias_acronym:
+        return True
+
+    return False
+
+
+def _filter_llm_synonym_groups(groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    filtered: list[dict[str, Any]] = []
+    for group in groups:
+        canonical = _clean_text(group.get("canonical"))
+        if not canonical:
+            continue
+        aliases = [
+            alias
+            for alias in _clean_list(list(group.get("aliases") or []))
+            if _trusted_synonym_pair(canonical, alias)
+        ]
+        if aliases:
+            filtered.append({"canonical": canonical, "aliases": aliases})
+    return filtered
+
+
+def _coerce_synonym_groups(raw: Any, known_names: list[str]) -> list[dict[str, Any]]:
+    parsed_payload: Any = None
+    for candidate in _extract_json_candidates(raw):
+        try:
+            parsed_payload = _json.loads(candidate)
+        except Exception:
+            continue
+        if parsed_payload is not None:
+            break
+    if parsed_payload is None:
+        return []
+
+    group_items: list[Any] = []
+    if isinstance(parsed_payload, list):
+        group_items = list(parsed_payload)
+    elif isinstance(parsed_payload, dict):
+        for key in ("groups", "synonyms", "results", "items", "data"):
+            value = parsed_payload.get(key)
+            if isinstance(value, list):
+                group_items = list(value)
+                break
+    if not group_items:
+        return []
+
+    normalized_groups: list[dict[str, Any]] = []
+    for item in group_items:
+        if not isinstance(item, dict):
+            continue
+        canonical = _resolve_known_concept_name(item.get("canonical"), known_names)
+        if not canonical:
+            continue
+        aliases = _clean_list(
+            [
+                _resolve_known_concept_name(alias, known_names)
+                for alias in list(item.get("aliases") or [])
+            ]
+        )
+        aliases = [alias for alias in aliases if alias.casefold() != canonical.casefold()]
+        if not aliases:
+            continue
+        normalized_groups.append({"canonical": canonical, "aliases": aliases})
+    return _dedupe_synonym_groups(normalized_groups)
 
 
 def upsert_ai_concept(
@@ -22,6 +416,13 @@ def upsert_ai_concept(
     related_names: list[str] | None = None,
     relation_predicates: list[str] | None = None,
 ):
+    resolver = getattr(sqlite_db, "resolve_entity", None)
+    if callable(resolver):
+        resolved = resolver(canonical_name, entity_type="concept") or {}
+        resolved_entity_id = _clean_text(resolved.get("entity_id"))
+        if resolved_entity_id:
+            entity_id = resolved_entity_id
+
     existing = sqlite_db.get_ontology_entity(entity_id) or {}
     current_properties = existing.get("properties") if isinstance(existing.get("properties"), dict) else {}
     effective_description = str(description or existing.get("description", "") or "")
@@ -360,7 +761,7 @@ def build_concept_note(name: str, description: str, related: list[str], papers: 
 
 def rebuild_concept_index_with_relations(papers_dir: Path, concepts_dir: Path, concept_papers: dict[str, list[str]]):
     sorted_concepts = sorted(concept_papers.items(), key=lambda item: -len(item[1]))
-    has_note = {item.stem for item in concepts_dir.glob("*.md")}
+    has_note = {item.stem for item in iter_concept_note_paths(concepts_dir)}
 
     lines = [
         "---",
@@ -401,27 +802,30 @@ def concept_id(name: str) -> str:
 
 
 def detect_synonym_groups(llm, concept_names: list[str]) -> list[dict]:
-    prompt = (
-        "You are an AI/ML terminology expert. Given a list of concept names, "
-        "find groups of synonyms, abbreviations, plural/singular variants, or "
-        "near-duplicates that should be merged into a single canonical concept.\n\n"
-        "Rules:\n"
-        "- Only group terms that truly refer to the SAME concept\n"
-        "- Do NOT merge parent-child (e.g. 'Reinforcement Learning' and 'Multi-Agent RL' are different)\n"
-        "- Prefer singular form as canonical\n"
-        "- Prefer full name over abbreviation as canonical\n"
-        "- Return ONLY a JSON array of {\"canonical\": \"...\", \"aliases\": [\"...\"]}\n"
-        "- Skip concepts with no duplicates\n\n"
-        + _json.dumps(concept_names, ensure_ascii=False)
-    )
-    raw = llm.generate(prompt).strip()
-    if raw.startswith("```"):
-        raw = re.sub(r"^```\w*\n?", "", raw)
-        raw = re.sub(r"\n?```$", "", raw)
-    groups = _json.loads(raw)
-    if not isinstance(groups, list):
+    cleaned_names = _clean_list([name for name in concept_names if not _is_noise_concept_name(name)])
+    if len(cleaned_names) < 2:
         return []
-    return [group for group in groups if isinstance(group, dict) and group.get("canonical") and group.get("aliases")]
+
+    local_groups, _grouped_names = _detect_local_synonym_groups(cleaned_names)
+    llm_groups: list[dict[str, Any]] = []
+    if len(cleaned_names) >= 2:
+        prompt = (
+            "You are an AI/ML terminology expert. Given a list of concept names, "
+            "find groups of synonyms, abbreviations, plural/singular variants, or "
+            "near-duplicates that should be merged into a single canonical concept.\n\n"
+            "Rules:\n"
+            "- Only group terms that truly refer to the SAME concept\n"
+            "- Do NOT merge parent-child (e.g. 'Reinforcement Learning' and 'Multi-Agent RL' are different)\n"
+            "- Do NOT merge benchmark names, project names, dataset names, or model names just because they look related\n"
+            "- Prefer singular form as canonical\n"
+            "- Prefer full name over abbreviation as canonical\n"
+            "- Return ONLY a JSON array of {\"canonical\": \"...\", \"aliases\": [\"...\"]}\n"
+            "- Skip concepts with no duplicates\n\n"
+            + _json.dumps(cleaned_names, ensure_ascii=False)
+        )
+        raw = llm.generate(prompt).strip()
+        llm_groups = _filter_llm_synonym_groups(_coerce_synonym_groups(raw, cleaned_names))
+    return _dedupe_synonym_groups(local_groups + llm_groups)
 
 
 def merge_obsidian_concept(papers_dir: Path, concepts_dir: Path, alias: str, canonical: str) -> int:

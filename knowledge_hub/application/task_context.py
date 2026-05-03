@@ -6,27 +6,7 @@ from typing import Any
 
 from knowledge_hub.application.agent_gateway import build_gateway_metadata
 from knowledge_hub.application.context_pack import build_context_pack, classify_task_mode
-
-
-def build_runtime_diagnostics(config: Any, *, searcher: Any = None) -> dict[str, Any]:
-    database = getattr(searcher, "database", None)
-    stats: dict[str, Any] = {}
-    if database is not None and hasattr(database, "get_stats"):
-        try:
-            stats = dict(database.get_stats() or {})
-        except Exception as error:
-            stats = {"error": str(error)}
-    return {
-        "schema": "knowledge-hub.runtime.diagnostics.v1",
-        "status": "ok",
-        "providerStates": [],
-        "vectorCorpus": {
-            "total_documents": int(stats.get("total_documents", 0) or 0),
-            "collection_name": str(stats.get("collection_name", "")),
-            "available": bool(stats.get("total_documents", 0) and stats.get("collection_name")),
-        },
-        "warnings": [],
-    }
+from knowledge_hub.application.runtime_diagnostics import build_runtime_diagnostics
 
 
 def build_task_context(

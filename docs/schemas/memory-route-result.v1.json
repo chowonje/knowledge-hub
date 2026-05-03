@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "query",
+    "sourceType",
+    "queryIntent",
+    "recommendedDecisionOrder",
+    "route",
+    "strategyComparison",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.memory-route.result.v1" },
+    "status": { "type": "string" },
+    "query": { "type": "string" },
+    "sourceType": { "type": "string" },
+    "queryIntent": { "type": "string" },
+    "recommendedDecisionOrder": { "type": "string" },
+    "route": { "type": "object" },
+    "strategyComparison": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

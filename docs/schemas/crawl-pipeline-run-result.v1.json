@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/crawl-pipeline-run-result.v1.json",
+  "title": "knowledge-hub crawl pipeline run result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "jobId",
+    "status",
+    "profile",
+    "sourcePolicy",
+    "storageRoot",
+    "requested",
+    "processed",
+    "normalized",
+    "indexed",
+    "pendingDomain",
+    "failed",
+    "skipped",
+    "dedupeRate",
+    "retryRate",
+    "memoryPeakRatio",
+    "recordsPerMin",
+    "p50StepLatencyMs",
+    "cursor",
+    "warnings",
+    "ts"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.crawl.pipeline.run.result.v1"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "jobId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "partial", "failed", "blocked", "running", "ok"]
+    },
+    "profile": {
+      "type": "string"
+    },
+    "sourcePolicy": {
+      "type": "string",
+      "enum": ["fixed", "hybrid", "keyword"]
+    },
+    "storageRoot": {
+      "type": "string"
+    },
+    "requested": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "processed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "normalized": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "indexed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pendingDomain": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "skipped": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dedupeRate": {
+      "type": "number",
+      "minimum": 0
+    },
+    "retryRate": {
+      "type": "number",
+      "minimum": 0
+    },
+    "memoryPeakRatio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "recordsPerMin": {
+      "type": "number",
+      "minimum": 0
+    },
+    "p50StepLatencyMs": {
+      "type": "number",
+      "minimum": 0
+    },
+    "cursor": {
+      "type": "object"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ts": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

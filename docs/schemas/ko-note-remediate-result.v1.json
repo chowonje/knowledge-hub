@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "runId",
+    "sourceRunId",
+    "itemType",
+    "qualityFlag",
+    "itemId",
+    "strategy",
+    "attempted",
+    "remediated",
+    "improved",
+    "unchanged",
+    "failed",
+    "items",
+    "warnings",
+    "ts"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ko-note.remediate.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "partial", "failed", "blocked"] },
+    "runId": { "type": "string", "minLength": 1 },
+    "sourceRunId": { "type": "string" },
+    "itemType": { "type": "string", "enum": ["source", "concept", "all"] },
+    "qualityFlag": { "type": "string", "enum": ["needs_review", "reject", "unscored", "all"] },
+    "itemId": { "type": "integer", "minimum": 0 },
+    "strategy": { "type": "string", "enum": ["section", "full"] },
+    "attempted": { "type": "integer", "minimum": 0 },
+    "remediated": { "type": "integer", "minimum": 0 },
+    "improved": { "type": "integer", "minimum": 0 },
+    "unchanged": { "type": "integer", "minimum": 0 },
+    "failed": { "type": "integer", "minimum": 0 },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "itemType",
+          "status",
+          "beforeQualityFlag",
+          "afterQualityFlag",
+          "improved",
+          "changed"
+        ],
+        "properties": {
+          "id": { "type": ["integer", "null"] },
+          "itemType": { "type": ["string", "null"] },
+          "status": { "type": ["string", "null"] },
+          "titleKo": { "type": ["string", "null"] },
+          "titleEn": { "type": ["string", "null"] },
+          "beforeQualityFlag": { "type": "string" },
+          "beforeScore": { "type": "number" },
+          "afterQualityFlag": { "type": "string" },
+          "afterScore": { "type": "number" },
+          "improved": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "strategy": { "type": "string" },
+          "targetSections": { "type": "array", "items": { "type": "string" } },
+          "patchedSections": { "type": "array", "items": { "type": "string" } },
+          "preservedSectionsCount": { "type": "integer", "minimum": 0 },
+          "patchedLineCount": { "type": "integer", "minimum": 0 },
+          "preservedLineCount": { "type": "integer", "minimum": 0 },
+          "recommendedStrategy": { "type": "string", "enum": ["", "full"] },
+          "error": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } },
+    "ts": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": true
+}

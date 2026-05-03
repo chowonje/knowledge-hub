@@ -1,0 +1,13 @@
+{
+  "schema": "knowledge-hub.dinger.ask.result.v1",
+  "status": "ok",
+  "question": "Transformer의 핵심 아이디어는?",
+  "sourceType": "paper",
+  "underlyingSchema": "knowledge-hub.ask.result.v1",
+  "answer": "Self-attention으로 토큰 간 관계를 직접 계산한다.",
+  "payload": {
+    "schema": "knowledge-hub.ask.result.v1",
+    "answer": "Self-attention으로 토큰 간 관계를 직접 계산한다."
+  },
+  "createdAt": "2026-04-09T00:00:00Z"
+}

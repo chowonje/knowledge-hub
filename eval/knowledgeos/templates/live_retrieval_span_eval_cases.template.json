@@ -1,0 +1,38 @@
+{
+  "schema": "knowledge-hub.live-retrieval-span-eval.cases.v1",
+  "cases": [
+    {
+      "case_id": "paper_known_anchor",
+      "query": "replace with a query whose expected paper is present in this local corpus",
+      "source_type": "paper",
+      "expected_source_ids": ["paper:<paper-id-or-document-id>#<chunk>"],
+      "expected_text_terms": ["term expected in the retrieved span", "another term"],
+      "expected_evidence_role": "citation",
+      "min_rank": 3,
+      "top_k": 10,
+      "must_abstain": false
+    },
+    {
+      "case_id": "vault_known_anchor",
+      "query": "replace with a query whose expected vault note is present in this local corpus",
+      "source_type": "vault",
+      "expected_source_ids": ["vault:<note-id-or-path>#<chunk>"],
+      "expected_text_terms": ["term expected in the retrieved span"],
+      "expected_evidence_role": "citation",
+      "min_rank": 3,
+      "top_k": 10,
+      "must_abstain": false
+    },
+    {
+      "case_id": "known_absention_scope",
+      "query": "replace with an intentionally missing source/scope query",
+      "source_type": "paper",
+      "expected_source_ids": [],
+      "expected_text_terms": ["term that should not appear in retrieved evidence"],
+      "expected_evidence_role": "none",
+      "min_rank": 0,
+      "top_k": 10,
+      "must_abstain": true
+    }
+  ]
+}

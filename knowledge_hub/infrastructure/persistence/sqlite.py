@@ -46,7 +46,6 @@ class SQLiteDatabase:
             "ontology_store",
             "ontology_profile_store",
             "epistemic_store",
-            "notebook_bridge_store",
             "web_card_v2_store",
             "vault_card_v2_store",
             "learning_store",

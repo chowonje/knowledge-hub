@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.capture.result.v1",
+  "description": "Capture intake acknowledgement. The runtime `status` already uses lifecycle values; optional docs-only `stage`, `flowSemantics`, and `traceability` fields let smoke fixtures pin input-only/raw and traceability invariants without changing the processor implementation.",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "accepted",
+    "queued",
+    "captureId",
+    "sourceUrl",
+    "pageTitle",
+    "selectionText",
+    "capturedAt",
+    "client",
+    "tags",
+    "queuePath",
+    "sourceRefs",
+    "createdAt"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.capture.result.v1" },
+    "status": {
+      "type": "string",
+      "enum": ["captured", "normalized", "filed", "linked_to_os", "failed"]
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["captured", "normalized", "filed", "linked_to_os", "failed"]
+    },
+    "accepted": { "type": "boolean" },
+    "queued": { "type": "boolean" },
+    "captureId": { "type": "string" },
+    "sourceUrl": { "type": "string" },
+    "pageTitle": { "type": "string" },
+    "selectionText": { "type": "string" },
+    "capturedAt": { "type": "string" },
+    "client": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "rawPath": { "type": "string" },
+    "rawVaultNotePath": { "type": "string" },
+    "queuePath": { "type": "string" },
+    "packetPath": { "type": "string" },
+    "queueStatus": { "type": "string" },
+    "flowSemantics": { "$ref": "#/$defs/flowSemantics" },
+    "traceability": { "$ref": "#/$defs/traceability" },
+    "captureUrl": { "type": "string" },
+    "title": { "type": "string" },
+    "slug": { "type": "string" },
+    "sourceRefs": { "type": "array", "items": { "type": "object" } },
+    "payload": { "type": "object" },
+    "error": { "type": "string" },
+    "createdAt": { "type": "string" }
+  },
+  "$defs": {
+    "flowSemantics": {
+      "type": "object",
+      "required": ["capturePacket", "dingerFiling", "osBridge", "canonicalStore"],
+      "properties": {
+        "capturePacket": { "type": "string", "enum": ["input"] },
+        "dingerFiling": { "type": "string", "enum": ["projection_only"] },
+        "osBridge": { "type": "string", "enum": ["inbox_evidence_candidate_only"] },
+        "canonicalStore": { "type": "string", "enum": ["no_new_store"] }
+      },
+      "additionalProperties": false
+    },
+    "traceability": {
+      "type": "object",
+      "required": ["captureId"],
+      "properties": {
+        "captureId": { "type": "string" },
+        "packetPath": { "type": "string" },
+        "runtimePointer": { "type": "string" },
+        "filingOutputPointer": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["packetPath"] },
+        { "required": ["runtimePointer"] }
+      ]
+    }
+  },
+  "additionalProperties": true
+}

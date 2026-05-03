@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.retrieval.eval.report.v1",
+  "type": "object",
+  "required": ["schema", "status", "dataset", "metrics", "runtimeDiagnostics", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.retrieval.eval.report.v1" },
+    "status": { "type": "string" },
+    "dataset": { "type": "object" },
+    "metrics": { "type": "object" },
+    "runtimeDiagnostics": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

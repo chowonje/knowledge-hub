@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.evidence.review.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "action", "project", "candidate", "item", "review", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.evidence.review.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "action": { "type": "string", "enum": ["approve", "dismiss", "explain"] },
+    "project": {
+      "type": "object",
+      "required": ["id", "slug", "title"],
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "candidate": { "$ref": "#/$defs/projectEvidenceCandidate" },
+    "item": { "type": "object" },
+    "review": {
+      "type": "object",
+      "required": ["decision", "command", "stateChanged", "beforeState", "afterState", "receipt", "preservesFlow", "traceability"],
+      "properties": {
+        "decision": { "type": "string", "enum": ["approved", "dismissed", "explained"] },
+        "command": { "type": "string", "minLength": 1 },
+        "stateChanged": { "type": "boolean" },
+        "beforeState": { "type": "string" },
+        "afterState": { "type": "string" },
+        "receipt": {
+          "type": "object",
+          "required": ["chosenAction", "semanticMeaning", "operatorMeaning", "followUpExpectation", "resultingInboxState"],
+          "properties": {
+            "chosenAction": { "type": "string", "enum": ["approve", "dismiss", "explain"] },
+            "semanticMeaning": {
+              "type": "string",
+              "enum": ["reviewed_for_manual_promotion", "closed_as_not_pursued", "read_only_review_guidance"]
+            },
+            "operatorMeaning": { "type": "string", "minLength": 1 },
+            "followUpExpectation": { "type": "string", "minLength": 1 },
+            "resultingInboxState": { "type": "string", "enum": ["open", "resolved"] }
+          },
+          "additionalProperties": false
+        },
+        "preservesFlow": {
+          "type": "object",
+          "required": ["projectEvidence", "stateChange", "promotion"],
+          "properties": {
+            "projectEvidence": { "const": "derived_read_model" },
+            "stateChange": { "const": "existing_inbox_state_only" },
+            "promotion": { "const": "manual_only" }
+          },
+          "additionalProperties": false
+        },
+        "traceability": {
+          "type": "object",
+          "required": ["inboxId", "relativePath", "bridge"],
+          "properties": {
+            "inboxId": { "type": "string", "minLength": 1 },
+            "relativePath": { "type": "string", "minLength": 1 },
+            "bridge": { "const": "dinger" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "createdAt": { "type": "string" }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceType"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "scope", "document"] },
+        "paperId": { "type": "string" },
+        "url": { "type": "string" },
+        "noteId": { "type": "string" },
+        "stableScopeId": { "type": "string" },
+        "documentScopeId": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "dingerEvidenceTrace": {
+      "type": "object",
+      "required": ["bridge", "relativePath", "title"],
+      "properties": {
+        "bridge": { "const": "dinger" },
+        "relativePath": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceCandidateReason": {
+      "type": "object",
+      "required": [
+        "kind",
+        "summary",
+        "inboxState",
+        "bridge",
+        "inboxSummary",
+        "relativePath",
+        "supportingSourceRefCount",
+        "sourceTypes",
+        "upstreamSourceRefs",
+        "replayAction",
+        "replayPolicy",
+        "matchedOpenItems",
+        "matchedResolvedItems",
+        "matchedOtherItems",
+        "dedupeKeySummary",
+        "bridgeTraceSummary"
+      ],
+      "properties": {
+        "kind": { "const": "dinger_linked_inbox_candidate" },
+        "summary": { "type": "string" },
+        "inboxState": { "const": "open" },
+        "bridge": { "const": "dinger" },
+        "inboxSummary": { "type": "string" },
+        "relativePath": { "type": "string" },
+        "supportingSourceRefCount": { "type": "integer", "minimum": 0 },
+        "sourceTypes": { "type": "array", "items": { "type": "string" } },
+        "upstreamSourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "replayAction": { "type": "string", "minLength": 1 },
+        "replayPolicy": {
+          "type": "object",
+          "required": ["open", "resolved", "triaged"],
+          "properties": {
+            "open": { "type": "string", "minLength": 1 },
+            "resolved": { "type": "string", "minLength": 1 },
+            "triaged": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "matchedOpenItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "matchedResolvedItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "matchedOtherItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "dedupeKeySummary": { "$ref": "#/$defs/dedupeKeySummary" },
+        "bridgeTraceSummary": { "$ref": "#/$defs/bridgeTraceSummary" }
+      },
+      "additionalProperties": false
+    },
+    "matchedItemSummary": {
+      "type": "object",
+      "required": ["id", "state"],
+      "properties": {
+        "id": { "type": "string" },
+        "state": { "type": "string" },
+        "summary": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "dedupeKeySummary": {
+      "type": "object",
+      "required": ["kind", "strategy", "markerCount", "markers", "fingerprint"],
+      "properties": {
+        "kind": { "type": "string" },
+        "strategy": { "type": "string" },
+        "markerCount": { "type": "integer", "minimum": 0 },
+        "markers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["sourceType", "primary"],
+            "properties": {
+              "sourceType": { "type": "string" },
+              "primary": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "fingerprint": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "bridgeTraceSummary": {
+      "type": "object",
+      "required": ["bridge", "sourceSchema", "kind", "relativePath"],
+      "properties": {
+        "bridge": { "const": "dinger" },
+        "sourceSchema": { "type": "string" },
+        "kind": { "type": "string" },
+        "relativePath": { "type": "string" },
+        "title": { "type": "string" },
+        "captureUrl": { "type": "string" },
+        "captureId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceCandidate": {
+      "type": "object",
+      "required": ["inboxId", "summary", "sourceRefs", "trace", "reason", "explanation"],
+      "properties": {
+        "inboxId": { "type": "string" },
+        "summary": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "trace": { "$ref": "#/$defs/dingerEvidenceTrace" },
+        "reason": { "$ref": "#/$defs/projectEvidenceCandidateReason" },
+        "explanation": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

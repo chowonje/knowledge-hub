@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "topicSlug", "status", "counts", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.learning.graph.build.result.v1" },
+    "runId": { "type": "string" },
+    "topic": { "type": "string" },
+    "topicSlug": { "type": "string" },
+    "status": { "type": "string" },
+    "policy": { "type": "object" },
+    "counts": { "type": "object" },
+    "queued": { "type": "object" },
+    "nodes": { "type": "array" },
+    "edgeCandidates": { "type": "array" },
+    "resourceLinks": { "type": "array" },
+    "createdAt": { "type": "string" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "knowledge-hub.authority.result-envelope.v1",
+  "status": "failed",
+  "stage": "failed",
+  "sourceRefs": [
+    {
+      "sourceType": "web",
+      "url": "https://example.com/rag",
+      "title": "RAG Capture"
+    },
+    {
+      "sourceType": "vault",
+      "noteId": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+      "title": "RAG Capture"
+    }
+  ],
+  "projectionRelativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+  "flowSemantics": {
+    "capturePacket": "input",
+    "dingerFiling": "projection_only",
+    "osBridge": "inbox_evidence_candidate_only",
+    "canonicalStore": "no_new_store"
+  },
+  "traceability": {
+    "captureId": "cap_123456789abc",
+    "runtimePointer": "dinger_capture_intake:queue/cap_123456789abc.json",
+    "filingOutputPointer": "KnowledgeOS/Dinger/Pages/rag-capture.md"
+  },
+  "authorityTimeout": {
+    "classification": "timeout_observed",
+    "handledAs": "classification_only"
+  },
+  "error": "authority timeout classified without retry semantics",
+  "createdAt": "2026-04-09T12:00:00+00:00"
+}

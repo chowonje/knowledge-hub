@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.goal.add.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "created", "goal", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.goal.add.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "created": { "type": "boolean" },
+    "goal": {
+      "type": "object",
+      "required": ["id", "projectId", "title", "status", "successCriteria", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "title": { "type": "string" },
+        "status": { "type": "string" },
+        "successCriteria": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

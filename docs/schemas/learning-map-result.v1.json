@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-map-result.v1.json",
+  "title": "knowledge-hub learning map result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "topic",
+    "status",
+    "policy",
+    "trunks",
+    "branches",
+    "scoringDetail",
+    "suggestedTopK",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.learning.map.result.v1"
+    },
+    "runId": {"type": "string", "minLength": 1},
+    "topic": {"type": "string", "minLength": 1},
+    "topicSlug": {"type": "string"},
+    "status": {"type": "string", "enum": ["ok", "fallback", "blocked", "error"]},
+    "policy": {
+      "type": "object",
+      "required": ["mode", "allowed", "classification", "policyErrors"],
+      "properties": {
+        "mode": {"type": "string"},
+        "allowed": {"type": "boolean"},
+        "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+        "blockedReason": {"type": ["string", "null"]},
+        "policyErrors": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "trunks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["canonical_id", "display_name", "aliases", "resolveConfidence", "trunkScore", "scoreBreakdown"],
+        "properties": {
+          "canonical_id": {"type": "string"},
+          "display_name": {"type": "string"},
+          "aliases": {"type": "array", "items": {"type": "string"}},
+          "resolveConfidence": {"type": "number"},
+          "trunkScore": {"type": "number"},
+          "scoreBreakdown": {"type": "object"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["canonical_id", "display_name", "aliases", "resolveConfidence", "parentTrunkIds", "confidence"],
+        "properties": {
+          "canonical_id": {"type": "string"},
+          "display_name": {"type": "string"},
+          "aliases": {"type": "array", "items": {"type": "string"}},
+          "resolveConfidence": {"type": "number"},
+          "parentTrunkIds": {"type": "array", "items": {"type": "string"}},
+          "confidence": {"type": "number"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "scoringDetail": {"type": "object"},
+    "suggestedTopK": {"type": "integer", "minimum": 0},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

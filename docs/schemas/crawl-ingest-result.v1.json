@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/crawl-ingest-result.v1.json",
+  "title": "knowledge-hub crawl ingest result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "status",
+    "requested",
+    "crawled",
+    "stored",
+    "indexedChunks",
+    "failed",
+    "engine",
+    "topic",
+    "warnings",
+    "ontology",
+    "writebackPaths",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.crawl.ingest.result.v1"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "partial", "error", "blocked"]
+    },
+    "requested": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "crawled": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "stored": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "indexedChunks": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "error"],
+        "properties": {
+          "url": {"type": "string"},
+          "error": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "engine": {"type": "string"},
+    "topic": {"type": "string"},
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "ontology": {
+      "type": "object",
+      "required": ["runId", "conceptsAccepted", "relationsAccepted", "pendingCount", "aliasesAdded"],
+      "properties": {
+        "runId": {"type": "string"},
+        "conceptsAccepted": {"type": "integer", "minimum": 0},
+        "relationsAccepted": {"type": "integer", "minimum": 0},
+        "pendingCount": {"type": "integer", "minimum": 0},
+        "aliasesAdded": {"type": "integer", "minimum": 0},
+        "writebackPaths": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "ontologyGraph": {
+      "type": "object",
+      "properties": {
+        "status": {"type": "string"},
+        "runId": {"type": "string"},
+        "conceptCount": {"type": "integer", "minimum": 0},
+        "relationCount": {"type": "integer", "minimum": 0},
+        "turtlePath": {"type": ["string", "null"]},
+        "validation": {"type": "object"},
+        "libraries": {"type": "object"},
+        "createdAt": {"type": "string"},
+        "updatedAt": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "writebackPaths": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "indexDiagnostics": {
+      "type": "object",
+      "properties": {
+        "requested": {"type": "boolean"},
+        "attempted": {"type": "boolean"},
+        "autoRetryEligible": {"type": "boolean"},
+        "autoRetryAttempted": {"type": "boolean"},
+        "initialIndexedChunks": {"type": "integer", "minimum": 0},
+        "finalIndexedChunks": {"type": "integer", "minimum": 0},
+        "status": {
+          "type": "string",
+          "enum": ["not_requested", "indexed", "retry_succeeded", "retry_exhausted", "index_failed"]
+        },
+        "reason": {"type": "string"},
+        "warnings": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "additionalProperties": true
+    },
+    "learningMap": {"type": "object"},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"}
+  },
+  "additionalProperties": true
+}

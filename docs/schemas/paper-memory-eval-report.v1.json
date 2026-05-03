@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper-memory.eval.report.v1",
+  "type": "object",
+  "required": ["schema", "status", "casesPath", "caseCount", "summary", "metrics", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-memory.eval.report.v1" },
+    "status": { "type": "string" },
+    "casesPath": { "type": "string" },
+    "caseCount": { "type": "integer" },
+    "summary": { "type": "object" },
+    "metrics": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

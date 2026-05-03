@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.ask-graph.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "question", "decomposition", "answer", "sources", "trace", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ask-graph.result.v1" },
+    "status": { "type": "string" },
+    "question": { "type": "string" },
+    "decomposition": { "type": "object" },
+    "answer": {},
+    "sources": { "type": "array" },
+    "trace": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

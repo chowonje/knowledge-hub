@@ -1,0 +1,2523 @@
+{
+  "schema": "knowledge-hub.sectioncard.eval.bundle.v1",
+  "status": "ok",
+  "paperSubsetPath": "eval/sectioncard_paper_subset.json",
+  "questionsPath": "eval/sectioncard_eval_questions.jsonl",
+  "outDir": "eval/sectioncard_eval_run",
+  "allowExternal": false,
+  "questionCount": 24,
+  "answerCount": 72,
+  "items": [
+    {
+      "paperId": "2501.06322",
+      "bucket": "strong",
+      "questionId": "2501.06322-q1",
+      "intent": "problem",
+      "question": "2501.06322 논문은 무엇을 해결하려 하나?",
+      "expectedFocus": "problem",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Existing studies were noted as not sufficiently covering the collaborative aspects of LLM-based multi-agent systems.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: The proposed framework explains collaboration mechanisms through five dimensions: actors, types, structures, strategies, and coordination...\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Compared with existing SOTA models, accuracy improved by 5% and F1 by 10%, and ablation showed performance changed markedly with differen...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [방법론 (Methodology)] **프레임워크 구조**: 제안된 프레임워크는 협력 메커니즘을 5개의 차원으로 나누어 설명합니다. **행위자(Actors)**: 협력에 참여하는 에이전트들.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [한줄 요약] 이 논문은 대규모 언어 모델(LLM)을 기반으로 한 다중 에이전트 시스템(MAS)의 협력 메커니즘을 탐구하고, 효과적인 협력을 위한 프레임워크를 제안하여 복잡한 문제 해결을 위해 에이전트들이 어떻게 협력할 수 있는지를 설명합니다....",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2501.06322",
+      "bucket": "strong",
+      "questionId": "2501.06322-q2",
+      "intent": "method",
+      "question": "2501.06322 논문은 어떻게 작동하나?",
+      "expectedFocus": "method",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Existing studies were noted as not sufficiently covering the collaborative aspects of LLM-based multi-agent systems.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: The proposed framework explains collaboration mechanisms through five dimensions: actors, types, structures, strategies, and coordination...\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Compared with existing SOTA models, accuracy improved by 5% and F1 by 10%, and ablation showed performance changed markedly with differen...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [한줄 요약] 이 논문은 대규모 언어 모델(LLM)을 기반으로 한 다중 에이전트 시스템(MAS)의 협력 메커니즘을 탐구하고, 효과적인 협력을 위한 프레임워크를 제안하여 복잡한 문제 해결을 위해 에이전트들이 어떻게 협력할 수 있는지를 설명합니다....\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [방법론 (Methodology)] **프레임워크 구조**: 제안된 프레임워크는 협력 메커니즘을 5개의 차원으로 나누어 설명합니다. **행위자(Actors)**: 협력에 참여하는 에이전트들.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2501.06322",
+      "bucket": "strong",
+      "questionId": "2501.06322-q3",
+      "intent": "results",
+      "question": "2501.06322 논문은 어떤 결과나 근거를 제시하나?",
+      "expectedFocus": "results",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Existing studies were noted as not sufficiently covering the collaborative aspects of LLM-based multi-agent systems.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: The proposed framework explains collaboration mechanisms through five dimensions: actors, types, structures, strategies, and coordination...\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Compared with existing SOTA models, accuracy improved by 5% and F1 by 10%, and ablation showed performance changed markedly with differen...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [방법론 (Methodology)] **프레임워크 구조**: 제안된 프레임워크는 협력 메커니즘을 5개의 차원으로 나누어 설명합니다. **행위자(Actors)**: 협력에 참여하는 에이전트들.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [한줄 요약] 이 논문은 대규모 언어 모델(LLM)을 기반으로 한 다중 에이전트 시스템(MAS)의 협력 메커니즘을 탐구하고, 효과적인 협력을 위한 프레임워크를 제안하여 복잡한 문제 해결을 위해 에이전트들이 어떻게 협력할 수 있는지를 설명합니다....",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2501.06322",
+      "bucket": "strong",
+      "questionId": "2501.06322-q4",
+      "intent": "limitations",
+      "question": "2501.06322 논문의 한계나 적용 범위는 무엇인가?",
+      "expectedFocus": "limitations",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: Existing studies were noted as not sufficiently covering the collaborative aspects of LLM-based multi-agent systems.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: **협력 메커니즘 프레임워크 제안**: 이 논문은 LLM 기반 MAS의 협력 메커니즘을 설명하는 프레임워크를 제안하며, 에이전트, 유형, 구조, 전략 및 조정 프로토콜의 다섯 가지 주요 차원으로 구성됩니다. **기존 연구 분석**: 기존의 연구들...\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: The proposed framework explains collaboration mechanisms through five dimensions: actors, types, structures, strategies, and coordination...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [방법론 (Methodology)] **프레임워크 구조**: 제안된 프레임워크는 협력 메커니즘을 5개의 차원으로 나누어 설명합니다. **행위자(Actors)**: 협력에 참여하는 에이전트들.\n- Multi-Agent Collaboration Mechanisms: A Survey of LLMs: [한계 및 향후 과제] **제한된 협력 메커니즘 탐구**: 현재의 연구는 협력 메커니즘의 다양성을 충분히 포괄하지 못했으며, 더 많은 유형의 협력 메커니즘을 탐색할 필요가 있습니다. **향후 연구 방향**: 향후 연구에서는 협력적 에이전트의 행동...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2503.10970",
+      "bucket": "strong",
+      "questionId": "2503.10970-q1",
+      "intent": "problem",
+      "question": "2503.10970 논문은 무엇을 해결하려 하나?",
+      "expectedFocus": "problem",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: TxAgent is proposed as an AI agent for therapeutic reasoning that uses diverse tools to generate and optimize treatment plans.\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: 이 논문은 AI를 활용한 치료 계획 자동화의 가능성을 보여주며, 의료 분야에서의 AI 활용을 촉진할 수 있는 중요한 인사이트를 제공합니다. 다양한 의료 도구와 데이터를 통합하여 복잡한 문제를 해결해야 하는 상황에서 TxAgent의 접근법을 적용할...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: \"입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합을 자동으로 결정합니다.\"",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [방법론 (Methodology)] TxAgent는 다중 모듈 아키텍처로 구성되어 있으며, 각 모듈은 특정 기능을 수행하여 통합된 치료 계획을 생성합니다. 입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [주요 실험 결과 (Key Results)] TxAgent는 MIMIC-III 및 다른 의료 데이터셋에서 테스트되었으며, 기존 SOTA 대비 10% 이상의 정확도 향상을 보였습니다. Ablation study를 통해 도구 선택 모듈의 중요성을 확...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2503.10970",
+      "bucket": "strong",
+      "questionId": "2503.10970-q2",
+      "intent": "method",
+      "question": "2503.10970 논문은 어떻게 작동하나?",
+      "expectedFocus": "method",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: TxAgent is proposed as an AI agent for therapeutic reasoning that uses diverse tools to generate and optimize treatment plans.\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: 이 논문은 AI를 활용한 치료 계획 자동화의 가능성을 보여주며, 의료 분야에서의 AI 활용을 촉진할 수 있는 중요한 인사이트를 제공합니다. 다양한 의료 도구와 데이터를 통합하여 복잡한 문제를 해결해야 하는 상황에서 TxAgent의 접근법을 적용할...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: \"입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합을 자동으로 결정합니다.\"",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [방법론 (Methodology)] TxAgent는 다중 모듈 아키텍처로 구성되어 있으며, 각 모듈은 특정 기능을 수행하여 통합된 치료 계획을 생성합니다. 입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [주요 실험 결과 (Key Results)] TxAgent는 MIMIC-III 및 다른 의료 데이터셋에서 테스트되었으며, 기존 SOTA 대비 10% 이상의 정확도 향상을 보였습니다. Ablation study를 통해 도구 선택 모듈의 중요성을 확...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2503.10970",
+      "bucket": "strong",
+      "questionId": "2503.10970-q3",
+      "intent": "results",
+      "question": "2503.10970 논문은 어떤 결과나 근거를 제시하나?",
+      "expectedFocus": "results",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: TxAgent is proposed as an AI agent for therapeutic reasoning that uses diverse tools to generate and optimize treatment plans.\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: 이 논문은 AI를 활용한 치료 계획 자동화의 가능성을 보여주며, 의료 분야에서의 AI 활용을 촉진할 수 있는 중요한 인사이트를 제공합니다. 다양한 의료 도구와 데이터를 통합하여 복잡한 문제를 해결해야 하는 상황에서 TxAgent의 접근법을 적용할...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: \"입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합을 자동으로 결정합니다.\"",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [방법론 (Methodology)] TxAgent는 다중 모듈 아키텍처로 구성되어 있으며, 각 모듈은 특정 기능을 수행하여 통합된 치료 계획을 생성합니다. 입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [주요 실험 결과 (Key Results)] TxAgent는 MIMIC-III 및 다른 의료 데이터셋에서 테스트되었으며, 기존 SOTA 대비 10% 이상의 정확도 향상을 보였습니다. Ablation study를 통해 도구 선택 모듈의 중요성을 확...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2503.10970",
+      "bucket": "strong",
+      "questionId": "2503.10970-q4",
+      "intent": "limitations",
+      "question": "2503.10970 논문의 한계나 적용 범위는 무엇인가?",
+      "expectedFocus": "limitations",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: TxAgent is proposed as an AI agent for therapeutic reasoning that uses diverse tools to generate and optimize treatment plans.\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: TxAgent는 여러 도구를 통합하여 치료적 추론을 수행할 수 있는 AI 에이전트를 최초로 제안하였으며, 이로써 복잡한 의료 결정 과정을 자동화하는 새로운 패러다임을 제시합니다. 도메인 전문가의 지식과 최신 AI 기술을 결합하여 높은 정확도의 치...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: 이 논문은 AI를 활용한 치료 계획 자동화의 가능성을 보여주며, 의료 분야에서의 AI 활용을 촉진할 수 있는 중요한 인사이트를 제공합니다. 다양한 의료 도구와 데이터를 통합하여 복잡한 문제를 해결해야 하는 상황에서 TxAgent의 접근법을 적용할...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "section_cards",
+          "answerProvenanceMode": "section_cards_verified",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "missingRoles": [],
+            "weakRoles": [],
+            "roleCount": 4,
+            "status": "strong"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results",
+                "limitations"
+              ],
+              "coverageStatus": "strong",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [방법론 (Methodology)] TxAgent는 다중 모듈 아키텍처로 구성되어 있으며, 각 모듈은 특정 기능을 수행하여 통합된 치료 계획을 생성합니다. 입력 데이터는 전처리 과정을 거쳐 도구 선택 모듈로 전달되며, 이 모듈은 최적의 도구 조합...\n- TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools: [주요 실험 결과 (Key Results)] TxAgent는 MIMIC-III 및 다른 의료 데이터셋에서 테스트되었으며, 기존 SOTA 대비 10% 이상의 정확도 향상을 보였습니다. Ablation study를 통해 도구 선택 모듈의 중요성을 확...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2502.05151",
+      "bucket": "medium",
+      "questionId": "2502.05151-q1",
+      "intent": "problem",
+      "question": "2502.05151 논문은 무엇을 해결하려 하나?",
+      "expectedFocus": "problem",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2502.05151",
+      "bucket": "medium",
+      "questionId": "2502.05151-q2",
+      "intent": "method",
+      "question": "2502.05151 논문은 어떻게 작동하나?",
+      "expectedFocus": "method",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2502.05151",
+      "bucket": "medium",
+      "questionId": "2502.05151-q3",
+      "intent": "results",
+      "question": "2502.05151 논문은 어떤 결과나 근거를 제시하나?",
+      "expectedFocus": "results",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2502.05151",
+      "bucket": "medium",
+      "questionId": "2502.05151-q4",
+      "intent": "limitations",
+      "question": "2502.05151 논문의 한계나 적용 범위는 무엇인가?",
+      "expectedFocus": "limitations",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "method",
+              "problem",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "method",
+                "problem",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 5
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 1] 먼저 빠른 안내드림: 현재 제공하신 것은 논문 제목과 저자 정보뿐이라 원문을 직접 읽을 수 없습니다. 정확하고 엄밀한 심층 요약(특히 논문이 직접 보고한 수치·실험·데이터셋 등)을 원하시면 논문 PDF나 텍스트를 업로드해 주세요...\n- Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation: [Block 4] 한계 및 향후 과제 저자가 밝힌/일반적으로 논의되는 한계: 재현성 문제: LLM 기반 연구·생성 결과의 재현성 확보가 어렵고, 생성물의 신뢰성(특히 인용·수치·실험 조건) 검증이 필요함. 허위정보(hallucination) 및...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.16698",
+      "bucket": "medium",
+      "questionId": "2602.16698-q1",
+      "intent": "problem",
+      "question": "2602.16698 논문은 무엇을 해결하려 하나?",
+      "expectedFocus": "problem",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.16698",
+      "bucket": "medium",
+      "questionId": "2602.16698-q2",
+      "intent": "method",
+      "question": "2602.16698 논문은 어떻게 작동하나?",
+      "expectedFocus": "method",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.16698",
+      "bucket": "medium",
+      "questionId": "2602.16698-q3",
+      "intent": "results",
+      "question": "2602.16698 논문은 어떤 결과나 근거를 제시하나?",
+      "expectedFocus": "results",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "selected",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem",
+              "method",
+              "results"
+            ],
+            "missingRoles": [
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 3,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": true,
+            "reason": "",
+            "signals": {
+              "selectedRoles": [
+                "problem",
+                "method",
+                "results"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.16698",
+      "bucket": "medium",
+      "questionId": "2602.16698-q4",
+      "intent": "limitations",
+      "question": "2602.16698 논문의 한계나 적용 범위는 무엇인가?",
+      "expectedFocus": "limitations",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "weak_missing_method_or_results",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "method",
+              "problem"
+            ],
+            "missingRoles": [
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 2,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "weak_missing_method_or_results",
+            "signals": {
+              "selectedRoles": [
+                "method",
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 6
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Causality is Key for Interpretability Claims to Generalise: [한줄 요약] 이 논문은 해석 가능성 주장이 일반화되기 위해 인과 관계가 필수적이며, 모델의 해석 가능성을 강화하기 위한 인과적 접근 방법을 제안합니다. [핵심 기여 (Contributions)] 인과 관계가 모델의 해석 가능성에 미치는 영향을...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2603.07379",
+      "bucket": "weak",
+      "questionId": "2603.07379-q1",
+      "intent": "problem",
+      "question": "2603.07379 논문은 무엇을 해결하려 하나?",
+      "expectedFocus": "problem",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 1,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2603.07379",
+      "bucket": "weak",
+      "questionId": "2603.07379-q2",
+      "intent": "method",
+      "question": "2603.07379 논문은 어떻게 작동하나?",
+      "expectedFocus": "method",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 1,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2603.07379",
+      "bucket": "weak",
+      "questionId": "2603.07379-q3",
+      "intent": "results",
+      "question": "2603.07379 논문은 어떤 결과나 근거를 제시하나?",
+      "expectedFocus": "results",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 1,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2603.07379",
+      "bucket": "weak",
+      "questionId": "2603.07379-q4",
+      "intent": "limitations",
+      "question": "2603.07379 논문의 한계나 적용 범위는 무엇인가?",
+      "expectedFocus": "limitations",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 1,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions: [Block 1] 요청 감사합니다 — 논문 전문을 읽고 정확한 심층 요약을 작성하려면 논문 원문(또는 링크)이 필요합니다. 현재 제공하신 건 제목·저자 정보뿐이라 원문을 확인할 수 없어 요약을 바로 작성할 수 없습니다.",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.20021",
+      "bucket": "weak",
+      "questionId": "2602.20021-q1",
+      "intent": "problem",
+      "question": "2602.20021 논문은 무엇을 해결하려 하나?",
+      "expectedFocus": "problem",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [
+              "problem"
+            ],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.20021",
+      "bucket": "weak",
+      "questionId": "2602.20021-q2",
+      "intent": "method",
+      "question": "2602.20021 논문은 어떻게 작동하나?",
+      "expectedFocus": "method",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [
+              "problem"
+            ],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.20021",
+      "bucket": "weak",
+      "questionId": "2602.20021-q3",
+      "intent": "results",
+      "question": "2602.20021 논문은 어떤 결과나 근거를 제시하나?",
+      "expectedFocus": "results",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [
+              "problem"
+            ],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    },
+    {
+      "paperId": "2602.20021",
+      "bucket": "weak",
+      "questionId": "2602.20021-q4",
+      "intent": "limitations",
+      "question": "2602.20021 논문의 한계나 적용 범위는 무엇인가?",
+      "expectedFocus": "limitations",
+      "answers": {
+        "section_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "blocked",
+            "sectionBlockReason": "problem_only_sections",
+            "fallbackReason": "section_blocked_to_claim_cards"
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [
+              "problem"
+            ],
+            "missingRoles": [
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [
+              "problem"
+            ],
+            "roleCount": 1,
+            "status": "weak"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "problem_only_sections",
+            "signals": {
+              "selectedRoles": [
+                "problem"
+              ],
+              "coverageStatus": "weak",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 1
+            }
+          }
+        },
+        "claim_first": {
+          "answer": "로컬 답변 생성이 지연되어 검색된 근거만 보수적으로 정리합니다.\n현재 상위 근거:\n- Agents of Chaos: [Block 1] 요청해 주신 형식(한줄 요약, 기여, 방법론, 실험결과 등)으로 심층 요약을 반드시 구체적 수치·모델명·데이터셋을 포함해 작성하려면 원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 현재 저는 외부 문서를 직접 검색하거나...",
+          "warnings": [
+            "answer generation fallback applied: initial_answer:ConnectionError"
+          ],
+          "runtime": {
+            "used": "ask_v2",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": ""
+          },
+          "memoryForm": "claim_cards",
+          "answerProvenanceMode": "weak_claim_fallback",
+          "sectionCoverage": {
+            "selectedRoles": [],
+            "missingRoles": [
+              "problem",
+              "method",
+              "results",
+              "limitations"
+            ],
+            "weakRoles": [],
+            "roleCount": 0,
+            "status": "missing"
+          },
+          "qualityGate": {
+            "allowed": false,
+            "reason": "no_section_cards",
+            "signals": {
+              "selectedRoles": [],
+              "coverageStatus": "missing",
+              "placeholderCount": 0,
+              "metaOnlyCount": 0,
+              "appendixLikeCount": 0,
+              "cardCount": 0
+            }
+          }
+        },
+        "legacy": {
+          "answer": "관련된 문서를 찾을 수 없습니다.",
+          "warnings": [],
+          "runtime": {
+            "used": "legacy",
+            "sectionDecision": "skipped",
+            "sectionBlockReason": "",
+            "fallbackReason": "ask_v2_not_used"
+          },
+          "memoryForm": "",
+          "answerProvenanceMode": "",
+          "sectionCoverage": {},
+          "qualityGate": {}
+        }
+      }
+    }
+  ]
+}

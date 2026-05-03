@@ -1,0 +1,40 @@
+{
+  "version": "2026-04-08",
+  "cases": [
+    {
+      "id": "p0-email",
+      "text": "contact alice@example.com for the draft",
+      "expectedP0": true
+    },
+    {
+      "id": "p0-phone",
+      "text": "office line 010-1234-5678",
+      "expectedP0": true
+    },
+    {
+      "id": "p0-card",
+      "text": "test card 4111 1111 1111 1111",
+      "expectedP0": true
+    },
+    {
+      "id": "p0-secret-keyword",
+      "text": "password: local-secret",
+      "expectedP0": true
+    },
+    {
+      "id": "safe-public-url",
+      "text": "https://arxiv.org/abs/2301.12345",
+      "expectedP0": false
+    },
+    {
+      "id": "safe-summary",
+      "text": "summary of retrieval methods and tradeoffs",
+      "expectedP0": false
+    },
+    {
+      "id": "safe-date",
+      "text": "release date 2026-04-08",
+      "expectedP0": false
+    }
+  ]
+}

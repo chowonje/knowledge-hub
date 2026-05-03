@@ -21,7 +21,6 @@ _EXPORTS = {
     "init_cmd": "knowledge_hub.interfaces.cli.commands.init_cmd",
     "learn_group": "knowledge_hub.interfaces.cli.commands.learn_cmd",
     "mcp_cmd": "knowledge_hub.interfaces.cli.commands.mcp_cmd",
-    "notebook_group": "knowledge_hub.interfaces.cli.commands.notebook_cmd",
     "ontology_group": "knowledge_hub.interfaces.cli.commands.ontology_cmd",
     "ops_action_ack": "knowledge_hub.interfaces.cli.commands.ops_cmd",
     "ops_action_execute": "knowledge_hub.interfaces.cli.commands.ops_cmd",
