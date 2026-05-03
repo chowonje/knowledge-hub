@@ -5,7 +5,6 @@
 .github/workflows/test.yml
 AGENTS.md
 COMMANDS.md
-PROJECT_PROGRESS.md
 config.yaml.example
 :(glob)config.yaml.bak_*
 :(glob)docs/**

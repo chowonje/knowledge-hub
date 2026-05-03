@@ -58,8 +58,9 @@ writeback goal:
 - `eval/knowledgeos/scripts/report_source_quality_detail_observation.py`
 - installed launchd helper: `~/.khub/bin/run_daily_source_quality_launchd.sh`
 
-launchd 템플릿:
-- `ops/launchd/com.won.knowledge-hub.daily-source-quality.plist`
+launchd:
+- workstation-specific launchd plists are local-only and are not tracked in this public repository.
+- point a local plist at `~/.khub/bin/run_daily_source_quality_launchd.sh` if scheduled local runs are needed.
 
 기본 스케줄:
 - 매일 `10:00` 로컬 시간

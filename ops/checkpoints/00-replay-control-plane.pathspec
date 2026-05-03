@@ -4,7 +4,6 @@
 
 CHANGELOG.md
 docs/PROJECT_STATE.md
-docs/status/2026-04-16-dirty-tree-split-plan.md
 ops/checkpoints/00-replay-control-plane.pathspec
 ops/checkpoints/01-contract-entrypoints-green-baseline.pathspec
 ops/checkpoints/02-cli-mcp-surface-migration.pathspec
