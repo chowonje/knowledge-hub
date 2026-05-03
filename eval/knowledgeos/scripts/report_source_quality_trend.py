@@ -57,6 +57,10 @@ def _load_run_summaries(runs_root: Path, *, limit: int) -> list[dict[str, Any]]:
             }
         )
     entries.sort(key=lambda item: item["created_at"])
+    latest_by_date: dict[str, dict[str, Any]] = {}
+    for item in entries:
+        latest_by_date[item["created_at"].date().isoformat()] = item
+    entries = sorted(latest_by_date.values(), key=lambda item: item["created_at"])
     if limit > 0:
         entries = entries[-limit:]
     return entries
@@ -177,6 +181,7 @@ def build_trend_report(run_summaries: list[dict[str, Any]]) -> dict[str, Any]:
         "runs": [
             {
                 "created_at": item["payload"]["created_at"],
+                "run_date": item["created_at"].date().isoformat(),
                 "run_dir": item["run_dir"],
                 "summary_path": item["summary_path"],
             }

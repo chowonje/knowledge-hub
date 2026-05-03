@@ -5,6 +5,7 @@ import argparse
 from collections import Counter
 import csv
 import json
+import os
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -186,6 +187,13 @@ def _run_collector(
     subprocess.run(command, cwd=repo_root, check=True)
 
 
+def _relative_output_path(path: Path, repo_root: Path) -> str:
+    try:
+        return str(path.relative_to(repo_root))
+    except ValueError:
+        return os.path.relpath(path, repo_root)
+
+
 def build_battery_summary(
     repo_root: Path,
     *,
@@ -209,7 +217,7 @@ def build_battery_summary(
             top_k=top_k,
             retrieval_mode=retrieval_mode,
         )
-        outputs[spec.name] = str(out_path.relative_to(repo_root))
+        outputs[spec.name] = _relative_output_path(out_path, repo_root)
         per_source[spec.name] = summarize_source_rows(spec.name, _read_rows(out_path))
     runtime_used_counter = Counter()
     fallback_reason_counter = Counter()

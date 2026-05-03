@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-04-24
+Last updated: 2026-05-03
 
 ## What this project is
 
@@ -88,6 +88,7 @@ The default product shape is now intentionally split into three layers:
 - `Core Runtime`: the local grounded loop (`discover -> index -> search/ask -> evidence review`) plus read-only task-context assembly and policy/provenance surfaces
 - `Agent Gateway`: a narrow future-facing adapter layer for context packs, grounded tool access, approval/policy checks, and result receipts
 - `Labs`: experimental or operator-heavy surfaces that remain additive and do not redefine the default promise
+- `Eval-quality-center`: a narrow control-plane tranche for EvalCase registry, Failure Bank, Eval Center summaries, and source-quality/daily runner automation; eval gate, full eval CLI, ask-v2 eval, answer-loop, RAG VNext, paper-memory eval, and side-layer integrations remain separate later tranches.
 
 This means two things operationally:
 
