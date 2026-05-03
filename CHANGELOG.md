@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added a narrow context-serving MCP tranche: shared `context_pack` / `task_context` assembly, schema-backed `build_task_context`, focused MCP `search_knowledge` / `ask_knowledge` / `build_task_context` serving through the `khub-mcp` entrypoint, and regression tests for the context package and MCP route without pulling in side-layer, eval-center, RAG vNext, Foundry, Dinger, OS bridge, learning, or generated-artifact paths.
 - Dinger facade MVP: `khub dinger ingest|ask|lint|recent` now provides a simpler user-facing knowledge surface over the existing `discover`, `crawl collect`, `ask`, and runtime-hygiene read models without changing canonical storage or Obsidian projection rules.
 - `khub dinger file` now files ask results or direct notes into managed `KnowledgeOS/Dinger/Pages/*.md` projection pages and regenerates additive `KnowledgeOS/Dinger/Index.md` plus `KnowledgeOS/Dinger/Log.md` without introducing a new canonical store.
 - `khub dinger capture` now provides a browser-friendly runtime intake surface for web clips (`sourceUrl`, `pageTitle`, `selectionText`, `capturedAt`, `client`, `tags`, optional raw pointers), persists queued packets under local runtime state instead of writing Dinger projection pages inline, returns `captureId` plus `accepted/queued`-style ack metadata, and keeps raw intake input-only until downstream filing and OS linkage.

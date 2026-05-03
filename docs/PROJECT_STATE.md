@@ -257,6 +257,7 @@ Additive subsystems exist behind that default surface:
 ### Agent flow
 - `run_agentic_query` exists as an MCP tool and CLI-facing capability.
 - `khub agent context` and MCP `build_task_context` expose the same backend task-context assembly service.
+- `core-serve-context-mcp` is isolated as a narrow context-serving tranche: `context_pack`, `task_context`, MCP `search_knowledge`, MCP `build_task_context`, and the small MCP server entrypoint are self-contained for Codex-style context serving. Side-layer surfaces such as eval center, failure bank, RAG vNext, Foundry, Dinger, OS bridge, learning, and generated artifacts are deliberately outside this worktree slice.
 - `build_task_context` is now a compatibility wrapper over the shared `context_pack` foundation rather than its own standalone selector implementation.
 - Workspace selection now skips virtualenv, `site-packages`, `dist-packages`, cache, and generated vendor trees up front, while still preserving explicit repo file matches inside the real workspace root.
 - Coding/design/debug fallbacks now start with `build_task_context` and keep repo evidence ephemeral instead of persisting project files into SQLite, vector, or ontology stores.

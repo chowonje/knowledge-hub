@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/task-context-result.v1.json",
+  "title": "knowledge-hub task context result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "goal",
+    "mode",
+    "knowledge_hits",
+    "workspace_files",
+    "project_conventions",
+    "suggested_prompt_context",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.task-context.result.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "error"]
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["coding", "design", "debug", "knowledge"]
+    },
+    "repoPath": {
+      "type": "string"
+    },
+    "knowledge_hits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "title", "snippet", "score"],
+        "properties": {
+          "source": {"type": "string"},
+          "title": {"type": "string"},
+          "snippet": {"type": "string"},
+          "score": {"type": "number"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "workspace_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "relative_path", "role", "snippet", "reason", "source_type"],
+        "properties": {
+          "path": {"type": "string"},
+          "relative_path": {"type": "string"},
+          "role": {"type": "string"},
+          "snippet": {"type": "string"},
+          "reason": {"type": "string"},
+          "source_type": {"const": "project"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "project_conventions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "suggested_prompt_context": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "evidenceSummary": {
+      "type": "object",
+      "properties": {
+        "persistentKnowledgeCount": {"type": "integer", "minimum": 0},
+        "workspaceFileCount": {"type": "integer", "minimum": 0},
+        "workspaceIncluded": {"type": "boolean"},
+        "repoContextEphemeral": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "gateway": {
+      "type": "object",
+      "required": [
+        "version",
+        "surface",
+        "mode",
+        "contract",
+        "executionAllowed",
+        "writebackAllowed",
+        "repoContextEphemeral"
+      ],
+      "properties": {
+        "version": {"const": "v1"},
+        "surface": {"const": "task_context"},
+        "mode": {"const": "context"},
+        "contract": {"const": "read_only_dry_run"},
+        "executionAllowed": {"const": false},
+        "writebackAllowed": {"const": false},
+        "repoContextEphemeral": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}
