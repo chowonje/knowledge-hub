@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.failure-bank.list.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "bankPath",
+    "recordCount",
+    "bucketCounts",
+    "statusCounts",
+    "items",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.failure-bank.list.result.v1" },
+    "status": { "type": "string" },
+    "bankPath": { "type": "string" },
+    "recordCount": { "type": "integer", "minimum": 0 },
+    "bucketCounts": { "type": "object" },
+    "statusCounts": { "type": "object" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["failureId", "status", "bucket"],
+        "properties": {
+          "failureId": { "type": "string" },
+          "status": { "type": "string" },
+          "bucket": { "type": "string" },
+          "packetRef": { "type": "string" },
+          "query": { "type": "string" },
+          "answerBackend": { "type": "string" },
+          "observationCount": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

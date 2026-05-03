@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-04-10
+Last updated: 2026-05-03
 
 ## What this project is
 
@@ -57,6 +57,7 @@ Additive subsystems exist behind that default surface:
 - Advanced workflows stay behind `khub labs ...` or profile-gated MCP discovery.
 - Default `paper` ask behavior is now intentionally narrow and predictable: `concept_explainer`, `paper_lookup`, `paper_compare`, and `paper_discover` are the only default paper families.
 - Heavy multi-paper synthesis is not part of the default paper contract; it stays on `khub labs paper topic-synthesize`.
+- Eval-quality-center is now split as a narrow control-plane tranche above the core context/MCP serving baseline: EvalCase registry, Failure Bank, Eval Center summaries, and source-quality/daily runner automation are schema-backed and focused, while eval gate, full eval CLI, ask-v2 eval, answer-loop, RAG vNext, paper-memory eval, and generated artifacts remain separate later tranches.
 - Domain routing is intentionally simple in this phase: `source=paper` resolves to `ai_papers`, `source=web` resolves to `web_knowledge`, and `medical` / `legal` exist only as inactive skeletons for future expansion.
 - Repo/project context is inspectable and ephemeral; it does not persist into SQLite, vector DB, or ontology tables.
 - Local-first privacy and outbound policy gating are hard constraints.

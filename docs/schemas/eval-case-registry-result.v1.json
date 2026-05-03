@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.eval-case-registry.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "action",
+    "status",
+    "registryPath",
+    "recordCount",
+    "items",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.eval-case-registry.result.v1" },
+    "action": { "type": "string", "enum": ["list", "import"] },
+    "status": { "type": "string" },
+    "registryPath": { "type": "string" },
+    "sourcePath": { "type": "string" },
+    "lane": { "type": "string" },
+    "importedAt": { "type": "string" },
+    "recordCount": { "type": "integer", "minimum": 0 },
+    "totalRecordCount": { "type": "integer", "minimum": 0 },
+    "importedCount": { "type": "integer", "minimum": 0 },
+    "createdCount": { "type": "integer", "minimum": 0 },
+    "updatedCount": { "type": "integer", "minimum": 0 },
+    "touchedEvalCaseIds": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "laneCounts": { "type": "object" },
+    "sourceTypeCounts": { "type": "object" },
+    "statusCounts": { "type": "object" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema",
+          "evalCaseId",
+          "lane",
+          "sourceType",
+          "scenarioType",
+          "query",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.eval-case.v1" },
+          "evalCaseId": { "type": "string" },
+          "lane": { "type": "string" },
+          "sourceType": { "type": "string" },
+          "scenarioType": { "type": "string" },
+          "query": { "type": "string" },
+          "status": { "type": "string" },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "filter": { "type": "object" },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

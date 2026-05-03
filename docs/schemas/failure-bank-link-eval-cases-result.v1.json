@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.failure-bank.link-eval-cases.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "bankPath",
+    "registryPath",
+    "linkedAt",
+    "linkedCount",
+    "alreadyLinkedCount",
+    "unmatchedCount",
+    "recordCount",
+    "bucketCounts",
+    "statusCounts",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.failure-bank.link-eval-cases.result.v1" },
+    "status": { "type": "string" },
+    "bankPath": { "type": "string" },
+    "registryPath": { "type": "string" },
+    "linkedAt": { "type": "string" },
+    "linkedStatus": { "type": "string" },
+    "linkedCount": { "type": "integer", "minimum": 0 },
+    "alreadyLinkedCount": { "type": "integer", "minimum": 0 },
+    "unmatchedCount": { "type": "integer", "minimum": 0 },
+    "recordCount": { "type": "integer", "minimum": 0 },
+    "touchedFailureIds": { "type": "array", "items": { "type": "string" } },
+    "unmatchedFailureIds": { "type": "array", "items": { "type": "string" } },
+    "bucketCounts": { "type": "object" },
+    "statusCounts": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.eval-case.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "evalCaseId",
+    "lane",
+    "sourceType",
+    "scenarioType",
+    "query",
+    "expectedFamily",
+    "expectedAnswerMode",
+    "expectedSourceScope",
+    "shouldAbstain",
+    "expectedEvidencePolicy",
+    "successCriteria",
+    "tags",
+    "status",
+    "provenance",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.eval-case.v1" },
+    "evalCaseId": { "type": "string" },
+    "lane": { "type": "string" },
+    "sourceType": { "type": "string" },
+    "scenarioType": { "type": "string" },
+    "query": { "type": "string" },
+    "expectedFamily": { "type": "string" },
+    "expectedAnswerMode": { "type": "string" },
+    "expectedSourceScope": { "type": "string" },
+    "shouldAbstain": { "type": "boolean" },
+    "expectedEvidencePolicy": { "type": "string" },
+    "successCriteria": {
+      "type": "object",
+      "properties": {
+        "expectedTop1OrSet": { "type": "string" },
+        "allowedFallback": { "type": "string" },
+        "expectedMatchCount": { "type": ["integer", "null"] },
+        "expectedScopeApplied": { "type": ["boolean", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": { "type": "string" },
+    "provenance": { "type": "object" },
+    "createdAt": { "type": "string" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}
