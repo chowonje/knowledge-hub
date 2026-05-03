@@ -820,6 +820,94 @@ def test_retrieval_pipeline_core_query_exposes_enrichment_diagnostics_without_us
     assert diagnostics["reason"] == "memory_first_query_family"
 
 
+def test_retrieval_pipeline_exposes_phase0_strategy_diagnostics_without_reordering():
+    records = [
+        {
+            "id": "rag",
+            "document": "Retrieval-Augmented Generation combines retrieval and generation for knowledge intensive QA.",
+            "distance": 0.04,
+            "metadata": {
+                "title": "Retrieval-Augmented Generation",
+                "source_type": "paper",
+                "arxiv_id": "2005.11401",
+            },
+        },
+        {
+            "id": "fid",
+            "document": "Fusion-in-Decoder uses retrieved passages for open domain question answering.",
+            "distance": 0.08,
+            "metadata": {
+                "title": "Fusion-in-Decoder",
+                "source_type": "paper",
+                "arxiv_id": "2007.01282",
+            },
+        },
+    ]
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB(records),
+        llm=FakeLLM(),
+        sqlite_db=None,
+    )
+
+    result = RetrievalPipelineService(searcher).execute(
+        query="Retrieval-Augmented Generation와 Fusion-in-Decoder를 비교해줘",
+        top_k=2,
+        source_type="paper",
+        retrieval_mode="semantic",
+        use_ontology_expansion=False,
+        memory_route_mode="off",
+        query_frame={
+            "source_type": "paper",
+            "family": "paper_compare",
+            "query_intent": "comparison",
+            "resolved_source_ids": ["2005.11401", "2007.01282"],
+        },
+    )
+
+    assert [item.document_id for item in result.results] == ["rag", "fid"]
+    diagnostics = result.diagnostics()
+    assert diagnostics["retrievalPlan"]["complexityClass"] == "multi_source_compare"
+    assert diagnostics["retrievalPlan"]["retryPolicy"]["mode"] == "diagnostics_only"
+    assert diagnostics["retrievalStrategy"]["phase"] == "phase0_diagnostics"
+    assert diagnostics["retrievalStrategy"]["complexityClass"] == "multi_source_compare"
+    assert diagnostics["retrievalQuality"]["label"] == "high"
+    assert diagnostics["retrievalQuality"]["resolvedSourceCoverage"] == {"expected": 2, "present": 2}
+    assert diagnostics["answerabilityRerank"]["applied"] is False
+    assert diagnostics["answerabilityRerank"]["reason"] == "diagnostics_only_no_result_reordering"
+    assert diagnostics["correctiveRetrieval"]["applied"] is False
+    assert diagnostics["correctiveRetrieval"]["retryCandidate"] is False
+    assert diagnostics["artifactHealth"]["label"] == "high"
+    assert result.results[0].lexical_extras["retrieval_strategy"]["complexityClass"] == "multi_source_compare"
+
+
+def test_retrieval_pipeline_phase0_diagnostics_marks_empty_result_retry_candidate():
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB([]),
+        llm=FakeLLM(),
+        sqlite_db=None,
+    )
+
+    result = RetrievalPipelineService(searcher).execute(
+        query="latest RAG benchmark update",
+        top_k=2,
+        source_type="paper",
+        retrieval_mode="semantic",
+        use_ontology_expansion=False,
+        memory_route_mode="off",
+    )
+
+    diagnostics = result.diagnostics()
+    assert diagnostics["retrievalPlan"]["complexityClass"] == "update_sensitive"
+    assert diagnostics["retrievalQuality"]["label"] == "low"
+    assert "no_results" in diagnostics["retrievalQuality"]["weakSignals"]
+    assert diagnostics["answerabilityRerank"]["label"] == "low"
+    assert "no_evidence" in diagnostics["answerabilityRerank"]["weakSignals"]
+    assert diagnostics["correctiveRetrieval"]["retryCandidate"] is True
+    assert diagnostics["correctiveRetrieval"]["candidateAction"] == "broaden_search"
+
+
 def test_evidence_assembly_tracks_temporal_grounding_and_memory_provenance():
     searcher = RAGSearcher(
         DummyEmbedder(),

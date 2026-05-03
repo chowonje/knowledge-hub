@@ -26,6 +26,13 @@ from knowledge_hub.ai.retrieval_pipeline_runtime import (
     ScopeDeps,
 )
 from knowledge_hub.ai.retrieval_pipeline_search_core import RetrievalSearchCore, RetrievalSearchCoreDeps
+from knowledge_hub.ai.retrieval_strategy_diagnostics import (
+    build_answerability_rerank_diagnostics,
+    build_artifact_health_diagnostics,
+    build_corrective_retrieval_diagnostics,
+    build_retrieval_quality_diagnostics,
+    build_retrieval_strategy_diagnostics,
+)
 from knowledge_hub.ai.rag_scope import get_active_profile, load_topology_index
 from knowledge_hub.ai.retrieval import (
     apply_feature_boosts,
@@ -999,6 +1006,10 @@ class RetrievalPlan:
     prefilter_reason: str = "none"
     reference_source_applied: bool = False
     watchlist_scope_applied: bool = False
+    complexity_class: str = "local_lookup"
+    budget_reason: str = "default_core_retrieval"
+    retrieval_budget: dict[str, Any] = field(default_factory=dict)
+    retry_policy: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)
@@ -1030,6 +1041,10 @@ class RetrievalPlan:
         payload["prefilterReason"] = payload.pop("prefilter_reason")
         payload["referenceSourceApplied"] = bool(payload.pop("reference_source_applied"))
         payload["watchlistScopeApplied"] = bool(payload.pop("watchlist_scope_applied"))
+        payload["complexityClass"] = payload.pop("complexity_class")
+        payload["budgetReason"] = payload.pop("budget_reason")
+        payload["retrievalBudget"] = dict(payload.pop("retrieval_budget") or {})
+        payload["retryPolicy"] = dict(payload.pop("retry_policy") or {})
         return payload
 
 
@@ -1048,6 +1063,11 @@ class RetrievalPipelineResult:
     source_scope_enforced: bool = False
     mixed_fallback_used: bool = False
     v2_diagnostics: dict[str, Any] = field(default_factory=dict)
+    retrieval_strategy: dict[str, Any] = field(default_factory=dict)
+    retrieval_quality: dict[str, Any] = field(default_factory=dict)
+    answerability_rerank: dict[str, Any] = field(default_factory=dict)
+    corrective_retrieval: dict[str, Any] = field(default_factory=dict)
+    artifact_health: dict[str, Any] = field(default_factory=dict)
 
     def diagnostics(self) -> dict[str, Any]:
         return {
@@ -1062,6 +1082,11 @@ class RetrievalPipelineResult:
             "temporalSignals": dict(self.memory_prefilter.get("temporalSignals") or self.plan.temporal_signals),
             "sourceScopeEnforced": bool(self.source_scope_enforced),
             "mixedFallbackUsed": bool(self.mixed_fallback_used),
+            "retrievalStrategy": dict(self.retrieval_strategy),
+            "retrievalQuality": dict(self.retrieval_quality),
+            "answerabilityRerank": dict(self.answerability_rerank),
+            "correctiveRetrieval": dict(self.corrective_retrieval),
+            "artifactHealth": dict(self.artifact_health),
             "v2": dict(self.v2_diagnostics),
         }
 
@@ -1796,6 +1821,27 @@ class RetrievalPipelineService:
                 cluster_used=False,
             )
         mixed_fallback_used = bool(memory_prefilter.get("mixedFallbackUsed"))
+        retrieval_strategy = build_retrieval_strategy_diagnostics(plan)
+        retrieval_quality = build_retrieval_quality_diagnostics(
+            plan=plan,
+            results=scoped_results,
+            candidate_sources=candidate_sources,
+            rerank_signals=rerank_signals,
+            memory_prefilter=memory_prefilter,
+        )
+        answerability_rerank = build_answerability_rerank_diagnostics(
+            plan=plan,
+            results=scoped_results,
+        )
+        artifact_health = build_artifact_health_diagnostics(
+            plan=plan,
+            results=scoped_results,
+        )
+        corrective_retrieval = build_corrective_retrieval_diagnostics(
+            retrieval_quality=retrieval_quality,
+            answerability_rerank=answerability_rerank,
+            artifact_health=artifact_health,
+        )
 
         for item in scoped_results:
             extras = dict(item.lexical_extras or {})
@@ -1805,6 +1851,11 @@ class RetrievalPipelineService:
             extras["memory_prefilter"] = dict(memory_prefilter)
             extras["source_scope_enforced"] = bool(source_scope_enforced)
             extras["mixed_fallback_used"] = bool(mixed_fallback_used)
+            extras["retrieval_strategy"] = dict(retrieval_strategy)
+            extras["retrieval_quality"] = dict(retrieval_quality)
+            extras["answerability_rerank"] = dict(answerability_rerank)
+            extras["corrective_retrieval"] = dict(corrective_retrieval)
+            extras["artifact_health"] = dict(artifact_health)
             item.lexical_extras = extras
 
         memory_route = memory_route_payload(
@@ -1863,6 +1914,17 @@ class RetrievalPipelineService:
                 ),
             }
 
+        memory_prefilter.setdefault("contractRole", "retrieval_memory_prefilter")
+        memory_prefilter.setdefault(
+            "aliasDeprecated",
+            bool(memory_prefilter.get("modeAliasApplied") and memory_prefilter.get("requestedMode") == "prefilter"),
+        )
+        paper_memory_prefilter.setdefault("contractRole", "paper_source_memory_prefilter")
+        paper_memory_prefilter.setdefault(
+            "aliasDeprecated",
+            bool(paper_memory_prefilter.get("modeAliasApplied") and paper_memory_prefilter.get("requestedMode") == "prefilter"),
+        )
+
         rerank_signals = dict(rerank_signals or {})
         rerank_signals.update(
             {
@@ -1888,6 +1950,11 @@ class RetrievalPipelineService:
             active_profile=active_profile,
             source_scope_enforced=source_scope_enforced,
             mixed_fallback_used=mixed_fallback_used,
+            retrieval_strategy=retrieval_strategy,
+            retrieval_quality=retrieval_quality,
+            answerability_rerank=answerability_rerank,
+            corrective_retrieval=corrective_retrieval,
+            artifact_health=artifact_health,
         )
 
 

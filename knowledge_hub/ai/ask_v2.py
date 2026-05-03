@@ -27,6 +27,7 @@ from knowledge_hub.ai.ask_v2_support import (
     web_scope_from_query as _web_scope_from_query,
 )
 from knowledge_hub.ai.ask_v2_card_selectors import AskV2CardSelectorRegistry
+from knowledge_hub.ai.ask_v2_pipeline_result import build_card_v2_pipeline_result
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
 from knowledge_hub.ai.evidence_assembly import EvidenceAssemblyService
 from knowledge_hub.ai.retrieval_pipeline import RetrievalPlan, RetrievalPipelineResult
@@ -78,6 +79,119 @@ def _ask_v2_hard_gate_reason(
     if int(claim_consensus.get("unsupportedClaimCount") or 0) > 0:
         return "ask_v2_unsupported_claim_cards"
     return ""
+
+
+def _clean_unique_values(values: list[Any]) -> list[str]:
+    result: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        token = _clean_text(value)
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        result.append(token)
+    return result
+
+
+def _first_int_value(values: list[Any]) -> int | None:
+    for value in values:
+        if value in (None, ""):
+            continue
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _selection_diagnostic_payload(card: dict[str, Any]) -> dict[str, Any]:
+    payload = card.get("selection_diagnostics")
+    return dict(payload) if isinstance(payload, dict) else {}
+
+
+def _card_selection_diagnostics(cards: list[dict[str, Any]]) -> dict[str, Any]:
+    diagnostics = [
+        _selection_diagnostic_payload(card)
+        for card in cards
+        if _selection_diagnostic_payload(card)
+    ]
+    if not diagnostics:
+        return {}
+    resolved_paper_ids = _clean_unique_values(
+        [
+            item
+            for diagnostics_item in diagnostics
+            for item in list(diagnostics_item.get("resolvedPaperIds") or [])
+        ]
+    )
+    stages = _clean_unique_values([item.get("stage") for item in diagnostics])
+    reasons = _clean_unique_values([item.get("reason") for item in diagnostics])
+    before_count = _first_int_value([item.get("candidateCountBeforeRerank") for item in diagnostics])
+    after_count = _first_int_value([item.get("candidateCountAfterRerank") for item in diagnostics])
+    selected_paper_ids = {
+        _clean_text(card.get("paper_id"))
+        for card in cards
+        if _clean_text(card.get("paper_id"))
+    }
+    resolved_pair = resolved_paper_ids[:2]
+    resolved_pair_preserved = (
+        bool(len(resolved_pair) >= 2 and all(paper_id in selected_paper_ids for paper_id in resolved_pair))
+        if len(resolved_pair) >= 2
+        else None
+    )
+    if resolved_pair_preserved is None:
+        for diagnostics_item in diagnostics:
+            if "resolvedPairPreserved" in diagnostics_item:
+                resolved_pair_preserved = bool(diagnostics_item.get("resolvedPairPreserved"))
+                break
+    payload: dict[str, Any] = {
+        "selectionStage": " | ".join(stages),
+        "selectionReason": " | ".join(reasons),
+        "resolvedPaperIds": resolved_paper_ids,
+    }
+    if before_count is not None:
+        payload["candidateCountBeforeRerank"] = before_count
+    if after_count is not None:
+        payload["candidateCountAfterRerank"] = after_count
+    if resolved_pair_preserved is not None:
+        payload["resolvedPairPreserved"] = resolved_pair_preserved
+    return payload
+
+
+def _card_v2_paper_memory_prefilter(
+    *,
+    source_kind: str,
+    selected_cards: list[dict[str, Any]],
+    reason: str,
+) -> dict[str, Any]:
+    requested_mode = f"{_clean_text(source_kind) or 'unknown'}-card-v2"
+    return {
+        "contractRole": "paper_source_memory_prefilter",
+        "requestedMode": requested_mode,
+        "effectiveMode": requested_mode,
+        "modeAliasApplied": False,
+        "aliasDeprecated": False,
+        "applied": True,
+        "fallbackUsed": False,
+        "matchedPaperIds": [
+            _clean_text(card.get("paper_id"))
+            for card in selected_cards
+            if _clean_text(card.get("paper_id"))
+        ],
+        "matchedMemoryIds": [
+            _clean_text(card.get("source_memory_id"))
+            for card in selected_cards
+            if _clean_text(card.get("source_memory_id"))
+        ],
+        "memoryRelationsUsed": [],
+        "temporalSignals": {},
+        "temporalRouteApplied": False,
+        "updatesPreferred": False,
+        "reason": reason,
+        "memoryInfluenceApplied": True,
+        "verificationCouplingApplied": False,
+        "fallbackReason": "",
+    }
 
 
 class AskV2Service:
@@ -820,38 +934,22 @@ class AskV2Service:
             "evidenceVerification": {"verificationStatus": "no_evidence", "anchorIdsUsed": [], "weakSlots": []},
             "fallback": {"used": False, "reason": reason},
         }
-        pipeline_result = RetrievalPipelineResult(
+        pipeline_result = build_card_v2_pipeline_result(
             results=[],
             plan=plan,
-            candidate_sources=[],
-            memory_route={"mode": f"{route.source_kind}-card-v2", "applied": True, "reason": reason},
-            memory_prefilter={"mode": f"{route.source_kind}-card-v2", "applied": True, "memoryRelationsUsed": [], "temporalSignals": dict(plan.temporal_signals)},
-            paper_memory_prefilter={
-                "requestedMode": f"{route.source_kind}-card-v2",
-                "applied": True,
-                "fallbackUsed": False,
-                "matchedPaperIds": [],
-                "matchedMemoryIds": [],
-                "reason": reason,
-            },
-            rerank_signals={"strategy": f"{route.source_kind}-card-v2", "selectedCardCount": 0, "selectedAnchorCount": 0},
-            context_expansion={
-                "eligible": False,
-                "used": False,
-                "mode": "none",
-                "reason": route.intent,
-                "queryIntent": route.intent,
-                "enrichmentRoute": route.mode,
-                "ontologyEligible": False,
-                "clusterEligible": False,
-                "ontologyUsed": False,
-                "clusterUsed": False,
-            },
-            related_clusters=[],
-            active_profile=None,
-            source_scope_enforced=True,
-            mixed_fallback_used=False,
+            source_kind=route.source_kind,
+            route_mode=route.mode,
+            route_intent=route.intent,
+            selected_cards=[],
+            selected_anchor_count=0,
+            memory_reason=reason,
+            context_expansion_mode="none",
             v2_diagnostics=v2_diagnostics,
+        )
+        pipeline_result.paper_memory_prefilter = _card_v2_paper_memory_prefilter(
+            source_kind=route.source_kind,
+            selected_cards=[],
+            reason=reason,
         )
         evidence_packet = EvidenceAssemblyService.from_searcher(self.searcher).assemble(
             query=query,
@@ -1650,47 +1748,22 @@ class AskV2Service:
             metadata_filter_applied=effective_metadata_filter,
             prefilter_reason=prefilter_reason,
         )
-        pipeline_result = RetrievalPipelineResult(
+        pipeline_result = build_card_v2_pipeline_result(
             results=anchor_results,
             plan=plan,
-            candidate_sources=[
-                {
-                    "id": _clean_text(card.get("paper_id") or card.get("document_id") or card.get("note_id") or card.get("relative_path")),
-                    "cardId": _clean_text(card.get("card_id")),
-                    "title": _clean_text(card.get("title")),
-                    "selectionScore": _stable_score(card.get("selection_score")),
-                    "qualityFlag": _clean_text(card.get("quality_flag")),
-                    "sourceKind": route.source_kind,
-                }
-                for card in selected_cards
-            ],
-            memory_route={"mode": f"{route.source_kind}-card-v2", "applied": True, "reason": route.mode},
-            memory_prefilter={"mode": f"{route.source_kind}-card-v2", "applied": True, "memoryRelationsUsed": [], "temporalSignals": dict(plan.temporal_signals)},
-            paper_memory_prefilter={
-                "requestedMode": f"{route.source_kind}-card-v2",
-                "applied": True,
-                "fallbackUsed": False,
-                "matchedPaperIds": [_clean_text(card.get("paper_id")) for card in selected_cards if _clean_text(card.get("paper_id"))],
-                "matchedMemoryIds": [_clean_text(card.get("source_memory_id")) for card in selected_cards if _clean_text(card.get("source_memory_id"))],
-                "reason": route.mode,
-            },
-            rerank_signals={"strategy": f"{route.source_kind}-card-v2", "selectedCardCount": len(selected_cards), "selectedAnchorCount": len(anchors)},
-            context_expansion={
-                "eligible": route.mode == "ontology-first",
-                "used": route.mode == "ontology-first",
-                "mode": "ontology" if route.mode == "ontology-first" else "card",
-                "reason": route.intent,
-                "queryIntent": route.intent,
-                "enrichmentRoute": route.mode,
-                "ontologyEligible": route.mode == "ontology-first",
-                "clusterEligible": False,
-                "ontologyUsed": route.mode == "ontology-first",
-                "clusterUsed": False,
-            },
-            related_clusters=[],
-            active_profile=None,
-            source_scope_enforced=True,
-            mixed_fallback_used=False,
+            source_kind=route.source_kind,
+            route_mode=route.mode,
+            route_intent=route.intent,
+            selected_cards=selected_cards,
+            selected_anchor_count=len(anchors),
+            memory_reason=route.mode,
+            context_expansion_mode="card",
+            paper_memory_mode=f"{route.source_kind}-card-v2",
+        )
+        pipeline_result.paper_memory_prefilter = _card_v2_paper_memory_prefilter(
+            source_kind=route.source_kind,
+            selected_cards=selected_cards,
+            reason=route.mode,
         )
         evidence_packet = EvidenceAssemblyService.from_searcher(self.searcher).assemble(
             query=query,
@@ -1752,13 +1825,17 @@ class AskV2Service:
                 "selected_card_ids": [_clean_text(card.get("card_id")) for card in selected_cards if _clean_text(card.get("card_id"))],
             },
             "cardSelection": {
+                **_card_selection_diagnostics(selected_cards),
                 "selected": [
                     {
                         "cardId": _clean_text(card.get("card_id")),
                         "sourceId": _clean_text(card.get("paper_id") or card.get("document_id") or card.get("note_id") or card.get("relative_path")),
+                        "paperId": _clean_text(card.get("paper_id")),
                         "title": _clean_text(card.get("title")),
                         "slotCoverage": _slot_coverage(card),
                         "qualityFlag": _clean_text(card.get("quality_flag")),
+                        "selectionStage": _clean_text(_selection_diagnostic_payload(card).get("stage")),
+                        "selectionReason": _clean_text(_selection_diagnostic_payload(card).get("reason")),
                     }
                     for card in selected_cards
                 ]
