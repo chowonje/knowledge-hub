@@ -3,8 +3,8 @@ Project instructions for `knowledge-hub`.
 Purpose:
 - This repository is a local-first knowledge system that combines notes, papers, web ingestion, ontology storage, RAG search, MCP tools, and a Foundry-style agent runtime.
 - Protect local-first and policy-first behavior. Do not trade privacy or auditability for convenience without saying so explicitly.
-- This repo is also surfaced through the KnowledgeOS workspace symlink at `/Users/won/Desktop/allinone/KnowledgeOS/knowledge-hub`.
-- Workspace vault, sibling-worktree, and source-of-truth fences live in `/Users/won/Desktop/allinone/KnowledgeOS/AGENTS.md`.
+- This repo is also surfaced through the KnowledgeOS workspace symlink at `<KnowledgeOS-workspace>/knowledge-hub`.
+- Workspace vault, sibling-worktree, and source-of-truth fences live in `<KnowledgeOS-workspace>/AGENTS.md`.
 
 Read this first:
 - `README.md`
