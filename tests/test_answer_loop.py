@@ -342,6 +342,120 @@ def test_build_answer_eval_packet_adds_axis_first_compare_guidance(monkeypatch):
     assert packet["retrieved_sources"][2]["evidence_kind"] == "background_evidence"
 
 
+def test_build_answer_eval_packet_promotes_vault_compare_resolved_note(monkeypatch):
+    searcher = _StubSearcher()
+    observed = {}
+
+    class _FakeFrame:
+        def to_dict(self):
+            return {
+                "family": "vault_compare",
+                "source_type": "vault",
+                "query_intent": "comparison",
+                "answer_mode": "compare_summary",
+                "resolved_source_ids": ["AI/AI_Papers/Concepts/Memory.md"],
+                "metadata_filter": {"source_type": "vault"},
+            }
+
+        def to_query_plan_dict(self):
+            return {
+                "family": "vault_compare",
+                "resolved_paper_ids": ["AI/AI_Papers/Concepts/Memory.md"],
+                "query_intent": "comparison",
+                "answer_mode": "compare_summary",
+            }
+
+    class _FakePipeline:
+        def __init__(self, inner_searcher):  # noqa: ANN001
+            self.inner_searcher = inner_searcher
+
+        def execute(self, **kwargs):  # noqa: ANN001
+            observed["top_k"] = kwargs.get("top_k")
+            return type(
+                "Result",
+                (),
+                {
+                    "results": [
+                        SearchResult(
+                            document="Chunk retrieval selects small text chunks for query-conditioned evidence.",
+                            metadata={
+                                "title": "Chunk Retrieval",
+                                "source_type": "vault",
+                                "file_path": "AI/AI_Papers/Concepts/Chunk Retrieval.md",
+                            },
+                            distance=0.01,
+                            score=0.99,
+                            semantic_score=0.96,
+                            lexical_score=0.95,
+                            retrieval_mode="hybrid",
+                            lexical_extras={},
+                            document_id="vault:AI/AI_Papers/Concepts/Chunk Retrieval.md",
+                        ),
+                        SearchResult(
+                            document="Agentic retrieval interfaces organize retrieval hierarchically.",
+                            metadata={
+                                "title": "A-RAG",
+                                "source_type": "vault",
+                                "file_path": "AI/AI_Papers/Papers/A-RAG.md",
+                            },
+                            distance=0.02,
+                            score=0.9,
+                            semantic_score=0.88,
+                            lexical_score=0.82,
+                            retrieval_mode="hybrid",
+                            lexical_extras={},
+                            document_id="vault:AI/AI_Papers/Papers/A-RAG.md",
+                        ),
+                        SearchResult(
+                            document="Document memory stores reusable memory units derived from whole documents.",
+                            metadata={
+                                "title": "Memory",
+                                "source_type": "vault",
+                                "file_path": "AI/AI_Papers/Concepts/Memory.md",
+                            },
+                            distance=0.03,
+                            score=0.78,
+                            semantic_score=0.76,
+                            lexical_score=0.7,
+                            retrieval_mode="hybrid",
+                            lexical_extras={},
+                            document_id="vault:AI/AI_Papers/Concepts/Memory.md",
+                        ),
+                    ]
+                },
+            )()
+
+    fake_domain_pack = type(
+        "DomainPack",
+        (),
+        {
+            "normalize": staticmethod(lambda *args, **kwargs: _FakeFrame()),
+        },
+    )()
+
+    monkeypatch.setattr(loop, "RetrievalPipelineService", _FakePipeline)
+    monkeypatch.setattr(loop, "get_domain_pack", lambda **kwargs: fake_domain_pack)
+
+    packet = loop.build_answer_eval_packet(
+        searcher,
+        {
+            "query": "document memory와 chunk retrieval의 차이를 쉽게 설명해줘",
+            "source": "vault",
+            "query_type": "comparison",
+            "expected_primary_source": "vault",
+            "expected_answer_style": "compare_summary",
+        },
+        packet_ref="packet-vault-compare-1",
+        top_k=2,
+    )
+
+    assert observed["top_k"] == 8
+    assert [item["title"] for item in packet["retrieved_sources"]] == ["Memory", "Chunk Retrieval"]
+    assert packet["retrieved_sources"][0]["role"] == "target_anchor"
+    assert packet["retrieved_sources"][0]["evidence_kind"] == "target_anchor"
+    assert packet["guidance"]["comparisonTargets"] == ["Memory", "Chunk Retrieval"]
+
+
 def test_build_answer_eval_packet_uses_project_workspace_fallback_when_retrieval_empty(monkeypatch):
     searcher = _StubSearcher()
 
@@ -758,9 +872,60 @@ def test_summary_and_failure_buckets(tmp_path: Path):
     summary = loop.summarize_answer_loop(judge_manifest_path=str(judge_manifest_path))
 
     assert summary["overall"]["predLabelScore"] == 0.5
+    assert summary["overall"]["abstainAgreement"] == 0.0
+    assert summary["overall"]["abstainExpectedCount"] == 1
+    assert summary["overall"]["abstainPredictedCount"] == 0
     assert summary["failureBucketCounts"]["groundedness_failure"] == 1
     assert summary["failureBucketCounts"]["source_accuracy_failure"] == 1
     assert summary["failureBucketCounts"]["abstention_failure"] == 1
+    assert validate_payload(summary, summary["schema"], strict=True).ok
+
+
+def test_summary_counts_non_abstain_rows_as_abstain_agreement(tmp_path: Path):
+    judged_csv = tmp_path / "answer_loop_judged.csv"
+    with judged_csv.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=loop.ANSWER_LOOP_FIELDNAMES)
+        writer.writeheader()
+        writer.writerow(
+            {
+                "query": "Q1",
+                "expected_answer_style": "compare_summary",
+                "answer_status": "ok",
+                "answer_backend": "ollama_gemma4",
+                "packet_ref": "packet-1",
+                "pred_label": "good",
+                "pred_groundedness": "good",
+                "pred_usefulness": "good",
+                "pred_readability": "good",
+                "pred_source_accuracy": "good",
+                "pred_should_abstain": "0",
+                "pred_reason": "grounded",
+            }
+        )
+    judge_manifest = {
+        "schema": loop.ANSWER_LOOP_JUDGE_SCHEMA,
+        "status": "ok",
+        "judgeProvider": "openai",
+        "judgeModel": "gpt-5",
+        "rowCount": 1,
+        "artifactPaths": {
+            "judgedCsvPath": str(judged_csv),
+            "judgeManifestPath": str(tmp_path / "answer_loop_judge_manifest.json"),
+        },
+    }
+    judge_manifest_path = tmp_path / "answer_loop_judge_manifest.json"
+    judge_manifest_path.write_text(json.dumps(judge_manifest), encoding="utf-8")
+
+    summary = loop.summarize_answer_loop(judge_manifest_path=str(judge_manifest_path))
+
+    assert summary["overall"]["abstainAgreement"] == 1.0
+    assert summary["overall"]["abstainExpectedCount"] == 0
+    assert summary["overall"]["abstainPredictedCount"] == 0
+    assert summary["overall"]["abstainAgreementCount"] == 1
+    assert summary["overall"]["abstainRequiredAgreement"] == 1.0
+    assert summary["backends"]["ollama_gemma4"]["predShouldAbstainAgreement"] == 1.0
+    assert summary["backends"]["ollama_gemma4"]["predShouldAbstainRequiredAgreement"] == 1.0
+    assert summary["failureCardCount"] == 0
     assert validate_payload(summary, summary["schema"], strict=True).ok
 
 

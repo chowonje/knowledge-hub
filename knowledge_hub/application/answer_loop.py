@@ -520,6 +520,36 @@ def _metadata_paper_id(metadata: dict[str, Any]) -> str:
     return _clean_text(metadata.get("arxiv_id") or metadata.get("paper_id") or metadata.get("paperId"))
 
 
+def _metadata_source_ids(metadata: dict[str, Any]) -> list[str]:
+    return _clean_lines(
+        [
+            _metadata_paper_id(metadata),
+            metadata.get("note_id"),
+            metadata.get("noteId"),
+            metadata.get("file_path"),
+            metadata.get("filePath"),
+            metadata.get("document_id"),
+            metadata.get("documentId"),
+            metadata.get("source_ref"),
+            metadata.get("sourceRef"),
+        ],
+        limit=8,
+    )
+
+
+def _metadata_matches_any_source_id(metadata: dict[str, Any], source_ids: set[str]) -> bool:
+    if not source_ids:
+        return False
+    normalized_targets = {_clean_text(item).casefold() for item in source_ids if _clean_text(item)}
+    if not normalized_targets:
+        return False
+    return any(item.casefold() in normalized_targets for item in _metadata_source_ids(metadata))
+
+
+def _result_matches_any_source_id(result: Any, source_ids: set[str]) -> bool:
+    return _metadata_matches_any_source_id(dict(getattr(result, "metadata", {}) or {}), source_ids)
+
+
 def _resolved_source_ids(query_plan: dict[str, Any] | None, query_frame: Any) -> list[str]:
     frame_payload = {}
     if hasattr(query_frame, "to_dict"):
@@ -560,14 +590,28 @@ def _compare_guidance(
         title = _clean_text(metadata.get("title"))
         if not title:
             continue
-        paper_id = _metadata_paper_id(metadata)
-        if paper_id and paper_id in target_ids:
+        if _metadata_matches_any_source_id(metadata, set(target_ids)):
             target_titles.append(title)
         else:
             support_titles.append(title)
+    def _support_title_score(title: str) -> tuple[float, int]:
+        lowered_title = _clean_text(title).casefold()
+        lowered_query = _clean_text(query_row.get("query")).casefold()
+        score = 0.0
+        if lowered_title and lowered_title in lowered_query:
+            score += 3.0
+        if "chunk" in lowered_title:
+            score += 3.0
+        if "retrieval" in lowered_title:
+            score += 2.0
+        if "memory" in lowered_title:
+            score += 2.0
+        return score, -len(lowered_title)
+
     target_titles = _clean_lines(target_titles, limit=2)
     if len(target_titles) < 2:
-        target_titles = _clean_lines([*target_titles, *support_titles], limit=2)
+        ranked_support_titles = sorted(support_titles, key=_support_title_score, reverse=True)
+        target_titles = _clean_lines([*target_titles, *ranked_support_titles], limit=2)
     comparison_axes = [
         "core structure",
         "inductive bias and locality",
@@ -966,6 +1010,40 @@ def _build_eval_query_context(
     return query_plan, query_frame
 
 
+def _select_packet_results(
+    results: list[Any],
+    *,
+    query_row: dict[str, str],
+    query_plan: dict[str, Any] | None,
+    query_frame: Any,
+    normalized_source: str,
+    top_k: int,
+) -> list[Any]:
+    limit = max(1, int(top_k))
+    if _clean_text(query_row.get("query_type")).lower() != "comparison":
+        return list(results)[:limit]
+    target_ids = set(_resolved_source_ids(query_plan, query_frame))
+    if not target_ids:
+        return list(results)[:limit]
+    if normalized_source not in {"vault", "paper"}:
+        return list(results)[:limit]
+
+    promoted: list[Any] = []
+    promoted_ids: set[int] = set()
+    for item in results:
+        if not _result_matches_any_source_id(item, target_ids):
+            continue
+        promoted.append(item)
+        promoted_ids.add(id(item))
+        if len(promoted) >= 2:
+            break
+
+    if not promoted:
+        return list(results)[:limit]
+    remaining = [item for item in results if id(item) not in promoted_ids]
+    return [*promoted, *remaining][:limit]
+
+
 def build_answer_eval_packet(
     searcher: Any,
     query_row: dict[str, str],
@@ -984,10 +1062,14 @@ def build_answer_eval_packet(
         query=query,
         source_type=source_type,
     )
+    packet_top_k = max(1, int(top_k))
+    search_top_k = packet_top_k
+    if normalized_source == "vault" and _clean_text(query_row.get("query_type")).lower() == "comparison":
+        search_top_k = max(packet_top_k, packet_top_k * 4)
     try:
         pipeline_result = RetrievalPipelineService(searcher).execute(
             query=query,
-            top_k=max(1, int(top_k)),
+            top_k=search_top_k,
             source_type=source_type,
             retrieval_mode=str(retrieval_mode),
             alpha=float(alpha),
@@ -1000,7 +1082,7 @@ def build_answer_eval_packet(
         results = list(
             searcher.search(
                 query,
-                top_k=max(1, int(top_k)),
+                top_k=search_top_k,
                 source_type=source_type,
                 retrieval_mode=str(retrieval_mode),
                 alpha=float(alpha),
@@ -1008,12 +1090,20 @@ def build_answer_eval_packet(
             )
             or []
         )
+    results = _select_packet_results(
+        results,
+        query_row=query_row,
+        query_plan=query_plan,
+        query_frame=query_frame,
+        normalized_source=normalized_source,
+        top_k=packet_top_k,
+    )
     retrieved_sources = []
     compare_target_ids = set(_resolved_source_ids(query_plan, query_frame))
     for index, item in enumerate(results, start=1):
         metadata = dict(item.metadata or {})
         paper_id = _metadata_paper_id(metadata)
-        role = "target_anchor" if paper_id and paper_id in compare_target_ids else "supporting_evidence"
+        role = "target_anchor" if _metadata_matches_any_source_id(metadata, compare_target_ids) else "supporting_evidence"
         evidence_kind = _evidence_kind(
             query_row=query_row,
             metadata=metadata,
@@ -1967,11 +2057,17 @@ def _candidate_metrics_summary(candidates: list[dict[str, Any]], *, judge_key: s
         "predUsefulnessScore": 0.0,
         "predReadabilityScore": 0.0,
         "abstainAgreement": 0.0,
+        "abstainExpectedCount": 0,
+        "abstainPredictedCount": 0,
+        "abstainAgreementCount": 0,
+        "abstainRequiredAgreement": 1.0,
     }
     if not candidates:
         return overall
     abstain_expected = 0
+    abstain_predicted = 0
     abstain_ok = 0
+    abstain_required_ok = 0
     for candidate in candidates:
         judge_payload = dict(candidate.get(judge_key) or {})
         overall["predLabelScore"] += _quality_value(judge_payload.get("pred_label"))
@@ -1979,17 +2075,29 @@ def _candidate_metrics_summary(candidates: list[dict[str, Any]], *, judge_key: s
         overall["predSourceAccuracyScore"] += _quality_value(judge_payload.get("pred_source_accuracy"))
         overall["predUsefulnessScore"] += _quality_value(judge_payload.get("pred_usefulness"))
         overall["predReadabilityScore"] += _quality_value(judge_payload.get("pred_readability"))
-        if _should_abstain_expected_from_packet(dict(candidate.get("packet") or {})):
+        actual_abstain = _clean_text(judge_payload.get("pred_should_abstain")) == "1"
+        if actual_abstain:
+            abstain_predicted += 1
+        expected_abstain = _should_abstain_expected_from_packet(dict(candidate.get("packet") or {}))
+        if expected_abstain == actual_abstain:
+            abstain_ok += 1
+        if expected_abstain:
             abstain_expected += 1
-            if _clean_text(judge_payload.get("pred_should_abstain")) == "1":
-                abstain_ok += 1
+            if actual_abstain:
+                abstain_required_ok += 1
     count = max(1, len(candidates))
     overall["predLabelScore"] = round(float(overall["predLabelScore"]) / count, 6)
     overall["predGroundednessScore"] = round(float(overall["predGroundednessScore"]) / count, 6)
     overall["predSourceAccuracyScore"] = round(float(overall["predSourceAccuracyScore"]) / count, 6)
     overall["predUsefulnessScore"] = round(float(overall["predUsefulnessScore"]) / count, 6)
     overall["predReadabilityScore"] = round(float(overall["predReadabilityScore"]) / count, 6)
-    overall["abstainAgreement"] = round(float(abstain_ok) / max(1, abstain_expected), 6) if abstain_expected else 0.0
+    overall["abstainAgreement"] = round(float(abstain_ok) / count, 6)
+    overall["abstainExpectedCount"] = abstain_expected
+    overall["abstainPredictedCount"] = abstain_predicted
+    overall["abstainAgreementCount"] = abstain_ok
+    overall["abstainRequiredAgreement"] = (
+        round(float(abstain_required_ok) / max(1, abstain_expected), 6) if abstain_expected else 1.0
+    )
     return overall
 
 
@@ -2550,7 +2658,9 @@ def summarize_answer_loop(
                 "predUsefulnessScoreTotal": 0.0,
                 "predReadabilityScoreTotal": 0.0,
                 "abstainExpectedCount": 0,
+                "abstainPredictedCount": 0,
                 "abstainAgreementCount": 0,
+                "abstainRequiredAgreementCount": 0,
             },
         )
         item["rowCount"] += 1
@@ -2559,10 +2669,16 @@ def summarize_answer_loop(
         item["predSourceAccuracyScoreTotal"] += _score_quality(row.get("pred_source_accuracy", ""))
         item["predUsefulnessScoreTotal"] += _score_quality(row.get("pred_usefulness", ""))
         item["predReadabilityScoreTotal"] += _score_quality(row.get("pred_readability", ""))
-        if _should_abstain_expected(row):
+        expected_abstain = _should_abstain_expected(row)
+        actual_abstain = _clean_text(row.get("pred_should_abstain")) == "1"
+        if actual_abstain:
+            item["abstainPredictedCount"] += 1
+        if expected_abstain == actual_abstain:
+            item["abstainAgreementCount"] += 1
+        if expected_abstain:
             item["abstainExpectedCount"] += 1
-            if _clean_text(row.get("pred_should_abstain")) == "1":
-                item["abstainAgreementCount"] += 1
+            if actual_abstain:
+                item["abstainRequiredAgreementCount"] += 1
     backend_metrics: dict[str, dict[str, Any]] = {}
     overall = {
         "rowCount": len(rows),
@@ -2570,9 +2686,15 @@ def summarize_answer_loop(
         "predGroundednessScore": 0.0,
         "predSourceAccuracyScore": 0.0,
         "abstainAgreement": 0.0,
+        "abstainExpectedCount": 0,
+        "abstainPredictedCount": 0,
+        "abstainAgreementCount": 0,
+        "abstainRequiredAgreement": 1.0,
     }
     abstain_expected_total = 0
+    abstain_predicted_total = 0
     abstain_agreement_total = 0
+    abstain_required_agreement_total = 0
     for backend, item in by_backend.items():
         count = max(1, int(item["rowCount"]))
         metrics = {
@@ -2582,22 +2704,40 @@ def summarize_answer_loop(
             "predSourceAccuracyScore": round(float(item["predSourceAccuracyScoreTotal"]) / count, 6),
             "predUsefulnessScore": round(float(item["predUsefulnessScoreTotal"]) / count, 6),
             "predReadabilityScore": round(float(item["predReadabilityScoreTotal"]) / count, 6),
-            "predShouldAbstainAgreement": round(
-                float(item["abstainAgreementCount"]) / max(1, int(item["abstainExpectedCount"])),
-                6,
-            ) if int(item["abstainExpectedCount"]) else 0.0,
+            "predShouldAbstainAgreement": round(float(item["abstainAgreementCount"]) / count, 6),
+            "predShouldAbstainRequiredAgreement": (
+                round(
+                    float(item["abstainRequiredAgreementCount"]) / max(1, int(item["abstainExpectedCount"])),
+                    6,
+                )
+                if int(item["abstainExpectedCount"])
+                else 1.0
+            ),
+            "abstainExpectedCount": int(item["abstainExpectedCount"]),
+            "abstainPredictedCount": int(item["abstainPredictedCount"]),
+            "abstainAgreementCount": int(item["abstainAgreementCount"]),
         }
         backend_metrics[backend] = metrics
         overall["predLabelScore"] += metrics["predLabelScore"] * metrics["rowCount"]
         overall["predGroundednessScore"] += metrics["predGroundednessScore"] * metrics["rowCount"]
         overall["predSourceAccuracyScore"] += metrics["predSourceAccuracyScore"] * metrics["rowCount"]
         abstain_expected_total += int(item["abstainExpectedCount"])
+        abstain_predicted_total += int(item["abstainPredictedCount"])
         abstain_agreement_total += int(item["abstainAgreementCount"])
+        abstain_required_agreement_total += int(item["abstainRequiredAgreementCount"])
     if rows:
         overall["predLabelScore"] = round(float(overall["predLabelScore"]) / len(rows), 6)
         overall["predGroundednessScore"] = round(float(overall["predGroundednessScore"]) / len(rows), 6)
         overall["predSourceAccuracyScore"] = round(float(overall["predSourceAccuracyScore"]) / len(rows), 6)
-    overall["abstainAgreement"] = round(float(abstain_agreement_total) / max(1, abstain_expected_total), 6) if abstain_expected_total else 0.0
+    overall["abstainAgreement"] = round(float(abstain_agreement_total) / len(rows), 6) if rows else 0.0
+    overall["abstainExpectedCount"] = abstain_expected_total
+    overall["abstainPredictedCount"] = abstain_predicted_total
+    overall["abstainAgreementCount"] = abstain_agreement_total
+    overall["abstainRequiredAgreement"] = (
+        round(float(abstain_required_agreement_total) / max(1, abstain_expected_total), 6)
+        if abstain_expected_total
+        else 1.0
+    )
     summary_payload = {
         "schema": ANSWER_LOOP_SUMMARY_SCHEMA,
         "status": "ok" if rows else "failed",

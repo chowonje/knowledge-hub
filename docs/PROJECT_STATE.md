@@ -91,6 +91,7 @@ The default product shape is now intentionally split into three layers:
 - `Eval-quality-center`: a narrow control-plane tranche for EvalCase registry, Failure Bank, Eval Center summaries, and source-quality/daily runner automation; eval gate, full eval CLI, ask-v2 eval, answer-loop, RAG VNext, paper-memory eval, and side-layer integrations remain separate later tranches.
 - `RAG vNext labs`: a retrieval-quality observation tranche for corrective diagnostics, shadow answerability reranking, graph/global planning, and write-free observation reports; default `search`, `ask`, and MCP retrieval behavior remain unchanged.
 - `ask-v2 retrieval diagnostics`: an additive phase-0 diagnostics tranche for retrieval plan/result quality signals and ask-v2 card pipeline-result assembly. It keeps evidence-contract fields, golden gates, MCP/search runtime routing, and generated eval artifacts out of scope.
+- `answer-loop eval hardening`: an eval-only tranche that improves frozen answer-eval packet target selection and abstain summary accounting without changing default `ask`, `search`, MCP runtime, answer contracts, or generated eval artifacts.
 
 This means two things operationally:
 
