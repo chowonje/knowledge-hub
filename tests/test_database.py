@@ -6,10 +6,23 @@ import sqlite3
 
 import pytest
 
+from knowledge_hub.core.sqlite_db import SQLiteDatabase as LegacySQLiteDatabase
 from knowledge_hub.core.database import SQLiteDatabase
+from knowledge_hub.core.config import Config as CoreConfig
+from knowledge_hub.infrastructure.persistence import SQLiteDatabase as CanonicalSQLiteDatabase
 
 
 class TestSQLiteWALMode:
+    def test_legacy_and_canonical_imports_share_class(self):
+        assert SQLiteDatabase is LegacySQLiteDatabase
+        assert SQLiteDatabase is CanonicalSQLiteDatabase
+
+    def test_core_package_exports_canonical_config_and_database(self):
+        import knowledge_hub.core as core
+
+        assert core.Config is CoreConfig
+        assert core.SQLiteDatabase is CanonicalSQLiteDatabase
+
     def test_wal_mode_enabled(self, tmp_path):
         db = SQLiteDatabase(str(tmp_path / "test.db"))
         mode = db.conn.execute("PRAGMA journal_mode").fetchone()[0]
@@ -19,6 +32,11 @@ class TestSQLiteWALMode:
         db = SQLiteDatabase(str(tmp_path / "test.db"))
         timeout = db.conn.execute("PRAGMA busy_timeout").fetchone()[0]
         assert timeout >= 5000
+
+    def test_registry_surface_is_exposed(self, tmp_path):
+        db = SQLiteDatabase(str(tmp_path / "test.db"))
+        assert db.registry is not None
+        assert "get_paper" in dir(db)
 
 
 class TestSQLiteTransaction:

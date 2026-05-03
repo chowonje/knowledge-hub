@@ -1,0 +1,19 @@
+{
+  "schema": "knowledge-hub.os.task.complete.result.v1",
+  "status": "ok",
+  "task": {
+    "id": "task_123",
+    "projectId": "proj_123",
+    "title": "Review bridge follow-up",
+    "kind": "research",
+    "status": "completed",
+    "priority": "high",
+    "assignee": "won",
+    "blockedBy": [],
+    "sourceRefs": [],
+    "createdAt": "2026-04-09T00:00:00Z",
+    "updatedAt": "2026-04-09T00:10:00Z"
+  },
+  "inbox": [],
+  "createdAt": "2026-04-09T00:10:00Z"
+}

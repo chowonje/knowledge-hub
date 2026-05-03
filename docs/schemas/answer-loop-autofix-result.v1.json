@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "repoPath"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-loop.autofix.result.v1" },
+    "status": { "type": "string" },
+    "reason": { "type": "string" },
+    "repoPath": { "type": "string" },
+    "changedFiles": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "artifactPaths": { "type": "object" },
+    "backendTrace": { "type": "object" },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

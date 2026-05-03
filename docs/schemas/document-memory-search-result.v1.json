@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "query", "count", "items", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.document-memory.search.result.v1" },
+    "status": { "type": "string" },
+    "query": { "type": "string" },
+    "count": { "type": "integer" },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

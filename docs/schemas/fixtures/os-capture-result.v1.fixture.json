@@ -1,0 +1,143 @@
+{
+  "schema": "knowledge-hub.os.capture.result.v1",
+  "status": "ok",
+  "stage": "linked_to_os",
+  "projectionRelativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+  "flowSemantics": {
+    "capturePacket": "input",
+    "dingerFiling": "projection_only",
+    "osBridge": "inbox_evidence_candidate_only",
+    "canonicalStore": "no_new_store"
+  },
+  "traceability": {
+    "captureId": "cap_123456789abc",
+    "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json",
+    "filingOutputPointer": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+    "osBridgeTrace": {
+      "bridge": "os_capture",
+      "schema": "knowledge-hub.os.capture.result.v1",
+      "itemId": "inbox_123",
+      "projectId": "proj_123",
+      "captureTraceBridge": "dinger",
+      "relativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+      "createdAt": "2026-04-09T00:00:00Z"
+    }
+  },
+  "item": {
+    "id": "inbox_123",
+    "projectId": "proj_123",
+    "kind": "dinger_file",
+    "severity": "medium",
+    "state": "open",
+    "summary": "Review bridge follow-up",
+    "sourceRefs": [
+      { "sourceType": "paper", "paperId": "1706.03762", "title": "Attention Is All You Need" },
+      { "sourceType": "document", "documentScopeId": "workflow_os_scope_v1", "title": "Workflow OS Scope" }
+    ],
+    "trace": {
+      "bridge": "dinger",
+      "relativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+      "title": "RAG Capture"
+    },
+    "createdAt": "2026-04-09T00:00:00Z",
+    "updatedAt": "2026-04-09T00:00:00Z"
+  },
+  "inbox": [
+    {
+      "id": "inbox_123",
+      "projectId": "proj_123",
+      "kind": "dinger_file",
+      "severity": "medium",
+      "state": "open",
+      "summary": "Review bridge follow-up",
+      "sourceRefs": [
+        { "sourceType": "paper", "paperId": "1706.03762", "title": "Attention Is All You Need" },
+        { "sourceType": "document", "documentScopeId": "workflow_os_scope_v1", "title": "Workflow OS Scope" }
+      ],
+      "trace": {
+        "bridge": "dinger",
+        "relativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+        "title": "RAG Capture"
+      },
+      "createdAt": "2026-04-09T00:00:00Z",
+      "updatedAt": "2026-04-09T00:00:00Z"
+    }
+  ],
+  "captureTrace": {
+    "bridge": "dinger",
+    "schema": "knowledge-hub.dinger.file.result.v1",
+    "title": "RAG Capture",
+    "slug": "rag-capture",
+    "kind": "web_capture",
+    "relativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+    "filePath": "/tmp/vault/KnowledgeOS/Dinger/Pages/rag-capture.md",
+    "captureId": "cap_123456789abc",
+    "packetPath": "/tmp/khub/dinger_capture_intake/queue/cap_123456789abc.json",
+    "filingOutputPointer": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+    "captureUrl": "https://example.com/rag",
+    "createdAt": "2026-04-09T00:00:00Z"
+  },
+  "duplicateSourceRefsSkipped": 1,
+  "linkAction": "created",
+  "replay": {
+    "policy": {
+      "open": "reuse",
+      "resolved": "create_new",
+      "triaged": "create_new"
+    },
+    "dedupeKey": {
+      "kind": "dinger_file",
+      "strategy": "vault_note",
+      "markers": [
+        {
+          "sourceType": "vault",
+          "primary": "KnowledgeOS/Dinger/Pages/rag-capture.md"
+        }
+      ],
+      "fingerprint": "dinger_file|vault_note|vault:KnowledgeOS/Dinger/Pages/rag-capture.md"
+    },
+    "action": "created_new_without_prior_match",
+    "matchedItemIds": [],
+    "matchedStates": []
+  },
+  "dedupeKey": {
+    "kind": "dinger_file",
+    "strategy": "vault_note",
+    "markers": [
+      {
+        "sourceType": "vault",
+        "primary": "KnowledgeOS/Dinger/Pages/rag-capture.md"
+      }
+    ],
+    "fingerprint": "dinger_file|vault_note|vault:KnowledgeOS/Dinger/Pages/rag-capture.md"
+  },
+  "reason": {
+    "dedupeKeySummary": {
+      "kind": "dinger_file",
+      "strategy": "vault_note",
+      "markerCount": 1,
+      "markers": [
+        {
+          "sourceType": "vault",
+          "primary": "KnowledgeOS/Dinger/Pages/rag-capture.md"
+        }
+      ],
+      "fingerprint": "dinger_file|vault_note|vault:KnowledgeOS/Dinger/Pages/rag-capture.md"
+    },
+    "replayAction": "created_new_without_prior_match",
+    "matchedOpenItems": [],
+    "matchedResolvedItems": [],
+    "matchedOtherItems": [],
+    "bridgeTraceSummary": {
+      "bridge": "dinger",
+      "sourceSchema": "knowledge-hub.dinger.file.result.v1",
+      "kind": "web_capture",
+      "relativePath": "KnowledgeOS/Dinger/Pages/rag-capture.md",
+      "title": "RAG Capture",
+      "captureUrl": "https://example.com/rag",
+      "captureId": "cap_123456789abc"
+    }
+  },
+  "explanation": "Created a new evidence candidate because dedupe key dinger_file/vault_note [KnowledgeOS/Dinger/Pages/rag-capture.md] had no prior open or resolved match. replay.action=created_new_without_prior_match; open matches=none; resolved matches=none; other matches=none; bridge trace=knowledge-hub.dinger.file.result.v1 -> KnowledgeOS/Dinger/Pages/rag-capture.md.",
+  "createdAt": "2026-04-09T00:00:00Z"
+}

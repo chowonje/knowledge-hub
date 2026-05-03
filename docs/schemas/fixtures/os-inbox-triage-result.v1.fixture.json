@@ -1,0 +1,35 @@
+{
+  "schema": "knowledge-hub.os.inbox.triage.result.v1",
+  "status": "ok",
+  "item": {
+    "id": "inbox_123",
+    "projectId": "proj_123",
+    "kind": "captured",
+    "severity": "medium",
+    "state": "resolved",
+    "summary": "Review bridge follow-up",
+    "sourceRefs": [
+      { "sourceType": "paper", "paperId": "1706.03762" }
+    ],
+    "createdAt": "2026-04-09T00:00:00Z",
+    "updatedAt": "2026-04-09T00:05:00Z"
+  },
+  "inbox": [],
+  "createdTask": {
+    "id": "task_123",
+    "projectId": "proj_123",
+    "title": "Review bridge follow-up",
+    "kind": "research",
+    "status": "open",
+    "priority": "high",
+    "assignee": "won",
+    "blockedBy": [],
+    "sourceRefs": [
+      { "sourceType": "paper", "paperId": "1706.03762" }
+    ],
+    "createdAt": "2026-04-09T00:05:00Z",
+    "updatedAt": "2026-04-09T00:05:00Z"
+  },
+  "createdDecision": null,
+  "createdAt": "2026-04-09T00:05:00Z"
+}

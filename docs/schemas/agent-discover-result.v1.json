@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/agent-discover-result.schema.json",
+  "title": "knowledge-hub agent discover result",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "source",
+    "status",
+    "sync",
+    "features",
+    "request"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.agent.discover.result.v1"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "partial",
+        "error"
+      ]
+    },
+    "sync": {
+      "oneOf": [
+        { "type": "object" },
+        { "type": "string" }
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "feature",
+          "ok"
+        ],
+        "properties": {
+          "feature": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "result": {
+            "oneOf": [
+              { "type": "object" },
+              { "type": "string" },
+              { "type": "null" }
+            ]
+          },
+          "error": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "source",
+        "days",
+        "topK",
+        "intent",
+        "features",
+        "saveState",
+        "resumeSource",
+        "resolution"
+      ],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "days": { "type": "integer", "minimum": 0 },
+        "from": { "type": ["string", "null"] },
+        "to": { "type": ["string", "null"] },
+        "topK": { "type": "integer", "minimum": 0 },
+        "limit": { "type": ["integer", "null"], "minimum": 0 },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "read",
+            "analyze",
+            "forecast",
+            "summarize",
+            "compare",
+            "alert"
+          ]
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "expenseThreshold": { "type": ["number", "null"] },
+        "minSleepHours": { "type": ["number", "null"] },
+        "eventLogPath": { "type": ["string", "null"] },
+        "stateFile": { "type": ["string", "null"] },
+        "saveState": { "type": "boolean" },
+        "resumeSource": { "type": "boolean" },
+        "resolution": {
+          "type": "object",
+          "required": [
+            "source",
+            "days",
+            "from",
+            "to",
+            "topK",
+            "limit",
+            "intent",
+            "features",
+            "expenseThreshold",
+            "minSleepHours",
+            "eventLogPath",
+            "stateFile",
+            "saveState"
+          ],
+          "properties": {
+            "source": { "type": "string", "enum": ["cli", "resume"] },
+            "days": { "type": "string", "enum": ["cli", "resume"] },
+            "from": { "type": "string", "enum": ["cli", "resume"] },
+            "to": { "type": "string", "enum": ["cli", "resume"] },
+            "topK": { "type": "string", "enum": ["cli", "resume"] },
+            "limit": { "type": "string", "enum": ["cli", "resume"] },
+            "intent": { "type": "string", "enum": ["cli", "resume"] },
+            "features": { "type": "string", "enum": ["cli", "resume"] },
+            "expenseThreshold": { "type": "string", "enum": ["cli", "resume"] },
+            "minSleepHours": { "type": "string", "enum": ["cli", "resume"] },
+            "eventLogPath": { "type": "string", "enum": ["cli", "resume"] },
+            "stateFile": { "type": "string", "enum": ["cli", "resume"] },
+            "saveState": { "type": "string", "enum": ["cli", "resume"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -9,6 +9,323 @@ from pathlib import Path
 from typing import Any, Callable
 
 from rich.table import Table
+from knowledge_hub.vault.concepts import iter_concept_note_paths, normalize_concept_wikilink_target
+
+
+def _clean_text(value: Any) -> str:
+    return " ".join(str(value or "").strip().split())
+
+
+def _clean_list(values: list[str], *, limit: int | None = None) -> list[str]:
+    result: list[str] = []
+    seen: set[str] = set()
+    for raw in values:
+        token = _clean_text(raw)
+        if not token:
+            continue
+        lowered = token.casefold()
+        if lowered in seen:
+            continue
+        seen.add(lowered)
+        result.append(token)
+        if limit is not None and len(result) >= limit:
+            break
+    return result
+
+
+def _list_db_concept_names(sqlite_db: Any, *, limit: int = 5000) -> list[str]:
+    list_entities = getattr(sqlite_db, "list_ontology_entities", None)
+    if list_entities is None:
+        return []
+    rows = list_entities(entity_type="concept", limit=max(1, int(limit))) or []
+    return _clean_list([str(row.get("canonical_name") or "") for row in rows], limit=limit)
+
+
+def _list_memory_card_concept_names(sqlite_db: Any, *, limit: int = 5000) -> list[str]:
+    list_cards = getattr(sqlite_db, "list_paper_memory_cards", None)
+    if list_cards is None:
+        return []
+    names: list[str] = []
+    for row in list_cards(limit=max(1, int(limit))) or []:
+        names.extend([_clean_text(item) for item in list(row.get("concept_links") or row.get("conceptLinks") or [])])
+    return _clean_list(names, limit=limit)
+
+
+def _resolve_concept_entity_id(sqlite_db: Any, concept_name: str, concept_id_fn: Callable[[str], str]) -> str:
+    resolve_entity = getattr(sqlite_db, "resolve_entity", None)
+    token = _clean_text(concept_name)
+    if token and resolve_entity is not None:
+        resolved = resolve_entity(token, entity_type="concept")
+        if resolved and _clean_text(resolved.get("entity_id")):
+            return _clean_text(resolved.get("entity_id"))
+    return concept_id_fn(token)
+
+
+def _rewrite_paper_memory_card_concepts(sqlite_db: Any, *, alias: str, canonical: str, limit: int = 5000) -> int:
+    list_cards = getattr(sqlite_db, "list_paper_memory_cards", None)
+    upsert_card = getattr(sqlite_db, "upsert_paper_memory_card", None)
+    if list_cards is None or upsert_card is None:
+        return 0
+    alias_token = _clean_text(alias)
+    canonical_token = _clean_text(canonical)
+    if not alias_token or not canonical_token or alias_token == canonical_token:
+        return 0
+    updated = 0
+    for row in list_cards(limit=max(1, int(limit))) or []:
+        concepts = list(row.get("concept_links") or row.get("conceptLinks") or [])
+        if not concepts:
+            continue
+        if all(_clean_text(item).casefold() != alias_token.casefold() for item in concepts):
+            continue
+        replaced = [
+            canonical_token if _clean_text(item).casefold() == alias_token.casefold() else _clean_text(item)
+            for item in concepts
+        ]
+        payload = dict(row)
+        payload["concept_links"] = _clean_list(replaced, limit=12)
+        upsert_card(card=payload)
+        updated += 1
+    return updated
+
+
+def _rewire_paper_concept_relations(sqlite_db: Any, *, alias_entity_id: str, canonical_entity_id: str) -> int:
+    conn = getattr(sqlite_db, "conn", None)
+    add_relation = getattr(sqlite_db, "add_relation", None)
+    delete_entity = getattr(sqlite_db, "delete_ontology_entity", None)
+    if conn is None or add_relation is None or delete_entity is None:
+        return 0
+    alias_token = _clean_text(alias_entity_id)
+    canonical_token = _clean_text(canonical_entity_id)
+    if not alias_token or not canonical_token or alias_token == canonical_token:
+        return 0
+    rows = conn.execute(
+        """
+        SELECT source_type, source_id, confidence, reason_json, evidence_ptrs_json, source
+        FROM ontology_relations
+        WHERE predicate_id='uses' AND target_type='concept' AND target_entity_id=?
+        """,
+        (alias_token,),
+    ).fetchall()
+    rewired = 0
+    for row in rows:
+        reason_json = json.loads(row["reason_json"] or "{}") if row["reason_json"] else {}
+        evidence_ptrs = json.loads(row["evidence_ptrs_json"] or "[]") if row["evidence_ptrs_json"] else []
+        evidence_text = str(reason_json.get("legacy_evidence_text") or "")
+        if not evidence_text:
+            evidence_text = json.dumps(
+                {
+                    "source": str(row["source"] or "paper_normalize_concepts"),
+                    "relation_norm": "uses",
+                    "evidence_ptrs": evidence_ptrs,
+                    "reason": reason_json,
+                },
+                ensure_ascii=False,
+            )
+        add_relation(
+            source_type=str(row["source_type"] or "paper"),
+            source_id=str(row["source_id"] or ""),
+            relation="uses",
+            target_type="concept",
+            target_id=canonical_token,
+            evidence_text=evidence_text,
+            confidence=float(row["confidence"] or 0.5),
+        )
+        rewired += 1
+    delete_entity(alias_token)
+    return rewired
+
+
+def _promote_trusted_title_seed_concepts(sqlite_db: Any, concept_names: list[str]) -> int:
+    from knowledge_hub.papers import memory_builder as _memory_builder
+
+    promoted = 0
+    for concept_name in _clean_list(concept_names, limit=5000):
+        if not getattr(_memory_builder, "_is_trusted_title_concept")(concept_name):
+            continue
+        entity_id = _resolve_concept_entity_id(sqlite_db, concept_name, lambda value: value)
+        if not entity_id:
+            continue
+        existing = sqlite_db.get_ontology_entity(entity_id) or {}
+        if not existing:
+            continue
+        properties = dict(existing.get("properties") or {})
+        if properties.pop("heuristic_source", None) is None and str(existing.get("source") or "").strip() == "paper_title_seed":
+            continue
+        sqlite_db.upsert_ontology_entity(
+            entity_id=entity_id,
+            entity_type="concept",
+            canonical_name=str(existing.get("canonical_name") or concept_name),
+            description=str(existing.get("description") or ""),
+            properties=properties,
+            confidence=max(float(existing.get("confidence") or 0.0), 0.74),
+            source="paper_title_seed",
+        )
+        promoted += 1
+    return promoted
+
+
+def _preview_curated_concept_cleanup(sqlite_db: Any, *, limit: int = 5000) -> dict[str, Any]:
+    from knowledge_hub.papers import memory_builder as _memory_builder
+
+    list_cards = getattr(sqlite_db, "list_paper_memory_cards", None)
+    canonical_pairs: set[tuple[str, str]] = set()
+    dropped_names: set[str] = set()
+    cards_touched = 0
+
+    if list_cards is not None:
+        for row in list_cards(limit=max(1, int(limit))) or []:
+            touched = False
+            for concept in list(row.get("concept_links") or row.get("conceptLinks") or []):
+                token = _clean_text(concept)
+                if not token:
+                    continue
+                normalized = getattr(_memory_builder, "_normalize_title_concept")(token)
+                if not normalized:
+                    dropped_names.add(token)
+                    touched = True
+                    continue
+                if normalized != token:
+                    canonical_pairs.add((token, normalized))
+                    touched = True
+            if touched:
+                cards_touched += 1
+
+    concept_rows = _list_db_concept_rows(sqlite_db, limit=limit)
+    prunable_entities = {
+        _clean_text(row.get("canonical_name"))
+        for row in concept_rows
+        if _clean_text(row.get("canonical_name")).casefold() in getattr(_memory_builder, "_TITLE_GENERIC_BLACKLIST")
+    }
+
+    return {
+        "canonicalPairs": sorted(canonical_pairs),
+        "droppedNames": sorted(dropped_names),
+        "cardsTouched": cards_touched,
+        "prunableEntities": sorted(prunable_entities),
+    }
+
+
+def _list_db_concept_rows(sqlite_db: Any, *, limit: int = 5000) -> list[dict[str, Any]]:
+    list_entities = getattr(sqlite_db, "list_ontology_entities", None)
+    if list_entities is None:
+        return []
+    return [dict(row or {}) for row in list_entities(entity_type="concept", limit=max(1, int(limit))) or []]
+
+
+def _remove_paper_memory_card_concepts(sqlite_db: Any, *, concept_names: list[str], limit: int = 5000) -> int:
+    list_cards = getattr(sqlite_db, "list_paper_memory_cards", None)
+    upsert_card = getattr(sqlite_db, "upsert_paper_memory_card", None)
+    if list_cards is None or upsert_card is None:
+        return 0
+    blocked = {_clean_text(name).casefold() for name in concept_names if _clean_text(name)}
+    if not blocked:
+        return 0
+    updated = 0
+    for row in list_cards(limit=max(1, int(limit))) or []:
+        concepts = list(row.get("concept_links") or row.get("conceptLinks") or [])
+        if not concepts:
+            continue
+        filtered = [item for item in concepts if _clean_text(item).casefold() not in blocked]
+        if len(filtered) == len(concepts):
+            continue
+        payload = dict(row)
+        payload["concept_links"] = _clean_list(filtered, limit=12)
+        upsert_card(card=payload)
+        updated += 1
+    return updated
+
+
+def _apply_curated_concept_cleanup(
+    sqlite_db: Any,
+    *,
+    concept_id_fn: Callable[[str], str],
+    upsert_ai_concept_fn: Callable[..., Any],
+    limit: int = 5000,
+) -> dict[str, int]:
+    from knowledge_hub.papers import memory_builder as _memory_builder
+
+    list_cards = getattr(sqlite_db, "list_paper_memory_cards", None)
+    upsert_card = getattr(sqlite_db, "upsert_paper_memory_card", None)
+    add_relation = getattr(sqlite_db, "add_relation", None)
+
+    canonicalized_links = 0
+    dropped_links = 0
+    updated_cards = 0
+
+    if list_cards is not None and upsert_card is not None:
+        for row in list_cards(limit=max(1, int(limit))) or []:
+            paper_id = _clean_text(row.get("paper_id") or row.get("paperId"))
+            concepts = list(row.get("concept_links") or row.get("conceptLinks") or [])
+            if not concepts:
+                continue
+            rewritten: list[str] = []
+            card_changed = False
+            for concept in concepts:
+                token = _clean_text(concept)
+                if not token:
+                    card_changed = True
+                    continue
+                normalized = getattr(_memory_builder, "_normalize_title_concept")(token)
+                if not normalized:
+                    dropped_links += 1
+                    card_changed = True
+                    continue
+                if normalized != token:
+                    canonicalized_links += 1
+                    card_changed = True
+                rewritten.append(normalized)
+                if paper_id and add_relation is not None and getattr(_memory_builder, "_is_trusted_title_concept")(normalized):
+                    canonical_id = _resolve_concept_entity_id(sqlite_db, normalized, concept_id_fn)
+                    upsert_ai_concept_fn(
+                        sqlite_db,
+                        entity_id=canonical_id,
+                        canonical_name=normalized,
+                        source="paper_title_seed",
+                    )
+                    add_relation(
+                        source_type="paper",
+                        source_id=paper_id,
+                        relation="uses",
+                        target_type="concept",
+                        target_id=canonical_id,
+                        evidence_text=json.dumps(
+                            {
+                                "source": "paper_curated_concept_cleanup",
+                                "relation_norm": "uses",
+                                "reason": "deterministic memory-card concept normalization",
+                            },
+                            ensure_ascii=False,
+                        ),
+                        confidence=0.74,
+                    )
+            deduped = _clean_list(rewritten, limit=12)
+            if card_changed or deduped != concepts:
+                payload = dict(row)
+                payload["concept_links"] = deduped
+                upsert_card(card=payload)
+                updated_cards += 1
+
+    prunable_entities = [
+        _clean_text(row.get("canonical_name"))
+        for row in _list_db_concept_rows(sqlite_db, limit=limit)
+        if _clean_text(row.get("canonical_name")).casefold() in getattr(_memory_builder, "_TITLE_GENERIC_BLACKLIST")
+    ]
+    pruned_entities = 0
+    pruned_cards = _remove_paper_memory_card_concepts(sqlite_db, concept_names=prunable_entities, limit=limit)
+    for concept_name in _clean_list(prunable_entities, limit=limit):
+        entity_id = _resolve_concept_entity_id(sqlite_db, concept_name, concept_id_fn)
+        if not entity_id:
+            continue
+        sqlite_db.delete_ontology_entity(entity_id)
+        pruned_entities += 1
+
+    return {
+        "canonicalizedLinks": canonicalized_links,
+        "droppedLinks": dropped_links,
+        "updatedCards": updated_cards,
+        "prunedEntities": pruned_entities,
+        "prunedCards": pruned_cards,
+    }
 
 
 def run_paper_sync_keywords(
@@ -330,7 +647,7 @@ def run_paper_build_concepts(
     console.print(f"[bold]{len(all_concept_names)}개 개념 발견[/bold]")
 
     if not force:
-        existing = {file.stem for file in concepts_dir.glob("*.md")}
+        existing = {file.stem for file in iter_concept_note_paths(concepts_dir)}
         to_process = [concept for concept in all_concept_names if concept not in existing]
     else:
         to_process = list(all_concept_names)
@@ -413,6 +730,8 @@ def run_paper_normalize_concepts(
     *,
     khub: Any,
     dry_run: bool,
+    provider: str | None,
+    model: str | None,
     console: Any,
     resolve_vault_papers_dir_fn: Callable[[str], Path | None],
     resolve_vault_concepts_dir_fn: Callable[[str], Path],
@@ -431,23 +750,38 @@ def run_paper_normalize_concepts(
         console.print("[red]Obsidian vault 경로가 설정되지 않았습니다.[/red]")
         return
 
-    llm = build_llm_fn(config, config.summarization_provider, config.summarization_model, khub=khub)
+    llm = build_llm_fn(
+        config,
+        provider or config.summarization_provider,
+        model or config.summarization_model,
+        khub=khub,
+    )
     papers_dir = resolve_vault_papers_dir_fn(vault_path)
     concepts_dir = resolve_vault_concepts_dir_fn(vault_path)
 
-    concept_names = sorted({file.stem for file in concepts_dir.glob("*.md")}) if concepts_dir.exists() else []
+    concept_names = sorted({file.stem for file in iter_concept_note_paths(concepts_dir)}) if concepts_dir.exists() else []
+    sqlite_db = sqlite_db_fn(config, khub=khub)
     for md_path in sorted(papers_dir.glob("*.md")):
         if md_path.name == "00_Concept_Index.md":
             continue
         content = md_path.read_text(encoding="utf-8")
-        for concept in re.findall(r"\[\[([^\]]+)\]\]", content):
-            if concept != "00_Concept_Index" and concept not in concept_names:
+        for raw in re.findall(r"\[\[([^\]]+)\]\]", content):
+            concept = normalize_concept_wikilink_target(raw)
+            if concept and concept != "00_Concept_Index" and concept not in concept_names:
                 concept_names.append(concept)
+    for concept in _list_db_concept_names(sqlite_db):
+        if concept not in concept_names:
+            concept_names.append(concept)
+    for concept in _list_memory_card_concept_names(sqlite_db):
+        if concept not in concept_names:
+            concept_names.append(concept)
 
     concept_names = sorted(set(concept_names))
     console.print(f"[bold]{len(concept_names)}개 개념 스캔 완료[/bold]\n")
 
-    if len(concept_names) < 2:
+    preview = _preview_curated_concept_cleanup(sqlite_db)
+
+    if len(concept_names) < 2 and not (preview["canonicalPairs"] or preview["droppedNames"] or preview["prunableEntities"]):
         console.print("[green]정규화할 개념이 부족합니다.[/green]")
         return
 
@@ -464,25 +798,38 @@ def run_paper_normalize_concepts(
         except Exception as error:
             console.print(f"[red]실패: {error}[/red]")
 
-    if not all_groups:
+    if all_groups:
+        table = Table(title=f"동의어 그룹 ({len(all_groups)}개)")
+        table.add_column("정규 이름", style="cyan")
+        table.add_column("별칭 (병합 대상)", style="yellow")
+        for group in all_groups:
+            table.add_row(group["canonical"], ", ".join(group["aliases"]))
+        console.print(table)
+    else:
         console.print("[green]동의어 그룹이 발견되지 않았습니다.[/green]")
-        return
 
-    table = Table(title=f"동의어 그룹 ({len(all_groups)}개)")
-    table.add_column("정규 이름", style="cyan")
-    table.add_column("별칭 (병합 대상)", style="yellow")
-    for group in all_groups:
-        table.add_row(group["canonical"], ", ".join(group["aliases"]))
-    console.print(table)
+    if preview["canonicalPairs"] or preview["droppedNames"] or preview["prunableEntities"]:
+        preview_table = Table(title="Curated Cleanup Preview")
+        preview_table.add_column("유형", style="cyan")
+        preview_table.add_column("내용", style="yellow")
+        for alias, canonical in list(preview["canonicalPairs"])[:12]:
+            preview_table.add_row("canonicalize", f"{alias} -> {canonical}")
+        for name in list(preview["droppedNames"])[:12]:
+            preview_table.add_row("drop-from-memory", name)
+        for name in list(preview["prunableEntities"])[:12]:
+            preview_table.add_row("prune-entity", name)
+        console.print(preview_table)
+
+    if not all_groups and not (preview["canonicalPairs"] or preview["droppedNames"] or preview["prunableEntities"]):
+        return
 
     if dry_run:
         console.print("\n[dim]--dry-run: 변경 없이 종료[/dim]")
         return
 
-    sqlite_db = sqlite_db_fn(config, khub=khub)
     registered = 0
     for concept_name in concept_names:
-        concept_id = concept_id_fn(concept_name)
+        concept_id = _resolve_concept_entity_id(sqlite_db, concept_name, concept_id_fn)
         upsert_ai_concept_fn(
             sqlite_db,
             entity_id=concept_id,
@@ -492,7 +839,7 @@ def run_paper_normalize_concepts(
 
     for group in all_groups:
         canonical = group["canonical"]
-        canonical_id = concept_id_fn(canonical)
+        canonical_id = _resolve_concept_entity_id(sqlite_db, canonical, concept_id_fn)
         upsert_ai_concept_fn(
             sqlite_db,
             entity_id=canonical_id,
@@ -502,11 +849,16 @@ def run_paper_normalize_concepts(
         )
 
         for alias in group["aliases"]:
+            alias_entity_id = _resolve_concept_entity_id(sqlite_db, alias, concept_id_fn)
             sqlite_db.add_entity_alias(alias, canonical_id)
-            alias_id = concept_id_fn(alias)
-            existing = sqlite_db.get_ontology_entity(alias_id)
+            _rewrite_paper_memory_card_concepts(sqlite_db, alias=alias, canonical=canonical)
+            existing = sqlite_db.get_ontology_entity(alias_entity_id)
             if existing and existing["canonical_name"] != canonical:
-                sqlite_db.delete_ontology_entity(alias_id)
+                _rewire_paper_concept_relations(
+                    sqlite_db,
+                    alias_entity_id=alias_entity_id,
+                    canonical_entity_id=canonical_id,
+                )
         registered += 1
 
     console.print(f"\n[green]{registered}개 정규화 그룹 DB 등록[/green]")
@@ -530,6 +882,18 @@ def run_paper_normalize_concepts(
                 concept_papers.setdefault(concept, []).append(md_path.stem)
 
     rebuild_concept_index_with_relations_fn(papers_dir, concepts_dir, concept_papers)
+    curated = _apply_curated_concept_cleanup(
+        sqlite_db,
+        concept_id_fn=concept_id_fn,
+        upsert_ai_concept_fn=upsert_ai_concept_fn,
+    )
+    promoted = _promote_trusted_title_seed_concepts(sqlite_db, concept_names)
+    console.print(f"[green]trusted title concept {promoted}개 승격[/green]")
+    console.print(
+        "[green]curated cleanup[/green] "
+        f"cards={curated['updatedCards']} canonicalized={curated['canonicalizedLinks']} "
+        f"dropped={curated['droppedLinks']} pruned_entities={curated['prunedEntities']}"
+    )
     console.print(f"[bold green]정규화 완료 — {len(all_groups)}개 그룹, {merged}개 노트 병합[/bold green]")
 
 

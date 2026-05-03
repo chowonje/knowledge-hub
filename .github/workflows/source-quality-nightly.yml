@@ -1,0 +1,61 @@
+name: source-quality-nightly
+
+on:
+  schedule:
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+
+jobs:
+  source-quality-battery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: Run source quality battery
+        run: |
+          python eval/knowledgeos/scripts/run_source_quality_battery.py \
+            --repo-root . \
+            --gate-mode stub_hard \
+            --mode hybrid \
+            --top-k 6
+
+      - name: Build trend, readiness, and observation reports
+        run: |
+          python eval/knowledgeos/scripts/report_source_quality_trend.py \
+            --runs-root eval/knowledgeos/runs \
+            --limit 7
+          python eval/knowledgeos/scripts/report_legacy_runtime_readiness.py \
+            --repo-root . \
+            --runs-root eval/knowledgeos/runs \
+            --limit 7
+          python eval/knowledgeos/scripts/report_source_quality_observation.py \
+            --runs-root eval/knowledgeos/runs \
+            --required-runs 7
+          python eval/knowledgeos/scripts/report_source_quality_detail_observation.py \
+            --runs-root eval/knowledgeos/runs \
+            --required-runs 7
+
+      - name: Publish observation summary
+        run: |
+          cat eval/knowledgeos/runs/reports/source_quality_observation_latest.md >> "$GITHUB_STEP_SUMMARY"
+          printf '\n\n' >> "$GITHUB_STEP_SUMMARY"
+          cat eval/knowledgeos/runs/reports/source_quality_detail_observation_latest.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload source quality artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-quality-battery
+          path: |
+            eval/knowledgeos/runs/source_quality_battery_*/
+            eval/knowledgeos/runs/reports/

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "version",
+    "filters",
+    "comparisonReport",
+    "commonLimitationSummary",
+    "conflictExplanations",
+    "diagnostics",
+    "counts",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.claim-synthesis.result.v1" },
+    "status": { "type": "string" },
+    "version": { "type": "string" },
+    "filters": { "type": "object" },
+    "comparisonReport": { "type": "array", "items": { "type": "object" } },
+    "commonLimitationSummary": { "type": "array", "items": { "type": "object" } },
+    "conflictExplanations": { "type": "array", "items": { "type": "object" } },
+    "diagnostics": { "type": "object" },
+    "counts": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

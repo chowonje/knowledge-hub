@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.task.start.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "task", "inbox", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.task.start.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "task": { "type": "object" },
+    "inbox": { "type": "array", "items": { "type": "object" } },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

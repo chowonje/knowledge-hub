@@ -26,6 +26,10 @@ GAP_SCHEMA = "knowledge-hub.learning.gap.result.v1"
 QUIZ_GENERATE_SCHEMA = "knowledge-hub.learning.quiz.generate.result.v1"
 QUIZ_GRADE_SCHEMA = "knowledge-hub.learning.quiz.grade.result.v1"
 PATCH_SUGGEST_SCHEMA = "knowledge-hub.learning.patch.suggest.result.v1"
+START_RESUME_SCHEMA = "knowledge-hub.learning.start-resume.result.v1"
+SESSION_STATE_SCHEMA = "knowledge-hub.learning.session-state.result.v1"
+EXPLAIN_SCHEMA = "knowledge-hub.learning.explain.result.v1"
+CHECKPOINT_SCHEMA = "knowledge-hub.learning.checkpoint.result.v1"
 
 
 @dataclass

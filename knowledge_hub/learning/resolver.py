@@ -18,6 +18,20 @@ def normalize_term(value: str) -> str:
     return lowered.strip()
 
 
+_COMMON_CONCEPT_QUERY_ALIASES = {
+    "cnn": "convolutional neural network",
+    "cnns": "convolutional neural networks",
+}
+
+
+def _expand_concept_query_alias(term: str, *, entity_type: str | None) -> str:
+    if str(entity_type or "").strip().lower() != "concept":
+        return term
+    normalized = normalize_term(term)
+    alias = _COMMON_CONCEPT_QUERY_ALIASES.get(normalized)
+    return str(alias or term or "").strip()
+
+
 @dataclass
 class _ConceptCandidate:
     concept_id: str
@@ -112,6 +126,7 @@ class EntityResolver:
         term = (raw_name or "").strip()
         if not term:
             return None
+        term = _expand_concept_query_alias(term, entity_type=entity_type)
         
         normalized = normalize_term(term)
         

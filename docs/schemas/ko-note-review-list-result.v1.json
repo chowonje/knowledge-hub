@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "runId", "items", "counts", "ts"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ko-note.review.list.result.v1" },
+    "status": { "type": "string" },
+    "runId": { "type": "string" },
+    "itemType": { "type": "string" },
+    "qualityFlag": { "type": "string" },
+    "counts": { "type": "object" },
+    "items": { "type": "array" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

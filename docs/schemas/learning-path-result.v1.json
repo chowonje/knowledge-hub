@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "runId", "topic", "topicSlug", "status", "path", "updatedAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.learning.path.result.v1" },
+    "runId": { "type": "string" },
+    "topic": { "type": "string" },
+    "topicSlug": { "type": "string" },
+    "status": { "type": "string" },
+    "path": { "type": "object" },
+    "writeback": { "type": "object" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

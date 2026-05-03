@@ -1,0 +1,89 @@
+query,source,rank,label,no_result,temporal_query,wrong_era,top1_title,top1_source_type,top1_quality_flag,top1_citation,top1_excerpt,answer_status,memory_route_requested,memory_route_applied,memory_prefilter_reason,matched_memory_ids,matched_document_ids,memory_relations_used,temporal_signals,notes
+최신 RAG benchmark 변경점은 무엇인가?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+최근에 업데이트된 memory-first retrieval 설계 차이를 정리해줘,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+latest multi-agent planning evaluation 기준이 어떻게 바뀌었나?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+최근 long-context retrieval failure 패턴 요약,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+가장 최근 vector database retrieval quality 개선 포인트는?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+before/after 기준으로 policy engine audit log 설계가 어떻게 달라졌나?,vault,1,,0,1,,Archives,vault,unscored,S1,"<!-- AUTO_LINK_START -->
+**관련 노트:** [[2026-02-06]], [[Archives/Tags/국회 조직도]], [[Archives/국제정치 2/국제정치]], [[Archives/국제정치/국제정치]], [[Areas/Areas]]
+<!-- AUTO_LINK_END -->
+
+<...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Archives/Archives.md:ca0bb4ed170c | memory-unit:Archives/Tags/국회 조직도.md:88740885e842 | memory-unit:Archives/Tags/.md:557d316c2140,Archives/Archives.md | Archives/Tags/국회 조직도.md | Archives/Tags/.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+최근 업데이트된 paper-memory retrieval 방식 설명,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+최근 web source 중 reference source와 continuous latest source 차이는?,web,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,"{'enabled': True, 'mode': 'latest', 'targetYear': ''}",
+Paper Memory Prefilter V1 이후 ask 경로는 어떻게 바뀌었나?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+memory_route_mode 추가 이후 paper_memory_mode와의 관계는?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+document-memory builder가 시간 필드를 언제부터 기록하나?,vault,1,,0,0,,SMART,vault,unscored,S1,"**SMART 방법론:** 질문의 구체성, 측정 가능 여부, 행동 지향성, 관련성, 시간 제한성 등을 기준으로 질문의 효과를 판단하는 도구
+
+| 구체적(Specific)                                                                     | 측정 가능(Measurable)                | ...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Papers/Concepts/Computational constraint.md:d269f2ef7a6b | memory-unit:Papers/Concepts/Instance Trajectory.md:9820ab93d38a | memory-unit:Papers/Concepts/Online Map Construction.md:4c87d84411c6 | memory-unit:Papers/Concepts/Sequential Decision Problem.md:3cabd014555b | memory-unit:Papers/Concepts/Short-term Motion Prediction.md:81ed7fcd3054 | memory-unit:Papers/Concepts/Temporal Continuity.md:b3bb8abd4af0 | memory-unit:Projects/Data Analytics/Ask/SMART.md:4c3db859f739 | memory-unit:Projects/Data Analytics/Process/데이터 문제 발생중.md:7e72c0ccbc66,Papers/Concepts/Computational constraint.md | Papers/Concepts/Instance Trajectory.md | Papers/Concepts/Online Map Construction.md | Papers/Concepts/Sequential Decision Problem.md | Papers/Concepts/Short-term Motion Prediction.md | Papers/Concepts/Temporal Continuity.md | Projects/Data Analytics/Ask/SMART.md | Projects/Data Analytics/Process/데이터 문제 발생중.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+updates relation이 retrieval에 어떻게 반영되는가?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+memory-router-v1 gate는 baseline 대비 무엇을 통과해야 하나?,vault,1,,0,0,,데이터 시각화,vault,unscored,S1,"## 그래프 장점
+바 그래프
+
+- 바 그래프는 크기 대비를 사용하여 두 개 이상의 값을 비교합니다.
+- x축은 범주나 시간, y축은 변수의 값을 나타내며, 경향을 쉽게 파악할 수 있습니다.
+
+선 그래프
+
+- 선 그래프는 시간에 따른 데이터의 변화를 추적하는 데 유용합니다.
+- 두 개의 선을 사용하여 고양이와 개의 인기 변화를 비교할 수 있습니다.
+
+파이 차...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Projects/AI/AI_Papers/Web_Sources/The Reactor- A fast and sample-efficient Actor-Critic agent for Reinforcement Learning.md:665b3a296354 | memory-unit:Projects/Data Analytics/Share/데이터 시각화.md:a2c1fd7bbe46 | memory-unit:Projects/데이터 사이언티스트/머신러닝 by python/선형 및 로지스틱 회귀/표준화(Standardization)와 데이터 해석 정리 노트.md:b5685e5f2162 | memory-unit:Projects/데이터 사이언티스트/머신러닝 by python/타이타닉.md:ea6e5581ba86,Projects/AI/AI_Papers/Web_Sources/The Reactor- A fast and sample-efficient Actor-Critic agent for Reinforcement Learning.md | Projects/Data Analytics/Share/데이터 시각화.md | Projects/데이터 사이언티스트/머신러닝 by python/선형 및 로지스틱 회귀/표준화(Standardization)와 데이터 해석 정리 노트.md | Projects/데이터 사이언티스트/머신러닝 by python/타이타닉.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+paper lookup and summarize가 prefilter 이후에도 paper-centric인 이유는?,paper,1,,1,1,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+vault notes와 web notes에서 document_memory prefilter 차이는?,vault,1,,0,0,,web,vault,unscored,S1,"<!-- AUTO_LINK_START -->
+- 한 줄 요약: web 노트는 com, https, ontology, org, source 키워드가 핵심인 내용입니다.
+- 추천 연결: [[Archives/국제정치 2/미국의 대중국 전략_ 양안전쟁 대비와 북극항로 통제를 위한 기...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Archives/Tags/web.md:7bd22720c23d | memory-unit:LearningHub/Cluster_Views/cluster-0012-ai-web.md:e3e9ff22dd8c | memory-unit:Archives/information/개인을 위한 인공지능(AI) 활용 방법에 대한 종합 분석.md:1adf92fd9c6a | memory-unit:Archives/Archives.md:ca0bb4ed170c | memory-unit:Archives/Tags/국회 조직도.md:88740885e842 | memory-unit:Archives/Tags/.md:557d316c2140 | memory-unit:Archives/Tags/pipeline_plan_for_notion.md:9ad6fe832c17 | memory-unit:Archives/Tags/계획획.md:e1fc5c03462b,Archives/Tags/web.md | LearningHub/Cluster_Views/cluster-0012-ai-web.md | Archives/information/개인을 위한 인공지능(AI) 활용 방법에 대한 종합 분석.md | Archives/Archives.md | Archives/Tags/국회 조직도.md | Archives/Tags/.md | Archives/Tags/pipeline_plan_for_notion.md | Archives/Tags/계획획.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+temporal query에서 event_date 와 document_date 우선순위는?,vault,1,,0,0,,Aegis2.0: A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Guardrails,vault,unscored,S1,"n extension to 9 fine-grained subcategories. This taxonomy is designed to meet the diverse requirements of downstream users, offering more granular and flexible tools for managing various risk types. ...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Archives/ai/11_AI_추가자료.md:6081aa7eb3ef | memory-unit:Archives/information/미시경제학.md:077f0080b575 | memory-unit:LearningHub/Cluster_Views/cluster-0005-ai-projects.md:e6be7979077d | memory-unit:Papers/Aegis2.0 A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Gua.md:bde30d10c93c | memory-unit:Papers/Causality is Key for Interpretability Claims to Generalise.md:7df17d0da7e5 | memory-unit:Papers/Concepts/AI alignment.md:a3f578537c7b | memory-unit:Papers/Concepts/Camera geometry.md:4e9c869b4564 | memory-unit:Papers/Concepts/Control flow graph analysis.md:a9f18d631f25,Archives/ai/11_AI_추가자료.md | Archives/information/미시경제학.md | LearningHub/Cluster_Views/cluster-0005-ai-projects.md | Papers/Aegis2.0 A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Gua.md | Papers/Causality is Key for Interpretability Claims to Generalise.md | Papers/Concepts/AI alignment.md | Papers/Concepts/Camera geometry.md | Papers/Concepts/Control flow graph analysis.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+memory-first retrieval executor는 어디에 붙어 있나?,vault,1,,0,0,,05_LLM_핵심기술_3,vault,unscored,S1,"<!-- AUTO_LINK_START -->
+- 한 줄 요약: 05_LLM_핵심기술_3 노트는 chain, llm, 구조, 기술, 핵심 키워드가 핵심인 내용입니다.
+- 추천 연결: [[Archives/ai/03_LLM_핵심기술_1]], [[Archives/ai/04_LLM_핵심기술_2]], [[Archives/ai/07...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Papers/Concepts/Capacity of Symmetric Private Information Retrieval.md:68c35ee4a2df | memory-unit:Papers/Concepts/Information Retrieval.md:5472b69f34ee | memory-unit:Papers/Concepts/Multi-stage Retrieval Pipeline.md:06ab904994b6 | memory-unit:Archives/ai/05_LLM_핵심기술_3.md:52880749d06f | memory-unit:Papers/Concepts/Catalog uncertainty.md:2bdb81a71d1e | memory-unit:Papers/Concepts/Common randomness.md:fbfd172438b1 | memory-unit:Papers/Concepts/Database privacy.md:81050073aaec | memory-unit:Papers/Concepts/Deep Neural Ranking Model.md:a87eb3f362ec,Papers/Concepts/Capacity of Symmetric Private Information Retrieval.md | Papers/Concepts/Information Retrieval.md | Papers/Concepts/Multi-stage Retrieval Pipeline.md | Archives/ai/05_LLM_핵심기술_3.md | Papers/Concepts/Catalog uncertainty.md | Papers/Concepts/Common randomness.md | Papers/Concepts/Database privacy.md | Papers/Concepts/Deep Neural Ranking Model.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+memory_router.py와 runtime executor의 책임 차이는?,vault,1,,0,0,,메모 앱,vault,unscored,S1,"1. llm을 넣어서 나의 영어 일기를 작성하면 문장을 피드백해주는 기능을 만들기
+2. 로컬 파일을 분석하고 피드백하기..
+3. 날짜를 추가하기
+4. 다양한 옵시디언 노션 구글 시트등을 연결 시켜보고 다양한 파일들도 연동 가능하게 하기
+첫 번째 목표는 파라앱 기능을 구현하는 것
+
+# 파라
+### PARA의 주요 구성 요소
+
+PARA는 네 가지 카테고리...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Papers/Concepts/Iterative self-correction through compiler and runtime feedback.md:787a7a404b66 | memory-unit:Projects/메모 앱.md:1d36fdedae7a,Papers/Concepts/Iterative self-correction through compiler and runtime feedback.md | Projects/메모 앱.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+why does ask use memory prefilter but search stays unchanged?,vault,1,,0,0,,Distributed task allocation algorithm,vault,unscored,S1,"# Distributed task allocation algorithm
+
+여러 에이전트 간에 작업을 효율적으로 분배하는 알고리즘입니다.
+
+## 관련 개념
+- [[Multi-agent system]]
+- [[Cooperation]]
+- [[Control flow graph analysis]]
+
+## 관련 논문
+- [[Consensus Based Task Al...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Papers/Concepts/Distributed task allocation algorithm.md:5ef60b1c5f7e | memory-unit:Papers/Concepts/Graph-based replication.md:aa2d5a7484f6,Papers/Concepts/Distributed task allocation algorithm.md | Papers/Concepts/Graph-based replication.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+memory_relations 테이블은 어떤 필드를 가지나?,vault,1,,0,0,,Sql,vault,unscored,S1,"<img src=""https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png"" style=""height:64px;margin-right:32px""/>
+
+
+***
+
+## SQL 간단 요약 \& 실무 활용 가이드
+
+### 1. 기본 SQL 문
+
+- **SELECT**: 데이터 조회
+- **DELETE**...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Projects/Data Analytics/Tool/Sql.md:f27d4c7f0fa6 | memory-unit:Projects/Data Analytics/Tool/Tableau.md:86839aa075a4 | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/10.Q-Learning.md:e93a8262ddb4 | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/5.트랜스포머 핵심 개념.md:4307de09bc03 | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/용어집 1고급 Keras Functional API.md:0e362fb1ce41 | memory-unit:Projects/데이터 사이언티스트/데이터분석 by python/연속형 수치 변수.md:23b279459f02 | memory-unit:Projects/데이터 사이언티스트/머신러닝 by python/지도 학습 모델 구축/의사결정트리.md:08e01536183c | memory-unit:Projects/데이터 사이언티스트/머신러닝 by python/타이타닉.md:ea6e5581ba86,Projects/Data Analytics/Tool/Sql.md | Projects/Data Analytics/Tool/Tableau.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/10.Q-Learning.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/5.트랜스포머 핵심 개념.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/용어집 1고급 Keras Functional API.md | Projects/데이터 사이언티스트/데이터분석 by python/연속형 수치 변수.md | Projects/데이터 사이언티스트/머신러닝 by python/지도 학습 모델 구축/의사결정트리.md | Projects/데이터 사이언티스트/머신러닝 by python/타이타닉.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+document memory retriever의 named-title bias는 무엇을 위한 것인가?,vault,1,,0,0,,대안안,vault,unscored,S1,"<!-- AUTO_LINK_START -->
+- 한 줄 요약: 대안안 노트는 kpol, 대한, 데이터, 상세화, 정의 키워드가 핵심인 내용입니다.
+- 추천 연결: [[Projects/데이터 사이언티스트/코스1/데이터 마이닝]], [[Projects/Data Analytics/Share/프레젠테이션 결과 보고...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Papers/Concepts/Rasterized Map Memory.md:de7f8588b505 | memory-unit:Archives/Tags/대안안.md:ce4323007c35 | memory-unit:Archives/ai/08_AI_도구_프레임워크.md:dbf4ccaeb5fc | memory-unit:LearningHub/Cluster_Views/cluster-0012-ai-web.md:e3e9ff22dd8c | memory-unit:Papers/Aegis2.0 A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Gua.md:bde30d10c93c | memory-unit:Papers/Brain Tumor Identification and Classification of MRI Images Using Deep Learning.md:efe21d9f0137 | memory-unit:Papers/Concepts/Adaptive sparsity ratio optimization.md:573570184998 | memory-unit:Papers/Concepts/Benchmarking.md:0f53f2bcffe2,Papers/Concepts/Rasterized Map Memory.md | Archives/Tags/대안안.md | Archives/ai/08_AI_도구_프레임워크.md | LearningHub/Cluster_Views/cluster-0012-ai-web.md | Papers/Aegis2.0 A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Gua.md | Papers/Brain Tumor Identification and Classification of MRI Images Using Deep Learning.md | Papers/Concepts/Adaptive sparsity ratio optimization.md | Papers/Concepts/Benchmarking.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+older memory hit가 fallback candidate로만 남는 이유는?,paper,1,,1,0,,,,,,,no_result,prefilter,false,no_memory_hits,,,,{},
+memoryRoute diagnostics에는 어떤 필드가 들어가나?,vault,1,,0,0,,더티 데이터,vault,unscored,S1,"### **중복 데이터**
+
+|설명|가능한 원인|비즈니스에 대한 잠재적 피해|
+|---|---|---|
+|두 번 이상 표시되는 모든 데이터 레코드|수동 데이터 입력, 일괄 데이터 가져오기 또는 데이터 마이그레이션|왜곡된 측정항목 또는 분석, 부풀려지거나 부정확한 카운트 또는 예측, 데이터 검색 중 혼동|
+
+### **오래된 데이터**
+
+|설명|가능한 원인|...",ok,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Projects/Data Analytics/Process/더티 데이터.md:c649feef4a25 | memory-unit:Projects/Data Analytics/Tool/Sql.md:f27d4c7f0fa6 | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/10.Q-Learning.md:e93a8262ddb4 | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/5.트랜스포머 핵심 개념.md:4307de09bc03 | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/용어집 1고급 Keras Functional API.md:0e362fb1ce41 | memory-unit:Projects/데이터 사이언티스트/데이터분석 by python/연속형 수치 변수.md:23b279459f02 | memory-unit:Projects/데이터 사이언티스트/머신러닝 by python/지도 학습 모델 구축/의사결정트리.md:08e01536183c | memory-unit:Projects/데이터 사이언티스트/머신러닝 by python/타이타닉.md:ea6e5581ba86,Projects/Data Analytics/Process/더티 데이터.md | Projects/Data Analytics/Tool/Sql.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/10.Q-Learning.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/5.트랜스포머 핵심 개념.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/용어집 1고급 Keras Functional API.md | Projects/데이터 사이언티스트/데이터분석 by python/연속형 수치 변수.md | Projects/데이터 사이언티스트/머신러닝 by python/지도 학습 모델 구축/의사결정트리.md | Projects/데이터 사이언티스트/머신러닝 by python/타이타닉.md,,"{'enabled': False, 'mode': 'none', 'targetYear': ''}",
+latest 또는 업데이트 질의에서 temporalSignals는 어떻게 읽어야 하나?,vault,1,,0,1,,기타 일반적인 데이터 구조,vault,unscored,S1,"## 데이터 구조
+
+데이터 구조는 데이터를 담고 있는 집과 같아서, 결론을 도출할 수 있도록 데이터 요소를 구조화된 방식으로 결합하는 데 도움이 됩니다.
+
+![다양한 데이터 폴더와 파일로 구성된 집의 이미지입니다.](https://d3c33hcgiwev3.cloudfront.net/imageAssetProxy.v1/_uX1M1dtQXSl9TNXbcF0CA_...",blocked,prefilter,true,memory_prefilter_chunk_fallback,memory-unit:Projects/Data Analytics/Tool/R/기타 일반적인 데이터 구조.md:462dc9948a1c | memory-unit:Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/용어집 6.md:a5cc00c52dde | memory-unit:Archives/Tags/계획획.md:e1fc5c03462b | memory-unit:Archives/information/미시경제학.md:077f0080b575 | memory-unit:Papers/Concepts/Collective behaviour.md:74aa6fcb9530 | memory-unit:Papers/Concepts/Computational constraint.md:d269f2ef7a6b | memory-unit:Papers/Concepts/Cultural evolution.md:a3a07e9ba3ff | memory-unit:Papers/Concepts/Online Map Construction.md:4c87d84411c6,Projects/Data Analytics/Tool/R/기타 일반적인 데이터 구조.md | Projects/ai engineering/케라스와 텐서플로우를 사용한 딥러닝/용어집 6.md | Archives/Tags/계획획.md | Archives/information/미시경제학.md | Papers/Concepts/Collective behaviour.md | Papers/Concepts/Computational constraint.md | Papers/Concepts/Cultural evolution.md | Papers/Concepts/Online Map Construction.md,,"{'enabled': True, 'mode': 'latest', 'targetYear': ''}",

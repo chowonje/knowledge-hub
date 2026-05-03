@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.agent.writeback.request.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "goal",
+    "repoPath",
+    "requestOperation",
+    "request",
+    "approval",
+    "dryRun",
+    "writebackPreview",
+    "gateway",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.agent.writeback.request.result.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "failed"]
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requestOperation": {
+      "type": "string",
+      "enum": ["created", "updated", "reopened"]
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "actionId",
+        "scope",
+        "actionType",
+        "status",
+        "targetKind",
+        "targetKey",
+        "summary",
+        "command",
+        "args",
+        "lastExecutionStatus",
+        "lastReceiptId"
+      ],
+      "properties": {
+        "actionId": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "actionType": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "targetKind": { "type": "string", "minLength": 1 },
+        "targetKey": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string" },
+        "command": { "type": "string" },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "lastExecutionStatus": { "type": "string" },
+        "lastReceiptId": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "approval": {
+      "type": "object",
+      "required": ["required", "status", "note", "commands"],
+      "properties": {
+        "required": { "const": true },
+        "status": { "const": "pending" },
+        "note": { "type": "string", "minLength": 1 },
+        "commands": {
+          "type": "object",
+          "required": ["ack", "execute", "resolve"],
+          "properties": {
+            "ack": { "type": "string", "minLength": 1 },
+            "execute": { "type": "string", "minLength": 1 },
+            "resolve": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "dryRun": {
+      "type": "object",
+      "required": ["schema", "status", "stage", "verify", "writeback", "dryRun", "gateway"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.foundry.agent.run.result.v1" },
+        "status": { "type": "string" },
+        "stage": { "type": "string" },
+        "plan": { "type": "array", "items": { "type": "string" } },
+        "verify": { "type": "object" },
+        "writeback": { "type": "object" },
+        "dryRun": { "const": true },
+        "gateway": {
+          "type": "object",
+          "required": ["surface", "mode"],
+          "properties": {
+            "surface": { "const": "agent_run" },
+            "mode": { "const": "dry_run" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "writebackPreview": {
+      "type": "object",
+      "required": [
+        "status",
+        "kind",
+        "intentSummary",
+        "targetCount",
+        "targets",
+        "workspaceContext",
+        "constraints",
+        "unknowns",
+        "advisory",
+        "previewFingerprint"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ok", "partial"]
+        },
+        "kind": {
+          "const": "repo_local_predicted_write_set"
+        },
+        "intentSummary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["relativePath", "reason", "source", "confidence", "exists"],
+            "properties": {
+              "relativePath": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string", "minLength": 1 },
+              "source": {
+                "type": "string",
+                "enum": ["task_context", "goal_inference"]
+              },
+              "confidence": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "exists": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "workspaceContext": {
+          "type": "object",
+          "required": ["included", "mode", "workspaceFileCount"],
+          "properties": {
+            "included": { "type": "boolean" },
+            "mode": {
+              "type": "string",
+              "enum": ["explicit", "inferred", "disabled"]
+            },
+            "workspaceFileCount": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "constraints": {
+          "type": "object",
+          "required": ["repoLocalOnly", "vaultWrite", "externalSideEffects", "hiddenAutomation", "allowedPathPrefixes"],
+          "properties": {
+            "repoLocalOnly": { "const": true },
+            "vaultWrite": { "const": false },
+            "externalSideEffects": { "const": false },
+            "hiddenAutomation": { "const": false },
+            "allowedPathPrefixes": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
+          "additionalProperties": false
+        },
+        "unknowns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "advisory": { "const": true },
+        "previewFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "gateway": {
+      "type": "object",
+      "required": [
+        "version",
+        "surface",
+        "mode",
+        "contract",
+        "executionAllowed",
+        "writebackAllowed",
+        "repoContextEphemeral",
+        "approvalRequired"
+      ],
+      "properties": {
+        "version": { "const": "v2" },
+        "surface": { "const": "agent_writeback_request" },
+        "mode": { "const": "request" },
+        "contract": { "const": "approval_gated_repo_local_writeback" },
+        "executionAllowed": { "const": false },
+        "writebackAllowed": { "const": false },
+        "repoContextEphemeral": { "const": true },
+        "approvalRequired": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

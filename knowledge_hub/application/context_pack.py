@@ -8,6 +8,7 @@ import os
 import re
 from typing import Any
 
+from knowledge_hub.ai.retrieval_fit import normalize_source_type
 from knowledge_hub.core.chunking import snippet_for_path
 
 
@@ -105,19 +106,6 @@ DEFAULT_MAX_VAULT_SOURCES = 6
 DEFAULT_MAX_PAPER_SOURCES = 4
 DEFAULT_MAX_WEB_SOURCES = 4
 DEFAULT_MAX_SOURCE_CHARS = 6000
-
-
-def normalize_source_type(source_type: str | None) -> str:
-    source = str(source_type or "").strip().lower()
-    if source in {"", "all", "*"}:
-        return ""
-    if source == "note":
-        return "vault"
-    if source in {"repo", "repository", "workspace"}:
-        return "project"
-    if source == "youtube":
-        return "web"
-    return source
 
 
 @dataclass(frozen=True)

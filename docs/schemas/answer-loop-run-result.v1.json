@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "attemptCount", "bestAttempt", "stoppedReason", "attempts", "overall"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-loop.run.result.v1" },
+    "status": { "type": "string" },
+    "attemptCount": { "type": "integer", "minimum": 0 },
+    "bestAttempt": { "type": "integer", "minimum": 0 },
+    "stoppedReason": { "type": "string" },
+    "attempts": { "type": "array", "items": { "type": "object" } },
+    "overall": { "type": "object" },
+    "artifactPaths": { "type": "object" },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

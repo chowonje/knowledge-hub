@@ -1,0 +1,21 @@
+query,source,query_type,expected_primary_source,expected_answer_style,difficulty,regression_bucket
+최근 벡터 검색 품질 개선 글은 rerank를 어떤 역할로 설명하나?,web,temporal,web,timeline_compare,medium,web_temporal_no_result
+현재 코퍼스만으로 특정 최신 논문의 정확한 수치 비교를 단정할 수 있나?,web,abstention,web,abstain,medium,web_temporal_no_result
+paper/web memory가 비어 있는 상태에서도 최신성 질문에 강하게 답해야 하나?,web,abstention,web,abstain,medium,web_temporal_no_result
+RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?,vault,general,vault,concise_summary,easy,vault_hub_noise
+memory-first retrieval의 목적을 한 문장으로 설명해줘,vault,general,vault,concise_summary,easy,vault_hub_noise
+ontology layer가 임베딩 검색에서 보완하는 것은 무엇인가?,vault,general,vault,concept_explainer,medium,vault_hub_noise
+cluster layer는 검색 결과에 어떤 역할을 하나?,vault,general,vault,concise_summary,easy,vault_hub_noise
+evidence-first answering이 필요한 이유는 무엇인가?,vault,general,vault,concise_summary,medium,vault_hub_noise
+document memory와 chunk retrieval의 차이를 설명해줘,vault,general,vault,compare_summary,medium,vault_hub_noise
+memory relation 중 updates는 무엇을 의미하나?,vault,general,vault,concise_summary,easy,vault_hub_noise
+document memory와 paper memory의 차이를 논문 관점에서 설명해줘,paper,general,paper,compare_summary,medium,non_substantive_refusal
+paper lookup and summarize가 paper-centric인 이유는 무엇인가?,paper,general,paper,concise_summary,medium,non_substantive_refusal
+updated paper disambiguation 문제는 왜 발생하나?,paper,general,paper,concise_summary,medium,non_substantive_refusal
+논문 retrieval에서 memory prefilter가 chunk evidence로 어떻게 이어지는가?,paper,implementation,paper,implementation_steps,hard,non_substantive_refusal
+paper summary path에서 evidence packet이 왜 필요한가?,paper,implementation,paper,implementation_steps,medium,non_substantive_refusal
+최근 retrieval pipeline에서 temporal route가 추가된 이유는 무엇인가?,vault,temporal,vault,timeline_compare,medium,temporal_no_grounding
+document-memory builder가 시간 필드를 기록하기 시작한 이후 달라진 점은?,vault,temporal,vault,timeline_compare,medium,temporal_no_grounding
+before/after 기준으로 policy engine audit log 설계 설명이 어떻게 달라졌나?,vault,temporal,vault,timeline_compare,hard,temporal_no_grounding
+최신 temporal query에서 event_date와 document_date 우선순위는 무엇인가?,vault,temporal,vault,timeline_compare,medium,temporal_no_grounding
+최근 memory-router-v1 gate는 temporal wrong-era hit를 어떻게 다루나?,vault,temporal,vault,timeline_compare,medium,temporal_no_grounding

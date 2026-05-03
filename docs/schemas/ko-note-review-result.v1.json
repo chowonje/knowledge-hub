@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "itemId", "ts"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ko-note.review.result.v1" },
+    "status": { "type": "string" },
+    "itemId": { "type": "integer", "minimum": 1 },
+    "runId": { "type": "string" },
+    "itemType": { "type": "string" },
+    "decision": { "type": "string" },
+    "qualityFlag": { "type": "string" },
+    "review": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.project.update.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "project", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.project.update.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "project": {
+      "type": "object",
+      "required": ["id", "title", "slug", "status", "priority", "summary", "owner", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "on_hold", "completed", "archived"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "summary": { "type": "string" },
+        "owner": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

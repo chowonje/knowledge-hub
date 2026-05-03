@@ -1,0 +1,17 @@
+{
+  "schema": "knowledge-hub.os.project.create.result.v1",
+  "status": "ok",
+  "created": true,
+  "project": {
+    "id": "proj_001",
+    "title": "KnowledgeOS Authority Hardening",
+    "slug": "knowledgeos-authority-hardening",
+    "status": "active",
+    "priority": "high",
+    "summary": "Lock authority boundaries and drift tests",
+    "owner": "won",
+    "createdAt": "2026-04-08T00:00:00.000Z",
+    "updatedAt": "2026-04-08T00:00:00.000Z"
+  },
+  "createdAt": "2026-04-08T00:00:00.000Z"
+}

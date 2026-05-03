@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.tree import Tree
 
-from knowledge_hub.core.database import SQLiteDatabase
+from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 
 console = Console()
 

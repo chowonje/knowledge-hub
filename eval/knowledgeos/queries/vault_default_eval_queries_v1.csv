@@ -1,0 +1,7 @@
+query,source,query_type,expected_primary_source,expected_family,expected_answer_mode,difficulty,regression_bucket
+RAG 검색 품질을 떨어뜨리는 가장 흔한 원인은 무엇인가?,vault,general,vault,vault_explainer,concise_summary,easy,vault_rag_failure
+ontology layer가 임베딩 검색에서 보완하는 것은 무엇인가?,vault,concept,vault,vault_explainer,concept_explainer,medium,vault_ontology_explainer
+document memory와 chunk retrieval의 차이를 설명해줘,vault,compare,vault,vault_compare,compare_summary,medium,vault_compare_summary
+최근 retrieval pipeline에서 temporal route가 추가된 이유는 무엇인가?,vault,temporal,vault,vault_timeline,timeline_compare,medium,vault_temporal_route
+최신 temporal query에서 event_date와 document_date 우선순위는 무엇인가?,vault,temporal,vault,vault_timeline,timeline_compare,medium,vault_temporal_priority
+Missing/NoSuchNote-999.md 파일의 핵심 내용을 보여줘,vault,lookup,vault,note_lookup,abstain,easy,vault_abstain_missing_path

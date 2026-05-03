@@ -3,7 +3,7 @@
 ## 시작하기
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub
+cd <repo-root>
 source venv/bin/activate
 ```
 

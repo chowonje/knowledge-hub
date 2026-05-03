@@ -1,0 +1,105 @@
+{
+  "schema": "knowledge-hub.os.next.result.v1",
+  "status": "ok",
+  "activeProjects": [
+    {
+      "id": "proj_001",
+      "title": "KnowledgeOS Decision OS",
+      "slug": "knowledgeos-decision-os",
+      "status": "active",
+      "priority": "high",
+      "summary": "Ground projects, tasks, and decisions in local evidence.",
+      "owner": "won",
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    }
+  ],
+  "actionableTasks": [
+    {
+      "id": "task_001",
+      "projectId": "proj_001",
+      "goalId": "goal_001",
+      "title": "Add decision records",
+      "kind": "delivery",
+      "status": "in_progress",
+      "priority": "urgent",
+      "assignee": "won",
+      "dueAt": "2026-04-10T00:00:00.000Z",
+      "blockedBy": [],
+      "sourceRefs": [
+        {
+          "sourceType": "paper",
+          "paperId": "1706.03762",
+          "title": "Attention Is All You Need"
+        }
+      ],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    }
+  ],
+  "blockedTasks": [
+    {
+      "id": "task_002",
+      "projectId": "proj_001",
+      "goalId": "goal_001",
+      "title": "Review projection output",
+      "kind": "review",
+      "status": "blocked",
+      "priority": "high",
+      "assignee": "won",
+      "blockedBy": ["task_001"],
+      "sourceRefs": [
+        {
+          "sourceType": "web",
+          "url": "https://example.com/decision-os",
+          "title": "Design note"
+        }
+      ],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T01:00:00.000Z"
+    }
+  ],
+  "openInbox": [
+    {
+      "id": "inbox_001",
+      "projectId": "proj_001",
+      "taskId": "task_002",
+      "kind": "blocked_task",
+      "severity": "high",
+      "state": "open",
+      "summary": "Blocked task: Review projection output",
+      "sourceRefs": [
+        {
+          "sourceType": "web",
+          "url": "https://example.com/decision-os",
+          "title": "Design note"
+        }
+      ],
+      "createdAt": "2026-04-09T01:00:00.000Z",
+      "updatedAt": "2026-04-09T01:00:00.000Z"
+    }
+  ],
+  "recentDecisions": [
+    {
+      "id": "decision_001",
+      "projectId": "proj_001",
+      "goalId": "goal_001",
+      "taskId": "task_001",
+      "kind": "architecture",
+      "summary": "Keep Obsidian projection-only for OS v1.",
+      "rationale": "Canonical state remains under personal-foundry.",
+      "sourceRefs": [
+        {
+          "sourceType": "document",
+          "documentScopeId": "knowledge_os_definition_v1",
+          "title": "Knowledge OS definition"
+        }
+      ],
+      "createdByType": "human",
+      "createdById": "won",
+      "createdAt": "2026-04-09T02:00:00.000Z",
+      "updatedAt": "2026-04-09T02:00:00.000Z"
+    }
+  ],
+  "createdAt": "2026-04-09T02:00:00.000Z"
+}

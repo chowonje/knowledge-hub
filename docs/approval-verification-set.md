@@ -8,7 +8,7 @@
 ## Release Smoke Gate
 
 ```bash
-cd /Users/won/Desktop/allinone/KnowledgeOS/knowledge-hub && python scripts/check_release_smoke.py
+cd <repo-root> && python scripts/check_release_smoke.py
 ```
 
 Covers:
@@ -39,7 +39,7 @@ Notes:
 1. Capture read-model + processor + `requeue` CLI
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q \
+cd <repo-root> && python -m pytest -q \
   tests/test_dinger_cmd.py::test_dinger_capture_list_exposes_operator_statuses \
   tests/test_dinger_cmd.py::test_dinger_capture_show_returns_packet_and_runtime_artifacts \
   tests/test_dinger_cmd.py::test_dinger_capture_retry_reprocesses_failed_packet \
@@ -60,7 +60,7 @@ Covers:
 2. Capture cleanup operator loop
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q \
+cd <repo-root> && python -m pytest -q \
   tests/test_dinger_capture_cleanup.py
 ```
 
@@ -78,7 +78,7 @@ Note:
 3. Filed Dinger -> OS bridge gate
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q \
+cd <repo-root> && python -m pytest -q \
   tests/test_os_cmd.py::test_os_capture_bridges_dinger_file_results_to_os \
   tests/test_os_cmd.py::test_os_capture_reuses_existing_open_dinger_bridge_item_even_with_summary_drift \
   tests/test_os_cmd.py::test_os_capture_creates_new_item_when_same_dedupe_key_only_matches_resolved_item \
@@ -93,7 +93,7 @@ Covers:
 4. Python authority contract gate
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q \
+cd <repo-root> && python -m pytest -q \
   'tests/test_authority_contract.py::test_bridge_fixtures_validate_against_python_authority_schemas[os-capture-result.v1.fixture.json-knowledge-hub.os.capture.result.v1]' \
   'tests/test_authority_contract.py::test_capture_flow_fixtures_validate_against_docs_helper_envelope[os-capture-result.v1.fixture.json]' \
   tests/test_authority_contract.py::test_capture_flow_docs_helper_pins_stage_policy_and_traceability_progression \
@@ -108,14 +108,14 @@ cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q \
 5. TypeScript authority contract gate
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub/foundry-core && node --import tsx --test tests/authority-contract.test.ts
+cd <repo-root>/foundry-core && node --import tsx --test tests/authority-contract.test.ts
 ```
 
 ## Excluded From Approval Gate
 
-- `cd /Users/won/Desktop/allinone/knowledge-hub && pytest`
+- `cd <repo-root> && pytest`
   - too broad for this tranche; full repo green 아님
-- `cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q tests/test_os_cmd.py::test_os_capture_bridges_dinger_capture_results_with_trace tests/test_os_cmd.py::test_os_capture_bridges_dinger_file_results_to_os tests/test_os_cmd.py::test_os_capture_reuses_existing_open_dinger_bridge_item_even_with_summary_drift tests/test_os_cmd.py::test_os_capture_creates_new_item_when_same_dedupe_key_only_matches_resolved_item tests/test_os_cmd.py::test_os_project_evidence_derives_dinger_candidates`
+- `cd <repo-root> && python -m pytest -q tests/test_os_cmd.py::test_os_capture_bridges_dinger_capture_results_with_trace tests/test_os_cmd.py::test_os_capture_bridges_dinger_file_results_to_os tests/test_os_cmd.py::test_os_capture_reuses_existing_open_dinger_bridge_item_even_with_summary_drift tests/test_os_cmd.py::test_os_capture_creates_new_item_when_same_dedupe_key_only_matches_resolved_item tests/test_os_cmd.py::test_os_project_evidence_derives_dinger_candidates`
   - still outside the frozen approval gate because the tranche gate remains intentionally narrower than the broader OS subset; a later rerun in this worktree showed the raw direct-bridge assertion green again, so this is now a gate-expansion choice rather than a current red blocker
 - raw `--help` checks for `capture status` / `capture requeue` / `capture cleanup`
   - useful as surface evidence only; they are not substitutes for the targeted behavioral tests above
@@ -129,7 +129,7 @@ cd /Users/won/Desktop/allinone/knowledge-hub/foundry-core && node --import tsx -
     - the exact review-only subset must rerun green in the target worktree, while upstream candidate derivation stays green through the existing bridge gate
     - scope must stay narrow to the three review semantics only; do not widen the blocker to `project evidence`, `evidence show`, or text-rendering/help-only coverage
   - current recommendation: keep the slice excluded from the frozen narrow gate; if a later deliberate expansion is chosen, promote only the review-specific targeted subset rather than broad `project evidence|evidence show|text rendering` coverage
-- `cd /Users/won/Desktop/allinone/knowledge-hub && venv/bin/python -m pytest -q tests/test_dinger_cmd.py -k 'dinger_capture_cleanup_wrapper'`
+- `cd <repo-root> && venv/bin/python -m pytest -q tests/test_dinger_cmd.py -k 'dinger_capture_cleanup_wrapper'`
   - excluded from the frozen blocker set for now because it protects the thin wrapper layer rather than the helper-owned cleanup policy; keep it as supporting evidence unless gate expansion is chosen deliberately
 
 ## Verification Result
@@ -237,7 +237,7 @@ cd /Users/won/Desktop/allinone/knowledge-hub/foundry-core && node --import tsx -
 - narrow candidate subset if promotion is chosen later:
 
 ```bash
-cd /Users/won/Desktop/allinone/knowledge-hub && python -m pytest -q \
+cd <repo-root> && python -m pytest -q \
   tests/test_os_cmd.py::test_os_evidence_review_approve_uses_resolve_only_triage \
   tests/test_os_cmd.py::test_os_evidence_review_dismiss_resolves_candidate \
   tests/test_os_cmd.py::test_os_evidence_review_explain_exposes_reason_without_mutation \

@@ -1,0 +1,15 @@
+{
+  "id": "technical_summary",
+  "version": "v1",
+  "title": "Technical Summary",
+  "description": "Summarize bounded technical context into a concise engineering brief.",
+  "prompt_template": "Write a concise technical summary for the topic or question below. Focus on architecture, important components, constraints, and likely next actions. Topic: {query}. Sources selected: {source_count}.",
+  "declared_inputs": {
+    "query": "string",
+    "sources": "bounded_context_pack"
+  },
+  "declared_output": {
+    "type": "markdown_brief",
+    "sections": ["summary", "key_components", "constraints", "next_actions"]
+  }
+}

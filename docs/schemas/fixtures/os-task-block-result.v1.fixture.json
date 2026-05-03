@@ -1,0 +1,32 @@
+{
+  "schema": "knowledge-hub.os.task.block.result.v1",
+  "status": "ok",
+  "task": {
+    "id": "task_123",
+    "projectId": "proj_123",
+    "title": "Review bridge follow-up",
+    "kind": "research",
+    "status": "blocked",
+    "priority": "high",
+    "assignee": "won",
+    "blockedBy": ["waiting_for_source_fix"],
+    "sourceRefs": [],
+    "createdAt": "2026-04-09T00:00:00Z",
+    "updatedAt": "2026-04-09T00:10:00Z"
+  },
+  "inbox": [
+    {
+      "id": "inbox_blocked_task_123",
+      "projectId": "proj_123",
+      "taskId": "task_123",
+      "kind": "blocked_task",
+      "severity": "high",
+      "state": "open",
+      "summary": "Blocked task: Review bridge follow-up",
+      "sourceRefs": [],
+      "createdAt": "2026-04-09T00:10:00Z",
+      "updatedAt": "2026-04-09T00:10:00Z"
+    }
+  ],
+  "createdAt": "2026-04-09T00:10:00Z"
+}

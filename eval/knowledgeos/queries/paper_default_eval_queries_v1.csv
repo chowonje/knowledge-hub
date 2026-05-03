@@ -1,0 +1,25 @@
+query,source,expected_family,expected_top1_or_set,expected_answer_mode,allowed_fallback
+CNN을 쉽게 설명해줘,paper,concept_explainer,alexnet-2012|ImageNet Classification with Deep Convolutional Neural Networks,representative_paper_explainer_beginner,planner_retry
+Transformer의 핵심 아이디어를 설명해줘,paper,concept_explainer,1706.03762|Attention Is All You Need,representative_paper_explainer,planner_retry
+BERT가 뭐야?,paper,concept_explainer,1810.04805|BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,representative_paper_explainer,planner_retry
+RAG를 쉽게 설명해줘,paper,concept_explainer,2005.11401|Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,representative_paper_explainer_beginner,planner_retry
+DQN의 핵심 아이디어를 설명해줘,paper,concept_explainer,1312.5602|Playing Atari with Deep Reinforcement Learning,representative_paper_explainer,planner_retry
+ViT가 뭐야?,paper,concept_explainer,2010.11929|An Image is Worth 16x16 Words,representative_paper_explainer,planner_retry
+AlexNet 논문 요약해줘,paper,paper_lookup,alexnet-2012|ImageNet Classification with Deep Convolutional Neural Networks,paper_scoped_answer,paper_scoped_no_result
+1706.03762 논문 핵심 기여를 요약해줘,paper,paper_lookup,1706.03762|Attention Is All You Need,paper_scoped_answer,paper_scoped_no_result
+BERT 논문의 초록을 정리해줘,paper,paper_lookup,1810.04805|BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,paper_scoped_answer,paper_scoped_no_result
+2005.11401 논문은 무엇을 제안했어?,paper,paper_lookup,2005.11401|Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,paper_scoped_answer,paper_scoped_no_result
+An Image is Worth 16x16 Words 논문 요약해줘,paper,paper_lookup,2010.11929|An Image is Worth 16x16 Words,paper_scoped_answer,paper_scoped_no_result
+Playing Atari with Deep Reinforcement Learning 논문을 설명해줘,paper,paper_lookup,1312.5602|Playing Atari with Deep Reinforcement Learning,paper_scoped_answer,paper_scoped_no_result
+CNN vs ViT 비교해줘,paper,paper_compare,alexnet-2012|2010.11929,paper_comparison,need_multiple_papers
+Transformer와 Mamba를 비교해줘,paper,paper_compare,1706.03762|2312.00752,paper_comparison,need_multiple_papers
+BERT와 GPT 계열의 차이를 논문 기준으로 비교해줘,paper,paper_compare,1810.04805|2005.14165,paper_comparison,need_multiple_papers
+RAG와 FiD를 비교해줘,paper,paper_compare,2005.11401|2007.01282,paper_comparison,need_multiple_papers
+DQN과 PPO를 비교해줘,paper,paper_compare,1312.5602|1707.06347,paper_comparison,need_multiple_papers
+GAN과 Diffusion 모델 논문을 비교해줘,paper,paper_compare,1406.2661|2006.11239,paper_comparison,need_multiple_papers
+RAG 관련 논문 찾아줘,paper,paper_discover,2005.11401|FiD|Atlas,paper_shortlist_summary,shortlist_only
+state space model 계열 논문들을 찾아 정리해줘,paper,paper_discover,S4|Mamba|Hyena,paper_shortlist_summary,shortlist_only
+Transformer 대안 아키텍처 논문들을 추천해줘,paper,paper_discover,Mamba|S4|RetNet,paper_shortlist_summary,shortlist_only
+diffusion 기반 text-to-image 논문들을 찾아줘,paper,paper_discover,DDPM|Latent Diffusion|Stable Diffusion,paper_shortlist_summary,shortlist_only
+멀티모달 LLM benchmark 논문들을 찾아 정리해줘,paper,paper_discover,MMMU|MMBench,paper_shortlist_summary,shortlist_only
+long-context reasoning 관련 논문들을 추천해줘,paper,paper_discover,LongRoPE|YaRN|LongBench,paper_shortlist_summary,shortlist_only

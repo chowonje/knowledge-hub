@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.file.result.v1",
+  "description": "Projection write result for managed Dinger pages. Runtime `status=ok` still means the filing stage succeeded; optional docs-only `stage`, `flowSemantics`, and `traceability` fields let smoke fixtures pin the broader capture -> dinger -> OS contract without changing filing implementation.",
+  "type": "object",
+  "required": ["schema", "status", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.file.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "stage": { "type": "string", "enum": ["filed", "failed"] },
+    "title": { "type": "string" },
+    "slug": { "type": "string" },
+    "kind": { "type": "string", "enum": ["note", "ask_result", "json_result", "web_capture"] },
+    "relativePath": { "type": "string" },
+    "projectionRelativePath": { "type": "string" },
+    "filePath": { "type": "string" },
+    "indexPath": { "type": "string" },
+    "logPath": { "type": "string" },
+    "vaultPath": { "type": "string" },
+    "backend": { "type": "string" },
+    "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+    "flowSemantics": { "$ref": "#/$defs/flowSemantics" },
+    "traceability": { "$ref": "#/$defs/traceability" },
+    "error": { "type": "string" },
+    "payload": { "type": "object" },
+    "sourceSchema": { "type": "string" },
+    "captureId": { "type": "string" },
+    "packetPath": { "type": "string" },
+    "createdAt": { "$ref": "#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "failed" }
+        }
+      },
+      "then": {
+        "required": ["title", "slug", "kind", "vaultPath", "backend", "sourceRefs", "error"]
+      },
+      "else": {
+        "required": ["title", "slug", "kind", "relativePath", "filePath", "indexPath", "logPath", "vaultPath", "backend", "sourceRefs"],
+        "properties": {
+          "title": { "minLength": 1 },
+          "slug": { "minLength": 1 },
+          "relativePath": { "minLength": 1 },
+          "filePath": { "minLength": 1 },
+          "indexPath": { "minLength": 1 },
+          "logPath": { "minLength": 1 },
+          "vaultPath": { "minLength": 1 },
+          "backend": { "minLength": 1 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceType"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "scope", "document"] },
+        "paperId": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "minLength": 1 },
+        "noteId": { "type": "string", "minLength": 1 },
+        "stableScopeId": { "type": "string", "minLength": 1 },
+        "documentScopeId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "sourceType": { "const": "paper" } },
+            "required": ["sourceType"]
+          },
+          "then": { "required": ["paperId"] }
+        },
+        {
+          "if": {
+            "properties": { "sourceType": { "const": "web" } },
+            "required": ["sourceType"]
+          },
+          "then": { "required": ["url"] }
+        },
+        {
+          "if": {
+            "properties": { "sourceType": { "const": "vault" } },
+            "required": ["sourceType"]
+          },
+          "then": { "required": ["noteId"] }
+        },
+        {
+          "if": {
+            "properties": { "sourceType": { "const": "scope" } },
+            "required": ["sourceType"]
+          },
+          "then": { "required": ["stableScopeId"] }
+        },
+        {
+          "if": {
+            "properties": { "sourceType": { "const": "document" } },
+            "required": ["sourceType"]
+          },
+          "then": { "required": ["documentScopeId"] }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "flowSemantics": {
+      "type": "object",
+      "required": ["capturePacket", "dingerFiling", "osBridge", "canonicalStore"],
+      "properties": {
+        "capturePacket": { "type": "string", "enum": ["input"] },
+        "dingerFiling": { "type": "string", "enum": ["projection_only"] },
+        "osBridge": { "type": "string", "enum": ["inbox_evidence_candidate_only"] },
+        "canonicalStore": { "type": "string", "enum": ["no_new_store"] }
+      },
+      "additionalProperties": false
+    },
+    "osBridgeTrace": {
+      "type": "object",
+      "properties": {
+        "bridge": { "type": "string", "enum": ["dinger"] },
+        "schema": {
+          "type": "string",
+          "enum": ["knowledge-hub.dinger.capture.result.v1", "knowledge-hub.dinger.file.result.v1"]
+        },
+        "relativePath": { "type": "string", "minLength": 1 },
+        "captureUrl": { "type": "string", "minLength": 1 },
+        "createdAt": { "$ref": "#/$defs/timestamp" }
+      },
+      "additionalProperties": true
+    },
+    "traceability": {
+      "type": "object",
+      "required": ["captureId", "filingOutputPointer"],
+      "properties": {
+        "captureId": { "type": "string", "minLength": 1 },
+        "packetPath": { "type": "string", "minLength": 1 },
+        "runtimePointer": { "type": "string", "minLength": 1 },
+        "filingOutputPointer": { "type": "string", "minLength": 1 },
+        "osBridgeTrace": { "$ref": "#/$defs/osBridgeTrace" }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["packetPath"] },
+        { "required": ["runtimePointer"] }
+      ]
+    }
+  },
+  "additionalProperties": true
+}

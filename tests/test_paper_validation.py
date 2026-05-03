@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 import click
 
-from knowledge_hub.cli.paper_cmd import _validate_arxiv_id
+from knowledge_hub.interfaces.cli.commands.paper_cmd import _validate_arxiv_id
 
 
 class TestArxivIdValidation:

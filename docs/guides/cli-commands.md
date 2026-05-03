@@ -32,6 +32,7 @@ khub doctor
 khub status
 khub dinger ingest --paper "주제"
 khub dinger ask "질문"
+khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
 khub search "주제"
 khub ask "질문"
 khub agent context "작업 목표" --repo-path .
@@ -41,14 +42,13 @@ khub paper board-export --json
 khub index
 ```
 
-## 기본 Top-Level
+## 기본 Top-Level Help
 
 ```text
 khub agent
 khub ask
 khub config
 khub crawl
-khub dinger
 khub discover
 khub doctor
 khub explore
@@ -57,14 +57,28 @@ khub index
 khub init
 khub labs
 khub mcp
-khub notebook
 khub paper
-khub paper-memory
 khub search
 khub setup
 khub status
 khub vault
 ```
+
+기본 `khub --help`는 representative core loop를 우선 노출합니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
+
+## Direct But Hidden Top-Level
+
+```text
+khub dinger
+khub eval
+khub math-memory
+khub os
+khub paper-memory
+khub vector-compare
+khub vector-restore
+```
+
+`khub eval`은 hidden compatibility alias이고, canonical eval surface는 `khub labs eval`입니다.
 
 ## 기본 Surface
 
@@ -72,18 +86,51 @@ khub vault
 
 ```text
 khub agent context
-khub agent discover
-khub agent discover-validate
-khub agent foundry-conflict-apply
-khub agent foundry-conflict-list
-khub agent foundry-conflict-reject
 khub agent run
-khub agent sync
+khub agent writeback-request
 ```
+
+기본 `khub agent --help`는 gateway-oriented subcommand만 노출합니다.
 
 용도:
 - `context`: repo + 지식 문맥 조립
-- `run/sync/discover`: agent/foundry bridge 작업
+- `run`: gateway-facing agent/foundry bridge 실행 엔벨로프
+- `writeback-request`: `Agent Gateway v2`의 approval-gated repo-local writeback lane 진입점. 현재 first-consumer 안전 범위는 **docs-only**이며 (`docs/adr/`, `docs/status/`, `reviews/`, `worklog/`), dry-run plan을 기반으로 pending request를 만들고 advisory `writebackPreview`로 허용된 문서 대상만 예측해 노출한 뒤, `khub labs ops action-ack -> action-execute`로 좁은 execution lane을 탄다. 성공 실행은 agent queue item을 자동 `resolved`로 닫는다.
+
+예:
+
+```bash
+khub agent writeback-request "Refactor the RAG fallback flow" --repo-path . --json
+khub labs ops action-list --scope agent --json
+khub labs ops action-ack --action-id <id> --actor cli-user
+khub labs ops action-execute --action-id <id> --actor cli-user --json
+```
+
+### `khub labs foundry`
+
+```text
+khub labs foundry sync
+khub labs foundry discover
+khub labs foundry discover-validate
+khub labs foundry conflict-list
+khub labs foundry conflict-apply
+khub labs foundry conflict-reject
+```
+
+용도:
+- foundry dual-write / connector / operator maintenance 경로
+- `agent` 기본 help에서 숨겨야 하는 운영성 command를 canonical하게 모아둔 group
+- 구현도 `knowledge_hub.interfaces.cli.commands.foundry_cmd`로 분리되어 gateway module과 ownership을 나눈다
+- 기존 `khub agent sync|discover|discover-validate|foundry-conflict-*`는 compatibility alias로만 유지
+
+예:
+
+```bash
+khub labs foundry sync --source all --json
+khub labs foundry discover --feature daily_coach --json
+khub labs foundry discover-validate --input discover.json --json
+khub labs foundry conflict-list --json
+```
 
 ### `khub ask`
 
@@ -100,6 +147,9 @@ khub ask
 - `--memory-route-mode off`는 현재 practical invariant만 고정한다: memory ranking influence는 없지만 strict `no injection`까지는 아직 아니다
 - 기존 `prefilter`는 deprecated alias로 남아 있고 `compat`로 정규화된다
 - 기존 `--paper-memory-mode`도 동일하게 `off|compat|on|prefilter`를 받으며, `prefilter`는 deprecated 호환 alias다
+- `--answer-route`는 `auto|local|api|codex`를 받는다. `codex`는 main ask runtime에서 `codex_mcp` backend를 강제 요청하는 override이며, `--allow-external`이 꺼져 있거나 Codex runtime readiness가 실패하면 기존 route resolver로 경고와 함께 fallback된다.
+- config에서 `routing.llm.tasks.rag_answer.preferred_backend: codex_mcp`를 두면 explicit override가 없을 때도 Codex를 policy-gated preferred backend로 사용할 수 있다. 이 경우에도 retrieval/evidence/policy authority는 기존 Python runtime이 유지한다.
+- `khub ask --json`은 이제 `answerRouteRequested`와 별도로 `answerRouteApplied`, `answerProviderApplied`, `answerModelApplied`를 넣어 실제 적용된 route/provider/model을 바로 확인할 수 있다. 텍스트 출력도 같은 정보를 한 줄로 보여준다.
 
 예:
 
@@ -110,6 +160,7 @@ khub ask "최근 업데이트된 RAG benchmark 차이" --source paper --memory-r
 khub ask "트랜스포머를 대체할 차세대 아키텍처 논문들을 찾아서 정리해줘" --source paper --json
 khub ask "최근 벡터 검색 품질 개선 글은 rerank를 어떤 역할로 설명하나?" --source web --json
 khub ask "web card v2에서 version grounding이 필요한 이유는 무엇인가?" --source web --json
+khub ask "오늘 바뀐 gateway shell-hardening 변경을 정리해줘" --answer-route codex --allow-external --json
 ```
 
 메모:
@@ -260,8 +311,14 @@ khub dinger capture cleanup --json
 khub dinger capture requeue --capture-id cap_123 --json
 khub dinger capture-process --packet ~/.khub/dinger_capture_intake/queue/cap_123.json --slug decision-os --json
 khub dinger file --from-json ./ask-result.json --json
-khub dinger lint --json
-khub dinger recent --json
+```
+
+직접 호출 가능하지만 기본 `khub dinger --help`에서는 숨겨진 운영 유틸:
+
+```text
+khub dinger capture-http
+khub dinger recent
+khub dinger lint
 ```
 
 ### `khub os`
@@ -282,9 +339,16 @@ khub os decide
 khub os next
 ```
 
+직접 호출 가능하지만 기본 `khub os --help`에서는 숨겨진 low-level record groups:
+
+```text
+khub os goal
+khub os decision
+```
+
 용도:
 - review workflow는 `khub dinger capture -> khub dinger capture-process -> khub os capture -> khub os project evidence -> khub os evidence review --action explain -> approve|dismiss`까지를 먼저 분리해서 본다. shipped surface는 candidate review까지이며, 그 다음에만 `khub os inbox triage`, `khub os task ...`, `khub os decide` 같은 promotion command를 사용한다.
-- `capture`는 project-scoped inbox item만 추가하고, `--from-dinger-json`은 filed/projection pointer가 이미 있는 Dinger 결과를 bridge하는 보조 surface로 둔다
+- `capture`는 project-scoped inbox item만 추가하고, `--from-dinger-json`은 filed/projection pointer(`relativePath` 또는 vault-relative `filePath`)가 이미 있는 filed-like Dinger 결과만 bridge하는 보조 surface로 둔다. queue-only raw `dinger capture` ack는 여기에 포함하지 않는다.
 - `project evidence`는 `projectEvidence.evidenceCandidates`를 나열하는 candidate review list surface다. 기본 텍스트 출력은 candidate마다 `inbox id`, 요약, Dinger page, supporting source refs, `reuse/replay` 힌트, 다음 read-only 액션을 먼저 보여준다. task/decision promotion과 같은 mutation을 하지 않으며, approve/dismiss가 곧바로 finalize를 뜻하는 surface로 문서화하면 안 된다.
 - `khub os evidence show`는 같은 candidate를 더 자세히 읽는 read-only detail surface다. `why reused / why replayed`, matched open/resolved item summary, source refs, 다음 review command를 한 번에 보여준다.
 - `khub os evidence review`는 그 read model 위에 얹힌 얇은 inspect/disposition surface다. `--action explain`은 단일 candidate를 read-only로 보여주는 explain surface이고, `approve`는 기존 `inbox triage --resolve-only`, `dismiss`는 기존 `inbox resolve`를 재사용한다.
@@ -324,7 +388,7 @@ khub os next --slug "decision-os" --json
 - authority timeout은 이 tranche에서 원인 분리/분류까지만 다루며, smoke에서는 `classification_only`로 기록하고 기능 복구나 retry semantics는 검증 범위에 넣지 않는다.
 - authority timeout은 원인 분리/분류용 진단으로만 취급한다. timeout 관찰이 새 workflow state나 새 canonical store를 암시하면 안 된다.
 - 알려진 timeout 이슈는 authority classification envelope에만 남긴다. 이번 tranche는 timeout 원인 구분과 fixture/schema/test 최소 보강이 범위이며, timeout recovery, automatic retry, live vault smoke 확대는 비목표다.
-- narrow gate note: 현재 실제 help surface에는 `khub os project evidence`와 `khub os evidence review`가 있지만, frozen approval gate는 여전히 capture/operator/bridge/authority subset만 본다. evidence list/show/review surface는 semantics가 candidate review에 머물고 targeted verification slice가 별도로 합의되기 전까지 gate에 넣지 않는다.
+- narrow gate note: 현재 실제 help surface에는 `khub os project evidence`와 `khub os evidence show|review`가 있지만, frozen approval gate는 여전히 capture/operator/bridge/authority subset만 본다. 이 split candidate-review surface는 semantics가 candidate review에 머물고 targeted verification slice가 별도로 합의되기 전까지 gate에 넣지 않는다.
 
 ### `khub discover`
 
@@ -412,6 +476,8 @@ khub labs paper topic-synthesize
 용도:
 - paper lane/operator 워크플로
 - 주제형 다논문 shortlist + synthesis
+- `lanes-backfill`은 이제 AI lane 후보로 보이는 논문만 채운다. non-AI 또는 현재 6-lane taxonomy 바깥 논문은 `primary_lane`을 비운 채 남긴다.
+- `lanes-backfill --force`는 `seeded` 행만 다시 판정하고, `reviewed` / `locked` lane은 덮어쓰지 않는다.
 
 예:
 
@@ -428,13 +494,16 @@ khub labs paper topic-synthesize "state space model papers beyond transformers" 
 
 ```text
 khub doctor
+khub doctor --json
 ```
 
 용도:
 - 사용자용 환경 진단 요약
-- `status`, `checks[]`, `nextActions[]` 확인
+- `--json`은 machine-readable public contract `knowledge-hub.doctor.result.v1`를 반환하며 `status`, `checks[]`, `nextActions[]`, `warnings[]`를 포함한다
+- local-first 진단에서 허용되는 상태 집합은 `ok|blocked|degraded|needs_setup`다
 - local-first profile에서 Ollama가 꺼져 있으면 `blocked/degraded`를 그대로 유지한 채 원인과 다음 명령을 보여준다
-- typical recovery order: `ollama serve` -> `ollama pull <model>` -> `python -m knowledge_hub.interfaces.cli.main doctor`
+- typical recovery order: `ollama serve` -> `ollama pull <each configured model>` -> `python -m knowledge_hub.interfaces.cli.main doctor`
+- vector corpus가 아직 `needs_setup`이면 현재 안내된 fix command를 따라 `khub discover "AI agent" --max-papers 1`로 최소 corpus를 만든다
 
 ### `khub mcp`
 
@@ -444,31 +513,6 @@ khub mcp
 
 용도:
 - MCP 서버 실행
-
-### `khub notebook`
-
-```text
-khub notebook create
-khub notebook list
-khub notebook local-models-apply
-khub notebook providers
-khub notebook study-pack
-khub notebook sync
-khub notebook topic-create
-khub notebook topic-preview
-khub notebook topic-sync
-```
-
-용도:
-- external notebook / topic bundle 작업
-
-예:
-
-```bash
-khub notebook list
-khub notebook topic-preview "attention residuals"
-khub notebook topic-sync "attention residuals"
-```
 
 ### `khub paper`
 
@@ -585,15 +629,29 @@ khub labs memory search --query "retrieval evidence" --json
 ```text
 khub labs eval prepare-document-memory
 khub labs eval prepare-claim-synthesis
+khub labs eval prepare-paper-summary
 khub labs eval run
+khub labs eval sectioncards
+khub labs eval answer-loop collect
+khub labs eval answer-loop judge
+khub labs eval answer-loop summarize
+khub labs eval answer-loop autofix
+khub labs eval answer-loop run
+khub labs eval answer-loop optimize
 ```
 
 용도:
-- retrieval / document-memory / paper-memory 평가를 공통 report + gate 형식으로 실행
+- retrieval / document-memory / paper-memory 평가와 user-answer answer-loop를 한 곳에서 실행
 - `memory-router-v1` 프로필은 기존 retrieval-core + document-memory + paper-memory non-regression 위에 memory-first delta를 같이 본다
 - optional claim-synthesis 수동 평가도 같은 eval surface에서 템플릿/게이트로 다룸
+- `answer-loop`는 retrieval을 한 번만 freeze한 packet으로 고정하고, 여러 answer backend를 같은 evidence에서 비교한다
+- `judge`는 `pred_*`만 채우고, `final_*`는 human review 전용으로 남긴다
+- `run`은 `collect -> judge -> summarize -> autofix`를 최대 시도 수까지 반복하고 dirty worktree는 기본 차단한다
+- `optimize`는 retrieval을 한 번 freeze한 뒤 Codex-only answer revision + Codex-only judge를 비파괴적으로 반복하고, judge estimated-token 사용량을 일일 예산 대비 제한된 비율로 묶은 채 review pack만 남긴다
 - supporting capability 승격 판단을 같은 프레임으로 읽기 위한 내부 운영 surface
 - core runtime 동작을 바꾸지 않고 `pass|warn|fail` 상태만 제공
+
+`khub eval`은 기존 스크립트/메모 호환을 위한 hidden compatibility alias만 남기고, canonical path는 `khub labs eval`로 고정한다.
 
 gate 의미:
 - `pass`: 현재 프로파일이 정의된 기준을 통과
@@ -605,10 +663,15 @@ gate 의미:
 ```bash
 khub labs eval prepare-document-memory --db data/knowledge.db --json
 khub labs eval prepare-claim-synthesis --db data/knowledge.db --paper-id 2501.00001 --paper-id 2501.00004 --json
+khub labs eval prepare-paper-summary --db data/knowledge.db --paper-id 2501.00001 --json
 khub labs eval run --profile memory-promotion --db data/knowledge.db --document-memory-csv docs/experiments/document_memory_eval_template.csv --json
 khub labs eval run --profile memory-promotion --db data/knowledge.db --document-memory-csv docs/experiments/document_memory_eval_template.csv --claim-synthesis-csv docs/experiments/claim_synthesis_eval_template.csv --json
 khub labs eval run --profile retrieval-core --retrieval-csv docs/eval_precision_template.csv --json
 khub labs eval run --profile memory-router-v1 --db data/knowledge.db --retrieval-csv docs/eval_precision_template.csv --document-memory-csv docs/experiments/document_memory_eval_template.csv --paper-memory-cases tests/fixtures/paper_memory_eval/cases.json --memory-router-csv docs/experiments/memory_router_candidate.csv --memory-router-baseline-csv docs/experiments/memory_router_baseline.csv --json
+khub labs eval answer-loop collect --answer-backend openai_gpt5_mini --json
+khub labs eval answer-loop judge --collect-manifest eval/knowledgeos/runs/answer_loop/latest/answer_loop_collect_manifest.json --json
+khub labs eval answer-loop run --answer-backend codex_mcp --answer-backend openai_gpt5_mini --answer-backend ollama_gemma4 --max-attempts 3 --repo-path . --json
+khub labs eval answer-loop optimize --queries eval/knowledgeos/queries/user_answer_eval_queries_v1.csv --daily-token-budget-estimate 120000 --judge-budget-ratio 0.10 --generator-model gpt-5.4 --judge-model gpt-5.4 --json
 ```
 
 ### `khub search`
@@ -648,6 +711,7 @@ khub status
 
 용도:
 - 설정, provider, corpus, runtime diagnostics 확인
+- high-signal human-readable markers는 `Knowledge Hub v`, `Retrieval Runtime`, `vector corpus`다
 
 ### `khub vault`
 

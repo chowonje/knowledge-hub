@@ -1,0 +1,28 @@
+{
+  "schema": "knowledge-hub.dinger.recent.result.v1",
+  "status": "ok",
+  "recentPapers": [
+    {
+      "paperId": "2501.00001",
+      "title": "Recent RAG Paper",
+      "year": 2025,
+      "field": "cs.CL",
+      "createdAt": "2026-04-09T00:00:00Z",
+      "hasPdf": true,
+      "hasTranslation": false,
+      "indexed": true
+    }
+  ],
+  "recentKoNoteRuns": [
+    {
+      "runId": "run_123",
+      "status": "completed",
+      "sourceGenerated": 3,
+      "conceptGenerated": 2,
+      "approvedCount": 1,
+      "rejectedCount": 0,
+      "updatedAt": "2026-04-09T00:00:00Z"
+    }
+  ],
+  "createdAt": "2026-04-09T00:00:00Z"
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "version",
+    "filters",
+    "aligned_groups",
+    "conflict_candidates",
+    "incomparable_groups",
+    "skipped_claims",
+    "counts",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.claim-compare.result.v1" },
+    "status": { "type": "string" },
+    "version": { "type": "string" },
+    "filters": { "type": "object" },
+    "aligned_groups": { "type": "array", "items": { "type": "object" } },
+    "conflict_candidates": { "type": "array", "items": { "type": "object" } },
+    "incomparable_groups": { "type": "array", "items": { "type": "object" } },
+    "skipped_claims": { "type": "array", "items": { "type": "object" } },
+    "counts": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

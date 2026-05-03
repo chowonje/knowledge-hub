@@ -23,6 +23,7 @@ from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import (
 from knowledge_hub.papers.downloader import PaperDownloader, _safe_filename
 from knowledge_hub.papers.memory_builder import PaperMemoryBuilder
 from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
+from knowledge_hub.papers.source_guard import merge_source_guard, review_downloaded_source, stage_source_guard
 from knowledge_hub.papers.url_resolver import resolve_url
 
 console = Console()
@@ -324,6 +325,7 @@ def _merge_entry_base(existing: dict[str, Any] | None, *, row: ImportRow) -> dic
     entry.setdefault("failedStep", "")
     entry.setdefault("error", "")
     entry.setdefault("artifacts", {})
+    entry.setdefault("sourceGuard", {})
     entry.setdefault("updatedAt", now_iso())
     return entry
 
@@ -423,6 +425,10 @@ def _run_register(*, sqlite_db, row: ImportRow, entry: dict[str, Any]) -> tuple[
     entry["resolvedPaperId"] = paper_id
     entry["resolvedSource"] = str(getattr(paper, "source", "") or "")
     entry["resolvedPdfUrl"] = str(getattr(paper, "pdf_url", "") or "")
+    entry["sourceGuard"] = merge_source_guard(
+        entry.get("sourceGuard"),
+        stage_source_guard(sqlite_db, paper_id=paper_id, title=str(paper.title or row.title)),
+    )
     existing = sqlite_db.get_paper(paper_id)
     if existing:
         entry["artifacts"] = _merge_artifacts(entry.get("artifacts"), existing)
@@ -479,6 +485,38 @@ def _run_download(*, khub, sqlite_db, paper_id: str, entry: dict[str, Any]) -> b
     if not paper:
         raise RuntimeError(f"paper not found: {token}")
     if _has_downloaded_artifacts(paper):
+        review = review_downloaded_source(
+            sqlite_db,
+            paper_id=token,
+            title=str(paper.get("title") or token),
+            pdf_path=str(paper.get("pdf_path") or ""),
+            text_path=str(paper.get("text_path") or ""),
+            existing=dict(entry.get("sourceGuard") or {}),
+        )
+        entry["sourceGuard"] = merge_source_guard(entry.get("sourceGuard"), dict(review.get("guard") or {}))
+        if bool(review.get("blocked")):
+            reason = str((review.get("guard") or {}).get("reason") or "source guard blocked import")
+            raise RuntimeError(reason)
+        final_pdf_path = str(review.get("finalPdfPath") or paper.get("pdf_path") or "")
+        final_text_path = str(review.get("finalTextPath") or paper.get("text_path") or "")
+        if final_pdf_path != str(paper.get("pdf_path") or "") or final_text_path != str(paper.get("text_path") or ""):
+            sqlite_db.upsert_paper(
+                {
+                    "arxiv_id": token,
+                    "title": paper.get("title") or token,
+                    "authors": paper.get("authors") or "",
+                    "year": paper.get("year") or 0,
+                    "field": paper.get("field") or "",
+                    "importance": paper.get("importance") or 3,
+                    "notes": paper.get("notes") or "",
+                    "pdf_path": final_pdf_path or None,
+                    "text_path": final_text_path or None,
+                    "translated_path": paper.get("translated_path"),
+                }
+            )
+            updated = sqlite_db.get_paper(token) or {}
+            entry["artifacts"] = _merge_artifacts(entry.get("artifacts"), updated)
+            return True
         entry["artifacts"] = _merge_artifacts(entry.get("artifacts"), paper)
         return False
     resolved_source = str(entry.get("resolvedSource") or "").strip().lower()
@@ -497,6 +535,20 @@ def _run_download(*, khub, sqlite_db, paper_id: str, entry: dict[str, Any]) -> b
         result = downloader.download_single(token, str(paper.get("title") or token))
     if not result.get("success"):
         raise RuntimeError(result.get("error") or f"download failed: {token}")
+    review = review_downloaded_source(
+        sqlite_db,
+        paper_id=token,
+        title=str(paper.get("title") or token),
+        pdf_path=str(result.get("pdf") or ""),
+        text_path=str(result.get("text") or ""),
+        existing=dict(entry.get("sourceGuard") or {}),
+    )
+    entry["sourceGuard"] = merge_source_guard(entry.get("sourceGuard"), dict(review.get("guard") or {}))
+    if bool(review.get("blocked")):
+        reason = str((review.get("guard") or {}).get("reason") or "source guard blocked import")
+        raise RuntimeError(reason)
+    final_pdf_path = str(review.get("finalPdfPath") or result.get("pdf") or "")
+    final_text_path = str(review.get("finalTextPath") or result.get("text") or "")
     sqlite_db.upsert_paper(
         {
             "arxiv_id": token,
@@ -506,8 +558,8 @@ def _run_download(*, khub, sqlite_db, paper_id: str, entry: dict[str, Any]) -> b
             "field": paper.get("field") or "",
             "importance": paper.get("importance") or 3,
             "notes": paper.get("notes") or "",
-            "pdf_path": result.get("pdf"),
-            "text_path": result.get("text"),
+            "pdf_path": final_pdf_path or None,
+            "text_path": final_text_path or None,
             "translated_path": paper.get("translated_path"),
         }
     )
@@ -728,8 +780,6 @@ def _merge_artifacts(existing: Any, payload: dict[str, Any] | None) -> dict[str,
     if payload.get("document_memory_parser"):
         merged["documentMemoryParser"] = str(payload.get("document_memory_parser"))
     return merged
-
-
 def _result_item(entry: dict[str, Any], *, selected_steps: list[str]) -> dict[str, Any]:
     return {
         "entryId": entry.get("entryId"),
@@ -744,5 +794,6 @@ def _result_item(entry: dict[str, Any], *, selected_steps: list[str]) -> dict[st
         "failedStep": entry.get("failedStep"),
         "error": entry.get("error"),
         "artifacts": dict(entry.get("artifacts") or {}),
+        "sourceGuard": dict(entry.get("sourceGuard") or {}),
         "updatedAt": entry.get("updatedAt"),
     }

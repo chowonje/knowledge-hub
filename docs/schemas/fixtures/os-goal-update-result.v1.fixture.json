@@ -1,0 +1,14 @@
+{
+  "schema": "knowledge-hub.os.goal.update.result.v1",
+  "status": "ok",
+  "goal": {
+    "id": "goal_001",
+    "projectId": "proj_001",
+    "title": "Ship Evidence-grounded Decision OS v1",
+    "status": "completed",
+    "successCriteria": "Decision records and next-action read model are live.",
+    "createdAt": "2026-04-09T00:00:00.000Z",
+    "updatedAt": "2026-04-09T02:00:00.000Z"
+  },
+  "createdAt": "2026-04-09T02:00:00.000Z"
+}

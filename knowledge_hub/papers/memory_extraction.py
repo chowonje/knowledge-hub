@@ -7,6 +7,8 @@ import json
 import re
 from typing import Any
 
+from knowledge_hub.papers.memory_models import normalize_final_cause, normalize_formal_cause
+
 
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
@@ -77,6 +79,8 @@ class PaperMemoryExtractionV1:
     concept_links: list[str] = field(default_factory=list)
     claim_refs: list[str] = field(default_factory=list)
     evidence_refs: list[str] = field(default_factory=list)
+    formal_cause: dict[str, Any] = field(default_factory=dict)
+    final_cause: dict[str, Any] = field(default_factory=dict)
     quality_flag: str = "unscored"
     coverage_status_by_field: dict[str, str] = field(default_factory=dict)
     field_confidence: dict[str, float] = field(default_factory=dict)
@@ -96,7 +100,23 @@ class PaperMemoryExtractionV1:
         concept_links = _clean_list(raw.get("concept_links") or raw.get("conceptLinks"), limit=6)
         claim_refs = _clean_list(raw.get("claim_refs") or raw.get("claimRefs"), limit=8)
         evidence_refs = _clean_list(raw.get("evidence_refs") or raw.get("evidenceRefs"), limit=8)
-        if not any((thesis, problem_context, method_core, evidence_core, claims, limitations, concept_links, claim_refs, evidence_refs)):
+        formal_cause = normalize_formal_cause(raw.get("formal_cause") or raw.get("formalCause"))
+        final_cause = normalize_final_cause(raw.get("final_cause") or raw.get("finalCause"))
+        if not any(
+            (
+                thesis,
+                problem_context,
+                method_core,
+                evidence_core,
+                claims,
+                limitations,
+                concept_links,
+                claim_refs,
+                evidence_refs,
+                formal_cause,
+                final_cause,
+            )
+        ):
             return None
         coverage = {
             str(key): _clean_text(value) or "partial"
@@ -123,6 +143,8 @@ class PaperMemoryExtractionV1:
             concept_links=concept_links,
             claim_refs=claim_refs,
             evidence_refs=evidence_refs,
+            formal_cause=formal_cause,
+            final_cause=final_cause,
             quality_flag=_clean_text(raw.get("quality_flag") or raw.get("qualityFlag")) or "unscored",
             coverage_status_by_field=coverage,
             field_confidence=field_confidence,
@@ -134,7 +156,7 @@ class PaperMemoryExtractionV1:
 class PaperMemorySchemaExtractor:
     """LLM-backed internal extractor for paper-memory payloads."""
 
-    schema = "knowledge-hub.paper-memory-extraction.v1"
+    schema = "knowledge-hub.paper-memory-extraction.v2"
 
     def __init__(self, llm: Any, *, model: str = "exaone3.5:7.8b") -> None:
         self.llm = llm
@@ -152,7 +174,7 @@ class PaperMemorySchemaExtractor:
 
     def extract_with_metadata(self, *, paper: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
         prompt = self._prompt(paper=paper)
-        raw = self.llm.generate(prompt, max_tokens=520)
+        raw = self.llm.generate(prompt, max_tokens=700)
         try:
             payload = self._coerce_payload(raw)
         except PaperMemoryExtractionError:
@@ -216,6 +238,23 @@ Schema:
   "claims": ["string"],
   "limitations": "string",
   "conceptLinks": ["string"],
+  "formalCause": {{
+    "summary": "string",
+    "basis": "author_stated|inferred|mixed|missing",
+    "confidence": 0.0,
+    "coverage": "missing|partial|complete",
+    "evidenceRefs": ["string"],
+    "warnings": ["string"]
+  }},
+  "finalCause": {{
+    "authorStatedSummary": "string",
+    "inferredSummary": "string",
+    "basis": "author_stated|inferred|mixed|missing",
+    "confidence": 0.0,
+    "coverage": "missing|partial|complete",
+    "evidenceRefs": ["string"],
+    "warnings": ["string"]
+  }},
   "qualityFlag": "ok|needs_review|unscored",
   "coverageStatusByField": {{
     "thesis": "missing|partial|complete",
@@ -224,7 +263,9 @@ Schema:
     "evidenceCore": "missing|partial|complete",
     "claims": "missing|partial|complete",
     "limitations": "missing|partial|complete",
-    "conceptLinks": "missing|partial|complete"
+    "conceptLinks": "missing|partial|complete",
+    "formalCause": "missing|partial|complete",
+    "finalCause": "missing|partial|complete"
   }},
   "fieldConfidence": {{
     "thesis": 0.0,
@@ -233,7 +274,9 @@ Schema:
     "evidenceCore": 0.0,
     "claims": 0.0,
     "limitations": 0.0,
-    "conceptLinks": 0.0
+    "conceptLinks": 0.0,
+    "formalCause": 0.0,
+    "finalCause": 0.0
   }},
   "warnings": ["string"],
   "extractorModel": "{self.model}"
@@ -247,6 +290,10 @@ Rules:
 - Keep `methodCore` and `evidenceCore` to short retrieval-friendly phrases, not paragraphs.
 - Prefer `evidenceCore` that preserves concrete benchmark names, metrics, gains, or comparison outcomes when they are visible.
 - If no explicit quantitative or benchmark evidence is visible, keep `evidenceCore` conservative and short instead of generalizing.
+- `formalCause.summary` should capture the paper's defining structure, formulation, architecture, or organizing approach only when that structure is visible in the input. Prefer author-stated structure; allow `basis=inferred` only for strong method/formulation evidence.
+- `finalCause.authorStatedSummary` should contain only an explicit author-stated objective, purpose, task, or motivation. `finalCause.inferredSummary` may contain a conservative inferred purpose, but do not copy inference into `authorStatedSummary`.
+- If `finalCause` is only inferred, keep `authorStatedSummary` empty.
+- Leave weak or unsupported cause fields empty instead of speculating.
 - For `limitations`, only report explicit limitations supported by the input excerpt. If limitations are not explicit, return exactly `limitations not explicit in visible excerpt`.
 - Leave weak fields empty instead of inventing content.
 - Prefer short retrieval-friendly phrases, not paragraphs.

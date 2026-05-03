@@ -1,0 +1,39 @@
+{
+  "schema": "knowledge-hub.foundry.connector.sync.result.v2",
+  "source": "foundry-core/personal-foundry/project-cli",
+  "runId": "sync_fixture_001",
+  "connectorId": "knowledge-hub",
+  "source_filter": "note",
+  "status": "ok",
+  "items": [
+    {
+      "id": "note-1",
+      "source": "note",
+      "title": "Authority contract",
+      "content": "summary of authority split",
+      "filePath": "vault/authority.md",
+      "metadata": {
+        "tags": [
+          "authority"
+        ]
+      },
+      "updatedAt": "2026-04-08T00:00:00.000Z",
+      "tags": [
+        "authority"
+      ],
+      "classification": "P1"
+    }
+  ],
+  "ontologyDelta": {
+    "entities": [],
+    "relations": [],
+    "claims": [],
+    "events": []
+  },
+  "cursor": {
+    "next_record_ts": "2026-04-08T00:00:00.000Z",
+    "next_event_ts": "2026-04-08T00:00:00.000Z",
+    "hasMore": false
+  },
+  "ts": "2026-04-08T00:00:00.000Z"
+}

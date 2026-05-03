@@ -1,1 +1,1 @@
-from knowledge_hub.providers.registry import get_llm, get_embedder, list_providers
+from knowledge_hub.providers.registry import get_embedder, get_llm, list_providers

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.ask.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "question", "sourceType", "underlyingSchema", "answer", "payload", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.ask.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "question": { "type": "string" },
+    "sourceType": { "type": "string" },
+    "underlyingSchema": { "type": "string" },
+    "answer": { "type": "string" },
+    "payload": { "type": "object" },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

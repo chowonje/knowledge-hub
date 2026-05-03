@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from click.testing import CliRunner
 
-from knowledge_hub.cli.main import cli
+from knowledge_hub.interfaces.cli.main import cli
 
 
 class TestCLIErrorHandler:
@@ -24,6 +24,9 @@ class TestCLIErrorHandler:
         runner = CliRunner()
         result = runner.invoke(cli, ["nonexistent-command"])
         assert result.exit_code != 0
+        assert "No such command" in result.output
+        assert "Traceback" not in result.output
+        assert "예상치 못한 오류" not in result.output
 
     def test_verbose_flag_accepted(self):
         runner = CliRunner()

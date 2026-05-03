@@ -5,8 +5,10 @@ from pathlib import Path
 from click.testing import CliRunner
 
 from knowledge_hub.interfaces.cli.commands.paper_cmd import _extract_note_concepts
+from knowledge_hub.interfaces.cli.commands import paper_shared_runtime as paper_shared_runtime_module
 from knowledge_hub.interfaces.cli.commands.paper_cmd import paper_group
 from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import _collect_paper_text
+from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import _render_structured_summary_notes
 from knowledge_hub.core.config import Config
 from knowledge_hub.core.database import SQLiteDatabase
 from knowledge_hub.core.models import ClaimCandidate
@@ -30,6 +32,27 @@ class _FakeLLM:
     def summarize_paper(self, text: str, title: str = "", language: str = "ko") -> str:
         _ = (text, title, language)
         return "### 한줄 요약\n요약"
+
+
+def _structured_summary_payload(*, paper_id: str, title: str, route: str = "mini") -> dict:
+    return {
+        "schema": "knowledge-hub.paper-summary.build.result.v1",
+        "status": "ok",
+        "paperId": paper_id,
+        "paperTitle": title,
+        "parserUsed": "raw",
+        "fallbackUsed": False,
+        "llmRoute": route,
+        "warnings": [],
+        "summary": {
+            "oneLine": f"{title} 요약",
+            "problem": f"{title} 문제",
+            "coreIdea": f"{title} 핵심 아이디어",
+            "methodSteps": [f"{title} 방법"],
+            "keyResults": [f"{title} 결과"],
+            "limitations": [f"{title} 한계"],
+        },
+    }
 
 
 def _config(tmp_path: Path) -> Config:
@@ -95,6 +118,32 @@ def test_collect_paper_text_prefers_parsed_markdown_over_raw_text(tmp_path: Path
     assert "\\documentclass" not in text
 
 
+def test_collect_paper_text_uses_pdf_text_before_refusal_notes(tmp_path: Path, monkeypatch):
+    config = _config(tmp_path)
+    pdf_path = tmp_path / "paper.pdf"
+    pdf_path.write_bytes(b"%PDF-1.4 test")
+    paper = {
+        "arxiv_id": "2501.00003",
+        "title": "PDF Runtime Paper",
+        "authors": "A",
+        "field": "AI",
+        "notes": "원문(또는 arXiv/DOI/PDF 링크)이 필요합니다. 논문 PDF를 올려주세요.",
+        "pdf_path": str(pdf_path),
+        "text_path": None,
+        "translated_path": None,
+    }
+    monkeypatch.setattr(
+        paper_shared_runtime_module,
+        "extract_pdf_text_excerpt",
+        lambda *args, **kwargs: "This PDF text includes the actual abstract and method details." * 6,
+    )
+
+    text = _collect_paper_text(paper, config)
+
+    assert "actual abstract and method details" in text
+    assert "원문(또는 arXiv/DOI/PDF 링크)" not in text
+
+
 def test_paper_translate_defaults_to_no_external(monkeypatch, tmp_path: Path):
     config = _config(tmp_path)
     _seed_paper(config, tmp_path)
@@ -124,7 +173,7 @@ def test_paper_translate_defaults_to_no_external(monkeypatch, tmp_path: Path):
     monkeypatch.setattr("knowledge_hub.interfaces.cli.commands.paper_cmd._resolve_routed_llm", _fake_resolve)
     result = runner.invoke(paper_group, ["translate", "2501.00001"], obj={"khub": _StubKhub(config)})
     assert result.exit_code == 0
-    assert seen["allow_external"] is False
+    assert seen["allow_external"] is None
     assert seen["llm_mode"] == "auto"
 
 
@@ -134,28 +183,24 @@ def test_paper_summarize_allow_external_mini(monkeypatch, tmp_path: Path):
     runner = CliRunner()
     seen: dict[str, object] = {}
 
-    def _fake_resolve(config_obj, **kwargs):  # noqa: ANN003
-        _ = config_obj
-        seen.update(kwargs)
-        return (
-            _FakeLLM(),
-            TaskRouteDecision(
-                task_type="rag_answer",
-                route="mini",
-                provider="openai",
-                model="gpt-5-mini",
-                timeout_sec=60,
-                fallback_chain=["mini", "fallback-only"],
-                reasons=["test"],
-                allow_external_effective=True,
-                complexity_score=2200,
-                policy_mode="external-allowed",
-            ),
-            [],
-        )
+    class _FakeSummaryService:
+        def __init__(self, sqlite_db, config_obj):  # noqa: ANN001
+            self.sqlite_db = sqlite_db
+            self.config = config_obj
 
-    monkeypatch.setattr("knowledge_hub.interfaces.cli.commands.paper_cmd._resolve_routed_llm", _fake_resolve)
-    monkeypatch.setattr("knowledge_hub.interfaces.cli.commands.paper_cmd._update_obsidian_summary", lambda *a, **k: None)
+        def build(self, **kwargs):  # noqa: ANN003
+            seen.update(kwargs)
+            paper = self.sqlite_db.get_paper(kwargs["paper_id"])
+            return _structured_summary_payload(
+                paper_id=kwargs["paper_id"],
+                title=str(paper.get("title") or ""),
+                route="mini",
+            )
+
+    monkeypatch.setattr(
+        "knowledge_hub.interfaces.cli.commands.paper_cmd.StructuredPaperSummaryService",
+        _FakeSummaryService,
+    )
     result = runner.invoke(
         paper_group,
         ["summarize", "2501.00001", "--allow-external", "--llm-mode", "mini"],
@@ -164,6 +209,100 @@ def test_paper_summarize_allow_external_mini(monkeypatch, tmp_path: Path):
     assert result.exit_code == 0
     assert seen["allow_external"] is True
     assert seen["llm_mode"] == "mini"
+    assert seen["provider_override"] is None
+    assert seen["model_override"] is None
+
+    db = SQLiteDatabase(config.sqlite_path)
+    paper = db.get_paper("2501.00001")
+    db.close()
+    assert paper["notes"] == _render_structured_summary_notes(
+        _structured_summary_payload(
+            paper_id="2501.00001",
+            title="Transformer Test Paper",
+            route="mini",
+        )
+    )
+
+
+def test_paper_summarize_defaults_to_configured_openai_provider(monkeypatch, tmp_path: Path):
+    config = _config(tmp_path)
+    _seed_paper(config, tmp_path)
+    runner = CliRunner()
+    seen: dict[str, object] = {}
+
+    class _FakeSummaryService:
+        def __init__(self, sqlite_db, config_obj):  # noqa: ANN001
+            self.sqlite_db = sqlite_db
+            self.config = config_obj
+
+        def build(self, **kwargs):  # noqa: ANN003
+            seen.update(kwargs)
+            paper = self.sqlite_db.get_paper(kwargs["paper_id"])
+            return _structured_summary_payload(
+                paper_id=kwargs["paper_id"],
+                title=str(paper.get("title") or ""),
+                route="strong",
+            )
+
+    monkeypatch.setattr(
+        "knowledge_hub.interfaces.cli.commands.paper_cmd.StructuredPaperSummaryService",
+        _FakeSummaryService,
+    )
+
+    result = runner.invoke(
+        paper_group,
+        ["summarize", "2501.00001"],
+        obj={"khub": _StubKhub(config)},
+    )
+
+    assert result.exit_code == 0
+    assert seen["allow_external"] is True
+    assert seen["provider_override"] == "openai"
+    assert seen["model_override"] == "gpt-5-mini"
+
+
+def test_paper_summarize_all_defaults_to_configured_openai_provider(monkeypatch, tmp_path: Path):
+    config = _config(tmp_path)
+    _seed_paper(config, tmp_path)
+    runner = CliRunner()
+    seen: list[dict[str, object]] = []
+
+    class _FakeSummaryService:
+        def __init__(self, sqlite_db, config_obj):  # noqa: ANN001
+            self.sqlite_db = sqlite_db
+            self.config = config_obj
+
+        def load_artifact(self, *, paper_id: str):  # noqa: ARG002
+            return {}
+
+    def _fake_summary_batch_worker(**kwargs):  # noqa: ANN003
+        seen.append(dict(kwargs))
+        return _structured_summary_payload(
+            paper_id=str(kwargs["paper_id"]),
+            title="Transformer Test Paper",
+            route="strong",
+        )
+
+    monkeypatch.setattr(
+        "knowledge_hub.interfaces.cli.commands.paper_cmd.StructuredPaperSummaryService",
+        _FakeSummaryService,
+    )
+    monkeypatch.setattr(
+        "knowledge_hub.interfaces.cli.commands.paper_cmd._run_structured_summary_batch_worker",
+        _fake_summary_batch_worker,
+    )
+
+    result = runner.invoke(
+        paper_group,
+        ["summarize-all", "--limit", "1"],
+        obj={"khub": _StubKhub(config)},
+    )
+
+    assert result.exit_code == 0
+    assert len(seen) == 1
+    assert seen[0]["allow_external"] is True
+    assert seen[0]["provider"] == "openai"
+    assert seen[0]["model"] == "gpt-5-mini"
 
 
 def test_paper_sync_keywords_claims_store_breakdown(monkeypatch, tmp_path: Path):

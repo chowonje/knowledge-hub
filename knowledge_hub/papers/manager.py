@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import csv
 import re
-from collections import Counter
 from pathlib import Path
 from typing import List, Optional
 from typing import Any
@@ -16,13 +15,26 @@ from typing import Any
 from rich.console import Console
 from rich.table import Table
 
-from knowledge_hub.core.config import Config
-from knowledge_hub.core.database import VectorDatabase, SQLiteDatabase
+from knowledge_hub.infrastructure.config import Config
+from knowledge_hub.infrastructure.persistence import VectorDatabase, SQLiteDatabase
+from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import (
+    fallback_source_hash,
+    mark_derivatives_stale_for_document,
+)
+from knowledge_hub.core.chunking import chunk_text_with_offsets as canonical_chunk_text_with_offsets
+from knowledge_hub.core.keywords import extract_keywords_from_text
 from knowledge_hub.providers.base import BaseEmbedder
 from knowledge_hub.core.models import SourceType
 from knowledge_hub.papers.downloader import PaperDownloader
 from knowledge_hub.papers.translator import PaperTranslator
 from knowledge_hub.papers.discoverer import DiscoveredPaper, discover_papers
+from knowledge_hub.papers.judge import (
+    DEFAULT_CANDIDATE_MULTIPLIER,
+    DEFAULT_PASS_THRESHOLD,
+    JUDGE_BACKEND,
+    PaperJudgeService,
+)
+from knowledge_hub.papers.judge_feedback import PaperJudgeFeedbackLogger
 
 console = Console()
 
@@ -184,27 +196,40 @@ class PaperManager:
                 continue
 
             # 청크 분할
-            chunk_size = 1000
-            overlap = 200
-            chunks = []
-            start = 0
-            idx = 0
-            while start < len(text):
-                end = min(start + chunk_size, len(text))
-                chunks.append(
-                    {
-                        "text": text[start:end].strip(),
-                        "metadata": {
-                            "title": paper["title"],
-                            "arxiv_id": paper["arxiv_id"],
-                            "source_type": SourceType.PAPER.value,
-                            "field": paper.get("field", ""),
-                            "chunk_index": idx,
-                        },
-                    }
+            chunks = self._chunk_text_with_offsets(text, chunk_size=1000, overlap=200)
+            document_id = f"paper:{paper['arxiv_id']}"
+            source_hash = fallback_source_hash(text, paper["arxiv_id"])
+            if source_hash:
+                mark_derivatives_stale_for_document(
+                    self.sqlite_db.conn,
+                    document_id=document_id,
+                    source_content_hash=source_hash,
+                    source_type=SourceType.PAPER.value,
                 )
-                start = end - overlap
-                idx += 1
+            delete_by_metadata = getattr(self.vector_db, "delete_by_metadata", None)
+            if callable(delete_by_metadata):
+                delete_by_metadata({"source_type": SourceType.PAPER.value, "arxiv_id": paper["arxiv_id"]})
+            for chunk in chunks:
+                chunk["metadata"] = {
+                    "title": paper["title"],
+                    "arxiv_id": paper["arxiv_id"],
+                    "source_type": SourceType.PAPER.value,
+                    "field": paper.get("field", ""),
+                    "document_id": document_id,
+                    "source_content_hash": source_hash,
+                    "stale": 0,
+                    "parent_id": f"{document_id}::document",
+                    "parent_title": paper["title"],
+                    "parent_type": "document",
+                    "chunk_index": chunk["chunk_index"],
+                    "chunk_size": chunk["chunk_end"] - chunk["chunk_start"],
+                    "chunk_start": chunk["chunk_start"],
+                    "chunk_end": chunk["chunk_end"],
+                    "contextual_summary": self._build_contextual_summary(
+                        title=paper["title"],
+                        chunk_text=chunk["text"],
+                    ),
+                }
 
             if not chunks:
                 continue
@@ -233,6 +258,39 @@ class PaperManager:
             console.print(f"  [green]인덱싱: {paper['title'][:50]}... ({len(chunks)} 청크)[/green]")
 
         console.print(f"\n[bold green]{indexed}개 논문 인덱싱 완료[/bold green]")
+
+    @staticmethod
+    def _build_contextual_summary(title: str, chunk_text: str) -> str:
+        normalized = re.sub(r"\s+", " ", (chunk_text or "").strip())
+        if not normalized:
+            return title
+
+        first_sentence = normalized.split(". ")[0].strip()
+        if len(first_sentence) > 180:
+            first_sentence = f"{first_sentence[:177]}..."
+
+        return f"[{title}] {first_sentence}"
+
+    @staticmethod
+    def _chunk_text_with_offsets(
+        text: str,
+        chunk_size: int = 1000,
+        overlap: int = 200,
+    ) -> list[dict[str, Any]]:
+        return [
+            {
+                "text": str(item.get("text") or ""),
+                "chunk_index": int(item.get("chunk_index", 0)),
+                "chunk_start": int(item.get("start", 0)),
+                "chunk_end": int(item.get("end", 0)),
+            }
+            for item in canonical_chunk_text_with_offsets(
+                text,
+                content_type="plain",
+                chunk_size=chunk_size,
+                overlap=overlap,
+            )
+        ]
 
     def list(self, field: Optional[str] = None):
         """논문 목록 표시"""
@@ -264,58 +322,7 @@ class PaperManager:
     @staticmethod
     def _extract_keywords_from_translated_text(text: str, max_keywords: int = 12) -> list[str]:
         """번역본 텍스트에서 핵심 키워드 추출(휴리스틱)"""
-        if not text:
-            return []
-
-        body = text.replace("\r\n", "\n")
-        if body.startswith("#"):
-            body = "\n".join(body.splitlines()[4:]) if len(body.splitlines()) > 4 else body
-
-        body = re.sub(r"\[[^\]]*\]\([^)]*\)", " ", body)
-        body = re.sub(r"`[^`]*`", " ", body)
-        body = re.sub(r"[\W_]+", " ", body)
-
-        stop_korean = {
-            "하는", "있는", "있는", "있다", "있고", "않고", "없이", "또는", "그리고", "그리고도", "에서", "대한", "대한", "대한", "대한",
-            "에 대한", "같은", "있는", "있는", "그", "그의", "그리고", "및", "또한", "하지만", "뿐", "수",
-            "등", "의", "을", "를", "에", "과", "와", "로", "으로", "으로써", "를", "그리고", "또", "뿐만", "때문에",
-            "않은", "없는", "없는", "이", "그", "그녀", "본", "수", "있습니다", "있을", "있으며", "있는지", "있음",
-        }
-        stop_english = {
-            "the", "and", "for", "with", "that", "this", "from", "into", "were", "have", "has", "are", "was", "were",
-            "which", "their", "when", "then", "there", "about", "used", "using", "based", "models", "model", "learn", "learning",
-            "dataset", "datasets", "results", "method", "methods", "paper", "research", "analysis", "analysis", "based",
-            "different", "different", "using", "used", "new", "more", "less", "one", "two", "three", "also", "first", "two",
-            "three", "four", "five", "new", "use", "show", "shown", "shows", "using",
-        }
-
-        en_tokens = [
-            t.lower() for t in re.findall(r"[A-Za-z][A-Za-z0-9]+", body)
-            if len(t) >= 3 and t.lower() not in stop_english
-        ]
-        ko_tokens = [
-            t for t in re.findall(r"[가-힣]{2,}", body)
-            if t not in stop_korean and len(t) >= 2
-        ]
-
-        phrases = []
-        for match in re.findall(r"[A-Za-z][A-Za-z0-9\-\+]+(?:\s+[A-Za-z][A-Za-z0-9\-\+]+){0,2}", body):
-            raw = match.strip()
-            if len(raw.split()) >= 2 and raw.lower() not in stop_english:
-                phrases.append(raw.lower())
-
-        tokens = []
-        tokens.extend(en_tokens)
-        tokens.extend(ko_tokens)
-        tokens.extend([p.lower() for p in phrases if len(p) >= 5])
-
-        counter = Counter()
-        for token in tokens:
-            score = len(token)
-            counter[token] += score
-
-        top = [t for t, _ in counter.most_common(max_keywords)]
-        return top
+        return extract_keywords_from_text(text, max_keywords=max_keywords)
 
     def sync_translated_keywords(
         self,
@@ -516,6 +523,12 @@ class PaperManager:
         create_obsidian_note: bool = True,
         generate_summary: bool = True,
         llm: Optional[Any] = None,
+        judge_enabled: bool = False,
+        judge_threshold: float = DEFAULT_PASS_THRESHOLD,
+        judge_candidates: Optional[int] = None,
+        allow_external: bool = False,
+        judge_llm: Optional[Any] = None,
+        user_goal: str = "",
     ) -> dict[str, Any]:
         """
         논문 자동 발견 → 중복 체크 → 다운로드 → 요약 → 인덱싱 → 옵시디언 연결
@@ -523,36 +536,99 @@ class PaperManager:
         """
         discovered = discover_papers(
             topic=topic,
-            max_papers=max_papers * 2,
+            max_papers=max(
+                max_papers * 2,
+                max(1, int(judge_candidates or (max_papers * DEFAULT_CANDIDATE_MULTIPLIER)))
+                if judge_enabled
+                else max_papers * 2,
+            ),
             year_start=year_start,
             min_citations=min_citations,
             sort_by=sort_by,
         )
 
         report = {
+            "schema": "knowledge-hub.paper.discover.result.v1",
+            "status": "ok",
             "topic": topic,
             "discovered": len(discovered),
             "duplicates_skipped": 0,
             "ingested": [],
             "failed": [],
             "obsidian_notes_created": [],
+            "warnings": [],
+            "judge": {
+                "enabled": bool(judge_enabled),
+                "backend": JUDGE_BACKEND if judge_enabled else "",
+                "threshold": round(float(judge_threshold or DEFAULT_PASS_THRESHOLD), 6),
+                "candidateCount": 0,
+                "selectedCount": 0,
+                "degraded": False,
+                "warnings": [],
+                "items": [],
+            },
         }
 
         if not discovered:
             report["message"] = "검색 결과가 없습니다."
             return report
 
-        downloader = PaperDownloader(self.config.papers_dir)
-        ingested_count = 0
-
+        candidates: list[DiscoveredPaper] = []
         for paper in discovered:
-            if ingested_count >= max_papers:
-                break
-
-            is_dup, dup_reason = self.is_duplicate(paper.arxiv_id)
+            is_dup, _dup_reason = self.is_duplicate(paper.arxiv_id)
             if is_dup:
                 report["duplicates_skipped"] += 1
                 continue
+            candidates.append(paper)
+
+        if judge_enabled and candidates:
+            judge_service = PaperJudgeService(
+                self.config,
+                llm=judge_llm or llm,
+                allow_external=allow_external,
+                pass_threshold=judge_threshold,
+            )
+            selected, judge_payload = judge_service.select_candidates(
+                candidates,
+                topic=topic,
+                threshold=judge_threshold,
+                top_k=max_papers,
+                user_goal=user_goal,
+            )
+            report["judge"] = {
+                "enabled": True,
+                "backend": judge_payload.get("backend", JUDGE_BACKEND),
+                "threshold": judge_payload.get("threshold", round(float(judge_threshold or DEFAULT_PASS_THRESHOLD), 6)),
+                "candidateCount": int(judge_payload.get("candidateCount", len(candidates)) or 0),
+                "selectedCount": int(judge_payload.get("selectedCount", len(selected)) or 0),
+                "degraded": bool(judge_payload.get("degraded", False)),
+                "warnings": list(judge_payload.get("warnings") or []),
+                "items": list(judge_payload.get("items") or []),
+            }
+            PaperJudgeFeedbackLogger(self.config).log_judge_decisions(
+                topic=topic,
+                items=report["judge"]["items"],
+                backend=str(report["judge"]["backend"] or JUDGE_BACKEND),
+                threshold=float(report["judge"]["threshold"] or judge_threshold or DEFAULT_PASS_THRESHOLD),
+                degraded=bool(report["judge"]["degraded"]),
+                allow_external=bool(allow_external),
+                source="discover_and_ingest",
+            )
+            candidates = selected
+            report["warnings"].extend([item for item in report["judge"]["warnings"] if item not in report["warnings"]])
+        else:
+            candidates = candidates[:max_papers]
+
+        if not candidates:
+            report["message"] = "조건을 만족하는 신규 논문이 없습니다."
+            return report
+
+        downloader = PaperDownloader(self.config.papers_dir)
+        ingested_count = 0
+
+        for paper in candidates:
+            if ingested_count >= max_papers:
+                break
 
             try:
                 result = downloader.download_single(paper.arxiv_id, paper.title)
@@ -592,7 +668,20 @@ class PaperManager:
 
                 obsidian_path = ""
                 if create_obsidian_note:
-                    obsidian_path = self._create_obsidian_note(paper, summary, topic)
+                    judge_assessment = next(
+                        (
+                            item
+                            for item in list(report.get("judge", {}).get("items") or [])
+                            if str(item.get("paper_id") or "") == str(paper.arxiv_id)
+                        ),
+                        None,
+                    )
+                    obsidian_path = self._create_obsidian_note(
+                        paper,
+                        summary,
+                        topic,
+                        judge_assessment=judge_assessment,
+                    )
 
                 ingested_count += 1
                 entry = {
@@ -656,29 +745,45 @@ class PaperManager:
         if not full_text.strip():
             return
 
-        chunk_size = 1000
-        overlap = 200
-        chunks = []
-        start = 0
-        idx = 0
-        while start < len(full_text):
-            end = min(start + chunk_size, len(full_text))
-            chunk_text = full_text[start:end].strip()
-            if chunk_text:
-                chunks.append({
-                    "text": chunk_text,
-                    "metadata": {
-                        "title": paper.title,
-                        "arxiv_id": paper.arxiv_id,
-                        "source_type": SourceType.PAPER.value,
-                        "field": paper_data.get("field", ""),
-                        "chunk_index": idx,
-                        "year": paper.year,
-                        "citation_count": paper.citation_count,
-                    },
-                })
-            start = end - overlap
-            idx += 1
+        document_id = f"paper:{paper.arxiv_id}"
+        source_hash = fallback_source_hash(full_text, paper.arxiv_id)
+        if source_hash:
+            mark_derivatives_stale_for_document(
+                self.sqlite_db.conn,
+                document_id=document_id,
+                source_content_hash=source_hash,
+                source_type=SourceType.PAPER.value,
+            )
+        delete_by_metadata = getattr(self.vector_db, "delete_by_metadata", None)
+        if callable(delete_by_metadata):
+            delete_by_metadata({"source_type": SourceType.PAPER.value, "arxiv_id": paper.arxiv_id})
+        chunks = [
+            {
+                "text": str(item.get("text") or ""),
+                "metadata": {
+                    "title": paper.title,
+                    "arxiv_id": paper.arxiv_id,
+                    "source_type": SourceType.PAPER.value,
+                    "field": paper_data.get("field", ""),
+                    "document_id": document_id,
+                    "source_content_hash": source_hash,
+                    "stale": 0,
+                    "parent_id": f"{document_id}::document",
+                    "parent_title": paper.title,
+                    "parent_type": "document",
+                    "chunk_index": int(item.get("chunk_index", 0)),
+                    "year": paper.year,
+                    "citation_count": paper.citation_count,
+                },
+            }
+            for item in canonical_chunk_text_with_offsets(
+                full_text,
+                content_type="plain",
+                chunk_size=1000,
+                overlap=200,
+            )
+            if str(item.get("text") or "").strip()
+        ]
 
         if not chunks:
             return
@@ -714,6 +819,8 @@ class PaperManager:
         paper: DiscoveredPaper,
         summary: str,
         topic: str,
+        judge_assessment: dict[str, Any] | None = None,
+        translated_abstract: str = "",
     ) -> str:
         """논문 요약 노트를 Obsidian vault에 생성하고 관련 노트를 [[링크]]"""
         vault_path = self.config.vault_path
@@ -721,7 +828,14 @@ class PaperManager:
             return ""
 
         vault = Path(vault_path)
-        papers_dir = vault / "Papers"
+        notes_folder = self.config.obsidian_notes_folder or "Papers"
+        notes_root = Path(notes_folder)
+        if notes_root.is_absolute():
+            notes_dir = notes_root
+        else:
+            notes_dir = vault / notes_root
+
+        papers_dir = notes_dir
         papers_dir.mkdir(parents=True, exist_ok=True)
 
         safe_title = re.sub(r'[\\/:*?"<>|]', '', paper.title)[:80].strip()
@@ -744,16 +858,30 @@ class PaperManager:
             f"topic: \"{topic}\"",
             f"tags: [paper, AI, {', '.join(paper.fields_of_study[:3])}]",
             "type: paper-summary",
-            "---",
-            "",
-            f"# {paper.title}",
-            "",
-            f"**arXiv:** [{paper.arxiv_id}](https://arxiv.org/abs/{paper.arxiv_id})",
-            f"**저자:** {paper.authors}",
-            f"**연도:** {paper.year} | **인용수:** {paper.citation_count}",
-            f"**분야:** {', '.join(paper.fields_of_study[:5]) if paper.fields_of_study else 'N/A'}",
-            "",
         ]
+        if judge_assessment:
+            content_lines.extend(
+                [
+                    "judge_enabled: true",
+                    f"judge_backend: \"{judge_assessment.get('backend', JUDGE_BACKEND)}\"",
+                    f"judge_score: {float(judge_assessment.get('total_score', 0.0) or 0.0):.6f}",
+                    f"judge_decision: \"{judge_assessment.get('decision', 'skip')}\"",
+                    f"judge_topic: \"{topic}\"",
+                ]
+            )
+        content_lines.extend(
+            [
+                "---",
+                "",
+                f"# {paper.title}",
+                "",
+                f"**arXiv:** [{paper.arxiv_id}](https://arxiv.org/abs/{paper.arxiv_id})",
+                f"**저자:** {paper.authors}",
+                f"**연도:** {paper.year} | **인용수:** {paper.citation_count}",
+                f"**분야:** {', '.join(paper.fields_of_study[:5]) if paper.fields_of_study else 'N/A'}",
+                "",
+            ]
+        )
 
         if summary:
             content_lines.extend([
@@ -763,11 +891,42 @@ class PaperManager:
                 "",
             ])
 
+        if judge_assessment:
+            dimension_scores = dict(judge_assessment.get("dimension_scores") or {})
+            content_lines.extend(
+                [
+                    "## Judge Assessment",
+                    "",
+                    f"- 총점: {float(judge_assessment.get('total_score', 0.0) or 0.0):.3f}",
+                    f"- 결정: {judge_assessment.get('decision', 'skip')}",
+                    f"- 백엔드: {judge_assessment.get('backend', JUDGE_BACKEND)}",
+                    f"- relevance: {float(dimension_scores.get('relevance_score', 0.0) or 0.0):.3f}",
+                    f"- novelty: {float(dimension_scores.get('novelty_score', 0.0) or 0.0):.3f}",
+                    f"- read value: {float(dimension_scores.get('read_value_score', 0.0) or 0.0):.3f}",
+                    f"- citation signal: {float(dimension_scores.get('citation_signal_score', 0.0) or 0.0):.3f}",
+                    "",
+                ]
+            )
+            reasons = [str(item).strip() for item in list(judge_assessment.get("top_reasons") or []) if str(item).strip()]
+            if reasons:
+                content_lines.extend(["### 이유", ""])
+                for reason in reasons[:4]:
+                    content_lines.append(f"- {reason}")
+                content_lines.append("")
+
         if paper.abstract:
             content_lines.extend([
                 "## Abstract",
                 "",
                 paper.abstract,
+                "",
+            ])
+
+        if translated_abstract:
+            content_lines.extend([
+                "## 초록 (한국어)",
+                "",
+                translated_abstract,
                 "",
             ])
 

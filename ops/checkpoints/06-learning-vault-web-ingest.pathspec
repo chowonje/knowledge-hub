@@ -1,0 +1,14 @@
+# Ingest, learning, vault, and related retrieval knowledge helpers.
+
+:(glob)knowledge_hub/curation/**
+:(glob)knowledge_hub/document_memory/**
+:(glob)knowledge_hub/knowledge/**
+:(glob)knowledge_hub/learning/**
+:(glob)knowledge_hub/vault/**
+:(glob)knowledge_hub/web/**
+:(glob)tests/test_document_memory*.py
+tests/test_knowledge_graph.py
+:(glob)tests/test_ko_note*.py
+:(glob)tests/test_learning*.py
+:(glob)tests/test_vault*.py
+:(glob)tests/test_web*.py

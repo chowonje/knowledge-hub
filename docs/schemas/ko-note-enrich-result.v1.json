@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "runId",
+    "scope",
+    "itemType",
+    "sourceTargets",
+    "sourceEnriched",
+    "conceptTargets",
+    "conceptEnriched",
+    "skipped",
+    "warnings",
+    "ts"
+  ],
+  "properties": {
+    "schema": {"const": "knowledge-hub.ko-note.enrich.result.v1"},
+    "status": {"type": "string", "enum": ["completed", "partial", "failed", "blocked"]},
+    "runId": {"type": "string", "minLength": 1},
+    "sourceRunId": {"type": "string"},
+    "scope": {"type": "string", "enum": ["new", "existing-top", "both"]},
+    "itemType": {"type": "string", "enum": ["source", "concept", "all"]},
+    "sourceTargets": {"type": "integer", "minimum": 0},
+    "sourceEnriched": {"type": "integer", "minimum": 0},
+    "conceptTargets": {"type": "integer", "minimum": 0},
+    "conceptEnriched": {"type": "integer", "minimum": 0},
+    "skipped": {"type": "integer", "minimum": 0},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "schemaErrors": {"type": "array", "items": {"type": "string"}},
+    "ts": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

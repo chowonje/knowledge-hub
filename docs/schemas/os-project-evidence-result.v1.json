@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.project.evidence.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "project", "projectEvidence", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.project.evidence.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "project": { "$ref": "#/$defs/project" },
+    "projectEvidence": { "$ref": "#/$defs/projectEvidence" },
+    "createdAt": { "type": "string" }
+  },
+  "$defs": {
+    "project": {
+      "type": "object",
+      "required": ["id", "title", "slug", "status", "priority", "summary", "owner", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "on_hold", "completed", "archived"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "summary": { "type": "string" },
+        "owner": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceType"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "scope", "document"] },
+        "paperId": { "type": "string" },
+        "url": { "type": "string" },
+        "noteId": { "type": "string" },
+        "stableScopeId": { "type": "string" },
+        "documentScopeId": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceTaskLink": {
+      "type": "object",
+      "required": ["taskId", "title", "sourceRef"],
+      "properties": {
+        "taskId": { "type": "string" },
+        "title": { "type": "string" },
+        "sourceRef": { "$ref": "#/$defs/sourceRef" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceDecisionLink": {
+      "type": "object",
+      "required": ["decisionId", "summary", "sourceRef"],
+      "properties": {
+        "decisionId": { "type": "string" },
+        "summary": { "type": "string" },
+        "sourceRef": { "$ref": "#/$defs/sourceRef" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceInboxLink": {
+      "type": "object",
+      "required": ["inboxId", "summary", "sourceRef"],
+      "properties": {
+        "inboxId": { "type": "string" },
+        "summary": { "type": "string" },
+        "sourceRef": { "$ref": "#/$defs/sourceRef" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceTaskSummary": {
+      "type": "object",
+      "required": ["taskId", "title", "sourceRefs"],
+      "properties": {
+        "taskId": { "type": "string" },
+        "title": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceDecisionSummary": {
+      "type": "object",
+      "required": ["decisionId", "summary", "sourceRefs"],
+      "properties": {
+        "decisionId": { "type": "string" },
+        "summary": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } }
+      },
+      "additionalProperties": false
+    },
+    "dingerEvidenceTrace": {
+      "type": "object",
+      "required": ["bridge", "relativePath", "title"],
+      "properties": {
+        "bridge": { "const": "dinger" },
+        "relativePath": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceCandidateReason": {
+      "type": "object",
+      "required": [
+        "kind",
+        "summary",
+        "inboxState",
+        "bridge",
+        "inboxSummary",
+        "relativePath",
+        "supportingSourceRefCount",
+        "sourceTypes",
+        "upstreamSourceRefs",
+        "replayAction",
+        "replayPolicy",
+        "matchedOpenItems",
+        "matchedResolvedItems",
+        "matchedOtherItems",
+        "dedupeKeySummary",
+        "bridgeTraceSummary"
+      ],
+      "properties": {
+        "kind": { "const": "dinger_linked_inbox_candidate" },
+        "summary": { "type": "string" },
+        "inboxState": { "const": "open" },
+        "bridge": { "const": "dinger" },
+        "inboxSummary": { "type": "string" },
+        "relativePath": { "type": "string" },
+        "supportingSourceRefCount": { "type": "integer", "minimum": 0 },
+        "sourceTypes": { "type": "array", "items": { "type": "string" } },
+        "upstreamSourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "replayAction": { "type": "string", "minLength": 1 },
+        "replayPolicy": {
+          "type": "object",
+          "required": ["open", "resolved", "triaged"],
+          "properties": {
+            "open": { "type": "string", "minLength": 1 },
+            "resolved": { "type": "string", "minLength": 1 },
+            "triaged": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "matchedOpenItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "matchedResolvedItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "matchedOtherItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "dedupeKeySummary": { "$ref": "#/$defs/dedupeKeySummary" },
+        "bridgeTraceSummary": { "$ref": "#/$defs/bridgeTraceSummary" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceCandidate": {
+      "type": "object",
+      "required": ["inboxId", "summary", "sourceRefs", "trace", "reason", "explanation"],
+      "properties": {
+        "inboxId": { "type": "string" },
+        "summary": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "trace": { "$ref": "#/$defs/dingerEvidenceTrace" },
+        "reason": { "$ref": "#/$defs/projectEvidenceCandidateReason" },
+        "explanation": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidenceGroupedBySourceType": {
+      "type": "object",
+      "required": ["paper", "web", "vault", "scope", "document"],
+      "properties": {
+        "paper": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "web": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "vault": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "scope": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "document": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } }
+      },
+      "additionalProperties": false
+    },
+    "matchedItemSummary": {
+      "type": "object",
+      "required": ["id", "state"],
+      "properties": {
+        "id": { "type": "string" },
+        "state": { "type": "string" },
+        "summary": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "dedupeKeySummary": {
+      "type": "object",
+      "required": ["kind", "strategy", "markerCount", "markers", "fingerprint"],
+      "properties": {
+        "kind": { "type": "string" },
+        "strategy": { "type": "string" },
+        "markerCount": { "type": "integer", "minimum": 0 },
+        "markers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["sourceType", "primary"],
+            "properties": {
+              "sourceType": { "type": "string" },
+              "primary": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "fingerprint": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "bridgeTraceSummary": {
+      "type": "object",
+      "required": ["bridge", "sourceSchema", "kind", "relativePath"],
+      "properties": {
+        "bridge": { "const": "dinger" },
+        "sourceSchema": { "type": "string" },
+        "kind": { "type": "string" },
+        "relativePath": { "type": "string" },
+        "title": { "type": "string" },
+        "captureUrl": { "type": "string" },
+        "captureId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "projectEvidence": {
+      "type": "object",
+      "required": [
+        "projectId",
+        "sourceRefs",
+        "taskLinkedRefs",
+        "decisionLinkedRefs",
+        "inboxLinkedRefs",
+        "groupedBySourceType",
+        "recentDecisionEvidence",
+        "nextTaskEvidence"
+      ],
+      "properties": {
+        "projectId": { "type": "string" },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "taskLinkedRefs": { "type": "array", "items": { "$ref": "#/$defs/projectEvidenceTaskLink" } },
+        "decisionLinkedRefs": { "type": "array", "items": { "$ref": "#/$defs/projectEvidenceDecisionLink" } },
+        "inboxLinkedRefs": { "type": "array", "items": { "$ref": "#/$defs/projectEvidenceInboxLink" } },
+        "groupedBySourceType": { "$ref": "#/$defs/projectEvidenceGroupedBySourceType" },
+        "recentDecisionEvidence": { "type": "array", "items": { "$ref": "#/$defs/projectEvidenceDecisionSummary" } },
+        "nextTaskEvidence": { "type": "array", "items": { "$ref": "#/$defs/projectEvidenceTaskSummary" } },
+        "evidenceCandidates": { "type": "array", "items": { "$ref": "#/$defs/projectEvidenceCandidate" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

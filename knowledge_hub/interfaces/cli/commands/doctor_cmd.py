@@ -16,6 +16,7 @@ from knowledge_hub.application.runtime_diagnostics import parser_runtime_status
 from knowledge_hub.infrastructure.config import DEFAULT_CONFIG_PATH
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.ai.reranker import reranker_runtime_status
+from knowledge_hub.application.index_freshness import build_index_freshness_check
 from knowledge_hub.providers import registry
 
 console = Console()
@@ -149,7 +150,7 @@ def _provider_check(config, role: str, provider_name: str, model: str, state: di
 def _parser_check(config) -> dict[str, object]:
     parser_states = {
         name: parser_runtime_status(name)
-        for name in ("mineru", "opendataloader")
+        for name in ("pymupdf", "mineru", "opendataloader")
     }
     available_non_raw = [name for name, state in parser_states.items() if bool(state.get("available"))]
     degraded_non_raw = [name for name, state in parser_states.items() if str(state.get("status") or "") != "ok"]
@@ -164,6 +165,7 @@ def _parser_check(config) -> dict[str, object]:
         summary = "paper parser auto chain이 raw fallback만 사용할 수 있습니다."
     detail = (
         f"auto={config.paper_summary_parser} "
+        f"pymupdf={parser_states['pymupdf']['status']} "
         f"mineru={parser_states['mineru']['status']} "
         f"opendataloader={parser_states['opendataloader']['status']} "
         f"raw=ok"
@@ -258,21 +260,36 @@ def _vector_check(runtime: dict[str, object]) -> dict[str, object]:
     vector = dict(runtime.get("vectorCorpus") or {})
     total_documents = int(vector.get("total_documents", 0) or 0)
     available = bool(vector.get("available"))
+    recovery_backup = dict(vector.get("recovery_backup") or {})
     if available:
         status = "ok"
         summary = "벡터 코퍼스가 준비되었습니다."
+        fix_command = ""
+    elif recovery_backup.get("total_documents") and bool(recovery_backup.get("restorable")):
+        status = "needs_setup"
+        summary = "벡터 코퍼스가 비어 있지만 복구 가능한 백업이 있습니다."
+        fix_command = "khub vector-compare --latest-backup"
+    elif recovery_backup.get("total_documents"):
+        status = "needs_setup"
+        summary = "벡터 코퍼스가 비어 있고 읽기 백업만 남아 있습니다."
+        fix_command = "khub index --all"
     elif total_documents <= 0:
         status = "needs_setup"
         summary = "벡터 코퍼스가 비어 있습니다."
+        fix_command = "khub index --all"
     else:
         status = "degraded"
         summary = "벡터 코퍼스가 부분적으로만 준비되었습니다."
+        fix_command = "khub index --all"
+    detail = f"{vector.get('collection_name') or '-'} / {total_documents}"
+    if recovery_backup.get("total_documents"):
+        detail = f"{detail} | backup={recovery_backup.get('total_documents')} at {recovery_backup.get('path')}"
     return {
         "area": "vector corpus",
         "status": status,
         "summary": summary,
-        "detail": f"{vector.get('collection_name') or '-'} / {total_documents}",
-        "fixCommand": "khub discover \"AI agent\" --max-papers 1",
+        "detail": detail,
+        "fixCommand": fix_command,
     }
 
 
@@ -361,14 +378,7 @@ def _status_style(status: str) -> str:
 
 def build_doctor_payload(khub_ctx) -> dict[str, object]:
     config = khub_ctx.config
-    searcher = None
-    searcher_error = ""
-    try:
-        searcher = khub_ctx.searcher()
-    except Exception as error:
-        searcher_error = str(error)
-
-    runtime = build_runtime_diagnostics(config, searcher=searcher, searcher_error=searcher_error)
+    runtime = build_runtime_diagnostics(config)
     provider_states = {str(item.get("role") or ""): dict(item) for item in list(runtime.get("providers") or [])}
 
     checks = [
@@ -385,6 +395,7 @@ def build_doctor_payload(khub_ctx) -> dict[str, object]:
         _ollama_check(config),
         _parser_check(config),
         _vector_check(runtime),
+        build_index_freshness_check(config),
         _reranker_check(config),
         _storage_check(config),
     ]
@@ -392,8 +403,6 @@ def build_doctor_payload(khub_ctx) -> dict[str, object]:
     status = _overall_status(checks)
     next_actions = _next_actions(checks, config=config)
     warnings = list(runtime.get("warnings") or [])
-    if searcher_error:
-        warnings.append(f"searcher init failed: {searcher_error}")
     return {
         "schema": "knowledge-hub.doctor.result.v1",
         "status": status,

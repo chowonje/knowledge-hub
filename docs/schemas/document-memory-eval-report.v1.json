@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.document-memory.eval.report.v1",
+  "type": "object",
+  "required": ["schema", "status", "dataset", "metrics", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.document-memory.eval.report.v1" },
+    "status": { "type": "string" },
+    "dataset": { "type": "object" },
+    "metrics": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

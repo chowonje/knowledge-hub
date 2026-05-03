@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.workbench.chat.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "message", "answer", "sources", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.workbench.chat.result.v1" },
+    "status": { "type": "string" },
+    "message": { "type": "string" },
+    "answer": { "type": "string" },
+    "sources": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

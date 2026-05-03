@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.capture-process.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "queueDir", "counts", "items", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.capture-process.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "queueDir": { "type": "string" },
+    "projectId": { "type": "string" },
+    "slug": { "type": "string" },
+    "counts": {
+      "type": "object",
+      "required": ["scanned", "processed", "succeeded", "failed", "idempotent"],
+      "properties": {
+        "scanned": { "type": "integer", "minimum": 0 },
+        "processed": { "type": "integer", "minimum": 0 },
+        "succeeded": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "idempotent": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["captureId", "status", "idempotent", "idempotencyKey", "packetPath", "statePath", "updatedAt"],
+        "properties": {
+          "captureId": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["captured", "normalized", "filed", "linked_to_os", "failed"]
+          },
+          "idempotent": { "type": "boolean" },
+          "idempotencyKey": { "type": "string" },
+          "packetPath": { "type": "string" },
+          "statePath": { "type": "string" },
+          "normalizedPath": { "type": "string" },
+          "filedResultPath": { "type": "string" },
+          "osResultPath": { "type": "string" },
+          "filedRelativePath": { "type": "string" },
+          "osItemId": { "type": "string" },
+          "projectId": { "type": "string" },
+          "linkAction": { "type": "string", "enum": ["", "created", "reused_existing"] },
+          "linkExplanation": { "type": "string" },
+          "linkReason": { "$ref": "#/$defs/evidenceCandidateReason" },
+          "osBridgeRelativePath": { "type": "string" },
+          "error": { "type": "string" },
+          "updatedAt": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "error": { "type": "string" },
+    "createdAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "failed" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["error"]
+      }
+    }
+  ],
+  "$defs": {
+    "matchedItemSummary": {
+      "type": "object",
+      "required": ["id", "state"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "state": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "dedupeKeySummary": {
+      "type": "object",
+      "required": ["kind", "strategy", "markerCount", "markers", "fingerprint"],
+      "properties": {
+        "kind": { "type": "string", "minLength": 1 },
+        "strategy": { "type": "string", "enum": ["vault_note", "source_refs"] },
+        "markerCount": { "type": "integer", "minimum": 0 },
+        "markers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["sourceType", "primary"],
+            "properties": {
+              "sourceType": { "type": "string", "minLength": 1 },
+              "primary": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "fingerprint": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "bridgeTraceSummary": {
+      "type": "object",
+      "required": ["bridge", "sourceSchema", "kind", "relativePath"],
+      "properties": {
+        "bridge": { "const": "dinger" },
+        "sourceSchema": {
+          "type": "string",
+          "enum": ["knowledge-hub.dinger.capture.result.v1", "knowledge-hub.dinger.file.result.v1"]
+        },
+        "kind": { "type": "string", "minLength": 1 },
+        "relativePath": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "captureUrl": { "type": "string", "minLength": 1 },
+        "captureId": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "evidenceCandidateReason": {
+      "type": "object",
+      "required": [
+        "dedupeKeySummary",
+        "replayAction",
+        "matchedOpenItems",
+        "matchedResolvedItems",
+        "matchedOtherItems",
+        "bridgeTraceSummary"
+      ],
+      "properties": {
+        "dedupeKeySummary": { "$ref": "#/$defs/dedupeKeySummary" },
+        "replayAction": {
+          "type": "string",
+          "enum": [
+            "reused_existing_open_item",
+            "created_new_after_resolved_match",
+            "created_new_without_prior_match"
+          ]
+        },
+        "matchedOpenItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "matchedResolvedItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "matchedOtherItems": { "type": "array", "items": { "$ref": "#/$defs/matchedItemSummary" } },
+        "bridgeTraceSummary": { "$ref": "#/$defs/bridgeTraceSummary" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

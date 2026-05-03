@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper-topic-synthesis.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "query",
+    "sourceMode",
+    "candidatePapers",
+    "selectedPapers",
+    "excludedPapers",
+    "selectionDiagnostics",
+    "topicSummary",
+    "architectureGroups",
+    "comparisonPoints",
+    "limitations",
+    "gaps",
+    "citations",
+    "verification",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-topic-synthesis.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "no_result", "failed"] },
+    "query": { "type": "string" },
+    "sourceMode": { "type": "string" },
+    "candidatePapers": { "type": "array", "items": { "type": "object" } },
+    "selectedPapers": { "type": "array", "items": { "type": "object" } },
+    "excludedPapers": { "type": "array", "items": { "type": "object" } },
+    "selectionDiagnostics": { "type": "object" },
+    "topicSummary": { "type": "string" },
+    "architectureGroups": { "type": "array", "items": { "type": "object" } },
+    "comparisonPoints": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "object" }
+        ]
+      }
+    },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "gaps": { "type": "array", "items": { "type": "string" } },
+    "citations": { "type": "array", "items": { "type": "object" } },
+    "verification": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

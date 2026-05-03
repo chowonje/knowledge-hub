@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "status", "document", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.document-memory.card.result.v1" },
+    "status": { "type": "string" },
+    "document": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

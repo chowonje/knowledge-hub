@@ -6,20 +6,94 @@ re-implement policy-related redaction rules.
 
 from __future__ import annotations
 
+from functools import lru_cache
+import json
 import hashlib
+from pathlib import Path
 import re
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from knowledge_hub.learning.models import EvidencePointer
 
-P0_PATTERNS = (
-    re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"),
-    # Phone-like patterns. Avoid broad digit-hyphen matches that can classify ISO dates as P0.
-    re.compile(r"\b(?:\+?\d{1,3}[-\s]?)?(?:\(?\d{2,4}\)?[-\s]?)\d{3,4}[-\s]?\d{4}\b"),
-    re.compile(r"\b\d{13,19}\b"),
-    re.compile(r"(?i)\b(password|passwd|api[_-]?key|access[_-]?token|refresh[_-]?token|secret(?:[_-]?key)?|주민등록번호|계좌번호)\b"),
-)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+P0_PATTERN_CONFIG_PATH = PROJECT_ROOT / "docs" / "policy" / "p0-detection-patterns.json"
+_FALLBACK_PATTERN_CONFIG = {
+    "version": "fallback-v1",
+    "patterns": [
+        {"id": "email", "regex": r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"},
+        {"id": "phone_like", "regex": r"\b(?:\+?\d{1,3}[-\s]?)?(?:\(?\d{2,4}\)?[-\s]?)\d{3,4}[-\s]?\d{4}\b"},
+        {"id": "card_like", "regex": r"\b(?:\d[ -]*?){13,19}\b"},
+        {"id": "ssn_like", "regex": r"\b\d{3}-\d{2}-\d{4}\b"},
+        {"id": "secret_keyword", "regex": r"\b(password|passwd|api[_-]?key|access[_-]?token|refresh[_-]?token|secret(?:[_-]?key)?|주민등록번호|계좌번호)\b", "flags": "i"},
+    ],
+    "redactKeys": [
+        "password",
+        "passwd",
+        "secret",
+        "secret_key",
+        "token",
+        "access_token",
+        "refresh_token",
+        "api_key",
+        "ssn",
+        "card_number",
+        "account_number",
+        "phone",
+        "email",
+    ],
+}
+
+
+def _re_flags_from_text(raw_flags: str | None) -> int:
+    flags = 0
+    for flag in str(raw_flags or ""):
+        if flag == "i":
+            flags |= re.IGNORECASE
+        elif flag == "m":
+            flags |= re.MULTILINE
+        elif flag == "s":
+            flags |= re.DOTALL
+    return flags
+
+
+@lru_cache(maxsize=1)
+def get_p0_detection_config() -> dict[str, Any]:
+    try:
+        raw = json.loads(P0_PATTERN_CONFIG_PATH.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            raise ValueError("pattern config must be a JSON object")
+    except Exception:
+        raw = dict(_FALLBACK_PATTERN_CONFIG)
+
+    compiled_patterns = []
+    for item in raw.get("patterns", []):
+        if not isinstance(item, dict):
+            continue
+        regex = str(item.get("regex", "") or "").strip()
+        if not regex:
+            continue
+        compiled_patterns.append(re.compile(regex, _re_flags_from_text(item.get("flags"))))
+
+    redact_keys = {
+        str(key).strip().lower()
+        for key in raw.get("redactKeys", [])
+        if str(key).strip()
+    }
+
+    if not compiled_patterns:
+        compiled_patterns = [
+            re.compile(item["regex"], _re_flags_from_text(item.get("flags")))
+            for item in _FALLBACK_PATTERN_CONFIG["patterns"]
+        ]
+    if not redact_keys:
+        redact_keys = {str(key).lower() for key in _FALLBACK_PATTERN_CONFIG["redactKeys"]}
+
+    return {
+        "version": str(raw.get("version") or _FALLBACK_PATTERN_CONFIG["version"]),
+        "patterns": tuple(compiled_patterns),
+        "redact_keys": frozenset(redact_keys),
+    }
 
 P3_PUBLIC_HINT_PATTERNS = (
     re.compile(r"(?i)\bhttps?://"),
@@ -43,7 +117,8 @@ def detect_p0(text: str | None) -> bool:
     if not text:
         return False
     target = str(text)
-    return any(pattern.search(target) for pattern in P0_PATTERNS)
+    patterns = get_p0_detection_config()["patterns"]
+    return any(pattern.search(target) for pattern in patterns)
 
 
 def classify_text_level(text: str | None) -> str:
@@ -106,7 +181,7 @@ def redact_p0(text: str | None) -> str:
     if not text:
         return ""
     output = str(text)
-    for pattern in P0_PATTERNS:
+    for pattern in get_p0_detection_config()["patterns"]:
         output = pattern.sub("[REDACTED]", output)
     return output
 
@@ -116,9 +191,14 @@ def redact_payload(value: Any) -> Any:
     if isinstance(value, str):
         return redact_p0(value)
     if isinstance(value, dict):
+        redact_keys = get_p0_detection_config()["redact_keys"]
         result: dict[str, Any] = {}
         for key, nested in value.items():
-            result[str(key)] = redact_payload(nested)
+            text_key = str(key)
+            if text_key.strip().lower() in redact_keys:
+                result[text_key] = "[REDACTED]"
+            else:
+                result[text_key] = redact_payload(nested)
         return result
     if isinstance(value, list):
         return [redact_payload(item) for item in value]

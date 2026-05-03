@@ -1,0 +1,23 @@
+# Replay control plane only.
+# This slice makes the split/replay process reviewable without carrying the
+# wider core-loop runtime, ask promotion, or CI/public-release overlay.
+
+CHANGELOG.md
+docs/PROJECT_STATE.md
+docs/status/2026-04-16-dirty-tree-split-plan.md
+ops/checkpoints/00-replay-control-plane.pathspec
+ops/checkpoints/01-contract-entrypoints-green-baseline.pathspec
+ops/checkpoints/02-cli-mcp-surface-migration.pathspec
+ops/checkpoints/03-core-infra-ownership-transition.pathspec
+ops/checkpoints/04-paper-public-reading.pathspec
+ops/checkpoints/05-retrieval-ask-v2.pathspec
+ops/checkpoints/06-learning-vault-web-ingest.pathspec
+ops/checkpoints/07-foundry-satellites-and-ops.pathspec
+ops/checkpoints/08-meta-docs-eval-carryover.pathspec
+ops/checkpoints/09-core-loop-stabilization.pathspec
+ops/checkpoints/README.md
+ops/checkpoints/checkpoints.json
+scripts/report_checkpoint_split.py
+scripts/sync_worktree_slice.py
+tests/test_checkpoint_split_report.py
+tests/test_sync_worktree_slice.py

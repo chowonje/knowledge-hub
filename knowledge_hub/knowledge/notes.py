@@ -10,7 +10,7 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.markdown import Markdown
 
-from knowledge_hub.core.database import SQLiteDatabase
+from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 
 console = Console()
 

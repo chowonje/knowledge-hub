@@ -1,0 +1,62 @@
+profile_id: core
+kind: core
+title: Core Epistemic Profile
+entity_types:
+  - note
+  - source
+  - concept
+  - claim
+  - belief
+  - decision
+predicates:
+  - id: mentions
+    description: A note or source mentions a concept.
+    domain: note
+    range: concept
+  - id: supports
+    description: A claim or belief supports another claim or belief.
+    domain: claim
+    range: belief
+  - id: contradicts
+    description: A claim or belief contradicts another belief.
+    domain: claim
+    range: belief
+  - id: depends_on
+    description: A belief or decision depends on another concept.
+    domain: belief
+    range: concept
+  - id: leads_to
+    description: A belief can lead to a decision.
+    domain: belief
+    range: decision
+aliases:
+  note:
+    - memo
+    - document
+  source:
+    - paper
+    - web
+extraction_hints:
+  note:
+    preferred_entities:
+      - concept
+      - claim
+  belief:
+    statuses:
+      - proposed
+      - reviewed
+      - trusted
+      - stale
+      - rejected
+cluster_label_hints:
+  concept_bias:
+    - core idea
+    - central concept
+retrieval_facets:
+  preferred_sources:
+    - vault
+    - paper
+    - web
+  supporting_predicates:
+    - supports
+    - contradicts

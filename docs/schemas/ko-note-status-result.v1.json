@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "runId",
+    "counts",
+    "paths",
+    "items",
+    "ts"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.ko-note.status.result.v1" },
+    "status": { "type": "string" },
+    "runId": { "type": "string" },
+    "counts": { "type": "object" },
+    "paths": { "type": "object" },
+    "items": { "type": "array" },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

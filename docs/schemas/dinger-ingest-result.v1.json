@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.ingest.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "mode", "target", "underlyingSchema", "payload", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.ingest.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "mode": { "type": "string", "enum": ["paper_query", "web", "youtube"] },
+    "target": { "type": "object" },
+    "underlyingSchema": { "type": "string" },
+    "payload": { "type": "object" },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

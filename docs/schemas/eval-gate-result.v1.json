@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.eval.gate.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "profile", "gate", "reports", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.eval.gate.result.v1" },
+    "status": { "type": "string" },
+    "profile": { "type": "string" },
+    "gate": { "type": "object" },
+    "reports": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

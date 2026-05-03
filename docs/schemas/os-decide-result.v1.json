@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.os.decide.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "decision", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.os.decide.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "decision": { "type": "object" },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/learning-template-result.v1.json",
+  "title": "knowledge-hub learning template result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "topic",
+    "status",
+    "session",
+    "policy",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.learning.template.result.v1"
+    },
+    "runId": {"type": "string", "minLength": 1},
+    "topic": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["ok", "error", "blocked"]},
+    "session": {
+      "type": "object",
+      "required": ["sessionId", "targetTrunkIds"],
+      "properties": {
+        "sessionId": {"type": "string", "minLength": 1},
+        "targetTrunkIds": {"type": "array", "items": {"type": "string"}},
+        "path": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": ["mode", "allowed", "classification", "policyErrors"],
+      "properties": {
+        "mode": {"type": "string"},
+        "allowed": {"type": "boolean"},
+        "classification": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+        "blockedReason": {"type": ["string", "null"]},
+        "policyErrors": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"},
+    "writeback": {
+      "type": "object",
+      "properties": {
+        "hub": {"type": "string"},
+        "session": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "schemaErrors": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

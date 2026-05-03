@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/crawl-pending-apply-result.v1.json",
+  "title": "knowledge-hub crawl pending apply result v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.crawl.pending.apply.result.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "error"]
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "error": {
+      "type": "string"
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "id",
+        "run_id",
+        "topic_slug",
+        "note_id",
+        "source_canonical_id",
+        "target_canonical_id",
+        "relation_norm",
+        "status",
+        "confidence"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "run_id": { "type": "string", "minLength": 1 },
+        "topic_slug": { "type": "string", "minLength": 1 },
+        "note_id": { "type": "string", "minLength": 1 },
+        "source_url": { "type": "string" },
+        "source_canonical_id": { "type": "string", "minLength": 1 },
+        "target_canonical_id": { "type": "string", "minLength": 1 },
+        "relation_norm": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence_ptrs_json": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "reason_json": { "type": "object" },
+        "status": {
+          "type": "string",
+          "enum": ["approved", "rejected", "pending"]
+        },
+        "created_at": { "type": "string" },
+        "reviewed_at": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "schemaErrors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "ok" } } },
+      "then": { "required": ["item"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "error" } } },
+      "then": { "required": ["error"] }
+    }
+  ]
+}

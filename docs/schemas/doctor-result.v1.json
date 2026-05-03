@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.doctor.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "checks", "nextActions", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.doctor.result.v1" },
+    "status": { "type": "string" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["area", "status", "summary", "detail"],
+        "properties": {
+          "area": { "type": "string" },
+          "status": { "type": "string" },
+          "summary": { "type": "string" },
+          "detail": { "type": "string" },
+          "fixCommand": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "nextActions": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

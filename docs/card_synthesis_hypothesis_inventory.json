@@ -1,0 +1,87 @@
+{
+  "schema": "knowledge-hub.card-synthesis-hypothesis-inventory.v1",
+  "updated": "2026-04-24",
+  "migrationRequired": false,
+  "destructiveActions": [],
+  "cards": [
+    {
+      "surface": "claim_cards_v1",
+      "generation": "v1",
+      "authority": "derivative",
+      "defaultRuntimeRole": "retrieval_signal_only",
+      "retirementStatus": "keep_until_compare_packet_and_answer_quality_gates_are_stable",
+      "risk": "claim extraction errors can look grounded if treated as citation evidence"
+    },
+    {
+      "surface": "paper_section_cards_v1",
+      "generation": "v1",
+      "authority": "derivative",
+      "defaultRuntimeRole": "labs_optional_retrieval_signal_only",
+      "retirementStatus": "labs_only_keep",
+      "risk": "section projections can drift from source spans"
+    },
+    {
+      "surface": "paper_cards_v2",
+      "generation": "v2",
+      "authority": "derivative",
+      "defaultRuntimeRole": "retrieval_signal_only",
+      "retirementStatus": "current_target_generation",
+      "risk": "paper-level summaries must resolve back to source spans before citation"
+    },
+    {
+      "surface": "vault_cards_v2",
+      "generation": "v2",
+      "authority": "derivative",
+      "defaultRuntimeRole": "retrieval_signal_only",
+      "retirementStatus": "current_target_generation",
+      "risk": "vault note summaries can expose private corpus shape and must stay local"
+    },
+    {
+      "surface": "web_cards_v2",
+      "generation": "v2",
+      "authority": "derivative",
+      "defaultRuntimeRole": "retrieval_signal_only",
+      "retirementStatus": "current_target_generation",
+      "risk": "web cards need version/date evidence for latest/current claims"
+    }
+  ],
+  "synthesis": {
+    "claimSynthesis": {
+      "store": "none",
+      "authority": "computed_projection",
+      "schemas": [
+        "knowledge-hub.claim-synthesis.result.v1",
+        "knowledge-hub.claim-synthesis.eval.prepare.result.v1",
+        "knowledge-hub.claim-synthesis.eval.report.v1"
+      ],
+      "promotionGate": "answer_quality_gate_and_compare_packet_contract_first"
+    },
+    "paperTopicSynthesis": {
+      "store": "none",
+      "authority": "labs_computed_projection",
+      "schemas": ["knowledge-hub.paper-topic-synthesis.result.v1"],
+      "promotionGate": "live_retrieval_baseline_plus_answer_quality_gate"
+    }
+  },
+  "hypothesis": {
+    "firstClassStore": false,
+    "status": "not_implemented",
+    "allowedNextStep": "proposal_contract_only_after_compare_packet_baseline",
+    "risk": "hypothesis rows become pseudo-facts unless explicitly marked proposal and barred from citations"
+  },
+  "proposals": {
+    "existingOperationalQueues": [
+      "ontology_pending",
+      "ontology_profile_proposals",
+      "entity_merge_proposals",
+      "entity_split_proposals",
+      "learning_graph_pending"
+    ],
+    "evidenceRole": "not_citation_endpoint"
+  },
+  "recommendation": {
+    "status": "hold_migration",
+    "reason": "v1/v2 coexistence is acceptable while answer quality, compare packet, index freshness, and reranker A/B gates are being established.",
+    "nextReviewTrigger": "after answer_quality_gate and compare_packet have live baseline reports"
+  }
+}

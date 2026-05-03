@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "runId", "status", "items", "count", "ts"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.entity.merge.list.result.v1" },
+    "runId": { "type": "string" },
+    "status": { "type": "string" },
+    "count": { "type": "integer", "minimum": 0 },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "ts": { "type": "string" }
+  },
+  "additionalProperties": true
+}

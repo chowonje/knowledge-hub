@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.dinger.capture-status.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "queueDir", "runtimeDir", "counts", "samples", "actions", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.dinger.capture-status.result.v1" },
+    "status": { "type": "string", "enum": ["ok"] },
+    "queueDir": { "type": "string" },
+    "runtimeDir": { "type": "string" },
+    "counts": {
+      "type": "object",
+      "required": [
+        "totalCaptures",
+        "queued",
+        "processing",
+        "filed",
+        "linkedToOs",
+        "failed",
+        "orphanedRuntime",
+        "recoverableOrphans",
+        "unrecoverableOrphans",
+        "retryReady",
+        "retryBlocked",
+        "staleClaimFiles",
+        "activeClaimFiles",
+        "invalidClaimFiles",
+        "cleanupDeleteEligibleEntries"
+      ],
+      "properties": {
+        "totalCaptures": { "type": "integer", "minimum": 0 },
+        "queued": { "type": "integer", "minimum": 0 },
+        "processing": { "type": "integer", "minimum": 0 },
+        "filed": { "type": "integer", "minimum": 0 },
+        "linkedToOs": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "orphanedRuntime": { "type": "integer", "minimum": 0 },
+        "recoverableOrphans": { "type": "integer", "minimum": 0 },
+        "unrecoverableOrphans": { "type": "integer", "minimum": 0 },
+        "retryReady": { "type": "integer", "minimum": 0 },
+        "retryBlocked": { "type": "integer", "minimum": 0 },
+        "staleClaimFiles": { "type": "integer", "minimum": 0 },
+        "activeClaimFiles": { "type": "integer", "minimum": 0 },
+        "invalidClaimFiles": { "type": "integer", "minimum": 0 },
+        "cleanupDeleteEligibleEntries": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "samples": {
+      "type": "object",
+      "required": [
+        "recoverableOrphanCaptureIds",
+        "unrecoverableOrphanCaptureIds",
+        "retryReadyCaptureIds",
+        "staleClaimCaptureIds"
+      ],
+      "properties": {
+        "recoverableOrphanCaptureIds": { "type": "array", "items": { "type": "string" } },
+        "unrecoverableOrphanCaptureIds": { "type": "array", "items": { "type": "string" } },
+        "retryReadyCaptureIds": { "type": "array", "items": { "type": "string" } },
+        "staleClaimCaptureIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "count", "command", "summary", "sampleCaptureIds"],
+        "properties": {
+          "kind": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 },
+          "command": { "type": "string" },
+          "summary": { "type": "string" },
+          "sampleCaptureIds": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    }
+  },
+  "additionalProperties": false
+}

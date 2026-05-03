@@ -1,0 +1,102 @@
+[
+  {
+    "case_id": "rejected_belief_without_caveat",
+    "mode": "verification",
+    "query": "attention mechanism",
+    "answer": "Attention은 seq2seq training에 필요합니다.",
+    "evidence": [
+      {
+        "title": "Paper A",
+        "excerpt": "attention is needed for seq2seq training.",
+        "source_type": "paper"
+      }
+    ],
+    "contradicting_beliefs": [
+      {
+        "belief_id": "belief_1",
+        "statement": "Attention은 필요하지 않다.",
+        "status": "rejected"
+      }
+    ],
+    "expected": {
+      "status": "failed",
+      "reasonCode": "contradicts_rejected_belief",
+      "contradictsRejectedBelief": true
+    }
+  },
+  {
+    "case_id": "rejected_belief_with_caveat",
+    "mode": "verification",
+    "query": "attention mechanism",
+    "answer": "Attention이 필요하다는 근거가 있지만, 기존 판단과 상충할 수 있어 단정하기 어렵습니다.",
+    "evidence": [
+      {
+        "title": "Paper A",
+        "excerpt": "attention is needed for seq2seq training.",
+        "source_type": "paper"
+      }
+    ],
+    "contradicting_beliefs": [
+      {
+        "belief_id": "belief_1",
+        "statement": "Attention은 필요하지 않다.",
+        "status": "rejected"
+      }
+    ],
+    "expected": {
+      "status": "caution",
+      "conflictMentioned": true,
+      "contradictsRejectedBelief": true
+    }
+  },
+  {
+    "case_id": "signal_only_grounding",
+    "mode": "verification",
+    "query": "attention mechanism",
+    "answer": "Attention은 최신 prerequisite입니다.",
+    "evidence": [
+      {
+        "title": "Learning edge",
+        "excerpt": "attention prerequisite edge",
+        "source_id": "learning_edge:rag:prereq",
+        "source_type": "learning_edge"
+      }
+    ],
+    "contradicting_beliefs": [],
+    "expected": {
+      "status": "failed",
+      "reasonCode": "signal_only_grounding",
+      "retrievalSignalCount": 1,
+      "groundingEvidenceCount": 0
+    }
+  },
+  {
+    "case_id": "non_evidence_signal_contract",
+    "mode": "answer_contract",
+    "answer": "Retrieval uses a learning edge signal.",
+    "evidence": [
+      {
+        "title": "Learning edge",
+        "excerpt": "retrieval prerequisite edge",
+        "source_id": "learning_edge:rag:prereq",
+        "source_type": "learning_edge"
+      }
+    ],
+    "citations": [
+      {
+        "label": "S1",
+        "target": "learning_edge:rag:prereq"
+      }
+    ],
+    "verification": {
+      "status": "failed",
+      "needsCaution": true,
+      "unsupportedClaimCount": 0,
+      "uncertainClaimCount": 0
+    },
+    "expected": {
+      "citationCount": 0,
+      "retrievalSignalCount": 1
+    }
+  }
+]

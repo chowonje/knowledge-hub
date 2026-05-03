@@ -7,10 +7,14 @@
     "build": "tsc",
     "check": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
-    "test:knowledge-hub-cli": "node --import tsx --test tests/knowledge-hub-cli-entrypoint.test.ts"
+    "test:knowledge-hub-cli": "node --import tsx --test tests/knowledge-hub-cli-entrypoint.test.ts",
+    "project": "node --import tsx src/personal-foundry/project-cli.ts",
+    "project:init": "node --import tsx src/personal-foundry/project-cli.ts init",
+    "project:status": "node --import tsx src/personal-foundry/project-cli.ts status"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "ajv": "^8.17.1",
     "tsx": "^4.0.0",
     "typescript": "^5.5.0"
   }
