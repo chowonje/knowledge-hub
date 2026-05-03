@@ -542,7 +542,13 @@ class Config:
     def get_provider_config(self, provider_name: str) -> dict:
         """특정 프로바이더의 설정 반환 (env var 확장 적용)"""
         raw = self.get_nested("providers", provider_name, default={})
-        return _expand_env_vars(raw) if isinstance(raw, dict) else {}
+        if not isinstance(raw, dict):
+            return {}
+        expanded = _expand_env_vars(raw)
+        api_key_env = str(expanded.get("api_key_env") or "").strip()
+        if api_key_env and not str(expanded.get("api_key") or "").strip():
+            expanded["api_key"] = os.environ.get(api_key_env, "")
+        return expanded
 
     # --- 편의 프로퍼티 ---
 
@@ -739,7 +745,10 @@ class Config:
         for provider in (require_providers or []):
             from knowledge_hub.providers import registry
 
-            info = registry.get_provider_info(provider)
+            try:
+                info = registry.get_provider_info(provider, config=self)
+            except TypeError:
+                info = registry.get_provider_info(provider)
             if info is not None and not bool(info.requires_api_key):
                 log.debug("Skipping API key validation for local provider [%s]", provider)
                 continue

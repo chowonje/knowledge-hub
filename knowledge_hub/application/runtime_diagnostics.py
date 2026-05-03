@@ -45,7 +45,13 @@ def _role_provider_state(
 ) -> dict[str, Any]:
     provider_name = _safe_str(provider_name)
     model = _safe_str(model)
-    provider_info = registry.get_provider_info(provider_name) if provider_name else None
+    if provider_name:
+        try:
+            provider_info = registry.get_provider_info(provider_name, config=config)
+        except TypeError:
+            provider_info = registry.get_provider_info(provider_name)
+    else:
+        provider_info = None
     provider_config = {}
     if config is not None and hasattr(config, "get_provider_config") and provider_name:
         try:
@@ -54,16 +60,16 @@ def _role_provider_state(
             provider_config = {}
 
     requires_api_key = bool(getattr(provider_info, "requires_api_key", False))
-    api_key = ""
+    resolved_secret = ""
     api_key_status = "not_required"
     if requires_api_key:
         raw_key = _safe_str(provider_config.get("api_key", ""))
-        api_key = resolve_api_key(provider_name, raw_key)
-        api_key_status = "ok" if api_key else "missing"
+        resolved_secret = resolve_api_key(provider_name, raw_key)
+        api_key_status = "ok" if resolved_secret else "missing"
 
     installed = bool(provider_info)
     role_supported = bool(provider_info) and _provider_supports_role(provider_info, role)
-    available = installed and role_supported and (not requires_api_key or bool(api_key))
+    available = installed and role_supported and (not requires_api_key or bool(resolved_secret))
 
     reason_codes: list[str] = []
     if not installed:
@@ -72,7 +78,7 @@ def _role_provider_state(
         reason_codes.append(
             "provider_missing_embedding_support" if role == "embedding" else "provider_missing_llm_support"
         )
-    if requires_api_key and not api_key:
+    if requires_api_key and not resolved_secret:
         reason_codes.append("missing_api_key")
 
     runtime_status: dict[str, Any] = {}

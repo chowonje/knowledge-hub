@@ -11,6 +11,7 @@ Last updated: 2026-05-03
 - Public-facing posture is **Research Preview**, not stable-release language.
 - The supported default path for public docs is `discover -> index -> search/ask -> evidence review`.
 - The current green signal is intentionally narrow: public release trust comes from the smoke gate / approval slice, not a full-repo green claim.
+- Provider setup is now a focused public-preview support surface: `khub provider` can recommend profiles, register custom OpenAI-compatible aliases, bind provider/model roles, store API-key environment references, apply setup profiles, and inspect provider diagnostics while keeping external-call policy explicit.
 - `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental in public messaging.
 - Default top-level CLI discovery now favors the representative core loop. Personal, eval, and low-level maintenance commands remain directly invokable for compatibility, but they are hidden from the default `khub --help` output.
 - A public snapshot should be cut from a dedicated `public-preview` branch and pass `scripts/check_public_release_hygiene.py` plus `scripts/check_release_smoke.py` on a clean checkout.
