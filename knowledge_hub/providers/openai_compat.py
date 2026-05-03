@@ -22,7 +22,7 @@ Usage in config.yaml:
   providers:
     openai-compat:
       base_url: https://api.deepseek.com/v1
-      api_key: ${DEEPSEEK_API_KEY}
+      api_key_env: DEEPSEEK_API_KEY
 """
 
 from __future__ import annotations
@@ -160,6 +160,7 @@ class OpenAICompatLLM(BaseLLM):
         api_key: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 2000,
+        provider_name: str = "openai-compat",
         **kwargs,
     ):
         super().__init__(model, **kwargs)
@@ -167,6 +168,7 @@ class OpenAICompatLLM(BaseLLM):
         self.api_key = api_key or self._resolve_api_key(base_url)
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self.provider_name = str(provider_name or "openai-compat").strip() or "openai-compat"
 
     @staticmethod
     def _resolve_api_key(base_url: str) -> str:
@@ -178,7 +180,7 @@ class OpenAICompatLLM(BaseLLM):
         return os.getenv("OPENAI_COMPAT_API_KEY", "")
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
-        decision = enforce_outbound_policy(provider="openai-compat", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(provider=self.provider_name, model=self.model, prompt=prompt, context=context)
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -202,7 +204,7 @@ class OpenAICompatLLM(BaseLLM):
         return resp.json()["choices"][0]["message"]["content"]
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
-        decision = enforce_outbound_policy(provider="openai-compat", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(provider=self.provider_name, model=self.model, prompt=prompt, context=context)
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -268,16 +270,18 @@ class OpenAICompatEmbedder(BaseEmbedder):
         model: str = "mistral-embed",
         base_url: str = "https://api.mistral.ai/v1",
         api_key: str | None = None,
+        provider_name: str = "openai-compat",
         **kwargs,
     ):
         super().__init__(model, **kwargs)
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key or OpenAICompatLLM._resolve_api_key(base_url)
+        self.provider_name = str(provider_name or "openai-compat").strip() or "openai-compat"
 
     def embed_text(self, text: str) -> List[float]:
         if not text or not text.strip():
             raise ValueError("빈 텍스트는 임베딩할 수 없습니다")
-        decision = enforce_outbound_policy(provider="openai-compat", model=self.model, prompt=text, context="")
+        decision = enforce_outbound_policy(provider=self.provider_name, model=self.model, prompt=text, context="")
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -295,7 +299,7 @@ class OpenAICompatEmbedder(BaseEmbedder):
         clean = [text for _, text in clean_pairs]
         if not clean:
             return [None] * len(texts)
-        report = evaluate_outbound_policy_batch(provider="openai-compat", model=self.model, texts=clean)
+        report = evaluate_outbound_policy_batch(provider=self.provider_name, model=self.model, texts=clean)
         blocked_positions = set(report.blocked_indices)
         self.last_policy = report.to_dict()
         if report.blocked_count or any("P1 warning" in warning for warning in report.warnings):

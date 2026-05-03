@@ -6,6 +6,7 @@ Usage:
     khub discover "topic" [OPTIONS]    # 논문 검색 → 다운로드 → 요약 → 연결
     khub paper summary|evidence|memory|related
     khub config get|set|list
+    khub provider recommend|setup|add|use
     khub search "query"
     khub ask "question"
     khub health                         # 설정/의존성 진단
@@ -309,6 +310,7 @@ cli.add_command(labs_group, "labs")
 
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.init_cmd", "init_cmd", "init")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.config_cmd", "config_group", "config")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.provider_cmd", "provider_group", "provider")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.discover_cmd", "discover", "discover")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_cmd", "paper_group", "paper")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_memory_cmd", "paper_memory_group", "paper-memory", hidden=True)
