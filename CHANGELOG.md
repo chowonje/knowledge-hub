@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Sanitized local workstation and vault-internal path strings in governance docs, an eval task note, and the RAG vNext rerank shadow query fixture.
 - Added a focused provider-surface tranche for public-preview setup. `khub provider` now exposes recommendation, custom OpenAI-compatible provider registration, role assignment, environment-key references, profile setup, and provider diagnostics; config-defined custom providers are visible to the registry, doctor, and runtime diagnostics without changing ask-v2, search/MCP runtime, or the add facade.
 - Refined `AGENTS.md` with the KnowledgeOS symlink note, P0 default handling, product-owned CLI/eval guidance, surface-specific verification mapping, and a pre-commit checklist for product changes.
 - Added an answer-loop eval packet hardening tranche. Vault/paper comparison packets now promote resolved target sources before support evidence, comparison guidance recognizes non-paper source ids, and summary metrics now report both all-row abstain agreement and required-abstain agreement counts.

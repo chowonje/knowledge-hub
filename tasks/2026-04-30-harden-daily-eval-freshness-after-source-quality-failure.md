@@ -39,5 +39,5 @@
 
 - `pytest tests/test_source_quality_trend_report.py tests/test_legacy_runtime_readiness_report.py tests/test_source_quality_observation_report.py tests/test_ask_v2_sources.py::test_generate_answer_vault_no_card_candidates_stays_ask_v2_no_result tests/test_eval_center.py tests/test_daily_eval_center_runner.py`
 - Chroma open probe for `~/.khub/chroma_db_bge_m3`.
-- `python scripts/run_daily_source_quality.py --repo-root /Users/won/Desktop/allinone/knowledge-hub --runs-root /Users/won/.khub/eval/knowledgeos/runs --local-timezone Asia/Seoul --enforce-hard-gate --json`
-- `python scripts/run_daily_eval_center.py --repo-root /Users/won/Desktop/allinone/knowledge-hub --runs-root /Users/won/.khub/eval/knowledgeos/runs --queries-dir eval/knowledgeos/queries --local-timezone Asia/Seoul --json`
+- `python scripts/run_daily_source_quality.py --repo-root <knowledge-hub-repo> --runs-root ~/.khub/eval/knowledgeos/runs --local-timezone Asia/Seoul --enforce-hard-gate --json`
+- `python scripts/run_daily_eval_center.py --repo-root <knowledge-hub-repo> --runs-root ~/.khub/eval/knowledgeos/runs --queries-dir eval/knowledgeos/queries --local-timezone Asia/Seoul --json`
