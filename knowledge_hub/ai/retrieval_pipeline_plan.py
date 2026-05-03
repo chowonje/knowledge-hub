@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Callable
 
+from knowledge_hub.ai.retrieval_strategy_diagnostics import build_strategy_plan_diagnostics
+
 
 @dataclass(frozen=True)
 class RetrievalPlanBuilderDeps:
@@ -84,6 +86,23 @@ class RetrievalPlanBuilder:
             query_plan=query_plan_payload,
             query_frame=query_frame_payload,
         )
+        strategy = build_strategy_plan_diagnostics(
+            query=query,
+            query_intent=intent,
+            paper_family=paper_family,
+            source_scope=normalized_source or "all",
+            candidate_budgets=budgets,
+            token_budget=token_budget,
+            fallback_window=fallback_window,
+            temporal_route_applied=bool(temporal_signals.get("enabled")),
+            enrichment_route=str(enrichment.get("route") or "core_only"),
+            resolved_source_ids=[
+                deps.clean_text_fn(item)
+                for item in list(query_frame_payload.get("resolved_source_ids") or query_plan_payload.get("resolved_paper_ids") or [])
+                if deps.clean_text_fn(item)
+            ],
+            top_k=top_k,
+        )
         return deps.retrieval_plan_type(
             query=deps.clean_text_fn(query),
             source_scope=normalized_source or "all",
@@ -113,4 +132,8 @@ class RetrievalPlanBuilder:
             prefilter_reason=str(prefilter.get("prefilter_reason") or "none"),
             reference_source_applied=bool(prefilter.get("reference_source_applied")),
             watchlist_scope_applied=bool(prefilter.get("watchlist_scope_applied")),
+            complexity_class=str(strategy.get("complexityClass") or "local_lookup"),
+            budget_reason=str(strategy.get("budgetReason") or "default_core_retrieval"),
+            retrieval_budget=dict(strategy.get("retrievalBudget") or {}),
+            retry_policy=dict(strategy.get("retryPolicy") or {}),
         )
