@@ -39,6 +39,8 @@ config.yaml.bak_*
 *.db
 *.db-shm
 *.db-wal
+*.sqlite
+*.sqlite3
 *.log
 .khub/
 runs/

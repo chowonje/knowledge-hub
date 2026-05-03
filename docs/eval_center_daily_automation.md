@@ -58,8 +58,9 @@
 - `scripts/run_daily_eval_center.sh`
 - installed launchd helper: `~/.khub/bin/run_daily_eval_center_launchd.sh`
 
-launchd 템플릿:
-- `ops/launchd/com.won.knowledge-hub.daily-eval-center.plist`
+launchd:
+- workstation-specific launchd plists are local-only and are not tracked in this public repository.
+- point a local plist at `~/.khub/bin/run_daily_eval_center_launchd.sh` if scheduled local runs are needed.
 
 기본 스케줄:
 - 매일 `10:05` 로컬 시간

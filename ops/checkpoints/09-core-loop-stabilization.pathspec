@@ -85,5 +85,4 @@ tests/test_search_cmd.py
 tests/test_sync_worktree_slice.py
 tests/test_vector_db_fts.py
 tests/test_vector_restore_cmd.py
-docs/status/2026-04-16-dirty-tree-split-plan.md
 knowledge_hub/ai/retrieval_fit.py

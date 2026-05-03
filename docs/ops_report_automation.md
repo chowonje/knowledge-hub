@@ -50,8 +50,9 @@ receipt:
 실행 스크립트:
 - `scripts/run_ops_report.sh`
 
-launchd 템플릿:
-- `ops/launchd/com.won.knowledge-hub.ops-report.plist`
+launchd:
+- workstation-specific launchd plists are local-only and are not tracked in this public repository.
+- point a local plist at `scripts/run_ops_report.sh` if scheduled local runs are needed.
 
 기본 스케줄:
 - 매일 `09:30` 로컬 시간

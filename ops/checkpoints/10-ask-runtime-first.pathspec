@@ -6,7 +6,6 @@
 
 CHANGELOG.md
 docs/PROJECT_STATE.md
-docs/status/2026-04-16-ask-tranche-plan.md
 knowledge_hub/ai/answer_native_inputs.py
 knowledge_hub/ai/answer_orchestrator.py
 knowledge_hub/ai/answer_payload_builder.py
