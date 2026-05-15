@@ -154,6 +154,7 @@ def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
         "sourceContentHash": content_hash,
         "spanLocator": span_locator,
         "contentHashAvailable": bool(content_hash),
+        "spanLocatorAvailable": bool(span_locator),
         "spanOffsetAvailable": bool(span_offset_available),
         "strictSpanBacked": bool(strict_span_backed),
         "fallbackSpan": bool(fallback_span),
@@ -367,6 +368,26 @@ def _claim_text(card: dict[str, Any]) -> str:
 
 
 def _claim_supporting_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
+    evidence_anchors = [dict(item or {}) for item in list(card.get("evidenceAnchors") or card.get("evidence_anchors") or [])]
+    if evidence_anchors:
+        spans: list[dict[str, Any]] = []
+        for index, anchor in enumerate(evidence_anchors, start=1):
+            anchor_id = _clean_text(anchor.get("anchorId") or anchor.get("anchor_id"))
+            spans.append(
+                {
+                    "spanRef": anchor_id or f"{_claim_card_id(card)}:anchor:{index}",
+                    "sourceId": _clean_text(anchor.get("sourceId") or anchor.get("source_id") or card.get("sourceId") or card.get("source_id")),
+                    "sourceType": _clean_text(anchor.get("sourceType") or anchor.get("source_type") or card.get("sourceKind") or card.get("source_kind") or "paper"),
+                    "contentHash": _clean_text(anchor.get("contentHash") or anchor.get("content_hash") or anchor.get("sourceContentHash") or anchor.get("source_content_hash")),
+                    "sourceContentHash": _clean_text(anchor.get("sourceContentHash") or anchor.get("source_content_hash") or anchor.get("contentHash") or anchor.get("content_hash")),
+                    "spanLocator": _clean_text(anchor.get("spanLocator") or anchor.get("span_locator")),
+                    "documentId": _clean_text(anchor.get("documentId") or anchor.get("document_id")),
+                    "chunkId": _clean_text(anchor.get("chunkId") or anchor.get("chunk_id")),
+                    "citationLabel": _clean_text(anchor.get("citationLabel") or anchor.get("citation_label")),
+                    "quote": str(anchor.get("quote") or anchor.get("excerpt") or "")[:500],
+                }
+            )
+        return spans
     anchor_ids = [_clean_text(value) for value in list(card.get("evidenceAnchorIds") or card.get("evidence_anchor_ids") or [])]
     excerpts = [_clean_text(value) for value in list(card.get("anchorExcerpts") or card.get("anchor_excerpts") or [])]
     if not anchor_ids and not excerpts:

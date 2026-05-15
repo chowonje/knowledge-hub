@@ -740,6 +740,13 @@ def test_generate_answer_compare_with_stored_claim_cards_does_not_require_alias_
     assert vector_db.search_called is False
     assert payload["v2"]["runtimeExecution"]["used"] == "ask_v2"
     assert payload["claimCards"]
+    evidence_anchor = payload["claimCards"][0]["evidenceAnchors"][0]
+    assert evidence_anchor["sourceId"] == "2603.13017"
+    assert evidence_anchor["documentId"] == "paper:2603.13017"
+    assert evidence_anchor["spanLocator"]
+    assert evidence_anchor["sourceContentHash"]
+    assert evidence_anchor["snippetHash"]
+    assert evidence_anchor["citationLabel"] == "S1"
     assert payload["answerProvenance"]["mode"] == "claim_cards_conflicted"
 
 

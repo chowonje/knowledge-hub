@@ -187,6 +187,151 @@ def test_compare_packet_from_runtime_maps_ask_v2_paper_compare_groups():
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_from_runtime_uses_enriched_evidence_anchors_with_offsets_as_strict_spans():
+    packet = build_compare_packet_from_runtime(
+        query="compare two papers on MemoryBench",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2603.13017", "2603.13018"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-a",
+                "sourceKind": "paper",
+                "sourceId": "2603.13017",
+                "summaryText": "Paper A reports 11x compression.",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-a",
+                        "sourceId": "2603.13017",
+                        "sourceType": "paper",
+                        "documentId": "paper:2603.13017",
+                        "chunkId": "paper:2603.13017:result",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:a",
+                        "snippetHash": "snippet-a",
+                        "citationLabel": "S1",
+                        "quote": "A reports 11x compression on MemoryBench.",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-b",
+                "sourceKind": "paper",
+                "sourceId": "2603.13018",
+                "summaryText": "Paper B reports worse compression.",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-b",
+                        "sourceId": "2603.13018",
+                        "sourceType": "paper",
+                        "documentId": "paper:2603.13018",
+                        "chunkId": "paper:2603.13018:result",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:b",
+                        "snippetHash": "snippet-b",
+                        "citationLabel": "S2",
+                        "quote": "B reports worse compression on MemoryBench.",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={
+            "groups": [
+                {
+                    "groupKey": "MemoryBench:compression",
+                    "canonicalFrame": {"dataset": "MemoryBench", "metric": "compression ratio"},
+                    "claimCardIds": ["claim-card-a", "claim-card-b"],
+                    "conflictingClaimCount": 1,
+                }
+            ]
+        },
+    )
+
+    assert packet is not None
+    spans = packet["dimensions"][0]["supportingSpans"]
+    assert {span["strictSpanBacked"] for span in spans} == {True}
+    assert {span["fallbackSpan"] for span in spans} == {False}
+    assert {span["sourceContentHash"] for span in spans} == {"sha256:a", "sha256:b"}
+    assert {span["spanLocatorAvailable"] for span in spans} == {True}
+    assert {span["spanOffsetAvailable"] for span in spans} == {True}
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_keeps_locator_only_evidence_anchors_non_strict():
+    packet = build_compare_packet_from_runtime(
+        query="compare two papers on MemoryBench",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2603.13017", "2603.13018"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-a",
+                "sourceKind": "paper",
+                "sourceId": "2603.13017",
+                "summaryText": "Paper A reports 11x compression.",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-a",
+                        "sourceId": "2603.13017",
+                        "sourceType": "paper",
+                        "documentId": "paper:2603.13017",
+                        "chunkId": "paper:2603.13017:result",
+                        "spanLocator": "paper:2603.13017:result",
+                        "sourceContentHash": "sha256:a",
+                        "snippetHash": "snippet-a",
+                        "citationLabel": "S1",
+                        "quote": "A reports 11x compression on MemoryBench.",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-b",
+                "sourceKind": "paper",
+                "sourceId": "2603.13018",
+                "summaryText": "Paper B reports worse compression.",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-b",
+                        "sourceId": "2603.13018",
+                        "sourceType": "paper",
+                        "documentId": "paper:2603.13018",
+                        "chunkId": "paper:2603.13018:result",
+                        "spanLocator": "paper:2603.13018:result",
+                        "sourceContentHash": "sha256:b",
+                        "snippetHash": "snippet-b",
+                        "citationLabel": "S2",
+                        "quote": "B reports worse compression on MemoryBench.",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={
+            "groups": [
+                {
+                    "groupKey": "MemoryBench:compression",
+                    "canonicalFrame": {"dataset": "MemoryBench", "metric": "compression ratio"},
+                    "claimCardIds": ["claim-card-a", "claim-card-b"],
+                    "conflictingClaimCount": 1,
+                }
+            ]
+        },
+    )
+
+    assert packet is not None
+    spans = packet["dimensions"][0]["supportingSpans"]
+    assert {span["strictSpanBacked"] for span in spans} == {False}
+    assert {span["fallbackSpan"] for span in spans} == {False}
+    assert {span["spanLocatorAvailable"] for span in spans} == {True}
+    assert {span["spanOffsetAvailable"] for span in spans} == {False}
+    assert packet["coverage"]["answerable"] is False
+    assert packet["coverage"]["strictSpanBackedCount"] == 0
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
 def test_compare_packet_from_runtime_omits_legacy_or_non_compare_payloads():
     assert (
         build_compare_packet_from_runtime(

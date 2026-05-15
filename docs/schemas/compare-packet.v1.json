@@ -36,6 +36,7 @@
                 "sourceContentHash": { "type": "string" },
                 "spanLocator": { "type": "string" },
                 "contentHashAvailable": { "type": "boolean" },
+                "spanLocatorAvailable": { "type": "boolean" },
                 "spanOffsetAvailable": { "type": "boolean" },
                 "strictSpanBacked": { "type": "boolean" },
                 "fallbackSpan": { "type": "boolean" },

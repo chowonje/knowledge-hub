@@ -1224,6 +1224,55 @@ class AskV2Service:
             deduped.append(dict(anchor))
         return deduped
 
+    @staticmethod
+    def _claim_card_evidence_anchors(item: dict[str, Any], *, limit: int = 5) -> list[dict[str, Any]]:
+        anchors: list[dict[str, Any]] = []
+        source_id = _clean_text(item.get("source_id") or item.get("sourceId"))
+        document_id = _clean_text(item.get("document_id") or item.get("documentId"))
+        source_hash = _clean_text(item.get("source_content_hash") or item.get("sourceContentHash"))
+        source_kind = _clean_text(item.get("source_kind") or item.get("sourceKind"))
+        for index, anchor in enumerate(list(item.get("anchors") or [])[: max(1, int(limit))], start=1):
+            payload = dict(anchor or {})
+            anchor_id = _clean_text(payload.get("anchor_id") or payload.get("anchorId"))
+            if not anchor_id:
+                continue
+            anchor_source_id = _clean_text(payload.get("paper_id") or payload.get("source_id") or payload.get("sourceId") or source_id)
+            anchor_document_id = _clean_text(payload.get("document_id") or payload.get("documentId") or document_id)
+            anchor_source_hash = _clean_text(
+                payload.get("source_content_hash")
+                or payload.get("sourceContentHash")
+                or payload.get("content_hash")
+                or payload.get("contentHash")
+                or source_hash
+            )
+            anchors.append(
+                {
+                    "anchorId": anchor_id,
+                    "anchor_id": anchor_id,
+                    "sourceId": anchor_source_id,
+                    "source_id": anchor_source_id,
+                    "sourceType": _clean_text(payload.get("source_type") or payload.get("sourceType") or source_kind),
+                    "documentId": anchor_document_id,
+                    "document_id": anchor_document_id,
+                    "chunkId": _clean_text(payload.get("chunk_id") or payload.get("chunkId") or payload.get("unit_id")),
+                    "chunk_id": _clean_text(payload.get("chunk_id") or payload.get("chunkId") or payload.get("unit_id")),
+                    "spanLocator": _clean_text(payload.get("span_locator") or payload.get("spanLocator") or payload.get("unit_id")),
+                    "span_locator": _clean_text(payload.get("span_locator") or payload.get("spanLocator") or payload.get("unit_id")),
+                    "sourceContentHash": anchor_source_hash,
+                    "source_content_hash": anchor_source_hash,
+                    "contentHash": anchor_source_hash,
+                    "content_hash": anchor_source_hash,
+                    "snippetHash": _clean_text(payload.get("snippet_hash") or payload.get("snippetHash")),
+                    "snippet_hash": _clean_text(payload.get("snippet_hash") or payload.get("snippetHash")),
+                    "citationLabel": f"S{index}",
+                    "citation_label": f"S{index}",
+                    "quote": str(payload.get("excerpt") or payload.get("quote") or "")[:500],
+                    "evidenceRole": _clean_text(payload.get("evidence_role") or payload.get("evidenceRole")),
+                    "sectionPath": _clean_text(payload.get("section_path") or payload.get("sectionPath")),
+                }
+            )
+        return anchors
+
     def _anchors_for_inline_cards(self, *, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
         anchors: list[dict[str, Any]] = []
         for card in cards:
@@ -1923,6 +1972,8 @@ class AskV2Service:
                     "claimId": _clean_text(item.get("claim_id")),
                     "sourceKind": _clean_text(item.get("source_kind")),
                     "sourceId": _clean_text(item.get("source_id")),
+                    "documentId": _clean_text(item.get("document_id")),
+                    "sourceContentHash": _clean_text(item.get("source_content_hash")),
                     "claimType": _clean_text(item.get("claim_type")),
                     "status": _clean_text(item.get("status")),
                     "summaryText": _clean_text(item.get("summary_text")),
@@ -1947,6 +1998,7 @@ class AskV2Service:
                     "limitationText": _clean_text(item.get("limitation_text")),
                     "evidenceStrength": _clean_text(item.get("evidence_strength")),
                     "evidenceAnchorIds": list(item.get("evidence_anchor_ids") or []),
+                    "evidenceAnchors": self._claim_card_evidence_anchors(item),
                     "sectionPaths": list(item.get("section_paths") or []),
                     "anchorExcerpts": [
                         _clean_text(anchor.get("excerpt"))
