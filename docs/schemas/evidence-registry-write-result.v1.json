@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.evidence-registry.write.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "records", "warnings", "createdAt"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.evidence-registry.write.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "not_found", "failed"] },
+    "records": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "createdAt": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -35,6 +35,9 @@ khub dinger ask "질문"
 khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
 khub search "주제"
 khub ask "질문"
+khub inspect corpus --json
+khub compare "비교 질문" --json
+khub trace "질문" --source paper --json
 khub agent context "작업 목표" --repo-path .
 khub discover "주제" -n 5 --judge
 khub paper list
@@ -42,11 +45,38 @@ khub paper board-export --json
 khub index
 ```
 
+## Evidence-substrate facades
+
+Codex/MCP handoff를 위한 얇은 public facade입니다. 새 답변 엔진을 만들지 않고 기존 검색/ask/evidence payload를 재사용합니다.
+
+```bash
+khub inspect corpus --json
+khub inspect index --json
+khub inspect source <source-id> --json
+khub inspect chunk <chunk-id> --json
+khub compare "MCP server design에서 tools와 resources를 어떻게 나눌까?" --json
+khub trace "Transformer의 핵심 아이디어는?" --source paper --json
+khub trace --from-json ./ask-result.json --json
+khub trace --from-json ./ask-result.json --save-registry --json
+khub inspect packet <packet-id> --json
+khub inspect context <context-pack-id> --json
+```
+
+계약:
+- `khub index`는 lexical + vector + metadata retrieval index를 만든다.
+- claim cards, evidence links, answer traces는 기본 index 결과가 아니라 별도 derivative/evidence contract다.
+- embedding은 source of truth가 아니라 검색용 파생 artifact다.
+- current repo/diff/task snippet은 기본적으로 ephemeral context이며, 명시적 승격 없이 persistent source store에 넣지 않는다.
+- `--save-registry`는 명시적으로 요청한 경우에만 packet/trace lookup record를 SQLite registry에 저장한다.
+- `khub://packet/{id}`와 `khub://context/{id}`는 registry record가 있으면 해석되고, 없으면 안정적인 `not_found`를 반환한다.
+- registry record는 source refs, source revision hash, lineage, token count, expiry, deletion policy를 가진 lookup projection이며 원본/source of truth가 아니다.
+
 ## 기본 Top-Level Help
 
 ```text
 khub agent
 khub ask
+khub compare
 khub config
 khub crawl
 khub discover
@@ -54,6 +84,7 @@ khub doctor
 khub explore
 khub health
 khub index
+khub inspect
 khub init
 khub labs
 khub mcp
@@ -61,6 +92,7 @@ khub paper
 khub search
 khub setup
 khub status
+khub trace
 khub vault
 ```
 

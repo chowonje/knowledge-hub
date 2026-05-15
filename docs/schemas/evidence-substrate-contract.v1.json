@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.evidence-substrate.contract.v1",
+  "type": "object",
+  "required": ["schema", "status", "primaryWorkflow", "canonicalFlow", "sourceBoundary", "indexContract"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.evidence-substrate.contract.v1" },
+    "status": { "type": "string" },
+    "primaryWorkflow": { "type": "string" },
+    "canonicalFlow": { "type": "array", "items": { "type": "string" } },
+    "sourceBoundary": { "type": "object" },
+    "indexContract": { "type": "object" },
+    "publicFacades": { "type": "object" },
+    "mcpResources": { "type": "array", "items": { "type": "string" } },
+    "promotionCriteria": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

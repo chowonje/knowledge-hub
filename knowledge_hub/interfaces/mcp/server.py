@@ -7,7 +7,8 @@ from uuid import uuid4
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
+from mcp.server.lowlevel.server import ReadResourceContents
+from mcp.types import Resource, ResourceTemplate, TextContent, Tool
 
 from knowledge_hub.application.agent.foundry_bridge import run_foundry_agent_goal
 from knowledge_hub.application.mcp.agent_payloads import (
@@ -18,6 +19,11 @@ from knowledge_hub.application.mcp.agent_payloads import (
     write_agent_run_report,
 )
 from knowledge_hub.application.mcp.jobs import ACTIVE_MCP_JOBS, run_async_tool
+from knowledge_hub.application.mcp.resources import (
+    list_khub_resource_templates,
+    list_khub_resources,
+    read_khub_resource,
+)
 from knowledge_hub.application.mcp.responses import (
     CORE_ONLY_TOOL_NAMES,
     JOB_TOOLS,
@@ -193,6 +199,20 @@ async def list_tools_impl() -> list[Tool]:
     from knowledge_hub.mcp.tool_specs import build_tools
 
     return build_tools()
+
+
+async def list_resources_impl() -> list[Resource]:
+    return list_khub_resources()
+
+
+async def list_resource_templates_impl() -> list[ResourceTemplate]:
+    return list_khub_resource_templates()
+
+
+async def read_resource_impl(state: Any, uri: Any) -> list[ReadResourceContents]:
+    if getattr(state, "config", None) is None or getattr(state, "sqlite_db", None) is None:
+        initialize_core_only(state)
+    return read_khub_resource(state, str(uri))
 
 
 async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[TextContent]:
@@ -390,6 +410,21 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
     return await call_tool_impl(SERVER_STATE, name, arguments)
 
 
+@app.list_resources()
+async def list_resources() -> list[Resource]:
+    return await list_resources_impl()
+
+
+@app.list_resource_templates()
+async def list_resource_templates() -> list[ResourceTemplate]:
+    return await list_resource_templates_impl()
+
+
+@app.read_resource()
+async def read_resource(uri: Any) -> list[ReadResourceContents]:
+    return await read_resource_impl(SERVER_STATE, uri)
+
+
 async def _async_main() -> None:
     async with stdio_server() as (read_stream, write_stream):
         await app.run(read_stream, write_stream, app.create_initialization_options())
@@ -419,9 +454,15 @@ __all__ = [
     "call_tool_impl",
     "initialize",
     "initialize_core_only",
+    "list_resource_templates",
+    "list_resource_templates_impl",
+    "list_resources",
+    "list_resources_impl",
     "list_tools",
     "list_tools_impl",
     "main",
+    "read_resource",
+    "read_resource_impl",
     "_build_fallback_agent_payload",
     "_build_mcp_tool_response",
     "_build_verify_block",

@@ -32,6 +32,10 @@ pip install -e ".[ollama]"
 khub doctor
 khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
+khub inspect corpus --json
+khub compare "MCP tools and resources contract" --json
+khub trace "Transformer의 핵심 아이디어는?" --source paper --json
+khub trace --from-json ./ask-result.json --save-registry --json
 ```
 
 실제 코퍼스를 넣고 representative result를 확인하려면 최소 1개 source ingest 후 indexing을 먼저 수행하세요.
@@ -61,6 +65,7 @@ The default surface is limited to:
 - local ingestion and indexing
 - grounded search and ask
 - evidence review
+- evidence-substrate inspection, comparison, and trace facades
 - read-only task-context assembly
 - policy / approval / provenance
 
@@ -82,6 +87,7 @@ The default `khub --help` surface now favors the representative core loop. Opera
 
 - **Grounded retrieval** - vault, paper, web에서 evidence를 찾아 질의응답
 - **Task context assembly** - repo context까지 읽기 전용으로 묶어 Codex-style assistance 지원
+- **Evidence registry** - 명시적으로 저장한 packet/context/trace lookup record를 `khub://packet/{id}`와 `khub://context/{id}`로 다시 확인
 - **Paper ingestion** - Semantic Scholar + arXiv 기반 검색, 다운로드, 요약, 인덱싱
 - **Obsidian 연결** - vault를 canonical memory로 유지하고 결과를 writeback
 - **Notebook workbench bridge** - Open Notebook에 topic bundle export
@@ -667,6 +673,11 @@ Cursor 예시 설정:
 - retrieval / answer: `search_knowledge`, `ask_knowledge`, `build_task_context`, `run_agentic_query`
 - paper / ingest: `discover_and_ingest`, `get_paper_detail`, `paper_lookup_and_summarize`, `run_paper_ingest_flow`
 - crawl / ko-note / ops: `crawl_web_ingest`, `crawl_pending_*`, `run_learning_pipeline`, `ops_report` 계열
+
+대표 MCP resources:
+- `khub://corpus/status`, `khub://corpus/contract`
+- `khub://source/{source_id}`, `khub://chunk/{chunk_id}`
+- `khub://packet/{packet_id}`, `khub://context/{context_pack_id}` for explicitly persisted registry records
 
 비동기 호출 규칙:
 - 장시간 작업은 보통 `queued|running|ok|blocked|failed` 상태를 반환합니다.
