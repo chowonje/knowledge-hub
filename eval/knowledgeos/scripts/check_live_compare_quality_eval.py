@@ -5,6 +5,7 @@ import argparse
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Any, Callable
@@ -21,6 +22,7 @@ SCHEMA = "knowledge-hub.live-compare-quality-eval.result.v1"
 DEFAULT_CASES_PATH = "eval/knowledgeos/queries/live_compare_quality_eval_cases.local.json"
 VALID_STATUSES = {"supported", "conflict", "unknown", "insufficient"}
 PUBLIC_SOURCE_TYPES = {"paper", "vault", "web", "concept"}
+OFFSET_LOCATOR_RE = re.compile(r"^chars?:\d+-\d+$", re.IGNORECASE)
 
 
 def _now_iso() -> str:
@@ -126,13 +128,18 @@ def _source_id_from_item(item: dict[str, Any]) -> str:
     return _clean_text(item.get("source_id") or item.get("sourceId") or item.get("target") or item.get("id"))
 
 
-def _collect_source_ids(payload: dict[str, Any], spans: list[dict[str, Any]]) -> set[str]:
+def _collect_source_ids(spans: list[dict[str, Any]]) -> set[str]:
     source_ids: set[str] = set()
     for item in spans:
         source_id = _source_id_from_item(item)
         if source_id:
             source_ids.add(source_id)
     return source_ids
+
+
+def _covered_expected_sources(expected_sources: list[str], spans: list[dict[str, Any]]) -> list[str]:
+    source_ids = _collect_source_ids(spans)
+    return [source_id for source_id in expected_sources if source_id in source_ids]
 
 
 def _collect_payload_source_ids(payload: dict[str, Any]) -> set[str]:
@@ -162,6 +169,71 @@ def _ratio(count: int, total: int) -> float | None:
     return round(count / total, 6)
 
 
+def _span_locator(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("spanLocator") or item.get("span_locator") or item.get("locator"))
+
+
+def _has_offset_locator(item: dict[str, Any]) -> bool:
+    locator = _span_locator(item)
+    if locator and OFFSET_LOCATOR_RE.match(locator):
+        return True
+    try:
+        int(item.get("charStart") if item.get("charStart") is not None else item.get("char_start"))
+        int(item.get("charEnd") if item.get("charEnd") is not None else item.get("char_end"))
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
+def _count_values(values: list[str]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for value in values:
+        key = _clean_text(value)
+        if not key:
+            continue
+        counts[key] = counts.get(key, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def _failure_categories(errors: list[str], diagnostics: list[str]) -> list[str]:
+    categories: set[str] = set()
+    for error in errors:
+        if error == "compare_packet_missing":
+            categories.add("compare_packet_missing")
+        elif error == "compare_packet_not_answerable":
+            categories.add("not_answerable")
+        elif error == "compare_packet_unexpectedly_answerable":
+            categories.add("false_positive_answerable")
+        elif error.startswith("strict_span_count_below_min"):
+            categories.add("strict_span_gap")
+        elif error == "expected_strict_source_coverage_below_min":
+            categories.add("strict_source_coverage_gap")
+        elif error == "expected_source_coverage_incomplete":
+            categories.add("expected_source_coverage_gap")
+        elif error == "dimension_terms_missing":
+            categories.add("dimension_gap")
+        elif error == "unexpected_dimension_status":
+            categories.add("unexpected_dimension_status")
+        elif error.startswith("supporting_span_count_below_min"):
+            categories.add("supporting_span_gap")
+        elif error == "trace_citations_missing":
+            categories.add("citation_gap")
+        elif error == "non_evidence_supporting_span_leak":
+            categories.add("non_evidence_leak")
+        elif error.startswith("compare_status_not_ok"):
+            categories.add("compare_status_not_ok")
+        elif error.startswith("case_execution_failed"):
+            categories.add("compare_runtime_failed")
+    if errors:
+        if "fallback_only_support" in diagnostics:
+            categories.add("fallback_only")
+        if "locator_only_spans_present" in diagnostics:
+            categories.add("locator_only_anchor")
+        if "trace_without_strict_spans" in diagnostics:
+            categories.add("trace_without_strict_spans")
+    return sorted(categories)
+
+
 def evaluate_case(
     case: dict[str, Any],
     payload: dict[str, Any],
@@ -179,6 +251,10 @@ def evaluate_case(
         case.get("expected_min_strict_span_count"),
         min_spans if expected_answerable else 0,
     )
+    min_strict_source_coverage = _as_float(
+        case.get("expected_min_strict_source_coverage"),
+        1.0 if expected_answerable and expected_sources else 0.0,
+    )
     require_trace_citations = _as_bool(case.get("require_trace_citations"), True)
     forbid_non_evidence = _as_bool(case.get("forbidden_non_evidence_support"), True)
 
@@ -187,10 +263,17 @@ def evaluate_case(
     spans = _supporting_spans(dimensions)
     strict_spans = [span for span in spans if _as_bool(span.get("strictSpanBacked"), False)]
     fallback_spans = [span for span in spans if _as_bool(span.get("fallbackSpan"), False)]
+    locator_only_spans = [
+        span
+        for span in spans
+        if _span_locator(span)
+        and not _as_bool(span.get("strictSpanBacked"), False)
+        and not _as_bool(span.get("fallbackSpan"), False)
+    ]
+    offset_backed_spans = [span for span in spans if _has_offset_locator(span)]
     coverage = dict(packet.get("coverage") or {})
     trace = dict(payload.get("trace") or {})
     citations = list(payload.get("citations") or trace.get("citations") or [])
-    source_ids = _collect_source_ids(payload, spans)
     payload_source_ids = _collect_payload_source_ids(payload)
     dimension_text = "\n".join(
         "\n".join(
@@ -206,8 +289,12 @@ def evaluate_case(
     term_hits = _term_hits(dimension_text, expected_terms)
     statuses = [_normalize(item.get("comparisonStatus") or item.get("status")) for item in dimensions]
     invalid_statuses = [status for status in statuses if status not in expected_statuses]
-    covered_sources = [source_id for source_id in expected_sources if source_id in source_ids]
+    covered_sources = _covered_expected_sources(expected_sources, spans)
+    strict_covered_sources = _covered_expected_sources(expected_sources, strict_spans)
+    fallback_covered_sources = _covered_expected_sources(expected_sources, fallback_spans)
     expected_source_coverage = 1.0 if not expected_sources else round(len(covered_sources) / len(expected_sources), 6)
+    expected_strict_source_coverage = 1.0 if not expected_sources else round(len(strict_covered_sources) / len(expected_sources), 6)
+    expected_fallback_source_coverage = 0.0 if not expected_sources else round(len(fallback_covered_sources) / len(expected_sources), 6)
     dimension_coverage = 1.0 if not expected_terms else round(len(term_hits) / len(expected_terms), 6)
     supporting_span_coverage = 1.0 if len(spans) >= min_spans else round(len(spans) / max(1, min_spans), 6)
     strict_span_coverage = 1.0 if len(strict_spans) >= min_strict_spans else round(len(strict_spans) / max(1, min_strict_spans), 6)
@@ -215,6 +302,18 @@ def evaluate_case(
     trace_citation_coverage = 1.0 if (not require_trace_citations or citations) else 0.0
     non_evidence_spans = [span for span in spans if _is_non_evidence_ref(span)]
     answerable = bool(coverage.get("answerable")) if "answerable" in coverage else bool(dimensions and spans)
+
+    provenance_diagnostics: list[str] = []
+    if spans and not strict_spans:
+        provenance_diagnostics.append("fallback_only_support" if fallback_spans else "no_strict_spans")
+    if fallback_spans:
+        provenance_diagnostics.append("fallback_spans_present")
+    if locator_only_spans:
+        provenance_diagnostics.append("locator_only_spans_present")
+    if expected_sources and expected_strict_source_coverage < 1.0:
+        provenance_diagnostics.append("strict_source_coverage_gap")
+    if citations and not strict_spans:
+        provenance_diagnostics.append("trace_without_strict_spans")
 
     errors: list[str] = []
     if not packet:
@@ -225,6 +324,8 @@ def evaluate_case(
         errors.append("compare_packet_unexpectedly_answerable")
     if len(strict_spans) < min_strict_spans:
         errors.append(f"strict_span_count_below_min:{len(strict_spans)}<{min_strict_spans}")
+    if expected_sources and expected_strict_source_coverage < min_strict_source_coverage:
+        errors.append("expected_strict_source_coverage_below_min")
     if expected_sources and expected_source_coverage < 1.0:
         errors.append("expected_source_coverage_incomplete")
     if expected_terms and dimension_coverage < 1.0:
@@ -242,6 +343,7 @@ def evaluate_case(
         expected_answerable and payload_status in {"insufficient_evidence", "insufficient_compare_contract"}
     ):
         errors.append(f"compare_status_not_ok:{payload.get('status')}")
+    failure_categories = _failure_categories(errors, provenance_diagnostics)
 
     return {
         "caseId": case_id,
@@ -255,8 +357,13 @@ def evaluate_case(
         "expectedAnswerable": expected_answerable,
         "expectedSourceIds": expected_sources,
         "coveredExpectedSourceIds": covered_sources,
+        "strictCoveredExpectedSourceIds": strict_covered_sources,
+        "fallbackCoveredExpectedSourceIds": fallback_covered_sources,
         "payloadSourceIds": sorted(payload_source_ids),
         "expectedSourceCoverage": expected_source_coverage,
+        "expectedStrictSourceCoverage": expected_strict_source_coverage,
+        "expectedFallbackSourceCoverage": expected_fallback_source_coverage,
+        "expectedMinStrictSourceCoverage": min_strict_source_coverage,
         "expectedDimensionTerms": expected_terms,
         "matchedDimensionTerms": term_hits,
         "dimensionCoverage": dimension_coverage,
@@ -267,12 +374,16 @@ def evaluate_case(
         "supportingSpanCoverage": supporting_span_coverage,
         "strictSpanBackedCount": len(strict_spans),
         "fallbackSpanCount": len(fallback_spans),
+        "locatorOnlySpanCount": len(locator_only_spans),
+        "offsetBackedSpanCount": len(offset_backed_spans),
         "expectedMinStrictSpanCount": min_strict_spans,
         "strictSpanCoverage": strict_span_coverage,
         "fallbackSpanShare": fallback_span_share,
         "traceCitationCount": len(citations),
         "traceCitationCoverage": trace_citation_coverage,
         "nonEvidenceLeakCount": len(non_evidence_spans),
+        "provenanceDiagnostics": provenance_diagnostics,
+        "failureCategories": failure_categories,
         "warnings": [str(item) for item in list(payload.get("warnings") or [])],
     }
 
@@ -286,6 +397,7 @@ def build_summary(
     min_compare_packet_present_rate: float,
     min_answerable_rate: float,
     min_expected_source_coverage_rate: float,
+    min_expected_answerable_strict_source_coverage_rate: float,
     min_dimension_coverage_rate: float,
     min_supporting_span_coverage_rate: float,
     min_trace_citation_coverage_rate: float,
@@ -304,6 +416,10 @@ def build_summary(
         sum(1 for item in evaluated if float(item.get("expectedSourceCoverage") or 0.0) >= 1.0),
         len(evaluated),
     )
+    expected_answerable_strict_source_coverage_rate = _ratio(
+        sum(1 for item in expected_answerable_cases if float(item.get("expectedStrictSourceCoverage") or 0.0) >= 1.0),
+        len(expected_answerable_cases),
+    )
     dimension_coverage_rate = _ratio(
         sum(1 for item in evaluated if float(item.get("dimensionCoverage") or 0.0) >= 1.0),
         len(evaluated),
@@ -317,11 +433,33 @@ def build_summary(
         len(evaluated),
     )
     fallback_span_case_rate = _ratio(sum(1 for item in evaluated if int(item.get("fallbackSpanCount") or 0) > 0), len(evaluated))
+    fallback_only_case_rate = _ratio(
+        sum(1 for item in evaluated if "fallback_only_support" in list(item.get("provenanceDiagnostics") or [])),
+        len(evaluated),
+    )
+    locator_only_case_rate = _ratio(
+        sum(1 for item in evaluated if int(item.get("locatorOnlySpanCount") or 0) > 0),
+        len(evaluated),
+    )
     trace_citation_coverage_rate = _ratio(
         sum(1 for item in evaluated if float(item.get("traceCitationCoverage") or 0.0) >= 1.0),
         len(evaluated),
     )
     non_evidence_leak_count = sum(int(item.get("nonEvidenceLeakCount") or 0) for item in evaluated)
+    failure_category_counts = _count_values(
+        [
+            category
+            for item in failures
+            for category in list(item.get("failureCategories") or [])
+        ]
+    )
+    provenance_diagnostic_counts = _count_values(
+        [
+            diagnostic
+            for item in evaluated
+            for diagnostic in list(item.get("provenanceDiagnostics") or [])
+        ]
+    )
 
     errors: list[str] = []
     insufficient = len(evaluated) < int(min_cases)
@@ -331,6 +469,11 @@ def build_summary(
         ("compare_packet_present_rate", compare_packet_present_rate, min_compare_packet_present_rate),
         ("expected_answerable_pass_rate", expected_answerable_pass_rate, min_answerable_rate),
         ("expected_source_coverage_rate", expected_source_coverage_rate, min_expected_source_coverage_rate),
+        (
+            "expected_answerable_strict_source_coverage_rate",
+            expected_answerable_strict_source_coverage_rate,
+            min_expected_answerable_strict_source_coverage_rate,
+        ),
         ("dimension_coverage_rate", dimension_coverage_rate, min_dimension_coverage_rate),
         ("supporting_span_coverage_rate", supporting_span_coverage_rate, min_supporting_span_coverage_rate),
         ("trace_citation_coverage_rate", trace_citation_coverage_rate, min_trace_citation_coverage_rate),
@@ -365,17 +508,23 @@ def build_summary(
         "expectedAnswerablePassRate": expected_answerable_pass_rate,
         "expectedNoAnswerPassRate": expected_no_answer_pass_rate,
         "expectedSourceCoverageRate": expected_source_coverage_rate,
+        "expectedAnswerableStrictSourceCoverageRate": expected_answerable_strict_source_coverage_rate,
         "dimensionCoverageRate": dimension_coverage_rate,
         "supportingSpanCoverageRate": supporting_span_coverage_rate,
         "strictSpanCoverageRate": strict_span_coverage_rate,
         "fallbackSpanCaseRate": fallback_span_case_rate,
+        "fallbackOnlyCaseRate": fallback_only_case_rate,
+        "locatorOnlyCaseRate": locator_only_case_rate,
         "traceCitationCoverageRate": trace_citation_coverage_rate,
         "nonEvidenceLeakCount": non_evidence_leak_count,
+        "failureCategoryCounts": failure_category_counts,
+        "provenanceDiagnosticCounts": provenance_diagnostic_counts,
         "minCases": int(min_cases),
         "thresholds": {
             "comparePacketPresentRate": float(min_compare_packet_present_rate),
             "expectedAnswerablePassRate": float(min_answerable_rate),
             "expectedSourceCoverageRate": float(min_expected_source_coverage_rate),
+            "expectedAnswerableStrictSourceCoverageRate": float(min_expected_answerable_strict_source_coverage_rate),
             "dimensionCoverageRate": float(min_dimension_coverage_rate),
             "supportingSpanCoverageRate": float(min_supporting_span_coverage_rate),
             "traceCitationCoverageRate": float(min_trace_citation_coverage_rate),
@@ -452,6 +601,7 @@ def run_live_compare_quality_eval(
     min_compare_packet_present_rate: float,
     min_answerable_rate: float,
     min_expected_source_coverage_rate: float,
+    min_expected_answerable_strict_source_coverage_rate: float,
     min_dimension_coverage_rate: float,
     min_supporting_span_coverage_rate: float,
     min_trace_citation_coverage_rate: float,
@@ -474,8 +624,11 @@ def run_live_compare_quality_eval(
                     "expectedSourceCoverage": 0.0,
                     "dimensionCoverage": 0.0,
                     "supportingSpanCoverage": 0.0,
+                    "expectedStrictSourceCoverage": 0.0,
                     "traceCitationCoverage": 0.0,
                     "nonEvidenceLeakCount": 0,
+                    "failureCategories": ["compare_runtime_failed"],
+                    "provenanceDiagnostics": [],
                 }
             )
     return build_summary(
@@ -486,6 +639,7 @@ def run_live_compare_quality_eval(
         min_compare_packet_present_rate=min_compare_packet_present_rate,
         min_answerable_rate=min_answerable_rate,
         min_expected_source_coverage_rate=min_expected_source_coverage_rate,
+        min_expected_answerable_strict_source_coverage_rate=min_expected_answerable_strict_source_coverage_rate,
         min_dimension_coverage_rate=min_dimension_coverage_rate,
         min_supporting_span_coverage_rate=min_supporting_span_coverage_rate,
         min_trace_citation_coverage_rate=min_trace_citation_coverage_rate,
@@ -504,14 +658,25 @@ def render_markdown(payload: dict[str, Any]) -> str:
         f"- expected answerable pass: `{payload.get('expectedAnswerablePassRate')}`",
         f"- expected no-answer pass: `{payload.get('expectedNoAnswerPassRate')}`",
         f"- expected source coverage: `{payload.get('expectedSourceCoverageRate')}`",
+        f"- expected answerable strict source coverage: `{payload.get('expectedAnswerableStrictSourceCoverageRate')}`",
         f"- dimension coverage: `{payload.get('dimensionCoverageRate')}`",
         f"- supporting span coverage: `{payload.get('supportingSpanCoverageRate')}`",
         f"- strict span coverage: `{payload.get('strictSpanCoverageRate')}`",
         f"- fallback span case rate: `{payload.get('fallbackSpanCaseRate')}`",
+        f"- fallback-only case rate: `{payload.get('fallbackOnlyCaseRate')}`",
+        f"- locator-only case rate: `{payload.get('locatorOnlyCaseRate')}`",
         f"- trace citation coverage: `{payload.get('traceCitationCoverageRate')}`",
         f"- non-evidence leaks: `{payload.get('nonEvidenceLeakCount')}`",
         f"- cases path: `{payload.get('casesPath')}`",
     ]
+    failure_category_counts = dict(payload.get("failureCategoryCounts") or {})
+    if failure_category_counts:
+        lines.extend(["", "## Failure Categories", ""])
+        lines.extend(f"- `{key}`: `{value}`" for key, value in sorted(failure_category_counts.items()))
+    provenance_diagnostic_counts = dict(payload.get("provenanceDiagnosticCounts") or {})
+    if provenance_diagnostic_counts:
+        lines.extend(["", "## Provenance Diagnostics", ""])
+        lines.extend(f"- `{key}`: `{value}`" for key, value in sorted(provenance_diagnostic_counts.items()))
     errors = list(payload.get("errors") or [])
     if errors:
         lines.extend(["", "## Errors", ""])
@@ -533,6 +698,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-compare-packet-present-rate", type=float, default=1.0)
     parser.add_argument("--min-answerable-rate", type=float, default=1.0)
     parser.add_argument("--min-expected-source-coverage-rate", type=float, default=1.0)
+    parser.add_argument("--min-expected-answerable-strict-source-coverage-rate", type=float, default=1.0)
     parser.add_argument("--min-dimension-coverage-rate", type=float, default=1.0)
     parser.add_argument("--min-supporting-span-coverage-rate", type=float, default=1.0)
     parser.add_argument("--min-trace-citation-coverage-rate", type=float, default=1.0)
@@ -556,6 +722,7 @@ def main(argv: list[str] | None = None) -> int:
         min_compare_packet_present_rate=float(args.min_compare_packet_present_rate),
         min_answerable_rate=float(args.min_answerable_rate),
         min_expected_source_coverage_rate=float(args.min_expected_source_coverage_rate),
+        min_expected_answerable_strict_source_coverage_rate=float(args.min_expected_answerable_strict_source_coverage_rate),
         min_dimension_coverage_rate=float(args.min_dimension_coverage_rate),
         min_supporting_span_coverage_rate=float(args.min_supporting_span_coverage_rate),
         min_trace_citation_coverage_rate=float(args.min_trace_citation_coverage_rate),
