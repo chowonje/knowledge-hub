@@ -213,8 +213,97 @@ def test_compare_json_builds_source_fallback_packet_when_claim_packet_missing(mo
     assert payload["comparePacket"]["coverage"]["supportingSpanCount"] == 1
     assert payload["comparePacket"]["coverage"]["answerable"] is False
     assert payload["comparePacket"]["dimensions"][0]["supportingSpans"][0]["sourceId"] == "2005.11401"
+    assert payload["comparePacket"]["dimensions"][0]["supportingSpans"][0]["strictSpanBacked"] is False
+    assert payload["comparePacket"]["dimensions"][0]["supportingSpans"][0]["fallbackSpan"] is True
     assert any("compare packet built from retrieved source spans" in warning for warning in payload["warnings"])
     assert payload["trace"]["comparePacket"]["packet_id"] == payload["comparePacket"]["packet_id"]
+    assert validate_payload(payload, payload["schema"], strict=True).ok
+
+
+def test_compare_json_enriches_existing_packet_with_strict_evidence_spans(monkeypatch):
+    monkeypatch.setattr(
+        substrate_cmd,
+        "_run_answer_facade",
+        lambda *_args, **_kwargs: {
+            "answer": "A and B conflict on accuracy.",
+            "comparePacketContract": {
+                "schema": "knowledge-hub.compare-packet.v1",
+                "packet_id": "cmp_strict",
+                "dimensions": [
+                    {
+                        "dimensionId": "accuracy",
+                        "label": "accuracy",
+                        "comparisonStatus": "conflict",
+                        "supportingSpans": [],
+                    }
+                ],
+                "coverage": {"answerable": False},
+            },
+            "answerContract": {
+                "citations": [
+                    {
+                        "spanRef": "span:1",
+                        "source_id": "paper:a#0",
+                        "content_hash": "sha256:a",
+                        "char_start": 10,
+                        "char_end": 40,
+                        "label": "S1",
+                    },
+                    {
+                        "spanRef": "span:2",
+                        "source_id": "paper:b#0",
+                        "content_hash": "sha256:b",
+                        "char_start": 50,
+                        "char_end": 90,
+                        "label": "S2",
+                    },
+                ]
+            },
+            "citations": [{"label": "S1", "target": "paper:a#0"}, {"label": "S2", "target": "paper:b#0"}],
+            "sources": [
+                {"source_id": "paper:a#0", "source_type": "paper", "title": "A", "excerpt": "A accuracy"},
+                {"source_id": "paper:b#0", "source_type": "paper", "title": "B", "excerpt": "B accuracy"},
+            ],
+            "evidencePacketContract": {
+                "packet_id": "epkt_1",
+                "spans": [
+                    {
+                        "spanRef": "span:1",
+                        "sourceId": "paper:a#0",
+                        "source_type": "paper",
+                        "sourceContentHash": "sha256:a",
+                        "spanLocator": "chars:10-40",
+                        "text": "A accuracy",
+                    },
+                    {
+                        "spanRef": "span:2",
+                        "sourceId": "paper:b#0",
+                        "source_type": "paper",
+                        "sourceContentHash": "sha256:b",
+                        "spanLocator": "chars:50-90",
+                        "text": "B accuracy",
+                    },
+                ],
+            },
+        },
+    )
+
+    result = CliRunner().invoke(
+        substrate_cmd.compare_cmd,
+        ["compare strict evidence", "--json"],
+        obj={"khub": object()},
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["status"] == "ok"
+    assert payload["comparePacket"]["packet_id"] == "cmp_strict"
+    assert payload["comparePacket"]["coverage"]["answerable"] is True
+    assert payload["comparePacket"]["coverage"]["strictSpanBackedCount"] == 2
+    assert payload["comparePacket"]["coverage"]["fallbackSpanCount"] == 0
+    spans = payload["comparePacket"]["dimensions"][0]["supportingSpans"]
+    assert {span["sourceId"] for span in spans} == {"paper:a#0", "paper:b#0"}
+    assert {span["strictSpanBacked"] for span in spans} == {True}
     assert validate_payload(payload, payload["schema"], strict=True).ok
 
 

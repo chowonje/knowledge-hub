@@ -258,11 +258,15 @@ def build_trace_payload(answer_payload: dict[str, Any], *, question: str = "") -
 def build_compare_payload(answer_payload: dict[str, Any], *, query: str) -> dict[str, Any]:
     trace = build_trace_payload(answer_payload, question=query)
     compare_contract = dict(answer_payload.get("comparePacketContract") or {})
+    evidence_contract = dict(answer_payload.get("evidencePacketContract") or {})
+    answer_contract = dict(answer_payload.get("answerContract") or {})
     warnings = list(trace["warnings"])
     enriched_compare = build_compare_packet_from_sources(
         query=query,
         sources=list(trace.get("sources") or []),
         citations=list(trace.get("citations") or []),
+        strict_spans=list(evidence_contract.get("spans") or []),
+        strict_citations=list(answer_contract.get("citations") or []),
         existing_packet=compare_contract or None,
         policy=dict(answer_payload.get("evidencePolicy") or {}),
     )

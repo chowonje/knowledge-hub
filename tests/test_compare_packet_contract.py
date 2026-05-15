@@ -64,6 +64,75 @@ def test_compare_packet_marks_all_unknown_as_not_answerable():
     assert packet["coverage"]["unknownDimensionCount"] == 1
 
 
+def test_compare_packet_requires_strict_span_backed_sources_for_answerable():
+    fallback_only = build_compare_packet_contract(
+        query="compare source A and source B",
+        dimensions=[
+            {
+                "label": "accuracy",
+                "status": "conflict",
+                "supporting_spans": [
+                    {
+                        "spanRef": "span-a",
+                        "sourceId": "paper:a#0",
+                        "sourceType": "paper",
+                        "contentHash": "sha256:a",
+                        "spanLocator": "chars:10-40",
+                        "quote": "A accuracy",
+                    },
+                    {
+                        "spanRef": "source-b",
+                        "sourceId": "paper:b#0",
+                        "sourceType": "paper",
+                        "quote": "B accuracy",
+                        "fallbackSpan": True,
+                    },
+                ],
+            }
+        ],
+    )
+
+    assert fallback_only["coverage"]["strictSpanBackedCount"] == 1
+    assert fallback_only["coverage"]["fallbackSpanCount"] == 1
+    assert fallback_only["coverage"]["answerable"] is False
+    assert fallback_only["dimensions"][0]["supportingSpans"][0]["strictSpanBacked"] is True
+    assert fallback_only["dimensions"][0]["supportingSpans"][1]["fallbackSpan"] is True
+
+    strict_packet = build_compare_packet_contract(
+        query="compare source A and source B",
+        dimensions=[
+            {
+                "label": "accuracy",
+                "status": "conflict",
+                "supporting_spans": [
+                    {
+                        "spanRef": "span-a",
+                        "sourceId": "paper:a#0",
+                        "sourceType": "paper",
+                        "contentHash": "sha256:a",
+                        "spanLocator": "chars:10-40",
+                        "quote": "A accuracy",
+                    },
+                    {
+                        "spanRef": "span-b",
+                        "sourceId": "paper:b#0",
+                        "sourceType": "paper",
+                        "contentHash": "sha256:b",
+                        "spanLocator": "chars:50-90",
+                        "quote": "B accuracy",
+                    },
+                ],
+            }
+        ],
+    )
+
+    assert strict_packet["coverage"]["strictSpanBackedCount"] == 2
+    assert strict_packet["coverage"]["fallbackSpanCount"] == 0
+    assert strict_packet["coverage"]["strictSupportedDimensionCount"] == 1
+    assert strict_packet["coverage"]["answerable"] is True
+    assert validate_payload(strict_packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
 def test_compare_packet_from_runtime_maps_ask_v2_paper_compare_groups():
     packet = build_compare_packet_from_runtime(
         query="compare two papers on MemoryBench",
@@ -164,6 +233,8 @@ def test_compare_packet_from_sources_builds_insufficient_source_coverage_packet(
     assert packet["schema"] == COMPARE_PACKET_SCHEMA
     assert packet["coverage"]["answerable"] is False
     assert packet["coverage"]["supportingSpanCount"] == 2
+    assert packet["coverage"]["strictSpanBackedCount"] == 0
+    assert packet["coverage"]["fallbackSpanCount"] == 2
     assert packet["coverage"]["excludedNonEvidenceSpanCount"] == 0
     assert packet["dimensions"][0]["comparisonStatus"] == "insufficient"
     assert "Retrieval" in packet["dimensions"][0]["label"]
@@ -171,6 +242,66 @@ def test_compare_packet_from_sources_builds_insufficient_source_coverage_packet(
         "2005.11401",
         "2312.10997",
     }
+    assert {span["fallbackSpan"] for span in packet["dimensions"][0]["supportingSpans"]} == {True}
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_sources_uses_strict_evidence_spans_before_fallback():
+    packet = build_compare_packet_from_sources(
+        query="GraphRAG and LightRAG global question handling",
+        existing_packet=build_compare_packet_contract(
+            query="GraphRAG and LightRAG global question handling",
+            dimensions=[
+                {
+                    "dimensionId": "dim:1",
+                    "label": "global retrieval",
+                    "comparisonStatus": "conflict",
+                    "supportingSpans": [],
+                }
+            ],
+        ),
+        strict_spans=[
+            {
+                "spanRef": "span-a",
+                "sourceId": "2603.15798",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:graph",
+                "spanLocator": "chars:1-50",
+                "text": "GraphRAG source span",
+            },
+            {
+                "spanRef": "span-b",
+                "sourceId": "2410.05779",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:light",
+                "spanLocator": "chars:80-120",
+                "text": "LightRAG source span",
+            },
+        ],
+        sources=[
+            {
+                "source_id": "2603.15798",
+                "source_type": "paper",
+                "title": "CUBE benchmark",
+                "excerpt": "GraphRAG fallback source span",
+            },
+            {
+                "source_id": "2410.05779",
+                "source_type": "paper",
+                "title": "LightRAG",
+                "excerpt": "LightRAG fallback source span",
+            },
+        ],
+    )
+
+    assert packet is not None
+    spans = packet["dimensions"][0]["supportingSpans"]
+    assert [span["strictSpanBacked"] for span in spans] == [True, True]
+    assert [span["fallbackSpan"] for span in spans] == [False, False]
+    assert {span["contentHash"] for span in spans} == {"sha256:graph", "sha256:light"}
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    assert packet["coverage"]["fallbackSpanCount"] == 0
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
