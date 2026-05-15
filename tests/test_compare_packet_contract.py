@@ -554,6 +554,176 @@ def test_compare_packet_from_sources_recovers_insufficient_dimension_with_strict
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_from_sources_recovers_dimension_with_redundant_fallback_spans():
+    packet = build_compare_packet_from_sources(
+        query="GraphRAG and LightRAG global question handling",
+        existing_packet=build_compare_packet_contract(
+            query="GraphRAG and LightRAG global question handling",
+            dimensions=[
+                {
+                    "dimensionId": "dim:1",
+                    "label": "global question",
+                    "comparisonStatus": "insufficient",
+                    "supportingSpans": [
+                        {
+                            "spanRef": "fallback-graph",
+                            "sourceId": "2603.15798",
+                            "sourceType": "paper",
+                            "quote": "GraphRAG fallback source span",
+                            "fallbackSpan": True,
+                        },
+                        {
+                            "spanRef": "fallback-light",
+                            "sourceId": "2410.05779",
+                            "sourceType": "paper",
+                            "quote": "LightRAG fallback source span",
+                            "fallbackSpan": True,
+                        },
+                    ],
+                }
+            ],
+        ),
+        strict_spans=[
+            {
+                "spanRef": "strict-graph",
+                "sourceId": "2603.15798",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:graph",
+                "spanLocator": "chars:1-50",
+                "text": "GraphRAG strict source span",
+            },
+            {
+                "spanRef": "strict-light",
+                "sourceId": "2410.05779",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:light",
+                "spanLocator": "chars:80-120",
+                "text": "LightRAG strict source span",
+            },
+        ],
+        sources=[
+            {
+                "source_id": "2603.15798",
+                "source_type": "paper",
+                "title": "CUBE benchmark",
+                "excerpt": "GraphRAG fallback source span",
+            },
+            {
+                "source_id": "2410.05779",
+                "source_type": "paper",
+                "title": "LightRAG",
+                "excerpt": "LightRAG fallback source span",
+            },
+        ],
+    )
+
+    assert packet is not None
+    dimension = packet["dimensions"][0]
+    assert dimension["comparisonStatus"] == "supported"
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSupportedDimensionCount"] == 1
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    assert packet["coverage"]["fallbackSpanCount"] == 2
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_sources_keeps_source_fallback_packet_insufficient_even_with_strict_spans():
+    packet = build_compare_packet_from_sources(
+        query="GraphRAG and LightRAG global question handling",
+        strict_spans=[
+            {
+                "spanRef": "strict-graph",
+                "sourceId": "2603.15798",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:graph",
+                "spanLocator": "chars:1-50",
+                "text": "GraphRAG strict source span",
+            },
+            {
+                "spanRef": "strict-light",
+                "sourceId": "2410.05779",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:light",
+                "spanLocator": "chars:80-120",
+                "text": "LightRAG strict source span",
+            },
+        ],
+        sources=[
+            {
+                "source_id": "2603.15798",
+                "source_type": "paper",
+                "title": "CUBE benchmark",
+                "excerpt": "GraphRAG fallback source span",
+            },
+            {
+                "source_id": "2410.05779",
+                "source_type": "paper",
+                "title": "LightRAG",
+                "excerpt": "LightRAG fallback source span",
+            },
+        ],
+    )
+
+    assert packet is not None
+    assert packet["dimensions"][0]["dimensionId"] == "retrieved-source-coverage"
+    assert packet["dimensions"][0]["comparisonStatus"] == "insufficient"
+    assert packet["coverage"]["answerable"] is False
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    assert packet["coverage"]["fallbackSpanCount"] == 2
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_sources_does_not_recover_when_fallback_source_lacks_strict_coverage():
+    packet = build_compare_packet_from_sources(
+        query="RAG and FiD retrieval generation",
+        existing_packet=build_compare_packet_contract(
+            query="RAG and FiD retrieval generation",
+            dimensions=[
+                {
+                    "dimensionId": "dim:1",
+                    "label": "retrieval generation",
+                    "comparisonStatus": "insufficient",
+                    "supportingSpans": [
+                        {
+                            "spanRef": "fallback-rag",
+                            "sourceId": "2005.11401",
+                            "sourceType": "paper",
+                            "quote": "RAG fallback source span",
+                            "fallbackSpan": True,
+                        },
+                        {
+                            "spanRef": "fallback-fid",
+                            "sourceId": "2007.01282",
+                            "sourceType": "paper",
+                            "quote": "FiD fallback source span",
+                            "fallbackSpan": True,
+                        },
+                    ],
+                }
+            ],
+        ),
+        strict_spans=[
+            {
+                "spanRef": "strict-rag",
+                "sourceId": "2005.11401",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:rag",
+                "spanLocator": "chars:1-50",
+                "text": "RAG strict source span",
+            }
+        ],
+        sources=[],
+    )
+
+    assert packet is not None
+    assert packet["dimensions"][0]["comparisonStatus"] == "insufficient"
+    assert packet["coverage"]["answerable"] is False
+    assert packet["coverage"]["strictSupportedDimensionCount"] == 0
+    assert packet["coverage"]["strictSpanBackedCount"] == 1
+    assert packet["coverage"]["fallbackSpanCount"] == 2
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
 def test_compare_packet_from_sources_does_not_recover_insufficient_dimension_with_fallback_spans():
     packet = build_compare_packet_from_sources(
         query="RAG and FiD retrieval generation",
