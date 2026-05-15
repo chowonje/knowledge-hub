@@ -41,10 +41,31 @@ from knowledge_hub.learning.resolver import normalize_term
 
 _TOKEN_RE = re.compile(r"[A-Za-z0-9.+-]+|[가-힣]+")
 _COMMON_ENTITY_RESCUE_FORMS = {
+    "alexnet": [
+        "ImageNet Classification with Deep Convolutional Neural Networks",
+    ],
+    "bert": [
+        "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    ],
+    "batchnorm": [
+        "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+    ],
+    "batch": [
+        "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+    ],
+    "normalization": [
+        "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+    ],
     "cnn": [
         "ImageNet Classification with Deep Convolutional Neural Networks",
         "Deep Convolutional Neural Networks",
         "Convolutional Neural Networks",
+    ],
+    "cot": [
+        "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    ],
+    "chain-of-thought": [
+        "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
     ],
     "dqn": [
         "Playing Atari with Deep Reinforcement Learning",
@@ -57,6 +78,21 @@ _COMMON_ENTITY_RESCUE_FORMS = {
     "fid": [
         "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
         "Fusion-in-Decoder",
+    ],
+    "fusion-in-decoder": [
+        "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+        "Fusion-in-Decoder",
+    ],
+    "graphrag": [
+        "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+        "GraphRAG",
+    ],
+    "lightrag": [
+        "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+        "LightRAG",
+    ],
+    "mamba": [
+        "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
     ],
     "gpt": [
         "Language Models are Few-Shot Learners",
@@ -73,6 +109,16 @@ _COMMON_ENTITY_RESCUE_FORMS = {
         "Proximal Policy Optimization Algorithms",
         "Proximal Policy Optimization",
     ],
+    "resnet": [
+        "Deep Residual Learning for Image Recognition",
+        "ResNet",
+    ],
+    "self-rag": [
+        "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+    ],
+    "seq2seq": [
+        "Sequence to Sequence Learning with Neural Networks",
+    ],
     "transformer": [
         "Attention Is All You Need",
         "Transformer",
@@ -84,6 +130,72 @@ _COMMON_ENTITY_RESCUE_FORMS = {
         "Vision Transformers",
     ],
 }
+_COMPARE_QUERY_RESCUE_RULES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
+    (
+        re.compile(r"(?<![A-Za-z0-9-])graph[-\s]?rag(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("From Local to Global: A Graph RAG Approach to Query-Focused Summarization", "GraphRAG"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])light[-\s]?rag(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("LightRAG: Simple and Fast Retrieval-Augmented Generation", "LightRAG"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])self[-\s]?rag(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection", "Self-RAG"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])rag(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", "Retrieval-Augmented Generation"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])(?:fid|fusion[-\s]?in[-\s]?decoder)(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering", "Fusion-in-Decoder"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])vision\s+transformer(?:s)?(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("An Image is Worth 16x16 Words", "Vision Transformer"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])vit(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("An Image is Worth 16x16 Words", "Vision Transformer"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])resnet(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Deep Residual Learning for Image Recognition", "ResNet"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])cnn(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("ImageNet Classification with Deep Convolutional Neural Networks", "Deep Convolutional Neural Networks"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])bert(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])gpt(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Language Models are Few-Shot Learners",),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])dqn(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Playing Atari with Deep Reinforcement Learning", "Deep Q-Network"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])ppo(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Proximal Policy Optimization Algorithms", "Proximal Policy Optimization"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])gan(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Generative Adversarial Nets", "GAN"),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])diffusion(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Denoising Diffusion Probabilistic Models",),
+    ),
+    (
+        re.compile(r"(?<![A-Za-z0-9-])mamba(?![A-Za-z0-9-])", re.IGNORECASE),
+        ("Mamba: Linear-Time Sequence Modeling with Selective State Spaces",),
+    ),
+)
 _DISCOVER_QUERY_RESCUES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     (
         re.compile(r"\bstate\s+space\s+model\b|\bssm\b|state space|상태\s*공간", re.IGNORECASE),
@@ -95,11 +207,95 @@ _DISCOVER_QUERY_RESCUES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     ),
 )
 _EXPLICIT_TITLE_RESCUES = {
+    normalize_term("An Image is Worth 16x16 Words"): {
+        "paper_id": "2010.11929",
+        "title": "An Image is Worth 16x16 Words",
+    },
+    normalize_term("BERT"): {
+        "paper_id": "1810.04805",
+        "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    },
+    normalize_term("BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"): {
+        "paper_id": "1810.04805",
+        "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    },
+    normalize_term("Denoising Diffusion Probabilistic Models"): {
+        "paper_id": "2006.11239",
+        "title": "Denoising Diffusion Probabilistic Models",
+    },
+    normalize_term("Deep Residual Learning for Image Recognition"): {
+        "paper_id": "1512.03385",
+        "title": "Deep Residual Learning for Image Recognition",
+    },
+    normalize_term("FiD"): {
+        "paper_id": "2007.01282",
+        "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+    },
+    normalize_term("Fusion-in-Decoder"): {
+        "paper_id": "2007.01282",
+        "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+    },
+    normalize_term("From Local to Global: A Graph RAG Approach to Query-Focused Summarization"): {
+        "paper_id": "2404.16130",
+        "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+    },
+    normalize_term("Generative Adversarial Nets"): {
+        "paper_id": "1406.2661",
+        "title": "Generative Adversarial Nets",
+    },
+    normalize_term("GPT"): {
+        "paper_id": "2005.14165",
+        "title": "Language Models are Few-Shot Learners",
+    },
+    normalize_term("ImageNet Classification with Deep Convolutional Neural Networks"): {
+        "paper_id": "alexnet-2012",
+        "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+    },
+    normalize_term("GraphRAG"): {
+        "paper_id": "2404.16130",
+        "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+    },
+    normalize_term("Language Models are Few-Shot Learners"): {
+        "paper_id": "2005.14165",
+        "title": "Language Models are Few-Shot Learners",
+    },
+    normalize_term("Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering"): {
+        "paper_id": "2007.01282",
+        "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+    },
+    normalize_term("LightRAG"): {
+        "paper_id": "2410.05779",
+        "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+    },
+    normalize_term("LightRAG: Simple and Fast Retrieval-Augmented Generation"): {
+        "paper_id": "2410.05779",
+        "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+    },
     normalize_term("Playing Atari with Deep Reinforcement Learning"): {
         "paper_id": "1312.5602",
         "title": "Playing Atari with Deep Reinforcement Learning",
     },
-    normalize_term("An Image is Worth 16x16 Words"): {
+    normalize_term("Proximal Policy Optimization Algorithms"): {
+        "paper_id": "1707.06347",
+        "title": "Proximal Policy Optimization Algorithms",
+    },
+    normalize_term("RAG"): {
+        "paper_id": "2005.11401",
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    },
+    normalize_term("Retrieval-Augmented Generation"): {
+        "paper_id": "2005.11401",
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    },
+    normalize_term("Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"): {
+        "paper_id": "2005.11401",
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    },
+    normalize_term("Vision Transformer"): {
+        "paper_id": "2010.11929",
+        "title": "An Image is Worth 16x16 Words",
+    },
+    normalize_term("ViT"): {
         "paper_id": "2010.11929",
         "title": "An Image is Worth 16x16 Words",
     },
@@ -261,6 +457,19 @@ def _bounded_entity_rescue_forms(entities: list[str]) -> list[str]:
             if idx < len(bucket):
                 rescue.append(bucket[idx])
     return _dedupe_lines(rescue, limit=6)
+
+
+def _compare_query_rescue_forms(query: str) -> list[str]:
+    text = _clean_text(query)
+    if not text:
+        return []
+    matches: list[tuple[int, str]] = []
+    for pattern, forms in _COMPARE_QUERY_RESCUE_RULES:
+        for match in pattern.finditer(text):
+            for form in forms:
+                matches.append((match.start(), form))
+    matches.sort(key=lambda item: item[0])
+    return _dedupe_lines([form for _, form in matches], limit=10)
 
 
 def _discover_query_rescue_forms(query: str) -> list[str]:
@@ -433,7 +642,12 @@ def build_rule_based_query_frame(
     family = classify_paper_family(query, source_type=source_type, metadata_filter=metadata_filter)
     scoped_paper_id = explicit_paper_id(query, metadata_filter=metadata_filter)
     entities = _rule_based_entities(query, family=family)
-    bounded_rescue_forms = _bounded_entity_rescue_forms(entities)
+    entity_rescue_forms = _bounded_entity_rescue_forms(entities)
+    compare_query_rescue_forms = _compare_query_rescue_forms(query) if family == PAPER_FAMILY_COMPARE else []
+    bounded_rescue_forms = _dedupe_lines(
+        [*compare_query_rescue_forms, *entity_rescue_forms],
+        limit=10 if family == PAPER_FAMILY_COMPARE else 6,
+    )
     canonical_entity_ids = _resolve_canonical_entity_ids(entities, sqlite_db=sqlite_db)
     resolved_ids = [scoped_paper_id] if scoped_paper_id else []
     expanded_terms: list[str] = []
@@ -470,7 +684,7 @@ def build_rule_based_query_frame(
         bounded_rescue_forms=bounded_rescue_forms,
         family=family,
     )
-    lookup_forms = _dedupe_lines([*lookup_seed, *bounded_rescue_forms], limit=6)
+    lookup_forms = _dedupe_lines([*lookup_seed, *bounded_rescue_forms], limit=10 if family == PAPER_FAMILY_COMPARE else 6)
     if family in {PAPER_FAMILY_LOOKUP, PAPER_FAMILY_COMPARE}:
         card_lookup_ids, card_lookup_titles = resolve_lookup(lookup_forms, sqlite_db=sqlite_db)
         lookup_ids, lookup_titles = list(card_lookup_ids), list(card_lookup_titles)
@@ -499,15 +713,31 @@ def build_rule_based_query_frame(
             else:
                 lookup_ids = _dedupe_lines(card_lookup_ids, limit=3)
                 lookup_titles = _dedupe_lines(card_lookup_titles, limit=3)
-        elif family == PAPER_FAMILY_COMPARE and compare_title_candidates:
+        elif family == PAPER_FAMILY_COMPARE:
+            compare_rescue_ids: list[str] = []
+            compare_rescue_titles: list[str] = []
+            compare_local_ids: list[str] = []
+            compare_local_titles: list[str] = []
+            compare_card_ids: list[str] = []
+            compare_card_titles: list[str] = []
             compare_lookup_ids: list[str] = []
             compare_lookup_titles: list[str] = []
-            for candidate in compare_title_candidates[:3]:
+            compare_lookup_forms = _dedupe_lines(
+                [*bounded_rescue_forms, *compare_title_candidates, *lookup_forms],
+                limit=10,
+            )
+            for candidate in compare_lookup_forms:
                 rescue_ids, rescue_titles = _explicit_title_rescue(candidate)
                 local_ids, local_titles = resolve_lookup_from_local_titles([candidate], sqlite_db=sqlite_db)
                 strict_card_ids, strict_card_titles = resolve_lookup([candidate], sqlite_db=sqlite_db)
-                compare_lookup_ids.extend([*rescue_ids, *local_ids, *strict_card_ids])
-                compare_lookup_titles.extend([*rescue_titles, *local_titles, *strict_card_titles])
+                compare_rescue_ids.extend(rescue_ids)
+                compare_rescue_titles.extend(rescue_titles)
+                compare_local_ids.extend(local_ids)
+                compare_local_titles.extend(local_titles)
+                compare_card_ids.extend(strict_card_ids)
+                compare_card_titles.extend(strict_card_titles)
+            compare_lookup_ids = [*compare_rescue_ids, *compare_local_ids, *compare_card_ids]
+            compare_lookup_titles = [*compare_rescue_titles, *compare_local_titles, *compare_card_titles]
             if explicit_compare_titles:
                 lookup_ids = _dedupe_lines(compare_lookup_ids, limit=3)
                 lookup_titles = _dedupe_lines(compare_lookup_titles, limit=6)
@@ -547,14 +777,17 @@ def build_rule_based_query_frame(
         ]
     elif family == PAPER_FAMILY_COMPARE:
         compare_ids: list[str] = []
-        compare_id_candidates = [*lookup_ids, *representative_ids] if explicit_compare_titles else [*representative_ids, *lookup_ids]
+        if explicit_compare_titles or len(lookup_ids) >= 2:
+            compare_id_candidates = [*lookup_ids, *representative_ids]
+        else:
+            compare_id_candidates = [*representative_ids, *lookup_ids]
         for paper_id in compare_id_candidates:
             if len(compare_ids) >= 2:
                 break
             if paper_id not in compare_ids:
                 compare_ids.append(paper_id)
         resolved_ids = [*resolved_ids, *compare_ids]
-        expanded_terms = [*compare_title_candidates, *entities[:4], *bounded_rescue_forms, *lookup_titles, *representative_titles[:2]]
+        expanded_terms = [*compare_title_candidates, *bounded_rescue_forms, *lookup_titles, *entities[:4], *representative_titles[:2]]
         expanded_term_limit = 8
     return build_query_frame(
         domain_key=_DOMAIN_KEY,

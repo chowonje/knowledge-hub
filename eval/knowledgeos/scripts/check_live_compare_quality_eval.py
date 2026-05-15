@@ -16,6 +16,11 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from knowledge_hub.ai.answer_contracts import NON_EVIDENCE_SOURCE_SCHEMES, NON_EVIDENCE_SOURCE_TYPES
+from knowledge_hub.domain.source_identity import (
+    alias_groups_for_items,
+    aliases_with_groups,
+    source_identity_aliases,
+)
 
 
 SCHEMA = "knowledge-hub.live-compare-quality-eval.result.v1"
@@ -137,9 +142,43 @@ def _collect_source_ids(spans: list[dict[str, Any]]) -> set[str]:
     return source_ids
 
 
-def _covered_expected_sources(expected_sources: list[str], spans: list[dict[str, Any]]) -> list[str]:
-    source_ids = _collect_source_ids(spans)
-    return [source_id for source_id in expected_sources if source_id in source_ids]
+def _collect_payload_source_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
+    trace = dict(payload.get("trace") or {})
+    for raw in [
+        *list(payload.get("citations") or trace.get("citations") or []),
+        *list(payload.get("sources") or trace.get("sources") or []),
+    ]:
+        if isinstance(raw, dict):
+            items.append(dict(raw))
+    return items
+
+
+def _coverage_for_expected_sources(
+    expected_sources: list[str],
+    spans: list[dict[str, Any]],
+    *,
+    alias_items: list[dict[str, Any]] | None = None,
+) -> tuple[list[str], list[str], list[str]]:
+    if not expected_sources:
+        return [], [], []
+    groups = alias_groups_for_items([*spans, *list(alias_items or [])])
+    covered: list[str] = []
+    alias_resolved: list[str] = []
+    unresolved: list[str] = []
+    raw_source_ids = _collect_source_ids(spans)
+    expanded_span_aliases = [aliases_with_groups(span, groups) for span in spans]
+    for expected in expected_sources:
+        expected_aliases = source_identity_aliases(expected)
+        raw_match = expected in raw_source_ids
+        alias_match = bool(expected_aliases and any(expected_aliases & aliases for aliases in expanded_span_aliases))
+        if raw_match or alias_match:
+            covered.append(expected)
+            if alias_match and not raw_match:
+                alias_resolved.append(expected)
+        else:
+            unresolved.append(expected)
+    return covered, alias_resolved, unresolved
 
 
 def _collect_payload_source_ids(payload: dict[str, Any]) -> set[str]:
@@ -231,6 +270,8 @@ def _failure_categories(errors: list[str], diagnostics: list[str]) -> list[str]:
             categories.add("locator_only_anchor")
         if "trace_without_strict_spans" in diagnostics:
             categories.add("trace_without_strict_spans")
+        if "unresolved_expected_source_alias" in diagnostics:
+            categories.add("unresolved_expected_source_alias")
     return sorted(categories)
 
 
@@ -274,6 +315,7 @@ def evaluate_case(
     coverage = dict(packet.get("coverage") or {})
     trace = dict(payload.get("trace") or {})
     citations = list(payload.get("citations") or trace.get("citations") or [])
+    payload_source_items = _collect_payload_source_items(payload)
     payload_source_ids = _collect_payload_source_ids(payload)
     dimension_text = "\n".join(
         "\n".join(
@@ -289,9 +331,21 @@ def evaluate_case(
     term_hits = _term_hits(dimension_text, expected_terms)
     statuses = [_normalize(item.get("comparisonStatus") or item.get("status")) for item in dimensions]
     invalid_statuses = [status for status in statuses if status not in expected_statuses]
-    covered_sources = _covered_expected_sources(expected_sources, spans)
-    strict_covered_sources = _covered_expected_sources(expected_sources, strict_spans)
-    fallback_covered_sources = _covered_expected_sources(expected_sources, fallback_spans)
+    covered_sources, alias_resolved_sources, unresolved_source_aliases = _coverage_for_expected_sources(
+        expected_sources,
+        spans,
+        alias_items=payload_source_items,
+    )
+    strict_covered_sources, strict_alias_resolved_sources, strict_unresolved_source_aliases = _coverage_for_expected_sources(
+        expected_sources,
+        strict_spans,
+        alias_items=payload_source_items,
+    )
+    fallback_covered_sources, fallback_alias_resolved_sources, fallback_unresolved_source_aliases = _coverage_for_expected_sources(
+        expected_sources,
+        fallback_spans,
+        alias_items=payload_source_items,
+    )
     expected_source_coverage = 1.0 if not expected_sources else round(len(covered_sources) / len(expected_sources), 6)
     expected_strict_source_coverage = 1.0 if not expected_sources else round(len(strict_covered_sources) / len(expected_sources), 6)
     expected_fallback_source_coverage = 0.0 if not expected_sources else round(len(fallback_covered_sources) / len(expected_sources), 6)
@@ -312,6 +366,10 @@ def evaluate_case(
         provenance_diagnostics.append("locator_only_spans_present")
     if expected_sources and expected_strict_source_coverage < 1.0:
         provenance_diagnostics.append("strict_source_coverage_gap")
+    if alias_resolved_sources:
+        provenance_diagnostics.append("alias_resolved_expected_source")
+    if unresolved_source_aliases:
+        provenance_diagnostics.append("unresolved_expected_source_alias")
     if citations and not strict_spans:
         provenance_diagnostics.append("trace_without_strict_spans")
 
@@ -357,8 +415,14 @@ def evaluate_case(
         "expectedAnswerable": expected_answerable,
         "expectedSourceIds": expected_sources,
         "coveredExpectedSourceIds": covered_sources,
+        "aliasResolvedExpectedSourceIds": alias_resolved_sources,
+        "unresolvedExpectedSourceAliases": unresolved_source_aliases,
         "strictCoveredExpectedSourceIds": strict_covered_sources,
+        "strictAliasResolvedExpectedSourceIds": strict_alias_resolved_sources,
+        "strictUnresolvedExpectedSourceAliases": strict_unresolved_source_aliases,
         "fallbackCoveredExpectedSourceIds": fallback_covered_sources,
+        "fallbackAliasResolvedExpectedSourceIds": fallback_alias_resolved_sources,
+        "fallbackUnresolvedExpectedSourceAliases": fallback_unresolved_source_aliases,
         "payloadSourceIds": sorted(payload_source_ids),
         "expectedSourceCoverage": expected_source_coverage,
         "expectedStrictSourceCoverage": expected_strict_source_coverage,

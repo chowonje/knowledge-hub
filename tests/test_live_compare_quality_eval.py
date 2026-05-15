@@ -16,7 +16,14 @@ def _load_module():
     return module
 
 
-def _payload(*, status: str = "ok", compare_packet: dict | None = None, citations: list[dict] | None = None):
+def _payload(
+    *,
+    status: str = "ok",
+    compare_packet: dict | None = None,
+    citations: list[dict] | None = None,
+    sources: list[dict] | None = None,
+):
+    source_items = sources if sources is not None else [{"source_id": "paper:a#0"}, {"source_id": "paper:b#0"}]
     return {
         "schema": "knowledge-hub.compare.result.v1",
         "status": status,
@@ -26,9 +33,10 @@ def _payload(*, status: str = "ok", compare_packet: dict | None = None, citation
         "trace": {
             "citations": citations if citations is not None else [{"label": "S1", "source_id": "paper:a#0"}],
             "evidenceSpans": [{"span_id": "span_a", "source_id": "paper:a#0"}],
+            "sources": source_items,
         },
         "citations": citations if citations is not None else [{"label": "S1", "source_id": "paper:a#0"}],
-        "sources": [{"source_id": "paper:a#0"}, {"source_id": "paper:b#0"}],
+        "sources": source_items,
         "warnings": [],
     }
 
@@ -222,6 +230,103 @@ def test_live_compare_quality_eval_requires_expected_sources_in_supporting_spans
     assert result["expectedSourceCoverage"] == 0.5
     assert result["payloadSourceIds"] == ["paper:a#0", "paper:b#0"]
     assert "expected_source_coverage_incomplete" in result["errors"]
+
+
+def test_live_compare_quality_eval_resolves_expected_source_aliases_from_payload_metadata():
+    module = _load_module()
+    packet = _compare_packet()
+    packet["dimensions"][0]["supportingSpans"] = [
+        {
+            "spanRef": "span_resnet",
+            "sourceId": "1512.03385",
+            "sourceType": "paper",
+            "contentHash": "sha256:a",
+            "spanLocator": "chars:1-20",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "ResNet accuracy",
+        },
+        {
+            "spanRef": "span_vit",
+            "sourceId": "2010.11929",
+            "sourceType": "paper",
+            "contentHash": "sha256:b",
+            "spanLocator": "chars:30-50",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "ViT accuracy",
+        },
+    ]
+    case = {
+        "case_id": "compare_title_aliases",
+        "query": "compare",
+        "expected_source_ids": [
+            "Deep_Residual_Learning_for_Image_Recognition",
+            "An Image is Worth 16x16 Words",
+        ],
+        "expected_dimension_terms": ["accuracy"],
+        "expected_statuses": ["conflict"],
+        "expected_min_supporting_span_count": 2,
+        "expected_min_strict_span_count": 2,
+    }
+
+    result = module.evaluate_case(
+        case,
+        _payload(
+            compare_packet=packet,
+            sources=[
+                {"source_id": "1512.03385", "title": "Deep Residual Learning for Image Recognition"},
+                {"source_id": "2010.11929", "title": "An Image is Worth 16x16 Words"},
+            ],
+        ),
+    )
+
+    assert result["status"] == "pass"
+    assert result["expectedSourceCoverage"] == 1.0
+    assert result["expectedStrictSourceCoverage"] == 1.0
+    assert result["aliasResolvedExpectedSourceIds"] == [
+        "Deep_Residual_Learning_for_Image_Recognition",
+        "An Image is Worth 16x16 Words",
+    ]
+    assert "alias_resolved_expected_source" in result["provenanceDiagnostics"]
+
+
+def test_live_compare_quality_eval_does_not_overmatch_similar_source_aliases():
+    module = _load_module()
+    packet = _compare_packet()
+    packet["dimensions"][0]["supportingSpans"] = [
+        {
+            "spanRef": "span_other",
+            "sourceId": "2501.00001",
+            "sourceType": "paper",
+            "contentHash": "sha256:a",
+            "spanLocator": "chars:1-20",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "A different deep learning paper",
+        }
+    ]
+    case = {
+        "case_id": "compare_similar_title_aliases",
+        "query": "compare",
+        "expected_source_ids": ["Deep Residual Learning for Image Recognition"],
+        "expected_dimension_terms": ["accuracy"],
+        "expected_min_supporting_span_count": 1,
+        "expected_min_strict_span_count": 1,
+    }
+
+    result = module.evaluate_case(
+        case,
+        _payload(
+            compare_packet=packet,
+            sources=[{"source_id": "2501.00001", "title": "Deep Learning for Recognition"}],
+        ),
+    )
+
+    assert result["status"] == "fail"
+    assert result["expectedSourceCoverage"] == 0.0
+    assert result["unresolvedExpectedSourceAliases"] == ["Deep Residual Learning for Image Recognition"]
+    assert "unresolved_expected_source_alias" in result["provenanceDiagnostics"]
 
 
 def test_live_compare_quality_eval_requires_strict_source_coverage_for_answerable_cases():

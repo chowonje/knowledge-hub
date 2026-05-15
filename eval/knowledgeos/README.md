@@ -138,8 +138,9 @@ live compare quality eval 운영 규칙:
 - `live_compare_quality_eval_cases.local.json`은 개인 장기 corpus의 source id/path를 담을 수 있으므로 git ignore 대상이다. 시작점은 `templates/live_compare_quality_eval_cases.template.json`을 복사해서 채운다.
 - 이 gate는 live DB와 현재 compare runtime에 의존하므로 required PR CI에는 넣지 않는다. CI는 fake payload 기반 `tests/test_live_compare_quality_eval.py`로 evaluator contract만 검증한다.
 - 통과 기준은 기본적으로 compare packet 존재, answerable/no-answer 기대 결과 분리, 기대 source coverage, expected-answerable strict source coverage, dimension term coverage, supporting span coverage, strict span coverage, trace citation coverage, non-evidence supporting span leak 없음이다.
+- `expected_source_ids`는 arXiv id, canonical source id, paper title, 또는 명확한 filename slug를 쓸 수 있다. Evaluator는 payload의 source/citation metadata가 같은 source임을 강하게 뒷받침할 때만 alias coverage로 인정하고, 그 외에는 `unresolved_expected_source_alias`와 coverage gap으로 남긴다.
 - `expected_answerable=true` case는 `expected_min_strict_span_count`와 `expected_min_strict_source_coverage`를 만족해야 한다. retrieved source fallback span은 observability에는 쓰지만 answerable 승격 근거로 보지 않는다.
-- wide corpus 운영에서는 `failureCategoryCounts`와 `provenanceDiagnosticCounts`를 함께 본다. 대표 taxonomy는 `strict_span_gap`, `strict_source_coverage_gap`, `expected_source_coverage_gap`, `dimension_gap`, `locator_only_anchor`, `fallback_only`, `trace_without_strict_spans`, `non_evidence_leak`이다. 이 taxonomy는 실패 지점을 찾기 위한 operator diagnostic이며 새 answer/compare engine이 아니다.
+- wide corpus 운영에서는 `failureCategoryCounts`와 `provenanceDiagnosticCounts`를 함께 본다. 대표 taxonomy는 `strict_span_gap`, `strict_source_coverage_gap`, `expected_source_coverage_gap`, `dimension_gap`, `locator_only_anchor`, `fallback_only`, `trace_without_strict_spans`, `unresolved_expected_source_alias`, `non_evidence_leak`이다. 이 taxonomy는 실패 지점을 찾기 위한 operator diagnostic이며 새 answer/compare engine이 아니다.
 - command는 기본적으로 `khub compare --json --no-allow-external` 경로를 사용하며 registry write를 하지 않는다.
 
 answer-quality / compare-packet contract gate 운영 규칙:
