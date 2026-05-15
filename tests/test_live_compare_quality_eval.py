@@ -46,8 +46,26 @@ def _compare_packet(*, source_type: str = "paper", status: str = "conflict"):
                 "rightClaim": "B reports lower accuracy.",
                 "comparisonStatus": status,
                 "supportingSpans": [
-                    {"spanRef": "span_a", "sourceId": "paper:a#0", "sourceType": source_type, "quote": "A accuracy"},
-                    {"spanRef": "span_b", "sourceId": "paper:b#0", "sourceType": source_type, "quote": "B accuracy"},
+                    {
+                        "spanRef": "span_a",
+                        "sourceId": "paper:a#0",
+                        "sourceType": source_type,
+                        "contentHash": "sha256:a",
+                        "spanLocator": "chars:1-20",
+                        "strictSpanBacked": True,
+                        "fallbackSpan": False,
+                        "quote": "A accuracy",
+                    },
+                    {
+                        "spanRef": "span_b",
+                        "sourceId": "paper:b#0",
+                        "sourceType": source_type,
+                        "contentHash": "sha256:b",
+                        "spanLocator": "chars:30-50",
+                        "strictSpanBacked": True,
+                        "fallbackSpan": False,
+                        "quote": "B accuracy",
+                    },
                 ],
             }
         ],
@@ -77,6 +95,8 @@ def test_live_compare_quality_eval_passes_expected_compare_packet():
     assert result["comparePacketPresent"] is True
     assert result["expectedSourceCoverage"] == 1.0
     assert result["dimensionCoverage"] == 1.0
+    assert result["strictSpanBackedCount"] == 2
+    assert result["strictSpanCoverage"] == 1.0
     assert result["traceCitationCoverage"] == 1.0
 
 
@@ -110,6 +130,22 @@ def test_live_compare_quality_eval_accepts_expected_no_answer_status():
     assert "compare_status_not_ok:insufficient_evidence" not in result["errors"]
 
 
+def test_live_compare_quality_eval_rejects_answerable_no_answer_case():
+    module = _load_module()
+    case = {
+        "case_id": "compare_expected_no_answer",
+        "query": "compare under-evidenced sources",
+        "expected_answerable": False,
+        "expected_min_supporting_span_count": 0,
+        "require_trace_citations": False,
+    }
+
+    result = module.evaluate_case(case, _payload(compare_packet=_compare_packet()))
+
+    assert result["status"] == "fail"
+    assert "compare_packet_unexpectedly_answerable" in result["errors"]
+
+
 def test_live_compare_quality_eval_blocks_non_evidence_supporting_spans():
     module = _load_module()
     case = {
@@ -133,7 +169,16 @@ def test_live_compare_quality_eval_requires_expected_sources_in_supporting_spans
     module = _load_module()
     packet = _compare_packet()
     packet["dimensions"][0]["supportingSpans"] = [
-        {"spanRef": "span_a", "sourceId": "paper:a#0", "sourceType": "paper", "quote": "A accuracy"}
+        {
+            "spanRef": "span_a",
+            "sourceId": "paper:a#0",
+            "sourceType": "paper",
+            "contentHash": "sha256:a",
+            "spanLocator": "chars:1-20",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "A accuracy",
+        }
     ]
     case = {
         "case_id": "compare_one_sided_packet",
@@ -185,8 +230,61 @@ def test_live_compare_quality_eval_summary_enforces_thresholds():
 
     assert payload["status"] == "failed"
     assert payload["comparePacketPresentRate"] == 0.5
+    assert payload["strictSpanCoverageRate"] == 0.5
+    assert payload["fallbackSpanCaseRate"] == 0.0
+    assert payload["expectedAnswerableCaseCount"] == 2
+    assert payload["expectedNoAnswerCaseCount"] == 0
     assert payload["failedCaseCount"] == 1
     assert "compare_packet_present_rate_below_threshold:0.5<1.0" in payload["errors"]
+
+
+def test_live_compare_quality_eval_summary_separates_expected_no_answer_cases():
+    module = _load_module()
+    payload = module.run_live_compare_quality_eval(
+        cases=[
+            {
+                "case_id": "answerable",
+                "query": "answerable",
+                "expected_source_ids": ["paper:a#0", "paper:b#0"],
+                "expected_dimension_terms": ["accuracy"],
+                "expected_statuses": ["conflict"],
+                "expected_min_supporting_span_count": 2,
+            },
+            {
+                "case_id": "no_answer",
+                "query": "no answer",
+                "expected_answerable": False,
+                "expected_min_supporting_span_count": 0,
+                "require_trace_citations": False,
+            },
+        ],
+        compare_runner=lambda case: _payload(compare_packet=_compare_packet())
+        if case["case_id"] == "answerable"
+        else _payload(
+            status="insufficient_evidence",
+            compare_packet={
+                **_compare_packet(status="insufficient"),
+                "coverage": {
+                    **_compare_packet(status="insufficient")["coverage"],
+                    "answerable": False,
+                },
+            },
+        ),
+        cases_path=Path("cases.json"),
+        min_cases=2,
+        min_compare_packet_present_rate=0.5,
+        min_answerable_rate=1.0,
+        min_expected_source_coverage_rate=1.0,
+        min_dimension_coverage_rate=1.0,
+        min_supporting_span_coverage_rate=1.0,
+        min_trace_citation_coverage_rate=0.5,
+        fail_on_insufficient=True,
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["answerableRate"] == 0.5
+    assert payload["expectedAnswerablePassRate"] == 1.0
+    assert payload["expectedNoAnswerPassRate"] == 1.0
 
 
 def test_live_compare_quality_eval_skips_empty_local_cases_without_fail_flag():

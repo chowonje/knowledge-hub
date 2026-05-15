@@ -33,6 +33,15 @@
                 "sourceId": { "type": "string" },
                 "sourceType": { "type": "string" },
                 "contentHash": { "type": "string" },
+                "sourceContentHash": { "type": "string" },
+                "spanLocator": { "type": "string" },
+                "contentHashAvailable": { "type": "boolean" },
+                "spanOffsetAvailable": { "type": "boolean" },
+                "strictSpanBacked": { "type": "boolean" },
+                "fallbackSpan": { "type": "boolean" },
+                "chunkId": { "type": "string" },
+                "documentId": { "type": "string" },
+                "citationLabel": { "type": "string" },
                 "quote": { "type": "string" }
               },
               "additionalProperties": true
@@ -54,9 +63,14 @@
         "supportedDimensionCount": { "type": "integer", "minimum": 0 },
         "conflictDimensionCount": { "type": "integer", "minimum": 0 },
         "unknownDimensionCount": { "type": "integer", "minimum": 0 },
+        "strictSupportedDimensionCount": { "type": "integer", "minimum": 0 },
+        "fallbackOnlyDimensionCount": { "type": "integer", "minimum": 0 },
         "supportingSpanCount": { "type": "integer", "minimum": 0 },
+        "strictSpanBackedCount": { "type": "integer", "minimum": 0 },
+        "fallbackSpanCount": { "type": "integer", "minimum": 0 },
         "excludedNonEvidenceSpanCount": { "type": "integer", "minimum": 0 },
-        "answerable": { "type": "boolean" }
+        "answerable": { "type": "boolean" },
+        "answerabilityRule": { "type": "string" }
       },
       "additionalProperties": true
     },

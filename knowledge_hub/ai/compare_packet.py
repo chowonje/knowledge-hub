@@ -15,6 +15,19 @@ def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
 
 
+def _bool_or_none(value: Any) -> bool | None:
+    if value is None or value == "":
+        return None
+    if isinstance(value, bool):
+        return value
+    token = str(value).strip().lower()
+    if token in {"1", "true", "yes", "y", "on"}:
+        return True
+    if token in {"0", "false", "no", "n", "off"}:
+        return False
+    return None
+
+
 def _hash_text(*parts: Any, length: int = 24) -> str:
     text = "\n".join(str(part or "") for part in parts if str(part or "").strip())
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[: max(8, int(length))]
@@ -36,16 +49,126 @@ def _is_non_evidence_ref(item: dict[str, Any]) -> bool:
     return bool(scheme and scheme in NON_EVIDENCE_SOURCE_SCHEMES)
 
 
+def _content_hash(item: dict[str, Any]) -> str:
+    return _clean_text(
+        item.get("content_hash")
+        or item.get("contentHash")
+        or item.get("source_content_hash")
+        or item.get("sourceContentHash")
+    )
+
+
+def _span_locator(item: dict[str, Any]) -> str:
+    locator = _clean_text(
+        item.get("span_locator")
+        or item.get("spanLocator")
+        or item.get("locator")
+        or item.get("parent_chunk_span")
+        or item.get("parentChunkSpan")
+        or item.get("chunk_span")
+        or item.get("chunkSpan")
+        or item.get("unit_id")
+        or item.get("unitId")
+    )
+    if locator:
+        return locator
+    char_start = _clean_text(
+        item.get("char_start")
+        or item.get("charStart")
+        or item.get("start_offset")
+        or item.get("startOffset")
+        or item.get("chunk_start")
+        or item.get("chunkStart")
+    )
+    char_end = _clean_text(
+        item.get("char_end")
+        or item.get("charEnd")
+        or item.get("end_offset")
+        or item.get("endOffset")
+        or item.get("chunk_end")
+        or item.get("chunkEnd")
+    )
+    return f"chars:{char_start}-{char_end}" if char_start and char_end else ""
+
+
+def _span_offset_available(item: dict[str, Any]) -> bool:
+    explicit = _bool_or_none(
+        item.get("spanOffsetAvailable") if "spanOffsetAvailable" in item else item.get("span_offset_available")
+    )
+    if explicit is not None:
+        return explicit
+    locator = _span_locator(item)
+    if re.search(r"(?:chars?|bytes?)[:=]\d+\s*[-:]\s*\d+", locator, re.IGNORECASE):
+        return True
+    if re.search(r"\b\d+\s*[-:]\s*\d+\b", locator):
+        return True
+    return bool(
+        _clean_text(
+            item.get("char_start") or item.get("charStart") or item.get("start_offset") or item.get("startOffset")
+        )
+        and _clean_text(
+            item.get("char_end") or item.get("charEnd") or item.get("end_offset") or item.get("endOffset")
+        )
+    )
+
+
+def _source_document_id(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("document_id") or item.get("documentId") or item.get("parent_id") or item.get("parentId"))
+
+
+def _chunk_id(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("chunk_id") or item.get("chunkId") or item.get("unit_id") or item.get("unitId"))
+
+
+def _is_stale_span(item: dict[str, Any]) -> bool:
+    derivative = dict(item.get("derivative_source") or item.get("derivativeSource") or {})
+    return bool(item.get("stale")) or bool(derivative.get("stale"))
+
+
+def _has_strict_span_provenance(item: dict[str, Any]) -> bool:
+    explicit = _bool_or_none(item.get("strictSpanBacked") if "strictSpanBacked" in item else item.get("strict_span_backed"))
+    if explicit is False:
+        return False
+    if _bool_or_none(item.get("fallbackSpan") if "fallbackSpan" in item else item.get("fallback_span")) is True:
+        return False
+    source_id = _clean_text(item.get("source_id") or item.get("sourceId") or item.get("target"))
+    return bool(source_id and _content_hash(item) and _span_offset_available(item) and not _is_stale_span(item))
+
+
 def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
-    source_id = _clean_text(item.get("source_id") or item.get("sourceId") or item.get("target") or item.get("spanRef"))
+    source_id_for_strict = _clean_text(item.get("source_id") or item.get("sourceId") or item.get("target"))
+    source_id = source_id_for_strict or _clean_text(item.get("spanRef"))
     span_ref = _clean_text(item.get("span_ref") or item.get("spanRef")) or f"span:{fallback_index}"
-    return {
+    content_hash = _content_hash(item)
+    span_locator = _span_locator(item)
+    span_offset_available = _span_offset_available({**item, "spanLocator": span_locator})
+    fallback_span = _bool_or_none(item.get("fallbackSpan") if "fallbackSpan" in item else item.get("fallback_span")) is True
+    strict_span_backed = False if fallback_span else _has_strict_span_provenance(
+        {**item, "sourceId": source_id_for_strict, "contentHash": content_hash, "spanLocator": span_locator}
+    )
+    span = {
         "spanRef": span_ref,
         "sourceId": source_id,
         "sourceType": _clean_text(item.get("source_type") or item.get("sourceType")),
-        "contentHash": _clean_text(item.get("content_hash") or item.get("contentHash") or item.get("source_content_hash")),
+        "contentHash": content_hash,
+        "sourceContentHash": content_hash,
+        "spanLocator": span_locator,
+        "contentHashAvailable": bool(content_hash),
+        "spanOffsetAvailable": bool(span_offset_available),
+        "strictSpanBacked": bool(strict_span_backed),
+        "fallbackSpan": bool(fallback_span),
         "quote": str(item.get("quote") or item.get("text") or item.get("excerpt") or "")[:500],
     }
+    citation_label = _clean_text(item.get("citation_label") or item.get("citationLabel") or item.get("label"))
+    document_id = _source_document_id(item)
+    chunk_id = _chunk_id(item)
+    if citation_label:
+        span["citationLabel"] = citation_label
+    if document_id:
+        span["documentId"] = document_id
+    if chunk_id:
+        span["chunkId"] = chunk_id
+    return span
 
 
 def _source_id(item: dict[str, Any]) -> str:
@@ -75,15 +198,70 @@ def _source_span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, 
         or item.get("parentId")
     )
     quote = str(item.get("quote") or item.get("text") or item.get("excerpt") or item.get("document") or item.get("title") or "")
-    return {
-        "spanRef": span_ref or f"source:{_hash_text(source_id, quote, fallback_index, length=16)}",
-        "sourceId": source_id,
-        "sourceType": source_type,
-        "contentHash": _clean_text(item.get("content_hash") or item.get("contentHash") or item.get("source_content_hash")),
-        "quote": quote[:500],
-        "citationLabel": _clean_text(item.get("citation_label") or item.get("citationLabel")),
-        "evidenceKind": _clean_text(item.get("evidence_kind") or item.get("evidenceKind")),
-    }
+    return _span_ref(
+        {
+            **item,
+            "spanRef": span_ref or f"source:{_hash_text(source_id, quote, fallback_index, length=16)}",
+            "sourceId": source_id,
+            "sourceType": source_type,
+            "spanLocator": span_ref,
+            "quote": quote[:500],
+            "citationLabel": _clean_text(item.get("citation_label") or item.get("citationLabel")),
+            "evidenceKind": _clean_text(item.get("evidence_kind") or item.get("evidenceKind")),
+            "fallbackSpan": True,
+            "strictSpanBacked": False,
+        },
+        fallback_index=fallback_index,
+    )
+
+
+def _span_key(item: dict[str, Any]) -> tuple[str, str]:
+    return (
+        _clean_text(item.get("sourceId") or item.get("source_id")),
+        _clean_text(item.get("spanRef") or item.get("span_ref")),
+    )
+
+
+def _strict_supporting_spans(
+    spans: list[dict[str, Any]] | None = None,
+    citations: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    citation_by_key: dict[tuple[str, str], dict[str, Any]] = {}
+    citation_by_ref: dict[str, dict[str, Any]] = {}
+    for citation in list(citations or []):
+        item = dict(citation or {})
+        normalized = _span_ref(
+            {**item, "strictSpanBacked": True, "fallbackSpan": False},
+            fallback_index=len(citation_by_ref) + 1,
+        )
+        if not normalized["strictSpanBacked"]:
+            continue
+        citation_by_key.setdefault(_span_key(normalized), normalized)
+        citation_by_ref.setdefault(_clean_text(normalized.get("spanRef")), normalized)
+
+    strict_spans: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for index, raw_span in enumerate(list(spans or []), start=1):
+        span = dict(raw_span or {})
+        key = _span_key(span)
+        citation = citation_by_key.get(key) or citation_by_ref.get(_clean_text(span.get("spanRef") or span.get("span_id"))) or {}
+        normalized = _span_ref({**citation, **span, "strictSpanBacked": True, "fallbackSpan": False}, fallback_index=index)
+        if not normalized["strictSpanBacked"] or _is_non_evidence_ref(normalized):
+            continue
+        normalized_key = _span_key(normalized)
+        if normalized_key in seen:
+            continue
+        seen.add(normalized_key)
+        strict_spans.append(normalized)
+
+    for index, citation in enumerate(list(citations or []), start=len(strict_spans) + 1):
+        normalized = _span_ref({**dict(citation or {}), "strictSpanBacked": True, "fallbackSpan": False}, fallback_index=index)
+        normalized_key = _span_key(normalized)
+        if not normalized["strictSpanBacked"] or normalized_key in seen or _is_non_evidence_ref(normalized):
+            continue
+        seen.add(normalized_key)
+        strict_spans.append(normalized)
+    return strict_spans
 
 
 def _source_supporting_spans(sources: list[dict[str, Any]], citations: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
@@ -308,6 +486,8 @@ def build_compare_packet_contract(
     excluded_non_evidence = 0
     unknown_count = 0
     conflict_count = 0
+    strict_supported_dimension_count = 0
+    fallback_only_dimension_count = 0
 
     for index, raw_dimension in enumerate(dimensions, start=1):
         dimension = dict(raw_dimension or {})
@@ -326,6 +506,18 @@ def build_compare_packet_contract(
             conflict_count += 1
         if status in {"unknown", "insufficient"} or not supporting_spans:
             unknown_count += 1
+        span_source_ids = {_clean_text(item.get("sourceId")) for item in supporting_spans if _clean_text(item.get("sourceId"))}
+        strict_source_ids = {
+            _clean_text(item.get("sourceId"))
+            for item in supporting_spans
+            if bool(item.get("strictSpanBacked")) and _clean_text(item.get("sourceId"))
+        }
+        strict_span_count = sum(1 for item in supporting_spans if bool(item.get("strictSpanBacked")))
+        fallback_span_count = sum(1 for item in supporting_spans if bool(item.get("fallbackSpan")))
+        if status in {"supported", "conflict"} and span_source_ids and span_source_ids.issubset(strict_source_ids):
+            strict_supported_dimension_count += 1
+        elif supporting_spans and fallback_span_count == len(supporting_spans):
+            fallback_only_dimension_count += 1
 
         normalized_dimensions.append(
             {
@@ -339,9 +531,21 @@ def build_compare_packet_contract(
             }
         )
 
-    answerable = bool(normalized_dimensions) and unknown_count < len(normalized_dimensions)
+    answerable = bool(normalized_dimensions) and strict_supported_dimension_count == len(normalized_dimensions)
     packet_id = _hash_text(query, [item["dimensionId"] for item in normalized_dimensions], [item["comparisonStatus"] for item in normalized_dimensions])
     created_at = datetime.now(timezone.utc).isoformat()
+    strict_span_total = sum(
+        1
+        for dimension in normalized_dimensions
+        for span in dimension["supportingSpans"]
+        if bool(span.get("strictSpanBacked"))
+    )
+    fallback_span_total = sum(
+        1
+        for dimension in normalized_dimensions
+        for span in dimension["supportingSpans"]
+        if bool(span.get("fallbackSpan"))
+    )
     return {
         "schema": COMPARE_PACKET_SCHEMA,
         "packetId": packet_id,
@@ -357,9 +561,14 @@ def build_compare_packet_contract(
             "supportedDimensionCount": sum(1 for item in normalized_dimensions if item["comparisonStatus"] == "supported"),
             "conflictDimensionCount": conflict_count,
             "unknownDimensionCount": unknown_count,
+            "strictSupportedDimensionCount": strict_supported_dimension_count,
+            "fallbackOnlyDimensionCount": fallback_only_dimension_count,
             "supportingSpanCount": sum(len(item["supportingSpans"]) for item in normalized_dimensions),
+            "strictSpanBackedCount": strict_span_total,
+            "fallbackSpanCount": fallback_span_total,
             "excludedNonEvidenceSpanCount": excluded_non_evidence,
             "answerable": bool(answerable),
+            "answerabilityRule": "requires_strict_span_backed_supporting_spans",
         },
     }
 
@@ -369,13 +578,28 @@ def build_compare_packet_from_sources(
     query: str,
     sources: list[dict[str, Any]],
     citations: list[dict[str, Any]] | None = None,
+    strict_spans: list[dict[str, Any]] | None = None,
+    strict_citations: list[dict[str, Any]] | None = None,
     existing_packet: dict[str, Any] | None = None,
     policy: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     source_items = [dict(item or {}) for item in list(sources or []) if isinstance(item, dict)]
+    strict_source_spans = _strict_supporting_spans(strict_spans, strict_citations)
     source_spans = _source_supporting_spans(source_items, citations=citations)
-    if not source_spans:
-        return dict(existing_packet or {}) or None
+    if not strict_source_spans and not source_spans:
+        if not existing_packet:
+            return None
+        packet = build_compare_packet_contract(
+            query=query,
+            dimensions=[dict(item or {}) for item in list(existing_packet.get("dimensions") or []) if isinstance(item, dict)],
+            retrieval_signals=list(existing_packet.get("retrievalSignals") or []),
+            policy={**dict(existing_packet.get("policy") or {}), **dict(policy or {})},
+        )
+        existing_packet_id = _clean_text(existing_packet.get("packet_id") or existing_packet.get("packetId"))
+        if existing_packet_id:
+            packet["packet_id"] = existing_packet_id
+            packet["packetId"] = existing_packet_id
+        return packet
 
     focus_label = _query_focus_label(query, source_items)
     if existing_packet:
@@ -395,26 +619,46 @@ def build_compare_packet_from_sources(
             for span in list(dimension.get("supportingSpans") or dimension.get("supporting_spans") or [])
             if isinstance(span, dict)
         }
+        existing_span_keys = {
+            _span_key(span)
+            for dimension in dimensions
+            for span in list(dimension.get("supportingSpans") or dimension.get("supporting_spans") or [])
+            if isinstance(span, dict)
+        }
+        missing_strict_spans = [
+            span
+            for span in strict_source_spans
+            if _span_key(span) not in existing_span_keys
+        ]
+        strict_source_ids = {_clean_text(span.get("sourceId")) for span in missing_strict_spans}
         missing_source_spans = [
             span
             for span in source_spans
             if _clean_text(span.get("sourceId")) not in existing_source_ids
+            and _clean_text(span.get("sourceId")) not in strict_source_ids
         ]
-        if missing_source_spans:
+        if missing_strict_spans or missing_source_spans:
             first_dimension = dimensions[0]
-            first_dimension["supportingSpans"] = list(first_dimension.get("supportingSpans") or []) + missing_source_spans
+            first_dimension["supportingSpans"] = (
+                list(first_dimension.get("supportingSpans") or []) + missing_strict_spans + missing_source_spans
+            )
         for dimension in dimensions:
             if _label_is_low_signal(str(dimension.get("label") or "")):
                 dimension["label"] = focus_label
             notes = _clean_text(dimension.get("notes"))
             if focus_label and focus_label.casefold() not in notes.casefold():
                 dimension["notes"] = _clean_text(f"{notes} Query focus: {focus_label}")
-        return build_compare_packet_contract(
+        packet = build_compare_packet_contract(
             query=query,
             dimensions=dimensions,
             retrieval_signals=list(existing_packet.get("retrievalSignals") or []),
             policy={**dict(existing_packet.get("policy") or {}), **dict(policy or {})},
         )
+        existing_packet_id = _clean_text(existing_packet.get("packet_id") or existing_packet.get("packetId"))
+        if existing_packet_id:
+            packet["packet_id"] = existing_packet_id
+            packet["packetId"] = existing_packet_id
+        return packet
 
     left = source_items[0] if source_items else {}
     right = source_items[1] if len(source_items) > 1 else {}
@@ -427,7 +671,7 @@ def build_compare_packet_from_sources(
                 "leftClaim": _clean_text(left.get("title") or left.get("excerpt")),
                 "rightClaim": _clean_text(right.get("title") or right.get("excerpt")),
                 "comparisonStatus": "insufficient",
-                "supportingSpans": source_spans,
+                "supportingSpans": strict_source_spans + source_spans,
                 "notes": "Source coverage fallback from retrieved evidence; no claim-aligned compare packet was available.",
             }
         ],
