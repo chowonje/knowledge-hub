@@ -85,7 +85,78 @@ def test_mcp_read_packet_resource_resolves_registry_record(tmp_path):
     assert payload["status"] == "ok"
     assert payload["registryLookup"]["payload"]["packet_id"] == "epkt_1"
     assert payload["registryLookup"]["lineage"]["evidenceSpanIds"] == ["span_1"]
+    assert payload["registryLookup"]["currentStaleness"]["status"] == "source_missing"
     assert validate_payload(payload["registryLookup"], payload["registryLookup"]["schema"], strict=True).ok
+
+
+def test_mcp_read_packet_resource_reports_current_staleness_from_document_memory(tmp_path):
+    module = _import_mcp_server()
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    db.replace_document_memory_units(
+        document_id="src_1",
+        units=[
+            {
+                "unit_id": "unit_1",
+                "document_title": "Source 1",
+                "unit_type": "document_summary",
+                "source_content_hash": "sha256:new",
+            }
+        ],
+    )
+    register_packet(
+        db,
+        {
+            "schema": "knowledge-hub.evidence-packet.v1",
+            "packet_id": "epkt_stale",
+            "spans": [{"span_id": "span_1", "source_id": "src_1", "content_hash": "sha256:old"}],
+        },
+    )
+    state = SimpleNamespace(config=object(), sqlite_db=db)
+
+    contents = module.read_khub_resource(state, "khub://packet/epkt_stale")
+    payload = json.loads(contents[0].content)
+
+    assert payload["status"] == "stale"
+    assert payload["storedStaleness"]["status"] == "fresh"
+    assert payload["currentStaleness"]["status"] == "stale"
+    assert payload["currentStaleness"]["mismatchedSourceIds"] == ["src_1"]
+    assert payload["registryLookup"]["currentStaleness"]["status"] == "stale"
+
+
+def test_mcp_read_packet_resource_prefers_current_note_hash_over_stale_document_memory(tmp_path):
+    module = _import_mcp_server()
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    db.upsert_note("note_1", "Note 1", content="version one", metadata={"source_content_hash": "sha256:new"})
+    db.replace_document_memory_units(
+        document_id="note_1",
+        units=[
+            {
+                "unit_id": "unit_1",
+                "document_title": "Note 1",
+                "unit_type": "document_summary",
+                "source_content_hash": "sha256:old",
+                "stale": True,
+                "stale_reason": "source_content_hash_changed",
+            }
+        ],
+    )
+    register_packet(
+        db,
+        {
+            "schema": "knowledge-hub.evidence-packet.v1",
+            "packet_id": "epkt_note",
+            "spans": [{"span_id": "span_1", "source_id": "note_1", "content_hash": "sha256:old"}],
+        },
+    )
+    state = SimpleNamespace(config=object(), sqlite_db=db)
+
+    contents = module.read_khub_resource(state, "khub://packet/epkt_note")
+    payload = json.loads(contents[0].content)
+
+    assert payload["status"] == "stale"
+    assert payload["storedStaleness"]["status"] == "fresh"
+    assert payload["currentStaleness"]["status"] == "stale"
+    assert payload["currentStaleness"]["mismatchedSourceIds"] == ["note_1"]
 
 
 def test_mcp_read_context_resource_resolves_registry_record(tmp_path):

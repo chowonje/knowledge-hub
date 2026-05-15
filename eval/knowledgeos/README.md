@@ -131,6 +131,15 @@ live retrieval-span eval 운영 규칙:
 - A/B 결과는 `sourceHitAtKRate`, `sourceHitWithinMinRankRate`, `termOverlapPassRate`, `failedCaseCount` delta로 `promote_candidate | hold | do_not_promote`를 낸다.
 - 이 command는 active Chroma/vector runtime에 접근하므로 다른 MCP 서버나 장기 실행 search process가 vector store를 잡고 있으면 lock에 걸릴 수 있다. CI가 아니라 로컬 operator 판단용으로만 사용한다.
 
+live compare quality eval 운영 규칙:
+- 목적은 실제 장기 로컬 DB에서 `khub compare`가 compare packet, source coverage, dimension labels, supporting spans, trace citations를 납득 가능하게 만드는지 operator가 확인하는 것이다.
+- canonical command:
+  - `python eval/knowledgeos/scripts/check_live_compare_quality_eval.py --cases eval/knowledgeos/queries/live_compare_quality_eval_cases.local.json --out-json eval/knowledgeos/runs/reports/live_compare_quality_latest.json --out-md eval/knowledgeos/runs/reports/live_compare_quality_latest.md --fail-on-insufficient --json`
+- `live_compare_quality_eval_cases.local.json`은 개인 장기 corpus의 source id/path를 담을 수 있으므로 git ignore 대상이다. 시작점은 `templates/live_compare_quality_eval_cases.template.json`을 복사해서 채운다.
+- 이 gate는 live DB와 현재 compare runtime에 의존하므로 required PR CI에는 넣지 않는다. CI는 fake payload 기반 `tests/test_live_compare_quality_eval.py`로 evaluator contract만 검증한다.
+- 통과 기준은 기본적으로 compare packet 존재, answerable coverage, 기대 source coverage, dimension term coverage, supporting span coverage, trace citation coverage, non-evidence supporting span leak 없음이다.
+- command는 기본적으로 `khub compare --json --no-allow-external` 경로를 사용하며 registry write를 하지 않는다.
+
 answer-quality / compare-packet contract gate 운영 규칙:
 - answer-quality gate는 current AnswerContract가 citation coverage, abstain, verification verdict, retrievalSignals 분리를 계속 지키는지 deterministic fixture로 확인한다.
 - canonical command:

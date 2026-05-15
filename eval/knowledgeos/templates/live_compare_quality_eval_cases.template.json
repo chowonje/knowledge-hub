@@ -1,0 +1,53 @@
+{
+  "schema": "knowledge-hub.live-compare-quality-eval.cases.v1",
+  "cases": [
+    {
+      "case_id": "paper_compare_known_conflict",
+      "template": true,
+      "query": "replace with a local paper comparison query that should surface a conflict",
+      "source": "paper",
+      "top_k": 8,
+      "mode": "hybrid",
+      "expected_source_ids": ["paper:<paper-a-id-or-chunk>", "paper:<paper-b-id-or-chunk>"],
+      "expected_dimension_terms": ["metric or method term expected in compare dimensions"],
+      "expected_statuses": ["conflict"],
+      "expected_min_supporting_span_count": 2,
+      "forbidden_non_evidence_support": true,
+      "require_trace_citations": true,
+      "expected_answerable": true,
+      "allow_external": false
+    },
+    {
+      "case_id": "paper_compare_known_support",
+      "template": true,
+      "query": "replace with a local paper comparison query whose sources agree on a dimension",
+      "source": "paper",
+      "top_k": 8,
+      "mode": "hybrid",
+      "expected_source_ids": ["paper:<paper-a-id-or-chunk>", "paper:<paper-b-id-or-chunk>"],
+      "expected_dimension_terms": ["shared dataset or method term"],
+      "expected_statuses": ["supported"],
+      "expected_min_supporting_span_count": 2,
+      "forbidden_non_evidence_support": true,
+      "require_trace_citations": true,
+      "expected_answerable": true,
+      "allow_external": false
+    },
+    {
+      "case_id": "compare_insufficient_evidence",
+      "template": true,
+      "query": "replace with an intentionally under-evidenced comparison query",
+      "source": "paper",
+      "top_k": 8,
+      "mode": "hybrid",
+      "expected_source_ids": [],
+      "expected_dimension_terms": [],
+      "expected_statuses": ["unknown", "insufficient"],
+      "expected_min_supporting_span_count": 0,
+      "forbidden_non_evidence_support": true,
+      "require_trace_citations": false,
+      "expected_answerable": false,
+      "allow_external": false
+    }
+  ]
+}

@@ -8,6 +8,7 @@ from mcp.types import Resource, ResourceTemplate
 
 from knowledge_hub.application.evidence_registry import resolve_registry_lookup
 from knowledge_hub.application.evidence_substrate import build_inspect_payload, build_substrate_contract
+from knowledge_hub.application.source_revision_resolver import resolve_current_source_refs
 
 
 RESOURCE_MIME_TYPE = "application/json"
@@ -72,6 +73,15 @@ def _payload_resource(kind: str, identifier: str, *, status: str = "not_found", 
 
 def _registry_resource(sqlite_db: Any, kind: str, identifier: str) -> dict[str, Any]:
     lookup = resolve_registry_lookup(sqlite_db, kind, identifier) if sqlite_db is not None else {}
+    if sqlite_db is not None and str(lookup.get("status") or "") in {"ok", "stale"}:
+        current_resolution = resolve_current_source_refs(sqlite_db, list(lookup.get("sourceRefs") or []))
+        lookup = resolve_registry_lookup(
+            sqlite_db,
+            kind,
+            identifier,
+            current_source_refs=list(current_resolution.get("currentSourceRefs") or []),
+            current_source_resolution=current_resolution,
+        )
     status = str(lookup.get("status") or "not_found")
     return {
         "schema": "knowledge-hub.mcp.resource.result.v1",
@@ -84,6 +94,8 @@ def _registry_resource(sqlite_db: Any, kind: str, identifier: str) -> dict[str, 
         "payload": dict(lookup.get("payload") or {}),
         "lineage": dict(lookup.get("lineage") or {}),
         "authority": dict(lookup.get("authority") or {}),
+        "storedStaleness": dict(lookup.get("storedStaleness") or {}),
+        "currentStaleness": dict(lookup.get("currentStaleness") or {}),
         "warnings": list(lookup.get("warnings") or []),
     }
 

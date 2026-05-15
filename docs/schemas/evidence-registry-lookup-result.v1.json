@@ -13,6 +13,8 @@
     "authority",
     "lineage",
     "sourceRefs",
+    "storedStaleness",
+    "currentStaleness",
     "warnings"
   ],
   "properties": {
@@ -26,6 +28,31 @@
     "authority": { "type": "object" },
     "lineage": { "type": "object" },
     "sourceRefs": { "type": "array", "items": { "type": "object" } },
+    "storedStaleness": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "properties": {
+        "status": { "type": "string", "enum": ["fresh", "stale", "unchecked", "source_missing"] },
+        "reason": { "type": "string" },
+        "checkedAt": { "type": "string" },
+        "sourceRevisionHash": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "currentStaleness": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "properties": {
+        "status": { "type": "string", "enum": ["fresh", "stale", "unchecked", "source_missing"] },
+        "reason": { "type": "string" },
+        "checkedAt": { "type": "string" },
+        "currentSourceRefs": { "type": "array", "items": { "type": "object" } },
+        "missingSourceIds": { "type": "array", "items": { "type": "string" } },
+        "mismatchedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "matchedSourceIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
     "warnings": { "type": "array", "items": { "type": "string" } }
   },
   "additionalProperties": false

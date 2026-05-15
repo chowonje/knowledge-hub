@@ -40,6 +40,8 @@ def test_registry_lookup_returns_exact_packet_by_id(tmp_path):
 
     assert record["registryId"] == "epkt_1"
     assert lookup["status"] == "ok"
+    assert lookup["storedStaleness"]["status"] == "fresh"
+    assert lookup["currentStaleness"]["status"] == "unchecked"
     assert lookup["payload"] == packet
     assert lookup["registryRecord"]["payloadHash"].startswith("sha256:")
     assert validate_payload(record, record["schema"], strict=True).ok
@@ -75,7 +77,32 @@ def test_registry_source_hash_mismatch_marks_record_stale(tmp_path):
     )
 
     assert lookup["status"] == "stale"
-    assert lookup["registryRecord"]["staleReason"] == "source_revision_mismatch"
+    assert lookup["storedStaleness"]["status"] == "fresh"
+    assert lookup["currentStaleness"]["status"] == "stale"
+    assert lookup["currentStaleness"]["mismatchedSourceIds"] == ["src_1"]
+    assert lookup["registryRecord"]["status"] == "ok"
+    assert lookup["registryRecord"]["staleReason"] == ""
+
+
+def test_registry_source_hash_match_marks_current_staleness_fresh(tmp_path):
+    db = _db(tmp_path)
+    packet = {
+        "schema": "knowledge-hub.evidence-packet.v1",
+        "packet_id": "epkt_fresh",
+        "spans": [{"span_id": "span_1", "source_id": "src_1", "content_hash": "sha256:aaa"}],
+    }
+    register_packet(db, packet)
+
+    lookup = resolve_registry_lookup(
+        db,
+        "packet",
+        "epkt_fresh",
+        current_source_refs=[{"sourceId": "src_1", "sourceContentHash": "sha256:aaa"}],
+    )
+
+    assert lookup["status"] == "ok"
+    assert lookup["currentStaleness"]["status"] == "fresh"
+    assert lookup["currentStaleness"]["matchedSourceIds"] == ["src_1"]
 
 
 def test_answer_trace_registry_keeps_citations_linked_to_evidence_spans(tmp_path):

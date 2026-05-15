@@ -323,12 +323,85 @@ def _revision_mismatch(record: dict[str, Any], current_source_refs: list[dict[st
     return False
 
 
+def _stored_staleness(record: dict[str, Any] | None) -> dict[str, Any]:
+    if not record:
+        return {
+            "status": "unchecked",
+            "reason": "registry_record_not_found",
+            "checkedAt": "",
+            "sourceRevisionHash": "",
+        }
+    stale = bool(record.get("stale")) or str(record.get("status") or "").lower() == "stale"
+    return {
+        "status": "stale" if stale else "fresh",
+        "reason": _clean_text(record.get("staleReason")) or ("stored_stale_flag" if stale else "stored_record_status"),
+        "checkedAt": _clean_text(record.get("updatedAt") or record.get("createdAt")),
+        "sourceRevisionHash": _clean_text(record.get("sourceRevisionHash")),
+    }
+
+
+def _current_staleness(
+    record: dict[str, Any],
+    current_source_refs: list[dict[str, Any]] | None,
+    current_source_resolution: dict[str, Any] | None,
+) -> dict[str, Any]:
+    if current_source_resolution:
+        return {
+            "status": _clean_text(current_source_resolution.get("status")) or "unchecked",
+            "reason": _clean_text(current_source_resolution.get("reason")) or "current_source_resolution",
+            "checkedAt": _clean_text(current_source_resolution.get("checkedAt")) or _now_iso(),
+            "currentSourceRefs": list(current_source_resolution.get("currentSourceRefs") or []),
+            "missingSourceIds": list(current_source_resolution.get("missingSourceIds") or []),
+            "mismatchedSourceIds": list(current_source_resolution.get("mismatchedSourceIds") or []),
+            "matchedSourceIds": list(current_source_resolution.get("matchedSourceIds") or []),
+        }
+    if current_source_refs is None:
+        return {
+            "status": "unchecked",
+            "reason": "current_source_refs_not_supplied",
+            "checkedAt": "",
+            "currentSourceRefs": [],
+            "missingSourceIds": [],
+            "mismatchedSourceIds": [],
+            "matchedSourceIds": [],
+        }
+    current = _current_ref_map(current_source_refs)
+    recorded = _current_ref_map(list(record.get("sourceRefs") or []))
+    if not recorded:
+        status = "unchecked"
+        reason = "registry_record_has_no_bound_source_hashes"
+        matched: list[str] = []
+        mismatched: list[str] = []
+    else:
+        mismatched = [source_id for source_id, source_hash in recorded.items() if current.get(source_id) and current[source_id] != source_hash]
+        matched = [source_id for source_id, source_hash in recorded.items() if current.get(source_id) == source_hash]
+        if mismatched:
+            status = "stale"
+            reason = "source_revision_mismatch"
+        elif matched and len(matched) == len(recorded):
+            status = "fresh"
+            reason = "source_hash_match"
+        else:
+            status = "unchecked"
+            reason = "current_source_refs_incomplete"
+    return {
+        "status": status,
+        "reason": reason,
+        "checkedAt": _now_iso(),
+        "currentSourceRefs": list(current_source_refs or []),
+        "missingSourceIds": [],
+        "mismatchedSourceIds": mismatched,
+        "matchedSourceIds": matched,
+    }
+
+
 def resolve_registry_lookup(
     sqlite_db: Any,
     record_kind: str,
     registry_id: str,
     *,
     current_source_refs: list[dict[str, Any]] | None = None,
+    current_source_resolution: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     kind = _clean_text(record_kind).lower()
     identifier = _clean_text(registry_id)
@@ -346,17 +419,24 @@ def resolve_registry_lookup(
             "authority": default_registry_authority(),
             "lineage": {},
             "sourceRefs": [],
+            "storedStaleness": _stored_staleness(None),
+            "currentStaleness": {
+                "status": "unchecked",
+                "reason": "registry_record_not_found",
+                "checkedAt": "",
+                "currentSourceRefs": [],
+                "missingSourceIds": [],
+                "mismatchedSourceIds": [],
+                "matchedSourceIds": [],
+            },
             "warnings": [],
         }
 
     warnings = []
     status = str(record.get("status") or "ok")
-    if _revision_mismatch(record, current_source_refs):
+    current_staleness = _current_staleness(record, current_source_refs, current_source_resolution)
+    if current_staleness.get("status") == "stale" or _revision_mismatch(record, current_source_refs):
         status = "stale"
-        record = dict(record)
-        record["status"] = "stale"
-        record["stale"] = True
-        record["staleReason"] = "source_revision_mismatch"
         warnings.append("registry record source revision does not match current source refs")
     elif bool(record.get("stale")) and record.get("staleReason"):
         warnings.append(str(record.get("staleReason")))
@@ -372,5 +452,7 @@ def resolve_registry_lookup(
         "authority": dict(record.get("authority") or default_registry_authority()),
         "lineage": dict(record.get("lineage") or {}),
         "sourceRefs": list(record.get("sourceRefs") or []),
+        "storedStaleness": _stored_staleness(record),
+        "currentStaleness": current_staleness,
         "warnings": warnings,
     }
