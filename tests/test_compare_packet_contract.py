@@ -332,6 +332,227 @@ def test_compare_packet_from_runtime_keeps_locator_only_evidence_anchors_non_str
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_from_runtime_synthesizes_claim_dimensions_from_strict_anchors_when_groups_missing():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 global question 처리를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-graph-method",
+                "sourceKind": "paper",
+                "sourceId": "2404.16130",
+                "summaryText": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization | GraphRAG builds global summaries.",
+                "claimType": "method",
+                "resultDirection": "unknown",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-graph-method",
+                        "sourceId": "2404.16130",
+                        "sourceType": "paper",
+                        "documentId": "paper:2404.16130",
+                        "chunkId": "paper:2404.16130:method",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:graph",
+                        "citationLabel": "S1",
+                        "quote": "GraphRAG builds global summaries.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-light-method",
+                "sourceKind": "paper",
+                "sourceId": "2410.05779",
+                "summaryText": "LightRAG: Simple and Fast Retrieval-Augmented Generation | LightRAG keeps a graph index.",
+                "claimType": "method",
+                "resultDirection": "unknown",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-light-method",
+                        "sourceId": "2410.05779",
+                        "sourceType": "paper",
+                        "documentId": "paper:2410.05779",
+                        "chunkId": "paper:2410.05779:method",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:light",
+                        "citationLabel": "S2",
+                        "quote": "LightRAG keeps a graph index.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={"groups": []},
+    )
+
+    assert packet is not None
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSupportedDimensionCount"] == 1
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    dimension = packet["dimensions"][0]
+    assert dimension["dimensionId"] == "claim-card-role:method"
+    assert dimension["comparisonStatus"] == "supported"
+    assert {span["strictSpanBacked"] for span in dimension["supportingSpans"]} == {True}
+    assert {span["fallbackSpan"] for span in dimension["supportingSpans"]} == {False}
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_does_not_synthesize_dimensions_without_explicit_source_mentions():
+    packet = build_compare_packet_from_runtime(
+        query="AlphaFoo Retrieval 논문과 BetaBar Memory 논문을 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2312.10997", "2512.13564"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-rag-method",
+                "sourceKind": "paper",
+                "sourceId": "2312.10997",
+                "summaryText": "Retrieval-Augmented Generation for Large Language Models: A Survey | RAG method.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-rag-method",
+                        "sourceId": "2312.10997",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:rag",
+                        "quote": "RAG method.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-memory-method",
+                "sourceKind": "paper",
+                "sourceId": "2512.13564",
+                "summaryText": "Memory in the Age of AI Agents | Memory method.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-memory-method",
+                        "sourceId": "2512.13564",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:memory",
+                        "quote": "Memory method.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={"groups": []},
+    )
+
+    assert packet is None
+
+
+def test_compare_packet_from_runtime_does_not_synthesize_dimensions_for_risky_no_answer_queries():
+    packet = build_compare_packet_from_runtime(
+        query="현재 코퍼스만으로 최신 RAG benchmark들의 정확한 수치 순위를 단정해서 비교할 수 있나?",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2005.11401", "2312.10997"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-rag-metric",
+                "sourceKind": "paper",
+                "sourceId": "2005.11401",
+                "summaryText": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | RAG benchmark table.",
+                "claimType": "metric",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-rag-metric",
+                        "sourceId": "2005.11401",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:rag",
+                        "quote": "RAG benchmark table.",
+                        "evidenceRole": "metric",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-survey-metric",
+                "sourceKind": "paper",
+                "sourceId": "2312.10997",
+                "summaryText": "Retrieval-Augmented Generation for Large Language Models: A Survey | Survey benchmark table.",
+                "claimType": "metric",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-survey-metric",
+                        "sourceId": "2312.10997",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:survey",
+                        "quote": "Survey benchmark table.",
+                        "evidenceRole": "metric",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={"groups": []},
+    )
+
+    assert packet is None
+
+
+def test_compare_packet_from_runtime_does_not_synthesize_dimensions_from_locator_only_anchors():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 global question 처리를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-graph-method",
+                "sourceKind": "paper",
+                "sourceId": "2404.16130",
+                "summaryText": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization | GraphRAG builds global summaries.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-graph-method",
+                        "sourceId": "2404.16130",
+                        "sourceType": "paper",
+                        "spanLocator": "paper:2404.16130:method",
+                        "sourceContentHash": "sha256:graph",
+                        "quote": "GraphRAG builds global summaries.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-light-method",
+                "sourceKind": "paper",
+                "sourceId": "2410.05779",
+                "summaryText": "LightRAG: Simple and Fast Retrieval-Augmented Generation | LightRAG keeps a graph index.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-light-method",
+                        "sourceId": "2410.05779",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:light",
+                        "quote": "LightRAG keeps a graph index.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={"groups": []},
+    )
+
+    assert packet is None
+
+
 def test_compare_packet_from_runtime_omits_legacy_or_non_compare_payloads():
     assert (
         build_compare_packet_from_runtime(
