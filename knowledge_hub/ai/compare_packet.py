@@ -230,7 +230,7 @@ def _strict_source_coverage_ready(spans: list[dict[str, Any]]) -> bool:
         if _is_non_evidence_ref(item):
             continue
         normalized.append(_span_ref(item, fallback_index=index))
-    if not normalized or any(bool(item.get("fallbackSpan")) for item in normalized):
+    if not normalized:
         return False
     source_ids = {_clean_text(item.get("sourceId")) for item in normalized if _clean_text(item.get("sourceId"))}
     strict_source_ids = {
@@ -238,7 +238,20 @@ def _strict_source_coverage_ready(spans: list[dict[str, Any]]) -> bool:
         for item in normalized
         if bool(item.get("strictSpanBacked")) and _clean_text(item.get("sourceId"))
     }
-    return len(strict_source_ids) >= 2 and bool(source_ids) and source_ids.issubset(strict_source_ids)
+    fallback_source_ids = {
+        _clean_text(item.get("sourceId"))
+        for item in normalized
+        if bool(item.get("fallbackSpan")) and _clean_text(item.get("sourceId"))
+    }
+    # Fallback spans remain non-evidence. They may coexist with strict spans as
+    # diagnostics, but every represented source must still be covered by a
+    # strict span before an existing dimension can recover to supported.
+    return (
+        len(strict_source_ids) >= 2
+        and bool(source_ids)
+        and source_ids.issubset(strict_source_ids)
+        and fallback_source_ids.issubset(strict_source_ids)
+    )
 
 
 def _strict_supporting_spans(
