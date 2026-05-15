@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-knowledge-slots.v1.json",
+  "title": "knowledge-hub.paper-knowledge-slots.v1",
+  "description": "Derived paper knowledge slots with evidence-anchor back-pointers. Slots are not canonical evidence.",
+  "type": "object",
+  "required": ["schema", "authority", "sourceKind", "paperId", "cardId", "slots", "coverage"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-knowledge-slots.v1" },
+    "authority": { "const": "derived_read_model" },
+    "sourceKind": { "const": "paper" },
+    "paperId": { "type": "string" },
+    "cardId": { "type": "string" },
+    "title": { "type": "string" },
+    "sourceContentHash": { "type": "string" },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slotId",
+          "slotType",
+          "slotKey",
+          "text",
+          "coverage",
+          "strictEvidence",
+          "strictEvidenceRefCount",
+          "evidenceRefCount",
+          "claimRefs",
+          "evidenceRefs",
+          "derivedFrom"
+        ],
+        "properties": {
+          "slotId": { "type": "string" },
+          "slotType": {
+            "type": "string",
+            "enum": [
+              "paper_core",
+              "problem",
+              "method",
+              "result",
+              "dataset",
+              "metric",
+              "limitation",
+              "when_not_to_use"
+            ]
+          },
+          "slotKey": { "type": "string" },
+          "text": { "type": "string" },
+          "coverage": { "type": "string" },
+          "strictEvidence": { "type": "boolean" },
+          "strictEvidenceRefCount": { "type": "integer", "minimum": 0 },
+          "evidenceRefCount": { "type": "integer", "minimum": 0 },
+          "claimRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["claimId", "role", "slotKey"],
+              "properties": {
+                "claimId": { "type": "string" },
+                "role": { "type": "string" },
+                "slotKey": { "type": "string" },
+                "confidence": {},
+                "rank": {},
+                "reason": { "type": "string" },
+                "normalization": { "type": "object" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "anchorId",
+                "sourceId",
+                "sourceType",
+                "spanLocator",
+                "sourceContentHash",
+                "strictSpanBacked",
+                "locatorOnly"
+              ],
+              "properties": {
+                "anchorId": { "type": "string" },
+                "claimId": { "type": "string" },
+                "sourceId": { "type": "string" },
+                "sourceType": { "type": "string" },
+                "documentId": { "type": "string" },
+                "chunkId": { "type": "string" },
+                "unitId": { "type": "string" },
+                "spanLocator": { "type": "string" },
+                "sourceContentHash": { "type": "string" },
+                "contentHash": { "type": "string" },
+                "snippetHash": { "type": "string" },
+                "evidenceRole": { "type": "string" },
+                "sectionPath": { "type": "string" },
+                "quote": { "type": "string" },
+                "score": {},
+                "strictSpanBacked": { "type": "boolean" },
+                "locatorOnly": { "type": "boolean" },
+                "fallbackSpan": { "type": "boolean" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "derivedFrom": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "slotCount",
+        "completeSlotCount",
+        "anchoredSlotCount",
+        "strictSlotCount",
+        "strictEvidenceRefCount"
+      ],
+      "properties": {
+        "slotCount": { "type": "integer", "minimum": 0 },
+        "completeSlotCount": { "type": "integer", "minimum": 0 },
+        "anchoredSlotCount": { "type": "integer", "minimum": 0 },
+        "strictSlotCount": { "type": "integer", "minimum": 0 },
+        "strictEvidenceRefCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

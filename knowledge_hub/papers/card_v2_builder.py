@@ -416,17 +416,21 @@ class PaperCardV2Builder:
         self.sqlite_db.replace_evidence_anchors_v2(card_id=card_id, anchors=payload["anchors"])
         self.sqlite_db.replace_paper_card_entity_refs_v2(card_id=card_id, refs=payload["entity_refs"])
         from knowledge_hub.domain.ai_papers.claim_cards import ClaimCardBuilder
+        from knowledge_hub.papers.knowledge_slots import build_paper_knowledge_slots_payload
 
         claim_cards = ClaimCardBuilder(self.sqlite_db).build_and_store_for_source_card(
             source_kind="paper",
             source_card=card,
         )
+        claim_refs = self.sqlite_db.list_paper_card_claim_refs_v2(card_id=card_id)
+        anchors = self.sqlite_db.list_evidence_anchors_v2(card_id=card_id)
         return {
             **card,
-            "claim_refs": self.sqlite_db.list_paper_card_claim_refs_v2(card_id=card_id),
-            "anchors": self.sqlite_db.list_evidence_anchors_v2(card_id=card_id),
+            "claim_refs": claim_refs,
+            "anchors": anchors,
             "entity_refs": self.sqlite_db.list_paper_card_entity_refs_v2(card_id=card_id),
             "claim_cards": claim_cards,
+            "knowledge_slots": build_paper_knowledge_slots_payload(card=card, claim_refs=claim_refs, anchors=anchors),
         }
 
 
