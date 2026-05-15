@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-05-04
+Last updated: 2026-05-15
 
 ## What this project is
 
@@ -14,6 +14,10 @@ Last updated: 2026-05-04
 - Provider setup is now a focused public-preview support surface: `khub provider` can recommend profiles, register custom OpenAI-compatible aliases, bind provider/model roles, store API-key environment references, apply setup profiles, and inspect provider diagnostics while keeping external-call policy explicit.
 - `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental in public messaging.
 - Default top-level CLI discovery now favors the representative core loop. Personal, eval, and low-level maintenance commands remain directly invokable for compatibility, but they are hidden from the default `khub --help` output.
+- 2026-05-15 evidence-substrate contract tranche: the primary Codex/MCP workflow is now fixed as local knowledge search, comparison, citation, and verification rather than broad feature growth. The canonical runtime flow is documented as `SourceLedgerRecord -> PreparedSourceRecord -> RetrievalUnit -> EvidencePacket -> ResearchContext/ComparePacket -> AnswerTrace`; `khub index` is explicitly a lexical + vector + metadata retrieval-index builder, not a default claim/evidence-card builder. Public `khub inspect`, `khub compare`, and `khub trace` are thin facades over existing inspection, answer, compare, and evidence payloads. MCP now exposes `khub://corpus/status` and `khub://corpus/contract` resources plus source/chunk/packet/context URI templates while preserving the existing schema-backed tool envelope.
+- 2026-05-15 evidence registry tranche: `khub://packet/{id}` and `khub://context/{id}` now have an explicit persisted registry path when records exist, while missing ids still return stable `not_found`. The registry is a derived lookup projection, not source authority: records store packet/context/trace payload snapshots together with source refs, source revision hashes, lineage, token counts, expiry, and deletion-policy metadata. Writes are explicit (`khub trace --save-registry`, `khub compare --save-registry`, or application helpers for ContextPack records); default inspect/MCP reads do not invoke providers, and embeddings remain index artifacts rather than source truth.
+- 2026-05-15 registry lifecycle/freshness tranche: registry lookups now separate `storedStaleness` from read-time `currentStaleness`. MCP packet/context resource reads use a cheap application-layer resolver to compare saved source refs with current local source hashes when possible, without mutating registry rows or calling providers. A current source mismatch marks the lookup stale; unresolved current hashes surface as `unchecked` or `source_missing` so Codex/MCP clients can treat saved payloads as snapshots requiring verification.
+- 2026-05-15 doctor install-environment tranche: `khub doctor` now includes a lightweight install check for stale or duplicate editable installs. The check reports the active executable, Python executable, imported package path, `knowledge-hub-cli` editable target, and legacy `knowledge-hub` distribution presence, then suggests explicit pip commands without automatically installing, uninstalling, reindexing, or touching registry state.
 - A public snapshot should be cut from a dedicated `public-preview` branch and pass `scripts/check_public_release_hygiene.py` plus `scripts/check_release_smoke.py` on a clean checkout.
 - Public repo hygiene now removes local progress and workstation-operation artifacts from the tracked surface: `PROJECT_PROGRESS.md`, historical `tasks/`, stale `docs/status/` notes, workstation-specific launchd plists, and manual eval review reports should not be reintroduced. Public-facing state belongs in `CHANGELOG.md`, this project-state file, ADRs, reproducible fixtures, or sanitized templates.
 - The Opus hardening split branch now has a release-hygiene cleanup on top of the clean replay: tracked `eval/knowledgeos/review/` runtime artifacts are removed and ignored, continuous-sync launchd is a template rather than a workstation-specific plist, and unattended `.env` loading / `--apply` / `--allow-external` remain opt-in.
@@ -23,6 +27,8 @@ See also:
 - `docs/maps/canonical-ownership-map.md`
 - `docs/maps/agent-execution-map.md`
 - `docs/maps/data-policy-flow-map.md`
+- `docs/adr/2026-05-15-evidence-registry-authority.md`
+- `docs/adr/2026-05-15-evidence-registry-lifecycle-policy.md`
 
 Default product behavior centers on:
 - local ingestion and storage for vault, paper, and web knowledge
@@ -75,6 +81,8 @@ That layer now has its first follow-up hardening slice. The answer-quality fixtu
 The corresponding live-corpus retrieval-span check is intentionally an operator gate, not required PR CI. `eval/knowledgeos/scripts/check_live_retrieval_span_eval.py` reads a local ignored case file (`eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json`) and checks the active local DB/index for expected source ids, rank bounds, text-term overlap, abstention cases, and retrieval-signal-only rows. This keeps the deterministic CI guard hermetic while giving weekly/local runs a direct way to catch real corpus drift in source/span recovery.
 
 That live operator script also has a baseline-vs-reranker A/B mode for promotion decisions. It compares source hit@K, source-hit-within-min-rank, term-overlap pass rate, and failed-case deltas between reranker-off and reranker-on runs, then emits a `promote_candidate`, `hold`, or `do_not_promote` recommendation. Because it touches the active vector runtime and local corpus, it remains a manual/local gate rather than CI; run it only when no other local Chroma client is holding the active vector store.
+
+Live compare quality now has the same operator-only shape. `eval/knowledgeos/scripts/check_live_compare_quality_eval.py` reads the ignored local case file `eval/knowledgeos/queries/live_compare_quality_eval_cases.local.json`, runs existing `khub compare --json --no-allow-external` behavior, and reports compare packet presence, answerability, expected source coverage, dimension coverage, supporting span coverage, trace citation coverage, non-evidence supporting span leaks, and failed cases. The tracked template is `eval/knowledgeos/templates/live_compare_quality_eval_cases.template.json`; generated JSON/Markdown reports belong under ignored `eval/knowledgeos/runs/reports/`.
 
 `khub doctor --json` now includes an `index freshness` check. The check reads canonical SQLite source counts, vector metadata counts, and source-id coverage in a lightweight way. It flags source types with records but zero vector coverage as `degraded`, keeps partial vector count differences informational, and degrades when canonical source ids are missing from vector metadata coverage. Exact span coverage remains a separate future audit.
 

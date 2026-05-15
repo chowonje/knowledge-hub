@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.inspect.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "target", "contract", "stores"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.inspect.result.v1" },
+    "status": { "type": "string" },
+    "target": { "type": "string" },
+    "identifier": { "type": "string" },
+    "contract": { "type": "object" },
+    "stores": { "type": "object" },
+    "matches": { "type": "array", "items": { "type": "object" } },
+    "matchCount": { "type": "integer" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

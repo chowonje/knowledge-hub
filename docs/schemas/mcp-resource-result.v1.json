@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.mcp.resource.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "resourceKind", "identifier", "reason", "contract"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.mcp.resource.result.v1" },
+    "status": { "type": "string" },
+    "resourceKind": { "type": "string" },
+    "identifier": { "type": "string" },
+    "reason": { "type": "string" },
+    "contract": { "type": "object" }
+  },
+  "additionalProperties": true
+}

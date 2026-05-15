@@ -4,8 +4,10 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from click.testing import CliRunner
 
+from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.interfaces.cli.commands import doctor_cmd as doctor_module
 
 setup_module = None
@@ -17,6 +19,28 @@ class _FakeKhub:
 
     def searcher(self):
         raise AssertionError("doctor must not initialize the searcher")
+
+
+def _ok_install_environment_check() -> dict[str, object]:
+    return {
+        "area": "install environment",
+        "status": "ok",
+        "summary": "khub 실행 경로와 imported package 경로가 일치합니다.",
+        "detail": "khub=/tmp/bin/khub; package=/repo/knowledge_hub/__init__.py; cli=0.1.5; editable=/repo",
+        "fixCommand": "",
+        "recommendedActions": [],
+        "diagnostics": {
+            "khubExecutable": "/tmp/bin/khub",
+            "pythonExecutable": "/tmp/bin/python",
+            "importedPackagePath": "/repo/knowledge_hub/__init__.py",
+            "issues": [],
+        },
+    }
+
+
+@pytest.fixture(autouse=True)
+def _stable_install_environment(monkeypatch):
+    monkeypatch.setattr(doctor_module, "_install_environment_check", _ok_install_environment_check)
 
 
 def _config(tmp_path: Path) -> SimpleNamespace:
@@ -64,6 +88,7 @@ def test_build_doctor_payload_translates_runtime_state(monkeypatch, tmp_path):
     payload = doctor_module.build_doctor_payload(_FakeKhub(config))
     assert payload["schema"] == "knowledge-hub.doctor.result.v1"
     assert payload["status"] in {"needs_setup", "blocked"}
+    assert any(item["area"] == "install environment" for item in payload["checks"])
     assert any(item["area"] == "summary" for item in payload["checks"])
     assert any(item["area"] == "paper parser" for item in payload["checks"])
     assert any(item["area"] == "vector corpus" for item in payload["checks"])
@@ -189,3 +214,127 @@ def test_doctor_cmd_json_outputs_public_shape(monkeypatch, tmp_path):
     assert payload["status"] == "ok"
     assert isinstance(payload["checks"], list)
     assert isinstance(payload["nextActions"], list)
+    assert validate_payload(payload, payload["schema"], strict=True).ok
+    install_check = next(item for item in payload["checks"] if item["area"] == "install environment")
+    assert install_check["diagnostics"]["khubExecutable"] == "/tmp/bin/khub"
+
+
+def test_install_environment_check_ok_for_matching_editable_paths(tmp_path):
+    repo = tmp_path / "repo"
+    package_dir = repo / "knowledge_hub"
+    package_file = package_dir / "__init__.py"
+    package_dir.mkdir(parents=True)
+    package_file.write_text("", encoding="utf-8")
+    check = doctor_module._build_install_environment_check(
+        khub_executable=str(tmp_path / "bin" / "khub"),
+        python_executable=str(tmp_path / "bin" / "python"),
+        imported_package_file=str(package_file),
+        cli_distribution={
+            "name": "knowledge-hub-cli",
+            "installed": True,
+            "version": "0.1.5",
+            "editable": True,
+            "editableProjectPath": str(repo),
+            "topLevelPackagePath": str(package_dir),
+        },
+        legacy_distribution={"name": "knowledge-hub", "installed": False, "version": ""},
+    )
+
+    assert check["status"] == "ok"
+    assert check["diagnostics"]["issues"] == []
+    assert check["fixCommand"] == ""
+
+
+def test_install_environment_check_warns_on_legacy_duplicate(tmp_path):
+    repo = tmp_path / "repo"
+    package_dir = repo / "knowledge_hub"
+    package_file = package_dir / "__init__.py"
+    package_dir.mkdir(parents=True)
+    package_file.write_text("", encoding="utf-8")
+    check = doctor_module._build_install_environment_check(
+        khub_executable=str(tmp_path / "bin" / "khub"),
+        python_executable=str(tmp_path / "bin" / "python"),
+        imported_package_file=str(package_file),
+        cli_distribution={
+            "name": "knowledge-hub-cli",
+            "installed": True,
+            "version": "0.1.5",
+            "editable": True,
+            "editableProjectPath": str(repo),
+            "topLevelPackagePath": str(package_dir),
+        },
+        legacy_distribution={"name": "knowledge-hub", "installed": True, "version": "0.1.0"},
+    )
+
+    assert check["status"] == "degraded"
+    assert "duplicate_legacy_distribution_detected" in check["diagnostics"]["issues"]
+    assert "python -m pip uninstall knowledge-hub" in check["recommendedActions"]
+
+
+def test_install_environment_check_warns_on_stale_editable_mismatch(tmp_path):
+    current_repo = tmp_path / "current"
+    stale_repo = tmp_path / "stale"
+    imported_package = stale_repo / "knowledge_hub" / "__init__.py"
+    imported_package.parent.mkdir(parents=True)
+    imported_package.write_text("", encoding="utf-8")
+    current_package_dir = current_repo / "knowledge_hub"
+    current_package_dir.mkdir(parents=True)
+    check = doctor_module._build_install_environment_check(
+        khub_executable=str(tmp_path / "bin" / "khub"),
+        python_executable=str(tmp_path / "bin" / "python"),
+        imported_package_file=str(imported_package),
+        cli_distribution={
+            "name": "knowledge-hub-cli",
+            "installed": True,
+            "version": "0.1.5",
+            "editable": True,
+            "editableProjectPath": str(current_repo),
+            "topLevelPackagePath": str(current_package_dir),
+        },
+        legacy_distribution={"name": "knowledge-hub", "installed": False, "version": ""},
+    )
+
+    assert check["status"] == "degraded"
+    assert "stale_editable_install_detected" in check["diagnostics"]["issues"]
+    assert "python -m pip install -e . --no-deps --force-reinstall" in check["recommendedActions"]
+
+
+def test_install_environment_check_blocks_missing_executable(tmp_path):
+    repo = tmp_path / "repo"
+    package_file = repo / "knowledge_hub" / "__init__.py"
+    package_file.parent.mkdir(parents=True)
+    package_file.write_text("", encoding="utf-8")
+    check = doctor_module._build_install_environment_check(
+        khub_executable="",
+        python_executable=str(tmp_path / "bin" / "python"),
+        imported_package_file=str(package_file),
+        cli_distribution={
+            "name": "knowledge-hub-cli",
+            "installed": True,
+            "version": "0.1.5",
+            "editable": True,
+            "editableProjectPath": str(repo),
+            "topLevelPackagePath": str(package_file.parent),
+        },
+        legacy_distribution={"name": "knowledge-hub", "installed": False, "version": ""},
+    )
+
+    assert check["status"] == "blocked"
+    assert "khub_executable_missing" in check["diagnostics"]["issues"]
+    assert check["fixCommand"] == "python -m pip install -e . --no-deps --force-reinstall"
+
+
+def test_install_environment_recommended_actions_feed_next_actions(tmp_path):
+    check = doctor_module._build_install_environment_check(
+        khub_executable="",
+        python_executable=str(tmp_path / "bin" / "python"),
+        imported_package_file=str(tmp_path / "repo" / "knowledge_hub" / "__init__.py"),
+        cli_distribution={"name": "knowledge-hub-cli", "installed": False, "version": ""},
+        legacy_distribution={"name": "knowledge-hub", "installed": True, "version": "0.1.0"},
+    )
+
+    actions = doctor_module._next_actions([check], config=_config(tmp_path))
+
+    assert "python -m pip install -e . --no-deps --force-reinstall" in actions
+    assert "python -m pip uninstall knowledge-hub" in actions
+    assert 'python -c "import knowledge_hub; print(knowledge_hub.__file__)"' in actions

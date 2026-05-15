@@ -15,6 +15,7 @@ from knowledge_hub.infrastructure.persistence.stores import (
     DocumentMemoryStore,
     EntityResolutionStore,
     EpistemicStore,
+    EvidenceRegistryStore,
     KoNoteStore,
     LearningGraphStore,
     LearningStore,
@@ -323,6 +324,16 @@ DELEGATED_METHODS.update(
 )
 DELEGATED_METHODS.update(
     _delegate_map(
+        "evidence_registry_store",
+        upsert_evidence_registry_record="upsert_record",
+        get_evidence_registry_record="get_record",
+        list_evidence_registry_records="list_records",
+        delete_evidence_registry_record="delete_record",
+        prune_expired_evidence_registry_records="prune_expired_records",
+    )
+)
+DELEGATED_METHODS.update(
+    _delegate_map(
         "crawl_pipeline_store",
         (
             "upsert_crawl_domain_policy",
@@ -498,6 +509,7 @@ class StoreRegistry:
         self.learning_store = LearningStore(self.conn)
         self.learning_graph_store = LearningGraphStore(self.conn)
         self.mcp_job_store = MCPJobStore(self.conn)
+        self.evidence_registry_store = EvidenceRegistryStore(self.conn)
         self.ko_note_store = KoNoteStore(self.conn)
         self.sync_conflict_store = SyncConflictStore(self.conn)
         self.feature_store = FeatureStore(self.conn)

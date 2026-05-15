@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.evidence-registry.lookup.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "resourceKind",
+    "identifier",
+    "reason",
+    "registryRecord",
+    "payload",
+    "authority",
+    "lineage",
+    "sourceRefs",
+    "storedStaleness",
+    "currentStaleness",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.evidence-registry.lookup.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "stale", "not_found", "failed", "insufficient_evidence"] },
+    "resourceKind": { "type": "string", "enum": ["packet", "context", "trace"] },
+    "identifier": { "type": "string" },
+    "reason": { "type": "string" },
+    "registryRecord": { "type": "object" },
+    "payload": { "type": "object" },
+    "authority": { "type": "object" },
+    "lineage": { "type": "object" },
+    "sourceRefs": { "type": "array", "items": { "type": "object" } },
+    "storedStaleness": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "properties": {
+        "status": { "type": "string", "enum": ["fresh", "stale", "unchecked", "source_missing"] },
+        "reason": { "type": "string" },
+        "checkedAt": { "type": "string" },
+        "sourceRevisionHash": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "currentStaleness": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "properties": {
+        "status": { "type": "string", "enum": ["fresh", "stale", "unchecked", "source_missing"] },
+        "reason": { "type": "string" },
+        "checkedAt": { "type": "string" },
+        "currentSourceRefs": { "type": "array", "items": { "type": "object" } },
+        "missingSourceIds": { "type": "array", "items": { "type": "string" } },
+        "mismatchedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "matchedSourceIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
