@@ -2,8 +2,16 @@
 
 from __future__ import annotations
 
+import ast
+import importlib.metadata as importlib_metadata
 from pathlib import Path
+import json
 import importlib.util
+import re
+import shutil
+import site
+import sys
+from urllib.parse import unquote, urlparse
 
 import click
 import requests
@@ -45,6 +53,216 @@ def _module_available(name: str) -> bool:
         return importlib.util.find_spec(name) is not None
     except Exception:
         return False
+
+
+def _normalize_distribution_name(name: str) -> str:
+    return re.sub(r"[-_.]+", "_", str(name or "").strip()).lower()
+
+
+def _path_text(path: str | Path | None) -> str:
+    if not path:
+        return ""
+    try:
+        return str(Path(path).expanduser().resolve())
+    except Exception:
+        return str(path)
+
+
+def _is_relative_to(path: str | Path | None, parent: str | Path | None) -> bool:
+    if not path or not parent:
+        return False
+    try:
+        Path(path).expanduser().resolve().relative_to(Path(parent).expanduser().resolve())
+        return True
+    except Exception:
+        return False
+
+
+def _file_url_to_path(url: str) -> str:
+    parsed = urlparse(str(url or ""))
+    if parsed.scheme != "file":
+        return ""
+    return _path_text(unquote(parsed.path))
+
+
+def _editable_mapping_from_finder(path: Path, package_name: str) -> str:
+    try:
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    for node in tree.body:
+        target = None
+        value = None
+        if isinstance(node, ast.AnnAssign):
+            target = node.target
+            value = node.value
+        elif isinstance(node, ast.Assign) and node.targets:
+            target = node.targets[0]
+            value = node.value
+        if not isinstance(target, ast.Name) or target.id != "MAPPING" or value is None:
+            continue
+        try:
+            mapping = ast.literal_eval(value)
+        except Exception:
+            return ""
+        if isinstance(mapping, dict):
+            return _path_text(mapping.get(package_name))
+    return ""
+
+
+def _editable_package_path(distribution_name: str, package_name: str) -> str:
+    normalized = _normalize_distribution_name(distribution_name)
+    search_roots: list[Path] = []
+    for raw in [*sys.path, *site.getsitepackages(), site.getusersitepackages()]:
+        if not raw:
+            continue
+        path = Path(raw)
+        if path not in search_roots:
+            search_roots.append(path)
+    for root in search_roots:
+        try:
+            candidates = sorted(root.glob(f"__editable___{normalized}*_finder.py"))
+        except Exception:
+            continue
+        for candidate in candidates:
+            package_path = _editable_mapping_from_finder(candidate, package_name)
+            if package_path:
+                return package_path
+    return ""
+
+
+def _distribution_snapshot(distribution_name: str, package_name: str = "knowledge_hub") -> dict[str, object]:
+    snapshot: dict[str, object] = {
+        "name": distribution_name,
+        "installed": False,
+        "version": "",
+        "editable": False,
+        "editableProjectPath": "",
+        "topLevelPackagePath": "",
+        "directUrl": "",
+    }
+    try:
+        dist = importlib_metadata.distribution(distribution_name)
+    except importlib_metadata.PackageNotFoundError:
+        return snapshot
+
+    snapshot["installed"] = True
+    snapshot["version"] = str(dist.version or "")
+
+    direct_url_text = dist.read_text("direct_url.json") or ""
+    if direct_url_text:
+        snapshot["directUrl"] = direct_url_text
+        try:
+            direct_url = json.loads(direct_url_text)
+        except Exception:
+            direct_url = {}
+        if isinstance(direct_url, dict):
+            dir_info = direct_url.get("dir_info") if isinstance(direct_url.get("dir_info"), dict) else {}
+            editable = bool(dir_info.get("editable"))
+            project_path = _file_url_to_path(str(direct_url.get("url") or ""))
+            snapshot["editable"] = editable
+            if editable and project_path:
+                snapshot["editableProjectPath"] = project_path
+
+    package_path = _editable_package_path(distribution_name, package_name)
+    if package_path:
+        snapshot["editable"] = True
+        snapshot["topLevelPackagePath"] = package_path
+        if not snapshot.get("editableProjectPath"):
+            snapshot["editableProjectPath"] = _path_text(Path(package_path).parent)
+    return snapshot
+
+
+def _build_install_environment_check(
+    *,
+    khub_executable: str,
+    python_executable: str,
+    imported_package_file: str,
+    cli_distribution: dict[str, object],
+    legacy_distribution: dict[str, object],
+) -> dict[str, object]:
+    imported_package_path = _path_text(imported_package_file)
+    imported_package_dir = _path_text(Path(imported_package_path).parent) if imported_package_path else ""
+    cli_top_package_path = _path_text(cli_distribution.get("topLevelPackagePath"))
+    cli_editable_project_path = _path_text(cli_distribution.get("editableProjectPath"))
+    legacy_installed = bool(legacy_distribution.get("installed"))
+    cli_installed = bool(cli_distribution.get("installed"))
+
+    stale_editable = False
+    if cli_top_package_path:
+        stale_editable = bool(imported_package_dir and not _is_relative_to(imported_package_dir, cli_top_package_path))
+    elif cli_editable_project_path:
+        stale_editable = bool(imported_package_path and not _is_relative_to(imported_package_path, cli_editable_project_path))
+
+    issues: list[str] = []
+    recommended_actions: list[str] = []
+    if not khub_executable:
+        issues.append("khub_executable_missing")
+        recommended_actions.append("python -m pip install -e . --no-deps --force-reinstall")
+    if not cli_installed:
+        issues.append("knowledge_hub_cli_distribution_missing")
+        recommended_actions.append("python -m pip install -e . --no-deps --force-reinstall")
+    if stale_editable:
+        issues.append("stale_editable_install_detected")
+        recommended_actions.append("python -m pip install -e . --no-deps --force-reinstall")
+    if legacy_installed:
+        issues.append("duplicate_legacy_distribution_detected")
+        recommended_actions.append("python -m pip uninstall knowledge-hub")
+    if issues:
+        recommended_actions.append('python -c "import knowledge_hub; print(knowledge_hub.__file__)"')
+
+    if not khub_executable or not cli_installed:
+        status = "blocked"
+        summary = "khub 실행 환경이 불완전합니다."
+    elif stale_editable or legacy_installed:
+        status = "degraded"
+        summary = "khub editable/install 경로가 꼬였을 수 있습니다."
+    else:
+        status = "ok"
+        summary = "khub 실행 경로와 imported package 경로가 일치합니다."
+
+    detail_bits = [
+        f"khub={_path_text(khub_executable) or '-'}",
+        f"package={imported_package_path or '-'}",
+        f"cli={cli_distribution.get('version') or '-'}",
+    ]
+    if cli_editable_project_path:
+        detail_bits.append(f"editable={cli_editable_project_path}")
+    if legacy_installed:
+        detail_bits.append(f"legacy={legacy_distribution.get('version') or '-'}")
+
+    recommended_unique = list(dict.fromkeys(recommended_actions))
+    return {
+        "area": "install environment",
+        "status": status,
+        "summary": summary,
+        "detail": "; ".join(detail_bits),
+        "fixCommand": recommended_unique[0] if recommended_unique else "",
+        "recommendedActions": recommended_unique,
+        "diagnostics": {
+            "khubExecutable": _path_text(khub_executable),
+            "pythonExecutable": _path_text(python_executable),
+            "importedPackagePath": imported_package_path,
+            "importedPackageDir": imported_package_dir,
+            "knowledgeHubCli": cli_distribution,
+            "legacyKnowledgeHub": legacy_distribution,
+            "issues": issues,
+            "staleEditableInstallDetected": stale_editable,
+            "duplicateLegacyDistributionDetected": legacy_installed,
+        },
+    }
+
+
+def _install_environment_check() -> dict[str, object]:
+    import knowledge_hub
+
+    return _build_install_environment_check(
+        khub_executable=shutil.which("khub") or "",
+        python_executable=sys.executable,
+        imported_package_file=str(getattr(knowledge_hub, "__file__", "") or ""),
+        cli_distribution=_distribution_snapshot("knowledge-hub-cli"),
+        legacy_distribution=_distribution_snapshot("knowledge-hub"),
+    )
 
 
 def _ollama_available(base_url: str) -> bool:
@@ -360,6 +578,9 @@ def _next_actions(checks: list[dict[str, object]], config=None) -> list[str]:
             "python -m knowledge_hub.interfaces.cli.main doctor  # confirm blocked/degraded areas after Ollama is up",
         )
     for check in checks:
+        if check.get("status") in {"blocked", "needs_setup", "degraded"}:
+            for action in list(check.get("recommendedActions") or []):
+                _append_action(actions, seen, str(action))
         fix = str(check.get("fixCommand") or "").strip()
         if not fix:
             continue
@@ -385,6 +606,7 @@ def build_doctor_payload(khub_ctx) -> dict[str, object]:
     provider_states = {str(item.get("role") or ""): dict(item) for item in list(runtime.get("providers") or [])}
 
     checks = [
+        _install_environment_check(),
         {
             "area": "settings",
             "status": "ok" if (getattr(config, "config_path", None) or Path(DEFAULT_CONFIG_PATH).exists()) else "needs_setup",
