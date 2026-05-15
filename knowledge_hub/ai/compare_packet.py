@@ -223,6 +223,24 @@ def _span_key(item: dict[str, Any]) -> tuple[str, str]:
     )
 
 
+def _strict_source_coverage_ready(spans: list[dict[str, Any]]) -> bool:
+    normalized: list[dict[str, Any]] = []
+    for index, span in enumerate(spans, start=1):
+        item = dict(span or {})
+        if _is_non_evidence_ref(item):
+            continue
+        normalized.append(_span_ref(item, fallback_index=index))
+    if not normalized or any(bool(item.get("fallbackSpan")) for item in normalized):
+        return False
+    source_ids = {_clean_text(item.get("sourceId")) for item in normalized if _clean_text(item.get("sourceId"))}
+    strict_source_ids = {
+        _clean_text(item.get("sourceId"))
+        for item in normalized
+        if bool(item.get("strictSpanBacked")) and _clean_text(item.get("sourceId"))
+    }
+    return len(strict_source_ids) >= 2 and bool(source_ids) and source_ids.issubset(strict_source_ids)
+
+
 def _strict_supporting_spans(
     spans: list[dict[str, Any]] | None = None,
     citations: list[dict[str, Any]] | None = None,
@@ -669,6 +687,13 @@ def build_compare_packet_from_sources(
             notes = _clean_text(dimension.get("notes"))
             if focus_label and focus_label.casefold() not in notes.casefold():
                 dimension["notes"] = _clean_text(f"{notes} Query focus: {focus_label}")
+            if _clean_text(dimension.get("comparisonStatus") or dimension.get("status")).lower() == "insufficient":
+                spans = [dict(item or {}) for item in list(dimension.get("supportingSpans") or dimension.get("supporting_spans") or [])]
+                if _strict_source_coverage_ready(spans):
+                    dimension["comparisonStatus"] = "supported"
+                    dimension["notes"] = _clean_text(
+                        f"{dimension.get('notes') or ''} Insufficient claim alignment recovered by strict retrieved-source spans."
+                    )
         packet = build_compare_packet_contract(
             query=query,
             dimensions=dimensions,

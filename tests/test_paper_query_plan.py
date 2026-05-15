@@ -687,6 +687,32 @@ def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_rag_and_fid(
     assert "2007.01282" in frame["resolved_source_ids"]
 
 
+def test_build_rule_based_query_frame_targets_graphrag_lightrag_before_generic_rag():
+    frame = build_rule_based_query_frame(
+        "GraphRAG와 LightRAG가 global question을 처리하는 방식 차이를 설명해줘",
+        source_type="paper",
+        sqlite_db=RepresentativeFilterSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["2404.16130", "2410.05779"]
+    assert "From Local to Global: A Graph RAG Approach to Query-Focused Summarization" in frame["expanded_terms"]
+    assert "LightRAG: Simple and Fast Retrieval-Augmented Generation" in frame["expanded_terms"]
+
+
+def test_build_rule_based_query_frame_targets_resnet_vit_pair_from_aliases():
+    frame = build_rule_based_query_frame(
+        "ResNet과 Vision Transformer를 이미지 인식 방식 차이로 비교해줘",
+        source_type="paper",
+        sqlite_db=RepresentativeFilterSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["1512.03385", "2010.11929"]
+    assert "Deep Residual Learning for Image Recognition" in frame["expanded_terms"]
+    assert "An Image is Worth 16x16 Words" in frame["expanded_terms"]
+
+
 def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_gan_and_diffusion():
     frame = build_rule_based_query_frame(
         "GAN과 Diffusion 모델 논문을 비교해줘",
