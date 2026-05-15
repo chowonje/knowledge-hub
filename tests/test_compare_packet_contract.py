@@ -400,6 +400,262 @@ def test_compare_packet_from_runtime_synthesizes_claim_dimensions_from_strict_an
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_from_runtime_synthesizes_slot_dimensions_from_strict_slot_refs_when_groups_missing():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 method와 result를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[],
+        claim_alignment={"groups": []},
+        paper_knowledge_slots=[
+            {
+                "paperId": "2404.16130",
+                "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "GraphRAG builds global summaries over graph communities.",
+                        "strictEvidence": True,
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-graph-method",
+                                "sourceId": "2404.16130",
+                                "sourceType": "paper",
+                                "documentId": "paper:2404.16130",
+                                "chunkId": "paper:2404.16130:method",
+                                "spanLocator": "chars:10-90",
+                                "sourceContentHash": "sha256:graph",
+                                "contentHash": "sha256:graph-snippet",
+                                "quote": "GraphRAG builds global summaries.",
+                                "strictSpanBacked": True,
+                            }
+                        ],
+                    },
+                    {
+                        "slotType": "result",
+                        "text": "GraphRAG improves global question answering.",
+                        "strictEvidence": True,
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-graph-result",
+                                "sourceId": "2404.16130",
+                                "sourceType": "paper",
+                                "documentId": "paper:2404.16130",
+                                "chunkId": "paper:2404.16130:result",
+                                "spanLocator": "chars:100-180",
+                                "sourceContentHash": "sha256:graph",
+                                "contentHash": "sha256:graph-result",
+                                "quote": "GraphRAG improves global question answering.",
+                                "strictSpanBacked": True,
+                            }
+                        ],
+                    },
+                ],
+            },
+            {
+                "paperId": "2410.05779",
+                "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "LightRAG keeps a lightweight graph index.",
+                        "strictEvidence": True,
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-light-method",
+                                "sourceId": "2410.05779",
+                                "sourceType": "paper",
+                                "documentId": "paper:2410.05779",
+                                "chunkId": "paper:2410.05779:method",
+                                "spanLocator": "chars:20-120",
+                                "sourceContentHash": "sha256:light",
+                                "contentHash": "sha256:light-snippet",
+                                "quote": "LightRAG keeps a graph index.",
+                                "strictSpanBacked": True,
+                            }
+                        ],
+                    },
+                    {
+                        "slotType": "result",
+                        "text": "LightRAG reduces retrieval overhead.",
+                        "strictEvidence": True,
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-light-result",
+                                "sourceId": "2410.05779",
+                                "sourceType": "paper",
+                                "documentId": "paper:2410.05779",
+                                "chunkId": "paper:2410.05779:result",
+                                "spanLocator": "chars:160-240",
+                                "sourceContentHash": "sha256:light",
+                                "contentHash": "sha256:light-result",
+                                "quote": "LightRAG reduces retrieval overhead.",
+                                "strictSpanBacked": True,
+                            }
+                        ],
+                    },
+                ],
+            },
+        ],
+    )
+
+    assert packet is not None
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSupportedDimensionCount"] == 2
+    assert packet["coverage"]["strictSpanBackedCount"] == 4
+    assert [dimension["dimensionId"] for dimension in packet["dimensions"]] == ["paper-slot:method", "paper-slot:result"]
+    assert {span["strictSpanBacked"] for dimension in packet["dimensions"] for span in dimension["supportingSpans"]} == {True}
+    assert {span["fallbackSpan"] for dimension in packet["dimensions"] for span in dimension["supportingSpans"]} == {False}
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_uses_slot_dimensions_when_claim_groups_are_incomplete():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 method를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-graph-method",
+                "sourceKind": "paper",
+                "sourceId": "2404.16130",
+                "summaryText": "GraphRAG builds global summaries.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-graph-method",
+                        "sourceId": "2404.16130",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:graph",
+                        "quote": "GraphRAG builds global summaries.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            }
+        ],
+        claim_alignment={
+            "groups": [
+                {
+                    "groupKey": "compare-group:method",
+                    "claimCardIds": ["claim-card-graph-method"],
+                    "canonicalFrame": {"task": "method"},
+                }
+            ]
+        },
+        paper_knowledge_slots=[
+            {
+                "paperId": "2404.16130",
+                "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "GraphRAG builds global summaries over graph communities.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-graph-method",
+                                "sourceId": "2404.16130",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:10-90",
+                                "sourceContentHash": "sha256:graph",
+                                "quote": "GraphRAG builds global summaries.",
+                            }
+                        ],
+                    }
+                ],
+            },
+            {
+                "paperId": "2410.05779",
+                "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "LightRAG keeps a lightweight graph index.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-light-method",
+                                "sourceId": "2410.05779",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:20-120",
+                                "sourceContentHash": "sha256:light",
+                                "quote": "LightRAG keeps a graph index.",
+                            }
+                        ],
+                    }
+                ],
+            },
+        ],
+    )
+
+    assert packet is not None
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSupportedDimensionCount"] == 1
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    assert [dimension["dimensionId"] for dimension in packet["dimensions"]] == ["paper-slot:method"]
+    assert packet["dimensions"][0]["comparisonStatus"] == "supported"
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_does_not_synthesize_slot_dimensions_from_locator_only_refs():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 method를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[],
+        claim_alignment={"groups": []},
+        paper_knowledge_slots=[
+            {
+                "paperId": "2404.16130",
+                "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "GraphRAG builds global summaries.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-graph-method",
+                                "sourceId": "2404.16130",
+                                "sourceType": "paper",
+                                "spanLocator": "paper:2404.16130:method",
+                                "sourceContentHash": "sha256:graph",
+                                "quote": "GraphRAG builds global summaries.",
+                            }
+                        ],
+                    }
+                ],
+            },
+            {
+                "paperId": "2410.05779",
+                "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "LightRAG keeps a graph index.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-light-method",
+                                "sourceId": "2410.05779",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:20-120",
+                                "sourceContentHash": "sha256:light",
+                                "quote": "LightRAG keeps a graph index.",
+                            }
+                        ],
+                    }
+                ],
+            },
+        ],
+    )
+
+    assert packet is None
+
+
 def test_compare_packet_from_runtime_does_not_synthesize_dimensions_without_explicit_source_mentions():
     packet = build_compare_packet_from_runtime(
         query="AlphaFoo Retrieval 논문과 BetaBar Memory 논문을 비교해줘",
@@ -497,6 +753,62 @@ def test_compare_packet_from_runtime_does_not_synthesize_dimensions_for_risky_no
             },
         ],
         claim_alignment={"groups": []},
+    )
+
+    assert packet is None
+
+
+def test_compare_packet_from_runtime_does_not_synthesize_slot_dimensions_for_risky_no_answer_queries():
+    packet = build_compare_packet_from_runtime(
+        query="현재 코퍼스만으로 최신 GraphRAG benchmark들의 정확한 수치 순위를 단정해서 비교할 수 있나?",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[],
+        claim_alignment={"groups": []},
+        paper_knowledge_slots=[
+            {
+                "paperId": "2404.16130",
+                "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+                "slots": [
+                    {
+                        "slotType": "metric",
+                        "text": "GraphRAG reports benchmark gains.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-graph-metric",
+                                "sourceId": "2404.16130",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:10-90",
+                                "sourceContentHash": "sha256:graph",
+                                "quote": "GraphRAG benchmark gains.",
+                            }
+                        ],
+                    }
+                ],
+            },
+            {
+                "paperId": "2410.05779",
+                "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+                "slots": [
+                    {
+                        "slotType": "metric",
+                        "text": "LightRAG reports benchmark gains.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-light-metric",
+                                "sourceId": "2410.05779",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:20-120",
+                                "sourceContentHash": "sha256:light",
+                                "quote": "LightRAG benchmark gains.",
+                            }
+                        ],
+                    }
+                ],
+            },
+        ],
     )
 
     assert packet is None
@@ -1065,4 +1377,104 @@ def test_answer_payload_builder_attaches_compare_packet_for_ask_v2_paper_compare
 
     assert payload["comparePacketContract"]["schema"] == COMPARE_PACKET_SCHEMA
     assert payload["comparePacketContract"]["coverage"]["conflictDimensionCount"] == 1
+    assert validate_payload(payload["comparePacketContract"], COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_answer_payload_builder_attaches_slot_backed_compare_packet_for_ask_v2_paper_compare():
+    builder = AnswerPayloadBuilder(SimpleNamespace(_resolve_query_entities=lambda _query: []))
+    pipeline_result = SimpleNamespace(
+        context_expansion={},
+        plan=SimpleNamespace(
+            to_dict=lambda: {
+                "queryFrame": {
+                    "source_type": "paper",
+                    "family": "paper_compare",
+                    "resolved_source_ids": ["2603.13017", "2603.13018"],
+                },
+                "paperFamily": "paper_compare",
+            }
+        ),
+        related_clusters=[],
+        active_profile="test",
+        paper_memory_prefilter={},
+        memory_route={},
+        memory_prefilter={},
+        candidate_sources=[],
+        rerank_signals={},
+        source_scope_enforced=False,
+        mixed_fallback_used=False,
+        v2_diagnostics={
+            "runtimeExecution": {"used": "ask_v2"},
+            "claimCards": [],
+            "claimAlignment": {"groups": []},
+            "paperKnowledgeSlots": [
+                {
+                    "paperId": "2603.13017",
+                    "title": "Paper A",
+                    "slots": [
+                        {
+                            "slotType": "method",
+                            "text": "Paper A uses a compression method.",
+                            "evidenceRefs": [
+                                {
+                                    "anchorId": "slot-a-method",
+                                    "sourceId": "2603.13017",
+                                    "sourceType": "paper",
+                                    "spanLocator": "chars:10-80",
+                                    "sourceContentHash": "sha256:paper-a",
+                                    "quote": "Paper A method.",
+                                }
+                            ],
+                        }
+                    ],
+                },
+                {
+                    "paperId": "2603.13018",
+                    "title": "Paper B",
+                    "slots": [
+                        {
+                            "slotType": "method",
+                            "text": "Paper B uses a different compression method.",
+                            "evidenceRefs": [
+                                {
+                                    "anchorId": "slot-b-method",
+                                    "sourceId": "2603.13018",
+                                    "sourceType": "paper",
+                                    "spanLocator": "chars:20-100",
+                                    "sourceContentHash": "sha256:paper-b",
+                                    "quote": "Paper B method.",
+                                }
+                            ],
+                        }
+                    ],
+                },
+            ],
+        },
+    )
+    evidence_packet = SimpleNamespace(
+        answer_signals={},
+        paper_answer_scope={},
+        evidence=[],
+        evidence_packet={},
+        evidence_policy={"policyKey": "paper_compare_policy"},
+        citations=[],
+        evidence_budget={},
+        supporting_beliefs=[],
+        contradicting_beliefs=[],
+        belief_updates_suggested=[],
+        claims=[],
+    )
+
+    payload = builder.base_payload(
+        query="2603.13017와 2603.13018의 method를 비교해줘",
+        retrieval_mode="hybrid",
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+        answer="comparison",
+    )
+
+    assert payload["comparePacketContract"]["schema"] == COMPARE_PACKET_SCHEMA
+    assert payload["comparePacketContract"]["coverage"]["answerable"] is True
+    assert payload["comparePacketContract"]["coverage"]["strictSupportedDimensionCount"] == 1
+    assert payload["comparePacketContract"]["dimensions"][0]["dimensionId"] == "paper-slot:method"
     assert validate_payload(payload["comparePacketContract"], COMPARE_PACKET_SCHEMA, strict=True).ok

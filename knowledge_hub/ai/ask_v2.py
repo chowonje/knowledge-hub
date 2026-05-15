@@ -1466,6 +1466,28 @@ class AskV2Service:
             )
         return anchors
 
+    def _paper_knowledge_slots(self, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        from knowledge_hub.papers.knowledge_slots import build_paper_knowledge_slots_payload
+
+        list_claim_refs = getattr(self.sqlite_db, "list_paper_card_claim_refs_v2", None)
+        list_anchors = getattr(self.sqlite_db, "list_evidence_anchors_v2", None)
+        if not callable(list_claim_refs) or not callable(list_anchors):
+            return []
+        payloads: list[dict[str, Any]] = []
+        for card in list(cards or []):
+            card_payload = dict(card or {})
+            paper_id = _clean_text(card_payload.get("paper_id") or card_payload.get("paperId"))
+            card_id = _clean_text(card_payload.get("card_id") or card_payload.get("cardId"))
+            if not paper_id or not card_id:
+                continue
+            claim_refs = list(list_claim_refs(card_id=card_id) or [])
+            anchors = [
+                self._enrich_anchor_provenance(dict(anchor or {}), card=card_payload)
+                for anchor in list(list_anchors(card_id=card_id) or [])
+            ]
+            payloads.append(build_paper_knowledge_slots_payload(card=card_payload, claim_refs=claim_refs, anchors=anchors))
+        return payloads
+
     def _anchors_for_inline_cards(self, *, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
         anchors: list[dict[str, Any]] = []
         for card in cards:
@@ -2219,6 +2241,7 @@ class AskV2Service:
                 }
                 for item in selected_claim_cards
             ],
+            "paperKnowledgeSlots": self._paper_knowledge_slots(selected_cards) if route.source_kind == "paper" else [],
             "sectionCards": [
                 {
                     "sectionCardId": _clean_text(item.get("section_card_id")),
