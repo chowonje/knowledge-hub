@@ -181,6 +181,43 @@ def test_compare_json_reuses_existing_answer_payload(monkeypatch):
     assert validate_payload(payload, payload["schema"], strict=True).ok
 
 
+def test_compare_json_builds_source_fallback_packet_when_claim_packet_missing(monkeypatch):
+    monkeypatch.setattr(
+        substrate_cmd,
+        "_run_answer_facade",
+        lambda *_args, **_kwargs: {
+            "answer": "근거가 부족합니다.",
+            "citations": [{"label": "S1", "target": "2005.11401", "kind": "arxiv"}],
+            "sources": [
+                {
+                    "source_id": "2005.11401",
+                    "source_type": "paper",
+                    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                    "excerpt": "RAG combines retrieval and generation.",
+                }
+            ],
+            "evidencePacketContract": {"packet_id": "epkt_1", "spans": []},
+        },
+    )
+
+    result = CliRunner().invoke(
+        substrate_cmd.compare_cmd,
+        ["compare RAG retrieval generation", "--json"],
+        obj={"khub": object()},
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["status"] == "insufficient_evidence"
+    assert payload["comparePacket"]["schema"] == "knowledge-hub.compare-packet.v1"
+    assert payload["comparePacket"]["coverage"]["supportingSpanCount"] == 1
+    assert payload["comparePacket"]["coverage"]["answerable"] is False
+    assert payload["comparePacket"]["dimensions"][0]["supportingSpans"][0]["sourceId"] == "2005.11401"
+    assert any("compare packet built from retrieved source spans" in warning for warning in payload["warnings"])
+    assert payload["trace"]["comparePacket"]["packet_id"] == payload["comparePacket"]["packet_id"]
+    assert validate_payload(payload, payload["schema"], strict=True).ok
+
+
 def test_top_level_help_exposes_substrate_facades():
     result = CliRunner().invoke(cli, ["--help"])
 

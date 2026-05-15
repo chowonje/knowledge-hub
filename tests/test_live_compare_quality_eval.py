@@ -95,6 +95,21 @@ def test_live_compare_quality_eval_fails_missing_compare_packet():
     assert "supporting_span_count_below_min:0<1" in result["errors"]
 
 
+def test_live_compare_quality_eval_accepts_expected_no_answer_status():
+    module = _load_module()
+    case = {
+        "case_id": "compare_expected_no_answer",
+        "query": "compare under-evidenced sources",
+        "expected_answerable": False,
+        "expected_min_supporting_span_count": 0,
+        "require_trace_citations": False,
+    }
+
+    result = module.evaluate_case(case, _payload(status="insufficient_evidence", compare_packet={}))
+
+    assert "compare_status_not_ok:insufficient_evidence" not in result["errors"]
+
+
 def test_live_compare_quality_eval_blocks_non_evidence_supporting_spans():
     module = _load_module()
     case = {

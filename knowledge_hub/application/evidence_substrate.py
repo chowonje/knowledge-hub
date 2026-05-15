@@ -5,6 +5,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
+from knowledge_hub.ai.compare_packet import build_compare_packet_from_sources
 from knowledge_hub.application.evidence_registry import build_lineage, resolve_registry_lookup
 from knowledge_hub.infrastructure.persistence.vector import inspect_vector_store
 
@@ -257,6 +258,32 @@ def build_trace_payload(answer_payload: dict[str, Any], *, question: str = "") -
 def build_compare_payload(answer_payload: dict[str, Any], *, query: str) -> dict[str, Any]:
     trace = build_trace_payload(answer_payload, question=query)
     compare_contract = dict(answer_payload.get("comparePacketContract") or {})
+    warnings = list(trace["warnings"])
+    enriched_compare = build_compare_packet_from_sources(
+        query=query,
+        sources=list(trace.get("sources") or []),
+        citations=list(trace.get("citations") or []),
+        existing_packet=compare_contract or None,
+        policy=dict(answer_payload.get("evidencePolicy") or {}),
+    )
+    if enriched_compare:
+        if compare_contract:
+            old_span_count = int(((compare_contract.get("coverage") or {}).get("supportingSpanCount")) or 0)
+            new_span_count = int(((enriched_compare.get("coverage") or {}).get("supportingSpanCount")) or 0)
+            if new_span_count > old_span_count:
+                warnings.append("compare packet enriched with retrieved source spans")
+        else:
+            warnings.append("compare packet built from retrieved source spans because claim-aligned dimensions were unavailable")
+        compare_contract = enriched_compare
+        trace["comparePacket"] = compare_contract
+        trace["lineage"] = build_lineage(
+            {
+                "citations": trace.get("citations") or [],
+                "sources": trace.get("sources") or [],
+                "evidenceSpans": trace.get("evidenceSpans") or [],
+                "comparePacket": compare_contract,
+            }
+        )
     status = "ok"
     if not compare_contract:
         status = "insufficient_compare_contract"
@@ -271,7 +298,7 @@ def build_compare_payload(answer_payload: dict[str, Any], *, query: str) -> dict
         "trace": trace,
         "citations": trace["citations"],
         "sources": trace["sources"],
-        "warnings": list(trace["warnings"]),
+        "warnings": warnings,
         "nextSuggestedActions": [
             {"tool": "khub_trace", "args": {"question": str(query or "")}},
             {"tool": "khub_inspect", "args": {"target": "corpus"}},

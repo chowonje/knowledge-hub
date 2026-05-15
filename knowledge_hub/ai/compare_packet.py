@@ -48,6 +48,121 @@ def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
     }
 
 
+def _source_id(item: dict[str, Any]) -> str:
+    return _clean_text(
+        item.get("source_id")
+        or item.get("sourceId")
+        or item.get("citation_target")
+        or item.get("target")
+        or item.get("source_ref")
+        or item.get("sourceRef")
+    )
+
+
+def _source_span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any] | None:
+    source_id = _source_id(item)
+    if not source_id:
+        return None
+    source_type = _clean_text(item.get("source_type") or item.get("sourceType"))
+    span_ref = _clean_text(
+        item.get("span_ref")
+        or item.get("spanRef")
+        or item.get("span_locator")
+        or item.get("spanLocator")
+        or item.get("parent_chunk_span")
+        or item.get("parentChunkSpan")
+        or item.get("parent_id")
+        or item.get("parentId")
+    )
+    quote = str(item.get("quote") or item.get("text") or item.get("excerpt") or item.get("document") or item.get("title") or "")
+    return {
+        "spanRef": span_ref or f"source:{_hash_text(source_id, quote, fallback_index, length=16)}",
+        "sourceId": source_id,
+        "sourceType": source_type,
+        "contentHash": _clean_text(item.get("content_hash") or item.get("contentHash") or item.get("source_content_hash")),
+        "quote": quote[:500],
+        "citationLabel": _clean_text(item.get("citation_label") or item.get("citationLabel")),
+        "evidenceKind": _clean_text(item.get("evidence_kind") or item.get("evidenceKind")),
+    }
+
+
+def _source_supporting_spans(sources: list[dict[str, Any]], citations: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    citation_by_source: dict[str, dict[str, Any]] = {}
+    for citation in list(citations or []):
+        item = dict(citation or {})
+        source_id = _source_id(item)
+        if source_id:
+            citation_by_source.setdefault(source_id, item)
+
+    spans: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for index, raw_source in enumerate(sources, start=1):
+        source = dict(raw_source or {})
+        source_id = _source_id(source)
+        if not source_id:
+            continue
+        citation = citation_by_source.get(source_id) or {}
+        merged = {**citation, **source}
+        span = _source_span_ref(merged, fallback_index=index)
+        if not span or _is_non_evidence_ref(span):
+            continue
+        key = (_clean_text(span.get("sourceId")), _clean_text(span.get("spanRef")))
+        if key in seen:
+            continue
+        seen.add(key)
+        spans.append(span)
+    return spans
+
+
+_LABEL_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9_-]{1,}|[가-힣]{2,}")
+_LABEL_STOPWORDS = {
+    "compare",
+    "comparison",
+    "source",
+    "sources",
+    "paper",
+    "papers",
+    "explain",
+    "difference",
+    "differences",
+    "논문",
+    "기준",
+    "비교",
+    "차이",
+    "설명",
+    "처리",
+    "하는",
+    "방식",
+}
+
+
+def _query_focus_label(query: str, sources: list[dict[str, Any]], *, max_tokens: int = 8) -> str:
+    text_parts = [str(query or "")]
+    text_parts.extend(str(item.get("title") or item.get("parent_label") or item.get("parentLabel") or "") for item in sources)
+    tokens: list[str] = []
+    seen: set[str] = set()
+    for token in _LABEL_TOKEN_RE.findall(" ".join(text_parts)):
+        normalized = token.casefold()
+        if normalized in _LABEL_STOPWORDS or normalized in seen:
+            continue
+        seen.add(normalized)
+        tokens.append(token)
+        if len(tokens) >= max_tokens:
+            break
+    return " ".join(tokens) if tokens else "evidence comparison"
+
+
+def _label_is_low_signal(label: str) -> bool:
+    value = _clean_text(label)
+    lowered = value.casefold()
+    return (
+        not value
+        or value.startswith("||||")
+        or lowered.startswith("comparison ")
+        or lowered in {"dimension", "evidence comparison"}
+    )
+
+
 def _claim_card_id(item: dict[str, Any]) -> str:
     return _clean_text(item.get("claimCardId") or item.get("claim_card_id") or item.get("claimId") or item.get("claim_id"))
 
@@ -249,4 +364,81 @@ def build_compare_packet_contract(
     }
 
 
-__all__ = ["COMPARE_PACKET_SCHEMA", "build_compare_packet_contract", "build_compare_packet_from_runtime"]
+def build_compare_packet_from_sources(
+    *,
+    query: str,
+    sources: list[dict[str, Any]],
+    citations: list[dict[str, Any]] | None = None,
+    existing_packet: dict[str, Any] | None = None,
+    policy: dict[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    source_items = [dict(item or {}) for item in list(sources or []) if isinstance(item, dict)]
+    source_spans = _source_supporting_spans(source_items, citations=citations)
+    if not source_spans:
+        return dict(existing_packet or {}) or None
+
+    focus_label = _query_focus_label(query, source_items)
+    if existing_packet:
+        dimensions = [dict(item or {}) for item in list(existing_packet.get("dimensions") or []) if isinstance(item, dict)]
+        if not dimensions:
+            dimensions = [
+                {
+                    "dimensionId": "retrieved-source-coverage",
+                    "label": focus_label,
+                    "comparisonStatus": "insufficient",
+                    "supportingSpans": [],
+                }
+            ]
+        existing_source_ids = {
+            _clean_text(span.get("sourceId") or span.get("source_id"))
+            for dimension in dimensions
+            for span in list(dimension.get("supportingSpans") or dimension.get("supporting_spans") or [])
+            if isinstance(span, dict)
+        }
+        missing_source_spans = [
+            span
+            for span in source_spans
+            if _clean_text(span.get("sourceId")) not in existing_source_ids
+        ]
+        if missing_source_spans:
+            first_dimension = dimensions[0]
+            first_dimension["supportingSpans"] = list(first_dimension.get("supportingSpans") or []) + missing_source_spans
+        for dimension in dimensions:
+            if _label_is_low_signal(str(dimension.get("label") or "")):
+                dimension["label"] = focus_label
+            notes = _clean_text(dimension.get("notes"))
+            if focus_label and focus_label.casefold() not in notes.casefold():
+                dimension["notes"] = _clean_text(f"{notes} Query focus: {focus_label}")
+        return build_compare_packet_contract(
+            query=query,
+            dimensions=dimensions,
+            retrieval_signals=list(existing_packet.get("retrievalSignals") or []),
+            policy={**dict(existing_packet.get("policy") or {}), **dict(policy or {})},
+        )
+
+    left = source_items[0] if source_items else {}
+    right = source_items[1] if len(source_items) > 1 else {}
+    return build_compare_packet_contract(
+        query=query,
+        dimensions=[
+            {
+                "dimensionId": "retrieved-source-coverage",
+                "label": focus_label,
+                "leftClaim": _clean_text(left.get("title") or left.get("excerpt")),
+                "rightClaim": _clean_text(right.get("title") or right.get("excerpt")),
+                "comparisonStatus": "insufficient",
+                "supportingSpans": source_spans,
+                "notes": "Source coverage fallback from retrieved evidence; no claim-aligned compare packet was available.",
+            }
+        ],
+        retrieval_signals=[],
+        policy=dict(policy or {}),
+    )
+
+
+__all__ = [
+    "COMPARE_PACKET_SCHEMA",
+    "build_compare_packet_contract",
+    "build_compare_packet_from_runtime",
+    "build_compare_packet_from_sources",
+]

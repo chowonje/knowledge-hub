@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 from knowledge_hub.ai.answer_payload_builder import AnswerPayloadBuilder
 from knowledge_hub.ai.compare_packet import COMPARE_PACKET_SCHEMA, build_compare_packet_contract
+from knowledge_hub.ai.compare_packet import build_compare_packet_from_sources
 from knowledge_hub.ai.compare_packet import build_compare_packet_from_runtime
 from knowledge_hub.core.schema_validator import validate_payload
 
@@ -130,6 +131,92 @@ def test_compare_packet_from_runtime_omits_legacy_or_non_compare_payloads():
         )
         is None
     )
+
+
+def test_compare_packet_from_sources_builds_insufficient_source_coverage_packet():
+    packet = build_compare_packet_from_sources(
+        query="compare RAG and Fusion in Decoder retrieval generation",
+        sources=[
+            {
+                "source_id": "2005.11401",
+                "source_type": "paper",
+                "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                "excerpt": "RAG combines retrieval and generation.",
+                "span_locator": "0",
+            },
+            {
+                "source_id": "2312.10997",
+                "source_type": "paper",
+                "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+                "excerpt": "The survey discusses retrieval and generation.",
+                "span_locator": "1",
+            },
+            {
+                "source_id": "learning_edge:rag",
+                "source_type": "learning_edge",
+                "title": "signal only",
+            },
+        ],
+        citations=[{"target": "2005.11401", "label": "S1"}],
+    )
+
+    assert packet is not None
+    assert packet["schema"] == COMPARE_PACKET_SCHEMA
+    assert packet["coverage"]["answerable"] is False
+    assert packet["coverage"]["supportingSpanCount"] == 2
+    assert packet["coverage"]["excludedNonEvidenceSpanCount"] == 0
+    assert packet["dimensions"][0]["comparisonStatus"] == "insufficient"
+    assert "Retrieval" in packet["dimensions"][0]["label"]
+    assert {span["sourceId"] for span in packet["dimensions"][0]["supportingSpans"]} == {
+        "2005.11401",
+        "2312.10997",
+    }
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_sources_enriches_existing_packet_with_missing_cited_source():
+    packet = build_compare_packet_from_sources(
+        query="GraphRAG and LightRAG global question handling",
+        existing_packet=build_compare_packet_contract(
+            query="GraphRAG and LightRAG global question handling",
+            dimensions=[
+                {
+                    "dimensionId": "dim:1",
+                    "label": "||||||ICML 2026 preprint format||||||",
+                    "comparisonStatus": "insufficient",
+                    "supportingSpans": [
+                        {
+                            "spanRef": "anchor-a",
+                            "sourceId": "2603.15798",
+                            "sourceType": "paper",
+                            "quote": "GraphRAG source span",
+                        }
+                    ],
+                }
+            ],
+        ),
+        sources=[
+            {
+                "source_id": "2603.15798",
+                "source_type": "paper",
+                "title": "CUBE benchmark",
+                "excerpt": "GraphRAG source span",
+            },
+            {
+                "source_id": "2410.05779",
+                "source_type": "paper",
+                "title": "LightRAG",
+                "excerpt": "LightRAG source span",
+            },
+        ],
+    )
+
+    assert packet is not None
+    dimension = packet["dimensions"][0]
+    assert dimension["label"].startswith("GraphRAG and LightRAG global question handling")
+    assert {span["sourceId"] for span in dimension["supportingSpans"]} == {"2603.15798", "2410.05779"}
+    assert packet["coverage"]["supportingSpanCount"] == 2
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
 def test_answer_payload_builder_attaches_compare_packet_for_ask_v2_paper_compare():
