@@ -225,7 +225,10 @@ def evaluate_case(
         errors.append("trace_citations_missing")
     if forbid_non_evidence and non_evidence_spans:
         errors.append("non_evidence_supporting_span_leak")
-    if str(payload.get("status") or "").lower() in {"failed", "insufficient_evidence", "insufficient_compare_contract"}:
+    payload_status = str(payload.get("status") or "").lower()
+    if payload_status == "failed" or (
+        expected_answerable and payload_status in {"insufficient_evidence", "insufficient_compare_contract"}
+    ):
         errors.append(f"compare_status_not_ok:{payload.get('status')}")
 
     return {
