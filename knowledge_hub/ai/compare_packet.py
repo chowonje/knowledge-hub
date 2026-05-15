@@ -385,6 +385,14 @@ _COMPARABLE_ROLE_LABELS = {
     "scope": "scope",
     "paper_summary": "summary",
 }
+_COMPARABLE_SLOT_LABELS = {
+    "problem": "problem",
+    "method": "method",
+    "result": "result",
+    "dataset": "dataset",
+    "metric": "metric",
+    "limitation": "limitation",
+}
 
 
 def _query_focus_label(query: str, sources: list[dict[str, Any]], *, max_tokens: int = 8) -> str:
@@ -550,6 +558,168 @@ def _card_strict_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
     return spans
 
 
+def _source_mention_tokens_from_payload(payload: dict[str, Any]) -> set[str]:
+    values = [
+        payload.get("paperId") or payload.get("paper_id"),
+        payload.get("sourceId") or payload.get("source_id"),
+        payload.get("title"),
+        payload.get("cardId") or payload.get("card_id"),
+    ]
+    tokens: set[str] = set()
+    for value in values:
+        for token in _SOURCE_MENTION_TOKEN_RE.findall(_clean_text(value)):
+            lowered = token.casefold()
+            if lowered in _SOURCE_MENTION_STOPWORDS:
+                continue
+            if re.fullmatch(r"\d{4}\.\d{4,5}", token) or len(lowered) >= 4:
+                tokens.add(lowered)
+    return tokens
+
+
+def _slot_source_id(payload: dict[str, Any]) -> str:
+    return _clean_text(payload.get("paperId") or payload.get("paper_id") or payload.get("sourceId") or payload.get("source_id"))
+
+
+def _slot_source_explicitly_named(query: str, payload: dict[str, Any]) -> bool:
+    query_lower = _clean_text(query).casefold()
+    if not query_lower:
+        return False
+    source_id = _slot_source_id(payload)
+    if source_id and source_id.casefold() in query_lower:
+        return True
+    query_tokens = set(_SOURCE_MENTION_TOKEN_RE.findall(query_lower))
+    source_tokens = _source_mention_tokens_from_payload(payload)
+    return bool(source_tokens & query_tokens) or any(token in query_lower for token in source_tokens)
+
+
+def _slot_strict_spans(slot: dict[str, Any]) -> list[dict[str, Any]]:
+    spans: list[dict[str, Any]] = []
+    for index, ref in enumerate(list(slot.get("evidenceRefs") or slot.get("evidence_refs") or []), start=1):
+        item = dict(ref or {})
+        normalized = _span_ref({**item, "strictSpanBacked": True, "fallbackSpan": False}, fallback_index=index)
+        if normalized["strictSpanBacked"] and not _is_non_evidence_ref(normalized):
+            spans.append(normalized)
+    return spans
+
+
+def _slot_text(slot: dict[str, Any]) -> str:
+    return _clean_text(slot.get("text") or slot.get("summaryText") or slot.get("summary_text"))
+
+
+def _synthesized_slot_dimensions(
+    *,
+    query: str,
+    query_frame: dict[str, Any],
+    paper_knowledge_slots: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    if _ANSWERABILITY_RISK_RE.search(_clean_text(query)):
+        return []
+    resolved_source_ids = [
+        _clean_text(value)
+        for value in list(query_frame.get("resolved_source_ids") or query_frame.get("resolvedSourceIds") or [])
+        if _clean_text(value)
+    ]
+    if len(resolved_source_ids) < 2:
+        return []
+
+    payloads_by_source: dict[str, dict[str, Any]] = {}
+    for payload in list(paper_knowledge_slots or []):
+        item = dict(payload or {})
+        source_id = _slot_source_id(item)
+        if source_id in resolved_source_ids and source_id not in payloads_by_source:
+            payloads_by_source[source_id] = item
+    selected_source_ids = [source_id for source_id in resolved_source_ids[:2] if source_id in payloads_by_source]
+    if len(selected_source_ids) < 2:
+        return []
+    if any(not _slot_source_explicitly_named(query, payloads_by_source[source_id]) for source_id in selected_source_ids):
+        return []
+
+    slots_by_type: dict[str, dict[str, dict[str, Any]]] = {}
+    for source_id in selected_source_ids:
+        for slot in list(payloads_by_source[source_id].get("slots") or []):
+            slot_item = dict(slot or {})
+            slot_type = _clean_text(slot_item.get("slotType") or slot_item.get("slot_type")).casefold()
+            if slot_type not in _COMPARABLE_SLOT_LABELS or not _slot_strict_spans(slot_item):
+                continue
+            slots_by_type.setdefault(slot_type, {}).setdefault(source_id, slot_item)
+
+    dimensions: list[dict[str, Any]] = []
+    for slot_type, source_slots in slots_by_type.items():
+        if any(source_id not in source_slots for source_id in selected_source_ids):
+            continue
+        ordered_slots = [source_slots[source_id] for source_id in selected_source_ids]
+        supporting_spans: list[dict[str, Any]] = []
+        for slot in ordered_slots:
+            supporting_spans.extend(_slot_strict_spans(slot))
+        if not _strict_source_coverage_ready(supporting_spans):
+            continue
+        label = _COMPARABLE_SLOT_LABELS.get(slot_type, slot_type)
+        dimensions.append(
+            {
+                "dimensionId": f"paper-slot:{slot_type}",
+                "label": label,
+                "leftClaim": _slot_text(ordered_slots[0]),
+                "rightClaim": _slot_text(ordered_slots[1]),
+                "comparisonStatus": "supported",
+                "supportingSpans": supporting_spans,
+                "notes": "Generated from Paper Knowledge Slots with strict evidence anchor coverage.",
+            }
+        )
+    return dimensions
+
+
+def _merge_synthesized_dimensions(*dimension_sets: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: list[dict[str, Any]] = []
+    seen_labels: set[str] = set()
+    for dimensions in dimension_sets:
+        for dimension in dimensions:
+            label = _clean_text(dimension.get("label")).casefold()
+            dimension_id = _clean_text(dimension.get("dimensionId") or dimension.get("dimension_id")).casefold()
+            key = label or dimension_id
+            if key and key in seen_labels:
+                continue
+            if key:
+                seen_labels.add(key)
+            merged.append(dimension)
+    return merged
+
+
+def _dimension_merge_key(dimension: dict[str, Any]) -> str:
+    label = _clean_text(dimension.get("label")).casefold()
+    if label:
+        return label
+    return _clean_text(dimension.get("dimensionId") or dimension.get("dimension_id")).casefold()
+
+
+def _merge_group_dimensions_with_slot_dimensions(
+    group_dimensions: list[dict[str, Any]],
+    slot_dimensions: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    if not slot_dimensions:
+        return group_dimensions
+    slot_by_key = {_dimension_merge_key(item): item for item in slot_dimensions if _dimension_merge_key(item)}
+    merged: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for dimension in group_dimensions:
+        key = _dimension_merge_key(dimension)
+        status = _clean_text(dimension.get("status") or dimension.get("comparisonStatus") or "unknown").casefold()
+        if key and key in slot_by_key and status in {"insufficient", "unknown"}:
+            merged.append(slot_by_key[key])
+            seen.add(key)
+            continue
+        merged.append(dimension)
+        if key:
+            seen.add(key)
+    for dimension in slot_dimensions:
+        key = _dimension_merge_key(dimension)
+        if key and key in seen:
+            continue
+        merged.append(dimension)
+        if key:
+            seen.add(key)
+    return merged
+
+
 def _synthesized_claim_dimensions(
     *,
     query: str,
@@ -619,6 +789,7 @@ def build_compare_packet_from_runtime(
     query_frame: dict[str, Any],
     claim_cards: list[dict[str, Any]],
     claim_alignment: dict[str, Any],
+    paper_knowledge_slots: list[dict[str, Any]] | None = None,
     evidence_policy: dict[str, Any] | None = None,
     comparison_verification: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
@@ -629,16 +800,24 @@ def build_compare_packet_from_runtime(
     if _clean_text(runtime_execution.get("used")).lower() != "ask_v2":
         return None
     cards_by_id = {_claim_card_id(item): dict(item or {}) for item in claim_cards if _claim_card_id(dict(item or {}))}
+    slot_payloads = [dict(item or {}) for item in list(paper_knowledge_slots or [])]
     groups = [dict(item or {}) for item in list((claim_alignment or {}).get("groups") or [])]
-    if not cards_by_id:
+    if not cards_by_id and not slot_payloads:
         return None
 
     resolved_source_ids = [_clean_text(value) for value in list(query_frame.get("resolved_source_ids") or query_frame.get("resolvedSourceIds") or [])]
     if not groups:
-        dimensions = _synthesized_claim_dimensions(
-            query=query,
-            query_frame=query_frame,
-            claim_cards=list(cards_by_id.values()),
+        dimensions = _merge_synthesized_dimensions(
+            _synthesized_slot_dimensions(
+                query=query,
+                query_frame=query_frame,
+                paper_knowledge_slots=slot_payloads,
+            ),
+            _synthesized_claim_dimensions(
+                query=query,
+                query_frame=query_frame,
+                claim_cards=list(cards_by_id.values()),
+            ),
         )
         if not dimensions:
             return None
@@ -690,6 +869,14 @@ def build_compare_packet_from_runtime(
             }
         )
 
+    dimensions = _merge_group_dimensions_with_slot_dimensions(
+        dimensions,
+        _synthesized_slot_dimensions(
+            query=query,
+            query_frame=query_frame,
+            paper_knowledge_slots=slot_payloads,
+        ),
+    )
     if not dimensions:
         return None
     return build_compare_packet_contract(

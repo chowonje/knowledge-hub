@@ -811,6 +811,14 @@ def test_generate_answer_claim_card_evidence_anchors_resolve_offset_locator_from
     assert any(str(anchor.get("spanLocator") or "").startswith("chars:") for anchor in evidence_anchors)
     assert any(anchor.get("charStart") is not None and anchor.get("charEnd") is not None for anchor in evidence_anchors)
     assert all(anchor.get("sourceContentHash") for anchor in evidence_anchors)
+    slot_payloads = payload["v2"]["paperKnowledgeSlots"]
+    assert slot_payloads
+    assert any(
+        ref.get("strictSpanBacked") is True
+        for slot_payload in slot_payloads
+        for slot in slot_payload.get("slots", [])
+        for ref in slot.get("evidenceRefs", [])
+    )
 
 
 def test_generate_answer_rebuilds_stale_paper_card_when_upstream_memory_is_newer(tmp_path):
