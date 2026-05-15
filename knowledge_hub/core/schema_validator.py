@@ -39,6 +39,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
     "knowledge-hub.paper-memory.card.result.v1": "paper-memory-card-result.v1.json",
     "knowledge-hub.paper-memory.search.result.v1": "paper-memory-search-result.v1.json",
+    "knowledge-hub.paper-knowledge-slots.v1": "paper-knowledge-slots.v1.json",
     "knowledge-hub.paper-topic-synthesis.result.v1": "paper-topic-synthesis-result.v1.json",
     "knowledge-hub.paper-memory.eval.report.v1": "paper-memory-eval-report.v1.json",
     "knowledge-hub.paper-topic-synthesis.result.v1": "paper-topic-synthesis-result.v1.json",

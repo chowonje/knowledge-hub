@@ -345,6 +345,47 @@ _LABEL_STOPWORDS = {
     "방식",
 }
 
+_SOURCE_MENTION_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9+.-]{1,}|\d{4}\.\d{4,5}", re.IGNORECASE)
+_SOURCE_MENTION_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "baseline",
+    "benchmark",
+    "benchmarks",
+    "current",
+    "generation",
+    "knowledge",
+    "large",
+    "learning",
+    "memory",
+    "model",
+    "models",
+    "paper",
+    "papers",
+    "retrieval",
+    "retrieval-augmented",
+    "survey",
+    "system",
+    "systems",
+    "the",
+    "with",
+}
+_ANSWERABILITY_RISK_RE = re.compile(
+    r"(?:latest|current corpus|exact numeric|rank(?:ing)?|최신|현재\s*코퍼스|정확한\s*수치|순위|단정)",
+    re.IGNORECASE,
+)
+_COMPARABLE_ROLE_LABELS = {
+    "method": "method",
+    "result": "result",
+    "metric": "metric",
+    "limitation": "limitation",
+    "problem": "problem",
+    "scope": "scope",
+    "paper_summary": "summary",
+}
+
 
 def _query_focus_label(query: str, sources: list[dict[str, Any]], *, max_tokens: int = 8) -> str:
     text_parts = [str(query or "")]
@@ -452,6 +493,123 @@ def _ordered_group_cards(*, group: dict[str, Any], claim_cards_by_id: dict[str, 
     )
 
 
+def _source_id_from_card(card: dict[str, Any]) -> str:
+    return _clean_text(card.get("sourceId") or card.get("source_id"))
+
+
+def _source_title_from_card(card: dict[str, Any]) -> str:
+    summary = _clean_text(card.get("summaryText") or card.get("summary_text"))
+    title = summary.split("|", 1)[0].strip() if "|" in summary else summary
+    return _clean_text(card.get("title") or card.get("sourceTitle") or card.get("source_title") or title)
+
+
+def _source_mention_tokens(card: dict[str, Any]) -> set[str]:
+    values = [
+        _source_id_from_card(card),
+        _source_title_from_card(card),
+        card.get("documentId") or card.get("document_id"),
+    ]
+    tokens: set[str] = set()
+    for value in values:
+        for token in _SOURCE_MENTION_TOKEN_RE.findall(_clean_text(value)):
+            lowered = token.casefold()
+            if lowered in _SOURCE_MENTION_STOPWORDS:
+                continue
+            if re.fullmatch(r"\d{4}\.\d{4,5}", token) or len(lowered) >= 4:
+                tokens.add(lowered)
+    return tokens
+
+
+def _source_explicitly_named(query: str, cards: list[dict[str, Any]]) -> bool:
+    query_lower = _clean_text(query).casefold()
+    if not query_lower:
+        return False
+    source_id = _source_id_from_card(cards[0]) if cards else ""
+    if source_id and source_id.casefold() in query_lower:
+        return True
+    for card in cards:
+        if _source_mention_tokens(card) & set(_SOURCE_MENTION_TOKEN_RE.findall(query_lower)):
+            return True
+    return any(token in query_lower for card in cards for token in _source_mention_tokens(card))
+
+
+def _card_evidence_role(card: dict[str, Any]) -> str:
+    for anchor in list(card.get("evidenceAnchors") or card.get("evidence_anchors") or []):
+        role = _clean_text(anchor.get("evidenceRole") or anchor.get("evidence_role")).casefold()
+        if role:
+            return role
+    return _clean_text(card.get("claimType") or card.get("claim_type")).casefold()
+
+
+def _card_strict_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
+    spans: list[dict[str, Any]] = []
+    for index, span in enumerate(_claim_supporting_spans(card), start=1):
+        normalized = _span_ref({**span, "strictSpanBacked": True, "fallbackSpan": False}, fallback_index=index)
+        if normalized["strictSpanBacked"] and not _is_non_evidence_ref(normalized):
+            spans.append(normalized)
+    return spans
+
+
+def _synthesized_claim_dimensions(
+    *,
+    query: str,
+    query_frame: dict[str, Any],
+    claim_cards: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    if _ANSWERABILITY_RISK_RE.search(_clean_text(query)):
+        return []
+    resolved_source_ids = [
+        _clean_text(value)
+        for value in list(query_frame.get("resolved_source_ids") or query_frame.get("resolvedSourceIds") or [])
+        if _clean_text(value)
+    ]
+    if len(resolved_source_ids) < 2:
+        return []
+
+    cards_by_source: dict[str, list[dict[str, Any]]] = {}
+    for card in claim_cards:
+        source_id = _source_id_from_card(card)
+        if source_id in resolved_source_ids:
+            cards_by_source.setdefault(source_id, []).append(dict(card or {}))
+    selected_source_ids = [source_id for source_id in resolved_source_ids[:2] if cards_by_source.get(source_id)]
+    if len(selected_source_ids) < 2:
+        return []
+    if any(not _source_explicitly_named(query, cards_by_source[source_id]) for source_id in selected_source_ids):
+        return []
+
+    cards_by_role: dict[str, dict[str, dict[str, Any]]] = {}
+    for source_id in selected_source_ids:
+        for card in cards_by_source[source_id]:
+            role = _card_evidence_role(card)
+            if role not in _COMPARABLE_ROLE_LABELS or not _card_strict_spans(card):
+                continue
+            cards_by_role.setdefault(role, {}).setdefault(source_id, card)
+
+    dimensions: list[dict[str, Any]] = []
+    for role, source_cards in cards_by_role.items():
+        if any(source_id not in source_cards for source_id in selected_source_ids):
+            continue
+        ordered_cards = [source_cards[source_id] for source_id in selected_source_ids]
+        supporting_spans: list[dict[str, Any]] = []
+        for card in ordered_cards:
+            supporting_spans.extend(_card_strict_spans(card))
+        if not _strict_source_coverage_ready(supporting_spans):
+            continue
+        label = _COMPARABLE_ROLE_LABELS.get(role, role)
+        dimensions.append(
+            {
+                "dimensionId": f"claim-card-role:{role}",
+                "label": label,
+                "leftClaim": _claim_text(ordered_cards[0]),
+                "rightClaim": _claim_text(ordered_cards[1]),
+                "comparisonStatus": "supported",
+                "supportingSpans": supporting_spans,
+                "notes": "Generated from ask-v2 claim-card evidence anchors with strict source span coverage.",
+            }
+        )
+    return dimensions
+
+
 def build_compare_packet_from_runtime(
     *,
     query: str,
@@ -472,10 +630,25 @@ def build_compare_packet_from_runtime(
         return None
     cards_by_id = {_claim_card_id(item): dict(item or {}) for item in claim_cards if _claim_card_id(dict(item or {}))}
     groups = [dict(item or {}) for item in list((claim_alignment or {}).get("groups") or [])]
-    if not cards_by_id or not groups:
+    if not cards_by_id:
         return None
 
     resolved_source_ids = [_clean_text(value) for value in list(query_frame.get("resolved_source_ids") or query_frame.get("resolvedSourceIds") or [])]
+    if not groups:
+        dimensions = _synthesized_claim_dimensions(
+            query=query,
+            query_frame=query_frame,
+            claim_cards=list(cards_by_id.values()),
+        )
+        if not dimensions:
+            return None
+        return build_compare_packet_contract(
+            query=query,
+            dimensions=dimensions,
+            retrieval_signals=[],
+            policy=dict(evidence_policy or {}),
+        )
+
     verification_conflicts = {
         _clean_text(item.get("groupKey"))
         for item in list((comparison_verification or {}).get("conflicts") or [])

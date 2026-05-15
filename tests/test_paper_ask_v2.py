@@ -292,6 +292,8 @@ def test_paper_card_v2_builder_populates_slots_refs_and_stable_anchors(tmp_path)
     assert first["claim_refs"][0]["claim_id"] == "claim_memory_1"
     assert first["anchors"]
     assert [item["anchor_id"] for item in first["anchors"]] == [item["anchor_id"] for item in second["anchors"]]
+    assert first["knowledge_slots"]["schema"] == "knowledge-hub.paper-knowledge-slots.v1"
+    assert {item["slotType"] for item in first["knowledge_slots"]["slots"]} >= {"method", "result", "dataset", "metric"}
 
 
 def test_paper_card_v2_builder_dedupes_duplicate_concept_entity_refs(tmp_path):
