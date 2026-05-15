@@ -495,6 +495,106 @@ def test_compare_packet_from_sources_enriches_existing_packet_with_missing_cited
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_from_sources_recovers_insufficient_dimension_with_strict_multisource_spans():
+    packet = build_compare_packet_from_sources(
+        query="GraphRAG and LightRAG global question handling",
+        existing_packet=build_compare_packet_contract(
+            query="GraphRAG and LightRAG global question handling",
+            dimensions=[
+                {
+                    "dimensionId": "dim:1",
+                    "label": "||||||ICML 2026 preprint format||||||",
+                    "comparisonStatus": "insufficient",
+                    "supportingSpans": [
+                        {
+                            "spanRef": "anchor-a",
+                            "sourceId": "2603.15798",
+                            "sourceType": "paper",
+                            "contentHash": "sha256:graph",
+                            "spanLocator": "chars:1-50",
+                            "quote": "GraphRAG source span",
+                        }
+                    ],
+                }
+            ],
+        ),
+        strict_spans=[
+            {
+                "spanRef": "span-b",
+                "sourceId": "2410.05779",
+                "source_type": "paper",
+                "sourceContentHash": "sha256:light",
+                "spanLocator": "chars:80-120",
+                "text": "LightRAG source span",
+            }
+        ],
+        sources=[
+            {
+                "source_id": "2603.15798",
+                "source_type": "paper",
+                "title": "CUBE benchmark",
+                "excerpt": "GraphRAG source span",
+            },
+            {
+                "source_id": "2410.05779",
+                "source_type": "paper",
+                "title": "LightRAG",
+                "excerpt": "LightRAG source span",
+            },
+        ],
+    )
+
+    assert packet is not None
+    dimension = packet["dimensions"][0]
+    assert dimension["comparisonStatus"] == "supported"
+    assert packet["coverage"]["answerable"] is True
+    assert packet["coverage"]["strictSupportedDimensionCount"] == 1
+    assert packet["coverage"]["strictSpanBackedCount"] == 2
+    assert packet["coverage"]["fallbackSpanCount"] == 0
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_sources_does_not_recover_insufficient_dimension_with_fallback_spans():
+    packet = build_compare_packet_from_sources(
+        query="RAG and FiD retrieval generation",
+        existing_packet=build_compare_packet_contract(
+            query="RAG and FiD retrieval generation",
+            dimensions=[
+                {
+                    "dimensionId": "dim:1",
+                    "label": "retrieval generation",
+                    "comparisonStatus": "insufficient",
+                    "supportingSpans": [
+                        {
+                            "spanRef": "span-a",
+                            "sourceId": "2005.11401",
+                            "sourceType": "paper",
+                            "contentHash": "sha256:rag",
+                            "spanLocator": "chars:1-50",
+                            "quote": "RAG source span",
+                        }
+                    ],
+                }
+            ],
+        ),
+        sources=[
+            {
+                "source_id": "2312.10997",
+                "source_type": "paper",
+                "title": "RAG survey",
+                "excerpt": "Survey fallback source span",
+            }
+        ],
+    )
+
+    assert packet is not None
+    assert packet["dimensions"][0]["comparisonStatus"] == "insufficient"
+    assert packet["coverage"]["answerable"] is False
+    assert packet["coverage"]["strictSpanBackedCount"] == 1
+    assert packet["coverage"]["fallbackSpanCount"] == 1
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
 def test_answer_payload_builder_attaches_compare_packet_for_ask_v2_paper_compare():
     builder = AnswerPayloadBuilder(SimpleNamespace(_resolve_query_entities=lambda _query: []))
     pipeline_result = SimpleNamespace(

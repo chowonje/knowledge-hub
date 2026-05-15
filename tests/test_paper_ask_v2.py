@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import json
 import pytest
 
 from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service
@@ -748,6 +749,66 @@ def test_generate_answer_compare_with_stored_claim_cards_does_not_require_alias_
     assert evidence_anchor["snippetHash"]
     assert evidence_anchor["citationLabel"] == "S1"
     assert payload["answerProvenance"]["mode"] == "claim_cards_conflicted"
+
+
+def test_generate_answer_claim_card_evidence_anchors_resolve_offset_locator_from_source_file(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper_with_note(db, tmp_path)
+    _seed_document_memory(db, "2603.13017")
+    source_path = tmp_path / "paper-source.txt"
+    source_path.write_text(
+        "Prelude\nThe method achieves 11x   compression on MemoryBench.\nConclusion\n",
+        encoding="utf-8",
+    )
+    result_unit_id = "paper:2603.13017:result"
+    db.conn.execute(
+        """
+        UPDATE document_memory_units
+        SET source_excerpt = ?,
+            source_content_hash = '',
+            provenance_json = ?
+        WHERE unit_id = ?
+        """,
+        (
+            "The method achieves 11x compression on MemoryBench.",
+            json.dumps({"file_path": str(source_path), "source_type": "paper", "source_ref": "2603.13017"}),
+            result_unit_id,
+        ),
+    )
+    db.conn.commit()
+    db.upsert_claim_normalization(
+        claim_id="claim_memory_1",
+        normalization_version="v1",
+        status="normalized",
+        task="retrieval_augmented_generation",
+        dataset="MemoryBench",
+        metric="compression ratio",
+        comparator="baseline",
+        result_direction="better",
+        result_value_text="11x compression",
+        result_value_numeric=11.0,
+        evidence_strength="strong",
+    )
+    paper_card = PaperCardV2Builder(db).build_and_store(paper_id="2603.13017")
+    ClaimCardBuilder(db).build_and_store_for_source_card(source_kind="paper", source_card=paper_card)
+    searcher, _vector_db = _build_searcher(db)
+
+    payload = searcher.generate_answer(
+        query="2603.13017 metric comparison",
+        source_type="paper",
+        top_k=3,
+    )
+
+    evidence_anchors = [
+        anchor
+        for claim_card in payload["claimCards"]
+        for anchor in list(claim_card.get("evidenceAnchors") or [])
+        if anchor.get("chunkId") == result_unit_id
+    ]
+    assert evidence_anchors
+    assert any(str(anchor.get("spanLocator") or "").startswith("chars:") for anchor in evidence_anchors)
+    assert any(anchor.get("charStart") is not None and anchor.get("charEnd") is not None for anchor in evidence_anchors)
+    assert all(anchor.get("sourceContentHash") for anchor in evidence_anchors)
 
 
 def test_generate_answer_rebuilds_stale_paper_card_when_upstream_memory_is_newer(tmp_path):
