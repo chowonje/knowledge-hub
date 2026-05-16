@@ -29,6 +29,22 @@ from knowledge_hub.providers import registry
 
 console = Console()
 
+_LOCAL_PATH_RE = re.compile(r"(?<![A-Za-z0-9_])/(?:Users|private|tmp|var/folders)/[^,|;\"}\]\n\r]+")
+
+
+def _redact_local_paths(value: object, *, replacement: str = "<local-path>") -> str:
+    return _LOCAL_PATH_RE.sub(replacement, str(value or ""))
+
+
+def _redact_local_paths_in_payload(value: object) -> object:
+    if isinstance(value, dict):
+        return {key: _redact_local_paths_in_payload(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_redact_local_paths_in_payload(item) for item in value]
+    if isinstance(value, str):
+        return _redact_local_paths(value)
+    return value
+
 
 def _config_nested(config, *path, default=None):
     getter = getattr(config, "get_nested", None)
@@ -449,7 +465,7 @@ def _storage_check(config) -> dict[str, object]:
         "area": "sqlite/papers",
         "status": status,
         "summary": summary,
-        "detail": f"papers={papers_dir} sqlite={sqlite_path}",
+        "detail": "papers=<local-papers-dir> sqlite=<local-sqlite-db>",
         "fixCommand": "khub setup --profile local --non-interactive",
     }
 
@@ -504,7 +520,7 @@ def _vector_check(runtime: dict[str, object]) -> dict[str, object]:
         fix_command = "khub index --all"
     detail = f"{vector.get('collection_name') or '-'} / {total_documents}"
     if recovery_backup.get("total_documents"):
-        detail = f"{detail} | backup={recovery_backup.get('total_documents')} at {recovery_backup.get('path')}"
+        detail = f"{detail} | backup={recovery_backup.get('total_documents')} at <local-vector-backup>"
     return {
         "area": "vector corpus",
         "status": status,
@@ -611,7 +627,7 @@ def build_doctor_payload(khub_ctx) -> dict[str, object]:
             "area": "settings",
             "status": "ok" if (getattr(config, "config_path", None) or Path(DEFAULT_CONFIG_PATH).exists()) else "needs_setup",
             "summary": "설정 파일을 찾았습니다." if (getattr(config, "config_path", None) or Path(DEFAULT_CONFIG_PATH).exists()) else "아직 초기 설정이 필요합니다.",
-            "detail": str(getattr(config, "config_path", None) or DEFAULT_CONFIG_PATH),
+            "detail": "configured" if getattr(config, "config_path", None) else "default config path",
             "fixCommand": "khub setup --profile local --non-interactive",
         },
         _provider_check(config, "summary", config.summarization_provider, config.summarization_model, provider_states.get("summarization", {})),
@@ -624,17 +640,20 @@ def build_doctor_payload(khub_ctx) -> dict[str, object]:
         _reranker_check(config),
         _storage_check(config),
     ]
+    for check in checks:
+        if isinstance(check, dict) and "detail" in check:
+            check["detail"] = _redact_local_paths(check.get("detail"))
 
     status = _overall_status(checks)
     next_actions = _next_actions(checks, config=config)
-    warnings = list(runtime.get("warnings") or [])
-    return {
+    warnings = [_redact_local_paths(item) for item in list(runtime.get("warnings") or [])]
+    return _redact_local_paths_in_payload({
         "schema": "knowledge-hub.doctor.result.v1",
         "status": status,
         "checks": checks,
         "nextActions": next_actions,
         "warnings": list(dict.fromkeys(warnings)),
-    }
+    })
 
 
 def _render_human_report(payload: dict[str, object]) -> None:

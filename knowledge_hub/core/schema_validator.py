@@ -87,6 +87,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.dinger.lint.result.v1": "dinger-lint-result.v1.json",
     "knowledge-hub.normalized.web-record.v2": "normalized-web-record.v2.json",
     "knowledge-hub.indexed.web-record.v2": "indexed-web-record.v2.json",
+    "knowledge-hub.prepared-source-record.v1": "prepared-source-record.v1.json",
+    "knowledge-hub.source-ledger-record.v1": "source-ledger-record.v1.json",
     "knowledge-hub.crawl.pending.list.result.v1": "crawl-pending-list-result.v1.json",
     "knowledge-hub.crawl.pending.apply.result.v1": "crawl-pending-apply-result.v1.json",
     "knowledge-hub.crawl.pending.reject.result.v1": "crawl-pending-reject-result.v1.json",

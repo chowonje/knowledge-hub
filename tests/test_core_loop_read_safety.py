@@ -135,6 +135,18 @@ def test_seeded_vector_corpus_survives_status_doctor_and_search(monkeypatch, tmp
         },
     )
     monkeypatch.setattr(
+        "knowledge_hub.interfaces.cli.commands.doctor_cmd._install_environment_check",
+        lambda: {
+            "area": "install environment",
+            "status": "ok",
+            "summary": "ok",
+            "detail": "ok",
+            "fixCommand": "",
+            "recommendedActions": [],
+            "diagnostics": {},
+        },
+    )
+    monkeypatch.setattr(
         "knowledge_hub.interfaces.cli.commands.doctor_cmd._reranker_check",
         lambda config: {
             "area": "reranker",
