@@ -74,6 +74,15 @@ def apply_claim_consensus_to_verification(
     return payload
 
 
+def claim_consensus_requires_strict_merge(claim_consensus: dict[str, Any]) -> bool:
+    consensus = dict(claim_consensus or {})
+    return (
+        int(consensus.get("conflictCount") or 0) > 0
+        or int(consensus.get("weakClaimCount") or 0) > 0
+        or int(consensus.get("unsupportedClaimCount") or 0) > 0
+    )
+
+
 def evaluate_policy(
     *,
     context: str,
@@ -122,6 +131,7 @@ def policy_payload(
 
 __all__ = [
     "apply_claim_consensus_to_verification",
+    "claim_consensus_requires_strict_merge",
     "evaluate_policy",
     "policy_payload",
     "with_claim_context",

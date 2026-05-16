@@ -108,7 +108,7 @@ def test_mcp_read_packet_resource_reports_current_staleness_from_document_memory
         {
             "schema": "knowledge-hub.evidence-packet.v1",
             "packet_id": "epkt_stale",
-            "spans": [{"span_id": "span_1", "source_id": "src_1", "content_hash": "sha256:old"}],
+            "spans": [{"span_id": "span_1", "source_id": "src_1", "source_content_hash": "sha256:old"}],
         },
     )
     state = SimpleNamespace(config=object(), sqlite_db=db)
@@ -145,7 +145,7 @@ def test_mcp_read_packet_resource_prefers_current_note_hash_over_stale_document_
         {
             "schema": "knowledge-hub.evidence-packet.v1",
             "packet_id": "epkt_note",
-            "spans": [{"span_id": "span_1", "source_id": "note_1", "content_hash": "sha256:old"}],
+            "spans": [{"span_id": "span_1", "source_id": "note_1", "source_content_hash": "sha256:old"}],
         },
     )
     state = SimpleNamespace(config=object(), sqlite_db=db)

@@ -15,6 +15,16 @@ from knowledge_hub.papers.source_cleanup import (
 )
 
 
+CONFIGURED_SOURCE_FILE_REPAIRS: dict[str, dict[str, Any]] = {
+    "alexnet-2012": {
+        "pdfCandidates": [
+            "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+        ],
+        "reason": "local AlexNet registry row can be reattached to the canonical PDF in the configured papers_dir",
+    },
+}
+
+
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
 
@@ -98,6 +108,51 @@ def build_source_cleanup_rows_for_papers(
     return rows, missing_ids
 
 
+def _configured_papers_dir(config: Any) -> Path | None:
+    raw = ""
+    if hasattr(config, "get_nested"):
+        raw = _clean_text(config.get_nested("storage", "papers_dir", default=""))
+    if not raw:
+        raw = _clean_text(getattr(config, "papers_dir", ""))
+    if not raw:
+        return None
+    return Path(raw).expanduser()
+
+
+def _configured_source_file_decision(decision: dict[str, str], *, config: Any) -> dict[str, str]:
+    paper_id = _clean_text(decision.get("paperId"))
+    rule = CONFIGURED_SOURCE_FILE_REPAIRS.get(paper_id)
+    if not rule:
+        return decision
+    if _clean_text(decision.get("oldPdfPath")) or _clean_text(decision.get("oldTextPath")):
+        return decision
+    papers_dir = _configured_papers_dir(config)
+    if papers_dir is None:
+        return {
+            **decision,
+            "action": "attach_configured_source_file",
+            "status": "blocked_missing_configured_papers_dir",
+            "resolutionReason": "configured papers_dir is unavailable",
+        }
+    for candidate_name in list(rule.get("pdfCandidates") or []):
+        candidate = papers_dir / str(candidate_name)
+        if candidate.is_file():
+            return {
+                **decision,
+                "action": "attach_configured_source_file",
+                "status": "resolved",
+                "newPdfPath": str(candidate),
+                "newTextPath": "",
+                "resolutionReason": _clean_text(rule.get("reason")),
+            }
+    return {
+        **decision,
+        "action": "attach_configured_source_file",
+        "status": "blocked_missing_configured_source",
+        "resolutionReason": "configured AlexNet source PDF was not found under papers_dir",
+    }
+
+
 def run_source_cleanup_queue(
     *,
     sqlite_db,
@@ -141,7 +196,10 @@ def repair_paper_sources(
         paper_ids=paper_ids,
         default_parser=document_memory_parser,
     )
-    decisions = build_source_cleanup_plan(rows, sqlite_db=sqlite_db)
+    decisions = [
+        _configured_source_file_decision(decision, config=config)
+        for decision in build_source_cleanup_plan(rows, sqlite_db=sqlite_db)
+    ]
     counts = {"ok": 0, "blocked": 0, "failed": 0, "missing": len(missing_ids)}
     items: list[dict[str, Any]] = []
 
@@ -167,6 +225,8 @@ def repair_paper_sources(
         decision_status = item["decisionStatus"]
         if action in {"exclude_until_manual_fix", "manual_review_required"} or (
             action == "relink_to_canonical" and decision_status != "resolved"
+        ) or (
+            action == "attach_configured_source_file" and decision_status != "resolved"
         ):
             item["repairStatus"] = "blocked"
             counts["blocked"] += 1
@@ -183,6 +243,19 @@ def repair_paper_sources(
                 summary = apply_source_cleanup_plan(sqlite_db=sqlite_db, decisions=[decision])
                 item["sourceApplied"] = bool(summary.get("applied"))
                 item["sourceChanged"] = bool(summary.get("applied"))
+            elif action == "attach_configured_source_file":
+                existing = sqlite_db.get_paper(paper_id)
+                if not existing:
+                    item["repairStatus"] = "missing"
+                    counts["missing"] += 1
+                    items.append(item)
+                    continue
+                payload = dict(existing)
+                payload["pdf_path"] = item["newPdfPath"]
+                payload["text_path"] = item["newTextPath"]
+                sqlite_db.upsert_paper(payload)
+                item["sourceApplied"] = True
+                item["sourceChanged"] = True
             elif action == "keep_current_source":
                 item["sourceApplied"] = True
                 item["sourceChanged"] = False
@@ -194,7 +267,7 @@ def repair_paper_sources(
                     allow_external=allow_external,
                     llm_mode=llm_mode,
                 )
-                memory_row = dict(memory_builder.build_and_store(paper_id=paper_id) or {})
+                memory_row = dict(memory_builder.build_and_store(paper_id=paper_id, materialize_card=False) or {})
                 document_rows = list(
                     DocumentMemoryBuilder(sqlite_db, config=config).build_and_store_paper(
                         paper_id=paper_id,

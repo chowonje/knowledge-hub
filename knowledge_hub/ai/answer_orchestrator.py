@@ -516,11 +516,18 @@ class AnswerOrchestrator:
             or plan_payload.get("paperFamily")
             or ""
         ).strip().lower()
-        if family != "paper_compare":
-            return "advisory"
         answer_provenance = dict(diagnostics.get("answerProvenance") or {})
         provenance_mode = str(answer_provenance.get("mode") or "").strip().lower()
-        if provenance_mode == "weak_claim_fallback":
+        consensus = dict(diagnostics.get("consensus") or {})
+        has_non_strict_claims = (
+            int(consensus.get("conflictCount") or 0) > 0
+            or int(consensus.get("weakClaimCount") or 0) > 0
+            or int(consensus.get("unsupportedClaimCount") or 0) > 0
+            or provenance_mode in {"weak_claim_fallback", "claim_cards_conflicted"}
+        )
+        if has_non_strict_claims:
+            return "strict"
+        if family != "paper_compare":
             return "advisory"
         return "strict"
 

@@ -9,6 +9,7 @@ from knowledge_hub.ai.paper_query_plan import (
     build_rule_query_plan,
     classify_paper_family,
 )
+from knowledge_hub.domain.ai_papers.lookup import extract_compare_title_candidates
 
 
 class DummySQLite:
@@ -751,6 +752,40 @@ def test_build_rule_based_query_frame_resolves_long_title_compare_pairs():
     assert frame["family"] == PAPER_FAMILY_COMPARE
     assert "2005.11401" in frame["resolved_source_ids"]
     assert "2310.11511" in frame["resolved_source_ids"]
+
+
+def test_build_rule_based_query_frame_resolves_short_self_rag_compare_before_generic_rag_survey():
+    frame = build_rule_based_query_frame(
+        "RAG와 Self-RAG를 논문 기준으로 비교해줘",
+        source_type="paper",
+        sqlite_db=RepresentativeFilterSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["2005.11401", "2310.11511"]
+    assert "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" in frame["expanded_terms"]
+    assert "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection" in frame["expanded_terms"]
+
+
+def test_build_rule_based_query_frame_resolves_seq2seq_attention_compare_titles():
+    frame = build_rule_based_query_frame(
+        "Sequence to Sequence Learning과 Attention Is All You Need를 sequence modeling 관점에서 비교해줘",
+        source_type="paper",
+        sqlite_db=LocalTitleLookupSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["1409.3215", "1706.03762"]
+    assert frame["expanded_terms"][0] == "Sequence to Sequence Learning"
+    assert frame["expanded_terms"][1] == "Attention Is All You Need"
+
+
+def test_extract_compare_title_candidates_keeps_title_internal_sequence_modeling():
+    candidates = extract_compare_title_candidates(
+        "Mamba: Linear-Time Sequence Modeling with Selective State Spaces와 Transformer를 비교해줘"
+    )
+
+    assert "Mamba: Linear-Time Sequence Modeling with Selective State Spaces" in candidates
 
 
 def test_build_rule_based_query_frame_adds_discover_rescue_terms_for_state_space_models():

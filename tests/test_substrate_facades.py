@@ -220,6 +220,350 @@ def test_compare_json_builds_source_fallback_packet_when_claim_packet_missing(mo
     assert validate_payload(payload, payload["schema"], strict=True).ok
 
 
+def test_compare_json_builds_slot_packet_from_ask_v2_no_result_payload(monkeypatch):
+    monkeypatch.setattr(
+        substrate_cmd,
+        "_run_answer_facade",
+        lambda *_args, **_kwargs: {
+            "status": "no_result",
+            "answer": "근거 span으로만 비교합니다.",
+            "sourceType": "paper",
+            "paperFamily": "paper_compare",
+            "queryFrame": {
+                "source_type": "paper",
+                "family": "paper_compare",
+                "resolved_source_ids": ["1706.03762", "2312.00752"],
+            },
+            "v2": {
+                "runtimeExecution": {"used": "ask_v2"},
+                "claimCards": [
+                    {
+                        "claimCardId": "claim-rag-metric",
+                        "sourceId": "2005.11401",
+                        "claimType": "empirical",
+                        "summaryText": "RAG reports retrieval-generation QA metrics.",
+                        "evidenceAnchors": [
+                            {
+                                "anchorId": "claim-rag-metric-anchor",
+                                "sourceId": "2005.11401",
+                                "sourceType": "paper",
+                                "evidenceRole": "metric",
+                                "spanLocator": "chars:10-80",
+                                "sourceContentHash": "sha256:rag",
+                                "quote": "RAG reports retrieval-generation QA metrics.",
+                            }
+                        ],
+                    },
+                    {
+                        "claimCardId": "claim-fid-metric",
+                        "sourceId": "2007.01282",
+                        "claimType": "empirical",
+                        "summaryText": "FiD metric claim from a parsed preamble.",
+                        "evidenceAnchors": [
+                            {
+                                "anchorId": "claim-fid-metric-anchor",
+                                "sourceId": "2007.01282",
+                                "sourceType": "paper",
+                                "evidenceRole": "metric",
+                                "spanLocator": "chars:20-100",
+                                "sourceContentHash": "sha256:fid",
+                                "quote": "[Block 1] %%%%% NEW MATH DEFINITIONS %%%%% \\newcommand{\\figleft}{x}",
+                            }
+                        ],
+                    },
+                ],
+                "claimAlignment": {"groups": []},
+                "paperKnowledgeSlots": [
+                    {
+                        "paperId": "1706.03762",
+                        "title": "Attention Is All You Need",
+                        "slots": [
+                            {
+                                "slotType": "method",
+                                "text": "The Transformer uses attention for sequence modeling.",
+                                "evidenceRefs": [
+                                    {
+                                        "anchorId": "slot-transformer-method",
+                                        "sourceId": "1706.03762",
+                                        "sourceType": "paper",
+                                        "spanLocator": "chars:10-80",
+                                        "sourceContentHash": "sha256:transformer",
+                                        "quote": "Transformer method.",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "paperId": "2312.00752",
+                        "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+                        "slots": [
+                            {
+                                "slotType": "method",
+                                "text": "Mamba uses selective state spaces for sequence modeling.",
+                                "evidenceRefs": [
+                                    {
+                                        "anchorId": "slot-mamba-method",
+                                        "sourceId": "2312.00752",
+                                        "sourceType": "paper",
+                                        "spanLocator": "chars:20-100",
+                                        "sourceContentHash": "sha256:mamba",
+                                        "quote": "Mamba method.",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                ],
+            },
+            "citations": [
+                {"label": "S1", "target": "1706.03762", "kind": "paper"},
+                {"label": "S2", "target": "2312.00752", "kind": "paper"},
+            ],
+            "sources": [
+                {"source_id": "1706.03762", "source_type": "paper", "title": "Attention Is All You Need"},
+                {
+                    "source_id": "2312.00752",
+                    "source_type": "paper",
+                    "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+                },
+            ],
+            "evidencePacketContract": {
+                "packet_id": "epkt_1",
+                "spans": [
+                    {"span_id": "span_1", "source_id": "1706.03762"},
+                    {"span_id": "span_2", "source_id": "2312.00752"},
+                ],
+            },
+            "evidencePolicy": {"policyKey": "paper_compare_policy"},
+        },
+    )
+
+    result = CliRunner().invoke(
+        substrate_cmd.compare_cmd,
+        ["Transformer와 Mamba를 논문 기준으로 비교해줘", "--json"],
+        obj={"khub": object()},
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["status"] == "ok"
+    assert payload["comparePacket"]["coverage"]["answerable"] is True
+    assert payload["comparePacket"]["coverage"]["strictSupportedDimensionCount"] == 1
+    assert payload["comparePacket"]["coverage"]["fallbackSpanCount"] == 0
+    assert payload["comparePacket"]["dimensions"][0]["dimensionId"] == "paper-slot:method"
+    assert any("paper knowledge slots" in warning for warning in payload["warnings"])
+    assert validate_payload(payload, payload["schema"], strict=True).ok
+
+
+def test_compare_json_keeps_generic_unknown_compare_slot_payload_insufficient(monkeypatch):
+    monkeypatch.setattr(
+        substrate_cmd,
+        "_run_answer_facade",
+        lambda *_args, **_kwargs: {
+            "status": "no_result",
+            "answer": "근거가 부족합니다.",
+            "sourceType": "paper",
+            "paperFamily": "paper_compare",
+            "queryFrame": {
+                "source_type": "paper",
+                "family": "paper_compare",
+                "resolved_source_ids": ["2312.10997", "2512.13564"],
+            },
+            "v2": {
+                "runtimeExecution": {"used": "ask_v2"},
+                "claimCards": [],
+                "claimAlignment": {"groups": []},
+                "paperKnowledgeSlots": [
+                    {
+                        "paperId": "2312.10997",
+                        "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+                        "slots": [
+                            {
+                                "slotType": "method",
+                                "text": "A retrieval survey method summary.",
+                                "evidenceRefs": [
+                                    {
+                                        "anchorId": "slot-rag-survey-method",
+                                        "sourceId": "2312.10997",
+                                        "sourceType": "paper",
+                                        "spanLocator": "chars:10-80",
+                                        "sourceContentHash": "sha256:rag-survey",
+                                        "quote": "RAG survey method.",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "paperId": "2512.13564",
+                        "title": "Memory in the Age of AI Agents",
+                        "slots": [
+                            {
+                                "slotType": "method",
+                                "text": "A memory survey method summary.",
+                                "evidenceRefs": [
+                                    {
+                                        "anchorId": "slot-memory-survey-method",
+                                        "sourceId": "2512.13564",
+                                        "sourceType": "paper",
+                                        "spanLocator": "chars:20-100",
+                                        "sourceContentHash": "sha256:memory-survey",
+                                        "quote": "Memory survey method.",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                ],
+            },
+            "citations": [
+                {"label": "S1", "target": "2312.10997", "kind": "paper"},
+                {"label": "S2", "target": "2512.13564", "kind": "paper"},
+            ],
+            "sources": [
+                {"source_id": "2312.10997", "source_type": "paper", "title": "RAG survey"},
+                {"source_id": "2512.13564", "source_type": "paper", "title": "Memory survey"},
+            ],
+            "evidencePacketContract": {
+                "packet_id": "epkt_1",
+                "spans": [
+                    {
+                        "spanRef": "span:1",
+                        "sourceId": "2312.10997",
+                        "sourceContentHash": "sha256:rag-survey",
+                        "spanLocator": "chars:10-80",
+                    },
+                    {
+                        "spanRef": "span:2",
+                        "sourceId": "2512.13564",
+                        "sourceContentHash": "sha256:memory-survey",
+                        "spanLocator": "chars:20-100",
+                    },
+                ],
+            },
+            "evidencePolicy": {"policyKey": "paper_compare_policy"},
+        },
+    )
+
+    result = CliRunner().invoke(
+        substrate_cmd.compare_cmd,
+        ["AlphaFoo Retrieval 논문과 BetaBar Memory 논문을 비교해줘", "--json"],
+        obj={"khub": object()},
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["comparePacket"]["coverage"]["answerable"] is False
+    assert payload["comparePacket"]["dimensions"][0]["dimensionId"] == "retrieved-source-coverage"
+    assert not any("paper knowledge slots" in warning for warning in payload["warnings"])
+    assert validate_payload(payload, payload["schema"], strict=True).ok
+
+
+def test_compare_json_rejects_low_signal_slot_text_for_answerability(monkeypatch):
+    monkeypatch.setattr(
+        substrate_cmd,
+        "_run_answer_facade",
+        lambda *_args, **_kwargs: {
+            "status": "no_result",
+            "answer": "근거가 부족합니다.",
+            "sourceType": "paper",
+            "paperFamily": "paper_compare",
+            "queryFrame": {
+                "source_type": "paper",
+                "family": "paper_compare",
+                "resolved_source_ids": ["2005.11401", "2007.01282"],
+            },
+            "v2": {
+                "runtimeExecution": {"used": "ask_v2"},
+                "claimCards": [],
+                "claimAlignment": {"groups": []},
+                "paperKnowledgeSlots": [
+                    {
+                        "paperId": "2005.11401",
+                        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                        "slots": [
+                            {
+                                "slotType": "method",
+                                "text": "RAG combines retrieval and generation for open-domain QA.",
+                                "evidenceRefs": [
+                                    {
+                                        "anchorId": "slot-rag-method",
+                                        "sourceId": "2005.11401",
+                                        "sourceType": "paper",
+                                        "spanLocator": "chars:10-80",
+                                        "sourceContentHash": "sha256:rag",
+                                        "quote": "RAG method.",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "paperId": "2007.01282",
+                        "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+                        "slots": [
+                            {
+                                "slotType": "method",
+                                "text": "\\newcommand{\\parents}{Pa} \\DeclareMathOperator*{\\argmax}{arg\\,max}",
+                                "evidenceRefs": [
+                                    {
+                                        "anchorId": "slot-fid-method",
+                                        "sourceId": "2007.01282",
+                                        "sourceType": "paper",
+                                        "spanLocator": "chars:20-100",
+                                        "sourceContentHash": "sha256:fid",
+                                        "quote": "FiD preamble.",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                ],
+            },
+            "citations": [
+                {"label": "S1", "target": "2005.11401", "kind": "paper"},
+                {"label": "S2", "target": "2007.01282", "kind": "paper"},
+            ],
+            "sources": [
+                {"source_id": "2005.11401", "source_type": "paper", "title": "RAG"},
+                {"source_id": "2007.01282", "source_type": "paper", "title": "FiD"},
+            ],
+            "evidencePacketContract": {
+                "packet_id": "epkt_1",
+                "spans": [
+                    {
+                        "spanRef": "span:1",
+                        "sourceId": "2005.11401",
+                        "sourceContentHash": "sha256:rag",
+                        "spanLocator": "chars:10-80",
+                    },
+                    {
+                        "spanRef": "span:2",
+                        "sourceId": "2007.01282",
+                        "sourceContentHash": "sha256:fid",
+                        "spanLocator": "chars:20-100",
+                    },
+                ],
+            },
+            "evidencePolicy": {"policyKey": "paper_compare_policy"},
+        },
+    )
+
+    result = CliRunner().invoke(
+        substrate_cmd.compare_cmd,
+        ["RAG와 Fusion-in-Decoder를 논문 기준으로 비교해줘", "--json"],
+        obj={"khub": object()},
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["comparePacket"]["coverage"]["answerable"] is False
+    assert payload["comparePacket"]["dimensions"][0]["dimensionId"] == "retrieved-source-coverage"
+    assert not any("paper knowledge slots" in warning for warning in payload["warnings"])
+    assert validate_payload(payload, payload["schema"], strict=True).ok
+
+
 def test_compare_json_enriches_existing_packet_with_strict_evidence_spans(monkeypatch):
     monkeypatch.setattr(
         substrate_cmd,

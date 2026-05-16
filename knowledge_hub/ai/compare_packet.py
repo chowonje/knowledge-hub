@@ -49,12 +49,19 @@ def _is_non_evidence_ref(item: dict[str, Any]) -> bool:
     return bool(scheme and scheme in NON_EVIDENCE_SOURCE_SCHEMES)
 
 
+_STRICT_CHARS_LOCATOR_RE = re.compile(r"^chars:\d+-\d+$")
+
+
+def _source_content_hash(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("source_content_hash") or item.get("sourceContentHash"))
+
+
 def _content_hash(item: dict[str, Any]) -> str:
     return _clean_text(
-        item.get("content_hash")
+        item.get("snippet_hash")
+        or item.get("snippetHash")
+        or item.get("content_hash")
         or item.get("contentHash")
-        or item.get("source_content_hash")
-        or item.get("sourceContentHash")
     )
 
 
@@ -95,21 +102,10 @@ def _span_offset_available(item: dict[str, Any]) -> bool:
     explicit = _bool_or_none(
         item.get("spanOffsetAvailable") if "spanOffsetAvailable" in item else item.get("span_offset_available")
     )
-    if explicit is not None:
-        return explicit
+    if explicit is False:
+        return False
     locator = _span_locator(item)
-    if re.search(r"(?:chars?|bytes?)[:=]\d+\s*[-:]\s*\d+", locator, re.IGNORECASE):
-        return True
-    if re.search(r"\b\d+\s*[-:]\s*\d+\b", locator):
-        return True
-    return bool(
-        _clean_text(
-            item.get("char_start") or item.get("charStart") or item.get("start_offset") or item.get("startOffset")
-        )
-        and _clean_text(
-            item.get("char_end") or item.get("charEnd") or item.get("end_offset") or item.get("endOffset")
-        )
-    )
+    return bool(_STRICT_CHARS_LOCATOR_RE.fullmatch(locator))
 
 
 def _source_document_id(item: dict[str, Any]) -> str:
@@ -132,7 +128,7 @@ def _has_strict_span_provenance(item: dict[str, Any]) -> bool:
     if _bool_or_none(item.get("fallbackSpan") if "fallbackSpan" in item else item.get("fallback_span")) is True:
         return False
     source_id = _clean_text(item.get("source_id") or item.get("sourceId") or item.get("target"))
-    return bool(source_id and _content_hash(item) and _span_offset_available(item) and not _is_stale_span(item))
+    return bool(source_id and _source_content_hash(item) and _span_offset_available(item) and not _is_stale_span(item))
 
 
 def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
@@ -140,18 +136,19 @@ def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
     source_id = source_id_for_strict or _clean_text(item.get("spanRef"))
     span_ref = _clean_text(item.get("span_ref") or item.get("spanRef")) or f"span:{fallback_index}"
     content_hash = _content_hash(item)
+    source_content_hash = _source_content_hash(item)
     span_locator = _span_locator(item)
     span_offset_available = _span_offset_available({**item, "spanLocator": span_locator})
     fallback_span = _bool_or_none(item.get("fallbackSpan") if "fallbackSpan" in item else item.get("fallback_span")) is True
     strict_span_backed = False if fallback_span else _has_strict_span_provenance(
-        {**item, "sourceId": source_id_for_strict, "contentHash": content_hash, "spanLocator": span_locator}
+        {**item, "sourceId": source_id_for_strict, "sourceContentHash": source_content_hash, "spanLocator": span_locator}
     )
     span = {
         "spanRef": span_ref,
         "sourceId": source_id,
         "sourceType": _clean_text(item.get("source_type") or item.get("sourceType")),
         "contentHash": content_hash,
-        "sourceContentHash": content_hash,
+        "sourceContentHash": source_content_hash,
         "spanLocator": span_locator,
         "contentHashAvailable": bool(content_hash),
         "spanLocatorAvailable": bool(span_locator),
@@ -393,6 +390,57 @@ _COMPARABLE_SLOT_LABELS = {
     "metric": "metric",
     "limitation": "limitation",
 }
+_EXPLICIT_SOURCE_ALIASES_BY_ID = {
+    "alexnet-2012": {"alexnet", "cnn"},
+    "1312.5602": {"dqn", "deep q-network"},
+    "1406.2661": {"gan"},
+    "1409.3215": {"seq2seq", "sequence to sequence"},
+    "1502.03167": {"batchnorm", "batch normalization"},
+    "1512.03385": {"resnet"},
+    "1706.03762": {"transformer", "attention is all you need"},
+    "1707.06347": {"ppo", "proximal policy optimization"},
+    "1810.04805": {"bert"},
+    "2005.11401": {"rag", "retrieval-augmented generation"},
+    "2005.14165": {"gpt"},
+    "2006.11239": {"diffusion", "denoising diffusion probabilistic models"},
+    "2007.01282": {"fid", "fusion-in-decoder", "fusion in decoder"},
+    "2010.11929": {"vit", "vision transformer"},
+    "2201.11903": {"cot", "chain-of-thought", "chain of thought"},
+    "2310.11511": {"self-rag", "self rag"},
+    "2312.00752": {"mamba"},
+    "2404.16130": {"graphrag", "graph rag"},
+    "2410.05779": {"lightrag", "light rag"},
+}
+_ALIAS_TOKEN_RE = re.compile(r"[A-Za-z0-9]+")
+_LOW_SIGNAL_EVIDENCE_TEXT_RE = re.compile(
+    r"^\s*(?:\\(?:newcommand|renewcommand|DeclareMathOperator|def|usepackage|documentclass)\b|%+)",
+    re.IGNORECASE,
+)
+_BLOCK_PREFIX_RE = re.compile(r"^\s*\[Block\s+\d+\]\s*", re.IGNORECASE)
+
+
+def _query_mentions_alias(query: str, alias: str) -> bool:
+    query_text = _clean_text(query).casefold()
+    alias_text = _clean_text(alias).casefold()
+    if not query_text or not alias_text:
+        return False
+    parts = _ALIAS_TOKEN_RE.findall(alias_text)
+    if not parts:
+        return False
+    pattern = r"(?<![A-Za-z0-9])" + r"[\s_.:/+-]+".join(re.escape(part) for part in parts) + r"(?![A-Za-z0-9])"
+    return bool(re.search(pattern, query_text, re.IGNORECASE))
+
+
+def _source_payload_explicitly_named(query: str, *, source_id: str, title: str = "") -> bool:
+    source_token = _clean_text(source_id)
+    if source_token and source_token.casefold() in _clean_text(query).casefold():
+        return True
+    if title and _query_mentions_alias(query, title):
+        return True
+    for alias in _EXPLICIT_SOURCE_ALIASES_BY_ID.get(source_token.casefold(), set()):
+        if _query_mentions_alias(query, alias):
+            return True
+    return False
 
 
 def _query_focus_label(query: str, sources: list[dict[str, Any]], *, max_tokens: int = 8) -> str:
@@ -447,6 +495,20 @@ def _claim_text(card: dict[str, Any]) -> str:
     return " | ".join(part for part in parts if part)
 
 
+def _text_signal_ready(value: Any) -> bool:
+    text = _clean_text(value)
+    body = _BLOCK_PREFIX_RE.sub("", text)
+    if len(body) < 16:
+        return False
+    return not _LOW_SIGNAL_EVIDENCE_TEXT_RE.search(body)
+
+
+def _text_has_low_signal_prefix(value: Any) -> bool:
+    text = _clean_text(value)
+    body = _BLOCK_PREFIX_RE.sub("", text)
+    return bool(body and _LOW_SIGNAL_EVIDENCE_TEXT_RE.search(body))
+
+
 def _claim_supporting_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
     evidence_anchors = [dict(item or {}) for item in list(card.get("evidenceAnchors") or card.get("evidence_anchors") or [])]
     if evidence_anchors:
@@ -458,8 +520,18 @@ def _claim_supporting_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
                     "spanRef": anchor_id or f"{_claim_card_id(card)}:anchor:{index}",
                     "sourceId": _clean_text(anchor.get("sourceId") or anchor.get("source_id") or card.get("sourceId") or card.get("source_id")),
                     "sourceType": _clean_text(anchor.get("sourceType") or anchor.get("source_type") or card.get("sourceKind") or card.get("source_kind") or "paper"),
-                    "contentHash": _clean_text(anchor.get("contentHash") or anchor.get("content_hash") or anchor.get("sourceContentHash") or anchor.get("source_content_hash")),
-                    "sourceContentHash": _clean_text(anchor.get("sourceContentHash") or anchor.get("source_content_hash") or anchor.get("contentHash") or anchor.get("content_hash")),
+                    "contentHash": _clean_text(
+                        anchor.get("snippetHash")
+                        or anchor.get("snippet_hash")
+                        or anchor.get("contentHash")
+                        or anchor.get("content_hash")
+                    ),
+                    "sourceContentHash": _clean_text(
+                        anchor.get("sourceContentHash")
+                        or anchor.get("source_content_hash")
+                        or card.get("sourceContentHash")
+                        or card.get("source_content_hash")
+                    ),
                     "spanLocator": _clean_text(anchor.get("spanLocator") or anchor.get("span_locator")),
                     "documentId": _clean_text(anchor.get("documentId") or anchor.get("document_id")),
                     "chunkId": _clean_text(anchor.get("chunkId") or anchor.get("chunk_id")),
@@ -529,16 +601,15 @@ def _source_mention_tokens(card: dict[str, Any]) -> set[str]:
 
 
 def _source_explicitly_named(query: str, cards: list[dict[str, Any]]) -> bool:
-    query_lower = _clean_text(query).casefold()
-    if not query_lower:
-        return False
     source_id = _source_id_from_card(cards[0]) if cards else ""
-    if source_id and source_id.casefold() in query_lower:
-        return True
-    for card in cards:
-        if _source_mention_tokens(card) & set(_SOURCE_MENTION_TOKEN_RE.findall(query_lower)):
+    for card in list(cards or []):
+        if _source_payload_explicitly_named(
+            query,
+            source_id=source_id or _source_id_from_card(card),
+            title=_clean_text(card.get("title") or card.get("parent_label") or card.get("parentLabel")),
+        ):
             return True
-    return any(token in query_lower for card in cards for token in _source_mention_tokens(card))
+    return False
 
 
 def _card_evidence_role(card: dict[str, Any]) -> str:
@@ -556,6 +627,13 @@ def _card_strict_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
         if normalized["strictSpanBacked"] and not _is_non_evidence_ref(normalized):
             spans.append(normalized)
     return spans
+
+
+def _claim_card_signal_ready(card: dict[str, Any]) -> bool:
+    if not _text_signal_ready(_claim_text(card)):
+        return False
+    spans = _claim_supporting_spans(card)
+    return not any(_text_has_low_signal_prefix(span.get("quote")) for span in spans)
 
 
 def _source_mention_tokens_from_payload(payload: dict[str, Any]) -> set[str]:
@@ -580,23 +658,28 @@ def _slot_source_id(payload: dict[str, Any]) -> str:
     return _clean_text(payload.get("paperId") or payload.get("paper_id") or payload.get("sourceId") or payload.get("source_id"))
 
 
+def _source_titles_note(source_titles: list[str]) -> str:
+    titles = [_clean_text(title) for title in source_titles if _clean_text(title)]
+    if not titles:
+        return ""
+    return f"Source titles: {'; '.join(titles[:2])}."
+
+
 def _slot_source_explicitly_named(query: str, payload: dict[str, Any]) -> bool:
-    query_lower = _clean_text(query).casefold()
-    if not query_lower:
-        return False
-    source_id = _slot_source_id(payload)
-    if source_id and source_id.casefold() in query_lower:
-        return True
-    query_tokens = set(_SOURCE_MENTION_TOKEN_RE.findall(query_lower))
-    source_tokens = _source_mention_tokens_from_payload(payload)
-    return bool(source_tokens & query_tokens) or any(token in query_lower for token in source_tokens)
+    return _source_payload_explicitly_named(
+        query,
+        source_id=_slot_source_id(payload),
+        title=_clean_text(payload.get("title")),
+    )
 
 
 def _slot_strict_spans(slot: dict[str, Any]) -> list[dict[str, Any]]:
     spans: list[dict[str, Any]] = []
     for index, ref in enumerate(list(slot.get("evidenceRefs") or slot.get("evidence_refs") or []), start=1):
         item = dict(ref or {})
-        normalized = _span_ref({**item, "strictSpanBacked": True, "fallbackSpan": False}, fallback_index=index)
+        if _bool_or_none(item.get("strictSpanBacked") if "strictSpanBacked" in item else item.get("strict_span_backed")) is False:
+            continue
+        normalized = _span_ref({**item, "fallbackSpan": False}, fallback_index=index)
         if normalized["strictSpanBacked"] and not _is_non_evidence_ref(normalized):
             spans.append(normalized)
     return spans
@@ -604,6 +687,10 @@ def _slot_strict_spans(slot: dict[str, Any]) -> list[dict[str, Any]]:
 
 def _slot_text(slot: dict[str, Any]) -> str:
     return _clean_text(slot.get("text") or slot.get("summaryText") or slot.get("summary_text"))
+
+
+def _slot_text_signal_ready(slot: dict[str, Any]) -> bool:
+    return _text_signal_ready(_slot_text(slot))
 
 
 def _synthesized_slot_dimensions(
@@ -639,7 +726,7 @@ def _synthesized_slot_dimensions(
         for slot in list(payloads_by_source[source_id].get("slots") or []):
             slot_item = dict(slot or {})
             slot_type = _clean_text(slot_item.get("slotType") or slot_item.get("slot_type")).casefold()
-            if slot_type not in _COMPARABLE_SLOT_LABELS or not _slot_strict_spans(slot_item):
+            if slot_type not in _COMPARABLE_SLOT_LABELS or not _slot_text_signal_ready(slot_item) or not _slot_strict_spans(slot_item):
                 continue
             slots_by_type.setdefault(slot_type, {}).setdefault(source_id, slot_item)
 
@@ -662,7 +749,10 @@ def _synthesized_slot_dimensions(
                 "rightClaim": _slot_text(ordered_slots[1]),
                 "comparisonStatus": "supported",
                 "supportingSpans": supporting_spans,
-                "notes": "Generated from Paper Knowledge Slots with strict evidence anchor coverage.",
+                "notes": _clean_text(
+                    "Generated from Paper Knowledge Slots with strict evidence anchor coverage. "
+                    + _source_titles_note([payloads_by_source[source_id].get("title") for source_id in selected_source_ids])
+                ),
             }
         )
     return dimensions
@@ -751,7 +841,7 @@ def _synthesized_claim_dimensions(
     for source_id in selected_source_ids:
         for card in cards_by_source[source_id]:
             role = _card_evidence_role(card)
-            if role not in _COMPARABLE_ROLE_LABELS or not _card_strict_spans(card):
+            if role not in _COMPARABLE_ROLE_LABELS or not _claim_card_signal_ready(card) or not _card_strict_spans(card):
                 continue
             cards_by_role.setdefault(role, {}).setdefault(source_id, card)
 
@@ -774,7 +864,10 @@ def _synthesized_claim_dimensions(
                 "rightClaim": _claim_text(ordered_cards[1]),
                 "comparisonStatus": "supported",
                 "supportingSpans": supporting_spans,
-                "notes": "Generated from ask-v2 claim-card evidence anchors with strict source span coverage.",
+                "notes": _clean_text(
+                    "Generated from ask-v2 claim-card evidence anchors with strict source span coverage. "
+                    + _source_titles_note([_source_title_from_card(card) for card in ordered_cards])
+                ),
             }
         )
     return dimensions

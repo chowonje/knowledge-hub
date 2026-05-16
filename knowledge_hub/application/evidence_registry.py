@@ -118,8 +118,6 @@ def extract_source_refs(payload: dict[str, Any]) -> list[dict[str, Any]]:
             item,
             "source_content_hash",
             "sourceContentHash",
-            "content_hash",
-            "contentHash",
             "source_revision",
             "sourceRevision",
         )
@@ -143,10 +141,11 @@ def source_revision_hash(source_refs: list[dict[str, Any]]) -> str:
     bound_refs = [
         {
             "sourceId": _first_key(ref, "sourceId", "source_id"),
-            "sourceContentHash": _first_key(ref, "sourceContentHash", "source_content_hash", "contentHash", "content_hash"),
+            "sourceContentHash": _first_key(ref, "sourceContentHash", "source_content_hash", "sourceRevision", "source_revision"),
         }
         for ref in source_refs
-        if _first_key(ref, "sourceId", "source_id") and _first_key(ref, "sourceContentHash", "source_content_hash", "contentHash", "content_hash")
+        if _first_key(ref, "sourceId", "source_id")
+        and _first_key(ref, "sourceContentHash", "source_content_hash", "sourceRevision", "source_revision")
     ]
     if not bound_refs:
         return ""
@@ -305,7 +304,7 @@ def _current_ref_map(source_refs: list[dict[str, Any]] | None) -> dict[str, str]
     result: dict[str, str] = {}
     for ref in source_refs or []:
         source_id = _first_key(ref, "sourceId", "source_id")
-        content_hash = _first_key(ref, "sourceContentHash", "source_content_hash", "contentHash", "content_hash")
+        content_hash = _first_key(ref, "sourceContentHash", "source_content_hash", "sourceRevision", "source_revision")
         if source_id and content_hash:
             result[source_id] = content_hash
     return result
@@ -317,7 +316,7 @@ def _revision_mismatch(record: dict[str, Any], current_source_refs: list[dict[st
         return False
     for ref in list(record.get("sourceRefs") or []):
         source_id = _first_key(ref, "sourceId", "source_id")
-        recorded_hash = _first_key(ref, "sourceContentHash", "source_content_hash", "contentHash", "content_hash")
+        recorded_hash = _first_key(ref, "sourceContentHash", "source_content_hash", "sourceRevision", "source_revision")
         if source_id and recorded_hash and current.get(source_id) and current[source_id] != recorded_hash:
             return True
     return False

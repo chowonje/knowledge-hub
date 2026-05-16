@@ -27,7 +27,7 @@ SCHEMA = "knowledge-hub.live-compare-quality-eval.result.v1"
 DEFAULT_CASES_PATH = "eval/knowledgeos/queries/live_compare_quality_eval_cases.local.json"
 VALID_STATUSES = {"supported", "conflict", "unknown", "insufficient"}
 PUBLIC_SOURCE_TYPES = {"paper", "vault", "web", "concept"}
-OFFSET_LOCATOR_RE = re.compile(r"^chars?:\d+-\d+$", re.IGNORECASE)
+OFFSET_LOCATOR_RE = re.compile(r"^chars:\d+-\d+$")
 
 
 def _now_iso() -> str:
@@ -212,6 +212,22 @@ def _span_locator(item: dict[str, Any]) -> str:
     return _clean_text(item.get("spanLocator") or item.get("span_locator") or item.get("locator"))
 
 
+def _source_content_hash(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("sourceContentHash") or item.get("source_content_hash"))
+
+
+def _has_strict_chars_locator(item: dict[str, Any]) -> bool:
+    return bool(OFFSET_LOCATOR_RE.match(_span_locator(item)))
+
+
+def _is_strict_source_span(item: dict[str, Any]) -> bool:
+    if not _as_bool(item.get("strictSpanBacked"), False):
+        return False
+    if _as_bool(item.get("fallbackSpan"), False):
+        return False
+    return bool(_source_content_hash(item) and _has_strict_chars_locator(item))
+
+
 def _has_offset_locator(item: dict[str, Any]) -> bool:
     locator = _span_locator(item)
     if locator and OFFSET_LOCATOR_RE.match(locator):
@@ -302,7 +318,7 @@ def evaluate_case(
     packet = _compare_packet(payload)
     dimensions = _dimensions(packet)
     spans = _supporting_spans(dimensions)
-    strict_spans = [span for span in spans if _as_bool(span.get("strictSpanBacked"), False)]
+    strict_spans = [span for span in spans if _is_strict_source_span(span)]
     fallback_spans = [span for span in spans if _as_bool(span.get("fallbackSpan"), False)]
     locator_only_spans = [
         span

@@ -80,7 +80,7 @@ def source_item_aliases(item: dict[str, Any]) -> set[str]:
         "filePath",
     ):
         aliases.update(source_identity_aliases(item.get(key)))
-    for key in ("sourceContentHash", "source_content_hash", "contentHash", "content_hash"):
+    for key in ("sourceContentHash", "source_content_hash"):
         value = _clean_text(item.get(key))
         if value:
             aliases.add(f"hash:{value.casefold().removeprefix('sha256:')}")

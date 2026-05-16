@@ -113,6 +113,70 @@ def test_paper_knowledge_slots_keep_summary_only_and_locator_only_non_strict():
     assert validate_payload(payload, PAPER_KNOWLEDGE_SLOTS_SCHEMA, strict=True).ok
 
 
+def test_paper_knowledge_slots_keep_korean_summary_text_non_strict_against_english_source_span():
+    card = {
+        **_base_card(),
+        "method_core": "AlexNet은 GPU 기반 대규모 CNN 학습으로 ImageNet 시대의 딥러닝 폭발을 촉발했다.",
+    }
+
+    payload = build_paper_knowledge_slots_payload(
+        card=card,
+        claim_refs=[],
+        anchors=[
+            {
+                "anchor_id": "anchor:alexnet-method",
+                "paper_id": "alexnet-2012",
+                "document_id": "paper:alexnet-2012",
+                "chunk_id": "memory-unit:paper:alexnet-2012:summary",
+                "span_locator": "chars:0-298",
+                "source_content_hash": "sha256:alexnet",
+                "snippet_hash": "snippet:alexnet",
+                "evidence_role": "method",
+                "excerpt": "We trained a large, deep convolutional neural network to classify ImageNet images.",
+            }
+        ],
+    )
+
+    method_slot = next(item for item in payload["slots"] if item["slotType"] == "method")
+    ref = method_slot["evidenceRefs"][0]
+    assert method_slot["strictEvidence"] is False
+    assert method_slot["strictEvidenceRefCount"] == 0
+    assert ref["strictSpanBacked"] is False
+    assert ref["locatorOnly"] is True
+    assert ref["provenanceWarning"] == "cross_language_slot_text_not_original_source_evidence"
+    assert validate_payload(payload, PAPER_KNOWLEDGE_SLOTS_SCHEMA, strict=True).ok
+
+
+def test_paper_knowledge_slots_keep_same_language_paraphrase_non_strict_against_source_span():
+    card = {
+        **_base_card(),
+        "method_core": "The paper introduced a breakthrough GPU-trained convolutional architecture for ImageNet.",
+    }
+
+    payload = build_paper_knowledge_slots_payload(
+        card=card,
+        claim_refs=[],
+        anchors=[
+            {
+                "anchor_id": "anchor:alexnet-method",
+                "paper_id": "alexnet-2012",
+                "span_locator": "chars:0-298",
+                "source_content_hash": "sha256:alexnet",
+                "snippet_hash": "snippet:alexnet",
+                "evidence_role": "method",
+                "excerpt": "We trained a large, deep convolutional neural network to classify ImageNet images.",
+            }
+        ],
+    )
+
+    method_slot = next(item for item in payload["slots"] if item["slotType"] == "method")
+    ref = method_slot["evidenceRefs"][0]
+    assert method_slot["strictEvidence"] is False
+    assert ref["strictSpanBacked"] is False
+    assert ref["provenanceWarning"] == "slot_text_not_supported_by_source_quote"
+    assert validate_payload(payload, PAPER_KNOWLEDGE_SLOTS_SCHEMA, strict=True).ok
+
+
 def test_load_paper_knowledge_slots_reads_existing_surfaces_without_writing():
     class _Db:
         def __init__(self) -> None:

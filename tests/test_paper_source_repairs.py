@@ -47,12 +47,22 @@ class _StubConfig:
         return default
 
 
+class _ConfigWithPapersDir:
+    def __init__(self, papers_dir: Path):
+        self.papers_dir = str(papers_dir)
+
+    def get_nested(self, *args, default=None):  # noqa: ANN002, ANN003
+        if tuple(args) == ("storage", "papers_dir"):
+            return self.papers_dir
+        return default
+
+
 class _MemoryBuilder:
-    def __init__(self, calls: list[tuple[str, str]]):
+    def __init__(self, calls: list[tuple[str, str, bool]]):
         self.calls = calls
 
-    def build_and_store(self, *, paper_id: str):
-        self.calls.append(("paper-memory", paper_id))
+    def build_and_store(self, *, paper_id: str, materialize_card: bool = True):
+        self.calls.append(("paper-memory", paper_id, bool(materialize_card)))
         return {"paper_id": paper_id, "quality_flag": "ok"}
 
 
@@ -123,7 +133,7 @@ def test_run_source_cleanup_queue_applies_and_writes_artifacts(tmp_path: Path):
 
 def test_repair_paper_sources_relinks_and_rebuilds(monkeypatch):
     sqlite_db = _FakeSQLite()
-    calls: list[tuple[str, str]] = []
+    calls: list[tuple[str, str, bool]] = []
 
     monkeypatch.setattr(
         repair_module,
@@ -155,9 +165,89 @@ def test_repair_paper_sources_relinks_and_rebuilds(monkeypatch):
     updated = sqlite_db.get_paper("Batch_Normalization_c72acd36")
     assert updated["pdf_path"] == "/tmp/good-bn.pdf"
     assert updated["text_path"] == "/tmp/good-bn.txt"
-    assert ("paper-memory", "Batch_Normalization_c72acd36") in calls
+    assert ("paper-memory", "Batch_Normalization_c72acd36", False) in calls
     assert ("document-memory", "Batch_Normalization_c72acd36", "opendataloader") in _DocumentMemoryBuilder.calls
     assert ("paper-card-v2", "Batch_Normalization_c72acd36") in _PaperCardBuilder.calls
+
+
+def test_repair_paper_sources_plans_alexnet_configured_source_attach(tmp_path: Path):
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    source_pdf = papers_dir / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf"
+    source_pdf.write_bytes(b"%PDF-1.4 alexnet")
+    sqlite_db = _FakeSQLite()
+    sqlite_db.rows["alexnet-2012"] = {
+        "arxiv_id": "alexnet-2012",
+        "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+        "pdf_path": "",
+        "text_path": "",
+    }
+
+    payload = repair_paper_sources(
+        sqlite_db=sqlite_db,
+        config=_ConfigWithPapersDir(papers_dir),
+        paper_ids=["alexnet-2012"],
+        document_memory_parser="raw",
+        dry_run=True,
+        rebuild=True,
+    )
+
+    assert payload["status"] == "ok"
+    item = payload["items"][0]
+    assert item["paperId"] == "alexnet-2012"
+    assert item["action"] == "attach_configured_source_file"
+    assert item["decisionStatus"] == "resolved"
+    assert item["repairStatus"] == "planned"
+    assert item["newPdfPath"] == str(source_pdf)
+    assert item["newTextPath"] == ""
+    assert sqlite_db.get_paper("alexnet-2012")["pdf_path"] == ""
+
+
+def test_repair_paper_sources_attaches_alexnet_source_and_rebuilds(tmp_path: Path, monkeypatch):
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    source_pdf = papers_dir / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf"
+    source_pdf.write_bytes(b"%PDF-1.4 alexnet")
+    sqlite_db = _FakeSQLite()
+    sqlite_db.rows["alexnet-2012"] = {
+        "arxiv_id": "alexnet-2012",
+        "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+        "pdf_path": "",
+        "text_path": "",
+    }
+    calls: list[tuple[str, str, bool]] = []
+    monkeypatch.setattr(
+        repair_module,
+        "build_paper_memory_builder",
+        lambda sqlite_db, **kwargs: _MemoryBuilder(calls),
+    )
+    _DocumentMemoryBuilder.calls = []
+    _PaperCardBuilder.calls = []
+    monkeypatch.setattr(repair_module, "DocumentMemoryBuilder", _DocumentMemoryBuilder)
+    monkeypatch.setattr(repair_module, "PaperCardV2Builder", _PaperCardBuilder)
+
+    payload = repair_paper_sources(
+        sqlite_db=sqlite_db,
+        config=_ConfigWithPapersDir(papers_dir),
+        paper_ids=["alexnet-2012"],
+        document_memory_parser="raw",
+        allow_external=False,
+        llm_mode="fallback-only",
+        dry_run=False,
+        rebuild=True,
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["counts"]["ok"] == 1
+    item = payload["items"][0]
+    assert item["repairStatus"] == "ok"
+    assert item["sourceChanged"] is True
+    updated = sqlite_db.get_paper("alexnet-2012")
+    assert updated["pdf_path"] == str(source_pdf)
+    assert updated["text_path"] == ""
+    assert ("paper-memory", "alexnet-2012", False) in calls
+    assert ("document-memory", "alexnet-2012", "raw") in _DocumentMemoryBuilder.calls
+    assert ("paper-card-v2", "alexnet-2012") in _PaperCardBuilder.calls
 
 
 def test_paper_repair_source_cli_reports_dry_run_plan(tmp_path: Path):
@@ -209,6 +299,47 @@ def test_paper_repair_source_cli_reports_dry_run_plan(tmp_path: Path):
     assert item["action"] == "relink_to_canonical"
     assert item["decisionStatus"] == "resolved"
     assert item["repairStatus"] == "planned"
+
+
+def test_paper_repair_source_cli_reports_alexnet_configured_source_plan(tmp_path: Path):
+    config = _config(tmp_path)
+    papers_dir = Path(config.papers_dir)
+    papers_dir.mkdir(parents=True)
+    source_pdf = papers_dir / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf"
+    source_pdf.write_bytes(b"%PDF-1.4 alexnet")
+    db = SQLiteDatabase(config.sqlite_path)
+    db.upsert_paper(
+        {
+            "arxiv_id": "alexnet-2012",
+            "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+            "authors": "A",
+            "year": 2012,
+            "field": "AI",
+            "importance": 5,
+            "notes": "AlexNet은 ImageNet CNN 논문이다.",
+            "pdf_path": "",
+            "text_path": "",
+            "translated_path": "",
+        }
+    )
+    db.close()
+
+    result = CliRunner().invoke(
+        paper_group,
+        ["repair-source", "--paper-id", "alexnet-2012", "--dry-run", "--json"],
+        obj={"khub": _StubKhub(config)},
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["status"] == "ok"
+    item = payload["items"][0]
+    assert item["action"] == "attach_configured_source_file"
+    assert item["decisionStatus"] == "resolved"
+    assert item["repairStatus"] == "planned"
+    assert item["newPdfPath"] == str(source_pdf)
+    db = SQLiteDatabase(config.sqlite_path)
+    assert db.get_paper("alexnet-2012")["pdf_path"] == ""
 
 
 def test_queue_paper_source_repairs_creates_paper_ops_action(tmp_path: Path):

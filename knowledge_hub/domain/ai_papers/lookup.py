@@ -43,8 +43,14 @@ _COMPARE_SPLIT_RE = re.compile(
     re.IGNORECASE,
 )
 _COMPARE_FILLER_RE = re.compile(
-    r"\b(?:paper|papers|perspective|view|core|key|difference|differences|strength|strengths|use\s*case|use\s*cases)\b|"
-    r"논문\s*관점(?:에서)?|관점에서|핵심\s*차이(?:와)?|각각|비교해서|잘하(?:는)?\s*상황(?:을)?|잘하(?:는)?|상황(?:을)?",
+    r"\b(?:paper|papers|perspective|view|core|key|difference|differences|strength|strengths|"
+    r"use\s*case|use\s*cases)\b|"
+    r"논문\s*관점(?:에서)?|논문\s*기준(?:으로)?|관점에서|기준(?:으로)?|핵심\s*차이(?:와)?|각각|비교해서|잘하(?:는)?\s*상황(?:을)?|잘하(?:는)?|상황(?:을)?",
+    re.IGNORECASE,
+)
+_COMPARE_ATTACHED_PARTICLE_CONTEXT_RE = re.compile(
+    r"(?<=[A-Za-z0-9])(?:을|를|은|는|이|가|와|과)\s+"
+    r"(?:sequence\s+modeling|reasoning|architecture)\b.*$",
     re.IGNORECASE,
 )
 
@@ -113,6 +119,7 @@ def extract_compare_title_candidates(query: str) -> list[str]:
         stripped = _LOOKUP_NOISE_RE.sub(" ", part)
         stripped = _COMPARE_NOISE_RE.sub(" ", stripped)
         stripped = _COMPARE_FILLER_RE.sub(" ", stripped)
+        stripped = _COMPARE_ATTACHED_PARTICLE_CONTEXT_RE.sub("", stripped)
         stripped = re.sub(r"[?!.;]+", " ", stripped)
         tokens = _clean_text(stripped).split()
         while tokens and tokens[-1] in _TRAILING_PARTICLE_TOKENS:
