@@ -330,9 +330,9 @@ def test_top_level_help_hides_operator_surfaces():
 
     assert result.exit_code == 0
     command_lines = _command_lines(result.output)
-    for token in ("dinger", "os", "eval", "paper-memory", "math-memory", "vector-compare", "vector-restore"):
+    for token in ("dinger", "os", "eval", "paper", "paper-memory", "math-memory", "vector-compare", "vector-restore"):
         assert token not in command_lines
-    for token in ("discover", "index", "search", "ask", "doctor", "status", "paper", "labs"):
+    for token in ("discover", "index", "search", "ask", "doctor", "status", "papers", "labs"):
         assert token in command_lines
 
 

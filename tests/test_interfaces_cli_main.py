@@ -8,6 +8,25 @@ import types
 from click.testing import CliRunner
 
 
+def _command_lines(output: str) -> set[str]:
+    commands: set[str] = set()
+    in_commands = False
+    for line in output.splitlines():
+        if line.strip() == "Commands:":
+            in_commands = True
+            continue
+        if not in_commands:
+            continue
+        if not line.startswith("  "):
+            if line.strip():
+                break
+            continue
+        stripped = line.strip()
+        if stripped and not stripped.startswith("-"):
+            commands.add(stripped.split()[0])
+    return commands
+
+
 def test_interfaces_cli_main_exports_canonical_entrypoint():
     module = importlib.import_module("knowledge_hub.interfaces.cli.main")
     assert module.cli is not None
@@ -23,32 +42,88 @@ def test_legacy_cli_main_is_a_shim_to_interfaces_module():
     assert legacy.KhubContext is canonical.KhubContext
 
 
-def test_cli_help_hides_labs_commands_from_top_level():
+def test_cli_help_exposes_compact_public_surface_only():
     module = importlib.import_module("knowledge_hub.interfaces.cli.main")
     runner = CliRunner()
 
     result = runner.invoke(module.cli, ["--help"])
 
     assert result.exit_code == 0
-    assert "search" in result.output
-    assert "ask" in result.output
-    assert "agent" in result.output
-    assert "crawl" in result.output
-    assert "doctor" in result.output
-    assert "labs" in result.output
-    assert "dinger" not in result.output
-    assert "eval" not in result.output
-    assert "learn" not in result.output
-    assert "belief" not in result.output
-    assert "decision" not in result.output
-    assert "outcome" not in result.output
-    assert "ontology" not in result.output
-    assert "graph" not in result.output
-    assert "claims" not in result.output
-    assert "feature" not in result.output
-    assert "rag-report" not in result.output
-    assert "corrective-report" not in result.output
-    assert "ops-report-run" not in result.output
+    commands = _command_lines(result.output)
+    for token in ("discover", "index", "search", "ask", "inspect", "compare", "trace"):
+        assert token in commands
+    for token in ("papers", "doctor", "setup", "status", "labs", "help"):
+        assert token in commands
+    for token in (
+        "agent",
+        "crawl",
+        "config",
+        "dinger",
+        "eval",
+        "explore",
+        "health",
+        "mcp",
+        "paper",
+        "paper-memory",
+        "provider",
+        "vault",
+        "vector-compare",
+        "vector-restore",
+    ):
+        assert token not in commands
+
+
+def test_cli_help_advanced_documents_hidden_inventory():
+    module = importlib.import_module("knowledge_hub.interfaces.cli.main")
+    runner = CliRunner()
+
+    result = runner.invoke(module.cli, ["help", "advanced"])
+
+    assert result.exit_code == 0
+    assert "discover is part of the public default source lifecycle" in result.output
+    assert "agent, crawl, explore, vault" in result.output
+    assert "paper -> papers" in result.output
+    assert "eval -> labs eval" in result.output
+    assert "vector-source-metadata" in result.output
+    assert "help" in result.output
+    for token in (
+        "paper feedback",
+        "paper review-card-plan",
+        "paper repair-source",
+        "paper source-freshness",
+        "paper translate-all",
+        "paper summarize-all",
+        "paper sync-keywords",
+        "paper build-concepts",
+        "paper resummary-vault",
+    ):
+        assert token in result.output
+
+
+def test_cli_papers_help_hides_operator_commands():
+    module = importlib.import_module("knowledge_hub.interfaces.cli.main")
+    runner = CliRunner()
+
+    result = runner.invoke(module.cli, ["papers", "--help"])
+
+    assert result.exit_code == 0
+    assert "Usage:" in result.output
+    for token in ("add", "import-csv", "list", "info", "summary", "evidence", "memory", "related"):
+        assert token in result.output
+    for token in (
+        "review-card",
+        "repair-source",
+        "canon-quality-audit",
+        "source-freshness",
+        "sync-keywords",
+        "build-concepts",
+        "normalize-concepts",
+        "resummary-vault",
+        "translate-all",
+        "summarize-all",
+        "embed-all",
+    ):
+        assert token not in result.output
 
 
 def test_cli_labs_help_exposes_demoted_groups():

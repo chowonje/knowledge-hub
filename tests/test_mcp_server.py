@@ -1296,9 +1296,9 @@ def test_list_tools_contains_paper_lookup_and_summarize(monkeypatch):
     tools = asyncio.run(module.list_tools())
     names = {tool.name for tool in tools}
     assert "paper_lookup_and_summarize" in names
-    assert "build_paper_memory" in names
     assert "get_paper_memory_card" in names
     assert "search_paper_memory" in names
+    assert "build_paper_memory" not in names
 
 
 def test_foundry_conflict_list_response_shape():
@@ -1338,14 +1338,17 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "search_knowledge" in names
     assert "ask_knowledge" in names
     assert "build_task_context" in names
-    assert "run_agentic_query" in names
-    assert "learning_start_or_resume_topic" in names
-    assert "learning_get_session_state" in names
-    assert "learning_explain_topic" in names
-    assert "learning_checkpoint" in names
-    assert "crawl_web_ingest" in names
+    assert "run_agentic_query" not in names
+    assert "learning_start_or_resume_topic" not in names
+    assert "learning_get_session_state" not in names
+    assert "learning_explain_topic" not in names
+    assert "learning_checkpoint" not in names
+    assert "crawl_web_ingest" not in names
     assert "crawl_youtube_ingest" not in names
     assert "paper_lookup_and_summarize" in names
+    assert "discover_and_ingest" not in names
+    assert "run_paper_ingest_flow" not in names
+    assert "index_paper_keywords" not in names
     assert "learn_map" not in names
     assert "belief_list" not in names
     assert "ontology_profile_list" not in names
@@ -1353,9 +1356,9 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "ops_action_list" not in names
     assert "rag_report" not in names
     assert "learn_reinforce" not in names
-    assert "mcp_job_list" in names
-    assert "mcp_job_status" in names
-    assert "mcp_job_cancel" in names
+    assert "mcp_job_list" not in names
+    assert "mcp_job_status" not in names
+    assert "mcp_job_cancel" not in names
     assert "crawl_pipeline_run" not in names
     assert "transform_run" not in names
     assert "ask_graph" not in names
@@ -1387,6 +1390,21 @@ def test_list_tools_includes_labs_profile(monkeypatch):
     assert "transform_run" in names
     assert "ask_graph" in names
     assert "notebook_workbench_chat" in names
+
+
+def test_list_tools_all_profile_includes_labs_surface(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "all")
+    module = _import_mcp_server()
+
+    tools = asyncio.run(module.list_tools())
+    names = {tool.name for tool in tools}
+    assert "search_knowledge" in names
+    assert "run_agentic_query" in names
+    assert "discover_and_ingest" in names
+    assert "crawl_web_ingest" in names
+    assert "mcp_job_list" in names
+    assert "learning_start_or_resume_topic" in names
+    assert "build_paper_memory" in names
 
 
 def test_crawl_youtube_ingest_returns_schema_backed_payload():

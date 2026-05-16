@@ -11,6 +11,7 @@
 
 ```bash
 khub --help
+khub help advanced
 khub labs --help
 khub <command> --help
 khub <command> <subcommand> --help
@@ -19,7 +20,7 @@ khub <command> <subcommand> --help
 예:
 
 ```bash
-khub paper --help
+khub papers --help
 khub discover --help
 khub labs crawl --help
 khub labs paper --help
@@ -40,8 +41,8 @@ khub compare "비교 질문" --json
 khub trace "질문" --source paper --json
 khub agent context "작업 목표" --repo-path .
 khub discover "주제" -n 5 --judge
-khub paper list
-khub paper board-export --json
+khub papers list
+khub papers board-export --json
 khub index
 ```
 
@@ -74,26 +75,19 @@ khub inspect context <context-pack-id> --json
 ## 기본 Top-Level Help
 
 ```text
-khub agent
 khub ask
 khub compare
-khub config
-khub crawl
 khub discover
 khub doctor
-khub explore
-khub health
+khub help
 khub index
 khub inspect
-khub init
 khub labs
-khub mcp
-khub paper
+khub papers
 khub search
 khub setup
 khub status
 khub trace
-khub vault
 ```
 
 기본 `khub --help`는 representative core loop를 우선 노출합니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
@@ -101,16 +95,54 @@ khub vault
 ## Direct But Hidden Top-Level
 
 ```text
+khub agent
+khub config
+khub crawl
 khub dinger
 khub eval
+khub explore
+khub health
+khub init
 khub math-memory
+khub mcp
 khub os
+khub paper
 khub paper-memory
+khub provider
+khub vault
 khub vector-compare
 khub vector-restore
+khub vector-source-metadata
 ```
 
 `khub eval`은 hidden compatibility alias이고, canonical eval surface는 `khub labs eval`입니다.
+`khub paper`는 hidden compatibility alias이고, canonical public paper surface는 `khub papers`입니다.
+
+## Advanced Inventory
+
+`khub help advanced`는 default help에서 숨긴 operator/compatibility command inventory를 보여줍니다.
+
+정책:
+- `discover`는 public default source lifecycle에 남긴다.
+- `papers`는 public paper namespace이고 maintenance/remediation subcommands는 help에서 숨긴다.
+- `labs`는 callable하지만 default product promise가 아니다.
+- hidden/operator command는 compatibility를 위해 직접 실행 가능하다.
+
+Advanced/root hidden 예:
+
+```text
+khub init
+khub config
+khub provider
+khub health
+khub mcp
+khub agent
+khub crawl
+khub explore
+khub vault
+khub paper
+khub eval
+```
 
 ## 기본 Surface
 
@@ -546,36 +578,31 @@ khub mcp
 용도:
 - MCP 서버 실행
 
-### `khub paper`
+MCP tool discovery:
+- default profile: read/retrieval/context and paper lookup tools only (`search_knowledge`, `ask_knowledge`, `build_task_context`, paper search/detail/citation/reference helpers, paper-memory read helpers)
+- labs/all profile: learning, crawl ingest, agentic execution, paper build/index, async job, ops, ontology, conflict/merge, transform, and workbench tools
+
+```bash
+KHUB_MCP_PROFILE=default khub mcp
+KHUB_MCP_PROFILE=labs khub mcp
+```
+
+### `khub papers`
 
 ```text
-khub paper add
-khub paper board-export
-khub paper build-concepts
-khub paper download
-khub paper embed
-khub paper embed-all
-khub paper evidence
-khub paper feedback
-khub paper info
-khub paper import-csv
-khub paper list
-khub paper memory
-khub paper normalize-concepts
-khub paper related
-khub paper resummary-vault
-khub paper review
-khub paper review-card
-khub paper review-card-apply
-khub paper review-card-apply-batch
-khub paper review-card-plan
-khub paper review-card-export
-khub paper summary
-khub paper summarize
-khub paper summarize-all
-khub paper sync-keywords
-khub paper translate
-khub paper translate-all
+khub papers add
+khub papers board-export
+khub papers download
+khub papers embed
+khub papers evidence
+khub papers info
+khub papers import-csv
+khub papers list
+khub papers memory
+khub papers related
+khub papers summary
+khub papers summarize
+khub papers translate
 ```
 
 용도:
@@ -583,31 +610,31 @@ khub paper translate-all
 - 번역/요약/임베딩
 - 사용자용 읽기 surface (`summary`, `evidence`, `memory`, `related`)
 - Obsidian `KnowledgeOS Papers`용 read-only board payload export (`board-export`)
-- keyword/concept writeback
-- judge calibration feedback 기록
-- 빈약한 board/memory 카드 수동 품질 피드백 기록
+- keyword/concept writeback, judge calibration, repair/remediation command는 hidden operator path로 직접 실행 가능하지만 public help에서는 숨긴다.
 
 예:
 
 ```bash
-khub paper list
-khub paper board-export --json
-khub paper info 2401.12345
-khub paper summary --paper-id 2401.12345
-khub paper evidence --paper-id 2401.12345
-khub paper memory --paper-id 2401.12345
-khub paper related --paper-id 2401.12345
-khub paper download 2401.12345
-khub paper summarize 2401.12345
-khub paper translate 2401.12345
-khub paper embed 2401.12345
-khub paper import-csv --csv ./ai_papers_curated.csv --min-priority 5 --limit 10
-khub paper feedback 2401.12345 --label keep --reason "내 주제와 강하게 맞음"
-khub paper review-card 2401.12345 --issue empty_method --issue empty_evidence --note "보드 카드가 너무 얕음"
+khub papers list
+khub papers board-export --json
+khub papers info 2401.12345
+khub papers summary --paper-id 2401.12345
+khub papers evidence --paper-id 2401.12345
+khub papers memory --paper-id 2401.12345
+khub papers related --paper-id 2401.12345
+khub papers download 2401.12345
+khub papers summarize 2401.12345
+khub papers translate 2401.12345
+khub papers embed 2401.12345
+khub papers import-csv --csv ./ai_papers_curated.csv --min-priority 5 --limit 10
+```
+
+Hidden operator examples:
+
+```bash
 khub paper review-card-plan 2401.12345
 khub paper review-card-apply 2401.12345 --allow-external --provider openai --model gpt-5-nano
-khub paper review-card-apply-batch --issue empty_method --json
-khub paper review-card-export --issue empty_method --output ./paper_ids.txt
+khub paper repair-source --paper-id 2401.12345 --dry-run --json
 ```
 
 ### `khub paper-memory`
@@ -956,11 +983,13 @@ khub ask "질문"
 khub agent context "작업 목표" --repo-path .
 ```
 
+`agent`는 직접 실행 가능한 advanced workflow이며 default top-level help에서는 숨깁니다.
+
 ### 3. 논문 수집
 
 ```bash
 khub discover "주제" -n 5 --judge
-khub paper list
+khub papers list
 ```
 
 ### 4. 인덱싱
@@ -970,14 +999,14 @@ khub index
 khub index --vault-all --vault-clear
 ```
 
-### 5. judge calibration
+### 5. judge calibration (hidden operator)
 
 ```bash
 khub paper feedback <paper_id> --label keep --reason "..."
 khub paper feedback <paper_id> --label skip --reason "..."
 ```
 
-### 6. card quality triage
+### 6. card quality triage (hidden operator)
 
 ```bash
 khub paper review-card <paper_id> --issue empty_method --issue empty_evidence --note "..."

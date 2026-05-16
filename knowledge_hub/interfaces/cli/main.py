@@ -240,8 +240,10 @@ class _LazyCommandGroup(_ErrorHandlingGroup):
             return None
         module = import_module(spec[0])
         command = getattr(module, spec[1])
-        if spec[3]:
+        if spec[3] or getattr(command, "name", None) != str(cmd_name):
             command = copy(command)
+            command.name = str(cmd_name)
+        if spec[3]:
             command.hidden = True
         self.add_command(command, cmd_name)
         return command
@@ -303,26 +305,70 @@ def labs_group():
     """실험적이거나 비핵심 subsystems"""
 
 
+@click.group("help")
+def help_group():
+    """추가 command inventory"""
+
+
+@help_group.command("advanced")
+def help_advanced():
+    """operator/compatibility command inventory"""
+    click.echo("Knowledge Hub advanced command inventory")
+    click.echo("")
+    click.echo("Public default:")
+    click.echo("  discover, index, search, ask, inspect, compare, trace")
+    click.echo("  papers, doctor, setup, status, labs, help")
+    click.echo("")
+    click.echo("Policy:")
+    click.echo("  discover is part of the public default source lifecycle.")
+    click.echo("  labs commands are callable under khub labs and are not default product promises.")
+    click.echo("  hidden/operator commands remain directly invokable for compatibility.")
+    click.echo("")
+    click.echo("Setup / environment:")
+    click.echo("  init, config, provider, health, mcp")
+    click.echo("")
+    click.echo("Advanced workflows:")
+    click.echo("  agent, crawl, explore, vault")
+    click.echo("")
+    click.echo("Compatibility aliases:")
+    click.echo("  paper -> papers")
+    click.echo("  eval -> labs eval")
+    click.echo("")
+    click.echo("Hidden diagnostics / maintenance:")
+    click.echo("  dinger, math-memory, os, paper-memory")
+    click.echo("  vector-compare, vector-restore, vector-source-metadata")
+    click.echo("")
+    click.echo("Hidden paper operator examples:")
+    click.echo("  paper feedback, paper review-card, paper review-card-plan")
+    click.echo("  paper review-card-apply, paper review-card-apply-batch")
+    click.echo("  paper review-card-export, paper repair-source, paper repair-source-queue")
+    click.echo("  paper source-freshness, paper canon-quality-audit, paper normalize-concepts")
+    click.echo("  paper translate-all, paper summarize-all, paper embed-all")
+    click.echo("  paper sync-keywords, paper build-concepts, paper resummary-vault")
+
+
 @click.group("ops", cls=_LazyCommandGroup)
 def labs_ops_group():
     """고급 운영/리포트 commands"""
 cli.add_command(labs_group, "labs")
+cli.add_command(help_group, "help")
 
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.init_cmd", "init_cmd", "init")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.config_cmd", "config_group", "config")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.provider_cmd", "provider_group", "provider")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.init_cmd", "init_cmd", "init", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.config_cmd", "config_group", "config", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.provider_cmd", "provider_group", "provider", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.discover_cmd", "discover", "discover")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_cmd", "paper_group", "paper")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_cmd", "paper_group", "papers")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_cmd", "paper_group", "paper", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_memory_cmd", "paper_memory_group", "paper-memory", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.math_memory_cmd", "math_memory_group", "math-memory", hidden=True)
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.explore_cmd", "explore_group", "explore")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.explore_cmd", "explore_group", "explore", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "search", "search")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "ask", "ask")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "inspect_cmd", "inspect")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "compare_cmd", "compare")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "trace_cmd", "trace")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.index_cmd", "index_cmd", "index")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.health_cmd", "health_cmd", "health")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.health_cmd", "health_cmd", "health", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.doctor_cmd", "doctor_cmd", "doctor")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vector_compare_cmd", "vector_compare_cmd", "vector-compare", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vector_cmd", "vector_restore_cmd", "vector-restore", hidden=True)
@@ -333,11 +379,11 @@ cli.add_lazy_command(
     hidden=True,
 )
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.setup_cmd", "setup_cmd", "setup")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.crawl_cmd", "crawl_group", "crawl")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.crawl_cmd", "crawl_group", "crawl", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.dinger_cmd", "dinger_group", "dinger", hidden=True)
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.mcp_cmd", "mcp_cmd", "mcp")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vault_cmd", "vault_group", "vault")
-cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.agent_cmd", "agent_group", "agent")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.mcp_cmd", "mcp_cmd", "mcp", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.vault_cmd", "vault_group", "vault", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.agent_cmd", "agent_group", "agent", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.os_cmd", "os_group", "os", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.eval_cmd", "eval_compat_group", "eval", hidden=True)
 

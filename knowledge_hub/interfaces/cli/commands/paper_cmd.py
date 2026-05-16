@@ -141,9 +141,9 @@ def _validate_cli_payload(config, payload: dict[str, Any], schema_id: str) -> No
         raise click.ClickException(f"schema validation failed for {schema_id}: {problems}")
 
 
-@click.group("paper")
+@click.group("papers")
 def paper_group():
-    """논문 관리 (add/import-csv/download/translate/summarize/summary/evidence/memory/related/embed/list/info)"""
+    """논문 public surface (add/import-csv/list/info/summary/evidence/memory/related)"""
     pass
 
 
@@ -623,7 +623,7 @@ def _execute_canon_quality_remediation(
     return payload
 
 
-@paper_group.command("feedback")
+@paper_group.command("feedback", hidden=True)
 @click.argument("paper_id")
 @click.option("--label", type=click.Choice(["keep", "skip"]), required=True, help="수동 판단 라벨")
 @click.option("--reason", default="", help="판단 이유")
@@ -672,7 +672,7 @@ def paper_feedback(ctx, paper_id, label, reason, topic, title, source, as_json):
         console.print(f"[dim]{payload['reason']}[/dim]")
 
 
-@paper_group.command("review-card")
+@paper_group.command("review-card", hidden=True)
 @click.argument("paper_id")
 @click.option(
     "--issue",
@@ -744,7 +744,7 @@ def paper_review_card(ctx, paper_id, issues, note, title, source, as_json):
         )
 
 
-@paper_group.command("review-card-export")
+@paper_group.command("review-card-export", hidden=True)
 @click.option(
     "--issue",
     "issues",
@@ -799,7 +799,7 @@ def paper_review_card_export(ctx, issues, limit, output_path, as_json):
         )
 
 
-@paper_group.command("review-card-plan")
+@paper_group.command("review-card-plan", hidden=True)
 @click.argument("paper_id")
 @click.option(
     "--issue",
@@ -837,7 +837,7 @@ def paper_review_card_plan(ctx, paper_id, issues, from_log, as_json):
         )
 
 
-@paper_group.command("review-card-apply")
+@paper_group.command("review-card-apply", hidden=True)
 @click.argument("paper_id")
 @click.option(
     "--issue",
@@ -919,7 +919,7 @@ def paper_review_card_apply(ctx, paper_id, issues, from_log, provider, model, al
         console.print(f"- failed {action.get('code')}: {action.get('error')}")
 
 
-@paper_group.command("review-card-apply-batch")
+@paper_group.command("review-card-apply-batch", hidden=True)
 @click.option("--paper-id", "paper_ids", multiple=True, help="대상 paper id (여러 번 사용 가능)")
 @click.option(
     "--paper-id-file",
@@ -1070,7 +1070,7 @@ def paper_review_card_apply_batch(
         )
 
 
-@paper_group.command("canon-quality-audit")
+@paper_group.command("canon-quality-audit", hidden=True)
 @click.option(
     "--manifest",
     "manifest_path",
@@ -1191,7 +1191,7 @@ def paper_canon_quality_audit(ctx, manifest_path, output_dir, apply, provider, m
         )
 
 
-@paper_group.command("repair-source")
+@paper_group.command("repair-source", hidden=True)
 @click.option("--paper-id", "paper_ids", multiple=True, help="대상 paper id (여러 번 사용 가능)")
 @click.option(
     "--paper-id-file",
@@ -1257,7 +1257,7 @@ def paper_repair_source(ctx, paper_ids, paper_id_file, document_memory_parser, r
         )
 
 
-@paper_group.command("repair-source-queue")
+@paper_group.command("repair-source-queue", hidden=True)
 @click.option("--paper-id", "paper_ids", multiple=True, help="대상 paper id (여러 번 사용 가능)")
 @click.option(
     "--paper-id-file",
@@ -1617,7 +1617,7 @@ def paper_summarize(ctx, arxiv_id, provider, model, quick, allow_external, llm_m
     )
 
 
-@paper_group.command("review")
+@paper_group.command("review", hidden=True)
 @click.option("--bad-only", is_flag=True, help="품질이 나쁜 요약만 표시 (점수 50 미만)")
 @click.option("--threshold", "-t", default=50, help="나쁜 요약 기준 점수 (기본: 50)")
 @click.option("--field", "-f", default=None, help="분야 필터")
@@ -1675,7 +1675,7 @@ def paper_embed(ctx, arxiv_id):
 # ─────────────────────────────────────────────
 # paper translate-all
 # ─────────────────────────────────────────────
-@paper_group.command("translate-all")
+@paper_group.command("translate-all", hidden=True)
 @click.option("--limit", "-n", default=0, help="최대 번역 수 (0=전체)")
 @click.option("--field", "-f", default=None, help="분야 필터")
 @click.option("--provider", "-p", default=None, help="번역 프로바이더")
@@ -1698,7 +1698,7 @@ def paper_translate_all(ctx, limit, field, provider, model):
 # ─────────────────────────────────────────────
 # paper summarize-all
 # ─────────────────────────────────────────────
-@paper_group.command("summarize-all")
+@paper_group.command("summarize-all", hidden=True)
 @click.option("--limit", "-n", default=0, help="최대 요약 수 (0=전체)")
 @click.option("--field", "-f", default=None, help="분야 필터")
 @click.option("--quick", is_flag=True, help="간단 요약 (구조화 분석 대신 3-5문장)")
@@ -1776,7 +1776,7 @@ def paper_summarize_all(
 # ─────────────────────────────────────────────
 # paper embed-all
 # ─────────────────────────────────────────────
-@paper_group.command("embed-all")
+@paper_group.command("embed-all", hidden=True)
 @click.option("--all", "index_all", is_flag=True, help="이미 인덱싱된 논문도 재인덱싱")
 @click.pass_context
 def paper_embed_all(ctx, index_all):
@@ -1797,7 +1797,7 @@ def paper_embed_all(ctx, index_all):
 # ─────────────────────────────────────────────
 # paper sync-keywords
 # ─────────────────────────────────────────────
-@paper_group.command("sync-keywords")
+@paper_group.command("sync-keywords", hidden=True)
 @click.option("--force", is_flag=True, help="이미 키워드가 있는 논문도 재추출")
 @click.option("--limit", "-n", default=0, help="최대 처리 수 (0=전체)")
 @click.option("--claims/--no-claims", default=True, show_default=True, help="키워드와 함께 claim 추출/저장")
@@ -1846,7 +1846,7 @@ def paper_sync_keywords(ctx, force, limit, claims, allow_external, llm_mode):
 # ─────────────────────────────────────────────
 # paper build-concepts
 # ─────────────────────────────────────────────
-@paper_group.command("build-concepts")
+@paper_group.command("build-concepts", hidden=True)
 @click.option("--force", is_flag=True, help="기존 개념 노트도 재생성")
 @click.pass_context
 def paper_build_concepts(ctx, force):
@@ -1870,7 +1870,7 @@ def paper_build_concepts(ctx, force):
 # ─────────────────────────────────────────────
 # paper normalize-concepts
 # ─────────────────────────────────────────────
-@paper_group.command("normalize-concepts")
+@paper_group.command("normalize-concepts", hidden=True)
 @click.option("--dry-run", is_flag=True, help="변경 없이 탐지 결과만 표시")
 @click.option("--provider", default=None, help="개념 정규화용 LLM provider override")
 @click.option("--model", default=None, help="개념 정규화용 LLM model override")
@@ -1916,7 +1916,7 @@ def paper_info(ctx, arxiv_id):
 # ─────────────────────────────────────────────
 # paper resummary-vault
 # ─────────────────────────────────────────────
-@paper_group.command("resummary-vault")
+@paper_group.command("resummary-vault", hidden=True)
 @click.option("--bad-only", is_flag=True, default=True, help="부실한 요약만 재요약 (기본값)")
 @click.option("--all", "resummary_all", is_flag=True, help="모든 노트 재요약")
 @click.option("--threshold", "-t", default=60, help="재요약 기준 점수 (기본: 60)")
