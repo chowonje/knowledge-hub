@@ -53,10 +53,15 @@ rebuild derivatives, or promote fallback/locator/snippet/summary evidence.
 Durable diagnostics use safe path refs such as `papers_dir/<filename>` and must
 not record personal absolute workstation paths.
 
-Live operator evals may declare `corpusRequirements`. Missing or mismatched
-local-corpus artifacts skip the affected row with an explicit reason, and the
-report must show declared, evaluable, skipped, and coverage metrics next to the
-ordinary pass/fail and safety metrics.
+Live operator evals may declare `corpusRequirements`. When an operator-local
+live compare case omits them, the eval runner derives requirements from
+`expected_source_ids` and the repo-controlled corpus manifest instead of
+requiring a manual `.local.json` edit. Expected source ids that cannot be mapped
+to manifest entries are reported as `missingCorpusRequirements` and fail the
+gate. Missing or mismatched local-corpus artifacts skip the affected row with an
+explicit reason, and the report must show declared, evaluable, skipped, derived
+requirements, missing requirements, and coverage metrics next to the ordinary
+pass/fail and safety metrics.
 `optional_local_corpus` requirements are observation-only and do not block the
 case from running when absent.
 Required local-corpus skips are not strict-evidence failures for the row, but
@@ -72,7 +77,8 @@ must be explicit, opt-in, hash-verified after download, and separate from
 - Clean-clone CI can still test strict evidence mechanics with small fixtures.
 - Live corpus gates remain local-first and operator-controlled.
 - A `15/15` live compare result is only complete when paired with
-  `declared=15`, `evaluable=15`, and full corpus coverage.
+  `declared=15`, `evaluable=15`, full corpus coverage, and zero missing corpus
+  requirements.
 - New collaborators can inspect the manifest to know which local files and
   hashes are required for live paper gates.
 - Hash drift becomes an explicit corpus maintenance event rather than an

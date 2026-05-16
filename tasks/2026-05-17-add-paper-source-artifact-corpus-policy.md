@@ -11,6 +11,7 @@
 - Make `paper repair-source` use manifest-backed local artifact checks for source attachment.
 - Report `missing_artifact` and `hash_mismatch` diagnostics without DB writes or derivative rebuilds.
 - Add live compare declared/evaluable/skipped corpus coverage metrics.
+- Derive live compare corpus requirements from expected source ids and the repo-controlled manifest when ignored operator-local cases omit explicit requirements.
 - Update operator docs and durable records.
 
 ## Non-scope
@@ -24,6 +25,7 @@
 
 - Missing or hash-mismatched corpus artifacts are visible as structured diagnostics and do not write source paths or rebuild derivatives.
 - Live compare reports declared/evaluable/skipped coverage metrics alongside existing safety metrics, and the default gate fails when required corpus coverage is incomplete.
+- Missing `corpusRequirements` in ignored live compare cases are generated or validated from the manifest; expected source ids without manifest mappings are reported as missing requirements and fail the gate.
 - The manifest and ADR make the git-vs-local-corpus boundary explicit.
 - Full pytest no longer fails on an unrelated provider help expectation; the test protects `khub help advanced` as the hidden/operator inventory instead of widening default help.
 - Focused tests, `py_compile`, JSON validation, and diff hygiene pass.
