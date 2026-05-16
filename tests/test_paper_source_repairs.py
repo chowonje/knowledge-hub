@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -105,6 +106,24 @@ def _config(tmp_path: Path) -> Config:
     return config
 
 
+def _manifest_for_pdf(source_pdf: Path, *, expected_hash: str | None = None) -> dict:
+    if expected_hash is None:
+        expected_hash = "sha256:" + hashlib.sha256(source_pdf.read_bytes()).hexdigest()
+    return {
+        "schema": "knowledge-hub.corpus-manifest.v1",
+        "artifacts": [
+            {
+                "artifactId": "alexnet_krizhevsky_2012",
+                "sourceIds": ["alexnet-2012"],
+                "expectedFilename": source_pdf.name,
+                "expectedSourceContentHash": expected_hash,
+                "byteLength": source_pdf.stat().st_size if source_pdf.exists() else 0,
+                "corpusTier": "local_corpus",
+            }
+        ],
+    }
+
+
 def test_run_source_cleanup_queue_applies_and_writes_artifacts(tmp_path: Path):
     sqlite_db = _FakeSQLite()
     payload = run_source_cleanup_queue(
@@ -170,7 +189,7 @@ def test_repair_paper_sources_relinks_and_rebuilds(monkeypatch):
     assert ("paper-card-v2", "Batch_Normalization_c72acd36") in _PaperCardBuilder.calls
 
 
-def test_repair_paper_sources_plans_alexnet_configured_source_attach(tmp_path: Path):
+def test_repair_paper_sources_plans_alexnet_configured_source_attach(tmp_path: Path, monkeypatch):
     papers_dir = tmp_path / "papers"
     papers_dir.mkdir()
     source_pdf = papers_dir / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf"
@@ -182,6 +201,7 @@ def test_repair_paper_sources_plans_alexnet_configured_source_attach(tmp_path: P
         "pdf_path": "",
         "text_path": "",
     }
+    monkeypatch.setattr(repair_module, "load_corpus_manifest", lambda: _manifest_for_pdf(source_pdf))
 
     payload = repair_paper_sources(
         sqlite_db=sqlite_db,
@@ -195,11 +215,12 @@ def test_repair_paper_sources_plans_alexnet_configured_source_attach(tmp_path: P
     assert payload["status"] == "ok"
     item = payload["items"][0]
     assert item["paperId"] == "alexnet-2012"
-    assert item["action"] == "attach_configured_source_file"
+    assert item["action"] == "attach_manifest_source_artifact"
     assert item["decisionStatus"] == "resolved"
     assert item["repairStatus"] == "planned"
     assert item["newPdfPath"] == str(source_pdf)
     assert item["newTextPath"] == ""
+    assert item["artifact"]["artifactId"] == "alexnet_krizhevsky_2012"
     assert sqlite_db.get_paper("alexnet-2012")["pdf_path"] == ""
 
 
@@ -215,6 +236,7 @@ def test_repair_paper_sources_attaches_alexnet_source_and_rebuilds(tmp_path: Pat
         "pdf_path": "",
         "text_path": "",
     }
+    monkeypatch.setattr(repair_module, "load_corpus_manifest", lambda: _manifest_for_pdf(source_pdf))
     calls: list[tuple[str, str, bool]] = []
     monkeypatch.setattr(
         repair_module,
@@ -242,12 +264,82 @@ def test_repair_paper_sources_attaches_alexnet_source_and_rebuilds(tmp_path: Pat
     item = payload["items"][0]
     assert item["repairStatus"] == "ok"
     assert item["sourceChanged"] is True
+    assert item["artifact"]["status"] == "ok"
+    assert item["artifact"]["expectedSourceContentHash"].startswith("sha256:")
     updated = sqlite_db.get_paper("alexnet-2012")
     assert updated["pdf_path"] == str(source_pdf)
     assert updated["text_path"] == ""
     assert ("paper-memory", "alexnet-2012", False) in calls
     assert ("document-memory", "alexnet-2012", "raw") in _DocumentMemoryBuilder.calls
     assert ("paper-card-v2", "alexnet-2012") in _PaperCardBuilder.calls
+
+
+def test_repair_paper_sources_reports_missing_manifest_artifact_without_write(tmp_path: Path, monkeypatch):
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    missing_pdf = papers_dir / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf"
+    sqlite_db = _FakeSQLite()
+    sqlite_db.rows["alexnet-2012"] = {
+        "arxiv_id": "alexnet-2012",
+        "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+        "pdf_path": "",
+        "text_path": "",
+    }
+    monkeypatch.setattr(repair_module, "load_corpus_manifest", lambda: _manifest_for_pdf(missing_pdf, expected_hash="sha256:" + "0" * 64))
+
+    payload = repair_paper_sources(
+        sqlite_db=sqlite_db,
+        config=_ConfigWithPapersDir(papers_dir),
+        paper_ids=["alexnet-2012"],
+        dry_run=False,
+        rebuild=True,
+    )
+
+    item = payload["items"][0]
+    assert payload["status"] == "blocked"
+    assert payload["counts"]["blocked"] == 1
+    assert item["repairStatus"] == "missing_artifact"
+    assert item["sourceChanged"] is False
+    assert item["rebuildApplied"] is False
+    assert item["artifact"]["artifactId"] == "alexnet_krizhevsky_2012"
+    assert item["artifact"]["expectedSourceContentHash"] == "sha256:" + "0" * 64
+    assert item["artifact"]["searchedPaths"] == [f"papers_dir/{missing_pdf.name}"]
+    assert str(papers_dir) not in json.dumps(item["artifact"])
+    assert sqlite_db.get_paper("alexnet-2012")["pdf_path"] == ""
+    assert sqlite_db.upserts == []
+
+
+def test_repair_paper_sources_reports_manifest_hash_mismatch_without_write(tmp_path: Path, monkeypatch):
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    source_pdf = papers_dir / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf"
+    source_pdf.write_bytes(b"%PDF-1.4 alexnet different")
+    sqlite_db = _FakeSQLite()
+    sqlite_db.rows["alexnet-2012"] = {
+        "arxiv_id": "alexnet-2012",
+        "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+        "pdf_path": "",
+        "text_path": "",
+    }
+    monkeypatch.setattr(repair_module, "load_corpus_manifest", lambda: _manifest_for_pdf(source_pdf, expected_hash="sha256:" + "1" * 64))
+
+    payload = repair_paper_sources(
+        sqlite_db=sqlite_db,
+        config=_ConfigWithPapersDir(papers_dir),
+        paper_ids=["alexnet-2012"],
+        dry_run=False,
+        rebuild=True,
+    )
+
+    item = payload["items"][0]
+    assert payload["status"] == "blocked"
+    assert item["repairStatus"] == "hash_mismatch"
+    assert item["sourceChanged"] is False
+    assert item["rebuildApplied"] is False
+    assert item["artifact"]["expectedSourceContentHash"] == "sha256:" + "1" * 64
+    assert item["artifact"]["observedSourceContentHash"].startswith("sha256:")
+    assert sqlite_db.get_paper("alexnet-2012")["pdf_path"] == ""
+    assert sqlite_db.upserts == []
 
 
 def test_paper_repair_source_cli_reports_dry_run_plan(tmp_path: Path):
@@ -301,7 +393,7 @@ def test_paper_repair_source_cli_reports_dry_run_plan(tmp_path: Path):
     assert item["repairStatus"] == "planned"
 
 
-def test_paper_repair_source_cli_reports_alexnet_configured_source_plan(tmp_path: Path):
+def test_paper_repair_source_cli_reports_alexnet_configured_source_plan(tmp_path: Path, monkeypatch):
     config = _config(tmp_path)
     papers_dir = Path(config.papers_dir)
     papers_dir.mkdir(parents=True)
@@ -323,6 +415,7 @@ def test_paper_repair_source_cli_reports_alexnet_configured_source_plan(tmp_path
         }
     )
     db.close()
+    monkeypatch.setattr(repair_module, "load_corpus_manifest", lambda: _manifest_for_pdf(source_pdf))
 
     result = CliRunner().invoke(
         paper_group,
@@ -334,10 +427,11 @@ def test_paper_repair_source_cli_reports_alexnet_configured_source_plan(tmp_path
     payload = json.loads(result.output)
     assert payload["status"] == "ok"
     item = payload["items"][0]
-    assert item["action"] == "attach_configured_source_file"
+    assert item["action"] == "attach_manifest_source_artifact"
     assert item["decisionStatus"] == "resolved"
     assert item["repairStatus"] == "planned"
     assert item["newPdfPath"] == str(source_pdf)
+    assert item["artifact"]["artifactId"] == "alexnet_krizhevsky_2012"
     db = SQLiteDatabase(config.sqlite_path)
     assert db.get_paper("alexnet-2012")["pdf_path"] == ""
 

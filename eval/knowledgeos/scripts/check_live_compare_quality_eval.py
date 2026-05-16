@@ -16,6 +16,14 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from knowledge_hub.ai.answer_contracts import NON_EVIDENCE_SOURCE_SCHEMES, NON_EVIDENCE_SOURCE_TYPES
+from knowledge_hub.application.corpus_artifacts import (
+    corpus_entry_ref,
+    find_corpus_entry_for_source,
+    inspect_corpus_requirement,
+    load_corpus_manifest,
+    public_corpus_artifact_diagnostic,
+)
+from knowledge_hub.core.config import Config
 from knowledge_hub.domain.source_identity import (
     alias_groups_for_items,
     aliases_with_groups,
@@ -76,6 +84,62 @@ def _as_list(value: Any) -> list[str]:
         return []
     delimiter = "|" if "|" in text else ","
     return [_clean_text(item) for item in text.split(delimiter) if _clean_text(item)]
+
+
+def _case_corpus_requirements(case: dict[str, Any]) -> list[dict[str, Any]]:
+    raw = case.get("corpusRequirements") or case.get("corpus_requirements") or []
+    if not isinstance(raw, list):
+        return []
+    return [dict(item or {}) for item in raw if isinstance(item, dict)]
+
+
+def _case_expected_source_ids(case: dict[str, Any]) -> list[str]:
+    return _as_list(case.get("expected_source_ids") or case.get("expected_source_id"))
+
+
+def _case_corpus_requirements_or_derived(
+    case: dict[str, Any],
+    *,
+    manifest: dict[str, Any],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
+    requirements = _case_corpus_requirements(case)
+    if requirements:
+        return requirements, [], 0
+
+    expected_sources = _case_expected_source_ids(case)
+    if not expected_sources:
+        return [], [], 0
+
+    derived: list[dict[str, Any]] = []
+    missing: list[dict[str, Any]] = []
+    derived_by_artifact: dict[str, dict[str, Any]] = {}
+    for source_id in expected_sources:
+        entry = find_corpus_entry_for_source(source_id, manifest)
+        if entry is None:
+            missing.append(
+                {
+                    "sourceId": source_id,
+                    "status": "missing_manifest_entry",
+                    "reason": "expected source id has no corpus manifest entry",
+                }
+            )
+            continue
+        artifact_id = corpus_entry_ref(entry)
+        key = artifact_id.casefold()
+        if key in derived_by_artifact:
+            derived_by_artifact[key].setdefault("derivedFromExpectedSourceIds", []).append(source_id)
+            continue
+        requirement: dict[str, Any] = {
+            "artifactId": artifact_id,
+            "derivedFromExpectedSourceIds": [source_id],
+        }
+        if entry.get("corpusTier") not in (None, ""):
+            requirement["corpusTier"] = entry["corpusTier"]
+        if entry.get("minOffsetsRequired") not in (None, ""):
+            requirement["minOffsetsRequired"] = entry["minOffsetsRequired"]
+        derived_by_artifact[key] = requirement
+        derived.append(requirement)
+    return derived, missing, len(derived)
 
 
 def _read_cases(path: Path) -> list[dict[str, Any]]:
@@ -228,6 +292,84 @@ def _is_strict_source_span(item: dict[str, Any]) -> bool:
     return bool(_source_content_hash(item) and _has_strict_chars_locator(item))
 
 
+def _corpus_skip_reason(requirement_results: list[dict[str, Any]]) -> str:
+    statuses = {_clean_text(item.get("status")) for item in requirement_results}
+    if "hash_mismatch" in statuses:
+        return "skipped_hash_mismatch"
+    if "missing_manifest_entry" in statuses:
+        return "skipped_missing_manifest_entry"
+    if "missing_artifact" in statuses:
+        return "skipped_missing_corpus"
+    return "skipped_corpus_unavailable"
+
+
+def _evaluate_corpus_requirements(
+    case: dict[str, Any],
+    *,
+    manifest: dict[str, Any],
+    config: Any,
+    derive_requirements: bool = False,
+) -> dict[str, Any]:
+    if derive_requirements:
+        requirements, missing_requirements, derived_requirement_count = _case_corpus_requirements_or_derived(
+            case,
+            manifest=manifest,
+        )
+    else:
+        requirements = _case_corpus_requirements(case)
+        missing_requirements = []
+        derived_requirement_count = 0
+    results = [
+        public_corpus_artifact_diagnostic(inspect_corpus_requirement(requirement, manifest=manifest, config=config))
+        for requirement in requirements
+    ]
+    if missing_requirements:
+        return {
+            "evaluable": False,
+            "hardFailure": True,
+            "requirements": results,
+            "missingCorpusRequirements": missing_requirements,
+            "derivedCorpusRequirementCount": derived_requirement_count,
+            "skipReason": "missing_corpus_requirement",
+        }
+    if not requirements:
+        return {
+            "evaluable": True,
+            "requirements": [],
+            "derivedCorpusRequirementCount": 0,
+            "missingCorpusRequirements": [],
+        }
+    missing_or_mismatch = [item for item in results if _clean_text(item.get("status")) != "ok"]
+    if not missing_or_mismatch:
+        return {
+            "evaluable": True,
+            "requirements": results,
+            "derivedCorpusRequirementCount": derived_requirement_count,
+            "missingCorpusRequirements": [],
+        }
+    hard_fail = any(_clean_text(item.get("corpusTier")) == "repo_fixture" for item in missing_or_mismatch)
+    blocking = [
+        item
+        for item in missing_or_mismatch
+        if _clean_text(item.get("corpusTier")) in {"local_corpus", "repo_fixture", ""}
+    ]
+    if not hard_fail and not blocking:
+        return {
+            "evaluable": True,
+            "requirements": results,
+            "derivedCorpusRequirementCount": derived_requirement_count,
+            "missingCorpusRequirements": [],
+        }
+    return {
+        "evaluable": False,
+        "hardFailure": hard_fail,
+        "requirements": results,
+        "missingCorpusRequirements": [],
+        "derivedCorpusRequirementCount": derived_requirement_count,
+        "skipReason": _corpus_skip_reason(blocking or missing_or_mismatch),
+    }
+
+
 def _has_offset_locator(item: dict[str, Any]) -> bool:
     locator = _span_locator(item)
     if locator and OFFSET_LOCATOR_RE.match(locator):
@@ -298,7 +440,7 @@ def evaluate_case(
     default_min_supporting_span_count: int = 1,
 ) -> dict[str, Any]:
     case_id = _clean_text(case.get("case_id"))
-    expected_sources = _as_list(case.get("expected_source_ids") or case.get("expected_source_id"))
+    expected_sources = _case_expected_source_ids(case)
     expected_terms = _as_list(case.get("expected_dimension_terms") or case.get("expected_terms"))
     expected_statuses = {_normalize(item) for item in _as_list(case.get("expected_statuses"))}
     expected_statuses = {item for item in expected_statuses if item in VALID_STATUSES} or set(VALID_STATUSES)
@@ -481,9 +623,13 @@ def build_summary(
     min_dimension_coverage_rate: float,
     min_supporting_span_coverage_rate: float,
     min_trace_citation_coverage_rate: float,
+    min_corpus_coverage_rate: float,
     fail_on_insufficient: bool,
 ) -> dict[str, Any]:
     evaluated = [item for item in case_results if item.get("status") != "skipped"]
+    skipped_missing_corpus = [item for item in case_results if item.get("skipReason") == "skipped_missing_corpus"]
+    skipped_hash_mismatch = [item for item in case_results if item.get("skipReason") == "skipped_hash_mismatch"]
+    skipped_missing_manifest_entry = [item for item in case_results if item.get("skipReason") == "skipped_missing_manifest_entry"]
     failures = [item for item in evaluated if item.get("status") == "fail"]
     passes = [item for item in evaluated if item.get("status") == "pass"]
     expected_answerable_cases = [item for item in evaluated if bool(item.get("expectedAnswerable"))]
@@ -526,6 +672,7 @@ def build_summary(
         len(evaluated),
     )
     non_evidence_leak_count = sum(int(item.get("nonEvidenceLeakCount") or 0) for item in evaluated)
+    coverage_pct = _ratio(len(evaluated), len(cases))
     failure_category_counts = _count_values(
         [
             category
@@ -540,6 +687,11 @@ def build_summary(
             for diagnostic in list(item.get("provenanceDiagnostics") or [])
         ]
     )
+    missing_corpus_requirement_count = sum(
+        len(list(item.get("missingCorpusRequirements") or []))
+        for item in case_results
+    )
+    derived_corpus_requirement_count = sum(int(item.get("derivedCorpusRequirementCount") or 0) for item in case_results)
 
     errors: list[str] = []
     insufficient = len(evaluated) < int(min_cases)
@@ -557,12 +709,15 @@ def build_summary(
         ("dimension_coverage_rate", dimension_coverage_rate, min_dimension_coverage_rate),
         ("supporting_span_coverage_rate", supporting_span_coverage_rate, min_supporting_span_coverage_rate),
         ("trace_citation_coverage_rate", trace_citation_coverage_rate, min_trace_citation_coverage_rate),
+        ("corpus_coverage_rate", coverage_pct, min_corpus_coverage_rate),
     ]
     for key, value, minimum in thresholds:
         if value is not None and float(value) < float(minimum):
             errors.append(f"{key}_below_threshold:{value}<{minimum}")
     if non_evidence_leak_count:
         errors.append(f"non_evidence_leaks:{non_evidence_leak_count}")
+    if missing_corpus_requirement_count:
+        errors.append(f"missing_corpus_requirements:{missing_corpus_requirement_count}")
     if failures:
         errors.append(f"failed_cases:{len(failures)}")
 
@@ -577,8 +732,28 @@ def build_summary(
         "status": status,
         "casesPath": str(cases_path),
         "caseCount": len(cases),
+        "declaredCaseCount": len(cases),
         "evaluatedCaseCount": len(evaluated),
+        "evaluableCaseCount": len(evaluated),
         "skippedCaseCount": len(case_results) - len(evaluated),
+        "coveragePct": coverage_pct,
+        "coverage_pct": coverage_pct,
+        "skippedForMissingCorpus": len(skipped_missing_corpus),
+        "skipped_for_missing_corpus": len(skipped_missing_corpus),
+        "skippedForHashMismatch": len(skipped_hash_mismatch),
+        "skippedForMissingManifestEntry": len(skipped_missing_manifest_entry),
+        "missingCorpusRequirementCount": missing_corpus_requirement_count,
+        "derivedCorpusRequirementCount": derived_corpus_requirement_count,
+        "coverageReport": {
+            "passed": len(passes),
+            "evaluable": len(evaluated),
+            "declared": len(cases),
+            "coverage_pct": coverage_pct,
+            "skipped_for_missing_corpus": len(skipped_missing_corpus),
+            "skipped_for_hash_mismatch": len(skipped_hash_mismatch),
+            "missing_corpus_requirements": missing_corpus_requirement_count,
+            "derived_corpus_requirements": derived_corpus_requirement_count,
+        },
         "passedCaseCount": len(passes),
         "failedCaseCount": len(failures),
         "comparePacketPresentRate": compare_packet_present_rate,
@@ -608,6 +783,7 @@ def build_summary(
             "dimensionCoverageRate": float(min_dimension_coverage_rate),
             "supportingSpanCoverageRate": float(min_supporting_span_coverage_rate),
             "traceCitationCoverageRate": float(min_trace_citation_coverage_rate),
+            "corpusCoverageRate": float(min_corpus_coverage_rate),
         },
         "failOnInsufficient": bool(fail_on_insufficient),
         "errors": errors,
@@ -686,12 +862,53 @@ def run_live_compare_quality_eval(
     min_supporting_span_coverage_rate: float,
     min_trace_citation_coverage_rate: float,
     fail_on_insufficient: bool,
+    min_corpus_coverage_rate: float = 1.0,
+    corpus_manifest_path: str | Path | None = None,
+    config: Any | None = None,
+    derive_corpus_requirements: bool = False,
 ) -> dict[str, Any]:
     case_results: list[dict[str, Any]] = []
+    manifest = load_corpus_manifest(corpus_manifest_path)
+    active_config = config or Config()
     for case in cases:
         try:
+            corpus = _evaluate_corpus_requirements(
+                case,
+                manifest=manifest,
+                config=active_config,
+                derive_requirements=derive_corpus_requirements,
+            )
+            if not corpus.get("evaluable"):
+                hard_failure = bool(corpus.get("hardFailure"))
+                skip_reason = _clean_text(corpus.get("skipReason"))
+                missing_requirements = list(corpus.get("missingCorpusRequirements") or [])
+                error_reason = "missing_corpus_requirement" if missing_requirements else skip_reason
+                case_results.append(
+                    {
+                        "caseId": _clean_text(case.get("case_id")),
+                        "query": _clean_text(case.get("query")),
+                        "source": _clean_text(case.get("source") or case.get("source_type")),
+                        "status": "fail" if hard_failure else "skipped",
+                        "skipReason": skip_reason if not hard_failure else "",
+                        "corpusRequirements": corpus.get("requirements") or [],
+                        "missingCorpusRequirements": missing_requirements,
+                        "derivedCorpusRequirementCount": int(corpus.get("derivedCorpusRequirementCount") or 0),
+                        "errors": [f"corpus_requirement_failed:{error_reason}"] if hard_failure else [],
+                        "comparePacketPresent": False,
+                        "answerable": False,
+                        "expectedAnswerable": _as_bool(case.get("expected_answerable"), True),
+                        "nonEvidenceLeakCount": 0,
+                        "failureCategories": ["corpus_requirement_failed"] if hard_failure else [],
+                        "provenanceDiagnostics": [],
+                    }
+                )
+                continue
             payload = compare_runner(case)
-            case_results.append(evaluate_case(case, payload))
+            result = evaluate_case(case, payload)
+            result["corpusRequirements"] = corpus.get("requirements") or []
+            result["missingCorpusRequirements"] = list(corpus.get("missingCorpusRequirements") or [])
+            result["derivedCorpusRequirementCount"] = int(corpus.get("derivedCorpusRequirementCount") or 0)
+            case_results.append(result)
         except Exception as error:  # pragma: no cover - operator resilience
             case_results.append(
                 {
@@ -723,6 +940,7 @@ def run_live_compare_quality_eval(
         min_dimension_coverage_rate=min_dimension_coverage_rate,
         min_supporting_span_coverage_rate=min_supporting_span_coverage_rate,
         min_trace_citation_coverage_rate=min_trace_citation_coverage_rate,
+        min_corpus_coverage_rate=min_corpus_coverage_rate,
         fail_on_insufficient=fail_on_insufficient,
     )
 
@@ -732,7 +950,12 @@ def render_markdown(payload: dict[str, Any]) -> str:
         "# Live Compare Quality Eval",
         "",
         f"- status: `{payload.get('status')}`",
-        f"- cases: `{payload.get('evaluatedCaseCount')}` evaluated / `{payload.get('caseCount')}` loaded",
+        f"- cases: `{payload.get('evaluatedCaseCount')}` evaluated / `{payload.get('declaredCaseCount', payload.get('caseCount'))}` declared",
+        f"- coverage: `{payload.get('coveragePct')}`",
+        f"- skipped missing corpus: `{payload.get('skippedForMissingCorpus')}`",
+        f"- skipped hash mismatch: `{payload.get('skippedForHashMismatch')}`",
+        f"- derived corpus requirements: `{payload.get('derivedCorpusRequirementCount')}`",
+        f"- missing corpus requirements: `{payload.get('missingCorpusRequirementCount')}`",
         f"- compare packet present: `{payload.get('comparePacketPresentRate')}`",
         f"- answerable: `{payload.get('answerableRate')}`",
         f"- expected answerable pass: `{payload.get('expectedAnswerablePassRate')}`",
@@ -766,6 +989,11 @@ def render_markdown(payload: dict[str, Any]) -> str:
         lines.extend(["", "## Failed Cases", ""])
         for item in failed_cases:
             lines.append(f"- `{item.get('caseId')}`: {', '.join(item.get('errors') or [])}")
+    skipped_cases = [item for item in list(payload.get("cases") or []) if item.get("status") == "skipped"]
+    if skipped_cases:
+        lines.extend(["", "## Skipped Cases", ""])
+        for item in skipped_cases:
+            lines.append(f"- `{item.get('caseId')}`: `{item.get('skipReason')}`")
     return "\n".join(lines) + "\n"
 
 
@@ -782,9 +1010,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-dimension-coverage-rate", type=float, default=1.0)
     parser.add_argument("--min-supporting-span-coverage-rate", type=float, default=1.0)
     parser.add_argument("--min-trace-citation-coverage-rate", type=float, default=1.0)
+    parser.add_argument("--min-corpus-coverage-rate", type=float, default=1.0)
     parser.add_argument("--timeout-seconds", type=int, default=120)
     parser.add_argument("--allow-external", action="store_true", default=False)
     parser.add_argument("--fail-on-insufficient", action="store_true", default=False)
+    parser.add_argument("--corpus-manifest", default="")
     parser.add_argument("--json", action="store_true", dest="as_json", default=False)
     args = parser.parse_args(argv)
 
@@ -806,7 +1036,10 @@ def main(argv: list[str] | None = None) -> int:
         min_dimension_coverage_rate=float(args.min_dimension_coverage_rate),
         min_supporting_span_coverage_rate=float(args.min_supporting_span_coverage_rate),
         min_trace_citation_coverage_rate=float(args.min_trace_citation_coverage_rate),
+        min_corpus_coverage_rate=float(args.min_corpus_coverage_rate),
         fail_on_insufficient=bool(args.fail_on_insufficient),
+        corpus_manifest_path=args.corpus_manifest or None,
+        derive_corpus_requirements=True,
     )
     if args.out_json:
         out_json = Path(args.out_json).expanduser()

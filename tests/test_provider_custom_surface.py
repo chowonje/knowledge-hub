@@ -104,8 +104,14 @@ def test_provider_setup_codex_mcp_sets_answer_backend(tmp_path):
     assert config.get_nested("routing", "llm", "tasks", "rag_answer", "codex", "args") == "mcp-server"
 
 
-def test_root_help_promotes_provider_surface():
-    result = CliRunner().invoke(cli, ["--help"])
+def test_provider_surface_stays_in_advanced_help_inventory():
+    root_result = CliRunner().invoke(cli, ["--help"])
 
-    assert result.exit_code == 0
-    assert "provider" in result.output
+    assert root_result.exit_code == 0
+    assert "provider" not in root_result.output
+
+    advanced_result = CliRunner().invoke(cli, ["help", "advanced"])
+
+    assert advanced_result.exit_code == 0
+    assert "Setup / environment:" in advanced_result.output
+    assert "init, config, provider, health, mcp" in advanced_result.output

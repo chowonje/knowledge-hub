@@ -14,6 +14,13 @@
       "expected_min_supporting_span_count": 2,
       "expected_min_strict_span_count": 2,
       "expected_min_strict_source_coverage": 1.0,
+      "corpusRequirements": [
+        {
+          "artifactId": "<artifact-id-from-eval-knowledgeos-fixtures-corpus-manifest>",
+          "corpusTier": "local_corpus",
+          "minOffsetsRequired": true
+        }
+      ],
       "forbidden_non_evidence_support": true,
       "require_trace_citations": true,
       "expected_answerable": true,
