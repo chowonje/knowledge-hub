@@ -37,10 +37,15 @@ from knowledge_hub.web.crawl4ai_adapter import (
 from knowledge_hub.web.crawler import WebCrawler
 from knowledge_hub.web.ontology_extractor import WebOntologyExtractor
 from knowledge_hub.web.quality import (
+    QualityDoc,
     assess_quality,
     canonicalize_url,
     evaluate_batch,
     evaluate_sample_gate,
+)
+from knowledge_hub.web.prepared_source import (
+    PREPARED_SOURCE_RECORD_SCHEMA,
+    build_prepared_source_record_from_quality_doc,
 )
 from knowledge_hub.web.youtube_extractor import (
     extract_youtube_document,
@@ -51,6 +56,16 @@ from knowledge_hub.web import ingest_chunking as _ingest_chunking
 from knowledge_hub.web import ingest_pipeline_support as _ingest_pipeline
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.knowledge.entity_resolution import build_entity_merge_proposals_for_note
+from knowledge_hub.core.prepared_source_record import (
+    build_prepared_source_record_from_text,
+    prepared_archive_dir,
+    prepared_record_path,
+)
+from knowledge_hub.core.source_ledger_record import (
+    build_source_ledger_record,
+    source_ledger_archive_dir,
+    write_source_ledger_record,
+)
 
 
 def make_web_note_id(url: str) -> str:
@@ -81,6 +96,304 @@ def _raw_archive_dir(config: Config, raw_dir: str | None = None) -> Path:
         path = base / "web_raw"
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def _prepared_archive_dir(config: Config) -> Path:
+    return prepared_archive_dir(config.sqlite_path)
+
+
+def _prepared_record_path(archive: Path, record: dict[str, Any]) -> Path:
+    return prepared_record_path(archive, record)
+
+
+def _prepared_record_from_index_row(row: dict[str, Any]) -> dict[str, Any]:
+    record = row.get("prepared_source_record")
+    if isinstance(record, dict) and _prepared_record_is_indexable(record):
+        return dict(record)
+    for key in ("prepared_source_record_path", "prepared_record_path", "preparedRecordPath", "storage_ref"):
+        path_value = str(row.get(key) or "").strip()
+        if not path_value:
+            continue
+        try:
+            payload = json.loads(Path(path_value).expanduser().read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(payload, dict) and _prepared_record_is_indexable(payload):
+            return payload
+    return {}
+
+
+def _legacy_prepared_record_from_index_row(
+    row: dict[str, Any],
+    *,
+    prepared_archive: Path,
+    topic: str,
+    created_at: str,
+    quality_passed: bool,
+) -> tuple[dict[str, Any], str]:
+    """Create a prepared-source record for legacy web rows that predate the contract."""
+
+    note_id = str(row.get("note_id") or "").strip()
+    content = str(row.get("content") or "").strip()
+    if not note_id or not content:
+        return {}, ""
+
+    canonical_uri = str(row.get("url") or note_id).strip()
+    source_hash = str(row.get("source_content_hash") or "").strip() or source_hash_from_content(
+        content=content,
+        metadata=dict(row or {}),
+        identity=note_id or canonical_uri,
+    )
+    metadata_keys = (
+        "source_name",
+        "source_vendor",
+        "source_channel",
+        "source_channel_type",
+        "source_item_id",
+        "published_at",
+        "freshness_days",
+        "tags",
+        "media_platform",
+        "media_type",
+        "video_id",
+        "channel_name",
+        "channel_id",
+        "duration_sec",
+        "transcript_source",
+        "language",
+    )
+    metadata = {
+        key: row.get(key)
+        for key in metadata_keys
+        if row.get(key) not in (None, "", [], {})
+    }
+    if topic:
+        metadata["topic"] = topic
+
+    media_platform = str(metadata.get("media_platform") or "").strip().lower()
+    source_type = "youtube" if media_platform == "youtube" else "web"
+    quality_score = row.get("quality_score")
+    try:
+        score = float(quality_score if quality_score not in (None, "") else 0.0)
+    except Exception:
+        score = 0.0
+    quality_flags = ["legacy_reindex_prepared_source"]
+    if not quality_passed:
+        quality_flags.append("legacy_quality_unrated")
+
+    record = build_prepared_source_record_from_text(
+        source_id=note_id,
+        source_type=source_type,
+        canonical_uri=canonical_uri,
+        text=content,
+        title=str(row.get("title") or "").strip(),
+        source_content_hash=source_hash,
+        ledger_id=note_id,
+        raw_ref=str(row.get("file_path") or canonical_uri or note_id),
+        metadata=metadata,
+        processor="web_reindex_preparer",
+        parser="legacy_web_note",
+        created_at=created_at,
+        quality_passed=quality_passed,
+        quality_score=score,
+        quality_flags=quality_flags,
+        locator={"section": "Legacy web note", "source_ref": canonical_uri or note_id},
+    )
+    path = _prepared_record_path(prepared_archive, record)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    record["storage_ref"] = str(path)
+    path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+    return record, str(path)
+
+
+def _update_existing_web_vector_prepared_metadata(
+    *,
+    vector_db: Any,
+    row: dict[str, Any],
+    prepared_record: dict[str, Any],
+) -> int:
+    get_documents = getattr(vector_db, "get_documents", None)
+    update_metadata_by_id = getattr(vector_db, "update_metadata_by_id", None)
+    if not callable(get_documents) or not callable(update_metadata_by_id):
+        return 0
+
+    note_id = str(row.get("note_id") or prepared_record.get("source_id") or "").strip()
+    if not note_id:
+        return 0
+    patch = _prepared_vector_metadata(row, prepared_record)
+    if not patch:
+        return 0
+
+    updates: dict[str, dict[str, Any]] = {}
+    for document_id in (note_id, f"web:{note_id}"):
+        try:
+            existing = get_documents(
+                filter_dict={"source_type": "web", "document_id": document_id},
+                limit=100000,
+                include_ids=True,
+                include_documents=False,
+                include_metadatas=True,
+            )
+        except Exception:
+            continue
+        ids = [str(item) for item in list(existing.get("ids") or []) if str(item)]
+        metadatas = [dict(item or {}) for item in list(existing.get("metadatas") or [])]
+        for index, doc_id in enumerate(ids):
+            metadata = metadatas[index] if index < len(metadatas) else {}
+            next_metadata = dict(metadata)
+            next_metadata.update(patch)
+            updates[doc_id] = next_metadata
+
+    if not updates:
+        return 0
+    return int(update_metadata_by_id(updates) or 0)
+
+
+def _has_existing_web_vector_rows(*, vector_db: Any, row: dict[str, Any]) -> bool:
+    get_documents = getattr(vector_db, "get_documents", None)
+    if not callable(get_documents):
+        return False
+    note_id = str(row.get("note_id") or "").strip()
+    if not note_id:
+        return False
+    for document_id in (note_id, f"web:{note_id}"):
+        try:
+            existing = get_documents(
+                filter_dict={"source_type": "web", "document_id": document_id},
+                limit=1,
+                include_ids=True,
+                include_documents=False,
+                include_metadatas=False,
+            )
+        except Exception:
+            continue
+        if list(existing.get("ids") or []):
+            return True
+    return False
+
+
+def _prepared_record_is_indexable(record: dict[str, Any]) -> bool:
+    if str(record.get("schema") or "").strip() != PREPARED_SOURCE_RECORD_SCHEMA:
+        return False
+    quality = record.get("quality") if isinstance(record.get("quality"), dict) else {}
+    if quality.get("passed") is not True:
+        return False
+    lifecycle = record.get("lifecycle") if isinstance(record.get("lifecycle"), dict) else {}
+    if lifecycle.get("stale") is not False:
+        return False
+    return True
+
+
+def _prepared_record_was_legacy_unrated(record: dict[str, Any]) -> bool:
+    quality = record.get("quality") if isinstance(record.get("quality"), dict) else {}
+    flags = quality.get("flags") if isinstance(quality.get("flags"), list) else []
+    return "legacy_quality_unrated" in {str(item).strip() for item in flags if str(item).strip()}
+
+
+def _index_row_with_prepared_source(row: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    indexed_row = dict(row)
+    record = _prepared_record_from_index_row(row)
+    if not record:
+        return indexed_row, {}
+
+    prepared = record.get("prepared") if isinstance(record.get("prepared"), dict) else {}
+    metadata = record.get("metadata") if isinstance(record.get("metadata"), dict) else {}
+    prepared_text = str(prepared.get("text") or "").strip()
+    if prepared_text:
+        indexed_row["content"] = prepared_text
+    for source_key, row_key in (
+        ("canonical_uri", "url"),
+        ("source_content_hash", "source_content_hash"),
+        ("record_id", "prepared_record_id"),
+        ("schema", "prepared_record_schema"),
+        ("storage_ref", "prepared_record_path"),
+        ("source_type", "prepared_source_type"),
+    ):
+        value = str(record.get(source_key) or "").strip()
+        if value:
+            indexed_row[row_key] = value
+    title = str(record.get("title") or metadata.get("title") or "").strip()
+    if title:
+        indexed_row["title"] = title
+    for key in (
+        "source_name",
+        "source_vendor",
+        "source_channel",
+        "source_item_id",
+        "language",
+        "media_platform",
+        "media_type",
+        "video_id",
+        "channel_name",
+        "channel_id",
+        "duration_sec",
+        "transcript_source",
+    ):
+        value = metadata.get(key)
+        if value not in (None, "", [], {}):
+            indexed_row.setdefault(key, value)
+    if str(record.get("source_type") or "").strip().lower() == "youtube":
+        indexed_row.setdefault("media_platform", "youtube")
+    if not isinstance(indexed_row.get("transcript_segments"), list):
+        transcript_segments = _transcript_segments_from_prepared_record(record)
+        if transcript_segments:
+            indexed_row["transcript_segments"] = transcript_segments
+    raw_ref = str(record.get("raw_ref") or "").strip()
+    if raw_ref:
+        indexed_row.setdefault("file_path", raw_ref)
+    return indexed_row, record
+
+
+def _transcript_segments_from_prepared_record(record: dict[str, Any]) -> list[dict[str, Any]]:
+    prepared = record.get("prepared") if isinstance(record.get("prepared"), dict) else {}
+    segments = prepared.get("segments") if isinstance(prepared.get("segments"), list) else []
+    transcript_segments: list[dict[str, Any]] = []
+    for segment in segments:
+        if not isinstance(segment, dict):
+            continue
+        text = str(segment.get("text") or "").strip()
+        locator = segment.get("locator") if isinstance(segment.get("locator"), dict) else {}
+        if not text:
+            continue
+        item: dict[str, Any] = {"text": text}
+        if "timestamp_start_sec" in locator:
+            item["start_sec"] = locator.get("timestamp_start_sec")
+        if "timestamp_end_sec" in locator:
+            item["end_sec"] = locator.get("timestamp_end_sec")
+        transcript_segments.append(item)
+    return transcript_segments
+
+
+def _prepared_vector_metadata(row: dict[str, Any], record: dict[str, Any]) -> dict[str, Any]:
+    prepared = record.get("prepared") if isinstance(record.get("prepared"), dict) else {}
+    segments = prepared.get("segments") if isinstance(prepared.get("segments"), list) else []
+    payload: dict[str, Any] = {}
+    for source_key, meta_key in (
+        ("record_id", "prepared_record_id"),
+        ("schema", "prepared_record_schema"),
+        ("storage_ref", "prepared_record_path"),
+        ("source_type", "prepared_source_type"),
+    ):
+        value = str(record.get(source_key) or row.get(meta_key) or "").strip()
+        if value:
+            payload[meta_key] = value
+    text_hash = str(prepared.get("text_hash") or "").strip()
+    if text_hash:
+        payload["prepared_text_hash"] = text_hash
+    payload["prepared_segment_count"] = len(segments)
+    return payload
+
+
+def _vector_ids_by_metadata(vector_db: Any, filter_dict: dict[str, Any]) -> set[str]:
+    collection = getattr(vector_db, "collection", None)
+    if collection is None:
+        return set()
+    normalize = getattr(vector_db, "_normalize_where_filter", lambda value: value)
+    try:
+        results = collection.get(where=normalize(filter_dict), include=[])
+    except Exception:
+        return set()
+    return {str(item) for item in (results.get("ids", []) if isinstance(results, dict) else []) if str(item)}
 
 
 def _to_datetime(value: str | None, *, default_to_now: bool = True) -> datetime | None:
@@ -854,13 +1167,16 @@ class WebIngestService:
         docs_payload: list[str] = []
         em_meta: list[dict[str, Any]] = []
         ids: list[str] = []
+        replacement_vector_ids: set[str] = set()
 
         for row in records:
+            row, prepared_record = _index_row_with_prepared_source(row)
+            prepared_meta = _prepared_vector_metadata(row, prepared_record) if prepared_record else {}
             note_id = str(row.get("note_id") or "").strip()
             title = str(row.get("title") or "").strip() or note_id
             content = str(row.get("content") or "")
             canonical_url = str(row.get("url") or "").strip()
-            source_hash = source_hash_from_content(
+            source_hash = str(row.get("source_content_hash") or "").strip() or source_hash_from_content(
                 content=content,
                 metadata=dict(row or {}),
                 identity=note_id or canonical_url,
@@ -880,10 +1196,10 @@ class WebIngestService:
             transcript_source = str(row.get("transcript_source") or "").strip()
             if not note_id or not content.strip():
                 continue
-            delete_by_metadata = getattr(vector_db, "delete_by_metadata", None)
-            if callable(delete_by_metadata):
-                for document_id in (note_id, f"web:{note_id}"):
-                    delete_by_metadata({"source_type": "web", "document_id": document_id})
+            for document_id in (note_id, f"web:{note_id}"):
+                replacement_vector_ids.update(
+                    _vector_ids_by_metadata(vector_db, {"source_type": "web", "document_id": document_id})
+                )
 
             chunks = _resolve_web_chunks(
                 row,
@@ -905,7 +1221,7 @@ class WebIngestService:
                         "title": title,
                         "url": canonical_url,
                         "source_type": "web",
-                        "file_path": str(archive / f"{note_id}-{_slugify(title)}.md"),
+                        "file_path": str(row.get("file_path") or archive / f"{note_id}-{_slugify(title)}.md"),
                         "topic": topic,
                         "source_content_hash": source_hash,
                         "stale": 0,
@@ -939,6 +1255,7 @@ class WebIngestService:
                             "summary",
                             _build_context_summary(title, chunk_text, "", ""),
                         ),
+                        **prepared_meta,
                     }
                 )
                 ids.append(f"{note_id}_{chunk_index}")
@@ -989,6 +1306,11 @@ class WebIngestService:
 
             if pause_ms:
                 time.sleep(pause_ms / 1000.0)
+        if total_indexed == len(docs_payload) and replacement_vector_ids:
+            stale_ids = sorted(replacement_vector_ids - set(ids))
+            delete_by_id = getattr(vector_db, "delete_by_id", None)
+            if stale_ids and callable(delete_by_id):
+                delete_by_id(stale_ids)
         return total_indexed, ""
 
     def _pipeline_root(self) -> Path:
@@ -1060,13 +1382,16 @@ class WebIngestService:
         docs_payload: list[str] = []
         metadatas: list[dict[str, Any]] = []
         ids: list[str] = []
+        replacement_vector_ids: set[str] = set()
 
         for row in records:
+            row, prepared_record = _index_row_with_prepared_source(row)
+            prepared_meta = _prepared_vector_metadata(row, prepared_record) if prepared_record else {}
             note_id = str(row.get("note_id") or "").strip()
             title = str(row.get("title") or "").strip() or note_id
             content = str(row.get("content") or "")
             canonical_url = str(row.get("url") or "").strip()
-            source_hash = source_hash_from_content(
+            source_hash = str(row.get("source_content_hash") or "").strip() or source_hash_from_content(
                 content=content,
                 metadata=dict(row or {}),
                 identity=note_id or canonical_url,
@@ -1078,10 +1403,10 @@ class WebIngestService:
             transcript_source = str(row.get("transcript_source") or "").strip()
             if not note_id or not content.strip():
                 continue
-            delete_by_metadata = getattr(vector_db, "delete_by_metadata", None)
-            if callable(delete_by_metadata):
-                for document_id in (note_id, f"web:{note_id}"):
-                    delete_by_metadata({"source_type": "web", "document_id": document_id})
+            for document_id in (note_id, f"web:{note_id}"):
+                replacement_vector_ids.update(
+                    _vector_ids_by_metadata(vector_db, {"source_type": "web", "document_id": document_id})
+                )
 
             chunks = _resolve_web_chunks(
                 row,
@@ -1103,7 +1428,7 @@ class WebIngestService:
                         "title": title,
                         "url": canonical_url,
                         "source_type": "web",
-                        "file_path": str(archive / f"{note_id}-{_slugify(title)}.md"),
+                        "file_path": str(row.get("file_path") or archive / f"{note_id}-{_slugify(title)}.md"),
                         "topic": topic,
                         "source_content_hash": source_hash,
                         "stale": 0,
@@ -1129,6 +1454,7 @@ class WebIngestService:
                             "summary",
                             _build_context_summary(title, chunk_text, "", ""),
                         ),
+                        **prepared_meta,
                     }
                 )
                 ids.append(f"{note_id}_{chunk_index}")
@@ -1210,6 +1536,12 @@ class WebIngestService:
             )
             total_indexed += len(documents)
 
+        if total_indexed == len(docs_payload) and replacement_vector_ids:
+            stale_ids = sorted(replacement_vector_ids - set(ids))
+            delete_by_id = getattr(vector_db, "delete_by_id", None)
+            if stale_ids and callable(delete_by_id):
+                delete_by_id(stale_ids)
+
         return {
             "indexed_chunks": total_indexed,
             "vector_dim": int(vector_dim),
@@ -1261,6 +1593,8 @@ class WebIngestService:
         source_item_index = _build_source_item_index(source_items)
 
         archive = _archive_dir(self.config)
+        prepared_archive = _prepared_archive_dir(self.config)
+        source_ledger_archive = source_ledger_archive_dir(self.config.sqlite_path)
         strict_schema = bool(self.config.get_nested("validation", "schema", "strict", default=False))
         allowlist = self._domain_allowlist()
         warnings: list[str] = []
@@ -1677,6 +2011,57 @@ class WebIngestService:
                 note_id = make_web_note_id(canonical_url)
                 note_file = archive / f"{note_id}-{_slugify(str(doc.title or canonical_url))}.md"
                 note_file.write_text(cleaned_content, encoding="utf-8")
+                prepared_record: dict[str, Any] = {}
+                prepared_record_path = ""
+                try:
+                    quality_doc = QualityDoc(
+                        doc=doc,
+                        canonical_url=canonical_url,
+                        cleaned_content=cleaned_content,
+                        content_hash=content_sha,
+                        assessment=quality,
+                    )
+                    prepared_record = build_prepared_source_record_from_quality_doc(
+                        quality_doc,
+                        source_id=note_id,
+                        topic=topic_safe,
+                        run_id=run_id,
+                        created_at=now,
+                        ledger_id=record_id,
+                        raw_ref=str(normalized_path),
+                    )
+                    prepared_path = _prepared_record_path(prepared_archive, prepared_record)
+                    prepared_record["storage_ref"] = str(prepared_path)
+                    self._write_json(prepared_path, prepared_record)
+                    prepared_record_path = str(prepared_path)
+                    write_source_ledger_record(
+                        source_ledger_archive,
+                        build_source_ledger_record(
+                            ledger_id=record_id,
+                            source_id=note_id,
+                            source_type=str(prepared_record.get("source_type") or "web"),
+                            canonical_uri=canonical_url,
+                            source_content_hash=content_sha,
+                            raw_ref=str(raw_dir),
+                            normalized_ref=str(normalized_path),
+                            prepared_ref=prepared_record_path,
+                            indexed_ref=str(indexed_path),
+                            policy={
+                                "classification": "UNKNOWN",
+                                "external_allowed": False,
+                                "redaction_required": True,
+                                "reasons": ["source_policy_not_classification"],
+                            },
+                            metadata={
+                                "title": str(doc.title or canonical_url),
+                                "source_name": source_context["source_name"],
+                                "source_vendor": source_context["source_vendor"],
+                                "source_channel": source_context["source_channel"],
+                            },
+                        ),
+                    )
+                except Exception as error:
+                    warnings.append(f"prepared source record failed for {canonical_url}: {error}")
                 sqlite_db.upsert_note(
                     note_id=note_id,
                     title=str(doc.title or canonical_url),
@@ -1693,6 +2078,9 @@ class WebIngestService:
                         "source_content_hash": content_sha,
                         "crawl_run_id": run_id,
                         "crawl_job_id": job_id,
+                        "prepared_record_id": prepared_record.get("record_id", ""),
+                        "prepared_record_schema": prepared_record.get("schema", ""),
+                        "prepared_record_path": prepared_record_path,
                         "source_name": source_context["source_name"],
                         "source_type": source_context["source_type"],
                         "source_vendor": source_context["source_vendor"],
@@ -1782,6 +2170,10 @@ class WebIngestService:
                                 "published_at": source_context["published_at"],
                                 "freshness_days": source_context["freshness_days"],
                                 "tags": source_context["tags"],
+                                "file_path": str(note_file),
+                                "prepared_source_record": prepared_record,
+                                "prepared_source_record_path": prepared_record_path,
+                                **doc_extra_metadata,
                             }
                         ],
                         topic=topic_safe,
@@ -2242,6 +2634,8 @@ class WebIngestService:
         now = datetime.now(timezone.utc).isoformat()
         run_id = run_id or f"crawl_ingest_{uuid4().hex[:12]}"
         archive = _archive_dir(self.config)
+        prepared_archive = _prepared_archive_dir(self.config)
+        source_ledger_archive = source_ledger_archive_dir(self.config.sqlite_path)
         raw_archive = _raw_archive_dir(self.config, raw_dir=raw_dir) if save_raw else None
 
         stored = 0
@@ -2317,6 +2711,7 @@ class WebIngestService:
             "sampleGate": sample_gate,
             "gateAllowed": (quality_gate_allowed if quality_first else True),
         }
+        prepared_record_ids: list[str] = []
 
         with self._sqlite_session() as sqlite_db:
             # 1) local note storage (P0 local-only, dedupe + cleaned content)
@@ -2387,6 +2782,63 @@ class WebIngestService:
                     "quality": quality_doc.assessment.to_dict(),
                     **doc_extra_metadata,
                 }
+                prepared_record: dict[str, Any] = {}
+                prepared_path: Path | None = None
+                try:
+                    prepared_record = build_prepared_source_record_from_quality_doc(
+                        quality_doc,
+                        source_id=note_id,
+                        topic=topic_safe,
+                        run_id=run_id,
+                        created_at=now,
+                        ledger_id=note_id,
+                        raw_ref=str(file_path),
+                    )
+                    prepared_path = _prepared_record_path(prepared_archive, prepared_record)
+                    prepared_path.parent.mkdir(parents=True, exist_ok=True)
+                    prepared_record["storage_ref"] = str(prepared_path)
+                    prepared_path.write_text(
+                        json.dumps(prepared_record, ensure_ascii=False, indent=2),
+                        encoding="utf-8",
+                    )
+                    write_source_ledger_record(
+                        source_ledger_archive,
+                        build_source_ledger_record(
+                            ledger_id=note_id,
+                            source_id=note_id,
+                            source_type=str(prepared_record.get("source_type") or "web"),
+                            canonical_uri=quality_doc.canonical_url,
+                            source_content_hash=quality_doc.content_hash,
+                            raw_ref=str(file_path),
+                            normalized_ref=str(file_path),
+                            prepared_ref=str(prepared_path),
+                            policy={
+                                "classification": "UNKNOWN",
+                                "external_allowed": False,
+                                "redaction_required": True,
+                                "reasons": ["source_policy_not_classification"],
+                            },
+                            metadata={
+                                "title": str(doc.title or ""),
+                                "source_name": str(doc_extra_metadata.get("source_name") or ""),
+                                "source_vendor": str(doc_extra_metadata.get("source_vendor") or ""),
+                                "source_channel": str(doc_extra_metadata.get("source_channel") or ""),
+                            },
+                        ),
+                    )
+                except Exception as error:
+                    warnings.append(f"prepared source save failed for {doc.url}: {error}")
+                    prepared_record = {}
+                    prepared_path = None
+                if prepared_record and prepared_path is not None:
+                    prepared_record_ids.append(str(prepared_record.get("record_id") or ""))
+                    metadata.update(
+                        {
+                            "prepared_record_id": prepared_record.get("record_id"),
+                            "prepared_record_schema": PREPARED_SOURCE_RECORD_SCHEMA,
+                            "prepared_record_path": str(prepared_path),
+                        }
+                    )
                 sqlite_db.upsert_note(
                     note_id=note_id,
                     title=doc.title,
@@ -2406,6 +2858,9 @@ class WebIngestService:
                         "qualityApproved": bool(quality_doc.assessment.approved),
                         "qualityScore": float(quality_doc.assessment.score),
                         "source_content_hash": quality_doc.content_hash,
+                        "preparedRecordId": prepared_record.get("record_id"),
+                        "preparedRecordSchema": PREPARED_SOURCE_RECORD_SCHEMA,
+                        "preparedRecordPath": str(prepared_path or ""),
                         **doc_extra_metadata,
                     }
                 )
@@ -2417,6 +2872,8 @@ class WebIngestService:
                         "content": clean_content,
                         "quality_score": float(quality_doc.assessment.score),
                         "source_content_hash": quality_doc.content_hash,
+                        "prepared_source_record": prepared_record,
+                        "prepared_source_record_path": str(prepared_path or ""),
                         **doc_extra_metadata,
                     }
                 )
@@ -2428,6 +2885,9 @@ class WebIngestService:
 
             quality_summary["storedCount"] = stored
             quality_summary["unchangedCount"] = unchanged
+            quality_summary["preparedRecordSchema"] = PREPARED_SOURCE_RECORD_SCHEMA
+            quality_summary["preparedRecordCount"] = len([item for item in prepared_record_ids if item])
+            quality_summary["preparedRecordIds"] = [item for item in prepared_record_ids if item]
 
             ontology_candidates = stored_notes
             index_candidates = index_records
@@ -2754,11 +3214,17 @@ class WebIngestService:
         include_unrated: bool = False,
         shard_index: int = 0,
         shard_total: int = 1,
+        prepared_metadata_only: bool = False,
     ) -> dict[str, Any]:
         archive = _archive_dir(self.config)
+        prepared_archive = _prepared_archive_dir(self.config)
+        source_ledger_archive = source_ledger_archive_dir(self.config.sqlite_path)
+        created_at = datetime.now(timezone.utc).isoformat()
         scanned = 0
         selected = 0
         indexed_chunks = 0
+        prepared_records_created = 0
+        vector_metadata_updated = 0
         failed: list[dict[str, str]] = []
         topic_safe = str(topic or "").strip()
         shard_index_i = max(0, int(shard_index))
@@ -2771,6 +3237,9 @@ class WebIngestService:
                 "scanned": 0,
                 "selected": 0,
                 "indexedChunks": 0,
+                "preparedMetadataOnly": bool(prepared_metadata_only),
+                "preparedRecordsCreated": 0,
+                "vectorMetadataUpdated": 0,
                 "includeUnrated": bool(include_unrated),
                 "shardIndex": shard_index_i,
                 "shardTotal": shard_total_i,
@@ -2783,6 +3252,13 @@ class WebIngestService:
         offset = 0
         page_size = 500
         selected_records: list[dict[str, Any]] = []
+        metadata_updates: list[tuple[str, dict[str, Any]]] = []
+        metadata_only_vector_db: Any | None = None
+        if prepared_metadata_only:
+            try:
+                metadata_only_vector_db = self._create_vector_db()
+            except Exception as error:
+                failed.append({"url": "*reindex-approved*", "error": f"prepared metadata backfill failed: {error}"})
 
         with self._sqlite_session() as sqlite_db:
             while True:
@@ -2820,22 +3296,175 @@ class WebIngestService:
                     if not approved and include_unrated and quality:
                         continue
 
-                    selected_records.append(
-                        {
-                            "note_id": str(note.get("id") or ""),
-                            "url": str(metadata.get("url") or ""),
-                            "title": str(note.get("title") or ""),
-                            "content": str(note.get("content") or ""),
-                            "quality_score": float(quality.get("score") or 0.0),
-                            "source_content_hash": str(metadata.get("source_content_hash") or metadata.get("content_sha1") or metadata.get("content_sha256") or ""),
-                        }
-                    )
+                    record = {
+                        "note_id": str(note.get("id") or ""),
+                        "url": str(metadata.get("url") or ""),
+                        "title": str(note.get("title") or ""),
+                        "content": str(note.get("content") or ""),
+                        "quality_score": float(quality.get("score") or 0.0),
+                        "source_content_hash": str(
+                            metadata.get("source_content_hash")
+                            or metadata.get("content_sha1")
+                            or metadata.get("content_sha256")
+                            or ""
+                        ),
+                    }
+                    for key in (
+                        "file_path",
+                        "source_name",
+                        "source_vendor",
+                        "source_channel",
+                        "source_channel_type",
+                        "source_item_id",
+                        "published_at",
+                        "freshness_days",
+                        "tags",
+                        "media_platform",
+                        "media_type",
+                        "video_id",
+                        "channel_name",
+                        "channel_id",
+                        "duration_sec",
+                        "transcript_source",
+                        "transcript_segments",
+                        "chapters",
+                    ):
+                        if key in metadata:
+                            record[key] = metadata[key]
+                    if prepared_metadata_only:
+                        if metadata_only_vector_db is None:
+                            selected += 1
+                            continue
+                        if not _has_existing_web_vector_rows(vector_db=metadata_only_vector_db, row=record):
+                            failed.append(
+                                {
+                                    "url": str(record.get("url") or record.get("note_id") or "*legacy-web-note*"),
+                                    "error": "no matching web vector rows for prepared metadata backfill",
+                                }
+                            )
+                            selected += 1
+                            continue
+                    prepared_path = str(
+                        metadata.get("prepared_source_record_path")
+                        or metadata.get("prepared_record_path")
+                        or metadata.get("preparedRecordPath")
+                        or ""
+                    ).strip()
+                    if prepared_path and approved:
+                        record["prepared_source_record_path"] = prepared_path
+                        record["prepared_record_path"] = prepared_path
+                        existing_prepared = _prepared_record_from_index_row(record)
+                        if existing_prepared and not _prepared_record_was_legacy_unrated(existing_prepared):
+                            prepared_record = existing_prepared
+                        else:
+                            record.pop("prepared_source_record_path", None)
+                            record.pop("prepared_record_path", None)
+                    if approved and not _prepared_record_from_index_row(record):
+                        prepared_path = ""
+                        try:
+                            prepared_record, prepared_path = _legacy_prepared_record_from_index_row(
+                                record,
+                                prepared_archive=prepared_archive,
+                                topic=topic_safe,
+                                created_at=created_at,
+                                quality_passed=True,
+                            )
+                            if prepared_record and prepared_path:
+                                write_source_ledger_record(
+                                    source_ledger_archive,
+                                    build_source_ledger_record(
+                                        ledger_id=str(note.get("id") or ""),
+                                        source_id=str(note.get("id") or ""),
+                                        source_type=str(prepared_record.get("source_type") or "web"),
+                                        canonical_uri=str(record.get("url") or note.get("id") or ""),
+                                        source_content_hash=str(prepared_record.get("source_content_hash") or ""),
+                                        raw_ref=str(record.get("file_path") or record.get("url") or note.get("id") or ""),
+                                        prepared_ref=prepared_path,
+                                        policy={
+                                            "classification": "UNKNOWN",
+                                            "external_allowed": False,
+                                            "redaction_required": True,
+                                            "reasons": ["legacy_web_reindex_prepared_source"],
+                                        },
+                                        metadata={
+                                            "title": str(record.get("title") or ""),
+                                            "source_name": str(record.get("source_name") or ""),
+                                            "source_vendor": str(record.get("source_vendor") or ""),
+                                            "source_channel": str(record.get("source_channel") or ""),
+                                        },
+                                    ),
+                                )
+                                prepared_records_created += 1
+                                record["prepared_source_record"] = prepared_record
+                                record["prepared_source_record_path"] = prepared_path
+                                record["prepared_record_path"] = prepared_path
+                                metadata_updates.append(
+                                    (
+                                        str(note.get("id") or ""),
+                                        {
+                                            "prepared_record_id": prepared_record.get("record_id"),
+                                            "prepared_record_schema": PREPARED_SOURCE_RECORD_SCHEMA,
+                                            "prepared_record_path": prepared_path,
+                                            "prepared_source_record_path": prepared_path,
+                                            "prepared_source_type": prepared_record.get("source_type"),
+                                        },
+                                    )
+                                )
+                        except Exception as error:
+                            if prepared_path:
+                                try:
+                                    Path(prepared_path).unlink(missing_ok=True)
+                                except Exception:
+                                    pass
+                            failed.append(
+                                {
+                                    "url": str(record.get("url") or record.get("note_id") or "*legacy-web-note*"),
+                                    "error": f"prepared source record failed: {error}",
+                                }
+                            )
+                    selected_records.append(record)
                     selected += 1
 
                 if limit > 0 and selected >= int(limit):
                     break
 
-            if selected_records:
+            for note_id, patch in metadata_updates:
+                if not note_id:
+                    continue
+                row = sqlite_db.get_note(note_id)
+                if not row:
+                    continue
+                try:
+                    current = json.loads(row.get("metadata") or "{}")
+                except Exception:
+                    current = {}
+                if not isinstance(current, dict):
+                    current = {}
+                current.update({key: value for key, value in patch.items() if value not in (None, "")})
+                sqlite_db.conn.execute(
+                    "UPDATE notes SET metadata = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+                    (json.dumps(current, ensure_ascii=False, default=str), note_id),
+                )
+            if metadata_updates:
+                sqlite_db.conn.commit()
+
+            if selected_records and prepared_metadata_only:
+                try:
+                    vector_db = metadata_only_vector_db
+                    if vector_db is None:
+                        raise RuntimeError("vector database unavailable for prepared metadata backfill")
+                    for record in selected_records:
+                        prepared_record = _prepared_record_from_index_row(record)
+                        if not prepared_record:
+                            continue
+                        vector_metadata_updated += _update_existing_web_vector_prepared_metadata(
+                            vector_db=vector_db,
+                            row=record,
+                            prepared_record=prepared_record,
+                        )
+                except Exception as error:
+                    failed.append({"url": "*reindex-approved*", "error": f"prepared metadata backfill failed: {error}"})
+            elif selected_records:
                 try:
                     indexed_chunks, _ = self._index_web_records(
                         selected_records,
@@ -2852,6 +3481,9 @@ class WebIngestService:
                 "scanned": scanned,
                 "selected": selected,
                 "indexedChunks": indexed_chunks,
+                "preparedMetadataOnly": bool(prepared_metadata_only),
+                "preparedRecordsCreated": prepared_records_created,
+                "vectorMetadataUpdated": vector_metadata_updated,
                 "shardIndex": shard_index_i,
                 "shardTotal": shard_total_i,
                 "includeUnrated": bool(include_unrated),

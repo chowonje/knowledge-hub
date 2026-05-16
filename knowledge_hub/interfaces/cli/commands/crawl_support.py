@@ -390,6 +390,7 @@ def build_reindex_worker_cmd(
     topic: str,
     limit: int,
     include_unrated: bool,
+    prepared_metadata_only: bool = False,
 ) -> list[str]:
     cmd = [sys.executable, "-m", CANONICAL_CLI_MODULE]
     config_path = getattr(base_ctx.obj["khub"], "_config_path", None)
@@ -411,6 +412,8 @@ def build_reindex_worker_cmd(
         cmd += ["--limit", str(limit)]
     if include_unrated:
         cmd += ["--include-unrated"]
+    if prepared_metadata_only:
+        cmd += ["--prepared-metadata-only"]
 
     return cmd
 
