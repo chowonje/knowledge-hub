@@ -65,7 +65,7 @@ def test_registry_source_hash_mismatch_marks_record_stale(tmp_path):
     packet = {
         "schema": "knowledge-hub.evidence-packet.v1",
         "packet_id": "epkt_stale",
-        "spans": [{"span_id": "span_1", "source_id": "src_1", "content_hash": "sha256:old"}],
+        "spans": [{"span_id": "span_1", "source_id": "src_1", "source_content_hash": "sha256:old"}],
     }
     register_packet(db, packet)
 
@@ -89,7 +89,7 @@ def test_registry_source_hash_match_marks_current_staleness_fresh(tmp_path):
     packet = {
         "schema": "knowledge-hub.evidence-packet.v1",
         "packet_id": "epkt_fresh",
-        "spans": [{"span_id": "span_1", "source_id": "src_1", "content_hash": "sha256:aaa"}],
+        "spans": [{"span_id": "span_1", "source_id": "src_1", "source_content_hash": "sha256:aaa"}],
     }
     register_packet(db, packet)
 
@@ -103,6 +103,48 @@ def test_registry_source_hash_match_marks_current_staleness_fresh(tmp_path):
     assert lookup["status"] == "ok"
     assert lookup["currentStaleness"]["status"] == "fresh"
     assert lookup["currentStaleness"]["matchedSourceIds"] == ["src_1"]
+
+
+def test_registry_does_not_promote_snippet_content_hash_to_source_revision(tmp_path):
+    db = _db(tmp_path)
+    packet = {
+        "schema": "knowledge-hub.evidence-packet.v1",
+        "packet_id": "epkt_snippet_hash",
+        "spans": [
+            {
+                "span_id": "span_1",
+                "source_id": "src_1",
+                "content_hash": "sha256:snippet",
+                "char_start": 0,
+                "char_end": 12,
+                "text": "source text",
+            }
+        ],
+    }
+
+    record = register_packet(db, packet)
+    lookup = resolve_registry_lookup(
+        db,
+        "packet",
+        "epkt_snippet_hash",
+        current_source_refs=[{"sourceId": "src_1", "sourceContentHash": "sha256:snippet"}],
+    )
+
+    assert record["sourceRevisionHash"] == ""
+    assert record["sourceRefs"] == [
+        {
+            "sourceId": "src_1",
+            "sourceContentHash": "",
+            "sourceType": "",
+            "documentId": "",
+            "chunkId": "",
+            "spanId": "span_1",
+        }
+    ]
+    assert lookup["status"] == "ok"
+    assert lookup["currentStaleness"]["status"] == "unchecked"
+    assert lookup["currentStaleness"]["reason"] == "registry_record_has_no_bound_source_hashes"
+    assert lookup["currentStaleness"]["matchedSourceIds"] == []
 
 
 def test_answer_trace_registry_keeps_citations_linked_to_evidence_spans(tmp_path):

@@ -64,7 +64,7 @@ _CLAIM_HEAVY_QUERY_RE = re.compile(
     r"\b(compare|comparison|versus|vs|difference|benchmark|metric|evaluate|evaluation|performance|accuracy)\b|비교|차이|결과|평가|성능|지표",
     re.IGNORECASE,
 )
-_CHARS_LOCATOR_RE = re.compile(r"(?:chars?|bytes?)[:=](\d+)\s*[-:]\s*(\d+)", re.IGNORECASE)
+_CHARS_LOCATOR_RE = re.compile(r"^chars:(\d+)-(\d+)$")
 _BLOCK_PREFIX_RE = re.compile(r"^\s*\[Block\s+\d+\]\s*", re.IGNORECASE)
 
 
@@ -108,7 +108,7 @@ def _first_int_value(values: list[Any]) -> int | None:
 
 
 def _offsets_from_locator(locator: Any) -> tuple[int | None, int | None]:
-    match = _CHARS_LOCATOR_RE.search(str(locator or ""))
+    match = _CHARS_LOCATOR_RE.fullmatch(str(locator or "").strip())
     if not match:
         return None, None
     try:
@@ -1443,8 +1443,6 @@ class AskV2Service:
         if source_hash:
             payload["source_content_hash"] = source_hash
             payload["sourceContentHash"] = source_hash
-            payload.setdefault("content_hash", source_hash)
-            payload.setdefault("contentHash", source_hash)
         offset_locator = self._resolved_offset_locator(anchor=payload, unit=unit) if unit else self._explicit_offset_locator(payload)
         if offset_locator:
             payload["span_locator"] = offset_locator
@@ -1475,6 +1473,12 @@ class AskV2Service:
                 or payload.get("sourceContentHash")
                 or source_hash
             )
+            snippet_hash = _clean_text(
+                payload.get("snippet_hash")
+                or payload.get("snippetHash")
+                or payload.get("content_hash")
+                or payload.get("contentHash")
+            )
             anchors.append(
                 {
                     "anchorId": anchor_id,
@@ -1494,10 +1498,10 @@ class AskV2Service:
                     "char_end": payload.get("char_end") if payload.get("char_end") is not None else payload.get("charEnd"),
                     "sourceContentHash": anchor_source_hash,
                     "source_content_hash": anchor_source_hash,
-                    "contentHash": anchor_source_hash,
-                    "content_hash": anchor_source_hash,
-                    "snippetHash": _clean_text(payload.get("snippet_hash") or payload.get("snippetHash")),
-                    "snippet_hash": _clean_text(payload.get("snippet_hash") or payload.get("snippetHash")),
+                    "contentHash": snippet_hash,
+                    "content_hash": snippet_hash,
+                    "snippetHash": snippet_hash,
+                    "snippet_hash": snippet_hash,
                     "citationLabel": f"S{index}",
                     "citation_label": f"S{index}",
                     "quote": str(payload.get("excerpt") or payload.get("quote") or "")[:500],

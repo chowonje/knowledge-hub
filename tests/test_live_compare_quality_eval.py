@@ -59,6 +59,7 @@ def _compare_packet(*, source_type: str = "paper", status: str = "conflict"):
                         "sourceId": "paper:a#0",
                         "sourceType": source_type,
                         "contentHash": "sha256:a",
+                        "sourceContentHash": "sha256:a-source",
                         "spanLocator": "chars:1-20",
                         "strictSpanBacked": True,
                         "fallbackSpan": False,
@@ -69,6 +70,7 @@ def _compare_packet(*, source_type: str = "paper", status: str = "conflict"):
                         "sourceId": "paper:b#0",
                         "sourceType": source_type,
                         "contentHash": "sha256:b",
+                        "sourceContentHash": "sha256:b-source",
                         "spanLocator": "chars:30-50",
                         "strictSpanBacked": True,
                         "fallbackSpan": False,
@@ -103,6 +105,7 @@ def _locator_only_packet():
             "sourceId": "paper:a#0",
             "sourceType": "paper",
             "contentHash": "sha256:a",
+            "sourceContentHash": "sha256:a-source",
             "spanLocator": "unit:abstract",
             "strictSpanBacked": False,
             "fallbackSpan": False,
@@ -133,6 +136,29 @@ def test_live_compare_quality_eval_passes_expected_compare_packet():
     assert result["strictSpanBackedCount"] == 2
     assert result["strictSpanCoverage"] == 1.0
     assert result["traceCitationCoverage"] == 1.0
+
+
+def test_live_compare_quality_eval_recomputes_strict_spans_from_source_provenance():
+    module = _load_module()
+    packet = _compare_packet()
+    for span in packet["dimensions"][0]["supportingSpans"]:
+        span.pop("sourceContentHash", None)
+    case = {
+        "case_id": "compare_legacy_strict_flags",
+        "query": "compare",
+        "expected_source_ids": ["paper:a#0", "paper:b#0"],
+        "expected_dimension_terms": ["accuracy"],
+        "expected_statuses": ["conflict"],
+        "expected_min_supporting_span_count": 2,
+    }
+
+    result = module.evaluate_case(case, _payload(compare_packet=packet))
+
+    assert result["status"] == "fail"
+    assert result["expectedSourceCoverage"] == 1.0
+    assert result["expectedStrictSourceCoverage"] == 0.0
+    assert result["strictSpanBackedCount"] == 0
+    assert "expected_strict_source_coverage_below_min" in result["errors"]
 
 
 def test_live_compare_quality_eval_fails_missing_compare_packet():
@@ -209,6 +235,7 @@ def test_live_compare_quality_eval_requires_expected_sources_in_supporting_spans
             "sourceId": "paper:a#0",
             "sourceType": "paper",
             "contentHash": "sha256:a",
+            "sourceContentHash": "sha256:a-source",
             "spanLocator": "chars:1-20",
             "strictSpanBacked": True,
             "fallbackSpan": False,
@@ -241,6 +268,7 @@ def test_live_compare_quality_eval_resolves_expected_source_aliases_from_payload
             "sourceId": "1512.03385",
             "sourceType": "paper",
             "contentHash": "sha256:a",
+            "sourceContentHash": "sha256:a-source",
             "spanLocator": "chars:1-20",
             "strictSpanBacked": True,
             "fallbackSpan": False,
@@ -251,6 +279,7 @@ def test_live_compare_quality_eval_resolves_expected_source_aliases_from_payload
             "sourceId": "2010.11929",
             "sourceType": "paper",
             "contentHash": "sha256:b",
+            "sourceContentHash": "sha256:b-source",
             "spanLocator": "chars:30-50",
             "strictSpanBacked": True,
             "fallbackSpan": False,
@@ -291,6 +320,40 @@ def test_live_compare_quality_eval_resolves_expected_source_aliases_from_payload
     assert "alias_resolved_expected_source" in result["provenanceDiagnostics"]
 
 
+def test_live_compare_quality_eval_does_not_resolve_sources_from_snippet_hashes():
+    module = _load_module()
+    source_hash = "sha256:" + ("a" * 64)
+    packet = _compare_packet()
+    packet["dimensions"][0]["supportingSpans"] = [
+        {
+            "spanRef": "span_hash",
+            "sourceId": "opaque-source",
+            "sourceType": "paper",
+            "contentHash": source_hash,
+            "spanLocator": "chars:1-20",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "A accuracy",
+        }
+    ]
+    case = {
+        "case_id": "compare_snippet_hash_alias",
+        "query": "compare",
+        "expected_source_ids": [source_hash],
+        "expected_dimension_terms": ["accuracy"],
+        "expected_min_supporting_span_count": 1,
+        "expected_min_strict_span_count": 1,
+    }
+
+    result = module.evaluate_case(case, _payload(compare_packet=packet, sources=[]))
+
+    assert result["status"] == "fail"
+    assert result["expectedSourceCoverage"] == 0.0
+    assert result["expectedStrictSourceCoverage"] == 0.0
+    assert result["strictSpanBackedCount"] == 0
+    assert "expected_source_coverage_incomplete" in result["errors"]
+
+
 def test_live_compare_quality_eval_does_not_overmatch_similar_source_aliases():
     module = _load_module()
     packet = _compare_packet()
@@ -300,6 +363,7 @@ def test_live_compare_quality_eval_does_not_overmatch_similar_source_aliases():
             "sourceId": "2501.00001",
             "sourceType": "paper",
             "contentHash": "sha256:a",
+            "sourceContentHash": "sha256:a-source",
             "spanLocator": "chars:1-20",
             "strictSpanBacked": True,
             "fallbackSpan": False,
@@ -337,6 +401,7 @@ def test_live_compare_quality_eval_requires_strict_source_coverage_for_answerabl
         "sourceId": "paper:b#0",
         "sourceType": "paper",
         "contentHash": "sha256:b",
+        "sourceContentHash": "sha256:b-source",
         "spanLocator": "chars:30-50",
         "strictSpanBacked": False,
         "fallbackSpan": True,
@@ -425,6 +490,7 @@ def test_live_compare_quality_eval_respects_expected_min_strict_source_coverage_
         "sourceId": "paper:b#0",
         "sourceType": "paper",
         "contentHash": "sha256:b",
+        "sourceContentHash": "sha256:b-source",
         "spanLocator": "chars:30-50",
         "strictSpanBacked": False,
         "fallbackSpan": True,

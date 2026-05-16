@@ -49,10 +49,17 @@ def _is_non_evidence_ref(item: dict[str, Any]) -> bool:
     return bool(scheme and scheme in NON_EVIDENCE_SOURCE_SCHEMES)
 
 
+_STRICT_CHARS_LOCATOR_RE = re.compile(r"^chars:\d+-\d+$")
+
+
+def _source_content_hash(item: dict[str, Any]) -> str:
+    return _clean_text(item.get("source_content_hash") or item.get("sourceContentHash"))
+
+
 def _content_hash(item: dict[str, Any]) -> str:
     return _clean_text(
-        item.get("source_content_hash")
-        or item.get("sourceContentHash")
+        item.get("snippet_hash")
+        or item.get("snippetHash")
         or item.get("content_hash")
         or item.get("contentHash")
     )
@@ -95,21 +102,10 @@ def _span_offset_available(item: dict[str, Any]) -> bool:
     explicit = _bool_or_none(
         item.get("spanOffsetAvailable") if "spanOffsetAvailable" in item else item.get("span_offset_available")
     )
-    if explicit is not None:
-        return explicit
+    if explicit is False:
+        return False
     locator = _span_locator(item)
-    if re.search(r"(?:chars?|bytes?)[:=]\d+\s*[-:]\s*\d+", locator, re.IGNORECASE):
-        return True
-    if re.search(r"\b\d+\s*[-:]\s*\d+\b", locator):
-        return True
-    return bool(
-        _clean_text(
-            item.get("char_start") or item.get("charStart") or item.get("start_offset") or item.get("startOffset")
-        )
-        and _clean_text(
-            item.get("char_end") or item.get("charEnd") or item.get("end_offset") or item.get("endOffset")
-        )
-    )
+    return bool(_STRICT_CHARS_LOCATOR_RE.fullmatch(locator))
 
 
 def _source_document_id(item: dict[str, Any]) -> str:
@@ -132,7 +128,7 @@ def _has_strict_span_provenance(item: dict[str, Any]) -> bool:
     if _bool_or_none(item.get("fallbackSpan") if "fallbackSpan" in item else item.get("fallback_span")) is True:
         return False
     source_id = _clean_text(item.get("source_id") or item.get("sourceId") or item.get("target"))
-    return bool(source_id and _content_hash(item) and _span_offset_available(item) and not _is_stale_span(item))
+    return bool(source_id and _source_content_hash(item) and _span_offset_available(item) and not _is_stale_span(item))
 
 
 def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
@@ -140,18 +136,19 @@ def _span_ref(item: dict[str, Any], *, fallback_index: int) -> dict[str, Any]:
     source_id = source_id_for_strict or _clean_text(item.get("spanRef"))
     span_ref = _clean_text(item.get("span_ref") or item.get("spanRef")) or f"span:{fallback_index}"
     content_hash = _content_hash(item)
+    source_content_hash = _source_content_hash(item)
     span_locator = _span_locator(item)
     span_offset_available = _span_offset_available({**item, "spanLocator": span_locator})
     fallback_span = _bool_or_none(item.get("fallbackSpan") if "fallbackSpan" in item else item.get("fallback_span")) is True
     strict_span_backed = False if fallback_span else _has_strict_span_provenance(
-        {**item, "sourceId": source_id_for_strict, "contentHash": content_hash, "spanLocator": span_locator}
+        {**item, "sourceId": source_id_for_strict, "sourceContentHash": source_content_hash, "spanLocator": span_locator}
     )
     span = {
         "spanRef": span_ref,
         "sourceId": source_id,
         "sourceType": _clean_text(item.get("source_type") or item.get("sourceType")),
         "contentHash": content_hash,
-        "sourceContentHash": content_hash,
+        "sourceContentHash": source_content_hash,
         "spanLocator": span_locator,
         "contentHashAvailable": bool(content_hash),
         "spanLocatorAvailable": bool(span_locator),
@@ -523,8 +520,18 @@ def _claim_supporting_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
                     "spanRef": anchor_id or f"{_claim_card_id(card)}:anchor:{index}",
                     "sourceId": _clean_text(anchor.get("sourceId") or anchor.get("source_id") or card.get("sourceId") or card.get("source_id")),
                     "sourceType": _clean_text(anchor.get("sourceType") or anchor.get("source_type") or card.get("sourceKind") or card.get("source_kind") or "paper"),
-                    "contentHash": _clean_text(anchor.get("contentHash") or anchor.get("content_hash") or anchor.get("sourceContentHash") or anchor.get("source_content_hash")),
-                    "sourceContentHash": _clean_text(anchor.get("sourceContentHash") or anchor.get("source_content_hash") or anchor.get("contentHash") or anchor.get("content_hash")),
+                    "contentHash": _clean_text(
+                        anchor.get("snippetHash")
+                        or anchor.get("snippet_hash")
+                        or anchor.get("contentHash")
+                        or anchor.get("content_hash")
+                    ),
+                    "sourceContentHash": _clean_text(
+                        anchor.get("sourceContentHash")
+                        or anchor.get("source_content_hash")
+                        or card.get("sourceContentHash")
+                        or card.get("source_content_hash")
+                    ),
                     "spanLocator": _clean_text(anchor.get("spanLocator") or anchor.get("span_locator")),
                     "documentId": _clean_text(anchor.get("documentId") or anchor.get("document_id")),
                     "chunkId": _clean_text(anchor.get("chunkId") or anchor.get("chunk_id")),

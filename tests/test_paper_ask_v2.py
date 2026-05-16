@@ -889,6 +889,29 @@ def test_anchor_provenance_does_not_treat_snippet_content_hash_as_source_hash(tm
     assert payload.get("contentHash") == "snippet-hash-only"
 
 
+def test_anchor_provenance_keeps_non_chars_locators_without_offset_promotion(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    searcher, _vector_db = _build_searcher(db)
+    service = PaperAskV2Service(searcher)
+
+    for locator in ("bytes:10-40", "10-40"):
+        payload = service._enrich_anchor_provenance(
+            {
+                "anchor_id": f"anchor:{locator}",
+                "paper_id": "paper-with-loose-locator",
+                "source_content_hash": "source-hash",
+                "span_locator": locator,
+                "excerpt": "Loose locators should not become strict character offsets.",
+            }
+        )
+
+        assert payload.get("span_locator") == locator
+        assert payload.get("spanLocator") in {None, ""}
+        assert payload.get("char_start") is None
+        assert payload.get("charStart") is None
+        assert payload.get("sourceContentHash") == "source-hash"
+
+
 def test_find_excerpt_offsets_matches_ordered_tokens_across_latex_wrappers():
     source = (
         "\\startcontents[sections]\n"

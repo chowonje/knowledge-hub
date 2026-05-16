@@ -76,7 +76,7 @@ def test_compare_packet_requires_strict_span_backed_sources_for_answerable():
                         "spanRef": "span-a",
                         "sourceId": "paper:a#0",
                         "sourceType": "paper",
-                        "contentHash": "sha256:a",
+                        "sourceContentHash": "sha256:a",
                         "spanLocator": "chars:10-40",
                         "quote": "A accuracy",
                     },
@@ -109,7 +109,8 @@ def test_compare_packet_requires_strict_span_backed_sources_for_answerable():
                         "spanRef": "span-a",
                         "sourceId": "paper:a#0",
                         "sourceType": "paper",
-                        "contentHash": "sha256:a",
+                        "contentHash": "snippet:a",
+                        "sourceContentHash": "sha256:a",
                         "spanLocator": "chars:10-40",
                         "quote": "A accuracy",
                     },
@@ -117,7 +118,8 @@ def test_compare_packet_requires_strict_span_backed_sources_for_answerable():
                         "spanRef": "span-b",
                         "sourceId": "paper:b#0",
                         "sourceType": "paper",
-                        "contentHash": "sha256:b",
+                        "contentHash": "snippet:b",
+                        "sourceContentHash": "sha256:b",
                         "spanLocator": "chars:50-90",
                         "quote": "B accuracy",
                     },
@@ -130,7 +132,87 @@ def test_compare_packet_requires_strict_span_backed_sources_for_answerable():
     assert strict_packet["coverage"]["fallbackSpanCount"] == 0
     assert strict_packet["coverage"]["strictSupportedDimensionCount"] == 1
     assert strict_packet["coverage"]["answerable"] is True
+    strict_spans = strict_packet["dimensions"][0]["supportingSpans"]
+    assert {span["sourceContentHash"] for span in strict_spans} == {"sha256:a", "sha256:b"}
+    assert {span["contentHash"] for span in strict_spans} == {"snippet:a", "snippet:b"}
     assert validate_payload(strict_packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_keeps_content_hash_only_chars_locator_non_strict():
+    packet = build_compare_packet_contract(
+        query="compare source A and source B",
+        dimensions=[
+            {
+                "label": "accuracy",
+                "status": "supported",
+                "supporting_spans": [
+                    {
+                        "spanRef": "span-a",
+                        "sourceId": "paper:a#0",
+                        "sourceType": "paper",
+                        "contentHash": "snippet:a",
+                        "spanLocator": "chars:10-40",
+                        "quote": "A accuracy",
+                    },
+                    {
+                        "spanRef": "span-b",
+                        "sourceId": "paper:b#0",
+                        "sourceType": "paper",
+                        "contentHash": "snippet:b",
+                        "spanLocator": "chars:50-90",
+                        "quote": "B accuracy",
+                    },
+                ],
+            }
+        ],
+    )
+
+    spans = packet["dimensions"][0]["supportingSpans"]
+    assert {span["strictSpanBacked"] for span in spans} == {False}
+    assert {span["sourceContentHash"] for span in spans} == {""}
+    assert {span["contentHash"] for span in spans} == {"snippet:a", "snippet:b"}
+    assert {span["spanOffsetAvailable"] for span in spans} == {True}
+    assert packet["coverage"]["strictSpanBackedCount"] == 0
+    assert packet["coverage"]["answerable"] is False
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_keeps_bytes_and_bare_range_locators_non_strict():
+    packet = build_compare_packet_contract(
+        query="compare source A and source B",
+        dimensions=[
+            {
+                "label": "accuracy",
+                "status": "supported",
+                "supporting_spans": [
+                    {
+                        "spanRef": "span-a",
+                        "sourceId": "paper:a#0",
+                        "sourceType": "paper",
+                        "sourceContentHash": "sha256:a",
+                        "spanLocator": "bytes:10-40",
+                        "quote": "A accuracy",
+                    },
+                    {
+                        "spanRef": "span-b",
+                        "sourceId": "paper:b#0",
+                        "sourceType": "paper",
+                        "sourceContentHash": "sha256:b",
+                        "spanLocator": "50-90",
+                        "quote": "B accuracy",
+                    },
+                ],
+            }
+        ],
+    )
+
+    spans = packet["dimensions"][0]["supportingSpans"]
+    assert {span["strictSpanBacked"] for span in spans} == {False}
+    assert {span["spanOffsetAvailable"] for span in spans} == {False}
+    assert {span["sourceContentHash"] for span in spans} == {"sha256:a", "sha256:b"}
+    assert packet["coverage"]["strictSpanBackedCount"] == 0
+    assert packet["coverage"]["answerable"] is False
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
 def test_compare_packet_from_runtime_maps_ask_v2_paper_compare_groups():
@@ -1210,6 +1292,7 @@ def test_compare_packet_from_sources_uses_strict_evidence_spans_before_fallback(
                 "sourceId": "2603.15798",
                 "source_type": "paper",
                 "sourceContentHash": "sha256:graph",
+                "contentHash": "snippet:graph",
                 "spanLocator": "chars:1-50",
                 "text": "GraphRAG source span",
             },
@@ -1218,6 +1301,7 @@ def test_compare_packet_from_sources_uses_strict_evidence_spans_before_fallback(
                 "sourceId": "2410.05779",
                 "source_type": "paper",
                 "sourceContentHash": "sha256:light",
+                "contentHash": "snippet:light",
                 "spanLocator": "chars:80-120",
                 "text": "LightRAG source span",
             },
@@ -1242,7 +1326,8 @@ def test_compare_packet_from_sources_uses_strict_evidence_spans_before_fallback(
     spans = packet["dimensions"][0]["supportingSpans"]
     assert [span["strictSpanBacked"] for span in spans] == [True, True]
     assert [span["fallbackSpan"] for span in spans] == [False, False]
-    assert {span["contentHash"] for span in spans} == {"sha256:graph", "sha256:light"}
+    assert {span["sourceContentHash"] for span in spans} == {"sha256:graph", "sha256:light"}
+    assert {span["contentHash"] for span in spans} == {"snippet:graph", "snippet:light"}
     assert packet["coverage"]["answerable"] is True
     assert packet["coverage"]["strictSpanBackedCount"] == 2
     assert packet["coverage"]["fallbackSpanCount"] == 0
@@ -1309,7 +1394,8 @@ def test_compare_packet_from_sources_recovers_insufficient_dimension_with_strict
                             "spanRef": "anchor-a",
                             "sourceId": "2603.15798",
                             "sourceType": "paper",
-                            "contentHash": "sha256:graph",
+                            "sourceContentHash": "sha256:graph",
+                            "contentHash": "snippet:graph",
                             "spanLocator": "chars:1-50",
                             "quote": "GraphRAG source span",
                         }
@@ -1538,7 +1624,8 @@ def test_compare_packet_from_sources_does_not_recover_insufficient_dimension_wit
                             "spanRef": "span-a",
                             "sourceId": "2005.11401",
                             "sourceType": "paper",
-                            "contentHash": "sha256:rag",
+                            "sourceContentHash": "sha256:rag",
+                            "contentHash": "snippet:rag",
                             "spanLocator": "chars:1-50",
                             "quote": "RAG source span",
                         }
