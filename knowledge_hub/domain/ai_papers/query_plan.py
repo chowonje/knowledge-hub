@@ -207,6 +207,10 @@ _DISCOVER_QUERY_RESCUES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     ),
 )
 _EXPLICIT_TITLE_RESCUES = {
+    normalize_term("Attention Is All You Need"): {
+        "paper_id": "1706.03762",
+        "title": "Attention Is All You Need",
+    },
     normalize_term("An Image is Worth 16x16 Words"): {
         "paper_id": "2010.11929",
         "title": "An Image is Worth 16x16 Words",
@@ -290,6 +294,18 @@ _EXPLICIT_TITLE_RESCUES = {
     normalize_term("Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"): {
         "paper_id": "2005.11401",
         "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    },
+    normalize_term("Self-RAG"): {
+        "paper_id": "2310.11511",
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+    },
+    normalize_term("Sequence to Sequence Learning"): {
+        "paper_id": "1409.3215",
+        "title": "Sequence to Sequence Learning with Neural Networks",
+    },
+    normalize_term("Sequence to Sequence Learning with Neural Networks"): {
+        "paper_id": "1409.3215",
+        "title": "Sequence to Sequence Learning with Neural Networks",
     },
     normalize_term("Vision Transformer"): {
         "paper_id": "2010.11929",

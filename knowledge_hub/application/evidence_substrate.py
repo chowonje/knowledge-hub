@@ -5,7 +5,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from knowledge_hub.ai.compare_packet import build_compare_packet_from_sources
+from knowledge_hub.ai.compare_packet import build_compare_packet_from_runtime, build_compare_packet_from_sources
 from knowledge_hub.application.evidence_registry import build_lineage, resolve_registry_lookup
 from knowledge_hub.infrastructure.persistence.vector import inspect_vector_store
 
@@ -261,6 +261,23 @@ def build_compare_payload(answer_payload: dict[str, Any], *, query: str) -> dict
     evidence_contract = dict(answer_payload.get("evidencePacketContract") or {})
     answer_contract = dict(answer_payload.get("answerContract") or {})
     warnings = list(trace["warnings"])
+    if not compare_contract:
+        v2_payload = dict(answer_payload.get("v2") or {})
+        runtime_compare = build_compare_packet_from_runtime(
+            query=query,
+            source_type=str(answer_payload.get("sourceType") or answer_payload.get("source_type") or ""),
+            family=str(answer_payload.get("paperFamily") or ""),
+            runtime_execution=dict(v2_payload.get("runtimeExecution") or {}),
+            query_frame=dict(answer_payload.get("queryFrame") or {}),
+            claim_cards=list(v2_payload.get("claimCards") or answer_payload.get("claimCards") or []),
+            claim_alignment=dict(v2_payload.get("claimAlignment") or answer_payload.get("claimAlignment") or {}),
+            paper_knowledge_slots=list(v2_payload.get("paperKnowledgeSlots") or []),
+            evidence_policy=dict(answer_payload.get("evidencePolicy") or {}),
+            comparison_verification=dict(v2_payload.get("comparisonVerification") or {}),
+        )
+        if runtime_compare:
+            compare_contract = runtime_compare
+            warnings.append("compare packet built from ask-v2 paper knowledge slots")
     enriched_compare = build_compare_packet_from_sources(
         query=query,
         sources=list(trace.get("sources") or []),

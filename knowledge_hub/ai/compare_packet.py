@@ -393,6 +393,57 @@ _COMPARABLE_SLOT_LABELS = {
     "metric": "metric",
     "limitation": "limitation",
 }
+_EXPLICIT_SOURCE_ALIASES_BY_ID = {
+    "alexnet-2012": {"alexnet", "cnn"},
+    "1312.5602": {"dqn", "deep q-network"},
+    "1406.2661": {"gan"},
+    "1409.3215": {"seq2seq", "sequence to sequence"},
+    "1502.03167": {"batchnorm", "batch normalization"},
+    "1512.03385": {"resnet"},
+    "1706.03762": {"transformer", "attention is all you need"},
+    "1707.06347": {"ppo", "proximal policy optimization"},
+    "1810.04805": {"bert"},
+    "2005.11401": {"rag", "retrieval-augmented generation"},
+    "2005.14165": {"gpt"},
+    "2006.11239": {"diffusion", "denoising diffusion probabilistic models"},
+    "2007.01282": {"fid", "fusion-in-decoder", "fusion in decoder"},
+    "2010.11929": {"vit", "vision transformer"},
+    "2201.11903": {"cot", "chain-of-thought", "chain of thought"},
+    "2310.11511": {"self-rag", "self rag"},
+    "2312.00752": {"mamba"},
+    "2404.16130": {"graphrag", "graph rag"},
+    "2410.05779": {"lightrag", "light rag"},
+}
+_ALIAS_TOKEN_RE = re.compile(r"[A-Za-z0-9]+")
+_LOW_SIGNAL_EVIDENCE_TEXT_RE = re.compile(
+    r"^\s*(?:\\(?:newcommand|renewcommand|DeclareMathOperator|def|usepackage|documentclass)\b|%+)",
+    re.IGNORECASE,
+)
+_BLOCK_PREFIX_RE = re.compile(r"^\s*\[Block\s+\d+\]\s*", re.IGNORECASE)
+
+
+def _query_mentions_alias(query: str, alias: str) -> bool:
+    query_text = _clean_text(query).casefold()
+    alias_text = _clean_text(alias).casefold()
+    if not query_text or not alias_text:
+        return False
+    parts = _ALIAS_TOKEN_RE.findall(alias_text)
+    if not parts:
+        return False
+    pattern = r"(?<![A-Za-z0-9])" + r"[\s_.:/+-]+".join(re.escape(part) for part in parts) + r"(?![A-Za-z0-9])"
+    return bool(re.search(pattern, query_text, re.IGNORECASE))
+
+
+def _source_payload_explicitly_named(query: str, *, source_id: str, title: str = "") -> bool:
+    source_token = _clean_text(source_id)
+    if source_token and source_token.casefold() in _clean_text(query).casefold():
+        return True
+    if title and _query_mentions_alias(query, title):
+        return True
+    for alias in _EXPLICIT_SOURCE_ALIASES_BY_ID.get(source_token.casefold(), set()):
+        if _query_mentions_alias(query, alias):
+            return True
+    return False
 
 
 def _query_focus_label(query: str, sources: list[dict[str, Any]], *, max_tokens: int = 8) -> str:
@@ -445,6 +496,20 @@ def _claim_text(card: dict[str, Any]) -> str:
         _clean_text(card.get("resultDirection") or card.get("result_direction")),
     ]
     return " | ".join(part for part in parts if part)
+
+
+def _text_signal_ready(value: Any) -> bool:
+    text = _clean_text(value)
+    body = _BLOCK_PREFIX_RE.sub("", text)
+    if len(body) < 16:
+        return False
+    return not _LOW_SIGNAL_EVIDENCE_TEXT_RE.search(body)
+
+
+def _text_has_low_signal_prefix(value: Any) -> bool:
+    text = _clean_text(value)
+    body = _BLOCK_PREFIX_RE.sub("", text)
+    return bool(body and _LOW_SIGNAL_EVIDENCE_TEXT_RE.search(body))
 
 
 def _claim_supporting_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
@@ -529,16 +594,15 @@ def _source_mention_tokens(card: dict[str, Any]) -> set[str]:
 
 
 def _source_explicitly_named(query: str, cards: list[dict[str, Any]]) -> bool:
-    query_lower = _clean_text(query).casefold()
-    if not query_lower:
-        return False
     source_id = _source_id_from_card(cards[0]) if cards else ""
-    if source_id and source_id.casefold() in query_lower:
-        return True
-    for card in cards:
-        if _source_mention_tokens(card) & set(_SOURCE_MENTION_TOKEN_RE.findall(query_lower)):
+    for card in list(cards or []):
+        if _source_payload_explicitly_named(
+            query,
+            source_id=source_id or _source_id_from_card(card),
+            title=_clean_text(card.get("title") or card.get("parent_label") or card.get("parentLabel")),
+        ):
             return True
-    return any(token in query_lower for card in cards for token in _source_mention_tokens(card))
+    return False
 
 
 def _card_evidence_role(card: dict[str, Any]) -> str:
@@ -556,6 +620,13 @@ def _card_strict_spans(card: dict[str, Any]) -> list[dict[str, Any]]:
         if normalized["strictSpanBacked"] and not _is_non_evidence_ref(normalized):
             spans.append(normalized)
     return spans
+
+
+def _claim_card_signal_ready(card: dict[str, Any]) -> bool:
+    if not _text_signal_ready(_claim_text(card)):
+        return False
+    spans = _claim_supporting_spans(card)
+    return not any(_text_has_low_signal_prefix(span.get("quote")) for span in spans)
 
 
 def _source_mention_tokens_from_payload(payload: dict[str, Any]) -> set[str]:
@@ -580,16 +651,19 @@ def _slot_source_id(payload: dict[str, Any]) -> str:
     return _clean_text(payload.get("paperId") or payload.get("paper_id") or payload.get("sourceId") or payload.get("source_id"))
 
 
+def _source_titles_note(source_titles: list[str]) -> str:
+    titles = [_clean_text(title) for title in source_titles if _clean_text(title)]
+    if not titles:
+        return ""
+    return f"Source titles: {'; '.join(titles[:2])}."
+
+
 def _slot_source_explicitly_named(query: str, payload: dict[str, Any]) -> bool:
-    query_lower = _clean_text(query).casefold()
-    if not query_lower:
-        return False
-    source_id = _slot_source_id(payload)
-    if source_id and source_id.casefold() in query_lower:
-        return True
-    query_tokens = set(_SOURCE_MENTION_TOKEN_RE.findall(query_lower))
-    source_tokens = _source_mention_tokens_from_payload(payload)
-    return bool(source_tokens & query_tokens) or any(token in query_lower for token in source_tokens)
+    return _source_payload_explicitly_named(
+        query,
+        source_id=_slot_source_id(payload),
+        title=_clean_text(payload.get("title")),
+    )
 
 
 def _slot_strict_spans(slot: dict[str, Any]) -> list[dict[str, Any]]:
@@ -604,6 +678,10 @@ def _slot_strict_spans(slot: dict[str, Any]) -> list[dict[str, Any]]:
 
 def _slot_text(slot: dict[str, Any]) -> str:
     return _clean_text(slot.get("text") or slot.get("summaryText") or slot.get("summary_text"))
+
+
+def _slot_text_signal_ready(slot: dict[str, Any]) -> bool:
+    return _text_signal_ready(_slot_text(slot))
 
 
 def _synthesized_slot_dimensions(
@@ -639,7 +717,7 @@ def _synthesized_slot_dimensions(
         for slot in list(payloads_by_source[source_id].get("slots") or []):
             slot_item = dict(slot or {})
             slot_type = _clean_text(slot_item.get("slotType") or slot_item.get("slot_type")).casefold()
-            if slot_type not in _COMPARABLE_SLOT_LABELS or not _slot_strict_spans(slot_item):
+            if slot_type not in _COMPARABLE_SLOT_LABELS or not _slot_text_signal_ready(slot_item) or not _slot_strict_spans(slot_item):
                 continue
             slots_by_type.setdefault(slot_type, {}).setdefault(source_id, slot_item)
 
@@ -662,7 +740,10 @@ def _synthesized_slot_dimensions(
                 "rightClaim": _slot_text(ordered_slots[1]),
                 "comparisonStatus": "supported",
                 "supportingSpans": supporting_spans,
-                "notes": "Generated from Paper Knowledge Slots with strict evidence anchor coverage.",
+                "notes": _clean_text(
+                    "Generated from Paper Knowledge Slots with strict evidence anchor coverage. "
+                    + _source_titles_note([payloads_by_source[source_id].get("title") for source_id in selected_source_ids])
+                ),
             }
         )
     return dimensions
@@ -751,7 +832,7 @@ def _synthesized_claim_dimensions(
     for source_id in selected_source_ids:
         for card in cards_by_source[source_id]:
             role = _card_evidence_role(card)
-            if role not in _COMPARABLE_ROLE_LABELS or not _card_strict_spans(card):
+            if role not in _COMPARABLE_ROLE_LABELS or not _claim_card_signal_ready(card) or not _card_strict_spans(card):
                 continue
             cards_by_role.setdefault(role, {}).setdefault(source_id, card)
 
@@ -774,7 +855,10 @@ def _synthesized_claim_dimensions(
                 "rightClaim": _claim_text(ordered_cards[1]),
                 "comparisonStatus": "supported",
                 "supportingSpans": supporting_spans,
-                "notes": "Generated from ask-v2 claim-card evidence anchors with strict source span coverage.",
+                "notes": _clean_text(
+                    "Generated from ask-v2 claim-card evidence anchors with strict source span coverage. "
+                    + _source_titles_note([_source_title_from_card(card) for card in ordered_cards])
+                ),
             }
         )
     return dimensions

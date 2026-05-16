@@ -400,6 +400,111 @@ def test_compare_packet_from_runtime_synthesizes_claim_dimensions_from_strict_an
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_from_runtime_accepts_concise_claim_anchor_quotes_with_good_summaries():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 global question 처리를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-graph-method",
+                "sourceKind": "paper",
+                "sourceId": "2404.16130",
+                "summaryText": "GraphRAG uses graph communities to organize evidence for global question answering.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-graph-method",
+                        "sourceId": "2404.16130",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:graph",
+                        "quote": "global QA",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-light-method",
+                "sourceKind": "paper",
+                "sourceId": "2410.05779",
+                "summaryText": "LightRAG keeps a lightweight graph index for retrieval-augmented generation.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-light-method",
+                        "sourceId": "2410.05779",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:light",
+                        "quote": "graph index",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={"groups": []},
+    )
+
+    assert packet is not None
+    assert packet["coverage"]["answerable"] is True
+    assert packet["dimensions"][0]["dimensionId"] == "claim-card-role:method"
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_rejects_low_signal_claim_anchor_quotes():
+    packet = build_compare_packet_from_runtime(
+        query="GraphRAG와 LightRAG의 global question 처리를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["2404.16130", "2410.05779"]},
+        claim_cards=[
+            {
+                "claimCardId": "claim-card-graph-method",
+                "sourceKind": "paper",
+                "sourceId": "2404.16130",
+                "summaryText": "GraphRAG uses graph communities to organize evidence for global question answering.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-graph-method",
+                        "sourceId": "2404.16130",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:10-90",
+                        "sourceContentHash": "sha256:graph",
+                        "quote": "GraphRAG uses graph communities.",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+            {
+                "claimCardId": "claim-card-light-method",
+                "sourceKind": "paper",
+                "sourceId": "2410.05779",
+                "summaryText": "LightRAG keeps a lightweight graph index for retrieval-augmented generation.",
+                "claimType": "method",
+                "evidenceAnchors": [
+                    {
+                        "anchorId": "anchor-light-method",
+                        "sourceId": "2410.05779",
+                        "sourceType": "paper",
+                        "spanLocator": "chars:20-120",
+                        "sourceContentHash": "sha256:light",
+                        "quote": "\\newcommand{\\parents}{Pa}",
+                        "evidenceRole": "method",
+                    }
+                ],
+            },
+        ],
+        claim_alignment={"groups": []},
+    )
+
+    assert packet is None
+
+
 def test_compare_packet_from_runtime_synthesizes_slot_dimensions_from_strict_slot_refs_when_groups_missing():
     packet = build_compare_packet_from_runtime(
         query="GraphRAG와 LightRAG의 method와 result를 비교해줘",
@@ -597,6 +702,67 @@ def test_compare_packet_from_runtime_uses_slot_dimensions_when_claim_groups_are_
     assert packet["coverage"]["strictSpanBackedCount"] == 2
     assert [dimension["dimensionId"] for dimension in packet["dimensions"]] == ["paper-slot:method"]
     assert packet["dimensions"][0]["comparisonStatus"] == "supported"
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_adds_source_titles_to_slot_dimension_notes():
+    packet = build_compare_packet_from_runtime(
+        query="BERT와 GPT 계열의 차이를 논문 기준으로 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["1810.04805", "2005.14165"]},
+        claim_cards=[],
+        claim_alignment={"groups": []},
+        paper_knowledge_slots=[
+            {
+                "paperId": "1810.04805",
+                "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "BERT uses bidirectional Transformer encoders.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-bert-method",
+                                "sourceId": "1810.04805",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:10-90",
+                                "sourceContentHash": "sha256:bert",
+                                "quote": "BERT uses bidirectional Transformer encoders.",
+                            }
+                        ],
+                    }
+                ],
+            },
+            {
+                "paperId": "2005.14165",
+                "title": "Language Models are Few-Shot Learners",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "GPT-3 is an autoregressive few-shot language model.",
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-gpt-method",
+                                "sourceId": "2005.14165",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:20-120",
+                                "sourceContentHash": "sha256:gpt",
+                                "quote": "GPT-3 is an autoregressive few-shot language model.",
+                            }
+                        ],
+                    }
+                ],
+            },
+        ],
+    )
+
+    assert packet is not None
+    dimension = packet["dimensions"][0]
+    assert dimension["label"] == "method"
+    assert "Language Models are Few-Shot Learners" in dimension["notes"]
+    assert packet["coverage"]["answerable"] is True
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
