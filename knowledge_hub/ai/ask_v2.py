@@ -52,7 +52,7 @@ from knowledge_hub.infrastructure.persistence.stores.section_card_v1_store impor
 from knowledge_hub.core.models import SearchResult
 from knowledge_hub.papers.memory_adapter import paper_memory_card_to_section_cards
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
-from knowledge_hub.papers.source_text import source_hash_for_path
+from knowledge_hub.papers.source_text import extract_pdf_text_excerpt, source_hash_for_path
 from knowledge_hub.web.youtube_extractor import is_youtube_url
 
 
@@ -65,6 +65,7 @@ _CLAIM_HEAVY_QUERY_RE = re.compile(
     re.IGNORECASE,
 )
 _CHARS_LOCATOR_RE = re.compile(r"(?:chars?|bytes?)[:=](\d+)\s*[-:]\s*(\d+)", re.IGNORECASE)
+_BLOCK_PREFIX_RE = re.compile(r"^\s*\[Block\s+\d+\]\s*", re.IGNORECASE)
 
 
 def _ask_v2_hard_gate_reason(
@@ -129,22 +130,57 @@ def _find_excerpt_offsets(source_text: str, excerpt: str) -> tuple[int | None, i
     snippet = str(excerpt or "").strip()
     if not source or not snippet:
         return None, None
-    exact_index = source.find(snippet)
-    if exact_index >= 0:
-        return exact_index, exact_index + len(snippet)
-    tokens = [token for token in re.split(r"\s+", snippet) if token]
-    if not tokens:
-        return None, None
-    for token_offset in range(0, min(8, len(tokens))):
-        for token_limit in (80, 48, 28):
-            selected = tokens[token_offset : token_offset + token_limit]
-            if len(selected) < 4:
-                continue
-            pattern = r"\s+".join(re.escape(token) for token in selected)
-            match = re.search(pattern, source, re.MULTILINE)
-            if match:
-                return match.start(), match.end()
+    snippets = _clean_unique_values([snippet, _BLOCK_PREFIX_RE.sub("", snippet).strip()])
+    for candidate in snippets:
+        exact_index = source.find(candidate)
+        if exact_index >= 0:
+            return exact_index, exact_index + len(candidate)
+    for candidate in snippets:
+        tokens = [token for token in re.split(r"\s+", candidate) if token]
+        if not tokens:
+            continue
+        for token_offset in range(0, min(8, len(tokens))):
+            for token_limit in (80, 48, 28):
+                selected = tokens[token_offset : token_offset + token_limit]
+                if len(selected) < 4:
+                    continue
+                pattern = r"\s+".join(re.escape(token) for token in selected)
+                match = re.search(pattern, source, re.MULTILINE)
+                if match:
+                    return match.start(), match.end()
+                ordered_match = _find_ordered_token_window(source, selected)
+                if ordered_match != (None, None):
+                    return ordered_match
     return None, None
+
+
+def _find_ordered_token_window(source: str, tokens: list[str]) -> tuple[int | None, int | None]:
+    selected = [
+        token
+        for token in list(tokens or [])
+        if len(token.strip(".,;:()[]{}")) >= 3 or token.startswith("\\")
+    ]
+    if len(selected) < 4:
+        return None, None
+    position = 0
+    start: int | None = None
+    end: int | None = None
+    for token in selected:
+        index = source.find(token, position)
+        if index < 0:
+            return None, None
+        if start is None:
+            start = index
+        end = index + len(token)
+        position = end
+    if start is None or end is None:
+        return None, None
+    window = end - start
+    # This fallback is for parser markup inserted between otherwise contiguous
+    # excerpt tokens. Keep it bounded so a few common words cannot span pages.
+    if window > max(800, len(" ".join(tokens)) * 5):
+        return None, None
+    return start, end
 
 
 def _selection_diagnostic_payload(card: dict[str, Any]) -> dict[str, Any]:
@@ -1293,7 +1329,16 @@ class AskV2Service:
         if token not in self._source_text_cache:
             path = Path(token).expanduser()
             try:
-                self._source_text_cache[token] = path.read_text(encoding="utf-8", errors="ignore") if path.is_file() else ""
+                if not path.is_file():
+                    self._source_text_cache[token] = ""
+                elif path.suffix.casefold() == ".pdf":
+                    self._source_text_cache[token] = extract_pdf_text_excerpt(
+                        str(path),
+                        max_pages=12,
+                        max_chars=80_000,
+                    )
+                else:
+                    self._source_text_cache[token] = path.read_text(encoding="utf-8", errors="ignore")
             except OSError:
                 self._source_text_cache[token] = ""
         return self._source_text_cache.get(token, "")
@@ -1387,8 +1432,6 @@ class AskV2Service:
         source_hash = _clean_text(
             payload.get("source_content_hash")
             or payload.get("sourceContentHash")
-            or payload.get("content_hash")
-            or payload.get("contentHash")
             or unit.get("source_content_hash")
             or provenance.get("source_content_hash")
             or card_payload.get("source_content_hash")
@@ -1400,8 +1443,8 @@ class AskV2Service:
         if source_hash:
             payload["source_content_hash"] = source_hash
             payload["sourceContentHash"] = source_hash
-            payload["content_hash"] = source_hash
-            payload["contentHash"] = source_hash
+            payload.setdefault("content_hash", source_hash)
+            payload.setdefault("contentHash", source_hash)
         offset_locator = self._resolved_offset_locator(anchor=payload, unit=unit) if unit else self._explicit_offset_locator(payload)
         if offset_locator:
             payload["span_locator"] = offset_locator
@@ -1430,8 +1473,6 @@ class AskV2Service:
             anchor_source_hash = _clean_text(
                 payload.get("source_content_hash")
                 or payload.get("sourceContentHash")
-                or payload.get("content_hash")
-                or payload.get("contentHash")
                 or source_hash
             )
             anchors.append(
@@ -1586,8 +1627,6 @@ class AskV2Service:
             source_hash = _clean_text(
                 anchor.get("source_content_hash")
                 or anchor.get("sourceContentHash")
-                or anchor.get("content_hash")
-                or anchor.get("contentHash")
             )
             metadata = {
                 "title": _clean_text(anchor.get("title") or card.get("title")),

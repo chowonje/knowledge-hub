@@ -332,6 +332,44 @@ def test_compare_packet_from_runtime_keeps_locator_only_evidence_anchors_non_str
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
 
 
+def test_compare_packet_keeps_memory_unit_locators_non_strict_even_with_hashes():
+    packet = build_compare_packet_contract(
+        query="compare DQN and PPO",
+        dimensions=[
+            {
+                "label": "method",
+                "status": "supported",
+                "supporting_spans": [
+                    {
+                        "spanRef": "anchor-dqn",
+                        "sourceId": "1312.5602",
+                        "sourceType": "paper",
+                        "contentHash": "sha256:dqn",
+                        "spanLocator": "memory-unit:paper:1312.5602:summary",
+                        "quote": "DQN uses a convolutional neural network trained with Q-learning.",
+                    },
+                    {
+                        "spanRef": "anchor-ppo",
+                        "sourceId": "1707.06347",
+                        "sourceType": "paper",
+                        "contentHash": "sha256:ppo",
+                        "spanLocator": "memory-unit:paper:1707.06347:summary",
+                        "quote": "PPO optimizes a clipped surrogate objective.",
+                    },
+                ],
+            }
+        ],
+    )
+
+    spans = packet["dimensions"][0]["supportingSpans"]
+    assert {span["strictSpanBacked"] for span in spans} == {False}
+    assert {span["spanLocatorAvailable"] for span in spans} == {True}
+    assert {span["spanOffsetAvailable"] for span in spans} == {False}
+    assert packet["coverage"]["answerable"] is False
+    assert packet["coverage"]["strictSpanBackedCount"] == 0
+    assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
 def test_compare_packet_from_runtime_synthesizes_claim_dimensions_from_strict_anchors_when_groups_missing():
     packet = build_compare_packet_from_runtime(
         query="GraphRAG와 LightRAG의 global question 처리를 비교해줘",
@@ -614,6 +652,68 @@ def test_compare_packet_from_runtime_synthesizes_slot_dimensions_from_strict_slo
     assert {span["strictSpanBacked"] for dimension in packet["dimensions"] for span in dimension["supportingSpans"]} == {True}
     assert {span["fallbackSpan"] for dimension in packet["dimensions"] for span in dimension["supportingSpans"]} == {False}
     assert validate_payload(packet, COMPARE_PACKET_SCHEMA, strict=True).ok
+
+
+def test_compare_packet_from_runtime_respects_explicit_non_strict_slot_refs():
+    packet = build_compare_packet_from_runtime(
+        query="AlexNet과 ViT의 method를 비교해줘",
+        source_type="paper",
+        family="paper_compare",
+        runtime_execution={"used": "ask_v2"},
+        query_frame={"resolved_source_ids": ["alexnet-2012", "2010.11929"]},
+        claim_cards=[],
+        claim_alignment={"groups": []},
+        paper_knowledge_slots=[
+            {
+                "paperId": "alexnet-2012",
+                "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "AlexNet은 GPU 기반 대규모 CNN 학습으로 ImageNet 시대를 열었다.",
+                        "strictEvidence": False,
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-alexnet-method",
+                                "sourceId": "alexnet-2012",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:0-298",
+                                "sourceContentHash": "sha256:alexnet",
+                                "contentHash": "snippet:alexnet",
+                                "quote": "We trained a large, deep convolutional neural network.",
+                                "strictSpanBacked": False,
+                            }
+                        ],
+                    }
+                ],
+            },
+            {
+                "paperId": "2010.11929",
+                "title": "An Image is Worth 16x16 Words",
+                "slots": [
+                    {
+                        "slotType": "method",
+                        "text": "ViT applies a Transformer directly to image patches.",
+                        "strictEvidence": True,
+                        "evidenceRefs": [
+                            {
+                                "anchorId": "anchor-vit-method",
+                                "sourceId": "2010.11929",
+                                "sourceType": "paper",
+                                "spanLocator": "chars:20-120",
+                                "sourceContentHash": "sha256:vit",
+                                "contentHash": "snippet:vit",
+                                "quote": "We apply a standard Transformer directly to image patches.",
+                                "strictSpanBacked": True,
+                            }
+                        ],
+                    }
+                ],
+            },
+        ],
+    )
+
+    assert packet is None
 
 
 def test_compare_packet_from_runtime_uses_slot_dimensions_when_claim_groups_are_incomplete():

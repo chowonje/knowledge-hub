@@ -26,6 +26,7 @@ _SECTION_LIMIT_RE = re.compile(r"\b(limit|limitation|future work|risk|caveat|한
 _SECTION_PROBLEM_RE = re.compile(r"\b(problem|motivation|background|introduction|abstract|문제|배경|요약|초록)\b", re.IGNORECASE)
 _DATASET_RE = re.compile(r"\b(dataset|benchmark|corpus|data|데이터셋|벤치마크)\b", re.IGNORECASE)
 _METRIC_RE = re.compile(r"\b(metric|accuracy|f1|auc|auroc|auprc|latency|throughput|precision|recall|지표|정확도)\b", re.IGNORECASE)
+_HANGUL_RE = re.compile(r"[\uac00-\ud7a3]")
 
 def _clean_lines(values: list[Any], *, limit: int | None = None) -> list[str]:
     result: list[str] = []
@@ -42,6 +43,30 @@ def _clean_lines(values: list[Any], *, limit: int | None = None) -> list[str]:
         if limit is not None and len(result) >= limit:
             break
     return result
+
+
+def _contains_hangul(value: Any) -> bool:
+    return bool(_HANGUL_RE.search(_clean_text(value)))
+
+
+def _source_backed_unit_excerpt(unit: dict[str, Any] | None) -> str:
+    payload = dict(unit or {})
+    if not payload:
+        return ""
+    provenance = dict(payload.get("provenance") or {})
+    source_path = _clean_text(provenance.get("file_path"))
+    source_excerpt = _clean_text(payload.get("source_excerpt"))
+    if not source_path or not source_excerpt:
+        return ""
+    return source_excerpt
+
+
+def _prefer_source_backed_slot_text(candidate: Any, unit: dict[str, Any] | None) -> str:
+    token = _clean_text(candidate)
+    source_excerpt = _source_backed_unit_excerpt(unit)
+    if source_excerpt and _contains_hangul(token) and not _contains_hangul(source_excerpt):
+        return source_excerpt
+    return token
 
 
 def _is_heuristic_title_fallback_concept(row: dict[str, Any]) -> bool:
@@ -221,6 +246,14 @@ class PaperCardV2Builder:
         method_core = _first_nonempty(memory_slots.get("method_core"), _slot_excerpt(method_unit or {}), claim_texts[0] if claim_texts else "")
         result_core = _first_nonempty(memory_slots.get("evidence_core"), _slot_excerpt(result_unit or {}), claim_texts[0] if claim_texts else "")
         limitations_core = _first_nonempty(memory_slots.get("limitations_core"), _slot_excerpt(limit_unit or {}), claim_limitations[0] if claim_limitations else "")
+        paper_core = _prefer_source_backed_slot_text(paper_core, problem_unit or summary)
+        problem_core = _prefer_source_backed_slot_text(problem_core, problem_unit or summary)
+        method_core = _prefer_source_backed_slot_text(method_core, method_unit or summary)
+        result_core = _prefer_source_backed_slot_text(result_core, result_unit or summary)
+        if limit_unit:
+            limitations_core = _prefer_source_backed_slot_text(limitations_core, limit_unit)
+        elif _contains_hangul(limitations_core) and _source_backed_unit_excerpt(summary):
+            limitations_core = ""
         dataset_core = _first_nonempty(datasets[0] if datasets else "", _slot_excerpt(dataset_unit or {}))
         metric_core = _first_nonempty(metrics[0] if metrics else "", _slot_excerpt(metric_unit or {}))
         when_not_to_use = _first_nonempty(limitations_core, claim_limitations[0] if claim_limitations else "")
@@ -336,7 +369,7 @@ class PaperCardV2Builder:
             ("when_not_to_use", limit_unit or summary or {}, "when_not_to_use"),
         ]
         for field_name, unit, role in slot_units:
-            excerpt = _first_nonempty(_slot_excerpt(unit), card.get(field_name))
+            excerpt = _first_nonempty(_source_backed_unit_excerpt(unit), _slot_excerpt(unit), card.get(field_name))
             if not excerpt:
                 continue
             section_path = _clean_text(unit.get("section_path") or unit.get("title") or field_name)
@@ -378,7 +411,7 @@ class PaperCardV2Builder:
                 else summary
             )
             unit = preferred_unit or claim_unit_index.get(claim_id) or summary or {}
-            excerpt = _first_nonempty(_slot_excerpt(unit), claim.get("claim_text"), card.get("result_core"))
+            excerpt = _first_nonempty(_source_backed_unit_excerpt(unit), _slot_excerpt(unit), claim.get("claim_text"), card.get("result_core"))
             section_path = _clean_text(unit.get("section_path") or unit.get("title") or ref.get("role") or "claim")
             anchors.append(
                 {

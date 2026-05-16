@@ -51,10 +51,10 @@ def _is_non_evidence_ref(item: dict[str, Any]) -> bool:
 
 def _content_hash(item: dict[str, Any]) -> str:
     return _clean_text(
-        item.get("content_hash")
-        or item.get("contentHash")
-        or item.get("source_content_hash")
+        item.get("source_content_hash")
         or item.get("sourceContentHash")
+        or item.get("content_hash")
+        or item.get("contentHash")
     )
 
 
@@ -670,7 +670,9 @@ def _slot_strict_spans(slot: dict[str, Any]) -> list[dict[str, Any]]:
     spans: list[dict[str, Any]] = []
     for index, ref in enumerate(list(slot.get("evidenceRefs") or slot.get("evidence_refs") or []), start=1):
         item = dict(ref or {})
-        normalized = _span_ref({**item, "strictSpanBacked": True, "fallbackSpan": False}, fallback_index=index)
+        if _bool_or_none(item.get("strictSpanBacked") if "strictSpanBacked" in item else item.get("strict_span_backed")) is False:
+            continue
+        normalized = _span_ref({**item, "fallbackSpan": False}, fallback_index=index)
         if normalized["strictSpanBacked"] and not _is_non_evidence_ref(normalized):
             spans.append(normalized)
     return spans

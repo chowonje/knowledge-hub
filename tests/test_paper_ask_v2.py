@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import json
 import pytest
 
+import knowledge_hub.ai.ask_v2 as ask_v2_module
 from knowledge_hub.ai.ask_v2 import AskV2FallbackToLegacy, PaperAskV2Service
 from knowledge_hub.ai.ask_v2_support import classify_intent
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
@@ -15,6 +16,8 @@ from knowledge_hub.ai.section_cards import assess_section_source_quality, projec
 from knowledge_hub.core.section_card_v1_store import SectionCardV1Store
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.papers.card_v2_builder import PaperCardV2Builder
+from knowledge_hub.papers.memory_builder import PaperMemoryBuilder
+from knowledge_hub.papers.source_text import source_hash_for_path
 from knowledge_hub.web.ingest import make_web_note_id
 from tests.test_paper_memory import _seed_paper_with_note
 from tests.test_rag_search import DummyEmbedder, FakeLLM
@@ -819,6 +822,169 @@ def test_generate_answer_claim_card_evidence_anchors_resolve_offset_locator_from
         for slot in slot_payload.get("slots", [])
         for ref in slot.get("evidenceRefs", [])
     )
+
+
+def test_anchor_provenance_uses_pdf_text_extractor_for_pdf_source_offsets(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    source_path = tmp_path / "paper-source.pdf"
+    source_path.write_bytes(b"%PDF-1.4 fake pdf bytes")
+    source_text = "We present the first deep learning model to successfully learn control policies directly."
+    excerpt = "We present the first deep learning model to successfully learn control policies"
+    document_id = "paper:1312.5602"
+    unit_id = f"{document_id}:summary"
+    db.replace_document_memory_units(
+        document_id=document_id,
+        units=[
+            {
+                "unit_id": unit_id,
+                "document_id": document_id,
+                "document_title": "Playing Atari with Deep Reinforcement Learning",
+                "source_type": "paper",
+                "source_ref": "1312.5602",
+                "unit_type": "document_summary",
+                "title": "Summary",
+                "source_excerpt": excerpt,
+                "provenance": {"file_path": str(source_path), "source_type": "paper", "source_ref": "1312.5602"},
+            }
+        ],
+    )
+    monkeypatch.setattr(ask_v2_module, "extract_pdf_text_excerpt", lambda *args, **kwargs: source_text)
+    searcher, _vector_db = _build_searcher(db)
+    service = PaperAskV2Service(searcher)
+
+    payload = service._enrich_anchor_provenance(
+        {
+            "anchor_id": "anchor:1312.5602",
+            "paper_id": "1312.5602",
+            "unit_id": unit_id,
+            "excerpt": excerpt,
+        }
+    )
+
+    assert payload["span_locator"] == f"chars:0-{len(excerpt)}"
+    assert payload["char_start"] == 0
+    assert payload["char_end"] == len(excerpt)
+    assert payload["source_content_hash"]
+
+
+def test_anchor_provenance_does_not_treat_snippet_content_hash_as_source_hash(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    searcher, _vector_db = _build_searcher(db)
+    service = PaperAskV2Service(searcher)
+
+    payload = service._enrich_anchor_provenance(
+        {
+            "anchor_id": "anchor:snippet-only",
+            "paper_id": "snippet-only-paper",
+            "span_locator": "chars:10-40",
+            "contentHash": "snippet-hash-only",
+            "snippetHash": "snippet-hash-only",
+            "excerpt": "Snippet-level hash should not become source provenance.",
+        }
+    )
+
+    assert payload.get("span_locator") == "chars:10-40"
+    assert payload.get("source_content_hash") in {None, ""}
+    assert payload.get("sourceContentHash") in {None, ""}
+    assert payload.get("contentHash") == "snippet-hash-only"
+
+
+def test_find_excerpt_offsets_matches_ordered_tokens_across_latex_wrappers():
+    source = (
+        "\\startcontents[sections]\n"
+        "\\printcontents[sections]{l}{1}{\\setcounter{tocdepth}{2}}\n"
+        "\\newpage\n\n"
+        "\\section{\\model Details}\n"
+        "\\subsection{Reflection Tokens.}\n"
+        "\\paragraph{Definitions of reflection tokens.}\n"
+        "Below, we provide a detailed definition of reflection type and output tokens."
+    )
+    excerpt = (
+        "[Block 1] \\startcontents[sections] \\printcontents[sections]{l}{1}{\\setcounter{tocdepth}{2}} "
+        "\\newpage \\model Details Reflection Tokens. Definitions of reflection tokens. Below, we provide "
+        "a detailed definition of reflection type and output tokens."
+    )
+
+    start, end = ask_v2_module._find_excerpt_offsets(source, excerpt)
+
+    assert start == 0
+    assert end is not None
+    assert source[start:end].startswith("\\startcontents[sections]")
+    assert "reflection type and output tokens" in source[start:end]
+
+
+def test_alexnet_source_backed_slots_do_not_reuse_korean_summary_as_strict_text(tmp_path, monkeypatch):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    source_path = tmp_path / "alexnet.pdf"
+    source_path.write_bytes(b"%PDF-1.4 alexnet test bytes")
+    source_text = (
+        "We trained a large, deep convolutional neural network to classify the 1.2 million "
+        "high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 different classes. "
+        "On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%."
+    )
+    excerpt = "We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images"
+    source_hash = source_hash_for_path(str(source_path))
+    db.upsert_paper(
+        {
+            "arxiv_id": "alexnet-2012",
+            "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+            "authors": "Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton",
+            "year": 2012,
+            "field": "Computer Science",
+            "importance": 5,
+            "notes": "AlexNet은 GPU 기반 대규모 CNN 학습으로 ImageNet 시대의 딥러닝 폭발을 촉발했다.",
+            "pdf_path": str(source_path),
+            "text_path": "",
+            "translated_path": "",
+        }
+    )
+    db.upsert_note(
+        note_id="paper:alexnet-2012",
+        title="[논문] AlexNet",
+        content="# AlexNet\n\n## 요약\n\nAlexNet은 GPU 기반 대규모 CNN 학습으로 ImageNet 시대의 딥러닝 폭발을 촉발했다.\n",
+        source_type="paper",
+        metadata={"arxiv_id": "alexnet-2012"},
+    )
+    db.replace_document_memory_units(
+        document_id="paper:alexnet-2012",
+        units=[
+            {
+                "unit_id": "memory-unit:paper:alexnet-2012:summary",
+                "document_id": "paper:alexnet-2012",
+                "document_title": "ImageNet Classification with Deep Convolutional Neural Networks",
+                "source_type": "paper",
+                "source_ref": "alexnet-2012",
+                "unit_type": "document_summary",
+                "title": "Summary",
+                "section_path": "Summary",
+                "contextual_summary": "[Summary] " + excerpt,
+                "source_excerpt": excerpt,
+                "source_content_hash": source_hash,
+                "provenance": {
+                    "file_path": str(source_path),
+                    "source_type": "paper",
+                    "source_ref": "alexnet-2012",
+                    "source_content_hash": source_hash,
+                },
+            }
+        ],
+    )
+    monkeypatch.setattr(ask_v2_module, "extract_pdf_text_excerpt", lambda *args, **kwargs: source_text)
+    PaperMemoryBuilder(db).build_and_store(paper_id="alexnet-2012", materialize_card=False)
+    PaperCardV2Builder(db).build_and_store(paper_id="alexnet-2012")
+    searcher, _vector_db = _build_searcher(db)
+    service = PaperAskV2Service(searcher)
+
+    payload = service._paper_knowledge_slots([db.get_paper_card_v2("alexnet-2012")])[0]
+    method_slot = next(item for item in payload["slots"] if item["slotType"] == "method")
+
+    assert "AlexNet은" not in method_slot["text"]
+    assert "We trained a large" in method_slot["text"]
+    assert method_slot["strictEvidence"] is True
+    ref = next(item for item in method_slot["evidenceRefs"] if item["strictSpanBacked"] is True)
+    assert ref["sourceId"] == "alexnet-2012"
+    assert ref["spanLocator"].startswith("chars:")
+    assert ref["sourceContentHash"] == source_hash
 
 
 def test_generate_answer_rebuilds_stale_paper_card_when_upstream_memory_is_newer(tmp_path):

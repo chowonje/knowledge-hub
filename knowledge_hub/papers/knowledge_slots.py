@@ -14,6 +14,19 @@ from knowledge_hub.core.card_v2_common import clean_text as _clean_text
 PAPER_KNOWLEDGE_SLOTS_SCHEMA = "knowledge-hub.paper-knowledge-slots.v1"
 
 _CHARS_LOCATOR_RE = re.compile(r"^chars:\d+-\d+$")
+_HANGUL_RE = re.compile(r"[\uac00-\ud7a3]")
+_TEXT_TOKEN_RE = re.compile(r"[0-9A-Za-z][0-9A-Za-z_.+-]*|[\uac00-\ud7a3]+")
+_TEXT_STOPWORDS = {
+    "and",
+    "are",
+    "for",
+    "from",
+    "into",
+    "that",
+    "the",
+    "this",
+    "with",
+}
 
 _SLOT_DEFINITIONS = [
     {
@@ -89,6 +102,46 @@ def _source_content_hash(card: dict[str, Any], anchor: dict[str, Any]) -> str:
     )
 
 
+def _contains_hangul(value: Any) -> bool:
+    return bool(_HANGUL_RE.search(_clean_text(value)))
+
+
+def _cross_language_slot_ref(slot_text: str, quote: str) -> bool:
+    if not slot_text or not quote:
+        return False
+    return _contains_hangul(slot_text) != _contains_hangul(quote)
+
+
+def _meaningful_tokens(value: Any) -> set[str]:
+    tokens: set[str] = set()
+    for raw in _TEXT_TOKEN_RE.findall(_clean_text(value).casefold()):
+        if raw in _TEXT_STOPWORDS:
+            continue
+        if len(raw) < 3 and not raw.isdigit():
+            continue
+        tokens.add(raw)
+    return tokens
+
+
+def _slot_text_supported_by_quote(slot_text: str, quote: str) -> bool:
+    slot = _clean_text(slot_text)
+    source_quote = _clean_text(quote)
+    if not slot or not source_quote:
+        return False
+    slot_folded = slot.casefold()
+    quote_folded = source_quote.casefold()
+    if slot_folded in quote_folded or quote_folded in slot_folded:
+        return True
+    if _cross_language_slot_ref(slot, source_quote):
+        return False
+    slot_tokens = _meaningful_tokens(slot)
+    quote_tokens = _meaningful_tokens(source_quote)
+    if not slot_tokens or not quote_tokens:
+        return False
+    overlap = len(slot_tokens & quote_tokens)
+    return overlap >= min(3, len(slot_tokens)) and overlap / max(1, min(len(slot_tokens), len(quote_tokens))) >= 0.5
+
+
 def _slot_coverage(card: dict[str, Any], coverage_key: str, text: str) -> str:
     coverage = _get(card, "slotCoverage", "slot_coverage")
     if isinstance(coverage, dict):
@@ -131,11 +184,19 @@ def _anchor_matches_slot(anchor: dict[str, Any], slot: dict[str, Any], claim_ids
     return bool(claim_id and claim_id in claim_ids)
 
 
-def _evidence_ref_payload(anchor: dict[str, Any], card: dict[str, Any], *, index: int) -> dict[str, Any]:
+def _evidence_ref_payload(anchor: dict[str, Any], card: dict[str, Any], *, index: int, slot_text: str = "") -> dict[str, Any]:
     span_locator = _clean_text(_get(anchor, "spanLocator", "span_locator"))
     source_content_hash = _source_content_hash(card, anchor)
     snippet_hash = _clean_text(_get(anchor, "snippetHash", "snippet_hash"))
+    quote = _clean_text(anchor.get("quote") or anchor.get("excerpt"))
     strict_span_backed = bool(source_content_hash and _CHARS_LOCATOR_RE.match(span_locator))
+    strict_warning = ""
+    if strict_span_backed and _cross_language_slot_ref(_clean_text(slot_text), quote):
+        strict_span_backed = False
+        strict_warning = "cross_language_slot_text_not_original_source_evidence"
+    elif strict_span_backed and not _slot_text_supported_by_quote(_clean_text(slot_text), quote):
+        strict_span_backed = False
+        strict_warning = "slot_text_not_supported_by_source_quote"
     return {
         "anchorId": _clean_text(_get(anchor, "anchorId", "anchor_id")) or f"anchor:{index}",
         "claimId": _clean_text(_get(anchor, "claimId", "claim_id")),
@@ -150,11 +211,12 @@ def _evidence_ref_payload(anchor: dict[str, Any], card: dict[str, Any], *, index
         "snippetHash": snippet_hash,
         "evidenceRole": _clean_text(_get(anchor, "evidenceRole", "evidence_role")),
         "sectionPath": _clean_text(_get(anchor, "sectionPath", "section_path")),
-        "quote": _clean_text(anchor.get("quote") or anchor.get("excerpt")),
+        "quote": quote,
         "score": anchor.get("score"),
         "strictSpanBacked": strict_span_backed,
         "locatorOnly": bool(span_locator and not strict_span_backed),
         "fallbackSpan": False,
+        "provenanceWarning": strict_warning,
     }
 
 
@@ -196,7 +258,7 @@ def build_paper_knowledge_slots_payload(
         claim_ids = {_clean_text(item.get("claimId")) for item in slot_claim_refs if _clean_text(item.get("claimId"))}
         evidence_refs = _dedupe_evidence_refs(
             [
-                _evidence_ref_payload(anchor, source_card, index=index)
+                _evidence_ref_payload(anchor, source_card, index=index, slot_text=text)
                 for index, anchor in enumerate(normalized_anchors, start=1)
                 if _anchor_matches_slot(anchor, slot_def, claim_ids)
             ]
