@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
+import json
 from pathlib import Path
+
+import pytest
 
 
 SCRIPT_PATH = Path("eval/knowledgeos/scripts/check_live_compare_quality_eval.py")
@@ -14,6 +18,24 @@ def _load_module():
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+class _ConfigWithPapersDir:
+    def __init__(self, papers_dir: Path):
+        self.papers_dir = str(papers_dir)
+
+    def get_nested(self, *args, default=None):  # noqa: ANN002, ANN003
+        if tuple(args) == ("storage", "papers_dir"):
+            return self.papers_dir
+        return default
+
+
+def _write_manifest(path: Path, artifacts: list[dict]) -> Path:
+    path.write_text(
+        json.dumps({"schema": "knowledge-hub.corpus-manifest.v1", "artifacts": artifacts}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return path
 
 
 def _payload(
@@ -736,6 +758,374 @@ def test_live_compare_quality_eval_summary_classifies_case_execution_failures():
     assert payload["cases"][0]["errors"] == ["case_execution_failed:boom"]
     assert payload["failureCategoryCounts"]["compare_runtime_failed"] == 1
     assert "failed_cases:1" in payload["errors"]
+
+
+def test_live_compare_quality_eval_skips_case_for_missing_corpus_requirement(tmp_path):
+    module = _load_module()
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "missing_artifact",
+                "sourceIds": ["paper:a#0"],
+                "expectedFilename": "missing.pdf",
+                "expectedSourceContentHash": "sha256:" + "0" * 64,
+                "corpusTier": "local_corpus",
+            }
+        ],
+    )
+
+    payload = module.run_live_compare_quality_eval(
+        cases=[
+            {
+                "case_id": "missing",
+                "query": "missing corpus",
+                "corpusRequirements": [{"artifactId": "missing_artifact"}],
+            }
+        ],
+        compare_runner=lambda _case: (_ for _ in ()).throw(AssertionError("compare should not run")),
+        cases_path=Path("cases.json"),
+        min_cases=1,
+        min_compare_packet_present_rate=1.0,
+        min_answerable_rate=1.0,
+        min_expected_source_coverage_rate=1.0,
+        min_expected_answerable_strict_source_coverage_rate=1.0,
+        min_dimension_coverage_rate=1.0,
+        min_supporting_span_coverage_rate=1.0,
+        min_trace_citation_coverage_rate=1.0,
+        fail_on_insufficient=False,
+        corpus_manifest_path=manifest_path,
+        config=_ConfigWithPapersDir(papers_dir),
+    )
+
+    case = payload["cases"][0]
+    assert case["status"] == "skipped"
+    assert case["skipReason"] == "skipped_missing_corpus"
+    assert case["errors"] == []
+    assert case["corpusRequirements"][0]["status"] == "missing_artifact"
+    assert case["corpusRequirements"][0]["searchedPaths"] == ["papers_dir/missing.pdf"]
+    assert payload["evaluatedCaseCount"] == 0
+    assert payload["skippedForMissingCorpus"] == 1
+
+
+def test_live_compare_quality_eval_accepts_repo_fixture_requirement(tmp_path):
+    module = _load_module()
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    fixture = tmp_path / "fixtures" / "fixture.txt"
+    fixture.parent.mkdir()
+    fixture.write_text("strict fixture evidence", encoding="utf-8")
+    fixture_hash = "sha256:" + hashlib.sha256(fixture.read_bytes()).hexdigest()
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "fixture_artifact",
+                "sourceIds": ["paper:a#0"],
+                "fixturePath": "fixtures/fixture.txt",
+                "expectedSourceContentHash": fixture_hash,
+                "corpusTier": "repo_fixture",
+            }
+        ],
+    )
+
+    payload = module.run_live_compare_quality_eval(
+        cases=[
+            {
+                "case_id": "fixture_present",
+                "query": "fixture present",
+                "expected_source_ids": ["paper:a#0", "paper:b#0"],
+                "expected_dimension_terms": ["accuracy"],
+                "expected_statuses": ["conflict"],
+                "expected_min_supporting_span_count": 2,
+                "corpusRequirements": [{"artifactId": "fixture_artifact", "minOffsetsRequired": True}],
+            }
+        ],
+        compare_runner=lambda _case: _payload(compare_packet=_compare_packet()),
+        cases_path=Path("cases.json"),
+        min_cases=1,
+        min_compare_packet_present_rate=1.0,
+        min_answerable_rate=1.0,
+        min_expected_source_coverage_rate=1.0,
+        min_expected_answerable_strict_source_coverage_rate=1.0,
+        min_dimension_coverage_rate=1.0,
+        min_supporting_span_coverage_rate=1.0,
+        min_trace_citation_coverage_rate=1.0,
+        fail_on_insufficient=True,
+        corpus_manifest_path=manifest_path,
+        config=_ConfigWithPapersDir(papers_dir),
+    )
+
+    case = payload["cases"][0]
+    assert payload["status"] == "ok"
+    assert payload["evaluatedCaseCount"] == 1
+    assert case["corpusRequirements"][0]["status"] == "ok"
+    assert case["corpusRequirements"][0]["path"] == "repo_fixture/fixtures/fixture.txt"
+    assert "resolvedPath" not in json.dumps(case["corpusRequirements"])
+
+
+def test_live_compare_quality_eval_fails_missing_repo_fixture_requirement(tmp_path):
+    module = _load_module()
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "fixture_artifact",
+                "sourceIds": ["paper:a#0"],
+                "expectedFilename": "fixture.txt",
+                "expectedSourceContentHash": "sha256:" + "0" * 64,
+                "corpusTier": "repo_fixture",
+            }
+        ],
+    )
+
+    payload = module.run_live_compare_quality_eval(
+        cases=[
+            {
+                "case_id": "fixture_missing",
+                "query": "fixture missing",
+                "corpusRequirements": [{"artifactId": "fixture_artifact"}],
+            }
+        ],
+        compare_runner=lambda _case: (_ for _ in ()).throw(AssertionError("compare should not run")),
+        cases_path=Path("cases.json"),
+        min_cases=1,
+        min_compare_packet_present_rate=0.0,
+        min_answerable_rate=0.0,
+        min_expected_source_coverage_rate=0.0,
+        min_expected_answerable_strict_source_coverage_rate=0.0,
+        min_dimension_coverage_rate=0.0,
+        min_supporting_span_coverage_rate=0.0,
+        min_trace_citation_coverage_rate=0.0,
+        fail_on_insufficient=True,
+        corpus_manifest_path=manifest_path,
+        config=_ConfigWithPapersDir(papers_dir),
+    )
+
+    case = payload["cases"][0]
+    assert case["status"] == "fail"
+    assert case["skipReason"] == ""
+    assert case["errors"] == ["corpus_requirement_failed:skipped_missing_corpus"]
+    assert payload["failedCaseCount"] == 1
+    assert payload["skippedCaseCount"] == 0
+
+
+def test_live_compare_quality_eval_runs_with_missing_optional_local_corpus(tmp_path):
+    module = _load_module()
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "optional_artifact",
+                "sourceIds": ["paper:a#0"],
+                "expectedFilename": "optional.pdf",
+                "expectedSourceContentHash": "sha256:" + "0" * 64,
+                "corpusTier": "optional_local_corpus",
+            }
+        ],
+    )
+
+    payload = module.run_live_compare_quality_eval(
+        cases=[
+            {
+                "case_id": "optional_missing",
+                "query": "optional corpus",
+                "expected_source_ids": ["paper:a#0", "paper:b#0"],
+                "expected_dimension_terms": ["accuracy"],
+                "expected_statuses": ["conflict"],
+                "expected_min_supporting_span_count": 2,
+                "corpusRequirements": [{"artifactId": "optional_artifact"}],
+            }
+        ],
+        compare_runner=lambda _case: _payload(compare_packet=_compare_packet()),
+        cases_path=Path("cases.json"),
+        min_cases=1,
+        min_compare_packet_present_rate=1.0,
+        min_answerable_rate=1.0,
+        min_expected_source_coverage_rate=1.0,
+        min_expected_answerable_strict_source_coverage_rate=1.0,
+        min_dimension_coverage_rate=1.0,
+        min_supporting_span_coverage_rate=1.0,
+        min_trace_citation_coverage_rate=1.0,
+        fail_on_insufficient=True,
+        corpus_manifest_path=manifest_path,
+        config=_ConfigWithPapersDir(papers_dir),
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["evaluatedCaseCount"] == 1
+    assert payload["skippedCaseCount"] == 0
+    assert payload["coveragePct"] == 1.0
+    assert payload["cases"][0]["corpusRequirements"][0]["status"] == "missing_artifact"
+
+
+def test_live_compare_quality_eval_summary_reports_corpus_coverage(tmp_path):
+    module = _load_module()
+    papers_dir = tmp_path / "papers"
+    papers_dir.mkdir()
+    mismatch_file = papers_dir / "mismatch.pdf"
+    mismatch_file.write_bytes(b"different")
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "missing_artifact",
+                "sourceIds": ["paper:missing#0"],
+                "expectedFilename": "missing.pdf",
+                "expectedSourceContentHash": "sha256:" + "0" * 64,
+                "corpusTier": "local_corpus",
+            },
+            {
+                "artifactId": "mismatch_artifact",
+                "sourceIds": ["paper:mismatch#0"],
+                "expectedFilename": "mismatch.pdf",
+                "expectedSourceContentHash": "sha256:" + "1" * 64,
+                "corpusTier": "local_corpus",
+            },
+        ],
+    )
+
+    def _runner(case):
+        if case["case_id"] == "pass":
+            return _payload(compare_packet=_compare_packet())
+        return _payload(compare_packet={})
+
+    payload = module.run_live_compare_quality_eval(
+        cases=[
+            {
+                "case_id": "pass",
+                "query": "pass",
+                "expected_source_ids": ["paper:a#0", "paper:b#0"],
+                "expected_dimension_terms": ["accuracy"],
+                "expected_statuses": ["conflict"],
+                "expected_min_supporting_span_count": 2,
+            },
+            {
+                "case_id": "fail",
+                "query": "fail",
+                "expected_min_supporting_span_count": 1,
+            },
+            {
+                "case_id": "missing",
+                "query": "missing corpus",
+                "corpusRequirements": [{"artifactId": "missing_artifact"}],
+            },
+            {
+                "case_id": "mismatch",
+                "query": "hash mismatch",
+                "corpusRequirements": [{"artifactId": "mismatch_artifact"}],
+            },
+        ],
+        compare_runner=_runner,
+        cases_path=Path("cases.json"),
+        min_cases=1,
+        min_compare_packet_present_rate=0.0,
+        min_answerable_rate=0.0,
+        min_expected_source_coverage_rate=0.0,
+        min_expected_answerable_strict_source_coverage_rate=0.0,
+        min_dimension_coverage_rate=0.0,
+        min_supporting_span_coverage_rate=0.0,
+        min_trace_citation_coverage_rate=0.0,
+        fail_on_insufficient=True,
+        corpus_manifest_path=manifest_path,
+        config=_ConfigWithPapersDir(papers_dir),
+    )
+
+    assert payload["declaredCaseCount"] == 4
+    assert payload["status"] == "failed"
+    assert "corpus_coverage_rate_below_threshold:0.5<1.0" in payload["errors"]
+    assert payload["evaluatedCaseCount"] == 2
+    assert payload["evaluableCaseCount"] == 2
+    assert payload["passedCaseCount"] == 1
+    assert payload["failedCaseCount"] == 1
+    assert payload["coveragePct"] == 0.5
+    assert payload["coverageReport"] == {
+        "passed": 1,
+        "evaluable": 2,
+        "declared": 4,
+        "coverage_pct": 0.5,
+        "skipped_for_missing_corpus": 1,
+        "skipped_for_hash_mismatch": 1,
+    }
+    assert payload["skippedForMissingCorpus"] == 1
+    assert payload["skippedForHashMismatch"] == 1
+    assert payload["cases"][2]["skipReason"] == "skipped_missing_corpus"
+    assert payload["cases"][3]["skipReason"] == "skipped_hash_mismatch"
+
+
+def test_live_compare_quality_eval_cli_fails_required_corpus_coverage_gap(tmp_path):
+    module = _load_module()
+    cases_path = tmp_path / "cases.json"
+    cases_path.write_text(
+        json.dumps(
+            [
+                {
+                    "case_id": "missing",
+                    "query": "missing corpus",
+                    "corpusRequirements": [{"artifactId": "missing_artifact"}],
+                }
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "missing_artifact",
+                "sourceIds": ["paper:missing#0"],
+                "expectedFilename": "missing.pdf",
+                "expectedSourceContentHash": "sha256:" + "0" * 64,
+                "corpusTier": "local_corpus",
+            }
+        ],
+    )
+
+    exit_code = module.main(
+        [
+            "--cases",
+            str(cases_path),
+            "--corpus-manifest",
+            str(manifest_path),
+            "--fail-on-insufficient",
+            "--min-cases",
+            "1",
+            "--json",
+        ]
+    )
+
+    assert exit_code == 1
+
+
+def test_live_compare_quality_eval_rejects_unsupported_corpus_manifest_schema(tmp_path):
+    module = _load_module()
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps({"schema": "wrong.schema", "artifacts": []}) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="unsupported corpus manifest schema"):
+        module.run_live_compare_quality_eval(
+            cases=[],
+            compare_runner=lambda _case: {},
+            cases_path=Path("cases.json"),
+            min_cases=1,
+            min_compare_packet_present_rate=1.0,
+            min_answerable_rate=1.0,
+            min_expected_source_coverage_rate=1.0,
+            min_expected_answerable_strict_source_coverage_rate=1.0,
+            min_dimension_coverage_rate=1.0,
+            min_supporting_span_coverage_rate=1.0,
+            min_trace_citation_coverage_rate=1.0,
+            fail_on_insufficient=False,
+            corpus_manifest_path=manifest_path,
+            config=_ConfigWithPapersDir(tmp_path / "papers"),
+        )
 
 
 def test_live_compare_quality_eval_skips_empty_local_cases_without_fail_flag():
