@@ -87,19 +87,19 @@ def parse_span_offsets(*values: Any) -> tuple[int | None, int | None]:
         token = str(value or "").strip()
         if not token:
             continue
-        match = re.search(r"(?:chars?|bytes?)[:=](\d+)\s*[-:]\s*(\d+)", token, re.IGNORECASE)
+        match = re.fullmatch(r"chars:(\d+)-(\d+)", token)
         if match:
             start = int(match.group(1))
             end = int(match.group(2))
-            if end >= start:
-                return start, end
-        match = re.search(r"\b(\d+)\s*[-:]\s*(\d+)\b", token)
-        if match:
-            start = int(match.group(1))
-            end = int(match.group(2))
-            if end >= start:
+            if end > start >= 0:
                 return start, end
     return None, None
+
+
+def _chars_locator(start: int | None, end: int | None) -> str:
+    if start is None or end is None or end <= start or start < 0:
+        return ""
+    return f"chars:{start}-{end}"
 
 
 def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
@@ -130,14 +130,28 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
         parsed_start, parsed_end = parse_span_offsets(span_locator)
         char_start = parsed_start if char_start is None else char_start
         char_end = parsed_end if char_end is None else char_end
+    if not span_locator:
+        span_locator = _chars_locator(char_start, char_end)
+    locator_start, locator_end = parse_span_offsets(span_locator)
+    span_offset_available = (
+        char_start is not None
+        and char_end is not None
+        and locator_start == char_start
+        and locator_end == char_end
+    )
     quote = str(item.get("excerpt") or item.get("text") or "")[:1000]
     text = quote if quote.strip() else _clean_text(item.get("title") or f"span {index}")
     source_id = _clean_text(item.get("source_id") or item.get("sourceId") or item.get("citation_target") or item.get("title"))
     if not source_id:
         source_id = f"source:{index}"
     source_hash = _clean_text(item.get("source_content_hash") or item.get("sourceContentHash"))
-    snippet_hash = _clean_text(item.get("snippet_hash") or item.get("snippetHash")) or _hash_text(text, length=32)
-    content_hash = source_hash or None
+    snippet_hash = _clean_text(
+        item.get("snippet_hash")
+        or item.get("snippetHash")
+        or item.get("content_hash")
+        or item.get("contentHash")
+    ) or _hash_text(text, length=32)
+    content_hash = snippet_hash
     classification = _normalize_classification(item.get("policy_class") or item.get("classification"))
     allow_external = item.get("allow_external") if "allow_external" in item else item.get("allowExternal")
     policy_allowed = item.get("policy_allowed") if "policy_allowed" in item else item.get("policyAllowed")
@@ -164,12 +178,13 @@ def _evidence_span(item: dict[str, Any], *, index: int) -> dict[str, Any]:
         "sourceContentHash": source_hash,
         "source_content_hash": source_hash,
         "content_hash": content_hash,
-        "contentHashAvailable": bool(source_hash),
+        "sourceContentHashAvailable": bool(source_hash),
+        "contentHashAvailable": bool(content_hash),
         "charStart": char_start,
         "char_start": char_start,
         "charEnd": char_end,
         "char_end": char_end,
-        "spanOffsetAvailable": char_start is not None and char_end is not None,
+        "spanOffsetAvailable": span_offset_available,
         "spanLocator": span_locator,
         "locator": span_locator,
         "text": text,
@@ -251,7 +266,7 @@ def _span_is_stale(span: dict[str, Any]) -> bool:
 
 def _span_has_strict_provenance(span: dict[str, Any]) -> bool:
     return (
-        bool(span.get("contentHashAvailable"))
+        bool(span.get("sourceContentHash") or span.get("source_content_hash"))
         and bool(span.get("spanOffsetAvailable"))
         and bool(span.get("source_id") or span.get("sourceId"))
         and not _span_is_stale(span)
@@ -304,7 +319,7 @@ def build_evidence_packet_contract(
     complete_spans = sum(
         1
         for span in spans
-        if bool(span.get("contentHashAvailable")) and bool(span.get("spanOffsetAvailable"))
+        if _span_has_strict_provenance(span)
     )
     coverage_status = "none" if not spans else ("complete" if complete_spans == len(spans) else "partial")
     if strict and raw_spans and not spans:
@@ -481,7 +496,7 @@ def build_answer_contract(
     citation_backed = sum(1 for item in claim_citation_map if item["citationRefs"])
     coverage_ratio = 1.0 if not claim_sentences else round(citation_backed / max(1, len(claim_sentences)), 4)
     unsupported = int((verification or {}).get("unsupportedClaimCount") or (verification or {}).get("claimUnsupportedCount") or 0)
-    abstain = evidence_payload.get("answerable") is False or not str(answer or "").strip()
+    abstain = evidence_payload.get("answerable") is False or not citations or not str(answer or "").strip()
     route = dict(routing_meta or {})
     model_id = _clean_text(route.get("model") or route.get("model_id") or route.get("modelId"))
     provider = _clean_text(route.get("provider"))
@@ -503,7 +518,12 @@ def build_answer_contract(
         "answer_text": str(answer or ""),
         "citations": citations,
         "abstain": bool(abstain),
-        "abstainReason": _clean_text(evidence_payload.get("answerableDecisionReason")) if abstain else "",
+        "abstainReason": (
+            _clean_text(evidence_payload.get("answerableDecisionReason"))
+            or ("missing_strict_citations" if not citations else "")
+            if abstain
+            else ""
+        ),
         "coverage": {
             "status": coverage_status,
             "citation_count": len(citations),

@@ -278,10 +278,21 @@ class AnswerNativeInputBuilder:
             return None
         if str(routing.get("memoryForm") or "").strip() != "section_cards":
             return None
+        if not any(str(item.get("sourceExcerpt") or item.get("source_excerpt") or "").strip() for item in section_cards):
+            diagnostics = dict(getattr(pipeline_result, "v2_diagnostics", {}) or {})
+            diagnostics["answerProvenance"] = {"mode": "section_cards_no_source_excerpt"}
+            diagnostics["scopeWarnings"] = ["section_cards_no_source_excerpt"]
+            pipeline_result.v2_diagnostics = diagnostics
+            return None
         supplemental_context = evidence_packet.context if str(section_coverage.get("status") or "").strip() != "strong" else ""
+        provenance_mode = (
+            "section_cards_verified"
+            if str(section_coverage.get("status") or "").strip() == "strong"
+            else "section_cards_weak_fallback"
+        )
         prompt = self.searcher._build_section_native_prompt(
             query=query,
-            answer_provenance="section_cards_verified",
+            answer_provenance=provenance_mode,
         )
         context = self.searcher._build_section_native_context(
             section_cards=section_cards,
@@ -289,9 +300,7 @@ class AnswerNativeInputBuilder:
             supplemental_context=supplemental_context,
         )
         diagnostics = dict(getattr(pipeline_result, "v2_diagnostics", {}) or {})
-        diagnostics["answerProvenance"] = {
-            "mode": "section_cards_verified" if str(section_coverage.get("status") or "").strip() == "strong" else "section_cards_weak_fallback"
-        }
+        diagnostics["answerProvenance"] = {"mode": provenance_mode}
         diagnostics["scopeWarnings"] = [f"missing_section:{item}" for item in list(section_coverage.get("missingRoles") or []) if str(item).strip()]
         pipeline_result.v2_diagnostics = diagnostics
         return prompt, context, section_coverage

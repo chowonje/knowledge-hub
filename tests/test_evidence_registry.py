@@ -9,6 +9,7 @@ from knowledge_hub.application.evidence_registry import (
     resolve_registry_lookup,
 )
 from knowledge_hub.application.evidence_substrate import build_trace_payload
+from knowledge_hub.application.source_revision_resolver import resolve_current_source_refs
 from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 
@@ -145,6 +146,28 @@ def test_registry_does_not_promote_snippet_content_hash_to_source_revision(tmp_p
     assert lookup["currentStaleness"]["status"] == "unchecked"
     assert lookup["currentStaleness"]["reason"] == "registry_record_has_no_bound_source_hashes"
     assert lookup["currentStaleness"]["matchedSourceIds"] == []
+
+
+def test_current_source_resolution_does_not_treat_content_hash_as_recorded_source_hash(tmp_path):
+    db = _db(tmp_path)
+    db.upsert_note(
+        "src_1",
+        title="Source 1",
+        content="source text",
+        file_path="vault/src_1.md",
+        source_type="note",
+        metadata={"content_hash": "sha256:snippet-only"},
+    )
+
+    current = resolve_current_source_refs(
+        db,
+        [{"sourceId": "src_1", "contentHash": "sha256:snippet-only"}],
+    )
+
+    assert current["status"] == "unchecked"
+    assert current["reason"] == "recorded_source_hash_missing"
+    assert current["matchedSourceIds"] == []
+    assert current["mismatchedSourceIds"] == []
 
 
 def test_answer_trace_registry_keeps_citations_linked_to_evidence_spans(tmp_path):

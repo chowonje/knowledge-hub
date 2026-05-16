@@ -659,6 +659,68 @@ def test_answer_orchestrator_prepare_answer_execution_inputs_updates_claim_nativ
     assert prepared.original_classification == "P1"
 
 
+def test_answer_orchestrator_promotes_weak_advisory_claim_consensus_to_strict(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM())
+    orchestrator = AnswerOrchestrator(searcher)
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_claim_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("prompt", "context"))
+    monkeypatch.setattr(
+        orchestrator,
+        "_evaluate_policy",
+        lambda **kwargs: (f"safe::{kwargs['context']}", _AllowedPolicy(), "P1"),
+    )
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="attention mechanism",
+        pipeline_result=_pipeline_result(),
+        evidence_packet=_evidence_packet(),
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[],
+        claim_consensus={
+            "supportCount": 0,
+            "weakClaimCount": 1,
+            "unsupportedClaimCount": 0,
+            "conflictCount": 0,
+        },
+        claim_context="claim-context",
+        allow_external=False,
+        route_mode="fixed",
+    )
+
+    assert prepared.claim_consensus_merge_mode == "strict"
+
+
+def test_section_native_inputs_skip_cards_without_source_excerpt():
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM())
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = SimpleNamespace(
+        v2_diagnostics={
+            "sectionCards": [
+                {
+                    "role": "method",
+                    "paperId": "paper:a",
+                    "contextualSummary": "LLM-written method summary.",
+                    "sourceExcerpt": "",
+                }
+            ],
+            "sectionCoverage": {"status": "strong"},
+            "routing": {"intent": "explanation", "memoryForm": "section_cards"},
+        }
+    )
+
+    result = orchestrator._section_native_inputs(
+        query="방법 설명",
+        pipeline_result=pipeline_result,
+        evidence_packet=_evidence_packet(),
+    )
+
+    assert result is None
+    assert pipeline_result.v2_diagnostics["answerProvenance"]["mode"] == "section_cards_no_source_excerpt"
+    assert "section_cards_no_source_excerpt" in pipeline_result.v2_diagnostics["scopeWarnings"]
+
+
 def test_answer_orchestrator_generate_and_stream_no_result_early_exit_stay_in_parity(monkeypatch):
     searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM())
     orchestrator = AnswerOrchestrator(searcher)

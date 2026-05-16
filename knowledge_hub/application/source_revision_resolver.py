@@ -105,8 +105,6 @@ def _note_hash(sqlite_db: Any, variants: list[str]) -> tuple[str, str]:
         metadata = _metadata_dict(note.get("metadata"))
         source_hash = _clean_text(
             metadata.get("source_content_hash")
-            or metadata.get("content_hash")
-            or metadata.get("contentHash")
             or source_hash_from_content(
                 content=note.get("content"),
                 metadata=metadata,
@@ -188,7 +186,7 @@ def resolve_current_source_refs(sqlite_db: Any, source_refs: list[dict[str, Any]
     expected: dict[str, str] = {}
     for ref in source_refs or []:
         source_id = _first_key(ref, "sourceId", "source_id")
-        recorded_hash = _first_key(ref, "sourceContentHash", "source_content_hash", "contentHash", "content_hash")
+        recorded_hash = _first_key(ref, "sourceContentHash", "source_content_hash")
         if source_id:
             expected[source_id] = recorded_hash
     if not expected:

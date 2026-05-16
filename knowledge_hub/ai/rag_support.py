@@ -378,12 +378,12 @@ def build_claim_native_prompt(*, query: str, answer_provenance: str) -> str:
         f"질문: {query}\n"
         f"answer_provenance={answer_provenance}\n\n"
         "규칙:\n"
-        "- 반드시 Verified Claims를 1차 근거로 사용한다.\n"
+        "- 반드시 Strict Verified Claims를 1차 근거로 사용한다.\n"
         "- Alignment Groups가 있으면 같은 frame 안에서만 비교한다.\n"
         "- Conflicts가 있으면 한쪽으로 평탄화하지 말고 출처와 함께 충돌을 드러낸다.\n"
         "- Scope Warnings와 Abstention Conditions가 있으면 답변에 그대로 반영한다.\n"
-        "- low-confidence fallback claim만 있을 때는 단정하지 말고 예비적 근거라고 명시한다.\n"
-        "- Verified Claims에 없는 내용은 추론으로 보강하지 않는다.\n"
+        "- Non-Strict Claim Diagnostics는 직접 답변 근거로 쓰지 말고 한계/불확실성으로만 다룬다.\n"
+        "- Strict Verified Claims에 없는 내용은 추론으로 보강하지 않는다.\n"
         "- 가능하면 '핵심 답변', '근거', '불확실성/한계'가 드러나게 짧게 쓴다.\n"
     )
 
@@ -394,9 +394,10 @@ def build_section_native_prompt(*, query: str, answer_provenance: str) -> str:
         f"질문: {query}\n"
         f"answer_provenance={answer_provenance}\n\n"
         "규칙:\n"
-        "- 반드시 Selected Sections를 1차 이해 근거로 사용한다.\n"
+        "- 반드시 Selected Sections의 Evidence excerpt를 1차 이해 근거로 사용한다.\n"
         "- problem, method, results, limitations의 역할을 구분해서 설명한다.\n"
         "- Missing Sections나 Supplemental Retrieval Context가 있으면 불확실성/한계에 반영한다.\n"
+        "- Summary, Thesis, Key points는 section 이해를 돕는 진단 정보이며 직접 사실 근거로 단정하지 않는다.\n"
         "- 외부 배경지식을 paper-native section 요약과 섞어 사실처럼 단정하지 않는다.\n"
         "- 선택된 section에 없는 내용은 추론으로 보강하지 않는다.\n"
         "- 가능하면 '핵심 답변', '근거', '불확실성/한계'가 드러나게 짧게 쓴다.\n"
@@ -419,31 +420,42 @@ def build_claim_native_context(
         if clean_text(item.get("claimCardId"))
     }
     claim_blocks: list[str] = []
+    diagnostic_blocks: list[str] = []
     for index, claim in enumerate(claim_cards, 1):
         claim_id = clean_text(claim.get("claimCardId") or claim.get("claim_card_id"))
         verification = verification_by_id.get(claim_id, {})
         anchors = [clean_text(item) for item in list(claim.get("anchorExcerpts") or []) if clean_text(item)]
-        claim_blocks.append(
-            "\n".join(
-                [
-                    f"Claim {index} [{clean_text(claim.get('sourceKind') or claim.get('source_kind'))}:{clean_text(claim.get('sourceId') or claim.get('source_id'))}]",
-                    f"  Text: {clean_text(claim.get('summaryText') or claim.get('summary_text') or claim.get('claimText') or claim.get('claim_text'))}",
-                    (
-                        "  Frame: "
-                        f"task={clean_text(claim.get('taskCanonical') or claim.get('task'))}, "
-                        f"dataset={clean_text(claim.get('datasetCanonical') or claim.get('dataset'))}, "
-                        f"metric={clean_text(claim.get('metricCanonical') or claim.get('metric'))}, "
-                        f"comparator={clean_text(claim.get('comparatorCanonical') or claim.get('comparator'))}"
-                    ),
-                    f"  Status: {clean_text(claim.get('status'))}, origin={clean_text(claim.get('origin'))}, trust={clean_text(claim.get('trustLevel') or claim.get('trust_level'))}",
-                    f"  Conditions: {clean_text(claim.get('conditionText') or claim.get('condition_text')) or '(none)'}",
-                    f"  Scope: {clean_text(claim.get('scopeText') or claim.get('scope_text')) or '(none)'}",
-                    f"  Limitation: {clean_text(claim.get('negativeScopeText') or claim.get('negative_scope_text') or claim.get('limitationText') or claim.get('limitation_text')) or '(none)'}",
-                    f"  Verification: {clean_text(verification.get('status')) or 'unknown'}",
-                    f"  Evidence anchor: {anchors[0] if anchors else '(none)'}",
-                ]
-            )
+        verification_status = clean_text(verification.get("status")).lower()
+        claim_status = clean_text(claim.get("status")).lower()
+        trust_level = clean_text(claim.get("trustLevel") or claim.get("trust_level")).lower()
+        strict_supported = (
+            verification_status == "supported"
+            and claim_status not in {"unsupported", "direction_conflict", "numeric_mismatch"}
+            and trust_level != "low"
         )
+        block = "\n".join(
+            [
+                f"Claim {index} [{clean_text(claim.get('sourceKind') or claim.get('source_kind'))}:{clean_text(claim.get('sourceId') or claim.get('source_id'))}]",
+                f"  Text: {clean_text(claim.get('summaryText') or claim.get('summary_text') or claim.get('claimText') or claim.get('claim_text'))}",
+                (
+                    "  Frame: "
+                    f"task={clean_text(claim.get('taskCanonical') or claim.get('task'))}, "
+                    f"dataset={clean_text(claim.get('datasetCanonical') or claim.get('dataset'))}, "
+                    f"metric={clean_text(claim.get('metricCanonical') or claim.get('metric'))}, "
+                    f"comparator={clean_text(claim.get('comparatorCanonical') or claim.get('comparator'))}"
+                ),
+                f"  Status: {clean_text(claim.get('status'))}, origin={clean_text(claim.get('origin'))}, trust={clean_text(claim.get('trustLevel') or claim.get('trust_level'))}",
+                f"  Conditions: {clean_text(claim.get('conditionText') or claim.get('condition_text')) or '(none)'}",
+                f"  Scope: {clean_text(claim.get('scopeText') or claim.get('scope_text')) or '(none)'}",
+                f"  Limitation: {clean_text(claim.get('negativeScopeText') or claim.get('negative_scope_text') or claim.get('limitationText') or claim.get('limitation_text')) or '(none)'}",
+                f"  Verification: {clean_text(verification.get('status')) or 'unknown'}",
+                f"  Evidence anchor: {anchors[0] if anchors else '(none)'}",
+            ]
+        )
+        if strict_supported:
+            claim_blocks.append(block)
+        else:
+            diagnostic_blocks.append(block)
     alignment_blocks: list[str] = []
     for item in claim_alignment or []:
         frame = dict(item.get("canonicalFrame") or item.get("frame") or {})
@@ -471,8 +483,10 @@ def build_claim_native_context(
     scope_lines = [f"- {clean_text(item)}" for item in (scope_warnings or []) if clean_text(item)]
     abstention_lines = [f"- {clean_text(item)}" for item in (abstention_conditions or []) if clean_text(item)]
     parts = [
-        "=== Verified Claims ===",
+        "=== Strict Verified Claims ===",
         "\n\n".join(claim_blocks) or "(none)",
+        "=== Non-Strict Claim Diagnostics ===",
+        "\n\n".join(diagnostic_blocks) or "(none)",
         "=== Alignment Groups ===",
         "\n\n".join(alignment_blocks) or "(none)",
         "=== Conflicts ===",
@@ -503,10 +517,10 @@ def build_section_native_context(
                     f"Section {index} [{clean_text(section.get('role')) or 'other'}:{clean_text(section.get('paperId') or section.get('paper_id'))}]",
                     f"  Title: {clean_text(section.get('title')) or '(untitled)'}",
                     f"  Path: {clean_text(section.get('sectionPath') or section.get('section_path')) or '(none)'}",
-                    f"  Summary: {clean_text(section.get('contextualSummary') or section.get('contextual_summary')) or '(none)'}",
                     f"  Evidence excerpt: {clean_text(section.get('sourceExcerpt') or section.get('source_excerpt')) or '(none)'}",
-                    f"  Thesis: {clean_text(section.get('documentThesis') or section.get('document_thesis')) or '(none)'}",
-                    f"  Key points: {', '.join(key_points) or '(none)'}",
+                    f"  Diagnostic summary: {clean_text(section.get('contextualSummary') or section.get('contextual_summary')) or '(none)'}",
+                    f"  Diagnostic thesis: {clean_text(section.get('documentThesis') or section.get('document_thesis')) or '(none)'}",
+                    f"  Diagnostic key points: {', '.join(key_points) or '(none)'}",
                     f"  Scope notes: {', '.join(scope_notes) or '(none)'}",
                     f"  Confidence: {safe_float(section.get('confidence'), 0.0):.3f}",
                 ]
