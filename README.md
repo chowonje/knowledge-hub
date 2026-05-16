@@ -134,7 +134,7 @@ khub status
 khub discover "large language model agent" -n 3
 
 # 5. 수집 결과 확인
-khub paper list
+khub papers list
 
 # 6. 인덱싱
 khub index
@@ -146,10 +146,10 @@ khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
 
 # 9. paper reading surface
-khub paper summary --paper-id 2501.06322
-khub paper evidence --paper-id 2501.06322
-khub paper memory --paper-id 2501.06322
-khub paper related --paper-id 2501.06322
+khub papers summary --paper-id 2501.06322
+khub papers evidence --paper-id 2501.06322
+khub papers memory --paper-id 2501.06322
+khub papers related --paper-id 2501.06322
 
 # 10. Codex-style read-only task context
 khub agent context "how should I refactor the RAG flow?" --repo-path .
@@ -173,7 +173,7 @@ khub labs ops --help
 khub labs crawl youtube-ingest --url "https://youtu.be/<video-id>" --topic "agents"
 ```
 
-MCP에서도 labs 도구는 기본적으로 숨겨지며, 필요하면 profile을 명시합니다.
+MCP에서도 labs/build/agentic/ingest-heavy 도구는 기본적으로 숨겨지며, 필요하면 profile을 명시합니다. Default profile은 read/retrieval/context and paper lookup 중심입니다.
 
 ```bash
 export KHUB_MCP_PROFILE=default  # default | labs | all
@@ -497,30 +497,26 @@ khub discover "AI agent" --judge --json
 
 `paper judge`는 기본 retrieval 코어가 아니라, 논문 discovery 입력단에서만 쓰는 선택형 필터입니다. 공식 opt-in은 호출별 `--judge`와 MCP `discover_and_ingest(judge_enabled=true)`뿐이며, 전역 config로 기본 on/off를 바꾸는 제품 계약은 현재 두지 않습니다. `allow_external=false`가 기본이고, 외부 judge가 허용되지 않거나 LLM judge를 쓸 수 없으면 rule-only fallback으로만 동작합니다.
 
-judge를 켜서 discovery를 실행하면 keep/skip 판단이 로컬 `~/.khub/paper_judge_events.jsonl`에 자동 기록됩니다. 사람이 나중에 판단을 뒤집고 싶으면 `khub paper feedback <paper_id> --label keep|skip`으로 수동 피드백을 남겨 future calibration 데이터로 사용할 수 있습니다.
+judge를 켜서 discovery를 실행하면 keep/skip 판단이 로컬 `~/.khub/paper_judge_events.jsonl`에 자동 기록됩니다. 사람이 나중에 판단을 뒤집고 싶으면 hidden operator path인 `khub paper feedback <paper_id> --label keep|skip`으로 수동 피드백을 남겨 future calibration 데이터로 사용할 수 있습니다.
 
-### `khub paper` - paper reading and maintenance
+### `khub papers` - paper reading surface
 
 ```bash
 # user-facing reading surface
-khub paper summary --paper-id 2401.12345
-khub paper evidence --paper-id 2401.12345
-khub paper memory --paper-id 2401.12345
-khub paper related --paper-id 2401.12345
+khub papers summary --paper-id 2401.12345
+khub papers evidence --paper-id 2401.12345
+khub papers memory --paper-id 2401.12345
+khub papers related --paper-id 2401.12345
 
-# maintenance / ingestion helpers
-khub paper list
-khub paper info 2401.12345
-khub paper download 2401.12345
-khub paper translate 2401.12345
-khub paper summarize 2401.12345
-khub paper summarize-all --bad-only
-khub paper sync-keywords
-khub paper build-concepts
-khub paper normalize-concepts
+# public ingestion/materialization helpers
+khub papers list
+khub papers info 2401.12345
+khub papers download 2401.12345
+khub papers translate 2401.12345
+khub papers summarize 2401.12345
 ```
 
-`summary|evidence|memory|related`는 현재 promoted reading surface입니다. `summarize`와 `summarize-all`은 artifact 생성/갱신 쪽 maintenance surface입니다.
+`summary|evidence|memory|related`는 현재 promoted reading surface입니다. `khub paper`는 hidden compatibility alias이며, feedback/sync/concept/repair/batch remediation commands는 operator-only로 직접 실행 가능합니다.
 
 ### `khub explore` - 학술 탐색
 
@@ -693,14 +689,14 @@ Cursor 예시 설정:
 | 명령 | LLM 필요 | 임베딩 필요 | Obsidian 필요 | API 키 |
 |---|---|---|---|---|
 | `khub discover` | O (번역/요약) | O (인덱싱) | 선택 | 프로바이더에 따라 |
-| `khub paper list/info` | - | - | - | - |
-| `khub paper translate` | O | - | - | 프로바이더에 따라 |
-| `khub paper summarize` | O | - | - | 프로바이더에 따라 |
+| `khub papers list/info` | - | - | - | - |
+| `khub papers translate` | O | - | - | 프로바이더에 따라 |
+| `khub papers summarize` | O | - | - | 프로바이더에 따라 |
 | `khub index` | - | O | 선택(개념 노트) | 프로바이더에 따라 |
 | `khub search/ask` | O (ask만) | O | - | 프로바이더에 따라 |
 | `khub explore *` | - | - | - | - (Semantic Scholar 무료) |
-| `khub paper sync-keywords` | O | - | O | 프로바이더에 따라 |
-| `khub paper build-concepts` | O | - | O | 프로바이더에 따라 |
+| `khub paper sync-keywords` (hidden operator) | O | - | O | 프로바이더에 따라 |
+| `khub paper build-concepts` (hidden operator) | O | - | O | 프로바이더에 따라 |
 | `khub status` | - | - | - | - |
 
 ## Troubleshooting
