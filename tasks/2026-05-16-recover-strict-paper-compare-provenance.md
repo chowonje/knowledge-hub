@@ -30,9 +30,11 @@
 - `knowledge_hub/ai/compare_packet.py`
 - `knowledge_hub/papers/card_v2_builder.py`
 - `knowledge_hub/papers/knowledge_slots.py`
+- `knowledge_hub/application/paper_source_repairs.py`
 - `tests/test_paper_ask_v2.py`
 - `tests/test_compare_packet_contract.py`
 - `tests/test_paper_knowledge_slots.py`
+- `tests/test_paper_source_repairs.py`
 - `CHANGELOG.md`
 - `docs/PROJECT_STATE.md`
 
@@ -45,6 +47,7 @@
 
 ## Result
 
-- Local `alexnet-2012` source was repaired by linking the existing canonical PDF in the configured paper store and rebuilding deterministic document-memory / PaperCardV2 artifacts. A SQLite backup was created first under `~/.khub/`.
-- Wide live compare eval is now `15/15` pass with `expectedAnswerablePassRate=1.0`, `expectedAnswerableStrictSourceCoverageRate=1.0`, `expectedNoAnswerPassRate=1.0`, `fallbackOnlyCaseRate=0.0`, and `nonEvidenceLeakCount=0`.
+- Local `alexnet-2012` source was first repaired by linking the existing canonical PDF in the configured paper store and rebuilding deterministic document-memory / PaperCardV2 artifacts. A SQLite backup was created first under `~/.khub/`.
+- Reproducibility follow-up: a pre-repair database copy failed the wide compare eval on AlexNet strict source coverage; applying the repo-controlled `khub paper repair-source --paper-id alexnet-2012` path against that copied DB restored the canonical source path and produced a `15/15` isolated run without depending on the manually edited operator DB.
+- Wide live compare eval is now reproducible after the repair command with `expectedAnswerablePassRate=1.0`, `expectedAnswerableStrictSourceCoverageRate=1.0`, `expectedNoAnswerPassRate=1.0`, `fallbackOnlyCaseRate=0.0`, and `nonEvidenceLeakCount=0`.
 - Regression coverage now protects PDF source provenance recovery, Korean summary and same-language paraphrase non-promotion, explicit non-strict slot refs, snippet-hash/source-hash separation, and `memory-unit:` locator non-promotion.
