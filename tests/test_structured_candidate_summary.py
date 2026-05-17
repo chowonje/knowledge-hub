@@ -1,0 +1,167 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from knowledge_hub.core.schema_validator import validate_payload
+from knowledge_hub.papers.structured_candidate_summary import (
+    STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID,
+    build_structured_candidate_summary,
+    write_structured_candidate_summary_reports,
+)
+
+
+def _write_report(root: Path, name: str, payload: dict) -> Path:
+    path = root / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
+def _reports(root: Path) -> dict[str, Path]:
+    return {
+        "sectionspan": _write_report(
+            root,
+            "sectionspan.json",
+            {
+                "schema": "knowledge-hub.paper.sectionspan-candidate-report.v1",
+                "status": "ok",
+                "counts": {
+                    "sectionSpanCandidates": 3,
+                    "heldOutCandidates": 1,
+                    "strictEligibleCandidates": 0,
+                    "citationGradeCandidates": 0,
+                    "byPaper": {"paper-1": 3},
+                    "heldOutByReason": {"held_out_toc": 1},
+                },
+            },
+        ),
+        "figure_caption": _write_report(
+            root,
+            "figure.json",
+            {
+                "schema": "knowledge-hub.paper.figure-caption-candidate-report.v1",
+                "status": "ok",
+                "counts": {
+                    "figureCaptionCandidates": 2,
+                    "alignedCaptionSpanCandidates": 1,
+                    "strictEligibleCandidates": 0,
+                    "citationGradeCandidates": 0,
+                    "byPaper": {"paper-1": 2},
+                    "byReadiness": {
+                        "caption_span_aligned_region_candidate_non_strict": 1,
+                        "blocked_alignment_incomplete": 1,
+                    },
+                    "strictBlockerSummary": {"figure_region_link_incomplete": 2},
+                },
+            },
+        ),
+        "equation_quote": _write_report(
+            root,
+            "equation.json",
+            {
+                "schema": "knowledge-hub.paper.equation-quote-candidate-report.v1",
+                "status": "ok",
+                "counts": {
+                    "equationQuoteCandidates": 1,
+                    "alignedEquationQuoteCandidates": 0,
+                    "strictEligibleCandidates": 0,
+                    "citationGradeCandidates": 0,
+                    "byPaper": {"paper-1": 1},
+                    "byReadiness": {"blocked_alignment_incomplete": 1},
+                    "strictBlockerSummary": {"equation_alignment_missing": 1},
+                },
+            },
+        ),
+        "table_region": _write_report(
+            root,
+            "table.json",
+            {
+                "schema": "knowledge-hub.paper.table-region-candidate-report.v1",
+                "status": "ok",
+                "counts": {
+                    "tableRegionCandidates": 1,
+                    "alignedTableCaptionCandidates": 1,
+                    "strictEligibleCandidates": 0,
+                    "citationGradeCandidates": 0,
+                    "byPaper": {"paper-1": 1},
+                    "byReadiness": {"caption_span_aligned_region_candidate_cell_blocked": 1},
+                    "strictBlockerSummary": {"table_cell_provenance_missing": 1},
+                },
+            },
+        ),
+    }
+
+
+def test_structured_candidate_summary_aggregates_four_layers_and_validates_schema(tmp_path: Path) -> None:
+    paths = _reports(tmp_path)
+
+    payload = build_structured_candidate_summary(
+        sectionspan_report=paths["sectionspan"],
+        figure_caption_report=paths["figure_caption"],
+        equation_quote_report=paths["equation_quote"],
+        table_region_report=paths["table_region"],
+    )
+
+    assert payload["schema"] == STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID
+    assert validate_payload(payload, STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID, strict=True).ok
+    assert payload["counts"]["layerCount"] == 4
+    assert payload["counts"]["totalCandidates"] == 7
+    assert payload["counts"]["byLayer"] == {
+        "sectionspan": 3,
+        "figure_caption": 2,
+        "equation_quote": 1,
+        "table_region": 1,
+    }
+    assert payload["counts"]["alignedByLayer"] == {
+        "sectionspan": 3,
+        "figure_caption": 1,
+        "equation_quote": 0,
+        "table_region": 1,
+    }
+    assert payload["counts"]["blockedOrHeldOutByLayer"] == {
+        "sectionspan": 1,
+        "figure_caption": 1,
+        "equation_quote": 1,
+        "table_region": 0,
+    }
+
+
+def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: Path) -> None:
+    paths = _reports(tmp_path)
+
+    payload = build_structured_candidate_summary(
+        sectionspan_report=paths["sectionspan"],
+        figure_caption_report=paths["figure_caption"],
+        equation_quote_report=paths["equation_quote"],
+        table_region_report=paths["table_region"],
+    )
+
+    assert payload["policy"]["strictEvidenceCreated"] is False
+    assert payload["policy"]["runtimePromotionAllowed"] is False
+    assert payload["policy"]["parserRoutingChanged"] is False
+    assert payload["policy"]["answerIntegrationChanged"] is False
+    assert payload["counts"]["strictEligibleCandidates"] == 0
+    assert payload["counts"]["citationGradeCandidates"] == 0
+    assert payload["counts"]["runtimeEvidenceCandidates"] == 0
+    assert payload["releaseCandidateAssessment"]["strictEvidenceReady"] is False
+    assert payload["releaseCandidateAssessment"]["parserRoutingReady"] is False
+
+
+def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markdown(tmp_path: Path) -> None:
+    paths = _reports(tmp_path / "input")
+    payload = build_structured_candidate_summary(
+        sectionspan_report=paths["sectionspan"],
+        figure_caption_report=paths["figure_caption"],
+        equation_quote_report=paths["equation_quote"],
+        table_region_report=paths["table_region"],
+    )
+
+    report_paths = write_structured_candidate_summary_reports(payload, tmp_path / "reports")
+
+    assert set(report_paths) == {"summary", "markdown"}
+    summary = json.loads(Path(report_paths["summary"]).read_text(encoding="utf-8"))
+    markdown = Path(report_paths["markdown"]).read_text(encoding="utf-8")
+    assert validate_payload(summary, STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID, strict=True).ok
+    assert "All layer outputs remain non-strict candidates" in markdown
+    assert "complex_paper_qa_eval_design" in markdown
