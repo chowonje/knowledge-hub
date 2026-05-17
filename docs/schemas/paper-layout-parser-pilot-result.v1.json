@@ -9,23 +9,25 @@
     "generatedAt": { "type": "string" },
     "request": {
       "type": "object",
-      "required": ["paperIds", "parsers", "run", "outputDir"],
+      "required": ["paperIds", "parsers", "run", "timeoutSeconds", "outputDir"],
       "properties": {
         "paperIds": { "type": "array", "items": { "type": "string" } },
         "parsers": { "type": "array", "items": { "type": "string" } },
         "run": { "type": "boolean" },
+        "timeoutSeconds": { "type": "integer", "minimum": 0 },
         "outputDir": { "type": "string" }
       },
       "additionalProperties": true
     },
     "counts": {
       "type": "object",
-      "required": ["planned", "ok", "blocked", "failed"],
+      "required": ["planned", "ok", "blocked", "failed", "timeout"],
       "properties": {
         "planned": { "type": "integer", "minimum": 0 },
         "ok": { "type": "integer", "minimum": 0 },
         "blocked": { "type": "integer", "minimum": 0 },
-        "failed": { "type": "integer", "minimum": 0 }
+        "failed": { "type": "integer", "minimum": 0 },
+        "timeout": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
@@ -57,16 +59,20 @@
                 "available",
                 "availability",
                 "durationMs",
+                "durationSeconds",
+                "timeoutSeconds",
                 "artifactDir",
                 "metrics"
               ],
               "properties": {
                 "parser": { "type": "string" },
-                "status": { "type": "string", "enum": ["planned", "ok", "blocked", "failed"] },
+                "status": { "type": "string", "enum": ["planned", "ok", "blocked", "failed", "timeout"] },
                 "reason": { "type": "string" },
                 "available": { "type": "boolean" },
                 "availability": { "type": "object" },
                 "durationMs": { "type": "integer", "minimum": 0 },
+                "durationSeconds": { "type": "number", "minimum": 0 },
+                "timeoutSeconds": { "type": "integer", "minimum": 0 },
                 "artifactDir": { "type": "string" },
                 "metrics": {
                   "type": "object",

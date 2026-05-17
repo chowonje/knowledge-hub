@@ -223,12 +223,13 @@ khub papers extraction-report --degraded-only --limit 50 --json
 
 ```bash
 khub paper layout-parser-pilot --paper-id 1706.03762 --json
-khub paper layout-parser-pilot --paper-id 1706.03762 --parser pymupdf --run --output-dir ~/.khub/reports/layout-parser-pilot/manual --json
+khub paper layout-parser-pilot --paper-id 1706.03762 --parser opendataloader --run --timeout-seconds 60 --output-dir ~/.khub/reports/layout-parser-pilot/manual --json
 ```
 
 용도:
 - 명시한 paper allowlist에 대해 PyMuPDF / OpenDataLoader / MinerU 후보를 비교한다.
 - 기본값은 plan-only이며, `--run`을 줘도 parser output은 configured `papers_dir/parsed`가 아니라 지정한 isolated report root 아래에만 쓴다.
+- `--timeout-seconds`로 parser별 제한 시간을 걸 수 있고, timeout은 green이 아니라 `timeout` status로 남긴다.
 - parser install 누락, source PDF 누락, parser failure를 schema-backed result에 남긴다.
 - 이 command는 SQLite mutation, reindex, reembed, global parser routing, source acquisition, strict evidence policy 변경을 하지 않는다.
 

@@ -11,10 +11,15 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import importlib
 import importlib.metadata
+import json
+import multiprocessing as mp
+import os
 from pathlib import Path
+import queue
 import shutil
+import signal
 import time
-from typing import Any, Callable
+from typing import Any
 
 from knowledge_hub.papers.extraction_diagnostics import diagnose_paper_parse
 from knowledge_hub.papers.mineru_adapter import MinerUPDFAdapter
@@ -36,6 +41,10 @@ DEFAULT_LAYOUT_PILOT_PAPERS = (
     "2201.11903",
 )
 SUPPORTED_LAYOUT_PILOT_PARSERS = ("pymupdf", "opendataloader", "mineru")
+
+
+class ParserTimeoutError(RuntimeError):
+    """Raised when an isolated parser run exceeds its pilot timeout."""
 
 
 def _clean_text(value: Any) -> str:
@@ -212,6 +221,123 @@ def _run_parser(
     )
 
 
+def _read_json(path: Path) -> dict[str, Any]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _load_parser_run_from_artifacts(*, parser_root: Path, paper_id: str) -> _ParserRun:
+    artifact_dir = parser_root / "parsed" / paper_id
+    document_path = artifact_dir / "document.json"
+    markdown_path = artifact_dir / "document.md"
+    manifest_path = artifact_dir / "manifest.json"
+    document = _read_json(document_path)
+    manifest = _read_json(manifest_path)
+    if not document or not manifest:
+        raise RuntimeError("parser process completed but parsed artifacts are missing")
+    try:
+        markdown_text = markdown_path.read_text(encoding="utf-8")
+    except Exception:
+        markdown_text = str(document.get("markdown_text") or "")
+    return _ParserRun(
+        markdown_text=markdown_text,
+        elements=[dict(item) for item in list(document.get("elements") or []) if isinstance(item, dict)],
+        parser_meta=dict(document.get("parser_meta") or manifest.get("parser_meta") or {}),
+        artifact_dir=str(artifact_dir),
+    )
+
+
+def _parser_worker(
+    result_queue: mp.Queue,
+    parser: str,
+    paper_id: str,
+    pdf_path: str,
+    parser_root: str,
+) -> None:
+    if hasattr(os, "setsid"):
+        try:
+            os.setsid()
+        except Exception:
+            pass
+    try:
+        _run_parser(
+            parser=parser,
+            paper_id=paper_id,
+            pdf_path=Path(pdf_path),
+            parser_root=Path(parser_root),
+        )
+        result_queue.put({"ok": True})
+    except BaseException as error:  # pragma: no cover - exercised through parent behavior
+        result_queue.put({"ok": False, "error": _clean_text(error) or error.__class__.__name__})
+
+
+def _terminate_parser_process(process: mp.Process) -> None:
+    pid = process.pid
+    if pid is None:
+        return
+    if hasattr(os, "killpg"):
+        try:
+            os.killpg(pid, signal.SIGTERM)
+        except ProcessLookupError:
+            return
+        except Exception:
+            pass
+    try:
+        process.terminate()
+    except Exception:
+        pass
+    process.join(timeout=3)
+    if process.is_alive():
+        if hasattr(os, "killpg"):
+            try:
+                os.killpg(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                return
+            except Exception:
+                pass
+        try:
+            process.kill()
+        except Exception:
+            pass
+        process.join(timeout=3)
+
+
+def _run_parser_with_timeout(
+    *,
+    parser: str,
+    paper_id: str,
+    pdf_path: Path,
+    parser_root: Path,
+    timeout_seconds: int,
+) -> _ParserRun:
+    timeout = max(0, int(timeout_seconds or 0))
+    if timeout <= 0:
+        return _run_parser(parser=parser, paper_id=paper_id, pdf_path=pdf_path, parser_root=parser_root)
+
+    result_queue: mp.Queue = mp.Queue(maxsize=1)
+    process = mp.Process(
+        target=_parser_worker,
+        args=(result_queue, parser, paper_id, str(pdf_path), str(parser_root)),
+    )
+    process.start()
+    process.join(timeout=timeout)
+    if process.is_alive():
+        _terminate_parser_process(process)
+        raise ParserTimeoutError(f"parser timed out after {timeout}s")
+    try:
+        payload = result_queue.get_nowait()
+    except queue.Empty as error:
+        exit_code = process.exitcode
+        raise RuntimeError(f"parser process exited without result; exit_code={exit_code}") from error
+    if not isinstance(payload, dict) or not payload.get("ok"):
+        reason = _clean_text(payload.get("error") if isinstance(payload, dict) else "") or "parser process failed"
+        raise RuntimeError(reason)
+    return _load_parser_run_from_artifacts(parser_root=parser_root, paper_id=paper_id)
+
+
 def _parser_item(
     *,
     parser: str,
@@ -221,6 +347,7 @@ def _parser_item(
     reason: str,
     available: dict[str, Any],
     duration_ms: int = 0,
+    timeout_seconds: int = 0,
     run: _ParserRun | None = None,
     diagnostic: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
@@ -234,13 +361,15 @@ def _parser_item(
         "available": bool(available.get("available")),
         "availability": dict(available),
         "durationMs": int(duration_ms),
+        "durationSeconds": round(float(duration_ms) / 1000.0, 3),
+        "timeoutSeconds": max(0, int(timeout_seconds or 0)),
         "artifactDir": _safe_path(run.artifact_dir, root=parser_root) if run is not None else "",
         "metrics": _layout_metrics(markdown_text=markdown_text, elements=elements, diagnostic=diagnostic),
     }
 
 
 def _counts(items: list[dict[str, Any]]) -> dict[str, int]:
-    counts = {"planned": 0, "ok": 0, "blocked": 0, "failed": 0}
+    counts = {"planned": 0, "ok": 0, "blocked": 0, "failed": 0, "timeout": 0}
     for paper in items:
         for parser_item in list(paper.get("parsers") or []):
             status = str(parser_item.get("status") or "")
@@ -251,6 +380,10 @@ def _counts(items: list[dict[str, Any]]) -> dict[str, int]:
 
 def _overall_status(counts: dict[str, int]) -> str:
     if counts.get("failed", 0):
+        return "failed"
+    if counts.get("timeout", 0):
+        if counts.get("ok", 0) or counts.get("planned", 0) or counts.get("blocked", 0):
+            return "partial"
         return "failed"
     if counts.get("blocked", 0) and (counts.get("ok", 0) or counts.get("planned", 0)):
         return "partial"
@@ -267,6 +400,7 @@ def run_layout_parser_pilot(
     parsers: list[str] | tuple[str, ...] | None = None,
     output_dir: str | Path | None = None,
     run: bool = False,
+    timeout_seconds: int = 0,
 ) -> dict[str, Any]:
     """Plan or run isolated parser comparisons for explicit paper ids."""
 
@@ -276,6 +410,7 @@ def run_layout_parser_pilot(
     parser_tokens = [_clean_text(item).casefold() for item in list(parsers or []) if _clean_text(item)]
     if not parser_tokens:
         parser_tokens = ["pymupdf", "opendataloader", "mineru"]
+    timeout = max(0, int(timeout_seconds or 0))
     output_root = Path(str(output_dir)).expanduser() if output_dir is not None else _default_output_dir()
     if run:
         output_root.mkdir(parents=True, exist_ok=True)
@@ -299,6 +434,7 @@ def run_layout_parser_pilot(
                             status="blocked",
                             reason="paper_not_registered",
                             available=availability.get(parser, {"available": False}),
+                            timeout_seconds=timeout,
                         )
                         for parser in parser_tokens
                     ],
@@ -322,6 +458,7 @@ def run_layout_parser_pilot(
                         status="blocked",
                         reason="unsupported_parser",
                         available=available,
+                        timeout_seconds=timeout,
                     )
                 )
                 continue
@@ -334,6 +471,7 @@ def run_layout_parser_pilot(
                         status="blocked",
                         reason="source_pdf_missing",
                         available=available,
+                        timeout_seconds=timeout,
                     )
                 )
                 continue
@@ -346,6 +484,7 @@ def run_layout_parser_pilot(
                         status="blocked",
                         reason=str(available.get("reason") or "parser_unavailable"),
                         available=available,
+                        timeout_seconds=timeout,
                     )
                 )
                 continue
@@ -358,16 +497,18 @@ def run_layout_parser_pilot(
                         status="planned",
                         reason="run_required",
                         available=available,
+                        timeout_seconds=timeout,
                     )
                 )
                 continue
             started = time.perf_counter()
             try:
-                parser_run = _run_parser(
+                parser_run = _run_parser_with_timeout(
                     parser=parser,
                     paper_id=paper_id,
                     pdf_path=pdf_path,
                     parser_root=parser_root,
+                    timeout_seconds=timeout,
                 )
                 diagnostic = diagnose_paper_parse(
                     paper_id=paper_id,
@@ -387,8 +528,22 @@ def run_layout_parser_pilot(
                         reason="ok",
                         available=available,
                         duration_ms=int((time.perf_counter() - started) * 1000),
+                        timeout_seconds=timeout,
                         run=parser_run,
                         diagnostic=diagnostic,
+                    )
+                )
+            except ParserTimeoutError as error:
+                parser_items.append(
+                    _parser_item(
+                        parser=parser,
+                        paper_id=paper_id,
+                        parser_root=parser_root,
+                        status="timeout",
+                        reason=f"parser_timeout: {_clean_text(error)}",
+                        available=available,
+                        duration_ms=int((time.perf_counter() - started) * 1000),
+                        timeout_seconds=timeout,
                     )
                 )
             except Exception as error:
@@ -401,6 +556,7 @@ def run_layout_parser_pilot(
                         reason=f"parser_failed: {_clean_text(error)}",
                         available=available,
                         duration_ms=int((time.perf_counter() - started) * 1000),
+                        timeout_seconds=timeout,
                     )
                 )
         items.append(
@@ -424,6 +580,7 @@ def run_layout_parser_pilot(
             "paperIds": requested_ids,
             "parsers": parser_tokens,
             "run": bool(run),
+            "timeoutSeconds": timeout,
             "outputDir": str(output_root),
         },
         "counts": counts,
@@ -435,6 +592,7 @@ def run_layout_parser_pilot(
 __all__ = [
     "DEFAULT_LAYOUT_PILOT_PAPERS",
     "LAYOUT_PARSER_PILOT_SCHEMA_ID",
+    "ParserTimeoutError",
     "SUPPORTED_LAYOUT_PILOT_PARSERS",
     "run_layout_parser_pilot",
 ]
