@@ -320,6 +320,61 @@ def _equation_quote_next_action_gate_payload(**overrides: object) -> dict:
     return payload
 
 
+def _equation_quote_decision_next_action_brief_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.equation-quote-decision-next-action-brief.v1",
+        "status": "manual_review_required",
+        "counts": {
+            "briefRows": 9,
+            "needsReviewRows": 9,
+            "nonNeedsReviewRows": 0,
+            "acceptedDiagnosticContextRows": 0,
+            "rejectedRows": 0,
+            "reextractRequestRows": 0,
+            "keptBlockedRows": 0,
+            "diagnosticPageContextRows": 8,
+            "unmatchedEquationQuoteRows": 1,
+            "validationValidRows": 9,
+            "validationInvalidRows": 0,
+            "validationMissingRows": 0,
+            "decisionRecordNeedsReviewRows": 9,
+            "decisionRecordAcceptedDiagnosticContextRows": 0,
+            "decisionRecordRejectedRows": 0,
+            "decisionRecordReextractRequestRows": 0,
+            "decisionRecordKeptBlockedRows": 0,
+            "sourceSpanCreatedRows": 0,
+            "originalPdfOffsetRecoveredRows": 0,
+            "equationSemanticsInterpretedRows": 0,
+            "strictEligibleRows": 0,
+            "citationGradeRows": 0,
+            "runtimeEvidenceRows": 0,
+        },
+        "gate": {
+            "nextActionBriefReady": True,
+            "manualReviewRequired": True,
+            "autoApprovalAllowed": False,
+            "humanReviewComplete": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+            "runtimePromotionAllowed": False,
+        },
+        "policy": {
+            "reportOnly": True,
+            "nextActionBriefOnly": True,
+            "strictEvidenceCreated": False,
+            "runtimePromotionAllowed": False,
+            "parserRoutingChanged": False,
+            "canonicalParsedArtifactsWritten": False,
+            "databaseMutation": False,
+            "reindexOrReembed": False,
+            "answerIntegrationChanged": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _non_sectionspan_pdf_offset_audit_payload(**overrides: object) -> dict:
     payload = {
         "schema": "knowledge-hub.paper.non-sectionspan-pdf-offset-feasibility-audit.v1",
@@ -1446,6 +1501,151 @@ def test_candidate_layer_blocker_backlog_blocks_wrong_equation_quote_next_action
     assert payload["status"] == "blocked"
     assert payload["gate"]["decision"] == "blocked"
     assert "equation_quote_next_action_gate_schema_mismatch" in payload["gate"]["schemaViolations"]
+
+
+def test_candidate_layer_blocker_backlog_includes_equation_quote_decision_next_action_manual_edit_gate(
+    tmp_path: Path,
+) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    next_action = _write(
+        tmp_path / "inputs",
+        "equation-quote-decision-next-action-brief.json",
+        _equation_quote_decision_next_action_brief_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        equation_quote_decision_next_action_brief_report=next_action,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    item = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "equation_quote_decision_manual_edit_required"
+    )
+    assert item["priority"] == "P0"
+    assert item["affected_layers"] == ["equation_quote"]
+    assert item["affected_candidate_count"] == 9
+    assert item["recommendedNextTranche"] == "manual_edit_equation_quote_decision_file"
+    assert payload["counts"]["equationQuoteDecisionNextActionBriefRows"] == 9
+    assert payload["counts"]["equationQuoteDecisionNextActionNeedsReviewRows"] == 9
+    assert payload["counts"]["equationQuoteDecisionNextActionDecisionRecordNeedsReviewRows"] == 9
+    assert payload["counts"]["equationQuoteDecisionNextActionDiagnosticPageContextRows"] == 8
+    assert payload["counts"]["equationQuoteDecisionNextActionUnmatchedRows"] == 1
+
+
+def test_candidate_layer_blocker_backlog_prefers_equation_quote_decision_brief_over_older_next_action_gate(
+    tmp_path: Path,
+) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    next_action_gate = _write(
+        tmp_path / "inputs",
+        "equation-quote-next-action-gate.json",
+        _equation_quote_next_action_gate_payload(),
+    )
+    decision_brief = _write(
+        tmp_path / "inputs",
+        "equation-quote-decision-next-action-brief.json",
+        _equation_quote_decision_next_action_brief_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        equation_quote_next_action_gate_report=next_action_gate,
+        equation_quote_decision_next_action_brief_report=decision_brief,
+    )
+
+    blockers = {item["blocker"] for item in payload["backlog"]}
+    assert "equation_quote_decision_manual_edit_required" in blockers
+    assert "equation_quote_next_action_review_required" not in blockers
+    assert payload["counts"]["equationQuoteNextActionCards"] == 9
+    assert payload["counts"]["equationQuoteDecisionNextActionBriefRows"] == 9
+
+
+def test_candidate_layer_blocker_backlog_skips_completed_equation_quote_decision_next_action_brief(
+    tmp_path: Path,
+) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    next_action = _write(
+        tmp_path / "inputs",
+        "equation-quote-decision-next-action-brief.json",
+        _equation_quote_decision_next_action_brief_payload(
+            status="manual_review_recorded_non_runtime",
+            counts={
+                "briefRows": 9,
+                "needsReviewRows": 0,
+                "nonNeedsReviewRows": 9,
+                "acceptedDiagnosticContextRows": 8,
+                "rejectedRows": 0,
+                "reextractRequestRows": 1,
+                "keptBlockedRows": 0,
+                "diagnosticPageContextRows": 8,
+                "unmatchedEquationQuoteRows": 1,
+                "validationValidRows": 9,
+                "validationInvalidRows": 0,
+                "validationMissingRows": 0,
+                "decisionRecordNeedsReviewRows": 0,
+                "decisionRecordAcceptedDiagnosticContextRows": 8,
+                "decisionRecordRejectedRows": 0,
+                "decisionRecordReextractRequestRows": 1,
+                "decisionRecordKeptBlockedRows": 0,
+                "sourceSpanCreatedRows": 0,
+                "originalPdfOffsetRecoveredRows": 0,
+                "equationSemanticsInterpretedRows": 0,
+                "strictEligibleRows": 0,
+                "citationGradeRows": 0,
+                "runtimeEvidenceRows": 0,
+            },
+            gate={
+                "nextActionBriefReady": True,
+                "manualReviewRequired": False,
+                "autoApprovalAllowed": False,
+                "humanReviewComplete": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "runtimePromotionAllowed": False,
+            },
+        ),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        equation_quote_decision_next_action_brief_report=next_action,
+    )
+
+    blockers = {item["blocker"] for item in payload["backlog"]}
+    assert "equation_quote_decision_manual_edit_required" not in blockers
+    assert payload["counts"]["equationQuoteDecisionNextActionDecisionRecordNeedsReviewRows"] == 0
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_equation_quote_decision_next_action_schema(
+    tmp_path: Path,
+) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    next_action = _write(
+        tmp_path / "inputs",
+        "equation-quote-decision-next-action-brief.json",
+        _equation_quote_decision_next_action_brief_payload(schema="example.wrong.equation-decision-next-action.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        equation_quote_decision_next_action_brief_report=next_action,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "equation_quote_decision_next_action_brief_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:
