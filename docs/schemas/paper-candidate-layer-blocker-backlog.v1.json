@@ -32,10 +32,12 @@
         "structuredSummaryReport": { "type": "string" },
         "complexQaEvalDesignReport": { "type": "string" },
         "sectionspanPdfOffsetSelectedReviewDecisionProposalReport": { "type": "string" },
+        "nonSectionspanPdfOffsetFeasibilityAuditReport": { "type": "string" },
         "candidateLayerReviewGateSchema": { "type": "string" },
         "structuredSummarySchema": { "type": "string" },
         "complexQaEvalDesignSchema": { "type": "string" },
-        "sectionspanPdfOffsetSelectedReviewDecisionProposalSchema": { "type": "string" }
+        "sectionspanPdfOffsetSelectedReviewDecisionProposalSchema": { "type": "string" },
+        "nonSectionspanPdfOffsetFeasibilityAuditSchema": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -66,7 +68,12 @@
         "currentRuntimeAnswerableQuestions": { "const": 0 },
         "sectionspanSelectedDecisionProposalRows": { "type": "integer", "minimum": 0 },
         "sectionspanSelectedDecisionProposalApproveRows": { "type": "integer", "minimum": 0 },
-        "sectionspanSelectedDecisionAcceptedRows": { "type": "integer", "minimum": 0 }
+        "sectionspanSelectedDecisionAcceptedRows": { "type": "integer", "minimum": 0 },
+        "nonSectionspanPdfOffsetAuditRows": { "type": "integer", "minimum": 0 },
+        "nonSectionspanPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
+        "nonSectionspanPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
+        "nonSectionspanPdfOffsetDiagnosticPageContextRows": { "type": "integer", "minimum": 0 },
+        "nonSectionspanPdfOffsetReadyForRegionReviewRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },

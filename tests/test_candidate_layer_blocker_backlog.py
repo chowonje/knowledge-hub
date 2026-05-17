@@ -230,6 +230,45 @@ def _sectionspan_selected_decision_proposal_payload(**overrides: object) -> dict
     return payload
 
 
+def _non_sectionspan_pdf_offset_audit_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.non-sectionspan-pdf-offset-feasibility-audit.v1",
+        "status": "ok",
+        "counts": {
+            "totalRows": 25,
+            "recoveredRows": 13,
+            "blockedRows": 12,
+            "diagnosticPageContextRows": 8,
+            "readyForRegionReviewRows": 13,
+            "needsFigureRegionReviewRows": 9,
+            "needsTableCellProvenanceReviewRows": 4,
+            "needsEquationAlignmentReviewRows": 9,
+            "strictEligibleRows": 0,
+            "citationGradeRows": 0,
+            "runtimeEvidenceRows": 0,
+        },
+        "gate": {
+            "auditComplete": True,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+            "runtimePromotionAllowed": False,
+        },
+        "policy": {
+            "allCandidatesNonStrict": True,
+            "strictEvidenceCreated": False,
+            "runtimePromotionAllowed": False,
+            "parserRoutingChanged": False,
+            "canonicalParsedArtifactsWritten": False,
+            "databaseMutation": False,
+            "reindexOrReembed": False,
+            "answerIntegrationChanged": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _reports(root: Path, *, gate: dict | None = None, summary: dict | None = None, eval_design: dict | None = None) -> tuple[Path, Path, Path]:
     gate_path = _write(root, "candidate-layer-review-gate.json", gate or _gate_payload())
     summary_path = _write(root, "structured-candidate-summary.json", summary or _summary_payload())
@@ -488,6 +527,88 @@ def test_candidate_layer_blocker_backlog_uses_equation_quote_pdf_offset_suppleme
     assert equation_review["affected_layers"] == ["equation_quote"]
     assert equation_review["affected_candidate_count"] == 2
     assert equation_review["recommendedNextTranche"] == "equation_quote_offset_review_pack"
+
+
+def test_candidate_layer_blocker_backlog_uses_non_sectionspan_pdf_offset_audit_counts(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(
+        tmp_path / "inputs",
+        gate=_gate_payload(
+            gate={
+                "candidateLayerReviewReady": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "blockers": [
+                    "candidate_layers_are_report_only",
+                    "runtime_promotion_disabled_for_tranche",
+                ],
+            }
+        ),
+        summary=_source_aligned_summary_payload(),
+    )
+    audit = _write(
+        tmp_path / "inputs",
+        "non-sectionspan-pdf-offset-feasibility-audit.json",
+        _non_sectionspan_pdf_offset_audit_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        non_sectionspan_pdf_offset_feasibility_audit_report=audit,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    non_sectionspan = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "non_sectionspan_layers_lack_original_pdf_offsets"
+    )
+    figure_review = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "figure_caption_pdf_offsets_require_region_link_review"
+    )
+    table_review = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "table_caption_pdf_offsets_require_cell_provenance_review"
+    )
+    equation_alignment = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "equation_quote_alignment_missing"
+    )
+    assert non_sectionspan["affected_candidate_count"] == 12
+    assert figure_review["affected_candidate_count"] == 9
+    assert table_review["affected_candidate_count"] == 4
+    assert equation_alignment["affected_candidate_count"] == 9
+    assert payload["counts"]["nonSectionspanPdfOffsetAuditRows"] == 25
+    assert payload["counts"]["nonSectionspanPdfOffsetRecoveredRows"] == 13
+    assert payload["counts"]["nonSectionspanPdfOffsetBlockedRows"] == 12
+    assert payload["counts"]["nonSectionspanPdfOffsetDiagnosticPageContextRows"] == 8
+    assert payload["counts"]["nonSectionspanPdfOffsetReadyForRegionReviewRows"] == 13
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_non_sectionspan_audit_schema(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    audit = _write(
+        tmp_path / "inputs",
+        "non-sectionspan-pdf-offset-feasibility-audit.json",
+        _non_sectionspan_pdf_offset_audit_payload(schema="example.wrong.non-sectionspan-audit.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        non_sectionspan_pdf_offset_feasibility_audit_report=audit,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "non_sectionspan_pdf_offset_feasibility_audit_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_includes_table_cell_isolated_extractor_approval_gate(tmp_path: Path) -> None:
