@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.equation-quote-decision-record.v1",
+  "title": "EquationQuote Decision Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "decisionRecords"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.equation-quote-decision-record.v1" },
+    "status": {
+      "type": "string",
+      "enum": ["decision_record_required", "decision_recorded", "blocked"]
+    },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equationQuoteManualReviewSheetReport",
+        "equationQuoteManualReviewSheetSchema",
+        "equationQuoteDecisionFileValidationReport",
+        "equationQuoteDecisionFileValidationSchema",
+        "reviewDecisionsReport",
+        "reviewDecisionInputRows"
+      ],
+      "properties": {
+        "equationQuoteManualReviewSheetReport": { "type": "string" },
+        "equationQuoteManualReviewSheetSchema": { "type": "string" },
+        "equationQuoteDecisionFileValidationReport": { "type": "string" },
+        "equationQuoteDecisionFileValidationSchema": { "type": "string" },
+        "reviewDecisionsReport": { "type": "string" },
+        "reviewDecisionInputRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordRows",
+        "needsReviewRows",
+        "acceptedDiagnosticContextRows",
+        "rejectedRows",
+        "reextractRequestRows",
+        "keptBlockedRows",
+        "sourceSpanCreatedRows",
+        "originalPdfOffsetRecoveredRows",
+        "equationSemanticsInterpretedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "unsafeUpstreamFlagCount",
+        "byPaper",
+        "byActionType",
+        "byDecision"
+      ],
+      "properties": {
+        "recordRows": { "type": "integer", "minimum": 0 },
+        "needsReviewRows": { "type": "integer", "minimum": 0 },
+        "acceptedDiagnosticContextRows": { "type": "integer", "minimum": 0 },
+        "rejectedRows": { "type": "integer", "minimum": 0 },
+        "reextractRequestRows": { "type": "integer", "minimum": 0 },
+        "keptBlockedRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "originalPdfOffsetRecoveredRows": { "const": 0 },
+        "equationSemanticsInterpretedRows": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byPaper": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byActionType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byDecision": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decisionRecordReady",
+        "humanReviewComplete",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "decisionRecordReady": { "type": "boolean" },
+        "humanReviewComplete": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "manual_equation_quote_decisions_still_required",
+            "manual_equation_quote_decisions_recorded_non_runtime",
+            "blocked"
+          ]
+        },
+        "unsafeUpstreamFlags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recommendedNextTranche": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "decisionRecordOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "decisionRecordOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "decisionRecords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "record_row_id",
+          "source_review_sheet_row_id",
+          "source_action_card_id",
+          "source_equation_quote_candidate_id",
+          "paper_id",
+          "candidate_text",
+          "equation_label",
+          "action_type",
+          "action_status",
+          "priority",
+          "recorded_decision",
+          "decision_scope",
+          "reviewer",
+          "notes",
+          "source_span_created",
+          "original_pdf_offset_recovered",
+          "equation_semantics_interpreted",
+          "evidence_tier",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "record_row_id": { "type": "string" },
+          "source_review_sheet_row_id": { "type": "string" },
+          "source_action_card_id": { "type": "string" },
+          "source_equation_quote_candidate_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "equation_label": { "type": "string" },
+          "action_type": { "type": "string" },
+          "action_status": { "type": "string" },
+          "priority": { "type": "string" },
+          "recorded_decision": {
+            "type": "string",
+            "enum": [
+              "needs_review",
+              "accepted_diagnostic_context_for_later_reextract_design",
+              "rejected_equation_quote_candidate",
+              "requested_equation_quote_reextraction",
+              "kept_blocked"
+            ]
+          },
+          "decision_scope": { "const": "equation_quote_decision_record_only_no_runtime_or_strict_promotion" },
+          "reviewer": { "type": "string" },
+          "notes": { "type": "string" },
+          "source_span_created": { "const": false },
+          "original_pdf_offset_recovered": { "const": false },
+          "equation_semantics_interpreted": { "const": false },
+          "evidence_tier": { "const": "equation_quote_decision_record_only" },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "non_strict_reason": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
