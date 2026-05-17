@@ -140,6 +140,32 @@ def _eval_payload(**overrides: object) -> dict:
     return payload
 
 
+def _table_cell_result_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.table-cell-isolated-extractor-pilot-result.v1",
+        "status": "approval_required",
+        "counts": {
+            "targetRows": 2,
+            "probeAttemptedRows": 0,
+            "approvalRequiredRows": 2,
+            "blockedRows": 0,
+            "strictEligibleRows": 0,
+            "citationGradeRows": 0,
+            "runtimeEvidenceRows": 0,
+        },
+        "gate": {
+            "pilotExecuted": False,
+            "approvalRequiredBeforeInstallOrRun": True,
+            "extractorAvailable": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _reports(root: Path, *, gate: dict | None = None, summary: dict | None = None, eval_design: dict | None = None) -> tuple[Path, Path, Path]:
     gate_path = _write(root, "candidate-layer-review-gate.json", gate or _gate_payload())
     summary_path = _write(root, "structured-candidate-summary.json", summary or _summary_payload())
@@ -398,6 +424,99 @@ def test_candidate_layer_blocker_backlog_uses_equation_quote_pdf_offset_suppleme
     assert equation_review["affected_layers"] == ["equation_quote"]
     assert equation_review["affected_candidate_count"] == 2
     assert equation_review["recommendedNextTranche"] == "equation_quote_offset_review_pack"
+
+
+def test_candidate_layer_blocker_backlog_includes_table_cell_isolated_extractor_approval_gate(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    table_cell_result = _write(tmp_path / "inputs", "table-cell-result.json", _table_cell_result_payload())
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        table_cell_isolated_extractor_pilot_result_report=table_cell_result,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    item = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "table_cell_isolated_extractor_approval_required"
+    )
+    assert item["priority"] == "P0"
+    assert item["affected_layers"] == ["table_region"]
+    assert item["affected_candidate_count"] == 2
+    assert item["recommendedNextTranche"] == "table_cell_isolated_extractor_pilot_requires_explicit_approval"
+    assert "strict_evidence_promotion" in item["disallowedActions"]
+    assert payload["counts"]["tableCellIsolatedExtractorTargetRows"] == 2
+    assert payload["counts"]["tableCellIsolatedExtractorApprovalRequiredRows"] == 2
+    assert payload["counts"]["tableCellIsolatedExtractorProbeAttemptedRows"] == 0
+
+
+def test_candidate_layer_blocker_backlog_includes_table_cell_blocked_extractor_gate(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    table_cell_result = _write(
+        tmp_path / "inputs",
+        "table-cell-result.json",
+        _table_cell_result_payload(
+            status="blocked",
+            counts={
+                "targetRows": 2,
+                "probeAttemptedRows": 0,
+                "approvalRequiredRows": 0,
+                "blockedRows": 2,
+                "strictEligibleRows": 0,
+                "citationGradeRows": 0,
+                "runtimeEvidenceRows": 0,
+            },
+            gate={
+                "pilotExecuted": False,
+                "approvalRequiredBeforeInstallOrRun": False,
+                "extractorAvailable": False,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+            },
+        ),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        table_cell_isolated_extractor_pilot_result_report=table_cell_result,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    item = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "table_cell_isolated_extractor_unavailable_or_blocked"
+    )
+    assert item["priority"] == "P0"
+    assert item["affected_candidate_count"] == 2
+    assert item["recommendedNextTranche"] == "table_cell_isolated_extractor_dependency_repair_or_alternative_review"
+    assert payload["counts"]["tableCellIsolatedExtractorBlockedRows"] == 2
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_table_cell_result_schema(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    table_cell_result = _write(
+        tmp_path / "inputs",
+        "table-cell-result.json",
+        _table_cell_result_payload(schema="example.wrong.table-cell-result.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        table_cell_isolated_extractor_pilot_result_report=table_cell_result,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "table_cell_isolated_extractor_pilot_result_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:

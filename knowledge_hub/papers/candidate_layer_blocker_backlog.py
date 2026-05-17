@@ -20,6 +20,9 @@ CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID = "knowledge-hub.paper.candidate-layer
 CANDIDATE_LAYER_REVIEW_GATE_SCHEMA_ID = "knowledge-hub.paper.candidate-layer-review-gate.v1"
 STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID = "knowledge-hub.paper.structured-candidate-summary.v1"
 COMPLEX_QA_EVAL_DESIGN_SCHEMA_ID = "knowledge-hub.paper.complex-qa-eval-design.v1"
+TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID = (
+    "knowledge-hub.paper.table-cell-isolated-extractor-pilot-result.v1"
+)
 
 _BLOCKER_RULES = {
     "equation_quote_alignment_missing": {
@@ -130,6 +133,32 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_table_caption_span_exists_but_cell_row_column_bbox_provenance_is_missing",
     },
+    "table_cell_isolated_extractor_approval_required": {
+        "priority": "P0",
+        "layers": ["table_region"],
+        "category": "table_cell_extractor_pilot",
+        "recommendedNextTranche": "table_cell_isolated_extractor_pilot_requires_explicit_approval",
+        "evidenceNeededBeforePromotion": [
+            "explicit operator approval before isolated dependency install or extractor run",
+            "isolated venv path and package set reviewed before execution",
+            "bounded target table allowlist",
+            "report proving no canonical parsed artifacts, DB, index, or embeddings were modified",
+        ],
+        "stopRule": "stop_if_operator_approval_for_isolated_extractor_run_is_missing",
+    },
+    "table_cell_isolated_extractor_unavailable_or_blocked": {
+        "priority": "P0",
+        "layers": ["table_region"],
+        "category": "table_cell_extractor_pilot",
+        "recommendedNextTranche": "table_cell_isolated_extractor_dependency_repair_or_alternative_review",
+        "evidenceNeededBeforePromotion": [
+            "importable optional extractor in an isolated environment",
+            "bounded page/table probe output",
+            "row/column/cell bbox candidates from the extractor",
+            "explicit report for blocked dependency or runtime failures",
+        ],
+        "stopRule": "stop_if_optional_extractor_is_missing_or_fails_before_producing_cell_candidates",
+    },
     "equation_quote_pdf_offsets_require_quote_review": {
         "priority": "P0",
         "layers": ["equation_quote"],
@@ -207,8 +236,18 @@ def _candidate_counts_by_layer(summary: dict[str, Any]) -> dict[str, int]:
     }
 
 
-def _affected_candidate_count(blocker: str, layers: list[str], summary: dict[str, Any]) -> int:
+def _affected_candidate_count(
+    blocker: str,
+    layers: list[str],
+    summary: dict[str, Any],
+    table_cell_result: dict[str, Any] | None = None,
+) -> int:
     by_layer = _candidate_counts_by_layer(summary)
+    table_cell_counts = dict((table_cell_result or {}).get("counts") or {})
+    if blocker == "table_cell_isolated_extractor_approval_required":
+        return _safe_int(table_cell_counts.get("approvalRequiredRows")) or _safe_int(table_cell_counts.get("targetRows"))
+    if blocker == "table_cell_isolated_extractor_unavailable_or_blocked":
+        return _safe_int(table_cell_counts.get("blockedRows")) or _safe_int(table_cell_counts.get("targetRows"))
     if blocker == "equation_quote_alignment_missing":
         return _safe_int(by_layer.get("equation_quote"))
     if blocker == "table_cell_row_column_bbox_provenance_missing":
@@ -259,7 +298,13 @@ def _affected_question_count(blocker: str, layers: list[str], eval_design: dict[
     return total
 
 
-def _backlog_item(index: int, blocker: str, summary: dict[str, Any], eval_design: dict[str, Any]) -> dict[str, Any]:
+def _backlog_item(
+    index: int,
+    blocker: str,
+    summary: dict[str, Any],
+    eval_design: dict[str, Any],
+    table_cell_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     rule = dict(_BLOCKER_RULES.get(blocker) or {})
     layers = list(rule.get("layers") or [])
     return {
@@ -269,7 +314,7 @@ def _backlog_item(index: int, blocker: str, summary: dict[str, Any], eval_design
         "priority": str(rule.get("priority") or "P2"),
         "category": str(rule.get("category") or "unknown"),
         "affected_layers": layers,
-        "affected_candidate_count": _affected_candidate_count(blocker, layers, summary),
+        "affected_candidate_count": _affected_candidate_count(blocker, layers, summary, table_cell_result),
         "affected_eval_question_count": _affected_question_count(blocker, layers, eval_design),
         "evidenceNeededBeforePromotion": list(rule.get("evidenceNeededBeforePromotion") or []),
         "recommendedNextTranche": str(rule.get("recommendedNextTranche") or "manual_review"),
@@ -302,12 +347,40 @@ def _backlog_item(index: int, blocker: str, summary: dict[str, Any], eval_design
     }
 
 
-def _collect_blockers(gate: dict[str, Any], summary: dict[str, Any], eval_design: dict[str, Any]) -> list[str]:
+def _table_cell_result_blockers(result: dict[str, Any]) -> list[str]:
+    if not result:
+        return []
+    blockers: list[str] = []
+    counts = dict(result.get("counts") or {})
+    gate = dict(result.get("gate") or {})
+    status = str(result.get("status") or "")
+    if (
+        status == "approval_required"
+        or gate.get("approvalRequiredBeforeInstallOrRun")
+        or _safe_int(counts.get("approvalRequiredRows"))
+    ):
+        blockers.append("table_cell_isolated_extractor_approval_required")
+    if status == "blocked" or _safe_int(counts.get("blockedRows")) or (
+        result.get("schema") == TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID
+        and gate.get("pilotExecuted")
+        and not gate.get("extractorAvailable")
+    ):
+        blockers.append("table_cell_isolated_extractor_unavailable_or_blocked")
+    return blockers
+
+
+def _collect_blockers(
+    gate: dict[str, Any],
+    summary: dict[str, Any],
+    eval_design: dict[str, Any],
+    table_cell_result: dict[str, Any] | None = None,
+) -> list[str]:
     blockers: list[str] = []
     blockers.extend(str(item) for item in list((gate.get("gate") or {}).get("blockers") or []))
     blockers.extend(str(item) for item in list((summary.get("releaseCandidateAssessment") or {}).get("mainBlockers") or []))
     for question in list(eval_design.get("questions") or []):
         blockers.extend(str(item) for item in list(question.get("blocked_by_current_candidates") or []))
+    blockers.extend(_table_cell_result_blockers(table_cell_result or {}))
     return [item for item in dict.fromkeys(blockers) if item]
 
 
@@ -316,6 +389,7 @@ def build_candidate_layer_blocker_backlog(
     candidate_layer_review_gate_report: str | Path,
     structured_summary_report: str | Path,
     complex_qa_eval_design_report: str | Path,
+    table_cell_isolated_extractor_pilot_result_report: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build a report-only backlog over current candidate-layer blockers."""
 
@@ -325,9 +399,20 @@ def build_candidate_layer_blocker_backlog(
     gate = _read_json(gate_path)
     summary = _read_json(summary_path)
     eval_design = _read_json(eval_path)
+    table_cell_result_path = (
+        Path(str(table_cell_isolated_extractor_pilot_result_report)).expanduser()
+        if table_cell_isolated_extractor_pilot_result_report
+        else None
+    )
+    table_cell_result = _read_json(table_cell_result_path) if table_cell_result_path else {}
     schema_violations = _schema_violations(gate, summary, eval_design)
-    blockers = _collect_blockers(gate, summary, eval_design)
-    items = [_backlog_item(index, blocker, summary, eval_design) for index, blocker in enumerate(blockers, start=1)]
+    if table_cell_result and table_cell_result.get("schema") != TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID:
+        schema_violations.append("table_cell_isolated_extractor_pilot_result_schema_mismatch")
+    blockers = _collect_blockers(gate, summary, eval_design, table_cell_result)
+    items = [
+        _backlog_item(index, blocker, summary, eval_design, table_cell_result)
+        for index, blocker in enumerate(blockers, start=1)
+    ]
     by_priority = Counter(str(item.get("priority") or "") for item in items)
     by_layer = Counter(layer for item in items for layer in list(item.get("affected_layers") or []))
     gate_payload = dict(gate.get("gate") or {})
@@ -341,9 +426,11 @@ def build_candidate_layer_blocker_backlog(
             "candidateLayerReviewGateReport": str(gate_path),
             "structuredSummaryReport": str(summary_path),
             "complexQaEvalDesignReport": str(eval_path),
+            "tableCellIsolatedExtractorPilotResultReport": str(table_cell_result_path or ""),
             "candidateLayerReviewGateSchema": str(gate.get("schema") or ""),
             "structuredSummarySchema": str(summary.get("schema") or ""),
             "complexQaEvalDesignSchema": str(eval_design.get("schema") or ""),
+            "tableCellIsolatedExtractorPilotResultSchema": str(table_cell_result.get("schema") or ""),
         },
         "counts": {
             "backlogItemCount": len(items),
@@ -356,6 +443,12 @@ def build_candidate_layer_blocker_backlog(
             "citationGradeCandidates": _safe_int(summary_counts.get("citationGradeCandidates")),
             "runtimeEvidenceCandidates": _safe_int(summary_counts.get("runtimeEvidenceCandidates")),
             "currentRuntimeAnswerableQuestions": _safe_int(eval_counts.get("currentRuntimeAnswerableQuestions")),
+            "tableCellIsolatedExtractorTargetRows": _safe_int((table_cell_result.get("counts") or {}).get("targetRows")),
+            "tableCellIsolatedExtractorApprovalRequiredRows": _safe_int(
+                (table_cell_result.get("counts") or {}).get("approvalRequiredRows")
+            ),
+            "tableCellIsolatedExtractorBlockedRows": _safe_int((table_cell_result.get("counts") or {}).get("blockedRows")),
+            "tableCellIsolatedExtractorProbeAttemptedRows": _safe_int((table_cell_result.get("counts") or {}).get("probeAttemptedRows")),
         },
         "gate": {
             "candidateLayerReviewReady": bool(gate_payload.get("candidateLayerReviewReady")),
@@ -444,6 +537,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--candidate-layer-review-gate-report", required=True, help="Path to candidate-layer-review-gate.json.")
     parser.add_argument("--structured-summary-report", required=True, help="Path to structured-candidate-summary.json.")
     parser.add_argument("--complex-qa-eval-design-report", required=True, help="Path to complex-paper-qa-eval-design.json.")
+    parser.add_argument(
+        "--table-cell-isolated-extractor-pilot-result-report",
+        default="",
+        help="Optional path to the latest TableCell isolated extractor pilot result JSON.",
+    )
     parser.add_argument("--output-dir", default="", help="Directory for local JSON/Markdown reports.")
     parser.add_argument("--json", action="store_true", help="Print backlog payload as JSON.")
     args = parser.parse_args(argv)
@@ -452,6 +550,7 @@ def main(argv: list[str] | None = None) -> int:
         candidate_layer_review_gate_report=args.candidate_layer_review_gate_report,
         structured_summary_report=args.structured_summary_report,
         complex_qa_eval_design_report=args.complex_qa_eval_design_report,
+        table_cell_isolated_extractor_pilot_result_report=args.table_cell_isolated_extractor_pilot_result_report or None,
     )
     paths: dict[str, str] = {}
     if args.output_dir:
