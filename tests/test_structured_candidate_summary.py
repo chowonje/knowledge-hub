@@ -93,14 +93,40 @@ def _reports(root: Path) -> dict[str, Path]:
     }
 
 
+def _sectionspan_offset_review_pack(root: Path) -> Path:
+    return _write_report(
+        root,
+        "sectionspan-offset-review.json",
+        {
+            "schema": "knowledge-hub.paper.sectionspan-pdf-offset-recovery-review-pack.v1",
+            "status": "review_pack_ready",
+            "counts": {
+                "reviewCardRows": 3,
+                "readyForHumanReviewRows": 3,
+                "heldOutRows": 0,
+                "pageAgreementRows": 3,
+                "sourceHashAgreementRows": 3,
+                "strictEligibleRows": 0,
+                "citationGradeRows": 0,
+                "runtimeEvidenceRows": 0,
+                "unsafeUpstreamFlagCount": 0,
+                "byMatchMethod": {"exact": 2, "normalized_whitespace_case": 1},
+                "byReviewStatus": {"ready_for_human_review": 3},
+            },
+        },
+    )
+
+
 def test_structured_candidate_summary_aggregates_four_layers_and_validates_schema(tmp_path: Path) -> None:
     paths = _reports(tmp_path)
+    sectionspan_offset_path = _sectionspan_offset_review_pack(tmp_path)
 
     payload = build_structured_candidate_summary(
         sectionspan_report=paths["sectionspan"],
         figure_caption_report=paths["figure_caption"],
         equation_quote_report=paths["equation_quote"],
         table_region_report=paths["table_region"],
+        sectionspan_pdf_offset_review_pack_report=sectionspan_offset_path,
     )
 
     assert payload["schema"] == STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID
@@ -125,16 +151,23 @@ def test_structured_candidate_summary_aggregates_four_layers_and_validates_schem
         "equation_quote": 1,
         "table_region": 0,
     }
+    assert payload["counts"]["sourceAlignmentSupplementCount"] == 1
+    assert payload["counts"]["sectionspanOriginalPdfOffsetReviewCards"] == 3
+    assert payload["counts"]["sectionspanOriginalPdfOffsetReadyForReviewRows"] == 3
+    assert payload["counts"]["sectionspanOriginalPdfOffsetHeldOutRows"] == 0
+    assert payload["sourceAlignmentSupplements"][0]["readyForReview"] is True
 
 
 def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: Path) -> None:
     paths = _reports(tmp_path)
+    sectionspan_offset_path = _sectionspan_offset_review_pack(tmp_path)
 
     payload = build_structured_candidate_summary(
         sectionspan_report=paths["sectionspan"],
         figure_caption_report=paths["figure_caption"],
         equation_quote_report=paths["equation_quote"],
         table_region_report=paths["table_region"],
+        sectionspan_pdf_offset_review_pack_report=sectionspan_offset_path,
     )
 
     assert payload["policy"]["strictEvidenceCreated"] is False
@@ -146,15 +179,21 @@ def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: P
     assert payload["counts"]["runtimeEvidenceCandidates"] == 0
     assert payload["releaseCandidateAssessment"]["strictEvidenceReady"] is False
     assert payload["releaseCandidateAssessment"]["parserRoutingReady"] is False
+    assert "sectionspan_pdf_offsets_require_human_review_before_strict_promotion" in payload["releaseCandidateAssessment"]["mainBlockers"]
+    assert "generated_markdown_offsets_are_not_original_pdf_offsets" not in payload["releaseCandidateAssessment"]["mainBlockers"]
+    assert payload["sourceAlignmentSupplements"][0]["strictEligibleRows"] == 0
+    assert payload["sourceAlignmentSupplements"][0]["runtimeEvidenceRows"] == 0
 
 
 def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markdown(tmp_path: Path) -> None:
     paths = _reports(tmp_path / "input")
+    sectionspan_offset_path = _sectionspan_offset_review_pack(tmp_path / "input")
     payload = build_structured_candidate_summary(
         sectionspan_report=paths["sectionspan"],
         figure_caption_report=paths["figure_caption"],
         equation_quote_report=paths["equation_quote"],
         table_region_report=paths["table_region"],
+        sectionspan_pdf_offset_review_pack_report=sectionspan_offset_path,
     )
 
     report_paths = write_structured_candidate_summary_reports(payload, tmp_path / "reports")
@@ -164,4 +203,21 @@ def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markd
     markdown = Path(report_paths["markdown"]).read_text(encoding="utf-8")
     assert validate_payload(summary, STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID, strict=True).ok
     assert "All layer outputs remain non-strict candidates" in markdown
-    assert "complex_paper_qa_eval_design" in markdown
+    assert "candidate_layer_review_gate_refresh" in markdown
+    assert "SectionSpan original-PDF-offset review cards" in markdown
+
+
+def test_structured_candidate_summary_without_offset_review_keeps_original_offset_blocker(tmp_path: Path) -> None:
+    paths = _reports(tmp_path)
+
+    payload = build_structured_candidate_summary(
+        sectionspan_report=paths["sectionspan"],
+        figure_caption_report=paths["figure_caption"],
+        equation_quote_report=paths["equation_quote"],
+        table_region_report=paths["table_region"],
+    )
+
+    assert validate_payload(payload, STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID, strict=True).ok
+    assert payload["sourceAlignmentSupplements"][0]["status"] == "not_provided"
+    assert payload["sourceAlignmentSupplements"][0]["readyForReview"] is False
+    assert "generated_markdown_offsets_are_not_original_pdf_offsets" in payload["releaseCandidateAssessment"]["mainBlockers"]

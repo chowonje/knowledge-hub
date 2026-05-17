@@ -11,7 +11,8 @@
     "policy",
     "releaseCandidateAssessment",
     "warnings",
-    "layers"
+    "layers",
+    "sourceAlignmentSupplements"
   ],
   "properties": {
     "schema": { "const": "knowledge-hub.paper.structured-candidate-summary.v1" },
@@ -24,7 +25,8 @@
         "sectionspan": { "type": "string" },
         "figure_caption": { "type": "string" },
         "equation_quote": { "type": "string" },
-        "table_region": { "type": "string" }
+        "table_region": { "type": "string" },
+        "sectionspan_pdf_offset_review_pack": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -38,7 +40,13 @@
         "blockedOrHeldOutByLayer",
         "strictEligibleCandidates",
         "citationGradeCandidates",
-        "runtimeEvidenceCandidates"
+        "runtimeEvidenceCandidates",
+        "sourceAlignmentSupplementCount",
+        "sectionspanOriginalPdfOffsetReviewCards",
+        "sectionspanOriginalPdfOffsetReadyForReviewRows",
+        "sectionspanOriginalPdfOffsetHeldOutRows",
+        "sectionspanOriginalPdfOffsetPageAgreementRows",
+        "sectionspanOriginalPdfOffsetSourceHashAgreementRows"
       ],
       "properties": {
         "layerCount": { "const": 4 },
@@ -48,7 +56,13 @@
         "blockedOrHeldOutByLayer": { "type": "object" },
         "strictEligibleCandidates": { "const": 0 },
         "citationGradeCandidates": { "const": 0 },
-        "runtimeEvidenceCandidates": { "const": 0 }
+        "runtimeEvidenceCandidates": { "const": 0 },
+        "sourceAlignmentSupplementCount": { "type": "integer", "minimum": 0 },
+        "sectionspanOriginalPdfOffsetReviewCards": { "type": "integer", "minimum": 0 },
+        "sectionspanOriginalPdfOffsetReadyForReviewRows": { "type": "integer", "minimum": 0 },
+        "sectionspanOriginalPdfOffsetHeldOutRows": { "type": "integer", "minimum": 0 },
+        "sectionspanOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
+        "sectionspanOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
@@ -138,6 +152,47 @@
           "byPaper": { "type": "object" },
           "byReadiness": { "type": "object" },
           "primaryBlockers": { "type": "object" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sourceAlignmentSupplements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "supplement",
+          "path",
+          "schema",
+          "status",
+          "evidenceTier",
+          "reviewCardRows",
+          "readyForHumanReviewRows",
+          "heldOutRows",
+          "pageAgreementRows",
+          "sourceHashAgreementRows",
+          "strictEligibleRows",
+          "citationGradeRows",
+          "runtimeEvidenceRows",
+          "readyForReview"
+        ],
+        "properties": {
+          "supplement": { "type": "string" },
+          "path": { "type": "string" },
+          "schema": { "type": "string" },
+          "status": { "type": "string" },
+          "evidenceTier": { "type": "string" },
+          "reviewCardRows": { "type": "integer", "minimum": 0 },
+          "readyForHumanReviewRows": { "type": "integer", "minimum": 0 },
+          "heldOutRows": { "type": "integer", "minimum": 0 },
+          "pageAgreementRows": { "type": "integer", "minimum": 0 },
+          "sourceHashAgreementRows": { "type": "integer", "minimum": 0 },
+          "strictEligibleRows": { "const": 0 },
+          "citationGradeRows": { "const": 0 },
+          "runtimeEvidenceRows": { "const": 0 },
+          "readyForReview": { "type": "boolean" },
+          "byMatchMethod": { "type": "object" },
+          "byReviewStatus": { "type": "object" }
         },
         "additionalProperties": true
       }
