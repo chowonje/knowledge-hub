@@ -108,7 +108,7 @@ def test_cli_papers_help_hides_operator_commands():
 
     assert result.exit_code == 0
     assert "Usage:" in result.output
-    for token in ("add", "import-csv", "list", "info", "summary", "evidence", "memory", "related"):
+    for token in ("add", "import-csv", "list", "info", "summary", "evidence", "memory", "related", "extraction-report"):
         assert token in result.output
     for token in (
         "review-card",

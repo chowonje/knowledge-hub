@@ -35,6 +35,7 @@ from typing import Any
 import click
 from pathlib import Path
 from rich.console import Console
+from rich.table import Table
 
 from knowledge_hub.application.paper_source_freshness import audit_paper_source_freshness
 from knowledge_hub.application.paper_source_repairs import queue_paper_source_repairs, repair_paper_sources
@@ -98,6 +99,10 @@ from knowledge_hub.papers.canon_quality_audit import (
     write_canon_audit_outputs as _write_canon_audit_outputs,
 )
 from knowledge_hub.papers.corpus_bootstrap import bootstrap_corpus_artifacts
+from knowledge_hub.papers.extraction_diagnostics import (
+    EXTRACTION_REPORT_SCHEMA_ID,
+    build_extraction_report,
+)
 from knowledge_hub.papers.source_guard import review_downloaded_source, stage_source_guard
 from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
@@ -144,7 +149,7 @@ def _validate_cli_payload(config, payload: dict[str, Any], schema_id: str) -> No
 
 @click.group("papers")
 def paper_group():
-    """논문 public surface (add/import-csv/list/info/summary/evidence/memory/related)"""
+    """논문 public surface (add/import-csv/list/info/summary/evidence/memory/related/extraction-report)"""
     pass
 
 
@@ -153,6 +158,59 @@ paper_group.add_command(paper_public_evidence)
 paper_group.add_command(paper_public_memory)
 paper_group.add_command(paper_public_related)
 paper_group.add_command(paper_board_export)
+
+
+@paper_group.command("extraction-report")
+@click.option("--paper-id", "paper_ids", multiple=True, help="Report one paper id; repeat to inspect multiple papers.")
+@click.option("--limit", default=0, type=int, show_default=True, help="Maximum registered papers to inspect; 0 means all.")
+@click.option("--degraded-only", is_flag=True, default=False, help="Only include papers with degraded extraction diagnostics.")
+@click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
+@click.pass_context
+def paper_extraction_report(ctx, paper_ids, limit, degraded_only, as_json):
+    """Report structural quality of existing parsed paper artifacts."""
+
+    khub = ctx.obj["khub"]
+    config = khub.config
+    sqlite_db = _sqlite_db(config, khub=khub)
+    payload = build_extraction_report(
+        sqlite_db=sqlite_db,
+        papers_dir=config.papers_dir,
+        paper_ids=list(paper_ids or []),
+        limit=max(0, int(limit or 0)),
+        degraded_only=bool(degraded_only),
+    )
+    _validate_cli_payload(config, payload, EXTRACTION_REPORT_SCHEMA_ID)
+    if as_json:
+        console.print_json(data=payload)
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        "[bold]Paper extraction diagnostics[/bold] "
+        f"reported={counts.get('reportedPapers', 0)} degraded={counts.get('degradedPapers', 0)} "
+        f"missingParsedArtifacts={counts.get('missingParsedArtifacts', 0)}"
+    )
+    table = Table()
+    table.add_column("Paper", style="cyan", max_width=18)
+    table.add_column("Parser", max_width=16)
+    table.add_column("Pages", justify="right", width=7)
+    table.add_column("Columns", justify="right", width=7)
+    table.add_column("Tables", justify="right", width=7)
+    table.add_column("Status", width=10)
+    table.add_column("Reasons", max_width=60)
+    for item in list(payload.get("papers") or []):
+        diagnostic = dict(item.get("diagnostic") or {})
+        reasons = ", ".join(str(reason) for reason in list(diagnostic.get("degradationReasons") or [])) or "-"
+        table.add_row(
+            str(item.get("paperId") or ""),
+            str(diagnostic.get("parser") or ""),
+            str(diagnostic.get("pageCount") or 0),
+            str(diagnostic.get("columnCountDetected") or 0),
+            str(diagnostic.get("tablesDetected") or 0),
+            "degraded" if diagnostic.get("extractionDegraded") else "ok",
+            reasons,
+        )
+    console.print(table)
 
 
 def _paper_card_feedback_context(*, khub, paper_id: str) -> dict[str, Any]:
