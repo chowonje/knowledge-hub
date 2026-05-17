@@ -97,6 +97,7 @@ from knowledge_hub.papers.canon_quality_audit import (
     remediation_needs_summary_rebuild as _canon_needs_summary_rebuild,
     write_canon_audit_outputs as _write_canon_audit_outputs,
 )
+from knowledge_hub.papers.corpus_bootstrap import bootstrap_corpus_artifacts
 from knowledge_hub.papers.source_guard import review_downloaded_source, stage_source_guard
 from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
@@ -1189,6 +1190,83 @@ def paper_canon_quality_audit(ctx, manifest_path, output_dir, apply, provider, m
             f"- {item.get('paperId')} needs_review={bool(item.get('needsReview'))} "
             f"issues={','.join(item.get('issues') or []) or '-'}"
         )
+
+
+@paper_group.command("corpus-bootstrap", hidden=True)
+@click.option("--artifact-id", "artifact_ids", multiple=True, help="대상 corpus artifact id (여러 번 사용 가능)")
+@click.option("--source-id", "source_ids", multiple=True, help="대상 manifest source id (여러 번 사용 가능)")
+@click.option("--all", "all_artifacts", is_flag=True, help="manifest의 모든 corpus artifact를 검사")
+@click.option(
+    "--manifest",
+    "manifest_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="corpus manifest 경로",
+)
+@click.option(
+    "--papers-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="config의 papers_dir 대신 사용할 local corpus root",
+)
+@click.option("--apply/--dry-run", default=False, show_default=True, help="missing artifact를 실제 다운로드")
+@click.option("--allow-network/--no-allow-network", default=False, show_default=True, help="명시적 네트워크 획득 허용")
+@click.option("--timeout", default=60.0, show_default=True, type=float, help="다운로드 요청 timeout 초")
+@click.option("--json/--no-json", "as_json", default=False, show_default=True, help="결과를 JSON으로 출력")
+@click.pass_context
+def paper_corpus_bootstrap(
+    ctx,
+    artifact_ids,
+    source_ids,
+    all_artifacts,
+    manifest_path,
+    papers_dir,
+    apply,
+    allow_network,
+    timeout,
+    as_json,
+):
+    """manifest-backed local paper corpus artifacts를 명시적으로 bootstrap."""
+    if not all_artifacts and not list(artifact_ids or []) and not list(source_ids or []):
+        raise click.ClickException("select artifacts with --artifact-id, --source-id, or --all")
+    khub = ctx.obj["khub"]
+    payload = bootstrap_corpus_artifacts(
+        config=khub.config,
+        manifest_path=manifest_path,
+        papers_dir=papers_dir,
+        artifact_ids=list(artifact_ids or []),
+        source_ids=list(source_ids or []),
+        all_artifacts=bool(all_artifacts),
+        apply=bool(apply),
+        allow_network=bool(allow_network),
+        timeout=max(1.0, float(timeout)),
+    )
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        if payload.get("status") != "ok":
+            ctx.exit(1)
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper corpus bootstrap[/bold] status={payload.get('status')} "
+        f"selected={payload.get('selectedCount', 0)} downloaded={counts.get('downloaded', 0)} "
+        f"already_present={counts.get('alreadyPresent', 0)} blocked={counts.get('blocked', 0)}"
+    )
+    if not apply:
+        console.print("[dim]dry-run only; pass --apply --allow-network to acquire missing artifacts[/dim]")
+    for item in list(payload.get("items") or [])[:10]:
+        console.print(
+            f"- {item.get('artifactId')} status={item.get('status')} "
+            f"target={item.get('targetPath') or '-'} reason={item.get('reason') or '-'}"
+        )
+    for error in list(payload.get("selectionErrors") or [])[:10]:
+        console.print(
+            f"- selector {error.get('selectorType')}={error.get('selector')} "
+            f"status={error.get('status')} reason={error.get('reason')}"
+        )
+    if payload.get("status") != "ok":
+        raise click.ClickException("paper corpus bootstrap blocked")
 
 
 @paper_group.command("repair-source", hidden=True)

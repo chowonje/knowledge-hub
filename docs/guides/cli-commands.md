@@ -634,8 +634,16 @@ Hidden operator examples:
 ```bash
 khub paper review-card-plan 2401.12345
 khub paper review-card-apply 2401.12345 --allow-external --provider openai --model gpt-5-nano
+khub paper corpus-bootstrap --artifact-id alexnet_krizhevsky_2012 --dry-run --json
+khub paper corpus-bootstrap --artifact-id alexnet_krizhevsky_2012 --apply --allow-network --json
 khub paper repair-source --paper-id 2401.12345 --dry-run --json
 ```
+
+`corpus-bootstrap` is explicit opt-in acquisition for manifest-backed local
+paper corpus files. Dry-run is the default. Network download requires both
+`--apply` and `--allow-network`, promotes a file into `papers_dir` only after
+manifest hash and byte-length verification, skips `repo_fixture` entries, and
+does not run `repair-source`, rebuild derivatives, or write SQLite rows.
 
 ### `khub paper-memory`
 

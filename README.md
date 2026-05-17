@@ -518,6 +518,15 @@ khub papers summarize 2401.12345
 
 `summary|evidence|memory|related`는 현재 promoted reading surface입니다. `khub paper`는 hidden compatibility alias이며, feedback/sync/concept/repair/batch remediation commands는 operator-only로 직접 실행 가능합니다.
 
+Paper source artifacts for live compare and repair-source are manifest-backed
+local corpus files. PDFs/full text stay outside git, while
+`eval/knowledgeos/fixtures/corpus_manifest.json` records expected filenames,
+hashes, byte lengths, provenance URLs, and corpus tiers. Hidden
+`khub paper corpus-bootstrap` can plan missing local corpus artifacts and can
+download selected artifacts only with explicit `--apply --allow-network`; it
+verifies hashes before writing to `papers_dir` and does not attach rows,
+rebuild derivatives, or run in eval/CI by default.
+
 ### `khub explore` - 학술 탐색
 
 ```bash
