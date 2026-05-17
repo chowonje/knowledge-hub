@@ -33,11 +33,17 @@
         "complexQaEvalDesignReport": { "type": "string" },
         "sectionspanPdfOffsetSelectedReviewDecisionProposalReport": { "type": "string" },
         "nonSectionspanPdfOffsetFeasibilityAuditReport": { "type": "string" },
+        "equationAlignmentFeasibilityAuditReport": { "type": "string" },
+        "tableCellProvenanceFeasibilityAuditReport": { "type": "string" },
+        "figureRegionLinkFeasibilityAuditReport": { "type": "string" },
         "candidateLayerReviewGateSchema": { "type": "string" },
         "structuredSummarySchema": { "type": "string" },
         "complexQaEvalDesignSchema": { "type": "string" },
         "sectionspanPdfOffsetSelectedReviewDecisionProposalSchema": { "type": "string" },
-        "nonSectionspanPdfOffsetFeasibilityAuditSchema": { "type": "string" }
+        "nonSectionspanPdfOffsetFeasibilityAuditSchema": { "type": "string" },
+        "equationAlignmentFeasibilityAuditSchema": { "type": "string" },
+        "tableCellProvenanceFeasibilityAuditSchema": { "type": "string" },
+        "figureRegionLinkFeasibilityAuditSchema": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -73,7 +79,17 @@
         "nonSectionspanPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
         "nonSectionspanPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
         "nonSectionspanPdfOffsetDiagnosticPageContextRows": { "type": "integer", "minimum": 0 },
-        "nonSectionspanPdfOffsetReadyForRegionReviewRows": { "type": "integer", "minimum": 0 }
+        "nonSectionspanPdfOffsetReadyForRegionReviewRows": { "type": "integer", "minimum": 0 },
+        "equationAlignmentAuditRows": { "type": "integer", "minimum": 0 },
+        "equationAlignmentCanonicalSourceSpanCreatedRows": { "type": "integer", "minimum": 0 },
+        "equationAlignmentDiagnosticTermContextRows": { "type": "integer", "minimum": 0 },
+        "tableCellProvenanceAuditRows": { "type": "integer", "minimum": 0 },
+        "tableCellProvenanceTotalTableCells": { "type": "integer", "minimum": 0 },
+        "tableCellProvenanceCellSourceSpanRows": { "type": "integer", "minimum": 0 },
+        "tableCellProvenanceCitationGradeRows": { "type": "integer", "minimum": 0 },
+        "figureRegionLinkAuditRows": { "type": "integer", "minimum": 0 },
+        "figureRegionLinkCaptionSourceSpanRows": { "type": "integer", "minimum": 0 },
+        "figureRegionLinkVerifiedRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },

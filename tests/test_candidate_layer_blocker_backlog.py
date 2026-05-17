@@ -269,6 +269,82 @@ def _non_sectionspan_pdf_offset_audit_payload(**overrides: object) -> dict:
     return payload
 
 
+def _equation_alignment_audit_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.equation-alignment-feasibility-audit.v1",
+        "status": "ok",
+        "counts": {
+            "auditedEquationQuoteCandidates": 9,
+            "canonicalSourceSpanCreatedCandidates": 0,
+            "diagnosticTermContextCandidates": 8,
+            "strictEligibleCandidates": 0,
+            "citationGradeCandidates": 0,
+            "runtimeEvidenceCandidates": 0,
+            "schemaViolationCount": 0,
+        },
+        "gate": {
+            "equationAlignmentFeasibilityReviewed": True,
+            "sourceSpanCreationReady": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
+def _table_cell_provenance_audit_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.table-cell-provenance-feasibility-audit.v1",
+        "status": "ok",
+        "counts": {
+            "auditedTableRegionCandidates": 5,
+            "totalTableCells": 681,
+            "cellSourceSpanCandidates": 0,
+            "tableCellCitationGradeCandidates": 0,
+            "strictEligibleCandidates": 0,
+            "citationGradeCandidates": 0,
+            "runtimeEvidenceCandidates": 0,
+            "schemaViolationCount": 0,
+        },
+        "gate": {
+            "tableCellProvenanceReviewed": True,
+            "tableCellCitationGradeReady": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
+def _figure_region_link_audit_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.figure-region-link-feasibility-audit.v1",
+        "status": "ok",
+        "counts": {
+            "auditedFigureCaptionCandidates": 11,
+            "captionSourceSpanCandidates": 9,
+            "figureRegionLinkVerifiedCandidates": 0,
+            "strictEligibleCandidates": 0,
+            "citationGradeCandidates": 0,
+            "runtimeEvidenceCandidates": 0,
+            "schemaViolationCount": 0,
+        },
+        "gate": {
+            "figureRegionLinkReviewed": True,
+            "figureRegionCitationGradeReady": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _reports(root: Path, *, gate: dict | None = None, summary: dict | None = None, eval_design: dict | None = None) -> tuple[Path, Path, Path]:
     gate_path = _write(root, "candidate-layer-review-gate.json", gate or _gate_payload())
     summary_path = _write(root, "structured-candidate-summary.json", summary or _summary_payload())
@@ -609,6 +685,77 @@ def test_candidate_layer_blocker_backlog_blocks_wrong_non_sectionspan_audit_sche
     assert payload["status"] == "blocked"
     assert payload["gate"]["decision"] == "blocked"
     assert "non_sectionspan_pdf_offset_feasibility_audit_schema_mismatch" in payload["gate"]["schemaViolations"]
+
+
+def test_candidate_layer_blocker_backlog_uses_downstream_feasibility_audit_counts(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(
+        tmp_path / "inputs",
+        gate=_gate_payload(
+            gate={
+                "candidateLayerReviewReady": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "blockers": [
+                    "candidate_layers_are_report_only",
+                    "runtime_promotion_disabled_for_tranche",
+                ],
+            }
+        ),
+        summary=_source_aligned_summary_payload(),
+    )
+    equation = _write(tmp_path / "inputs", "equation-alignment.json", _equation_alignment_audit_payload())
+    table = _write(tmp_path / "inputs", "table-cell-provenance.json", _table_cell_provenance_audit_payload())
+    figure = _write(tmp_path / "inputs", "figure-region-link.json", _figure_region_link_audit_payload())
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        equation_alignment_feasibility_audit_report=equation,
+        table_cell_provenance_feasibility_audit_report=table,
+        figure_region_link_feasibility_audit_report=figure,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    equation_item = next(item for item in payload["backlog"] if item["blocker"] == "equation_quote_alignment_missing")
+    table_item = next(
+        item for item in payload["backlog"] if item["blocker"] == "table_cell_row_column_bbox_provenance_missing"
+    )
+    figure_item = next(item for item in payload["backlog"] if item["blocker"] == "figure_region_link_unverified")
+    assert equation_item["affected_candidate_count"] == 9
+    assert table_item["affected_candidate_count"] == 5
+    assert figure_item["affected_candidate_count"] == 11
+    assert payload["counts"]["equationAlignmentAuditRows"] == 9
+    assert payload["counts"]["equationAlignmentCanonicalSourceSpanCreatedRows"] == 0
+    assert payload["counts"]["equationAlignmentDiagnosticTermContextRows"] == 8
+    assert payload["counts"]["tableCellProvenanceAuditRows"] == 5
+    assert payload["counts"]["tableCellProvenanceTotalTableCells"] == 681
+    assert payload["counts"]["tableCellProvenanceCellSourceSpanRows"] == 0
+    assert payload["counts"]["tableCellProvenanceCitationGradeRows"] == 0
+    assert payload["counts"]["figureRegionLinkAuditRows"] == 11
+    assert payload["counts"]["figureRegionLinkCaptionSourceSpanRows"] == 9
+    assert payload["counts"]["figureRegionLinkVerifiedRows"] == 0
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_downstream_audit_schema(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    equation = _write(
+        tmp_path / "inputs",
+        "equation-alignment.json",
+        _equation_alignment_audit_payload(schema="example.wrong.equation-alignment.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        equation_alignment_feasibility_audit_report=equation,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "equation_alignment_feasibility_audit_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_includes_table_cell_isolated_extractor_approval_gate(tmp_path: Path) -> None:
