@@ -346,6 +346,42 @@ class RepresentativeFilterSQLite(DummySQLite):
         return []
 
 
+class AmbiguousShortAliasLookupSQLite(DummySQLite):
+    def search_papers(self, query, limit=5):
+        _ = limit
+        token = str(query or "").strip()
+        rows = {
+            "CNN": {"paper_id": "local-cnn-alias", "title": "CNN"},
+            "RAG": {"paper_id": "local-rag-alias", "title": "RAG"},
+            "GPT": {"paper_id": "local-gpt-alias", "title": "GPT"},
+        }
+        row = rows.get(token)
+        return [row] if row else []
+
+    def search_paper_cards_v2(self, query, limit=5):
+        _ = limit
+        token = str(query or "").strip()
+        rows = {
+            "ImageNet Classification with Deep Convolutional Neural Networks": {
+                "paper_id": "alexnet-2012",
+                "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+                "search_text": "alexnet cnn imagenet deep convolutional neural networks",
+            },
+            "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks": {
+                "paper_id": "2005.11401",
+                "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                "search_text": "rag retrieval augmented generation knowledge intensive nlp tasks",
+            },
+            "Language Models are Few-Shot Learners": {
+                "paper_id": "2005.14165",
+                "title": "Language Models are Few-Shot Learners",
+                "search_text": "gpt gpt-3 few-shot language models",
+            },
+        }
+        row = rows.get(token)
+        return [row] if row else []
+
+
 class PrefixTitleSQLite(DummySQLite):
     def search_papers(self, query, limit=20):
         _ = limit
@@ -652,6 +688,36 @@ def test_build_rule_based_query_frame_strips_method_suffix_for_explicit_lookup_t
     assert frame["family"] == PAPER_FAMILY_LOOKUP
     assert frame["resolved_source_ids"] == ["2005.11401"]
     assert frame["expanded_terms"][0] == "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+
+
+def test_build_rule_based_query_frame_does_not_treat_ambiguous_short_lookup_aliases_as_exact_sources():
+    sqlite_db = AmbiguousShortAliasLookupSQLite()
+
+    cnn = build_rule_based_query_frame(
+        "CNN 논문 요약해줘",
+        source_type="paper",
+        sqlite_db=sqlite_db,
+    ).to_dict()
+    rag = build_rule_based_query_frame(
+        "RAG 논문 요약해줘",
+        source_type="paper",
+        sqlite_db=sqlite_db,
+    ).to_dict()
+    gpt = build_rule_based_query_frame(
+        "GPT 논문 요약해줘",
+        source_type="paper",
+        sqlite_db=sqlite_db,
+    ).to_dict()
+
+    assert cnn["family"] == PAPER_FAMILY_LOOKUP
+    assert rag["family"] == PAPER_FAMILY_LOOKUP
+    assert gpt["family"] == PAPER_FAMILY_LOOKUP
+    assert cnn["resolved_source_ids"] == []
+    assert rag["resolved_source_ids"] == []
+    assert gpt["resolved_source_ids"] == []
+    assert "ImageNet Classification with Deep Convolutional Neural Networks" in cnn["expanded_terms"]
+    assert "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" in rag["expanded_terms"]
+    assert "Language Models are Few-Shot Learners" in gpt["expanded_terms"]
 
 
 def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_gpt_and_ppo():

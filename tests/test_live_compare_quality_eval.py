@@ -7,6 +7,8 @@ from pathlib import Path
 
 import pytest
 
+from knowledge_hub.domain.source_identity import source_identity_aliases
+
 
 SCRIPT_PATH = Path("eval/knowledgeos/scripts/check_live_compare_quality_eval.py")
 
@@ -136,6 +138,18 @@ def _locator_only_packet():
     ]
     packet["coverage"] = {**packet["coverage"], "answerable": False}
     return packet
+
+
+@pytest.mark.parametrize("alias", ["CNN", "GPT", "RAG"])
+def test_source_identity_aliases_do_not_promote_ambiguous_short_aliases(alias):
+    assert not any(item.startswith("text:") for item in source_identity_aliases(alias))
+
+
+def test_source_identity_aliases_preserve_stable_hash_and_arxiv_aliases():
+    hash_value = "a" * 64
+
+    assert f"hash:{hash_value}" in source_identity_aliases(f"sha256:{hash_value}")
+    assert "arxiv:2005.11401" in source_identity_aliases("paper:2005.11401#0")
 
 
 def test_live_compare_quality_eval_passes_expected_compare_packet():
@@ -413,6 +427,85 @@ def test_live_compare_quality_eval_does_not_overmatch_similar_source_aliases():
     assert result["expectedSourceCoverage"] == 0.0
     assert result["unresolvedExpectedSourceAliases"] == ["Deep Residual Learning for Image Recognition"]
     assert "unresolved_expected_source_alias" in result["provenanceDiagnostics"]
+
+
+def test_live_compare_quality_eval_does_not_resolve_ambiguous_short_expected_source_alias():
+    module = _load_module()
+    packet = _compare_packet()
+    packet["dimensions"][0]["supportingSpans"] = [
+        {
+            "spanRef": "span_rag",
+            "sourceId": "paper:2005.11401#0",
+            "sourceType": "paper",
+            "contentHash": "sha256:a",
+            "sourceContentHash": "sha256:a-source",
+            "spanLocator": "chars:1-20",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "RAG retrieves documents before generation.",
+        }
+    ]
+    case = {
+        "case_id": "compare_short_alias_expected_source",
+        "query": "compare",
+        "expected_source_ids": ["RAG"],
+        "expected_dimension_terms": ["accuracy"],
+        "expected_min_supporting_span_count": 1,
+        "expected_min_strict_span_count": 1,
+    }
+
+    result = module.evaluate_case(
+        case,
+        _payload(
+            compare_packet=packet,
+            sources=[{"source_id": "paper:2005.11401#0", "title": "RAG"}],
+        ),
+    )
+
+    assert result["status"] == "fail"
+    assert result["expectedSourceCoverage"] == 0.0
+    assert result["unresolvedExpectedSourceAliases"] == ["RAG"]
+    assert "unresolved_expected_source_alias" in result["provenanceDiagnostics"]
+
+
+def test_live_compare_quality_eval_resolves_stable_id_when_payload_title_is_ambiguous_short_alias():
+    module = _load_module()
+    packet = _compare_packet()
+    packet["dimensions"][0]["supportingSpans"] = [
+        {
+            "spanRef": "span_rag",
+            "sourceId": "paper:2005.11401#0",
+            "sourceType": "paper",
+            "contentHash": "sha256:a",
+            "sourceContentHash": "sha256:a-source",
+            "spanLocator": "chars:1-20",
+            "strictSpanBacked": True,
+            "fallbackSpan": False,
+            "quote": "RAG retrieves documents before generation.",
+        }
+    ]
+    case = {
+        "case_id": "compare_stable_id_with_short_alias_title",
+        "query": "compare",
+        "expected_source_ids": ["2005.11401"],
+        "expected_dimension_terms": ["accuracy"],
+        "expected_min_supporting_span_count": 1,
+        "expected_min_strict_span_count": 1,
+    }
+
+    result = module.evaluate_case(
+        case,
+        _payload(
+            compare_packet=packet,
+            sources=[{"source_id": "paper:2005.11401#0", "title": "RAG"}],
+        ),
+    )
+
+    assert result["status"] == "pass"
+    assert result["expectedSourceCoverage"] == 1.0
+    assert result["expectedStrictSourceCoverage"] == 1.0
+    assert result["coveredExpectedSourceIds"] == ["2005.11401"]
+    assert result["unresolvedExpectedSourceAliases"] == []
 
 
 def test_live_compare_quality_eval_requires_strict_source_coverage_for_answerable_cases():

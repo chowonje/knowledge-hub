@@ -9,6 +9,7 @@ _ARXIV_RE = re.compile(r"(?<!\d)(\d{4}\.\d{4,5})(?:v\d+)?(?!\d)", re.IGNORECASE)
 _HEX_SUFFIX_RE = re.compile(r"(?:[_-][0-9a-f]{6,})+$", re.IGNORECASE)
 _HASH_RE = re.compile(r"^(?:sha256:)?[0-9a-f]{32,64}$", re.IGNORECASE)
 _PAPER_CHUNK_RE = re.compile(r"^paper[_:](\d{4}\.\d{4,5})(?:[_:#-]\d+)?$", re.IGNORECASE)
+_AMBIGUOUS_SHORT_SOURCE_ALIASES = {"cnn", "gpt", "rag"}
 
 
 def _clean_text(value: Any) -> str:
@@ -46,9 +47,10 @@ def source_identity_aliases(value: Any) -> set[str]:
 
     normalized = _normalized_text(token)
     if normalized:
-        aliases.add(f"text:{normalized}")
+        if normalized not in _AMBIGUOUS_SHORT_SOURCE_ALIASES:
+            aliases.add(f"text:{normalized}")
         stripped = _HEX_SUFFIX_RE.sub("", normalized).strip()
-        if stripped and stripped != normalized:
+        if stripped and stripped != normalized and stripped not in _AMBIGUOUS_SHORT_SOURCE_ALIASES:
             aliases.add(f"text:{stripped}")
     return aliases
 
