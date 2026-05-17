@@ -37,6 +37,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.extraction-report.v1": "paper-extraction-report-result.v1.json",
     "knowledge-hub.paper.parsed-materialization.result.v1": "paper-parsed-materialization-result.v1.json",
     "knowledge-hub.paper.layout-parser-pilot.result.v1": "paper-layout-parser-pilot-result.v1.json",
+    "knowledge-hub.paper.mineru-normalizer-audit.v1": "paper-mineru-normalizer-audit.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
