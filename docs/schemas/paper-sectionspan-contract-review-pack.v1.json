@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.sectionspan-contract-review-pack.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "reviewGuidance",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.sectionspan-contract-review-pack.v1" },
+    "status": { "type": "string", "enum": ["review_pack_ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": ["sectionspanContractReviewReport", "sectionspanContractReviewSchema"],
+      "properties": {
+        "sectionspanContractReviewReport": { "type": "string" },
+        "sectionspanContractReviewSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputContractCandidates",
+        "reviewCardCount",
+        "heldOutCandidates",
+        "strictEligibleCards",
+        "citationGradeCards",
+        "runtimeEvidenceCards",
+        "schemaViolationCount",
+        "unsafeUpstreamFlagCount",
+        "bySectionType",
+        "byPaper",
+        "byRecommendedAction",
+        "heldOutByReason"
+      ],
+      "properties": {
+        "inputContractCandidates": { "type": "integer", "minimum": 0 },
+        "reviewCardCount": { "type": "integer", "minimum": 0 },
+        "heldOutCandidates": { "type": "integer", "minimum": 0 },
+        "strictEligibleCards": { "const": 0 },
+        "citationGradeCards": { "const": 0 },
+        "runtimeEvidenceCards": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "bySectionType": { "type": "object" },
+        "byPaper": { "type": "object" },
+        "byRecommendedAction": { "type": "object" },
+        "heldOutByReason": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "reviewPackReady",
+        "candidateFormalizationReady",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "reviewPackReady": { "type": "boolean" },
+        "candidateFormalizationReady": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["sectionspan_contract_human_review_ready", "blocked"]
+        },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "allCardsNonStrict",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "allCardsNonStrict": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "reviewGuidance": {
+      "type": "object",
+      "required": ["primaryDecision", "recommendedFirstArtifact", "doNotPromoteYet"],
+      "properties": {
+        "primaryDecision": { "type": "string" },
+        "recommendedFirstArtifact": { "type": "string" },
+        "doNotPromoteYet": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "reviewCards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "card_id",
+          "review_status",
+          "recommended_action",
+          "source_contract_candidate_id",
+          "source_sectionspan_candidate_id",
+          "candidate_type",
+          "paper_id",
+          "source_parser",
+          "candidate_text",
+          "section_label",
+          "section_title",
+          "section_type",
+          "section_level",
+          "canonical_span",
+          "review_questions",
+          "contract_assessment",
+          "evidence_tier",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "card_id": { "type": "string" },
+          "review_status": { "const": "needs_human_review" },
+          "recommended_action": { "type": "string" },
+          "source_contract_candidate_id": { "type": "string" },
+          "source_sectionspan_candidate_id": { "type": "string" },
+          "candidate_type": { "const": "sectionspan_contract_review_card" },
+          "paper_id": { "type": "string" },
+          "source_parser": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "section_label": { "type": "string" },
+          "section_title": { "type": "string" },
+          "section_type": {
+            "type": "string",
+            "enum": ["numbered_section", "abstract", "backmatter", "named_section"]
+          },
+          "section_level": { "type": "integer", "minimum": 0 },
+          "canonical_span": {
+            "type": "object",
+            "required": [
+              "chars_start",
+              "chars_end",
+              "page",
+              "sourceContentHash",
+              "alignmentMethod",
+              "alignmentStatus",
+              "confidence",
+              "locatorKind"
+            ],
+            "properties": {
+              "chars_start": { "type": "integer", "minimum": 0 },
+              "chars_end": { "type": "integer", "minimum": 0 },
+              "page": { "type": "integer", "minimum": 0 },
+              "sourceContentHash": { "type": "string" },
+              "alignmentMethod": { "type": "string" },
+              "alignmentStatus": { "type": "string" },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+              "locatorKind": { "const": "canonical_generated_markdown" }
+            },
+            "additionalProperties": true
+          },
+          "review_questions": { "type": "array", "items": { "type": "string" } },
+          "contract_assessment": {
+            "type": "object",
+            "required": ["contractStatus", "contractReady", "contractBlockers", "contractRequirements"],
+            "properties": {
+              "contractStatus": { "type": "string" },
+              "contractReady": { "type": "boolean" },
+              "contractBlockers": { "type": "array", "items": { "type": "string" } },
+              "contractRequirements": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": true
+          },
+          "evidence_tier": { "const": "sectionspan_contract_review_card_only" },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "heldOut": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sourceCandidateId",
+          "paperId",
+          "candidateText",
+          "reviewClass",
+          "reason",
+          "reviewStatus",
+          "strictEligible",
+          "citationGrade",
+          "runtimeEvidence"
+        ],
+        "properties": {
+          "sourceCandidateId": { "type": "string" },
+          "paperId": { "type": "string" },
+          "candidateText": { "type": "string" },
+          "reviewClass": { "type": "string" },
+          "reason": { "type": "string" },
+          "reviewStatus": { "const": "held_out" },
+          "strictEligible": { "const": false },
+          "citationGrade": { "const": false },
+          "runtimeEvidence": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

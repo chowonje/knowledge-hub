@@ -11,6 +11,7 @@
 
 ### Changed
 
+- Added a report-only SectionSpan contract human review pack helper. The helper turns the non-strict SectionSpan contract review into schema-backed operator cards for 61 section boundaries, keeps title/TOC rows held out, and leaves strict evidence, runtime citations, parser routing, answer integration, SQLite/index, and canonical parsed artifacts unchanged.
 - Added a report-only SectionSpanCandidate contract review helper. The helper checks the SectionSpan candidate layer against the promotion-policy draft, records 61 non-strict contract-ready candidates while preserving held-out title/TOC rows, and keeps strict evidence, runtime citations, parser routing, answer integration, SQLite/index, and canonical parsed artifacts unchanged.
 - Added a report-only candidate-layer promotion policy draft helper. The helper consumes the structured candidate summary, review gate, blocker backlog, and feasibility audits to draft non-runtime promotion tracks for SectionSpan, FigureCaption, EquationQuote, and TableRegion candidates while keeping strict evidence, parser routing, answer integration, SQLite/index, and canonical parsed artifacts unchanged.
 - Added a report-only figure-region link feasibility audit helper. The helper joins FigureCaptionCandidate rows with MinerU normalizer layout candidates, reports caption-span/layout-bbox/page-link feasibility, records missing verified figure/image region authority, and keeps figure-region evidence, strict evidence, parser routing, answer integration, SQLite/index, and canonical parsed artifacts unchanged.
