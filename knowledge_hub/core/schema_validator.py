@@ -52,6 +52,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.candidate-layer-blocker-decision-template.v1": "paper-candidate-layer-blocker-decision-template.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-decision-record.v1": "paper-candidate-layer-blocker-decision-record.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-decision-input-pack.v1": "paper-candidate-layer-blocker-decision-input-pack.v1.json",
+    "knowledge-hub.paper.candidate-layer-blocker-decision-edit-plan.v1": "paper-candidate-layer-blocker-decision-edit-plan.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-decision-file-validation.v1": "paper-candidate-layer-blocker-decision-file-validation.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-decision-file-draft.v1": "paper-candidate-layer-blocker-decision-file-draft.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-manual-decision-review-sheet.v1": "paper-candidate-layer-blocker-manual-decision-review-sheet.v1.json",
