@@ -120,6 +120,44 @@ def test_manual_and_operator_cards_are_not_accepted_decisions(tmp_path: Path) ->
     assert "strict_evidence_promotion" in operator["disallowed_actions"]
 
 
+def test_latest_manual_edit_blockers_are_classified_as_manual_decisions(tmp_path: Path) -> None:
+    backlog = _write(
+        tmp_path,
+        _backlog_payload(
+            backlog=[
+                _backlog_item("sectionspan_selected_review_manual_edit_required", layers=["sectionspan"]),
+                _backlog_item("equation_quote_decision_manual_edit_required", layers=["equation_quote"]),
+                _backlog_item(
+                    "candidate_layer_blocker_decision_record_pending",
+                    layers=["sectionspan", "figure_caption", "equation_quote", "table_region"],
+                ),
+            ],
+        ),
+    )
+
+    payload = build_candidate_layer_blocker_review_pack(candidate_layer_blocker_backlog_report=backlog)
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_REVIEW_PACK_SCHEMA_ID, strict=True).ok
+    assert payload["counts"]["reviewCardCount"] == 3
+    assert payload["counts"]["manualDecisionRequiredCards"] == 3
+    assert payload["counts"]["technicalFeasibilityBlockedCards"] == 0
+    actions = {card["blocker"]: card["recommended_review_action"] for card in payload["reviewCards"]}
+    assert (
+        actions["sectionspan_selected_review_manual_edit_required"]
+        == "manually_edit_selected_sectionspan_decision_file_or_keep_pending"
+    )
+    assert (
+        actions["equation_quote_decision_manual_edit_required"]
+        == "manually_edit_equation_quote_decision_file_or_keep_pending"
+    )
+    assert (
+        actions["candidate_layer_blocker_decision_record_pending"]
+        == "record_candidate_layer_blocker_decisions_or_keep_pending"
+    )
+    assert all(card["requires_human_decision"] is True for card in payload["reviewCards"])
+    assert all(card["runtime_evidence"] is False for card in payload["reviewCards"])
+
+
 def test_blocker_review_pack_blocks_wrong_or_failed_backlog(tmp_path: Path) -> None:
     backlog = _write(
         tmp_path,

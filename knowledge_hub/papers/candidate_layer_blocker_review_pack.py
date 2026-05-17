@@ -23,7 +23,10 @@ CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID = "knowledge-hub.paper.candidate-layer
 _MANUAL_DECISION_BLOCKERS = {
     "sectionspan_pdf_offset_human_review_pending",
     "sectionspan_selected_review_decision_file_required",
+    "sectionspan_selected_review_manual_edit_required",
     "sectionspan_pdf_offsets_require_human_review_before_strict_promotion",
+    "equation_quote_decision_manual_edit_required",
+    "candidate_layer_blocker_decision_record_pending",
 }
 _OPERATOR_APPROVAL_BLOCKERS = {
     "table_cell_isolated_extractor_approval_required",
@@ -66,6 +69,7 @@ def _review_bucket(blocker: str) -> str:
 def _review_action(blocker: str, fallback: str) -> str:
     actions = {
         "sectionspan_selected_review_decision_file_required": "provide_selected_sectionspan_decision_file_or_keep_pending",
+        "sectionspan_selected_review_manual_edit_required": "manually_edit_selected_sectionspan_decision_file_or_keep_pending",
         "sectionspan_pdf_offset_human_review_pending": "review_sectionspan_original_pdf_offset_rows",
         "sectionspan_pdf_offsets_require_human_review_before_strict_promotion": "run_or_refresh_sectionspan_human_review_gate",
         "table_cell_isolated_extractor_approval_required": "approve_or_decline_isolated_table_cell_extractor_pilot",
@@ -75,6 +79,8 @@ def _review_action(blocker: str, fallback: str) -> str:
         "non_sectionspan_layers_lack_original_pdf_offsets": "continue_non_sectionspan_pdf_offset_recovery_review",
         "figure_caption_pdf_offsets_require_region_link_review": "review_caption_source_span_to_figure_region_links",
         "table_caption_pdf_offsets_require_cell_provenance_review": "review_table_caption_offsets_before_cell_provenance",
+        "equation_quote_decision_manual_edit_required": "manually_edit_equation_quote_decision_file_or_keep_pending",
+        "candidate_layer_blocker_decision_record_pending": "record_candidate_layer_blocker_decisions_or_keep_pending",
         "candidate_layers_are_report_only": "keep_candidate_layer_contract_report_only",
         "runtime_promotion_disabled_for_tranche": "defer_runtime_promotion_to_explicit_later_tranche",
     }
