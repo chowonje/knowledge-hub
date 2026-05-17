@@ -10,6 +10,8 @@ import shutil
 import subprocess
 from typing import Any
 
+from knowledge_hub.papers.extraction_diagnostics import build_parser_meta_diagnostic
+
 
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
@@ -28,17 +30,61 @@ def _page_total(document: Any) -> int:
         return 0
 
 
+def _page_column_count(page: Any) -> int:
+    try:
+        blocks = list(page.get_text("blocks") or [])
+    except Exception:
+        return 0
+    centers: list[float] = []
+    for block in blocks:
+        if not isinstance(block, (list, tuple)) or len(block) < 5:
+            continue
+        text = _clean_text(block[4])
+        if len(text) < 20:
+            continue
+        try:
+            x0 = float(block[0])
+            x1 = float(block[2])
+        except Exception:
+            continue
+        centers.append((x0 + x1) / 2.0)
+    if len(centers) < 4:
+        return 1 if centers else 0
+    try:
+        width = max(1.0, float(getattr(getattr(page, "rect", None), "width", 0.0) or 0.0))
+    except Exception:
+        width = 0.0
+    threshold = max(80.0, width * 0.18) if width else 120.0
+    clusters: list[list[float]] = []
+    for center in sorted(centers):
+        if not clusters:
+            clusters.append([center])
+            continue
+        current = clusters[-1]
+        mean = sum(current) / len(current)
+        if center - mean > threshold:
+            clusters.append([center])
+        else:
+            current.append(center)
+    substantial = [cluster for cluster in clusters if len(cluster) >= 2]
+    return max(1, min(3, len(substantial) or len(clusters)))
+
+
 def _extract_document_text(document: Any) -> tuple[str, list[dict[str, Any]], dict[str, Any]]:
     elements: list[dict[str, Any]] = []
     markdown_lines: list[str] = []
     pages_with_text = 0
     char_count = 0
+    column_count_distribution: dict[int, int] = {}
     for page_index in range(_page_total(document)):
         try:
             page = document.load_page(page_index)
+            column_count = _page_column_count(page)
             raw_text = str(page.get_text("text") or "")
         except Exception:
             continue
+        if column_count > 0:
+            column_count_distribution[column_count] = column_count_distribution.get(column_count, 0) + 1
         text = _clean_text(raw_text)
         if not text:
             continue
@@ -60,6 +106,9 @@ def _extract_document_text(document: Any) -> tuple[str, list[dict[str, Any]], di
         "page_count": _page_total(document),
         "pages_with_text": pages_with_text,
         "char_count": char_count,
+        "column_count_distribution": {str(key): value for key, value in sorted(column_count_distribution.items())},
+        "column_count_detected": max(column_count_distribution.keys(), default=0),
+        "reading_order_method": "column_probe_only" if max(column_count_distribution.keys(), default=0) >= 2 else "y_only",
     }
     return markdown_text, elements, stats
 
@@ -253,7 +302,11 @@ class PyMuPDFAdapter:
             "ocr_applied": ocr_applied,
             "ocr_output_pdf": ocr_output_pdf,
             "ocr_warning": ocr_warning,
+            "column_count_distribution": dict(stats.get("column_count_distribution") or {}),
+            "column_count_detected": int(stats.get("column_count_detected") or 0),
+            "reading_order_method": str(stats.get("reading_order_method") or "y_only"),
         }
+        parser_meta["extraction_diagnostic"] = build_parser_meta_diagnostic(parser_meta, elements)
 
         artifact_dir = self.artifact_dir_for(paper_id=token)
         artifact_dir.mkdir(parents=True, exist_ok=True)

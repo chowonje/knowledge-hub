@@ -75,7 +75,7 @@ def test_papers_help_keeps_operator_remediation_hidden():
 
     assert result.exit_code == 0
     commands = _command_lines(result.output)
-    assert {"add", "import-csv", "list", "summary", "evidence", "memory", "related"}.issubset(commands)
+    assert {"add", "import-csv", "list", "summary", "evidence", "memory", "related", "extraction-report"}.issubset(commands)
     assert "repair-source" not in commands
     assert "repair-source-queue" not in commands
     assert "review-card" not in commands

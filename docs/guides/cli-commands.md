@@ -38,6 +38,7 @@ khub compare "비교 질문" --json
 khub trace "질문" --source paper --json
 khub discover "주제" -n 5 --judge
 khub papers list
+khub papers extraction-report --json
 khub papers board-export --json
 khub index
 ```
@@ -202,6 +203,20 @@ khub labs foundry discover --feature daily_coach --json
 khub labs foundry discover-validate --input discover.json --json
 khub labs foundry conflict-list --json
 ```
+
+### `khub papers extraction-report`
+
+```bash
+khub papers extraction-report --json
+khub papers extraction-report --paper-id 1706.03762 --json
+khub papers extraction-report --degraded-only --limit 50 --json
+```
+
+용도:
+- 기존 `papers/parsed/<paper_id>/manifest.json` / `document.json`만 읽어 paper parse 구조 품질을 점검한다.
+- parser, page/text coverage, OCR 적용 여부, column probe, table/figure/equation signal, degraded reason을 `knowledge-hub.paper.extraction-report.v1` payload로 반환한다.
+- parsed artifact가 없으면 실패하지 않고 `parsed_artifact_missing` degraded diagnostic으로 보고한다.
+- 이 command는 parser 실행, source repair, indexing, embedding, SQLite mutation을 하지 않는다.
 
 ### `khub ask`
 
@@ -604,6 +619,7 @@ khub papers board-export
 khub papers download
 khub papers embed
 khub papers evidence
+khub papers extraction-report
 khub papers info
 khub papers import-csv
 khub papers list
@@ -617,6 +633,7 @@ khub papers translate
 용도:
 - 개별 논문 관리
 - 번역/요약/임베딩
+- 기존 parsed artifact 기반 extraction diagnostics/report
 - 사용자용 읽기 surface (`summary`, `evidence`, `memory`, `related`)
 - Obsidian `KnowledgeOS Papers`용 read-only board payload export (`board-export`)
 - keyword/concept writeback, judge calibration, repair/remediation command는 hidden operator path로 직접 실행 가능하지만 public help에서는 숨긴다.
