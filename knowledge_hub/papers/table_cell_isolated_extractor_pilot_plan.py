@@ -262,8 +262,8 @@ def build_table_cell_isolated_extractor_pilot_plan(
     *,
     table_cell_next_action_gate: str | Path,
     table_cell_pymupdf_pairing_diagnostic: str | Path,
-    output_dir: str | Path = "/Users/won/.khub/reports/layout-parser-pilot/2026-05-17/table-cell-isolated-extractor-pilot-result",
-    venv_path: str | Path = "/Users/won/.khub/venvs/table-extractor-pilot-20260518",
+    output_dir: str | Path = "~/.khub/reports/layout-parser-pilot/2026-05-17/table-cell-isolated-extractor-pilot-result",
+    venv_path: str | Path = "~/.khub/venvs/table-extractor-pilot-20260518",
     environment: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build a report-only isolated table-extractor pilot plan."""
@@ -458,8 +458,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--table-cell-next-action-gate", required=True)
     parser.add_argument("--table-cell-pymupdf-pairing-diagnostic", required=True)
     parser.add_argument("--output-dir", default="", help="Directory for local JSON/Markdown reports.")
-    parser.add_argument("--pilot-output-dir", default="/Users/won/.khub/reports/layout-parser-pilot/2026-05-17/table-cell-isolated-extractor-pilot-result")
-    parser.add_argument("--venv-path", default="/Users/won/.khub/venvs/table-extractor-pilot-20260518")
+    parser.add_argument("--pilot-output-dir", default="~/.khub/reports/layout-parser-pilot/2026-05-17/table-cell-isolated-extractor-pilot-result")
+    parser.add_argument("--venv-path", default="~/.khub/venvs/table-extractor-pilot-20260518")
     parser.add_argument("--json", action="store_true", help="Print summary payload as JSON.")
     args = parser.parse_args(argv)
 
