@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.candidate-layer-promotion-policy-draft.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "promotionPrinciples",
+    "warnings",
+    "promotionTracks"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.candidate-layer-promotion-policy-draft.v1" },
+    "status": { "type": "string", "enum": ["draft_ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": { "type": "object", "additionalProperties": true },
+    "counts": {
+      "type": "object",
+      "required": [
+        "totalCandidates",
+        "promotionTrackCount",
+        "candidateOnlyPromotionTracks",
+        "candidateFormalizationReadyTracks",
+        "strictPromotionReadyTracks",
+        "parserRoutingReadyTracks",
+        "answerIntegrationReadyTracks",
+        "runtimePromotionAllowedTracks",
+        "strictEligibleCandidates",
+        "citationGradeCandidates",
+        "runtimeEvidenceCandidates",
+        "currentRuntimeAnswerableQuestions",
+        "canonicalParsedTextSpanCandidates",
+        "originalPdfOffsetCandidates",
+        "schemaViolationCount",
+        "unsafeUpstreamFlagCount",
+        "byReadiness",
+        "byLayer"
+      ],
+      "properties": {
+        "totalCandidates": { "type": "integer", "minimum": 0 },
+        "promotionTrackCount": { "type": "integer", "minimum": 0 },
+        "candidateOnlyPromotionTracks": { "type": "integer", "minimum": 0 },
+        "candidateFormalizationReadyTracks": { "type": "integer", "minimum": 0 },
+        "strictPromotionReadyTracks": { "const": 0 },
+        "parserRoutingReadyTracks": { "const": 0 },
+        "answerIntegrationReadyTracks": { "const": 0 },
+        "runtimePromotionAllowedTracks": { "const": 0 },
+        "strictEligibleCandidates": { "const": 0 },
+        "citationGradeCandidates": { "const": 0 },
+        "runtimeEvidenceCandidates": { "const": 0 },
+        "currentRuntimeAnswerableQuestions": { "const": 0 },
+        "canonicalParsedTextSpanCandidates": { "type": "integer", "minimum": 0 },
+        "originalPdfOffsetCandidates": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byReadiness": { "type": "object" },
+        "byLayer": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "promotionPolicyDraftReady",
+        "candidateLayerReviewReady",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "promotionPolicyDraftReady": { "type": "boolean" },
+        "candidateLayerReviewReady": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "decision": { "type": "string", "enum": ["candidate_layer_promotion_policy_draft_ready", "blocked"] },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "draftOnly",
+        "runtimePolicyChanged",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "draftOnly": { "const": true },
+        "runtimePolicyChanged": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "promotionPrinciples": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "promotionTracks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "track_id",
+          "layer",
+          "candidate_count",
+          "canonical_source_span_candidate_count",
+          "promotion_readiness",
+          "candidate_layer_formalization_ready",
+          "strict_promotion_ready",
+          "parser_routing_ready",
+          "answer_integration_ready",
+          "allowed_next_actions",
+          "disallowed_actions",
+          "evidence_needed_before_strict_promotion",
+          "recommended_next_tranche",
+          "evidence_tier",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "track_id": { "type": "string" },
+          "layer": {
+            "type": "string",
+            "enum": ["sectionspan", "figure_caption", "equation_quote", "table_region"]
+          },
+          "candidate_count": { "type": "integer", "minimum": 0 },
+          "canonical_source_span_candidate_count": { "type": "integer", "minimum": 0 },
+          "promotion_readiness": { "type": "string" },
+          "candidate_layer_formalization_ready": { "type": "boolean" },
+          "strict_promotion_ready": { "const": false },
+          "parser_routing_ready": { "const": false },
+          "answer_integration_ready": { "const": false },
+          "allowed_next_actions": { "type": "array", "items": { "type": "string" } },
+          "disallowed_actions": { "type": "array", "items": { "type": "string" } },
+          "evidence_needed_before_strict_promotion": { "type": "array", "items": { "type": "string" } },
+          "recommended_next_tranche": { "type": "string" },
+          "evidence_tier": { "const": "promotion_policy_draft_candidate_only" },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
