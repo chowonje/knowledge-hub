@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.sectionspan-source-authority-options.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "options"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.sectionspan-source-authority-options.v1" },
+    "status": { "type": "string", "enum": ["options_ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": ["sectionspanStrictPromotionDesignReport", "sectionspanStrictPromotionDesignSchema"],
+      "properties": {
+        "sectionspanStrictPromotionDesignReport": { "type": "string" },
+        "sectionspanStrictPromotionDesignSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputDesignRows",
+        "optionCount",
+        "authorityDecisionMadeOptions",
+        "strictPromotionReadyOptions",
+        "runtimePromotionAllowedOptions",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "schemaViolationCount",
+        "unsafeUpstreamFlagCount",
+        "byPromotionDesignStatus",
+        "byRecommendedOption"
+      ],
+      "properties": {
+        "inputDesignRows": { "type": "integer", "minimum": 0 },
+        "optionCount": { "type": "integer", "minimum": 0 },
+        "authorityDecisionMadeOptions": { "const": 0 },
+        "strictPromotionReadyOptions": { "const": 0 },
+        "runtimePromotionAllowedOptions": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byPromotionDesignStatus": { "type": "object" },
+        "byRecommendedOption": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "authorityOptionsReady",
+        "authorityDecisionMade",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "authorityOptionsReady": { "type": "boolean" },
+        "authorityDecisionMade": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["source_authority_options_ready_no_decision_made", "blocked"]
+        },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "authorityDecisionMade",
+        "strictPromotionImplemented",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "authorityDecisionMade": { "const": false },
+        "strictPromotionImplemented": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "option_id",
+          "title",
+          "authority_posture",
+          "recommendation",
+          "affected_row_count",
+          "pros",
+          "cons",
+          "required_before_use",
+          "blocked_actions",
+          "authority_decision_made",
+          "strict_promotion_ready",
+          "runtime_promotion_allowed",
+          "evidence_tier",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence"
+        ],
+        "properties": {
+          "option_id": { "type": "string" },
+          "title": { "type": "string" },
+          "authority_posture": { "type": "string" },
+          "recommendation": { "type": "string" },
+          "affected_row_count": { "type": "integer", "minimum": 0 },
+          "pros": { "type": "array", "items": { "type": "string" } },
+          "cons": { "type": "array", "items": { "type": "string" } },
+          "required_before_use": { "type": "array", "items": { "type": "string" } },
+          "blocked_actions": { "type": "array", "items": { "type": "string" } },
+          "authority_decision_made": { "const": false },
+          "strict_promotion_ready": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "evidence_tier": { "const": "sectionspan_source_authority_option_only" },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

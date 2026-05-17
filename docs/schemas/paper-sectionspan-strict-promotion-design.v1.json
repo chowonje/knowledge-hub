@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.sectionspan-strict-promotion-design.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "promotionPrinciples",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.sectionspan-strict-promotion-design.v1" },
+    "status": { "type": "string", "enum": ["design_ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "sectionspanContractReviewPackReport",
+        "sourceSpanOffsetAuthorityAuditReport",
+        "sectionspanContractReviewPackSchema",
+        "sourceSpanOffsetAuthorityAuditSchema"
+      ],
+      "properties": {
+        "sectionspanContractReviewPackReport": { "type": "string" },
+        "sourceSpanOffsetAuthorityAuditReport": { "type": "string" },
+        "sectionspanContractReviewPackSchema": { "type": "string" },
+        "sourceSpanOffsetAuthorityAuditSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputReviewCards",
+        "designRowCount",
+        "candidateFormalizationReadyRows",
+        "strictPromotionReadyRows",
+        "runtimePromotionAllowedRows",
+        "heldOutCandidates",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "schemaViolationCount",
+        "unsafeUpstreamFlagCount",
+        "bySectionType",
+        "byPaper",
+        "byPromotionDesignStatus",
+        "heldOutByReason"
+      ],
+      "properties": {
+        "inputReviewCards": { "type": "integer", "minimum": 0 },
+        "designRowCount": { "type": "integer", "minimum": 0 },
+        "candidateFormalizationReadyRows": { "type": "integer", "minimum": 0 },
+        "strictPromotionReadyRows": { "const": 0 },
+        "runtimePromotionAllowedRows": { "const": 0 },
+        "heldOutCandidates": { "type": "integer", "minimum": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "bySectionType": { "type": "object" },
+        "byPaper": { "type": "object" },
+        "byPromotionDesignStatus": { "type": "object" },
+        "heldOutByReason": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "strictPromotionDesignReady",
+        "candidateFormalizationReady",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "strictPromotionDesignReady": { "type": "boolean" },
+        "candidateFormalizationReady": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["sectionspan_strict_promotion_design_ready_but_blocked_for_runtime", "blocked"]
+        },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "strictPromotionImplemented",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "strictPromotionImplemented": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "promotionPrinciples": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "designRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "design_id",
+          "source_review_card_id",
+          "source_contract_candidate_id",
+          "source_sectionspan_candidate_id",
+          "candidate_type",
+          "paper_id",
+          "candidate_text",
+          "section_label",
+          "section_title",
+          "section_type",
+          "section_level",
+          "canonical_span",
+          "source_span_authority",
+          "promotion_design_status",
+          "candidate_formalization_ready",
+          "strict_promotion_ready",
+          "runtime_promotion_allowed",
+          "requirements_before_strict_promotion",
+          "allowed_next_actions",
+          "disallowed_actions",
+          "evidence_tier",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "design_id": { "type": "string" },
+          "source_review_card_id": { "type": "string" },
+          "source_contract_candidate_id": { "type": "string" },
+          "source_sectionspan_candidate_id": { "type": "string" },
+          "candidate_type": { "const": "sectionspan_strict_promotion_design" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "section_label": { "type": "string" },
+          "section_title": { "type": "string" },
+          "section_type": {
+            "type": "string",
+            "enum": ["numbered_section", "abstract", "backmatter", "named_section"]
+          },
+          "section_level": { "type": "integer", "minimum": 0 },
+          "canonical_span": {
+            "type": "object",
+            "required": [
+              "chars_start",
+              "chars_end",
+              "page",
+              "sourceContentHash",
+              "alignmentMethod",
+              "alignmentStatus",
+              "locatorKind"
+            ],
+            "properties": {
+              "chars_start": { "type": "integer", "minimum": 0 },
+              "chars_end": { "type": "integer", "minimum": 0 },
+              "page": { "type": "integer", "minimum": 0 },
+              "sourceContentHash": { "type": "string" },
+              "alignmentMethod": { "type": "string" },
+              "alignmentStatus": { "type": "string" },
+              "locatorKind": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "source_span_authority": {
+            "type": "object",
+            "required": [
+              "audit_id",
+              "authorityStatus",
+              "locatorKind",
+              "canonicalParsedTextSpanAvailable",
+              "originalPdfOffsetAvailable",
+              "layoutOrBboxOnly",
+              "markdownOffsetOnly"
+            ],
+            "properties": {
+              "audit_id": { "type": "string" },
+              "authorityStatus": { "type": "string" },
+              "locatorKind": { "type": "string" },
+              "canonicalParsedTextSpanAvailable": { "type": "boolean" },
+              "originalPdfOffsetAvailable": { "type": "boolean" },
+              "layoutOrBboxOnly": { "type": "boolean" },
+              "markdownOffsetOnly": { "type": "boolean" }
+            },
+            "additionalProperties": true
+          },
+          "promotion_design_status": { "type": "string" },
+          "candidate_formalization_ready": { "type": "boolean" },
+          "strict_promotion_ready": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "requirements_before_strict_promotion": { "type": "array", "items": { "type": "string" } },
+          "allowed_next_actions": { "type": "array", "items": { "type": "string" } },
+          "disallowed_actions": { "type": "array", "items": { "type": "string" } },
+          "evidence_tier": { "const": "sectionspan_strict_promotion_design_only" },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "heldOut": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sourceCandidateId",
+          "paperId",
+          "candidateText",
+          "reviewClass",
+          "reason",
+          "promotionDesignStatus",
+          "strictEligible",
+          "citationGrade",
+          "runtimeEvidence"
+        ],
+        "properties": {
+          "sourceCandidateId": { "type": "string" },
+          "paperId": { "type": "string" },
+          "candidateText": { "type": "string" },
+          "reviewClass": { "type": "string" },
+          "reason": { "type": "string" },
+          "promotionDesignStatus": { "const": "held_out" },
+          "strictEligible": { "const": false },
+          "citationGrade": { "const": false },
+          "runtimeEvidence": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

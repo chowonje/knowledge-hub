@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.candidate-layer-blocker-manual-decision-review-sheet.v1",
+  "title": "Candidate Layer Blocker Manual Decision Review Sheet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "reviewRows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.candidate-layer-blocker-manual-decision-review-sheet.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["manual_review_sheet_ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateLayerBlockerDecisionTemplateReport",
+        "candidateLayerBlockerDecisionTemplateSchema",
+        "candidateLayerBlockerDecisionsFile",
+        "candidateLayerBlockerDecisionRecordReport",
+        "candidateLayerBlockerDecisionRecordSchema"
+      ],
+      "properties": {
+        "candidateLayerBlockerDecisionTemplateReport": { "type": "string" },
+        "candidateLayerBlockerDecisionTemplateSchema": { "type": "string" },
+        "candidateLayerBlockerDecisionsFile": { "type": "string" },
+        "candidateLayerBlockerDecisionRecordReport": { "type": "string" },
+        "candidateLayerBlockerDecisionRecordSchema": { "type": "string" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewRows",
+        "needsReviewRows",
+        "nonNeedsReviewRows",
+        "manualBucketRows",
+        "operatorBucketRows",
+        "technicalBucketRows",
+        "policyBucketRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "unsafeUpstreamFlagCount",
+        "byBucket",
+        "byPriority",
+        "byLayer",
+        "byDecision"
+      ],
+      "properties": {
+        "reviewRows": { "type": "integer", "minimum": 0 },
+        "needsReviewRows": { "type": "integer", "minimum": 0 },
+        "nonNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "manualBucketRows": { "type": "integer", "minimum": 0 },
+        "operatorBucketRows": { "type": "integer", "minimum": 0 },
+        "technicalBucketRows": { "type": "integer", "minimum": 0 },
+        "policyBucketRows": { "type": "integer", "minimum": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byBucket": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byPriority": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byLayer": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byDecision": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manualReviewSheetReady",
+        "containsNonNeedsReviewDraftValues",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "manualReviewSheetReady": { "type": "boolean" },
+        "containsNonNeedsReviewDraftValues": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["manual_review_sheet_ready_for_human_edit", "blocked"]
+        },
+        "unsafeUpstreamFlags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recommendedNextTranche": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "manualReviewSheetOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "manualReviewSheetOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "reviewRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "review_sheet_row_id",
+          "source_decision_row_id",
+          "source_review_card_id",
+          "source_backlog_id",
+          "blocker",
+          "priority",
+          "review_bucket",
+          "affected_layers",
+          "affected_candidate_count",
+          "affected_eval_question_count",
+          "current_decision",
+          "allowed_decisions",
+          "draft_reviewer",
+          "draft_notes",
+          "recorded_decision",
+          "recommended_next_tranche",
+          "recommended_review_action",
+          "required_review_checks",
+          "decision_note",
+          "decision_scope",
+          "evidence_tier",
+          "report_only",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "review_sheet_row_id": { "type": "string" },
+          "source_decision_row_id": { "type": "string" },
+          "source_review_card_id": { "type": "string" },
+          "source_backlog_id": { "type": "string" },
+          "blocker": { "type": "string" },
+          "priority": { "type": "string" },
+          "review_bucket": { "type": "string" },
+          "affected_layers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "affected_candidate_count": { "type": "integer", "minimum": 0 },
+          "affected_eval_question_count": { "type": "integer", "minimum": 0 },
+          "current_decision": { "type": "string" },
+          "allowed_decisions": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "draft_reviewer": { "type": "string" },
+          "draft_notes": { "type": "string" },
+          "recorded_decision": { "type": "string" },
+          "recommended_next_tranche": { "type": "string" },
+          "recommended_review_action": { "type": "string" },
+          "required_review_checks": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "decision_note": { "type": "string" },
+          "decision_scope": {
+            "const": "candidate_layer_blocker_manual_decision_review_sheet_only_no_runtime_or_strict_promotion"
+          },
+          "evidence_tier": {
+            "const": "candidate_layer_blocker_manual_decision_review_sheet_only"
+          },
+          "report_only": { "const": true },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "non_strict_reason": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
