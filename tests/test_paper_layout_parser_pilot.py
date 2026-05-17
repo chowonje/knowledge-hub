@@ -12,6 +12,7 @@ from knowledge_hub.interfaces.cli.commands.paper_cmd import paper_group
 from knowledge_hub.papers import layout_parser_pilot
 from knowledge_hub.papers.layout_parser_pilot import (
     LAYOUT_PARSER_PILOT_SCHEMA_ID,
+    ParserTimeoutError,
     run_layout_parser_pilot,
 )
 
@@ -140,8 +141,9 @@ def test_layout_parser_pilot_plan_does_not_write(tmp_path: Path, monkeypatch) ->
 
     assert payload["schema"] == LAYOUT_PARSER_PILOT_SCHEMA_ID
     assert validate_payload(payload, LAYOUT_PARSER_PILOT_SCHEMA_ID, strict=True).ok
-    assert payload["counts"] == {"planned": 1, "ok": 0, "blocked": 0, "failed": 0}
+    assert payload["counts"] == {"planned": 1, "ok": 0, "blocked": 0, "failed": 0, "timeout": 0}
     assert payload["papers"][0]["parsers"][0]["status"] == "planned"
+    assert payload["request"]["timeoutSeconds"] == 0
     assert not (tmp_path / "pilot").exists()
     assert not (papers_dir / "parsed" / "2600.01001").exists()
     assert _FakeLayoutAdapter.calls == []
@@ -157,6 +159,8 @@ def test_layout_parser_pilot_run_writes_only_isolated_output(tmp_path: Path, mon
     source_pdf.write_bytes(b"%PDF-1.4")
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
     _seed_paper(db, paper_id="2600.01002", title="Example Paper", pdf_path=str(source_pdf))
+    row_before = db.get_paper("2600.01002")
+    changes_before = db.conn.total_changes
     output_dir = tmp_path / "pilot"
 
     payload = run_layout_parser_pilot(
@@ -174,12 +178,51 @@ def test_layout_parser_pilot_run_writes_only_isolated_output(tmp_path: Path, mon
     assert (isolated_target / "document.json").exists()
     assert (isolated_target / "manifest.json").exists()
     assert not (papers_dir / "parsed" / "2600.01002").exists()
+    assert db.conn.total_changes == changes_before
+    assert db.get_paper("2600.01002") == row_before
     assert _FakeLayoutAdapter.calls[0]["refresh"] is True
     assert _FakeLayoutAdapter.calls[0]["allow_ocr"] is False
     metrics = payload["papers"][0]["parsers"][0]["metrics"]
     assert metrics["realHeadingCount"] >= 1
     assert metrics["tableCellElementCount"] == 1
     assert metrics["columnCountDetected"] == 2
+    assert validate_payload(payload, LAYOUT_PARSER_PILOT_SCHEMA_ID, strict=True).ok
+
+
+def test_layout_parser_pilot_timeout_is_reported_without_green_status(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(layout_parser_pilot, "_parser_availability", _available)
+
+    def _timeout(**kwargs):  # noqa: ANN002, ANN003
+        _ = kwargs
+        raise ParserTimeoutError("parser timed out after 1s")
+
+    monkeypatch.setattr(layout_parser_pilot, "_run_parser_with_timeout", _timeout)
+    papers_dir = tmp_path / "papers"
+    source_pdf = papers_dir / "Example.pdf"
+    source_pdf.parent.mkdir(parents=True)
+    source_pdf.write_bytes(b"%PDF-1.4")
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper(db, paper_id="2600.01005", title="Timeout Paper", pdf_path=str(source_pdf))
+
+    payload = run_layout_parser_pilot(
+        sqlite_db=db,
+        papers_dir=papers_dir,
+        paper_ids=["2600.01005"],
+        parsers=["pymupdf"],
+        output_dir=tmp_path / "pilot",
+        run=True,
+        timeout_seconds=1,
+    )
+
+    item = payload["papers"][0]["parsers"][0]
+    assert payload["status"] == "failed"
+    assert payload["counts"]["timeout"] == 1
+    assert item["status"] == "timeout"
+    assert item["timeoutSeconds"] == 1
+    assert item["durationSeconds"] >= 0
+    assert item["artifactDir"] == ""
+    assert item["reason"].startswith("parser_timeout:")
+    assert not (papers_dir / "parsed" / "2600.01005").exists()
     assert validate_payload(payload, LAYOUT_PARSER_PILOT_SCHEMA_ID, strict=True).ok
 
 
@@ -239,6 +282,8 @@ def test_layout_parser_pilot_cli_json_and_hidden_help(tmp_path: Path, monkeypatc
             "pymupdf",
             "--output-dir",
             str(tmp_path / "pilot"),
+            "--timeout-seconds",
+            "7",
             "--json",
         ],
         obj={"khub": khub},
@@ -248,6 +293,8 @@ def test_layout_parser_pilot_cli_json_and_hidden_help(tmp_path: Path, monkeypatc
     payload = json.loads(result.output)
     assert payload["schema"] == LAYOUT_PARSER_PILOT_SCHEMA_ID
     assert payload["counts"]["planned"] == 1
+    assert payload["request"]["timeoutSeconds"] == 7
+    assert payload["papers"][0]["parsers"][0]["timeoutSeconds"] == 7
     assert validate_payload(payload, LAYOUT_PARSER_PILOT_SCHEMA_ID, strict=True).ok
 
     help_result = runner.invoke(paper_group, ["--help"], obj={"khub": khub})

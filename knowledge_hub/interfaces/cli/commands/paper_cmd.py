@@ -283,9 +283,10 @@ def paper_materialize_parsed(ctx, paper_ids, parser, apply, overwrite, as_json):
     help="Isolated report/artifact output root. Defaults under ~/.khub/reports/layout-parser-pilot/.",
 )
 @click.option("--run/--plan", default=False, show_default=True, help="Run parsers into isolated output root; default plans only.")
+@click.option("--timeout-seconds", default=0, type=int, show_default=True, help="Per-parser run timeout for isolated pilot execution; 0 disables timeout.")
 @click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
 @click.pass_context
-def paper_layout_parser_pilot(ctx, paper_ids, parsers, output_dir, run, as_json):
+def paper_layout_parser_pilot(ctx, paper_ids, parsers, output_dir, run, timeout_seconds, as_json):
     """Compare parser candidates in an isolated report-only pilot."""
 
     khub = ctx.obj["khub"]
@@ -296,6 +297,7 @@ def paper_layout_parser_pilot(ctx, paper_ids, parsers, output_dir, run, as_json)
         parsers=list(parsers or []),
         output_dir=output_dir,
         run=bool(run),
+        timeout_seconds=max(0, int(timeout_seconds or 0)),
     )
     _validate_cli_payload(khub.config, payload, LAYOUT_PARSER_PILOT_SCHEMA_ID)
     if as_json:
@@ -306,7 +308,8 @@ def paper_layout_parser_pilot(ctx, paper_ids, parsers, output_dir, run, as_json)
     console.print(
         f"[bold]paper layout parser pilot[/bold] status={payload.get('status')} "
         f"planned={counts.get('planned', 0)} ok={counts.get('ok', 0)} "
-        f"blocked={counts.get('blocked', 0)} failed={counts.get('failed', 0)}"
+        f"blocked={counts.get('blocked', 0)} failed={counts.get('failed', 0)} "
+        f"timeout={counts.get('timeout', 0)}"
     )
     if not run:
         console.print("[dim]plan only; pass --run to write isolated parser outputs[/dim]")
