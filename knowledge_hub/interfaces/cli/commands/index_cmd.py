@@ -36,6 +36,7 @@ log = logging.getLogger("khub.index")
 BATCH_SIZE = 20
 EMBED_MAX_RETRIES = 3
 EMBED_RETRY_BASE_SEC = 1.0
+PAPER_EMBED_CONTEXT_RETRY_CHAR_LIMITS = (6000, 4000, 3000, 2000)
 
 
 def _now_iso() -> str:
@@ -160,6 +161,60 @@ def _collect_embedder_status(embedder) -> tuple[int, list[dict]]:
                 }
             )
     return retries, failures
+
+
+def _embedder_failure_messages(embedder, failed_indices: list[int]) -> list[str]:
+    if not hasattr(embedder, "get_last_status"):
+        return []
+    try:
+        status = embedder.get_last_status() or {}
+    except Exception:
+        return []
+    failures_raw = status.get("failures", []) if isinstance(status, dict) else []
+    messages: list[str] = []
+    if not isinstance(failures_raw, list):
+        return messages
+    failed_set = set(failed_indices)
+    for item in failures_raw:
+        if not isinstance(item, dict):
+            continue
+        item_index = _safe_int(item.get("itemIndex"), default=-1)
+        if item_index not in failed_set:
+            continue
+        code = str(item.get("errorCode") or "EMBEDDER_ERROR").strip()
+        message = str(item.get("message") or "").strip()
+        if message:
+            messages.append(f"{item_index}:{code}: {message}")
+    return messages
+
+
+def _is_embedding_context_overflow(message: str) -> bool:
+    normalized = str(message or "").strip().lower()
+    return "context length" in normalized or "input length exceeds" in normalized
+
+
+def _truncate_embedding_text(text: str, limit: int) -> str:
+    limit = max(1, int(limit))
+    if len(text) <= limit:
+        return text
+    truncated = text[:limit].rstrip()
+    newline_at = truncated.rfind("\n")
+    if newline_at >= int(limit * 0.75):
+        truncated = truncated[:newline_at].rstrip()
+    return truncated or text[:limit].rstrip()
+
+
+def _paper_context_retry_texts(_paper: Any, text: str) -> list[str]:
+    variants: list[str] = []
+    seen: set[str] = {text}
+    for limit in PAPER_EMBED_CONTEXT_RETRY_CHAR_LIMITS:
+        if len(text) <= limit:
+            continue
+        candidate = _truncate_embedding_text(text, limit)
+        if candidate and candidate not in seen:
+            variants.append(candidate)
+            seen.add(candidate)
+    return variants
 
 
 def _save_index_report(config, run_id: str, payload: dict) -> str:
@@ -313,6 +368,7 @@ def _run_index_batches(
     build_id: Callable[[Any], str],
     failure_builder: Callable[[Any | None, str], dict[str, Any]],
     warning_builder: Callable[[Any | None, str], dict[str, Any]] | None = None,
+    context_retry_texts: Callable[[Any, str], list[str]] | None = None,
     before_add: Callable[[list[Any]], None] | None = None,
     mark_indexed: Callable[[list[Any]], None] | None = None,
 ) -> dict[str, Any]:
@@ -386,31 +442,59 @@ def _run_index_batches(
     def _index_single(item: Any) -> bool:
         nonlocal succeeded, isolated_retry_count
         isolated_retry_count += 1
-        status_collected = False
-        try:
-            text = build_text(item)
-            embs = _embed_batch_via_provider(embedder, [text])
-            _collect_status(item)
-            status_collected = True
-            if not embs or embs[0] is None:
-                raise RuntimeError("embedder returned None for isolated item")
-            if before_add is not None:
-                before_add([item])
-            vector_db.add_documents(
-                documents=[text],
-                embeddings=[embs[0]],
-                metadatas=[build_metadata(item)],
-                ids=[build_id(item)],
-            )
-            if mark_indexed is not None:
-                mark_indexed([item])
-            succeeded += 1
-            return True
-        except Exception as error:
-            if not status_collected:
+        original_text = build_text(item)
+        attempts = [original_text]
+        seen_attempts = {original_text}
+        context_variants_loaded = False
+        attempt_index = 0
+        last_error = ""
+        while attempt_index < len(attempts):
+            text = attempts[attempt_index]
+            status_collected = False
+            try:
+                embs = _embed_batch_via_provider(embedder, [text])
                 _collect_status(item)
-            failures.append(failure_builder(item, str(error)))
-            return False
+                status_collected = True
+                if not embs or embs[0] is None:
+                    raise RuntimeError("embedder returned None for isolated item")
+                if before_add is not None:
+                    before_add([item])
+                vector_db.add_documents(
+                    documents=[text],
+                    embeddings=[embs[0]],
+                    metadatas=[build_metadata(item)],
+                    ids=[build_id(item)],
+                )
+                if mark_indexed is not None:
+                    mark_indexed([item])
+                if attempt_index > 0:
+                    builder = warning_builder or failure_builder
+                    warnings.append(
+                        builder(
+                            item,
+                            "CONTEXT_SAFE_EMBED_RETRY: "
+                            f"truncated isolated embedding text from {len(original_text)} to {len(text)} chars",
+                        )
+                    )
+                succeeded += 1
+                return True
+            except Exception as error:
+                last_error = str(error)
+                if not status_collected:
+                    _collect_status(item)
+                if (
+                    context_retry_texts is not None
+                    and not context_variants_loaded
+                    and _is_embedding_context_overflow(last_error)
+                ):
+                    for candidate in context_retry_texts(item, original_text):
+                        if candidate and candidate not in seen_attempts:
+                            attempts.append(candidate)
+                            seen_attempts.add(candidate)
+                    context_variants_loaded = True
+                attempt_index += 1
+        failures.append(failure_builder(item, last_error or "isolated embedding failed"))
+        return False
 
     while cursor < len(items):
         backoff_meta = _apply_resource_backoff(config, backoff_round=backoff_round)
@@ -549,7 +633,9 @@ def _embed_batch_via_provider(embedder, texts: list[str]) -> list[list[float]]:
     results = embedder.embed_batch(texts, show_progress=False)
     failed = [i for i, r in enumerate(results) if r is None]
     if failed:
-        raise RuntimeError(f"{len(failed)}개 텍스트 임베딩 실패 (인덱스: {failed[:5]})")
+        details = _embedder_failure_messages(embedder, failed[:5])
+        detail_text = f"; providerErrors={details[:3]}" if details else ""
+        raise RuntimeError(f"{len(failed)}개 텍스트 임베딩 실패 (인덱스: {failed[:5]}){detail_text}")
     return results
 
 
@@ -840,6 +926,7 @@ def index_cmd(ctx, index_all, concepts_only, vault_all, vault_clear, as_json):
                     "title": paper["title"] if paper else "",
                     "error": message,
                 },
+                context_retry_texts=_paper_context_retry_texts,
                 before_add=_prepare_paper_vector_replace,
                 mark_indexed=_mark_papers_indexed,
             )
