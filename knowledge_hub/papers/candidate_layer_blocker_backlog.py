@@ -29,6 +29,9 @@ SECTIONSPAN_PDF_OFFSET_HUMAN_REVIEW_GATE_SCHEMA_ID = (
 SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_DECISION_PROPOSAL_SCHEMA_ID = (
     "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-decision-proposal.v1"
 )
+SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_NEXT_ACTION_BRIEF_SCHEMA_ID = (
+    "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-next-action-brief.v1"
+)
 NON_SECTIONSPAN_PDF_OFFSET_FEASIBILITY_AUDIT_SCHEMA_ID = (
     "knowledge-hub.paper.non-sectionspan-pdf-offset-feasibility-audit.v1"
 )
@@ -139,6 +142,20 @@ _BLOCKER_RULES = {
             "separate explicit apply tranche before any strict/runtime evidence use",
         ],
         "stopRule": "stop_if_selected_review_decision_proposals_have_not_been_accepted_by_a_human_decision_file",
+    },
+    "sectionspan_selected_review_manual_edit_required": {
+        "priority": "P0",
+        "layers": ["sectionspan"],
+        "category": "source_span_promotion_review",
+        "recommendedNextTranche": "manual_edit_selected_sectionspan_review_decision_file",
+        "evidenceNeededBeforePromotion": [
+            "human edit of the selected SectionSpan review decision file",
+            "reviewer and notes for each non-needs_review row",
+            "validation report proving the edited file is structurally valid",
+            "decision record proving no automatic proposal consumption occurred",
+            "separate explicit apply tranche before any strict/runtime evidence use",
+        ],
+        "stopRule": "stop_if_selected_review_next_action_brief_still_requires_manual_edit",
     },
     "non_sectionspan_layers_lack_original_pdf_offsets": {
         "priority": "P0",
@@ -303,6 +320,7 @@ def _affected_candidate_count(
     table_cell_result: dict[str, Any] | None = None,
     sectionspan_human_review_gate: dict[str, Any] | None = None,
     sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
+    sectionspan_selected_review_next_action_brief: dict[str, Any] | None = None,
     non_sectionspan_pdf_offset_audit: dict[str, Any] | None = None,
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
@@ -327,6 +345,9 @@ def _affected_candidate_count(
         )
     if blocker == "sectionspan_selected_review_decision_file_required":
         return _safe_int(((sectionspan_selected_decision_proposal or {}).get("counts") or {}).get("proposalRows"))
+    if blocker == "sectionspan_selected_review_manual_edit_required":
+        counts = dict((sectionspan_selected_review_next_action_brief or {}).get("counts") or {})
+        return _safe_int(counts.get("decisionRecordNeedsReviewRows")) or _safe_int(counts.get("briefRows"))
     if blocker == "table_cell_isolated_extractor_approval_required":
         return _safe_int(table_cell_counts.get("approvalRequiredRows")) or _safe_int(table_cell_counts.get("targetRows"))
     if blocker == "table_cell_isolated_extractor_unavailable_or_blocked":
@@ -403,6 +424,7 @@ def _backlog_item(
     table_cell_result: dict[str, Any] | None = None,
     sectionspan_human_review_gate: dict[str, Any] | None = None,
     sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
+    sectionspan_selected_review_next_action_brief: dict[str, Any] | None = None,
     non_sectionspan_pdf_offset_audit: dict[str, Any] | None = None,
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
@@ -425,6 +447,7 @@ def _backlog_item(
             table_cell_result,
             sectionspan_human_review_gate,
             sectionspan_selected_decision_proposal,
+            sectionspan_selected_review_next_action_brief,
             non_sectionspan_pdf_offset_audit,
             equation_alignment_audit,
             table_cell_provenance_audit,
@@ -515,6 +538,21 @@ def _sectionspan_selected_decision_proposal_blockers(result: dict[str, Any]) -> 
     return []
 
 
+def _sectionspan_selected_review_next_action_brief_blockers(result: dict[str, Any]) -> list[str]:
+    if not result:
+        return []
+    counts = dict(result.get("counts") or {})
+    gate = dict(result.get("gate") or {})
+    status = str(result.get("status") or "")
+    if (
+        status == "manual_review_required"
+        or _safe_int(counts.get("decisionRecordNeedsReviewRows"))
+        or gate.get("manualReviewRequired")
+    ):
+        return ["sectionspan_selected_review_manual_edit_required"]
+    return []
+
+
 def _non_sectionspan_pdf_offset_audit_blockers(result: dict[str, Any]) -> list[str]:
     if not result:
         return []
@@ -578,6 +616,7 @@ def _collect_blockers(
     table_cell_result: dict[str, Any] | None = None,
     sectionspan_human_review_gate: dict[str, Any] | None = None,
     sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
+    sectionspan_selected_review_next_action_brief: dict[str, Any] | None = None,
     non_sectionspan_pdf_offset_audit: dict[str, Any] | None = None,
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
@@ -592,6 +631,7 @@ def _collect_blockers(
     blockers.extend(_table_cell_result_blockers(table_cell_result or {}))
     blockers.extend(_sectionspan_human_review_gate_blockers(sectionspan_human_review_gate or {}))
     blockers.extend(_sectionspan_selected_decision_proposal_blockers(sectionspan_selected_decision_proposal or {}))
+    blockers.extend(_sectionspan_selected_review_next_action_brief_blockers(sectionspan_selected_review_next_action_brief or {}))
     blockers.extend(_non_sectionspan_pdf_offset_audit_blockers(non_sectionspan_pdf_offset_audit or {}))
     blockers.extend(_candidate_layer_blocker_decision_record_blockers(candidate_layer_blocker_decision_record or {}))
     blockers.extend(
@@ -612,6 +652,7 @@ def build_candidate_layer_blocker_backlog(
     table_cell_isolated_extractor_pilot_result_report: str | Path | None = None,
     sectionspan_pdf_offset_human_review_gate_report: str | Path | None = None,
     sectionspan_pdf_offset_selected_review_decision_proposal_report: str | Path | None = None,
+    sectionspan_pdf_offset_selected_review_next_action_brief_report: str | Path | None = None,
     non_sectionspan_pdf_offset_feasibility_audit_report: str | Path | None = None,
     equation_alignment_feasibility_audit_report: str | Path | None = None,
     table_cell_provenance_feasibility_audit_report: str | Path | None = None,
@@ -647,6 +688,16 @@ def build_candidate_layer_blocker_backlog(
     )
     sectionspan_selected_decision_proposal = (
         _read_json(sectionspan_selected_decision_proposal_path) if sectionspan_selected_decision_proposal_path else {}
+    )
+    sectionspan_selected_review_next_action_brief_path = (
+        Path(str(sectionspan_pdf_offset_selected_review_next_action_brief_report)).expanduser()
+        if sectionspan_pdf_offset_selected_review_next_action_brief_report
+        else None
+    )
+    sectionspan_selected_review_next_action_brief = (
+        _read_json(sectionspan_selected_review_next_action_brief_path)
+        if sectionspan_selected_review_next_action_brief_path
+        else {}
     )
     non_sectionspan_pdf_offset_audit_path = (
         Path(str(non_sectionspan_pdf_offset_feasibility_audit_report)).expanduser()
@@ -701,6 +752,12 @@ def build_candidate_layer_blocker_backlog(
     ):
         schema_violations.append("sectionspan_pdf_offset_selected_review_decision_proposal_schema_mismatch")
     if (
+        sectionspan_selected_review_next_action_brief
+        and sectionspan_selected_review_next_action_brief.get("schema")
+        != SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_NEXT_ACTION_BRIEF_SCHEMA_ID
+    ):
+        schema_violations.append("sectionspan_pdf_offset_selected_review_next_action_brief_schema_mismatch")
+    if (
         non_sectionspan_pdf_offset_audit
         and non_sectionspan_pdf_offset_audit.get("schema") != NON_SECTIONSPAN_PDF_OFFSET_FEASIBILITY_AUDIT_SCHEMA_ID
     ):
@@ -732,6 +789,7 @@ def build_candidate_layer_blocker_backlog(
         table_cell_result,
         sectionspan_human_review_gate,
         sectionspan_selected_decision_proposal,
+        sectionspan_selected_review_next_action_brief,
         non_sectionspan_pdf_offset_audit,
         equation_alignment_audit,
         table_cell_provenance_audit,
@@ -747,6 +805,7 @@ def build_candidate_layer_blocker_backlog(
             table_cell_result,
             sectionspan_human_review_gate,
             sectionspan_selected_decision_proposal,
+            sectionspan_selected_review_next_action_brief,
             non_sectionspan_pdf_offset_audit,
             equation_alignment_audit,
             table_cell_provenance_audit,
@@ -773,6 +832,9 @@ def build_candidate_layer_blocker_backlog(
             "sectionspanPdfOffsetSelectedReviewDecisionProposalReport": str(
                 sectionspan_selected_decision_proposal_path or ""
             ),
+            "sectionspanPdfOffsetSelectedReviewNextActionBriefReport": str(
+                sectionspan_selected_review_next_action_brief_path or ""
+            ),
             "nonSectionspanPdfOffsetFeasibilityAuditReport": str(non_sectionspan_pdf_offset_audit_path or ""),
             "equationAlignmentFeasibilityAuditReport": str(equation_alignment_audit_path or ""),
             "tableCellProvenanceFeasibilityAuditReport": str(table_cell_provenance_audit_path or ""),
@@ -785,6 +847,9 @@ def build_candidate_layer_blocker_backlog(
             "sectionspanPdfOffsetHumanReviewGateSchema": str(sectionspan_human_review_gate.get("schema") or ""),
             "sectionspanPdfOffsetSelectedReviewDecisionProposalSchema": str(
                 sectionspan_selected_decision_proposal.get("schema") or ""
+            ),
+            "sectionspanPdfOffsetSelectedReviewNextActionBriefSchema": str(
+                sectionspan_selected_review_next_action_brief.get("schema") or ""
             ),
             "nonSectionspanPdfOffsetFeasibilityAuditSchema": str(non_sectionspan_pdf_offset_audit.get("schema") or ""),
             "equationAlignmentFeasibilityAuditSchema": str(equation_alignment_audit.get("schema") or ""),
@@ -830,6 +895,20 @@ def build_candidate_layer_blocker_backlog(
             ),
             "sectionspanSelectedDecisionAcceptedRows": _safe_int(
                 (sectionspan_selected_decision_proposal.get("counts") or {}).get("acceptedHumanDecisionRows")
+            ),
+            "sectionspanSelectedNextActionBriefRows": _safe_int(
+                (sectionspan_selected_review_next_action_brief.get("counts") or {}).get("briefRows")
+            ),
+            "sectionspanSelectedNextActionNeedsReviewRows": _safe_int(
+                (sectionspan_selected_review_next_action_brief.get("counts") or {}).get("needsReviewRows")
+            ),
+            "sectionspanSelectedNextActionSuggestedApproveRows": _safe_int(
+                (sectionspan_selected_review_next_action_brief.get("counts") or {}).get(
+                    "suggestedApproveForLaterPromotionDesignRows"
+                )
+            ),
+            "sectionspanSelectedNextActionDecisionRecordNeedsReviewRows": _safe_int(
+                (sectionspan_selected_review_next_action_brief.get("counts") or {}).get("decisionRecordNeedsReviewRows")
             ),
             "nonSectionspanPdfOffsetAuditRows": _safe_int(
                 (non_sectionspan_pdf_offset_audit.get("counts") or {}).get("totalRows")
@@ -992,6 +1071,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Optional path to the latest SectionSpan selected review decision proposal JSON.",
     )
     parser.add_argument(
+        "--sectionspan-pdf-offset-selected-review-next-action-brief-report",
+        default="",
+        help="Optional path to the latest SectionSpan selected review next-action brief JSON.",
+    )
+    parser.add_argument(
         "--non-sectionspan-pdf-offset-feasibility-audit-report",
         default="",
         help="Optional path to the latest non-SectionSpan PDF offset feasibility audit JSON.",
@@ -1028,6 +1112,9 @@ def main(argv: list[str] | None = None) -> int:
         sectionspan_pdf_offset_human_review_gate_report=args.sectionspan_pdf_offset_human_review_gate_report or None,
         sectionspan_pdf_offset_selected_review_decision_proposal_report=(
             args.sectionspan_pdf_offset_selected_review_decision_proposal_report or None
+        ),
+        sectionspan_pdf_offset_selected_review_next_action_brief_report=(
+            args.sectionspan_pdf_offset_selected_review_next_action_brief_report or None
         ),
         non_sectionspan_pdf_offset_feasibility_audit_report=(
             args.non_sectionspan_pdf_offset_feasibility_audit_report or None
