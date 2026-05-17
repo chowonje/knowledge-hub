@@ -42,6 +42,11 @@ _TRACKED_PATH_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (
         re.compile(r"(^|/)eval/knowledgeos/runs/", re.IGNORECASE),
         "generated eval run artifacts should be curated or removed before release",
     ),
+    (
+        "tracked_internal_process_record",
+        re.compile(r"^(?:tasks|reviews|worklog)/", re.IGNORECASE),
+        "internal process records should not be tracked in the public branch",
+    ),
 )
 
 _HIGH_CONFIDENCE_SECRET_RULES: tuple[tuple[str, re.Pattern[str], str], ...] = (

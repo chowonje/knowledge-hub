@@ -51,6 +51,11 @@ eval/knowledgeos/queries/live_retrieval_span_eval_cases.local.json
 eval/knowledgeos/queries/live_compare_quality_eval_cases.local.json
 runs/ab/
 
+# Local process records
+/tasks/
+/reviews/
+/worklog/
+
 # Secrets
 .env
 .env.*
