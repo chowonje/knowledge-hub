@@ -116,6 +116,20 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_caption_source_span_is_available_but_figure_region_link_is_unverified",
     },
+    "table_caption_pdf_offsets_require_cell_provenance_review": {
+        "priority": "P0",
+        "layers": ["table_region"],
+        "category": "table_cell_provenance",
+        "recommendedNextTranche": "table_cell_provenance_review_pack",
+        "evidenceNeededBeforePromotion": [
+            "operator review of recovered original-PDF table caption spans",
+            "row and column labels linked to table cells",
+            "cell values linked to bbox or source spans",
+            "sourceContentHash agreement between caption span and table region",
+            "tests proving table captions alone do not authorize table-cell evidence",
+        ],
+        "stopRule": "stop_if_table_caption_span_exists_but_cell_row_column_bbox_provenance_is_missing",
+    },
     "candidate_layers_are_report_only": {
         "priority": "P2",
         "layers": ["sectionspan", "figure_caption", "equation_quote", "table_region"],
@@ -198,10 +212,18 @@ def _affected_candidate_count(blocker: str, layers: list[str], summary: dict[str
             figure_blocked = _safe_int(counts.get("figureCaptionOriginalPdfOffsetBlockedRows"))
         else:
             figure_blocked = _safe_int(by_layer.get("figure_caption"))
-        return figure_blocked + sum(_safe_int(by_layer.get(layer)) for layer in ("equation_quote", "table_region"))
+        if _safe_int(counts.get("tableRegionOriginalPdfOffsetFeasibilityRows")) > 0:
+            table_blocked = _safe_int(counts.get("tableRegionOriginalPdfOffsetBlockedRows"))
+        else:
+            table_blocked = _safe_int(by_layer.get("table_region"))
+        return figure_blocked + table_blocked + _safe_int(by_layer.get("equation_quote"))
     if blocker == "figure_caption_pdf_offsets_require_region_link_review":
         return _safe_int((summary.get("counts") or {}).get("figureCaptionOriginalPdfOffsetRecoveredRows")) or _safe_int(
             by_layer.get("figure_caption")
+        )
+    if blocker == "table_caption_pdf_offsets_require_cell_provenance_review":
+        return _safe_int((summary.get("counts") or {}).get("tableRegionOriginalPdfOffsetRecoveredRows")) or _safe_int(
+            by_layer.get("table_region")
         )
     return sum(_safe_int(by_layer.get(layer)) for layer in layers)
 

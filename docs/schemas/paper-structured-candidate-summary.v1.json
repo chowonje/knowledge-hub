@@ -27,7 +27,8 @@
         "equation_quote": { "type": "string" },
         "table_region": { "type": "string" },
         "sectionspan_pdf_offset_review_pack": { "type": "string" },
-        "figure_caption_pdf_offset_feasibility": { "type": "string" }
+        "figure_caption_pdf_offset_feasibility": { "type": "string" },
+        "table_region_pdf_offset_feasibility": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -52,7 +53,12 @@
         "figureCaptionOriginalPdfOffsetRecoveredRows",
         "figureCaptionOriginalPdfOffsetBlockedRows",
         "figureCaptionOriginalPdfOffsetPageAgreementRows",
-        "figureCaptionOriginalPdfOffsetSourceHashAgreementRows"
+        "figureCaptionOriginalPdfOffsetSourceHashAgreementRows",
+        "tableRegionOriginalPdfOffsetFeasibilityRows",
+        "tableRegionOriginalPdfOffsetRecoveredRows",
+        "tableRegionOriginalPdfOffsetBlockedRows",
+        "tableRegionOriginalPdfOffsetPageAgreementRows",
+        "tableRegionOriginalPdfOffsetSourceHashAgreementRows"
       ],
       "properties": {
         "layerCount": { "const": 4 },
@@ -73,7 +79,12 @@
         "figureCaptionOriginalPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
         "figureCaptionOriginalPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
         "figureCaptionOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
-        "figureCaptionOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
+        "figureCaptionOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 },
+        "tableRegionOriginalPdfOffsetFeasibilityRows": { "type": "integer", "minimum": 0 },
+        "tableRegionOriginalPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
+        "tableRegionOriginalPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
+        "tableRegionOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
+        "tableRegionOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },

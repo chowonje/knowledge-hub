@@ -274,6 +274,68 @@ def test_candidate_layer_blocker_backlog_uses_figure_caption_pdf_offset_suppleme
     assert figure_region_review["recommendedNextTranche"] == "figure_caption_region_link_review_pack"
 
 
+def test_candidate_layer_blocker_backlog_uses_table_region_pdf_offset_supplement_counts(tmp_path: Path) -> None:
+    summary = _source_aligned_summary_payload()
+    summary["counts"] = {
+        **summary["counts"],
+        "figureCaptionOriginalPdfOffsetFeasibilityRows": 11,
+        "figureCaptionOriginalPdfOffsetRecoveredRows": 9,
+        "figureCaptionOriginalPdfOffsetBlockedRows": 2,
+        "tableRegionOriginalPdfOffsetFeasibilityRows": 5,
+        "tableRegionOriginalPdfOffsetRecoveredRows": 4,
+        "tableRegionOriginalPdfOffsetBlockedRows": 1,
+    }
+    summary["releaseCandidateAssessment"] = {
+        **summary["releaseCandidateAssessment"],
+        "mainBlockers": [
+            *summary["releaseCandidateAssessment"]["mainBlockers"],
+            "figure_caption_pdf_offsets_require_region_link_review",
+            "table_caption_pdf_offsets_require_cell_provenance_review",
+        ],
+    }
+    gate_path, summary_path, eval_path = _reports(
+        tmp_path,
+        gate=_gate_payload(
+            gate={
+                "candidateLayerReviewReady": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "blockers": [
+                    "non_sectionspan_layers_lack_original_pdf_offsets",
+                    "table_caption_pdf_offsets_require_cell_provenance_review",
+                    "candidate_layers_are_report_only",
+                    "runtime_promotion_disabled_for_tranche",
+                ],
+            }
+        ),
+        summary=summary,
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    non_sectionspan = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "non_sectionspan_layers_lack_original_pdf_offsets"
+    )
+    table_review = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "table_caption_pdf_offsets_require_cell_provenance_review"
+    )
+    assert non_sectionspan["affected_candidate_count"] == 12
+    assert table_review["priority"] == "P0"
+    assert table_review["affected_layers"] == ["table_region"]
+    assert table_review["affected_candidate_count"] == 4
+    assert table_review["recommendedNextTranche"] == "table_cell_provenance_review_pack"
+
+
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:
     gate_path, summary_path, eval_path = _reports(tmp_path)
 
