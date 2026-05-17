@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.equation-quote-manual-review-sheet.v1",
+  "title": "EquationQuote Manual Review Sheet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "reviewRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.equation-quote-manual-review-sheet.v1" },
+    "status": { "type": "string", "enum": ["manual_review_sheet_ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equationQuoteNextActionGateReport",
+        "equationQuoteNextActionGateSchema"
+      ],
+      "properties": {
+        "equationQuoteNextActionGateReport": { "type": "string" },
+        "equationQuoteNextActionGateSchema": { "type": "string" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewRows",
+        "needsReviewRows",
+        "nonNeedsReviewRows",
+        "humanReviewRows",
+        "blockedRows",
+        "diagnosticPageContextRows",
+        "unmatchedEquationQuoteRows",
+        "sourceSpanCreatedRows",
+        "originalPdfOffsetRecoveredRows",
+        "equationSemanticsInterpretedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "unsafeUpstreamFlagCount",
+        "byPaper",
+        "byActionType",
+        "byActionStatus",
+        "byDecision"
+      ],
+      "properties": {
+        "reviewRows": { "type": "integer", "minimum": 0 },
+        "needsReviewRows": { "type": "integer", "minimum": 0 },
+        "nonNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "humanReviewRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "diagnosticPageContextRows": { "type": "integer", "minimum": 0 },
+        "unmatchedEquationQuoteRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "originalPdfOffsetRecoveredRows": { "const": 0 },
+        "equationSemanticsInterpretedRows": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byPaper": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byActionType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byActionStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byDecision": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manualReviewSheetReady",
+        "humanReviewComplete",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "manualReviewSheetReady": { "type": "boolean" },
+        "humanReviewComplete": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["equation_quote_manual_review_required", "blocked"]
+        },
+        "unsafeUpstreamFlags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recommendedNextTranche": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "manualReviewSheetOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "manualReviewSheetOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "reviewRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "review_sheet_row_id",
+          "source_action_card_id",
+          "source_equation_quote_candidate_id",
+          "paper_id",
+          "candidate_text",
+          "equation_label",
+          "action_type",
+          "action_status",
+          "priority",
+          "current_decision",
+          "allowed_decisions",
+          "recommended_review_action",
+          "review_prompt",
+          "canonical_alignment_status",
+          "canonical_alignment_method",
+          "alignment_feasibility_status",
+          "pdf_offset_feasibility_status",
+          "diagnostic_terms",
+          "diagnostic_term_coverage",
+          "diagnostic_page_candidates",
+          "best_diagnostic_page_coverage",
+          "layout_element_count",
+          "bbox_available",
+          "sourceContentHash",
+          "source_span_created",
+          "original_pdf_offset_recovered",
+          "equation_semantics_interpreted",
+          "quote_only",
+          "evidence_tier",
+          "report_only",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "review_sheet_row_id": { "type": "string" },
+          "source_action_card_id": { "type": "string" },
+          "source_equation_quote_candidate_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "equation_label": { "type": "string" },
+          "action_type": { "type": "string" },
+          "action_status": { "type": "string" },
+          "priority": { "type": "string" },
+          "current_decision": { "const": "needs_review" },
+          "allowed_decisions": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "recommended_review_action": { "type": "string" },
+          "review_prompt": { "type": "string" },
+          "canonical_alignment_status": { "type": "string" },
+          "canonical_alignment_method": { "type": "string" },
+          "alignment_feasibility_status": { "type": "string" },
+          "pdf_offset_feasibility_status": { "type": "string" },
+          "diagnostic_terms": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "diagnostic_term_coverage": { "type": "number" },
+          "diagnostic_page_candidates": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "best_diagnostic_page_coverage": { "type": "number" },
+          "layout_element_count": { "type": "integer", "minimum": 0 },
+          "bbox_available": { "type": "boolean" },
+          "sourceContentHash": { "type": "string" },
+          "source_span_created": { "const": false },
+          "original_pdf_offset_recovered": { "const": false },
+          "equation_semantics_interpreted": { "const": false },
+          "quote_only": { "const": true },
+          "evidence_tier": { "const": "equation_quote_manual_review_sheet_only" },
+          "report_only": { "const": true },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "non_strict_reason": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

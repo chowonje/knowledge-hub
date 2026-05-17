@@ -60,6 +60,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.source-span-offset-authority-audit.v1": "paper-source-span-offset-authority-audit.v1.json",
     "knowledge-hub.paper.equation-alignment-feasibility-audit.v1": "paper-equation-alignment-feasibility-audit.v1.json",
     "knowledge-hub.paper.equation-quote-next-action-gate.v1": "paper-equation-quote-next-action-gate.v1.json",
+    "knowledge-hub.paper.equation-quote-manual-review-sheet.v1": "paper-equation-quote-manual-review-sheet.v1.json",
     "knowledge-hub.paper.table-cell-provenance-feasibility-audit.v1": "paper-table-cell-provenance-feasibility-audit.v1.json",
     "knowledge-hub.paper.figure-region-link-feasibility-audit.v1": "paper-figure-region-link-feasibility-audit.v1.json",
     "knowledge-hub.paper.candidate-layer-promotion-policy-draft.v1": "paper-candidate-layer-promotion-policy-draft.v1.json",
