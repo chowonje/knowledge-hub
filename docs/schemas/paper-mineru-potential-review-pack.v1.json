@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.mineru-potential-review-pack.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "policy",
+    "reviewGuidance",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.mineru-potential-review-pack.v1" },
+    "status": { "type": "string", "enum": ["ok", "empty"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": ["sourceAlignmentReportPath", "includeClassifications"],
+      "properties": {
+        "sourceAlignmentReportPath": { "type": "string" },
+        "sourceAlignmentSchema": { "type": "string" },
+        "includeClassifications": { "type": "array", "items": { "type": "string" } },
+        "limit": { "anyOf": [{ "type": "integer" }, { "type": "null" }] }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputCandidateCount",
+        "totalReviewCards",
+        "emittedCardCount",
+        "skippedCount",
+        "strictEligibleCards",
+        "citationGradeCards"
+      ],
+      "properties": {
+        "inputCandidateCount": { "type": "integer", "minimum": 0 },
+        "totalReviewCards": { "type": "integer", "minimum": 0 },
+        "emittedCardCount": { "type": "integer", "minimum": 0 },
+        "skippedCount": { "type": "integer", "minimum": 0 },
+        "byCandidateType": { "type": "object" },
+        "byPaper": { "type": "object" },
+        "byRecommendedAction": { "type": "object" },
+        "strictEligibleCards": { "const": 0 },
+        "citationGradeCards": { "const": 0 },
+        "strictBlockerSummary": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "allCardsCandidateOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed"
+      ],
+      "properties": {
+        "allCardsCandidateOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "reviewGuidance": {
+      "type": "object",
+      "required": ["primaryDecision", "recommendedFirstArtifact", "doNotPromoteYet"],
+      "properties": {
+        "primaryDecision": { "type": "string" },
+        "recommendedFirstArtifact": { "type": "string" },
+        "doNotPromoteYet": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "missingMarkdownPapers": { "type": "array", "items": { "type": "string" } },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cardId",
+          "reviewStatus",
+          "recommendedAction",
+          "formalArtifactCandidate",
+          "candidateId",
+          "candidateType",
+          "paperId",
+          "candidateText",
+          "canonicalSpan",
+          "promotionAssessment",
+          "evidenceTier",
+          "strict",
+          "citationGrade"
+        ],
+        "properties": {
+          "cardId": { "type": "string" },
+          "reviewStatus": { "const": "needs_human_review" },
+          "recommendedAction": { "type": "string" },
+          "formalArtifactCandidate": { "type": "string" },
+          "candidateId": { "type": "string" },
+          "candidateType": { "type": "string" },
+          "paperId": { "type": "string" },
+          "candidateText": { "type": "string" },
+          "canonicalSpan": {
+            "type": "object",
+            "required": [
+              "charsStart",
+              "charsEnd",
+              "page",
+              "sourceContentHash",
+              "alignmentMethod",
+              "alignmentStatus",
+              "matchedText"
+            ],
+            "properties": {
+              "charsStart": { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+              "charsEnd": { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+              "page": { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+              "sourceContentHash": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "sourceContentHashSource": { "type": "string" },
+              "alignmentMethod": { "type": "string" },
+              "alignmentStatus": { "type": "string" },
+              "alignmentConfidence": { "type": "number" },
+              "matchedText": { "type": "string" },
+              "contextBefore": { "type": "string" },
+              "contextAfter": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "sourceSpanLocator": { "type": "object" },
+          "promotionAssessment": {
+            "type": "object",
+            "required": [
+              "candidateClassification",
+              "sourceAlignmentRequirementsMet",
+              "runtimeStrictEligible",
+              "citationGrade",
+              "strictBlockers",
+              "humanReviewQuestions"
+            ],
+            "properties": {
+              "candidateClassification": { "type": "string" },
+              "sourceAlignmentRequirementsMet": { "type": "boolean" },
+              "runtimeStrictEligible": { "const": false },
+              "citationGrade": { "const": false },
+              "strictBlockers": { "type": "array", "items": { "type": "string" } },
+              "humanReviewQuestions": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": true
+          },
+          "evidenceTier": { "const": "human_review_candidate_only" },
+          "strict": { "const": false },
+          "citationGrade": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
