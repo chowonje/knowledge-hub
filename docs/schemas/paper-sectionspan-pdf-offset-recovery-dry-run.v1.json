@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.sectionspan-pdf-offset-recovery-dry-run.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "paperContexts",
+    "recoveryRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.sectionspan-pdf-offset-recovery-dry-run.v1" },
+    "status": { "type": "string", "enum": ["dry_run_complete", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "sectionspanPdfOffsetRecoveryDesignReport",
+        "sectionspanPdfOffsetRecoveryDesignSchema",
+        "pymupdfParsedRoot"
+      ],
+      "properties": {
+        "sectionspanPdfOffsetRecoveryDesignReport": { "type": "string" },
+        "sectionspanPdfOffsetRecoveryDesignSchema": { "type": "string" },
+        "pymupdfParsedRoot": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRecoveryPlanRows",
+        "dryRunRows",
+        "originalPdfOffsetRecoveredRows",
+        "blockedRows",
+        "exactRecoveredRows",
+        "normalizedRecoveredRows",
+        "ambiguousRows",
+        "noMatchRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "schemaViolationCount",
+        "byPaper",
+        "bySectionType",
+        "byRecoveryStatus"
+      ],
+      "properties": {
+        "inputRecoveryPlanRows": { "type": "integer", "minimum": 0 },
+        "dryRunRows": { "type": "integer", "minimum": 0 },
+        "originalPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "exactRecoveredRows": { "type": "integer", "minimum": 0 },
+        "normalizedRecoveredRows": { "type": "integer", "minimum": 0 },
+        "ambiguousRows": { "type": "integer", "minimum": 0 },
+        "noMatchRows": { "type": "integer", "minimum": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byPaper": { "type": "object" },
+        "bySectionType": { "type": "object" },
+        "byRecoveryStatus": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "dryRunComplete",
+        "applyExecuted",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "schemaViolations",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "dryRunComplete": { "type": "boolean" },
+        "applyExecuted": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": { "type": "string", "enum": ["dry_run_complete_non_strict", "blocked"] },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "dryRunOnly",
+        "applyExecuted",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "dryRunOnly": { "const": true },
+        "applyExecuted": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "paperContexts": { "type": "object" },
+    "recoveryRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "recovery_plan_id",
+          "source_sectionspan_candidate_id",
+          "paper_id",
+          "candidate_text",
+          "section_type",
+          "section_level",
+          "canonical_span",
+          "source_pdf_path",
+          "source_manifest_path",
+          "sourceContentHash",
+          "evidence_tier",
+          "dry_run_only",
+          "runtime_promotion_allowed",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "recovery_status",
+          "original_pdf_offset_recovered",
+          "original_pdf_span",
+          "match_count",
+          "recovery_failure_reason",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "recovery_plan_id": { "type": "string" },
+          "source_sectionspan_candidate_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "section_type": { "type": "string" },
+          "section_level": { "type": "integer", "minimum": 0 },
+          "canonical_span": { "type": "object" },
+          "source_pdf_path": { "type": "string" },
+          "source_manifest_path": { "type": "string" },
+          "sourceContentHash": { "type": "string" },
+          "evidence_tier": { "const": "sectionspan_pdf_offset_recovery_dry_run_only" },
+          "dry_run_only": { "const": true },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "recovery_status": { "type": "string" },
+          "original_pdf_offset_recovered": { "type": "boolean" },
+          "original_pdf_span": { "type": "object" },
+          "match_count": { "type": "integer", "minimum": 0 },
+          "recovery_failure_reason": { "type": "string" },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
