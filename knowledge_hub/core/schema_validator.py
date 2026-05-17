@@ -60,6 +60,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.sectionspan-pdf-offset-recovery-design.v1": "paper-sectionspan-pdf-offset-recovery-design.v1.json",
     "knowledge-hub.paper.sectionspan-pdf-offset-recovery-dry-run.v1": "paper-sectionspan-pdf-offset-recovery-dry-run.v1.json",
     "knowledge-hub.paper.sectionspan-pdf-offset-recovery-review-pack.v1": "paper-sectionspan-pdf-offset-recovery-review-pack.v1.json",
+    "knowledge-hub.paper.sectionspan-pdf-offset-human-review-gate.v1": "paper-sectionspan-pdf-offset-human-review-gate.v1.json",
     "knowledge-hub.paper.figure-caption-pdf-offset-feasibility.v1": "paper-figure-caption-pdf-offset-feasibility.v1.json",
     "knowledge-hub.paper.figure-caption-region-link-review-pack.v1": "paper-figure-caption-region-link-review-pack.v1.json",
     "knowledge-hub.paper.equation-quote-pdf-offset-feasibility.v1": "paper-equation-quote-pdf-offset-feasibility.v1.json",
