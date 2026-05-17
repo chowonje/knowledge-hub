@@ -65,6 +65,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.sectionspan-pdf-offset-review-decision-record.v1": "paper-sectionspan-pdf-offset-review-decision-record.v1.json",
     "knowledge-hub.paper.sectionspan-pdf-offset-review-priority-pack.v1": "paper-sectionspan-pdf-offset-review-priority-pack.v1.json",
     "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-packet.v1": "paper-sectionspan-pdf-offset-selected-review-packet.v1.json",
+    "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-decision-template.v1": "paper-sectionspan-pdf-offset-selected-review-decision-template.v1.json",
     "knowledge-hub.paper.figure-caption-pdf-offset-feasibility.v1": "paper-figure-caption-pdf-offset-feasibility.v1.json",
     "knowledge-hub.paper.figure-caption-region-link-review-pack.v1": "paper-figure-caption-region-link-review-pack.v1.json",
     "knowledge-hub.paper.equation-quote-pdf-offset-feasibility.v1": "paper-equation-quote-pdf-offset-feasibility.v1.json",
