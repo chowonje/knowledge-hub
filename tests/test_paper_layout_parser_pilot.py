@@ -259,6 +259,61 @@ def test_layout_parser_pilot_reports_missing_source_and_unavailable_parser(tmp_p
     assert validate_payload(unavailable, LAYOUT_PARSER_PILOT_SCHEMA_ID, strict=True).ok
 
 
+def test_layout_parser_pilot_does_not_execute_blocked_mineru_runtime(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        layout_parser_pilot,
+        "parser_runtime_status",
+        lambda name: {
+            "available": False,
+            "status": "blocked",
+            "reason": "fastapi_starlette_incompatible",
+            "detail": "fastapi=0.115.12 requires starlette<0.47.0,>=0.40.0, but starlette=1.0.0 is installed",
+            "fixCommand": "python -m pip install -e '.[mineru]'",
+            "mineruVersion": "3.0.1",
+            "fastapiVersion": "0.115.12",
+            "starletteVersion": "1.0.0",
+            "expectedStarletteRange": "<0.47.0,>=0.40.0",
+            "startupFailureSummary": "FastAPI APIRouter passes on_startup to Starlette Router.",
+        },
+    )
+
+    def _must_not_run(**kwargs):  # noqa: ANN002, ANN003
+        raise AssertionError(f"blocked MinerU should not execute: {kwargs}")
+
+    monkeypatch.setattr(layout_parser_pilot, "_run_parser_with_timeout", _must_not_run)
+    papers_dir = tmp_path / "papers"
+    source_pdf = papers_dir / "Example.pdf"
+    source_pdf.parent.mkdir(parents=True)
+    source_pdf.write_bytes(b"%PDF-1.4")
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    _seed_paper(db, paper_id="2600.01006", title="Blocked MinerU Paper", pdf_path=str(source_pdf))
+
+    payload = run_layout_parser_pilot(
+        sqlite_db=db,
+        papers_dir=papers_dir,
+        paper_ids=["2600.01006"],
+        parsers=["mineru"],
+        output_dir=tmp_path / "pilot",
+        run=True,
+        timeout_seconds=60,
+    )
+
+    item = payload["papers"][0]["parsers"][0]
+    assert payload["status"] == "blocked"
+    assert payload["counts"]["blocked"] == 1
+    assert item["status"] == "blocked"
+    assert item["reason"] == "fastapi_starlette_incompatible"
+    assert item["available"] is False
+    assert item["availability"]["runtimeStatus"] == "blocked"
+    assert item["availability"]["mineruVersion"] == "3.0.1"
+    assert item["availability"]["fastapiVersion"] == "0.115.12"
+    assert item["availability"]["starletteVersion"] == "1.0.0"
+    assert item["artifactDir"] == ""
+    assert not (tmp_path / "pilot" / "mineru" / "parsed" / "2600.01006").exists()
+    assert not (papers_dir / "parsed" / "2600.01006").exists()
+    assert validate_payload(payload, LAYOUT_PARSER_PILOT_SCHEMA_ID, strict=True).ok
+
+
 def test_layout_parser_pilot_cli_json_and_hidden_help(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setattr(layout_parser_pilot, "PyMuPDFAdapter", _FakeLayoutAdapter)
     monkeypatch.setattr(layout_parser_pilot, "_parser_availability", _available)
