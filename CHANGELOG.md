@@ -5,6 +5,7 @@
 ### Removed
 
 - Removed tracked public-inappropriate process artifacts: the generated `PROJECT_PROGRESS.md`, historical `tasks/` notes, stale `docs/status/` handoff notes, workstation-specific `ops/launchd/com.won.*.plist` files, and two manual `eval/knowledgeos/reports/` review reports. Public-facing state should live in `CHANGELOG.md`, `docs/PROJECT_STATE.md`, durable ADRs, or reproducible eval fixtures instead of local progress logs and machine-specific launchd files.
+- Removed tracked tranche task/review/worklog records from the public candidate branch and added root ignore rules plus a public-release hygiene guard so local process records stay outside the public tracked surface.
 - Removed the standalone `motion-control/` subproject, removed the desktop-only `obsidian-plugins/knowledgeos-papers` satellite plugin, and dropped the inactive `medical` / `legal` domain skeleton registrations so the repository stays focused on the maintained runtime surfaces.
 - Removed the external notebook bridge surface: `khub notebook`, the matching MCP provider/topic-export tools, the `open_notebook` provider adapters, and the sync-manifest SQLite store are gone, while the local notebook workbench helpers remain labs-only.
 
