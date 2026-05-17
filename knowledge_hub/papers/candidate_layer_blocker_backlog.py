@@ -32,6 +32,7 @@ SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_DECISION_PROPOSAL_SCHEMA_ID = (
 SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_NEXT_ACTION_BRIEF_SCHEMA_ID = (
     "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-next-action-brief.v1"
 )
+EQUATION_QUOTE_NEXT_ACTION_GATE_SCHEMA_ID = "knowledge-hub.paper.equation-quote-next-action-gate.v1"
 NON_SECTIONSPAN_PDF_OFFSET_FEASIBILITY_AUDIT_SCHEMA_ID = (
     "knowledge-hub.paper.non-sectionspan-pdf-offset-feasibility-audit.v1"
 )
@@ -236,6 +237,19 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_equation_quote_span_exists_but_semantics_or_context_are_unreviewed",
     },
+    "equation_quote_next_action_review_required": {
+        "priority": "P0",
+        "layers": ["equation_quote"],
+        "category": "equation_quote_provenance",
+        "recommendedNextTranche": "manual_review_equation_quote_diagnostic_context_or_reextract",
+        "evidenceNeededBeforePromotion": [
+            "human review of EquationQuote diagnostic page-context action cards",
+            "explicit reject or re-extract decision for unmatched equation quote cards",
+            "proof that diagnostic context did not create source spans or equation semantics",
+            "separate explicit apply or promotion tranche before any strict/runtime evidence use",
+        ],
+        "stopRule": "stop_if_equation_quote_next_action_cards_are_still_unreviewed",
+    },
     "candidate_layers_are_report_only": {
         "priority": "P2",
         "layers": ["sectionspan", "figure_caption", "equation_quote", "table_region"],
@@ -321,6 +335,7 @@ def _affected_candidate_count(
     sectionspan_human_review_gate: dict[str, Any] | None = None,
     sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
     sectionspan_selected_review_next_action_brief: dict[str, Any] | None = None,
+    equation_quote_next_action_gate: dict[str, Any] | None = None,
     non_sectionspan_pdf_offset_audit: dict[str, Any] | None = None,
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
@@ -348,6 +363,9 @@ def _affected_candidate_count(
     if blocker == "sectionspan_selected_review_manual_edit_required":
         counts = dict((sectionspan_selected_review_next_action_brief or {}).get("counts") or {})
         return _safe_int(counts.get("decisionRecordNeedsReviewRows")) or _safe_int(counts.get("briefRows"))
+    if blocker == "equation_quote_next_action_review_required":
+        counts = dict((equation_quote_next_action_gate or {}).get("counts") or {})
+        return _safe_int(counts.get("nextActionCards")) or _safe_int(counts.get("humanReviewCards"))
     if blocker == "table_cell_isolated_extractor_approval_required":
         return _safe_int(table_cell_counts.get("approvalRequiredRows")) or _safe_int(table_cell_counts.get("targetRows"))
     if blocker == "table_cell_isolated_extractor_unavailable_or_blocked":
@@ -425,6 +443,7 @@ def _backlog_item(
     sectionspan_human_review_gate: dict[str, Any] | None = None,
     sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
     sectionspan_selected_review_next_action_brief: dict[str, Any] | None = None,
+    equation_quote_next_action_gate: dict[str, Any] | None = None,
     non_sectionspan_pdf_offset_audit: dict[str, Any] | None = None,
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
@@ -448,6 +467,7 @@ def _backlog_item(
             sectionspan_human_review_gate,
             sectionspan_selected_decision_proposal,
             sectionspan_selected_review_next_action_brief,
+            equation_quote_next_action_gate,
             non_sectionspan_pdf_offset_audit,
             equation_alignment_audit,
             table_cell_provenance_audit,
@@ -553,6 +573,21 @@ def _sectionspan_selected_review_next_action_brief_blockers(result: dict[str, An
     return []
 
 
+def _equation_quote_next_action_gate_blockers(result: dict[str, Any]) -> list[str]:
+    if not result:
+        return []
+    counts = dict(result.get("counts") or {})
+    gate = dict(result.get("gate") or {})
+    status = str(result.get("status") or "")
+    if (
+        status == "next_action_ready"
+        or _safe_int(counts.get("nextActionCards"))
+        or gate.get("humanReviewRequired")
+    ):
+        return ["equation_quote_next_action_review_required"]
+    return []
+
+
 def _non_sectionspan_pdf_offset_audit_blockers(result: dict[str, Any]) -> list[str]:
     if not result:
         return []
@@ -617,6 +652,7 @@ def _collect_blockers(
     sectionspan_human_review_gate: dict[str, Any] | None = None,
     sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
     sectionspan_selected_review_next_action_brief: dict[str, Any] | None = None,
+    equation_quote_next_action_gate: dict[str, Any] | None = None,
     non_sectionspan_pdf_offset_audit: dict[str, Any] | None = None,
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
@@ -632,6 +668,7 @@ def _collect_blockers(
     blockers.extend(_sectionspan_human_review_gate_blockers(sectionspan_human_review_gate or {}))
     blockers.extend(_sectionspan_selected_decision_proposal_blockers(sectionspan_selected_decision_proposal or {}))
     blockers.extend(_sectionspan_selected_review_next_action_brief_blockers(sectionspan_selected_review_next_action_brief or {}))
+    blockers.extend(_equation_quote_next_action_gate_blockers(equation_quote_next_action_gate or {}))
     blockers.extend(_non_sectionspan_pdf_offset_audit_blockers(non_sectionspan_pdf_offset_audit or {}))
     blockers.extend(_candidate_layer_blocker_decision_record_blockers(candidate_layer_blocker_decision_record or {}))
     blockers.extend(
@@ -653,6 +690,7 @@ def build_candidate_layer_blocker_backlog(
     sectionspan_pdf_offset_human_review_gate_report: str | Path | None = None,
     sectionspan_pdf_offset_selected_review_decision_proposal_report: str | Path | None = None,
     sectionspan_pdf_offset_selected_review_next_action_brief_report: str | Path | None = None,
+    equation_quote_next_action_gate_report: str | Path | None = None,
     non_sectionspan_pdf_offset_feasibility_audit_report: str | Path | None = None,
     equation_alignment_feasibility_audit_report: str | Path | None = None,
     table_cell_provenance_feasibility_audit_report: str | Path | None = None,
@@ -698,6 +736,14 @@ def build_candidate_layer_blocker_backlog(
         _read_json(sectionspan_selected_review_next_action_brief_path)
         if sectionspan_selected_review_next_action_brief_path
         else {}
+    )
+    equation_quote_next_action_gate_path = (
+        Path(str(equation_quote_next_action_gate_report)).expanduser()
+        if equation_quote_next_action_gate_report
+        else None
+    )
+    equation_quote_next_action_gate = (
+        _read_json(equation_quote_next_action_gate_path) if equation_quote_next_action_gate_path else {}
     )
     non_sectionspan_pdf_offset_audit_path = (
         Path(str(non_sectionspan_pdf_offset_feasibility_audit_report)).expanduser()
@@ -758,6 +804,11 @@ def build_candidate_layer_blocker_backlog(
     ):
         schema_violations.append("sectionspan_pdf_offset_selected_review_next_action_brief_schema_mismatch")
     if (
+        equation_quote_next_action_gate
+        and equation_quote_next_action_gate.get("schema") != EQUATION_QUOTE_NEXT_ACTION_GATE_SCHEMA_ID
+    ):
+        schema_violations.append("equation_quote_next_action_gate_schema_mismatch")
+    if (
         non_sectionspan_pdf_offset_audit
         and non_sectionspan_pdf_offset_audit.get("schema") != NON_SECTIONSPAN_PDF_OFFSET_FEASIBILITY_AUDIT_SCHEMA_ID
     ):
@@ -790,6 +841,7 @@ def build_candidate_layer_blocker_backlog(
         sectionspan_human_review_gate,
         sectionspan_selected_decision_proposal,
         sectionspan_selected_review_next_action_brief,
+        equation_quote_next_action_gate,
         non_sectionspan_pdf_offset_audit,
         equation_alignment_audit,
         table_cell_provenance_audit,
@@ -806,6 +858,7 @@ def build_candidate_layer_blocker_backlog(
             sectionspan_human_review_gate,
             sectionspan_selected_decision_proposal,
             sectionspan_selected_review_next_action_brief,
+            equation_quote_next_action_gate,
             non_sectionspan_pdf_offset_audit,
             equation_alignment_audit,
             table_cell_provenance_audit,
@@ -835,6 +888,7 @@ def build_candidate_layer_blocker_backlog(
             "sectionspanPdfOffsetSelectedReviewNextActionBriefReport": str(
                 sectionspan_selected_review_next_action_brief_path or ""
             ),
+            "equationQuoteNextActionGateReport": str(equation_quote_next_action_gate_path or ""),
             "nonSectionspanPdfOffsetFeasibilityAuditReport": str(non_sectionspan_pdf_offset_audit_path or ""),
             "equationAlignmentFeasibilityAuditReport": str(equation_alignment_audit_path or ""),
             "tableCellProvenanceFeasibilityAuditReport": str(table_cell_provenance_audit_path or ""),
@@ -851,6 +905,7 @@ def build_candidate_layer_blocker_backlog(
             "sectionspanPdfOffsetSelectedReviewNextActionBriefSchema": str(
                 sectionspan_selected_review_next_action_brief.get("schema") or ""
             ),
+            "equationQuoteNextActionGateSchema": str(equation_quote_next_action_gate.get("schema") or ""),
             "nonSectionspanPdfOffsetFeasibilityAuditSchema": str(non_sectionspan_pdf_offset_audit.get("schema") or ""),
             "equationAlignmentFeasibilityAuditSchema": str(equation_alignment_audit.get("schema") or ""),
             "tableCellProvenanceFeasibilityAuditSchema": str(table_cell_provenance_audit.get("schema") or ""),
@@ -909,6 +964,24 @@ def build_candidate_layer_blocker_backlog(
             ),
             "sectionspanSelectedNextActionDecisionRecordNeedsReviewRows": _safe_int(
                 (sectionspan_selected_review_next_action_brief.get("counts") or {}).get("decisionRecordNeedsReviewRows")
+            ),
+            "equationQuoteNextActionCards": _safe_int(
+                (equation_quote_next_action_gate.get("counts") or {}).get("nextActionCards")
+            ),
+            "equationQuoteNextActionHumanReviewCards": _safe_int(
+                (equation_quote_next_action_gate.get("counts") or {}).get("humanReviewCards")
+            ),
+            "equationQuoteNextActionDiagnosticPageContextCards": _safe_int(
+                (equation_quote_next_action_gate.get("counts") or {}).get("diagnosticPageContextCards")
+            ),
+            "equationQuoteNextActionUnmatchedCards": _safe_int(
+                (equation_quote_next_action_gate.get("counts") or {}).get("unmatchedEquationQuoteCards")
+            ),
+            "equationQuoteNextActionSourceSpanCreatedCards": _safe_int(
+                (equation_quote_next_action_gate.get("counts") or {}).get("sourceSpanCreatedCards")
+            ),
+            "equationQuoteNextActionStrictEligibleCards": _safe_int(
+                (equation_quote_next_action_gate.get("counts") or {}).get("strictEligibleCards")
             ),
             "nonSectionspanPdfOffsetAuditRows": _safe_int(
                 (non_sectionspan_pdf_offset_audit.get("counts") or {}).get("totalRows")
@@ -1076,6 +1149,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Optional path to the latest SectionSpan selected review next-action brief JSON.",
     )
     parser.add_argument(
+        "--equation-quote-next-action-gate-report",
+        default="",
+        help="Optional path to the latest EquationQuote next-action gate JSON.",
+    )
+    parser.add_argument(
         "--non-sectionspan-pdf-offset-feasibility-audit-report",
         default="",
         help="Optional path to the latest non-SectionSpan PDF offset feasibility audit JSON.",
@@ -1116,6 +1194,7 @@ def main(argv: list[str] | None = None) -> int:
         sectionspan_pdf_offset_selected_review_next_action_brief_report=(
             args.sectionspan_pdf_offset_selected_review_next_action_brief_report or None
         ),
+        equation_quote_next_action_gate_report=args.equation_quote_next_action_gate_report or None,
         non_sectionspan_pdf_offset_feasibility_audit_report=(
             args.non_sectionspan_pdf_offset_feasibility_audit_report or None
         ),
