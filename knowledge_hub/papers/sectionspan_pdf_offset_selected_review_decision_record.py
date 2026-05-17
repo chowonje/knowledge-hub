@@ -18,6 +18,7 @@ SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_DECISION_TEMPLATE_SCHEMA_ID = (
 )
 
 _VALID_DECISIONS = {
+    "needs_review": "needs_review",
     "approve_for_later_promotion_design": "approved_for_later_promotion_design",
     "reject_keep_candidate_only": "rejected_keep_candidate_only",
 }
