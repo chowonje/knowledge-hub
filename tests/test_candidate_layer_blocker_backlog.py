@@ -166,6 +166,33 @@ def _table_cell_result_payload(**overrides: object) -> dict:
     return payload
 
 
+def _sectionspan_human_review_gate_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.sectionspan-pdf-offset-human-review-gate.v1",
+        "status": "review_required",
+        "counts": {
+            "gateRows": 61,
+            "pendingHumanReviewRows": 61,
+            "approvedForLaterPromotionDesignRows": 0,
+            "rejectedRows": 0,
+            "heldOutRows": 0,
+            "strictEligibleRows": 0,
+            "citationGradeRows": 0,
+            "runtimeEvidenceRows": 0,
+        },
+        "gate": {
+            "humanReviewGateReady": True,
+            "humanReviewComplete": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+            "runtimePromotionAllowed": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _reports(root: Path, *, gate: dict | None = None, summary: dict | None = None, eval_design: dict | None = None) -> tuple[Path, Path, Path]:
     gate_path = _write(root, "candidate-layer-review-gate.json", gate or _gate_payload())
     summary_path = _write(root, "structured-candidate-summary.json", summary or _summary_payload())
@@ -517,6 +544,98 @@ def test_candidate_layer_blocker_backlog_blocks_wrong_table_cell_result_schema(t
     assert payload["status"] == "blocked"
     assert payload["gate"]["decision"] == "blocked"
     assert "table_cell_isolated_extractor_pilot_result_schema_mismatch" in payload["gate"]["schemaViolations"]
+
+
+def test_candidate_layer_blocker_backlog_includes_sectionspan_human_review_pending_gate(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    human_review_gate = _write(
+        tmp_path / "inputs",
+        "sectionspan-human-review-gate.json",
+        _sectionspan_human_review_gate_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        sectionspan_pdf_offset_human_review_gate_report=human_review_gate,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    item = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "sectionspan_pdf_offset_human_review_pending"
+    )
+    assert item["priority"] == "P0"
+    assert item["affected_layers"] == ["sectionspan"]
+    assert item["affected_candidate_count"] == 61
+    assert item["recommendedNextTranche"] == "sectionspan_pdf_offset_human_review_execution"
+    assert payload["counts"]["sectionspanHumanReviewGateRows"] == 61
+    assert payload["counts"]["sectionspanHumanReviewPendingRows"] == 61
+    assert payload["counts"]["sectionspanHumanReviewApprovedRows"] == 0
+
+
+def test_candidate_layer_blocker_backlog_skips_completed_sectionspan_human_review_gate(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    human_review_gate = _write(
+        tmp_path / "inputs",
+        "sectionspan-human-review-gate.json",
+        _sectionspan_human_review_gate_payload(
+            status="review_recorded",
+            counts={
+                "gateRows": 61,
+                "pendingHumanReviewRows": 0,
+                "approvedForLaterPromotionDesignRows": 61,
+                "rejectedRows": 0,
+                "heldOutRows": 0,
+                "strictEligibleRows": 0,
+                "citationGradeRows": 0,
+                "runtimeEvidenceRows": 0,
+            },
+            gate={
+                "humanReviewGateReady": True,
+                "humanReviewComplete": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "runtimePromotionAllowed": False,
+            },
+        ),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        sectionspan_pdf_offset_human_review_gate_report=human_review_gate,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    blockers = {item["blocker"] for item in payload["backlog"]}
+    assert "sectionspan_pdf_offset_human_review_pending" not in blockers
+    assert payload["counts"]["sectionspanHumanReviewPendingRows"] == 0
+    assert payload["counts"]["sectionspanHumanReviewApprovedRows"] == 61
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_sectionspan_human_review_gate_schema(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    human_review_gate = _write(
+        tmp_path / "inputs",
+        "sectionspan-human-review-gate.json",
+        _sectionspan_human_review_gate_payload(schema="example.wrong.sectionspan-human-review-gate.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        sectionspan_pdf_offset_human_review_gate_report=human_review_gate,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "sectionspan_pdf_offset_human_review_gate_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:

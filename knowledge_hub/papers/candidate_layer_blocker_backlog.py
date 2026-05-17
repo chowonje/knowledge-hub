@@ -23,6 +23,9 @@ COMPLEX_QA_EVAL_DESIGN_SCHEMA_ID = "knowledge-hub.paper.complex-qa-eval-design.v
 TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID = (
     "knowledge-hub.paper.table-cell-isolated-extractor-pilot-result.v1"
 )
+SECTIONSPAN_PDF_OFFSET_HUMAN_REVIEW_GATE_SCHEMA_ID = (
+    "knowledge-hub.paper.sectionspan-pdf-offset-human-review-gate.v1"
+)
 
 _BLOCKER_RULES = {
     "equation_quote_alignment_missing": {
@@ -92,6 +95,19 @@ _BLOCKER_RULES = {
             "runtime tests preserving fail-closed no-answer behavior",
         ],
         "stopRule": "stop_if_human_review_or_explicit_promotion_approval_is_missing",
+    },
+    "sectionspan_pdf_offset_human_review_pending": {
+        "priority": "P0",
+        "layers": ["sectionspan"],
+        "category": "source_span_promotion_review",
+        "recommendedNextTranche": "sectionspan_pdf_offset_human_review_execution",
+        "evidenceNeededBeforePromotion": [
+            "human review decision for each recovered SectionSpan original-PDF offset",
+            "explicit approval or rejection recorded outside runtime answer generation",
+            "tests proving approvals remain later-promotion-design-only",
+            "separate explicit apply tranche before any strict/runtime evidence use",
+        ],
+        "stopRule": "stop_if_any_sectionspan_pdf_offset_rows_are_still_pending_human_review",
     },
     "non_sectionspan_layers_lack_original_pdf_offsets": {
         "priority": "P0",
@@ -241,9 +257,15 @@ def _affected_candidate_count(
     layers: list[str],
     summary: dict[str, Any],
     table_cell_result: dict[str, Any] | None = None,
+    sectionspan_human_review_gate: dict[str, Any] | None = None,
 ) -> int:
     by_layer = _candidate_counts_by_layer(summary)
     table_cell_counts = dict((table_cell_result or {}).get("counts") or {})
+    sectionspan_gate_counts = dict((sectionspan_human_review_gate or {}).get("counts") or {})
+    if blocker == "sectionspan_pdf_offset_human_review_pending":
+        return _safe_int(sectionspan_gate_counts.get("pendingHumanReviewRows")) or _safe_int(
+            sectionspan_gate_counts.get("gateRows")
+        )
     if blocker == "table_cell_isolated_extractor_approval_required":
         return _safe_int(table_cell_counts.get("approvalRequiredRows")) or _safe_int(table_cell_counts.get("targetRows"))
     if blocker == "table_cell_isolated_extractor_unavailable_or_blocked":
@@ -304,6 +326,7 @@ def _backlog_item(
     summary: dict[str, Any],
     eval_design: dict[str, Any],
     table_cell_result: dict[str, Any] | None = None,
+    sectionspan_human_review_gate: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     rule = dict(_BLOCKER_RULES.get(blocker) or {})
     layers = list(rule.get("layers") or [])
@@ -314,7 +337,13 @@ def _backlog_item(
         "priority": str(rule.get("priority") or "P2"),
         "category": str(rule.get("category") or "unknown"),
         "affected_layers": layers,
-        "affected_candidate_count": _affected_candidate_count(blocker, layers, summary, table_cell_result),
+        "affected_candidate_count": _affected_candidate_count(
+            blocker,
+            layers,
+            summary,
+            table_cell_result,
+            sectionspan_human_review_gate,
+        ),
         "affected_eval_question_count": _affected_question_count(blocker, layers, eval_design),
         "evidenceNeededBeforePromotion": list(rule.get("evidenceNeededBeforePromotion") or []),
         "recommendedNextTranche": str(rule.get("recommendedNextTranche") or "manual_review"),
@@ -369,11 +398,27 @@ def _table_cell_result_blockers(result: dict[str, Any]) -> list[str]:
     return blockers
 
 
+def _sectionspan_human_review_gate_blockers(result: dict[str, Any]) -> list[str]:
+    if not result:
+        return []
+    counts = dict(result.get("counts") or {})
+    status = str(result.get("status") or "")
+    gate = dict(result.get("gate") or {})
+    if (
+        status == "review_required"
+        or _safe_int(counts.get("pendingHumanReviewRows"))
+        or (gate.get("humanReviewGateReady") and not gate.get("humanReviewComplete"))
+    ):
+        return ["sectionspan_pdf_offset_human_review_pending"]
+    return []
+
+
 def _collect_blockers(
     gate: dict[str, Any],
     summary: dict[str, Any],
     eval_design: dict[str, Any],
     table_cell_result: dict[str, Any] | None = None,
+    sectionspan_human_review_gate: dict[str, Any] | None = None,
 ) -> list[str]:
     blockers: list[str] = []
     blockers.extend(str(item) for item in list((gate.get("gate") or {}).get("blockers") or []))
@@ -381,6 +426,7 @@ def _collect_blockers(
     for question in list(eval_design.get("questions") or []):
         blockers.extend(str(item) for item in list(question.get("blocked_by_current_candidates") or []))
     blockers.extend(_table_cell_result_blockers(table_cell_result or {}))
+    blockers.extend(_sectionspan_human_review_gate_blockers(sectionspan_human_review_gate or {}))
     return [item for item in dict.fromkeys(blockers) if item]
 
 
@@ -390,6 +436,7 @@ def build_candidate_layer_blocker_backlog(
     structured_summary_report: str | Path,
     complex_qa_eval_design_report: str | Path,
     table_cell_isolated_extractor_pilot_result_report: str | Path | None = None,
+    sectionspan_pdf_offset_human_review_gate_report: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build a report-only backlog over current candidate-layer blockers."""
 
@@ -405,12 +452,25 @@ def build_candidate_layer_blocker_backlog(
         else None
     )
     table_cell_result = _read_json(table_cell_result_path) if table_cell_result_path else {}
+    sectionspan_human_review_gate_path = (
+        Path(str(sectionspan_pdf_offset_human_review_gate_report)).expanduser()
+        if sectionspan_pdf_offset_human_review_gate_report
+        else None
+    )
+    sectionspan_human_review_gate = (
+        _read_json(sectionspan_human_review_gate_path) if sectionspan_human_review_gate_path else {}
+    )
     schema_violations = _schema_violations(gate, summary, eval_design)
     if table_cell_result and table_cell_result.get("schema") != TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID:
         schema_violations.append("table_cell_isolated_extractor_pilot_result_schema_mismatch")
-    blockers = _collect_blockers(gate, summary, eval_design, table_cell_result)
+    if (
+        sectionspan_human_review_gate
+        and sectionspan_human_review_gate.get("schema") != SECTIONSPAN_PDF_OFFSET_HUMAN_REVIEW_GATE_SCHEMA_ID
+    ):
+        schema_violations.append("sectionspan_pdf_offset_human_review_gate_schema_mismatch")
+    blockers = _collect_blockers(gate, summary, eval_design, table_cell_result, sectionspan_human_review_gate)
     items = [
-        _backlog_item(index, blocker, summary, eval_design, table_cell_result)
+        _backlog_item(index, blocker, summary, eval_design, table_cell_result, sectionspan_human_review_gate)
         for index, blocker in enumerate(blockers, start=1)
     ]
     by_priority = Counter(str(item.get("priority") or "") for item in items)
@@ -427,10 +487,12 @@ def build_candidate_layer_blocker_backlog(
             "structuredSummaryReport": str(summary_path),
             "complexQaEvalDesignReport": str(eval_path),
             "tableCellIsolatedExtractorPilotResultReport": str(table_cell_result_path or ""),
+            "sectionspanPdfOffsetHumanReviewGateReport": str(sectionspan_human_review_gate_path or ""),
             "candidateLayerReviewGateSchema": str(gate.get("schema") or ""),
             "structuredSummarySchema": str(summary.get("schema") or ""),
             "complexQaEvalDesignSchema": str(eval_design.get("schema") or ""),
             "tableCellIsolatedExtractorPilotResultSchema": str(table_cell_result.get("schema") or ""),
+            "sectionspanPdfOffsetHumanReviewGateSchema": str(sectionspan_human_review_gate.get("schema") or ""),
         },
         "counts": {
             "backlogItemCount": len(items),
@@ -449,6 +511,15 @@ def build_candidate_layer_blocker_backlog(
             ),
             "tableCellIsolatedExtractorBlockedRows": _safe_int((table_cell_result.get("counts") or {}).get("blockedRows")),
             "tableCellIsolatedExtractorProbeAttemptedRows": _safe_int((table_cell_result.get("counts") or {}).get("probeAttemptedRows")),
+            "sectionspanHumanReviewGateRows": _safe_int(
+                (sectionspan_human_review_gate.get("counts") or {}).get("gateRows")
+            ),
+            "sectionspanHumanReviewPendingRows": _safe_int(
+                (sectionspan_human_review_gate.get("counts") or {}).get("pendingHumanReviewRows")
+            ),
+            "sectionspanHumanReviewApprovedRows": _safe_int(
+                (sectionspan_human_review_gate.get("counts") or {}).get("approvedForLaterPromotionDesignRows")
+            ),
         },
         "gate": {
             "candidateLayerReviewReady": bool(gate_payload.get("candidateLayerReviewReady")),
@@ -542,6 +613,11 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Optional path to the latest TableCell isolated extractor pilot result JSON.",
     )
+    parser.add_argument(
+        "--sectionspan-pdf-offset-human-review-gate-report",
+        default="",
+        help="Optional path to the latest SectionSpan PDF offset human review gate JSON.",
+    )
     parser.add_argument("--output-dir", default="", help="Directory for local JSON/Markdown reports.")
     parser.add_argument("--json", action="store_true", help="Print backlog payload as JSON.")
     args = parser.parse_args(argv)
@@ -551,6 +627,7 @@ def main(argv: list[str] | None = None) -> int:
         structured_summary_report=args.structured_summary_report,
         complex_qa_eval_design_report=args.complex_qa_eval_design_report,
         table_cell_isolated_extractor_pilot_result_report=args.table_cell_isolated_extractor_pilot_result_report or None,
+        sectionspan_pdf_offset_human_review_gate_report=args.sectionspan_pdf_offset_human_review_gate_report or None,
     )
     paths: dict[str, str] = {}
     if args.output_dir:
