@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.table-cell-isolated-extractor-pilot-plan.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "environment",
+    "counts",
+    "gate",
+    "policy",
+    "targetRows",
+    "extractorCandidates",
+    "proposedCommandsAfterApproval",
+    "successCriteria",
+    "stopConditions",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.table-cell-isolated-extractor-pilot-plan.v1" },
+    "status": { "type": "string", "enum": ["approval_required", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "tableCellNextActionGate",
+        "tableCellPymupdfPairingDiagnostic",
+        "tableCellNextActionGateSchema",
+        "tableCellPymupdfPairingDiagnosticSchema"
+      ],
+      "properties": {
+        "tableCellNextActionGate": { "type": "string" },
+        "tableCellPymupdfPairingDiagnostic": { "type": "string" },
+        "tableCellNextActionGateSchema": { "type": "string" },
+        "tableCellPymupdfPairingDiagnosticSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "environment": {
+      "type": "object",
+      "required": ["pythonVersion", "venvAvailable", "modules", "systemTools"],
+      "properties": {
+        "pythonVersion": { "type": "string" },
+        "venvAvailable": { "type": "boolean" },
+        "modules": { "type": "object" },
+        "systemTools": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "targetTables",
+        "sourcePdfExistingRows",
+        "availableExtractorModules",
+        "missingExtractorModules",
+        "plannedPilotRuns",
+        "packagesInstalled",
+        "globalPackagesInstalled",
+        "tableCellEvidenceCreatedRows",
+        "tableCellCitationGradeRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "schemaViolationCount",
+        "unsafeUpstreamFlagCount"
+      ],
+      "properties": {
+        "targetTables": { "type": "integer", "minimum": 0 },
+        "sourcePdfExistingRows": { "type": "integer", "minimum": 0 },
+        "availableExtractorModules": { "type": "integer", "minimum": 0 },
+        "missingExtractorModules": { "type": "integer", "minimum": 0 },
+        "plannedPilotRuns": { "const": 0 },
+        "packagesInstalled": { "const": 0 },
+        "globalPackagesInstalled": { "const": 0 },
+        "tableCellEvidenceCreatedRows": { "const": 0 },
+        "tableCellCitationGradeRows": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "pilotPlanReady",
+        "approvalRequiredBeforeInstallOrRun",
+        "sourcePdfsReady",
+        "dependencyIsolationRequired",
+        "globalInstallAllowed",
+        "pilotExecuted",
+        "extractorChoiceMade",
+        "cellBboxTextPairingVerified",
+        "cellSourceSpansCreated",
+        "cellSourceHashLinked",
+        "tableCellEvidenceReady",
+        "tableCellCitationGradeReady",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "pilotPlanReady": { "type": "boolean" },
+        "approvalRequiredBeforeInstallOrRun": { "const": true },
+        "sourcePdfsReady": { "type": "boolean" },
+        "dependencyIsolationRequired": { "const": true },
+        "globalInstallAllowed": { "const": false },
+        "pilotExecuted": { "const": false },
+        "extractorChoiceMade": { "const": false },
+        "cellBboxTextPairingVerified": { "const": false },
+        "cellSourceSpansCreated": { "const": false },
+        "cellSourceHashLinked": { "const": false },
+        "tableCellEvidenceReady": { "const": false },
+        "tableCellCitationGradeReady": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["awaiting_explicit_approval_for_isolated_pdfplumber_pilot", "blocked"]
+        },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "planOnly",
+        "globalPackageInstall",
+        "isolatedPackageInstall",
+        "pilotRunExecuted",
+        "tableCellEvidenceCreated",
+        "tableCellCitationGradeEvidenceCreated",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "planOnly": { "const": true },
+        "globalPackageInstall": { "const": false },
+        "isolatedPackageInstall": { "const": false },
+        "pilotRunExecuted": { "const": false },
+        "tableCellEvidenceCreated": { "const": false },
+        "tableCellCitationGradeEvidenceCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "targetRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "paper_id",
+          "table_label",
+          "page",
+          "source_pdf_path",
+          "source_pdf_exists",
+          "pilot_target",
+          "strict_eligible",
+          "runtime_evidence"
+        ],
+        "properties": {
+          "paper_id": { "type": "string" },
+          "table_label": { "type": "string" },
+          "page": { "type": ["integer", "null"], "minimum": 1 },
+          "source_pdf_path": { "type": "string" },
+          "source_pdf_exists": { "type": "boolean" },
+          "source_table_region_candidate_id": { "type": "string" },
+          "selected_table_bbox": {},
+          "selected_table_cell_bbox_count": { "type": "integer", "minimum": 0 },
+          "selected_table_cell_text_count": { "type": "integer", "minimum": 0 },
+          "diagnostic_unique_cell_text_matches": { "type": "integer", "minimum": 0 },
+          "diagnostic_ambiguous_cell_text_matches": { "type": "integer", "minimum": 0 },
+          "diagnostic_no_match_cell_texts": { "type": "integer", "minimum": 0 },
+          "pilot_target": { "const": true },
+          "strict_eligible": { "const": false },
+          "runtime_evidence": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    },
+    "extractorCandidates": { "type": "array", "items": { "type": "object" } },
+    "proposedCommandsAfterApproval": { "type": "object" },
+    "successCriteria": { "type": "array", "items": { "type": "string" } },
+    "stopConditions": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
