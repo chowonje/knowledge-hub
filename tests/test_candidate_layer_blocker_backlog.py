@@ -216,6 +216,64 @@ def test_candidate_layer_blocker_backlog_classifies_source_aligned_sectionspan_b
     assert non_sectionspan["recommendedNextTranche"] == "non_sectionspan_original_pdf_offset_feasibility_audit"
 
 
+def test_candidate_layer_blocker_backlog_uses_figure_caption_pdf_offset_supplement_counts(tmp_path: Path) -> None:
+    summary = _source_aligned_summary_payload()
+    summary["counts"] = {
+        **summary["counts"],
+        "figureCaptionOriginalPdfOffsetFeasibilityRows": 11,
+        "figureCaptionOriginalPdfOffsetRecoveredRows": 9,
+        "figureCaptionOriginalPdfOffsetBlockedRows": 2,
+    }
+    summary["releaseCandidateAssessment"] = {
+        **summary["releaseCandidateAssessment"],
+        "mainBlockers": [
+            *summary["releaseCandidateAssessment"]["mainBlockers"],
+            "figure_caption_pdf_offsets_require_region_link_review",
+        ],
+    }
+    gate_path, summary_path, eval_path = _reports(
+        tmp_path,
+        gate=_gate_payload(
+            gate={
+                "candidateLayerReviewReady": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "blockers": [
+                    "non_sectionspan_layers_lack_original_pdf_offsets",
+                    "figure_caption_pdf_offsets_require_region_link_review",
+                    "candidate_layers_are_report_only",
+                    "runtime_promotion_disabled_for_tranche",
+                ],
+            }
+        ),
+        summary=summary,
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    non_sectionspan = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "non_sectionspan_layers_lack_original_pdf_offsets"
+    )
+    figure_region_review = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "figure_caption_pdf_offsets_require_region_link_review"
+    )
+    assert non_sectionspan["affected_candidate_count"] == 16
+    assert figure_region_review["priority"] == "P1"
+    assert figure_region_review["affected_layers"] == ["figure_caption"]
+    assert figure_region_review["affected_candidate_count"] == 9
+    assert figure_region_review["recommendedNextTranche"] == "figure_caption_region_link_review_pack"
+
+
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:
     gate_path, summary_path, eval_path = _reports(tmp_path)
 

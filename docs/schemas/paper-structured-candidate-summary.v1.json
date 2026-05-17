@@ -26,7 +26,8 @@
         "figure_caption": { "type": "string" },
         "equation_quote": { "type": "string" },
         "table_region": { "type": "string" },
-        "sectionspan_pdf_offset_review_pack": { "type": "string" }
+        "sectionspan_pdf_offset_review_pack": { "type": "string" },
+        "figure_caption_pdf_offset_feasibility": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -46,7 +47,12 @@
         "sectionspanOriginalPdfOffsetReadyForReviewRows",
         "sectionspanOriginalPdfOffsetHeldOutRows",
         "sectionspanOriginalPdfOffsetPageAgreementRows",
-        "sectionspanOriginalPdfOffsetSourceHashAgreementRows"
+        "sectionspanOriginalPdfOffsetSourceHashAgreementRows",
+        "figureCaptionOriginalPdfOffsetFeasibilityRows",
+        "figureCaptionOriginalPdfOffsetRecoveredRows",
+        "figureCaptionOriginalPdfOffsetBlockedRows",
+        "figureCaptionOriginalPdfOffsetPageAgreementRows",
+        "figureCaptionOriginalPdfOffsetSourceHashAgreementRows"
       ],
       "properties": {
         "layerCount": { "const": 4 },
@@ -62,7 +68,12 @@
         "sectionspanOriginalPdfOffsetReadyForReviewRows": { "type": "integer", "minimum": 0 },
         "sectionspanOriginalPdfOffsetHeldOutRows": { "type": "integer", "minimum": 0 },
         "sectionspanOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
-        "sectionspanOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
+        "sectionspanOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionOriginalPdfOffsetFeasibilityRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionOriginalPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionOriginalPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
@@ -168,6 +179,7 @@
           "evidenceTier",
           "reviewCardRows",
           "readyForHumanReviewRows",
+          "readyForRegionReviewRows",
           "heldOutRows",
           "pageAgreementRows",
           "sourceHashAgreementRows",
@@ -184,6 +196,7 @@
           "evidenceTier": { "type": "string" },
           "reviewCardRows": { "type": "integer", "minimum": 0 },
           "readyForHumanReviewRows": { "type": "integer", "minimum": 0 },
+          "readyForRegionReviewRows": { "type": "integer", "minimum": 0 },
           "heldOutRows": { "type": "integer", "minimum": 0 },
           "pageAgreementRows": { "type": "integer", "minimum": 0 },
           "sourceHashAgreementRows": { "type": "integer", "minimum": 0 },

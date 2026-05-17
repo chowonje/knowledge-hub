@@ -103,6 +103,19 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_non_sectionspan_candidates_only_have_generated_markdown_offsets",
     },
+    "figure_caption_pdf_offsets_require_region_link_review": {
+        "priority": "P1",
+        "layers": ["figure_caption"],
+        "category": "layout_region_link",
+        "recommendedNextTranche": "figure_caption_region_link_review_pack",
+        "evidenceNeededBeforePromotion": [
+            "human/operator review of recovered original-PDF caption spans",
+            "verified link from caption source span to the correct figure/image-like region",
+            "page and sourceContentHash agreement between caption span and layout region",
+            "tests proving recovered caption offsets alone do not authorize figure evidence",
+        ],
+        "stopRule": "stop_if_caption_source_span_is_available_but_figure_region_link_is_unverified",
+    },
     "candidate_layers_are_report_only": {
         "priority": "P2",
         "layers": ["sectionspan", "figure_caption", "equation_quote", "table_region"],
@@ -180,7 +193,16 @@ def _affected_candidate_count(blocker: str, layers: list[str], summary: dict[str
             by_layer.get("sectionspan")
         )
     if blocker == "non_sectionspan_layers_lack_original_pdf_offsets":
-        return sum(_safe_int(by_layer.get(layer)) for layer in ("figure_caption", "equation_quote", "table_region"))
+        counts = dict(summary.get("counts") or {})
+        if _safe_int(counts.get("figureCaptionOriginalPdfOffsetFeasibilityRows")) > 0:
+            figure_blocked = _safe_int(counts.get("figureCaptionOriginalPdfOffsetBlockedRows"))
+        else:
+            figure_blocked = _safe_int(by_layer.get("figure_caption"))
+        return figure_blocked + sum(_safe_int(by_layer.get(layer)) for layer in ("equation_quote", "table_region"))
+    if blocker == "figure_caption_pdf_offsets_require_region_link_review":
+        return _safe_int((summary.get("counts") or {}).get("figureCaptionOriginalPdfOffsetRecoveredRows")) or _safe_int(
+            by_layer.get("figure_caption")
+        )
     return sum(_safe_int(by_layer.get(layer)) for layer in layers)
 
 
