@@ -201,7 +201,14 @@ class PyMuPDFAdapter:
             manifest_path=str(manifest_path),
         )
 
-    def ensure_artifacts(self, *, paper_id: str, pdf_path: str, refresh: bool = False) -> PyMuPDFParseResult:
+    def ensure_artifacts(
+        self,
+        *,
+        paper_id: str,
+        pdf_path: str,
+        refresh: bool = False,
+        allow_ocr: bool = True,
+    ) -> PyMuPDFParseResult:
         token = str(paper_id).strip()
         existing = None if refresh else self._load_existing(paper_id=token)
         if existing is not None:
@@ -241,7 +248,7 @@ class PyMuPDFAdapter:
         ocr_warning = ""
         ocr_output_pdf = ""
         extracted_from = str(source_pdf)
-        if _looks_like_scanned_pdf(stats):
+        if allow_ocr and _looks_like_scanned_pdf(stats):
             ocr_attempted = True
             prereq = _ocr_prerequisite_status()
             if prereq["status"] != "ok":

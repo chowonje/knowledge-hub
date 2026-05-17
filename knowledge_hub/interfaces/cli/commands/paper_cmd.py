@@ -14,6 +14,7 @@ khub paper - 논문 개별 관리 명령어
   khub paper review-card-apply   안전한 remediation action 실행
   khub paper review-card-export  audit/rebuild 대상 paper id export
   khub paper canon-quality-audit AI canon 9편 전용 deterministic quality audit
+  khub paper materialize-parsed parsed artifact dry-run/apply backfill
   khub paper repair-source       known source contamination relink + artifact rebuild
   khub paper repair-source-queue paper source repair action queue 적재
 
@@ -102,6 +103,10 @@ from knowledge_hub.papers.corpus_bootstrap import bootstrap_corpus_artifacts
 from knowledge_hub.papers.extraction_diagnostics import (
     EXTRACTION_REPORT_SCHEMA_ID,
     build_extraction_report,
+)
+from knowledge_hub.papers.parsed_materialization import (
+    PARSED_MATERIALIZATION_SCHEMA_ID,
+    materialize_parsed_artifacts,
 )
 from knowledge_hub.papers.source_guard import review_downloaded_source, stage_source_guard
 from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
@@ -211,6 +216,49 @@ def paper_extraction_report(ctx, paper_ids, limit, degraded_only, as_json):
             reasons,
         )
     console.print(table)
+
+
+@paper_group.command("materialize-parsed", hidden=True)
+@click.option("--paper-id", "paper_ids", multiple=True, help="Materialize one registered paper id; repeat to inspect multiple papers.")
+@click.option("--parser", "parser", default="pymupdf", show_default=True, type=click.Choice(["pymupdf"]), help="Local parser used for parsed artifacts.")
+@click.option("--apply/--dry-run", default=False, show_default=True, help="Write parsed artifacts; default is dry-run.")
+@click.option("--overwrite/--no-overwrite", default=False, show_default=True, help="Refresh existing parsed artifacts.")
+@click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
+@click.pass_context
+def paper_materialize_parsed(ctx, paper_ids, parser, apply, overwrite, as_json):
+    """Materialize parsed artifacts from existing local paper PDFs."""
+
+    targets = [str(item).strip() for item in list(paper_ids or []) if str(item).strip()]
+    if not targets:
+        raise click.ClickException("at least one --paper-id is required")
+    khub = ctx.obj["khub"]
+    payload = materialize_parsed_artifacts(
+        sqlite_db=_sqlite_db(khub.config, khub=khub),
+        papers_dir=khub.config.papers_dir,
+        paper_ids=targets,
+        parser=str(parser or "pymupdf"),
+        apply=bool(apply),
+        overwrite=bool(overwrite),
+    )
+    _validate_cli_payload(khub.config, payload, PARSED_MATERIALIZATION_SCHEMA_ID)
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper parsed materialization[/bold] status={payload.get('status')} "
+        f"planned={counts.get('planned', 0)} materialized={counts.get('materialized', 0)} "
+        f"blocked={counts.get('blocked', 0)} failed={counts.get('failed', 0)} "
+        f"skipped_existing={counts.get('skippedExisting', 0)}"
+    )
+    if not apply:
+        console.print("[dim]dry-run only; pass --apply to write parsed artifacts[/dim]")
+    for item in list(payload.get("items") or [])[:20]:
+        console.print(
+            f"- {item.get('paperId')} status={item.get('status')} "
+            f"reason={item.get('reason') or '-'} action={item.get('action') or '-'}"
+        )
 
 
 def _paper_card_feedback_context(*, khub, paper_id: str) -> dict[str, Any]:

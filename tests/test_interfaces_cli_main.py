@@ -90,6 +90,7 @@ def test_cli_help_advanced_documents_hidden_inventory():
         "paper feedback",
         "paper review-card-plan",
         "paper repair-source",
+        "paper materialize-parsed",
         "paper source-freshness",
         "paper translate-all",
         "paper summarize-all",
@@ -113,6 +114,7 @@ def test_cli_papers_help_hides_operator_commands():
     for token in (
         "review-card",
         "repair-source",
+        "materialize-parsed",
         "canon-quality-audit",
         "source-freshness",
         "sync-keywords",
