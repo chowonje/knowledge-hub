@@ -53,6 +53,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.table-cell-provenance-feasibility-audit.v1": "paper-table-cell-provenance-feasibility-audit.v1.json",
     "knowledge-hub.paper.figure-region-link-feasibility-audit.v1": "paper-figure-region-link-feasibility-audit.v1.json",
     "knowledge-hub.paper.candidate-layer-promotion-policy-draft.v1": "paper-candidate-layer-promotion-policy-draft.v1.json",
+    "knowledge-hub.paper.sectionspan-contract-review.v1": "paper-sectionspan-contract-review.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",

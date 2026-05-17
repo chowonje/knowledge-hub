@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-05-17
+Last updated: 2026-05-18
 
 ## What this project is
 
@@ -15,6 +15,7 @@ Last updated: 2026-05-17
 - `labs`, `Agent Gateway`, answer-loop eval, learning workflows, and `foundry-core` remain additive or experimental in public messaging.
 - Default top-level CLI discovery now favors the representative core loop. `discover` remains public-default, `khub papers` is the visible paper namespace, `khub paper` is a hidden compatibility alias, and personal, eval, environment, MCP server, crawl, agent, vault, and low-level maintenance commands remain directly invokable but hidden from the default `khub --help` output. `khub help advanced` is the documented inventory for those hidden/operator surfaces.
 - Default MCP discovery now uses a read/retrieval/context allowlist. Learning, crawl ingest, agentic execution, paper build/index, async job, and ingest-flow tools remain implemented but require the explicit `labs`/`all` profile for discovery.
+- 2026-05-18 SectionSpanCandidate contract review: the SectionSpan candidate layer now has a report-only contract review helper that consumes the SectionSpan candidate report plus the candidate-layer promotion-policy draft. The current contract review keeps 61 section-span rows contract-ready only at the non-strict candidate layer, preserves held-out title/TOC rows, and continues to block strict evidence, runtime citations, parser routing, answer integration, canonical parsed-artifact writes, and DB/index changes.
 - 2026-05-17 candidate-layer promotion policy draft: the structured candidate layer now has a report-only promotion policy draft that separates candidate contract review from runtime promotion. The draft identifies SectionSpan as the only candidate formalization-ready track while keeping FigureCaption, EquationQuote, and TableRegion blocked on verified figure regions, equation source spans, and table-cell provenance; it does not change runtime evidence policy, parser routing, answer integration, canonical artifact writes, or DB/index state.
 - 2026-05-17 figure-region link feasibility audit: FigureCaptionCandidate rows can now be checked against MinerU normalizer layout candidates to separate caption source spans from unverified figure/image regions. The current audit keeps every row candidate-only because normalizer region pages and explicit figure-region type/link authority are missing; no figure-region citation-grade evidence, strict evidence, runtime citations, parser routing, answer integration, canonical artifact writes, or DB/index changes are introduced.
 - 2026-05-17 table-cell provenance feasibility audit: TableRegionCandidate rows can now be checked against MinerU normalizer table rows to see whether row/column/cell text exists. The current audit keeps every row candidate-only because per-cell bbox, canonical source spans, and cell-level source hash linkage are missing; no table-cell citation-grade evidence, strict evidence, runtime citations, parser routing, answer integration, canonical artifact writes, or DB/index changes are introduced.
