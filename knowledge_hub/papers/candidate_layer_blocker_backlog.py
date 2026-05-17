@@ -130,6 +130,19 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_table_caption_span_exists_but_cell_row_column_bbox_provenance_is_missing",
     },
+    "equation_quote_pdf_offsets_require_quote_review": {
+        "priority": "P0",
+        "layers": ["equation_quote"],
+        "category": "equation_quote_provenance",
+        "recommendedNextTranche": "equation_quote_offset_review_pack",
+        "evidenceNeededBeforePromotion": [
+            "operator review of recovered original-PDF equation quote spans",
+            "explicit quote-only policy with no equation interpretation",
+            "page and sourceContentHash agreement",
+            "tests proving recovered equation offsets alone do not authorize equation semantics",
+        ],
+        "stopRule": "stop_if_equation_quote_span_exists_but_semantics_or_context_are_unreviewed",
+    },
     "candidate_layers_are_report_only": {
         "priority": "P2",
         "layers": ["sectionspan", "figure_caption", "equation_quote", "table_region"],
@@ -216,7 +229,11 @@ def _affected_candidate_count(blocker: str, layers: list[str], summary: dict[str
             table_blocked = _safe_int(counts.get("tableRegionOriginalPdfOffsetBlockedRows"))
         else:
             table_blocked = _safe_int(by_layer.get("table_region"))
-        return figure_blocked + table_blocked + _safe_int(by_layer.get("equation_quote"))
+        if _safe_int(counts.get("equationQuoteOriginalPdfOffsetFeasibilityRows")) > 0:
+            equation_blocked = _safe_int(counts.get("equationQuoteOriginalPdfOffsetBlockedRows"))
+        else:
+            equation_blocked = _safe_int(by_layer.get("equation_quote"))
+        return figure_blocked + table_blocked + equation_blocked
     if blocker == "figure_caption_pdf_offsets_require_region_link_review":
         return _safe_int((summary.get("counts") or {}).get("figureCaptionOriginalPdfOffsetRecoveredRows")) or _safe_int(
             by_layer.get("figure_caption")
@@ -224,6 +241,10 @@ def _affected_candidate_count(blocker: str, layers: list[str], summary: dict[str
     if blocker == "table_caption_pdf_offsets_require_cell_provenance_review":
         return _safe_int((summary.get("counts") or {}).get("tableRegionOriginalPdfOffsetRecoveredRows")) or _safe_int(
             by_layer.get("table_region")
+        )
+    if blocker == "equation_quote_pdf_offsets_require_quote_review":
+        return _safe_int((summary.get("counts") or {}).get("equationQuoteOriginalPdfOffsetRecoveredRows")) or _safe_int(
+            by_layer.get("equation_quote")
         )
     return sum(_safe_int(by_layer.get(layer)) for layer in layers)
 

@@ -26,6 +26,9 @@ FIGURE_CAPTION_PDF_OFFSET_FEASIBILITY_SCHEMA_ID = (
 TABLE_REGION_PDF_OFFSET_FEASIBILITY_SCHEMA_ID = (
     "knowledge-hub.paper.table-region-pdf-offset-feasibility.v1"
 )
+EQUATION_QUOTE_PDF_OFFSET_FEASIBILITY_SCHEMA_ID = (
+    "knowledge-hub.paper.equation-quote-pdf-offset-feasibility.v1"
+)
 
 _LAYER_CONFIG = {
     "sectionspan": {
@@ -211,6 +214,42 @@ def _table_region_pdf_offset_supplement(path: str | Path | None, payload: dict[s
     }
 
 
+def _equation_quote_pdf_offset_supplement(path: str | Path | None, payload: dict[str, Any]) -> dict[str, Any]:
+    counts = dict(payload.get("counts") or {})
+    schema = str(payload.get("schema") or "")
+    provided = bool(path)
+    ready = (
+        provided
+        and schema == EQUATION_QUOTE_PDF_OFFSET_FEASIBILITY_SCHEMA_ID
+        and str(payload.get("status") or "") == "feasibility_complete"
+        and _safe_int(counts.get("schemaViolationCount")) == 0
+    )
+    return {
+        "supplement": "equation_quote_pdf_offset_feasibility",
+        "path": str(Path(str(path)).expanduser()) if path else "",
+        "schema": schema,
+        "status": str(payload.get("status") or ("not_provided" if not provided else "")),
+        "evidenceTier": "equation_quote_pdf_offset_feasibility_only",
+        "reviewCardRows": _safe_int(counts.get("feasibilityRows")),
+        "readyForHumanReviewRows": 0,
+        "readyForRegionReviewRows": _safe_int(counts.get("originalPdfOffsetRecoveredRows")),
+        "heldOutRows": _safe_int(counts.get("blockedRows")),
+        "pageAgreementRows": _safe_int(counts.get("pageAgreementRows")),
+        "sourceHashAgreementRows": _safe_int(counts.get("sourceHashAgreementRows")),
+        "strictEligibleRows": _safe_int(counts.get("strictEligibleRows")),
+        "citationGradeRows": _safe_int(counts.get("citationGradeRows")),
+        "runtimeEvidenceRows": _safe_int(counts.get("runtimeEvidenceRows")),
+        "readyForReview": ready,
+        "byMatchMethod": {
+            "exact": _safe_int(counts.get("exactRecoveredRows")),
+            "normalized_whitespace_case": _safe_int(counts.get("normalizedRecoveredRows")),
+            "compact_whitespace_removed": _safe_int(counts.get("compactRecoveredRows")),
+        },
+        "byReviewStatus": dict(counts.get("byFeasibilityStatus") or {}),
+        "diagnosticPageContextRows": _safe_int(counts.get("diagnosticPageContextRows")),
+    }
+
+
 def _main_blockers(*, supplements: list[dict[str, Any]]) -> list[str]:
     sectionspan = next(
         (
@@ -236,6 +275,14 @@ def _main_blockers(*, supplements: list[dict[str, Any]]) -> list[str]:
         ),
         {},
     )
+    equation_quote = next(
+        (
+            item
+            for item in supplements
+            if item.get("supplement") == "equation_quote_pdf_offset_feasibility"
+        ),
+        {},
+    )
     blockers = [
         "equation_quote_alignment_missing",
         "table_cell_row_column_bbox_provenance_missing",
@@ -250,6 +297,8 @@ def _main_blockers(*, supplements: list[dict[str, Any]]) -> list[str]:
         blockers.append("figure_caption_pdf_offsets_require_region_link_review")
     if _safe_int(table_region.get("readyForRegionReviewRows")) > 0:
         blockers.append("table_caption_pdf_offsets_require_cell_provenance_review")
+    if _safe_int(equation_quote.get("readyForRegionReviewRows")) > 0:
+        blockers.append("equation_quote_pdf_offsets_require_quote_review")
     return blockers
 
 
@@ -262,6 +311,7 @@ def build_structured_candidate_summary(
     sectionspan_pdf_offset_review_pack_report: str | Path | None = None,
     figure_caption_pdf_offset_feasibility_report: str | Path | None = None,
     table_region_pdf_offset_feasibility_report: str | Path | None = None,
+    equation_quote_pdf_offset_feasibility_report: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build a consolidated report over all current structured candidate layers."""
 
@@ -282,6 +332,10 @@ def build_structured_candidate_summary(
     if table_region_pdf_offset_feasibility_report:
         inputs["table_region_pdf_offset_feasibility"] = str(
             Path(str(table_region_pdf_offset_feasibility_report)).expanduser()
+        )
+    if equation_quote_pdf_offset_feasibility_report:
+        inputs["equation_quote_pdf_offset_feasibility"] = str(
+            Path(str(equation_quote_pdf_offset_feasibility_report)).expanduser()
         )
     payloads = {
         "sectionspan": _read_json(sectionspan_report),
@@ -309,6 +363,11 @@ def build_structured_candidate_summary(
         if table_region_pdf_offset_feasibility_report
         else {}
     )
+    equation_offset_payload = (
+        _read_json(equation_quote_pdf_offset_feasibility_report)
+        if equation_quote_pdf_offset_feasibility_report
+        else {}
+    )
     supplements = [
         _sectionspan_pdf_offset_supplement(sectionspan_pdf_offset_review_pack_report, offset_payload),
         _figure_caption_pdf_offset_supplement(
@@ -316,6 +375,9 @@ def build_structured_candidate_summary(
         ),
         _table_region_pdf_offset_supplement(
             table_region_pdf_offset_feasibility_report, table_offset_payload
+        ),
+        _equation_quote_pdf_offset_supplement(
+            equation_quote_pdf_offset_feasibility_report, equation_offset_payload
         ),
     ]
     return {
@@ -357,6 +419,16 @@ def build_structured_candidate_summary(
             "tableRegionOriginalPdfOffsetPageAgreementRows": _safe_int(supplements[2].get("pageAgreementRows")),
             "tableRegionOriginalPdfOffsetSourceHashAgreementRows": _safe_int(
                 supplements[2].get("sourceHashAgreementRows")
+            ),
+            "equationQuoteOriginalPdfOffsetFeasibilityRows": _safe_int(supplements[3].get("reviewCardRows")),
+            "equationQuoteOriginalPdfOffsetRecoveredRows": _safe_int(supplements[3].get("readyForRegionReviewRows")),
+            "equationQuoteOriginalPdfOffsetBlockedRows": _safe_int(supplements[3].get("heldOutRows")),
+            "equationQuoteOriginalPdfOffsetDiagnosticPageContextRows": _safe_int(
+                supplements[3].get("diagnosticPageContextRows")
+            ),
+            "equationQuoteOriginalPdfOffsetPageAgreementRows": _safe_int(supplements[3].get("pageAgreementRows")),
+            "equationQuoteOriginalPdfOffsetSourceHashAgreementRows": _safe_int(
+                supplements[3].get("sourceHashAgreementRows")
             ),
         },
         "policy": {
@@ -402,6 +474,7 @@ def render_structured_candidate_summary_markdown(report: dict[str, Any]) -> str:
         f"- SectionSpan original-PDF-offset ready for review: `{int(counts.get('sectionspanOriginalPdfOffsetReadyForReviewRows') or 0)}`",
         f"- FigureCaption original-PDF-offset recovered: `{int(counts.get('figureCaptionOriginalPdfOffsetRecoveredRows') or 0)}`",
         f"- TableRegion original-PDF-offset recovered: `{int(counts.get('tableRegionOriginalPdfOffsetRecoveredRows') or 0)}`",
+        f"- EquationQuote original-PDF-offset recovered: `{int(counts.get('equationQuoteOriginalPdfOffsetRecoveredRows') or 0)}`",
         f"- Candidate-layer review ready: `{bool(assessment.get('candidateLayerReviewReady'))}`",
         f"- Strict evidence ready: `{bool(assessment.get('strictEvidenceReady'))}`",
         f"- Parser routing ready: `{bool(assessment.get('parserRoutingReady'))}`",
@@ -489,6 +562,11 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Optional path to TableRegion caption original PDF offset feasibility report.",
     )
+    parser.add_argument(
+        "--equation-quote-pdf-offset-feasibility-report",
+        default="",
+        help="Optional path to EquationQuote original PDF offset feasibility report.",
+    )
     parser.add_argument("--output-dir", default="", help="Directory for local JSON/Markdown reports.")
     parser.add_argument("--json", action="store_true", help="Print summary payload as JSON.")
     args = parser.parse_args(argv)
@@ -501,6 +579,7 @@ def main(argv: list[str] | None = None) -> int:
         sectionspan_pdf_offset_review_pack_report=args.sectionspan_pdf_offset_review_pack_report or None,
         figure_caption_pdf_offset_feasibility_report=args.figure_caption_pdf_offset_feasibility_report or None,
         table_region_pdf_offset_feasibility_report=args.table_region_pdf_offset_feasibility_report or None,
+        equation_quote_pdf_offset_feasibility_report=args.equation_quote_pdf_offset_feasibility_report or None,
     )
     paths: dict[str, str] = {}
     if args.output_dir:

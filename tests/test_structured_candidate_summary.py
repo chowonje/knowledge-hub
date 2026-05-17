@@ -167,11 +167,39 @@ def _table_region_pdf_offset_feasibility(root: Path) -> Path:
     )
 
 
+def _equation_quote_pdf_offset_feasibility(root: Path) -> Path:
+    return _write_report(
+        root,
+        "equation-quote-pdf-offset-feasibility.json",
+        {
+            "schema": "knowledge-hub.paper.equation-quote-pdf-offset-feasibility.v1",
+            "status": "feasibility_complete",
+            "counts": {
+                "feasibilityRows": 1,
+                "originalPdfOffsetRecoveredRows": 0,
+                "blockedRows": 1,
+                "exactRecoveredRows": 0,
+                "normalizedRecoveredRows": 0,
+                "compactRecoveredRows": 0,
+                "diagnosticPageContextRows": 1,
+                "pageAgreementRows": 0,
+                "sourceHashAgreementRows": 0,
+                "strictEligibleRows": 0,
+                "citationGradeRows": 0,
+                "runtimeEvidenceRows": 0,
+                "schemaViolationCount": 0,
+                "byFeasibilityStatus": {"diagnostic_page_context_candidate_only": 1},
+            },
+        },
+    )
+
+
 def test_structured_candidate_summary_aggregates_four_layers_and_validates_schema(tmp_path: Path) -> None:
     paths = _reports(tmp_path)
     sectionspan_offset_path = _sectionspan_offset_review_pack(tmp_path)
     figure_offset_path = _figure_caption_pdf_offset_feasibility(tmp_path)
     table_offset_path = _table_region_pdf_offset_feasibility(tmp_path)
+    equation_offset_path = _equation_quote_pdf_offset_feasibility(tmp_path)
 
     payload = build_structured_candidate_summary(
         sectionspan_report=paths["sectionspan"],
@@ -181,6 +209,7 @@ def test_structured_candidate_summary_aggregates_four_layers_and_validates_schem
         sectionspan_pdf_offset_review_pack_report=sectionspan_offset_path,
         figure_caption_pdf_offset_feasibility_report=figure_offset_path,
         table_region_pdf_offset_feasibility_report=table_offset_path,
+        equation_quote_pdf_offset_feasibility_report=equation_offset_path,
     )
 
     assert payload["schema"] == STRUCTURED_CANDIDATE_SUMMARY_SCHEMA_ID
@@ -205,7 +234,7 @@ def test_structured_candidate_summary_aggregates_four_layers_and_validates_schem
         "equation_quote": 1,
         "table_region": 0,
     }
-    assert payload["counts"]["sourceAlignmentSupplementCount"] == 3
+    assert payload["counts"]["sourceAlignmentSupplementCount"] == 4
     assert payload["counts"]["sectionspanOriginalPdfOffsetReviewCards"] == 3
     assert payload["counts"]["sectionspanOriginalPdfOffsetReadyForReviewRows"] == 3
     assert payload["counts"]["sectionspanOriginalPdfOffsetHeldOutRows"] == 0
@@ -215,11 +244,17 @@ def test_structured_candidate_summary_aggregates_four_layers_and_validates_schem
     assert payload["counts"]["tableRegionOriginalPdfOffsetFeasibilityRows"] == 1
     assert payload["counts"]["tableRegionOriginalPdfOffsetRecoveredRows"] == 1
     assert payload["counts"]["tableRegionOriginalPdfOffsetBlockedRows"] == 0
+    assert payload["counts"]["equationQuoteOriginalPdfOffsetFeasibilityRows"] == 1
+    assert payload["counts"]["equationQuoteOriginalPdfOffsetRecoveredRows"] == 0
+    assert payload["counts"]["equationQuoteOriginalPdfOffsetBlockedRows"] == 1
+    assert payload["counts"]["equationQuoteOriginalPdfOffsetDiagnosticPageContextRows"] == 1
     assert payload["sourceAlignmentSupplements"][0]["readyForReview"] is True
     assert payload["sourceAlignmentSupplements"][1]["supplement"] == "figure_caption_pdf_offset_feasibility"
     assert payload["sourceAlignmentSupplements"][1]["readyForRegionReviewRows"] == 1
     assert payload["sourceAlignmentSupplements"][2]["supplement"] == "table_region_pdf_offset_feasibility"
     assert payload["sourceAlignmentSupplements"][2]["readyForRegionReviewRows"] == 1
+    assert payload["sourceAlignmentSupplements"][3]["supplement"] == "equation_quote_pdf_offset_feasibility"
+    assert payload["sourceAlignmentSupplements"][3]["diagnosticPageContextRows"] == 1
 
 
 def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: Path) -> None:
@@ -227,6 +262,7 @@ def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: P
     sectionspan_offset_path = _sectionspan_offset_review_pack(tmp_path)
     figure_offset_path = _figure_caption_pdf_offset_feasibility(tmp_path)
     table_offset_path = _table_region_pdf_offset_feasibility(tmp_path)
+    equation_offset_path = _equation_quote_pdf_offset_feasibility(tmp_path)
 
     payload = build_structured_candidate_summary(
         sectionspan_report=paths["sectionspan"],
@@ -236,6 +272,7 @@ def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: P
         sectionspan_pdf_offset_review_pack_report=sectionspan_offset_path,
         figure_caption_pdf_offset_feasibility_report=figure_offset_path,
         table_region_pdf_offset_feasibility_report=table_offset_path,
+        equation_quote_pdf_offset_feasibility_report=equation_offset_path,
     )
 
     assert payload["policy"]["strictEvidenceCreated"] is False
@@ -257,6 +294,8 @@ def test_structured_candidate_summary_keeps_runtime_promotion_closed(tmp_path: P
     assert payload["sourceAlignmentSupplements"][1]["runtimeEvidenceRows"] == 0
     assert payload["sourceAlignmentSupplements"][2]["strictEligibleRows"] == 0
     assert payload["sourceAlignmentSupplements"][2]["runtimeEvidenceRows"] == 0
+    assert payload["sourceAlignmentSupplements"][3]["strictEligibleRows"] == 0
+    assert payload["sourceAlignmentSupplements"][3]["runtimeEvidenceRows"] == 0
 
 
 def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markdown(tmp_path: Path) -> None:
@@ -264,6 +303,7 @@ def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markd
     sectionspan_offset_path = _sectionspan_offset_review_pack(tmp_path / "input")
     figure_offset_path = _figure_caption_pdf_offset_feasibility(tmp_path / "input")
     table_offset_path = _table_region_pdf_offset_feasibility(tmp_path / "input")
+    equation_offset_path = _equation_quote_pdf_offset_feasibility(tmp_path / "input")
     payload = build_structured_candidate_summary(
         sectionspan_report=paths["sectionspan"],
         figure_caption_report=paths["figure_caption"],
@@ -272,6 +312,7 @@ def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markd
         sectionspan_pdf_offset_review_pack_report=sectionspan_offset_path,
         figure_caption_pdf_offset_feasibility_report=figure_offset_path,
         table_region_pdf_offset_feasibility_report=table_offset_path,
+        equation_quote_pdf_offset_feasibility_report=equation_offset_path,
     )
 
     report_paths = write_structured_candidate_summary_reports(payload, tmp_path / "reports")
@@ -285,6 +326,7 @@ def test_structured_candidate_summary_writer_outputs_schema_valid_json_and_markd
     assert "SectionSpan original-PDF-offset review cards" in markdown
     assert "FigureCaption original-PDF-offset recovered" in markdown
     assert "TableRegion original-PDF-offset recovered" in markdown
+    assert "EquationQuote original-PDF-offset recovered" in markdown
 
 
 def test_structured_candidate_summary_without_offset_review_keeps_original_offset_blocker(tmp_path: Path) -> None:
@@ -304,4 +346,6 @@ def test_structured_candidate_summary_without_offset_review_keeps_original_offse
     assert payload["sourceAlignmentSupplements"][1]["readyForReview"] is False
     assert payload["sourceAlignmentSupplements"][2]["status"] == "not_provided"
     assert payload["sourceAlignmentSupplements"][2]["readyForReview"] is False
+    assert payload["sourceAlignmentSupplements"][3]["status"] == "not_provided"
+    assert payload["sourceAlignmentSupplements"][3]["readyForReview"] is False
     assert "generated_markdown_offsets_are_not_original_pdf_offsets" in payload["releaseCandidateAssessment"]["mainBlockers"]

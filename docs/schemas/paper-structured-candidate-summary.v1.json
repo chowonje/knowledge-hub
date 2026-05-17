@@ -28,7 +28,8 @@
         "table_region": { "type": "string" },
         "sectionspan_pdf_offset_review_pack": { "type": "string" },
         "figure_caption_pdf_offset_feasibility": { "type": "string" },
-        "table_region_pdf_offset_feasibility": { "type": "string" }
+        "table_region_pdf_offset_feasibility": { "type": "string" },
+        "equation_quote_pdf_offset_feasibility": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -58,7 +59,13 @@
         "tableRegionOriginalPdfOffsetRecoveredRows",
         "tableRegionOriginalPdfOffsetBlockedRows",
         "tableRegionOriginalPdfOffsetPageAgreementRows",
-        "tableRegionOriginalPdfOffsetSourceHashAgreementRows"
+        "tableRegionOriginalPdfOffsetSourceHashAgreementRows",
+        "equationQuoteOriginalPdfOffsetFeasibilityRows",
+        "equationQuoteOriginalPdfOffsetRecoveredRows",
+        "equationQuoteOriginalPdfOffsetBlockedRows",
+        "equationQuoteOriginalPdfOffsetDiagnosticPageContextRows",
+        "equationQuoteOriginalPdfOffsetPageAgreementRows",
+        "equationQuoteOriginalPdfOffsetSourceHashAgreementRows"
       ],
       "properties": {
         "layerCount": { "const": 4 },
@@ -84,7 +91,13 @@
         "tableRegionOriginalPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
         "tableRegionOriginalPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
         "tableRegionOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
-        "tableRegionOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
+        "tableRegionOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 },
+        "equationQuoteOriginalPdfOffsetFeasibilityRows": { "type": "integer", "minimum": 0 },
+        "equationQuoteOriginalPdfOffsetRecoveredRows": { "type": "integer", "minimum": 0 },
+        "equationQuoteOriginalPdfOffsetBlockedRows": { "type": "integer", "minimum": 0 },
+        "equationQuoteOriginalPdfOffsetDiagnosticPageContextRows": { "type": "integer", "minimum": 0 },
+        "equationQuoteOriginalPdfOffsetPageAgreementRows": { "type": "integer", "minimum": 0 },
+        "equationQuoteOriginalPdfOffsetSourceHashAgreementRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
