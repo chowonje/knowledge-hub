@@ -20,6 +20,10 @@ def _filter_tools(tools: list[Tool], profile: str) -> list[Tool]:
     return tools
 
 
+def build_tool_name_set(profile: str | None = None) -> set[str]:
+    return {tool.name for tool in build_tools(profile=profile)}
+
+
 def build_tools(profile: str | None = None) -> list[Tool]:
     tools = [
         Tool(

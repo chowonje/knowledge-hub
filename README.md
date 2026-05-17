@@ -90,7 +90,7 @@ The default `khub --help` surface now favors the representative core loop. Opera
 - **Evidence registry** - 명시적으로 저장한 packet/context/trace lookup record를 `khub://packet/{id}`와 `khub://context/{id}`로 다시 확인
 - **Paper ingestion** - Semantic Scholar + arXiv 기반 검색, 다운로드, 요약, 인덱싱
 - **Obsidian 연결** - vault를 canonical memory로 유지하고 결과를 writeback
-- **Notebook workbench bridge** - Open Notebook에 topic bundle export
+- **Labs workbench helpers** - local-only notebook/workbench search/chat helpers stay behind labs MCP profiles
 - **MCP 서버** - 기본 product surface는 retrieval-assistant-first, 고급 기능은 labs profile로 노출
 
 ## Extended Setup and Product Flow
@@ -150,8 +150,13 @@ khub papers summary --paper-id 2501.06322
 khub papers evidence --paper-id 2501.06322
 khub papers memory --paper-id 2501.06322
 khub papers related --paper-id 2501.06322
+```
 
-# 10. Codex-style read-only task context
+### Advanced / Codex handoff
+
+`khub agent context` is a directly invokable hidden/advanced CLI path, not part of the default top-level help. The default MCP-side equivalent is `build_task_context`.
+
+```bash
 khub agent context "how should I refactor the RAG flow?" --repo-path .
 ```
 
@@ -660,8 +665,8 @@ khub labs crawl pending reject --id 13
 
 주의:
 - 기본 MCP surface는 retrieval-assistant-first product surface에 맞춰 노출됩니다.
-- learning / advanced crawl / operator 도구는 기본 discovery에 항상 나타나는 surface가 아닙니다.
-- 비핵심 도구는 `KHUB_MCP_PROFILE=labs` 또는 `KHUB_MCP_PROFILE=all`일 때만 노출되는 것으로 문서화합니다.
+- learning / advanced crawl / operator 도구는 default profile에서 discovery되거나 직접 호출되지 않습니다.
+- 비핵심 도구는 `KHUB_MCP_PROFILE=labs` 또는 `KHUB_MCP_PROFILE=all`일 때만 노출/호출되는 것으로 문서화합니다.
 
 Cursor 예시 설정:
 
@@ -674,13 +679,19 @@ Cursor 예시 설정:
 }
 ```
 
-대표 MCP 도구 묶음:
-- retrieval / answer: `search_knowledge`, `ask_knowledge`, `build_task_context`, `run_agentic_query`
-- paper / ingest: `discover_and_ingest`, `get_paper_detail`, `paper_lookup_and_summarize`, `run_paper_ingest_flow`
-- crawl / ko-note / ops: `crawl_web_ingest`, `crawl_pending_*`, `run_learning_pipeline`, `ops_report` 계열
+Default MCP profile:
+- retrieval / answer / context: `search_knowledge`, `ask_knowledge`, `build_task_context`
+- paper lookup / read helpers: `search_papers`, `get_paper_detail`, `paper_lookup_and_summarize`, citation/reference helpers, and paper-memory read helpers
 
-대표 MCP resources:
+Labs/all MCP profiles:
+- agentic / heavy ingest: `run_agentic_query`, `discover_and_ingest`, `run_paper_ingest_flow`
+- crawl / learning / ops: `crawl_web_ingest`, `crawl_pending_*`, `run_learning_pipeline`, `rag_report`, `ops_action_*`
+- build/job/workbench helpers: paper build/index tools, `mcp_job_*`, and local `notebook_workbench_*`
+
+MCP resources:
 - `khub://corpus/status`, `khub://corpus/contract`
+
+MCP resource templates:
 - `khub://source/{source_id}`, `khub://chunk/{chunk_id}`
 - `khub://packet/{packet_id}`, `khub://context/{context_pack_id}` for explicitly persisted registry records
 
