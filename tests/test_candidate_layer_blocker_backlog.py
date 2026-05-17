@@ -345,6 +345,51 @@ def _figure_region_link_audit_payload(**overrides: object) -> dict:
     return payload
 
 
+def _candidate_layer_blocker_decision_record_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.candidate-layer-blocker-decision-record.v1",
+        "status": "decision_record_required",
+        "counts": {
+            "recordRows": 12,
+            "needsReviewRows": 12,
+            "manualApprovalRows": 0,
+            "manualRejectionRows": 0,
+            "operatorApprovedRows": 0,
+            "operatorDeclinedRows": 0,
+            "technicalAcceptedOpenRows": 0,
+            "technicalDeferredRows": 0,
+            "policyAcceptedGuardrailRows": 0,
+            "strictEligibleRows": 0,
+            "citationGradeRows": 0,
+            "runtimeEvidenceRows": 0,
+            "unsafeUpstreamFlagCount": 0,
+        },
+        "gate": {
+            "decisionRecordReady": True,
+            "allDecisionRowsComplete": False,
+            "humanReviewComplete": False,
+            "operatorApprovalComplete": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+            "runtimePromotionAllowed": False,
+        },
+        "policy": {
+            "reportOnly": True,
+            "decisionRecordOnly": True,
+            "strictEvidenceCreated": False,
+            "runtimePromotionAllowed": False,
+            "parserRoutingChanged": False,
+            "canonicalParsedArtifactsWritten": False,
+            "databaseMutation": False,
+            "reindexOrReembed": False,
+            "answerIntegrationChanged": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _reports(root: Path, *, gate: dict | None = None, summary: dict | None = None, eval_design: dict | None = None) -> tuple[Path, Path, Path]:
     gate_path = _write(root, "candidate-layer-review-gate.json", gate or _gate_payload())
     summary_path = _write(root, "structured-candidate-summary.json", summary or _summary_payload())
@@ -756,6 +801,122 @@ def test_candidate_layer_blocker_backlog_blocks_wrong_downstream_audit_schema(tm
     assert payload["status"] == "blocked"
     assert payload["gate"]["decision"] == "blocked"
     assert "equation_alignment_feasibility_audit_schema_mismatch" in payload["gate"]["schemaViolations"]
+
+
+def test_candidate_layer_blocker_backlog_uses_blocker_decision_record_pending_counts(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(
+        tmp_path / "inputs",
+        gate=_gate_payload(
+            gate={
+                "candidateLayerReviewReady": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "blockers": [
+                    "candidate_layers_are_report_only",
+                    "runtime_promotion_disabled_for_tranche",
+                ],
+            }
+        ),
+        summary=_source_aligned_summary_payload(),
+    )
+    decision_record = _write(
+        tmp_path / "inputs",
+        "candidate-layer-blocker-decision-record.json",
+        _candidate_layer_blocker_decision_record_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        candidate_layer_blocker_decision_record_report=decision_record,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    item = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "candidate_layer_blocker_decision_record_pending"
+    )
+    assert item["priority"] == "P0"
+    assert item["affected_layers"] == ["sectionspan", "figure_caption", "equation_quote", "table_region"]
+    assert item["affected_candidate_count"] == 12
+    assert item["recommendedNextTranche"] == "manual_record_candidate_layer_blocker_decisions"
+    assert payload["counts"]["candidateLayerBlockerDecisionRecordRows"] == 12
+    assert payload["counts"]["candidateLayerBlockerDecisionNeedsReviewRows"] == 12
+    assert payload["counts"]["candidateLayerBlockerManualApprovalRows"] == 0
+    assert payload["counts"]["candidateLayerBlockerOperatorApprovedRows"] == 0
+
+
+def test_candidate_layer_blocker_backlog_skips_completed_blocker_decision_record(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    decision_record = _write(
+        tmp_path / "inputs",
+        "candidate-layer-blocker-decision-record.json",
+        _candidate_layer_blocker_decision_record_payload(
+            status="decision_recorded",
+            counts={
+                "recordRows": 12,
+                "needsReviewRows": 0,
+                "manualApprovalRows": 3,
+                "manualRejectionRows": 0,
+                "operatorApprovedRows": 1,
+                "operatorDeclinedRows": 0,
+                "technicalAcceptedOpenRows": 6,
+                "technicalDeferredRows": 0,
+                "policyAcceptedGuardrailRows": 2,
+                "strictEligibleRows": 0,
+                "citationGradeRows": 0,
+                "runtimeEvidenceRows": 0,
+                "unsafeUpstreamFlagCount": 0,
+            },
+            gate={
+                "decisionRecordReady": True,
+                "allDecisionRowsComplete": True,
+                "humanReviewComplete": True,
+                "operatorApprovalComplete": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "runtimePromotionAllowed": False,
+            },
+        ),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        candidate_layer_blocker_decision_record_report=decision_record,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    blockers = {item["blocker"] for item in payload["backlog"]}
+    assert "candidate_layer_blocker_decision_record_pending" not in blockers
+    assert payload["counts"]["candidateLayerBlockerDecisionNeedsReviewRows"] == 0
+    assert payload["counts"]["candidateLayerBlockerManualApprovalRows"] == 3
+    assert payload["counts"]["candidateLayerBlockerOperatorApprovedRows"] == 1
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_blocker_decision_record_schema(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    decision_record = _write(
+        tmp_path / "inputs",
+        "candidate-layer-blocker-decision-record.json",
+        _candidate_layer_blocker_decision_record_payload(schema="example.wrong.blocker-decision-record.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        candidate_layer_blocker_decision_record_report=decision_record,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "candidate_layer_blocker_decision_record_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_includes_table_cell_isolated_extractor_approval_gate(tmp_path: Path) -> None:

@@ -41,6 +41,9 @@ TABLE_CELL_PROVENANCE_FEASIBILITY_AUDIT_SCHEMA_ID = (
 FIGURE_REGION_LINK_FEASIBILITY_AUDIT_SCHEMA_ID = (
     "knowledge-hub.paper.figure-region-link-feasibility-audit.v1"
 )
+CANDIDATE_LAYER_BLOCKER_DECISION_RECORD_SCHEMA_ID = (
+    "knowledge-hub.paper.candidate-layer-blocker-decision-record.v1"
+)
 
 _BLOCKER_RULES = {
     "equation_quote_alignment_missing": {
@@ -240,6 +243,19 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_any_runtime_evidence_or_answer_generation_change_is_needed",
     },
+    "candidate_layer_blocker_decision_record_pending": {
+        "priority": "P0",
+        "layers": ["sectionspan", "figure_caption", "equation_quote", "table_region"],
+        "category": "blocker_decision_review",
+        "recommendedNextTranche": "manual_record_candidate_layer_blocker_decisions",
+        "evidenceNeededBeforePromotion": [
+            "explicit decision file for each candidate-layer blocker decision row",
+            "separate human/operator decision record with reviewer notes",
+            "proof that operator approval records do not execute parser, dependency, or artifact writes",
+            "separate explicit tranche before any blocker resolution can change runtime behavior",
+        ],
+        "stopRule": "stop_if_candidate_layer_blocker_decision_record_rows_are_still_needs_review",
+    },
 }
 
 
@@ -291,6 +307,7 @@ def _affected_candidate_count(
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
     figure_region_link_audit: dict[str, Any] | None = None,
+    candidate_layer_blocker_decision_record: dict[str, Any] | None = None,
 ) -> int:
     by_layer = _candidate_counts_by_layer(summary)
     table_cell_counts = dict((table_cell_result or {}).get("counts") or {})
@@ -299,6 +316,11 @@ def _affected_candidate_count(
     equation_counts = dict((equation_alignment_audit or {}).get("counts") or {})
     table_cell_counts_audit = dict((table_cell_provenance_audit or {}).get("counts") or {})
     figure_counts = dict((figure_region_link_audit or {}).get("counts") or {})
+    blocker_decision_counts = dict((candidate_layer_blocker_decision_record or {}).get("counts") or {})
+    if blocker == "candidate_layer_blocker_decision_record_pending":
+        return _safe_int(blocker_decision_counts.get("needsReviewRows")) or _safe_int(
+            blocker_decision_counts.get("recordRows")
+        )
     if blocker == "sectionspan_pdf_offset_human_review_pending":
         return _safe_int(sectionspan_gate_counts.get("pendingHumanReviewRows")) or _safe_int(
             sectionspan_gate_counts.get("gateRows")
@@ -385,6 +407,7 @@ def _backlog_item(
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
     figure_region_link_audit: dict[str, Any] | None = None,
+    candidate_layer_blocker_decision_record: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     rule = dict(_BLOCKER_RULES.get(blocker) or {})
     layers = list(rule.get("layers") or [])
@@ -406,6 +429,7 @@ def _backlog_item(
             equation_alignment_audit,
             table_cell_provenance_audit,
             figure_region_link_audit,
+            candidate_layer_blocker_decision_record,
         ),
         "affected_eval_question_count": _affected_question_count(blocker, layers, eval_design),
         "evidenceNeededBeforePromotion": list(rule.get("evidenceNeededBeforePromotion") or []),
@@ -532,6 +556,21 @@ def _downstream_feasibility_audit_blockers(
     return blockers
 
 
+def _candidate_layer_blocker_decision_record_blockers(result: dict[str, Any]) -> list[str]:
+    if not result:
+        return []
+    counts = dict(result.get("counts") or {})
+    gate = dict(result.get("gate") or {})
+    status = str(result.get("status") or "")
+    if (
+        status == "decision_record_required"
+        or _safe_int(counts.get("needsReviewRows"))
+        or (gate.get("decisionRecordReady") and not gate.get("allDecisionRowsComplete"))
+    ):
+        return ["candidate_layer_blocker_decision_record_pending"]
+    return []
+
+
 def _collect_blockers(
     gate: dict[str, Any],
     summary: dict[str, Any],
@@ -543,6 +582,7 @@ def _collect_blockers(
     equation_alignment_audit: dict[str, Any] | None = None,
     table_cell_provenance_audit: dict[str, Any] | None = None,
     figure_region_link_audit: dict[str, Any] | None = None,
+    candidate_layer_blocker_decision_record: dict[str, Any] | None = None,
 ) -> list[str]:
     blockers: list[str] = []
     blockers.extend(str(item) for item in list((gate.get("gate") or {}).get("blockers") or []))
@@ -553,6 +593,7 @@ def _collect_blockers(
     blockers.extend(_sectionspan_human_review_gate_blockers(sectionspan_human_review_gate or {}))
     blockers.extend(_sectionspan_selected_decision_proposal_blockers(sectionspan_selected_decision_proposal or {}))
     blockers.extend(_non_sectionspan_pdf_offset_audit_blockers(non_sectionspan_pdf_offset_audit or {}))
+    blockers.extend(_candidate_layer_blocker_decision_record_blockers(candidate_layer_blocker_decision_record or {}))
     blockers.extend(
         _downstream_feasibility_audit_blockers(
             equation_alignment_audit=equation_alignment_audit or {},
@@ -575,6 +616,7 @@ def build_candidate_layer_blocker_backlog(
     equation_alignment_feasibility_audit_report: str | Path | None = None,
     table_cell_provenance_feasibility_audit_report: str | Path | None = None,
     figure_region_link_feasibility_audit_report: str | Path | None = None,
+    candidate_layer_blocker_decision_record_report: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build a report-only backlog over current candidate-layer blockers."""
 
@@ -634,6 +676,16 @@ def build_candidate_layer_blocker_backlog(
         else None
     )
     figure_region_link_audit = _read_json(figure_region_link_audit_path) if figure_region_link_audit_path else {}
+    candidate_layer_blocker_decision_record_path = (
+        Path(str(candidate_layer_blocker_decision_record_report)).expanduser()
+        if candidate_layer_blocker_decision_record_report
+        else None
+    )
+    candidate_layer_blocker_decision_record = (
+        _read_json(candidate_layer_blocker_decision_record_path)
+        if candidate_layer_blocker_decision_record_path
+        else {}
+    )
     schema_violations = _schema_violations(gate, summary, eval_design)
     if table_cell_result and table_cell_result.get("schema") != TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID:
         schema_violations.append("table_cell_isolated_extractor_pilot_result_schema_mismatch")
@@ -668,6 +720,11 @@ def build_candidate_layer_blocker_backlog(
         and figure_region_link_audit.get("schema") != FIGURE_REGION_LINK_FEASIBILITY_AUDIT_SCHEMA_ID
     ):
         schema_violations.append("figure_region_link_feasibility_audit_schema_mismatch")
+    if (
+        candidate_layer_blocker_decision_record
+        and candidate_layer_blocker_decision_record.get("schema") != CANDIDATE_LAYER_BLOCKER_DECISION_RECORD_SCHEMA_ID
+    ):
+        schema_violations.append("candidate_layer_blocker_decision_record_schema_mismatch")
     blockers = _collect_blockers(
         gate,
         summary,
@@ -679,6 +736,7 @@ def build_candidate_layer_blocker_backlog(
         equation_alignment_audit,
         table_cell_provenance_audit,
         figure_region_link_audit,
+        candidate_layer_blocker_decision_record,
     )
     items = [
         _backlog_item(
@@ -693,6 +751,7 @@ def build_candidate_layer_blocker_backlog(
             equation_alignment_audit,
             table_cell_provenance_audit,
             figure_region_link_audit,
+            candidate_layer_blocker_decision_record,
         )
         for index, blocker in enumerate(blockers, start=1)
     ]
@@ -718,6 +777,7 @@ def build_candidate_layer_blocker_backlog(
             "equationAlignmentFeasibilityAuditReport": str(equation_alignment_audit_path or ""),
             "tableCellProvenanceFeasibilityAuditReport": str(table_cell_provenance_audit_path or ""),
             "figureRegionLinkFeasibilityAuditReport": str(figure_region_link_audit_path or ""),
+            "candidateLayerBlockerDecisionRecordReport": str(candidate_layer_blocker_decision_record_path or ""),
             "candidateLayerReviewGateSchema": str(gate.get("schema") or ""),
             "structuredSummarySchema": str(summary.get("schema") or ""),
             "complexQaEvalDesignSchema": str(eval_design.get("schema") or ""),
@@ -730,6 +790,9 @@ def build_candidate_layer_blocker_backlog(
             "equationAlignmentFeasibilityAuditSchema": str(equation_alignment_audit.get("schema") or ""),
             "tableCellProvenanceFeasibilityAuditSchema": str(table_cell_provenance_audit.get("schema") or ""),
             "figureRegionLinkFeasibilityAuditSchema": str(figure_region_link_audit.get("schema") or ""),
+            "candidateLayerBlockerDecisionRecordSchema": str(
+                candidate_layer_blocker_decision_record.get("schema") or ""
+            ),
         },
         "counts": {
             "backlogItemCount": len(items),
@@ -812,6 +875,18 @@ def build_candidate_layer_blocker_backlog(
             ),
             "figureRegionLinkVerifiedRows": _safe_int(
                 (figure_region_link_audit.get("counts") or {}).get("figureRegionLinkVerifiedCandidates")
+            ),
+            "candidateLayerBlockerDecisionRecordRows": _safe_int(
+                (candidate_layer_blocker_decision_record.get("counts") or {}).get("recordRows")
+            ),
+            "candidateLayerBlockerDecisionNeedsReviewRows": _safe_int(
+                (candidate_layer_blocker_decision_record.get("counts") or {}).get("needsReviewRows")
+            ),
+            "candidateLayerBlockerManualApprovalRows": _safe_int(
+                (candidate_layer_blocker_decision_record.get("counts") or {}).get("manualApprovalRows")
+            ),
+            "candidateLayerBlockerOperatorApprovedRows": _safe_int(
+                (candidate_layer_blocker_decision_record.get("counts") or {}).get("operatorApprovedRows")
             ),
         },
         "gate": {
@@ -936,6 +1011,11 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Optional path to the latest FigureRegion link feasibility audit JSON.",
     )
+    parser.add_argument(
+        "--candidate-layer-blocker-decision-record-report",
+        default="",
+        help="Optional path to the latest candidate-layer blocker decision record JSON.",
+    )
     parser.add_argument("--output-dir", default="", help="Directory for local JSON/Markdown reports.")
     parser.add_argument("--json", action="store_true", help="Print backlog payload as JSON.")
     args = parser.parse_args(argv)
@@ -955,6 +1035,7 @@ def main(argv: list[str] | None = None) -> int:
         equation_alignment_feasibility_audit_report=args.equation_alignment_feasibility_audit_report or None,
         table_cell_provenance_feasibility_audit_report=args.table_cell_provenance_feasibility_audit_report or None,
         figure_region_link_feasibility_audit_report=args.figure_region_link_feasibility_audit_report or None,
+        candidate_layer_blocker_decision_record_report=args.candidate_layer_blocker_decision_record_report or None,
     )
     paths: dict[str, str] = {}
     if args.output_dir:

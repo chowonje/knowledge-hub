@@ -36,6 +36,7 @@
         "equationAlignmentFeasibilityAuditReport": { "type": "string" },
         "tableCellProvenanceFeasibilityAuditReport": { "type": "string" },
         "figureRegionLinkFeasibilityAuditReport": { "type": "string" },
+        "candidateLayerBlockerDecisionRecordReport": { "type": "string" },
         "candidateLayerReviewGateSchema": { "type": "string" },
         "structuredSummarySchema": { "type": "string" },
         "complexQaEvalDesignSchema": { "type": "string" },
@@ -43,7 +44,8 @@
         "nonSectionspanPdfOffsetFeasibilityAuditSchema": { "type": "string" },
         "equationAlignmentFeasibilityAuditSchema": { "type": "string" },
         "tableCellProvenanceFeasibilityAuditSchema": { "type": "string" },
-        "figureRegionLinkFeasibilityAuditSchema": { "type": "string" }
+        "figureRegionLinkFeasibilityAuditSchema": { "type": "string" },
+        "candidateLayerBlockerDecisionRecordSchema": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -89,7 +91,11 @@
         "tableCellProvenanceCitationGradeRows": { "type": "integer", "minimum": 0 },
         "figureRegionLinkAuditRows": { "type": "integer", "minimum": 0 },
         "figureRegionLinkCaptionSourceSpanRows": { "type": "integer", "minimum": 0 },
-        "figureRegionLinkVerifiedRows": { "type": "integer", "minimum": 0 }
+        "figureRegionLinkVerifiedRows": { "type": "integer", "minimum": 0 },
+        "candidateLayerBlockerDecisionRecordRows": { "type": "integer", "minimum": 0 },
+        "candidateLayerBlockerDecisionNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "candidateLayerBlockerManualApprovalRows": { "type": "integer", "minimum": 0 },
+        "candidateLayerBlockerOperatorApprovedRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
