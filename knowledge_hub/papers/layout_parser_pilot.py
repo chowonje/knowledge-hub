@@ -21,6 +21,7 @@ import signal
 import time
 from typing import Any
 
+from knowledge_hub.application.runtime_diagnostics import parser_runtime_status
 from knowledge_hub.papers.extraction_diagnostics import diagnose_paper_parse
 from knowledge_hub.papers.mineru_adapter import MinerUPDFAdapter
 from knowledge_hub.papers.opendataloader_adapter import OpenDataLoaderPDFAdapter
@@ -103,9 +104,24 @@ def _parser_availability(parser: str) -> dict[str, Any]:
         package = "opendataloader-pdf"
         command = ""
     elif parser == "mineru":
-        module = ""
-        package = "mineru"
-        command = "mineru"
+        state = dict(parser_runtime_status("mineru"))
+        runtime_status = _clean_text(state.get("status"))
+        available = bool(state.get("available")) and runtime_status == "ok"
+        reason = "" if available else _clean_text(state.get("reason") or state.get("detail") or runtime_status or "parser_unavailable")
+        return {
+            "available": available,
+            "reason": reason,
+            "version": _clean_text(state.get("mineruVersion")),
+            "command": "mineru",
+            "runtimeStatus": runtime_status,
+            "detail": _clean_text(state.get("detail")),
+            "fixCommand": _clean_text(state.get("fixCommand")),
+            "mineruVersion": _clean_text(state.get("mineruVersion")),
+            "fastapiVersion": _clean_text(state.get("fastapiVersion")),
+            "starletteVersion": _clean_text(state.get("starletteVersion")),
+            "expectedStarletteRange": _clean_text(state.get("expectedStarletteRange")),
+            "startupFailureSummary": _clean_text(state.get("startupFailureSummary")),
+        }
     else:
         return {"available": False, "reason": "unsupported_parser", "version": "", "command": ""}
 

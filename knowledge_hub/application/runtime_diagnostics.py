@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.metadata
 import importlib.util
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -365,16 +366,83 @@ def _java_runtime_status() -> dict[str, Any]:
     }
 
 
-def _mineru_dependency_status() -> dict[str, Any]:
+def _package_version(package_name: str) -> str:
+    try:
+        return str(importlib.metadata.version(package_name))
+    except Exception:
+        return ""
+
+
+def _dependency_specifier(*, package_name: str, dependency_name: str) -> str:
+    try:
+        distribution = importlib.metadata.distribution(package_name)
+    except Exception:
+        return ""
+    dependency_key = dependency_name.strip().casefold()
+    for requirement in list(distribution.requires or []):
+        token = str(requirement or "").split(";", 1)[0].strip()
+        if not token:
+            continue
+        name = re.split(r"[<>=!~\s]", token, maxsplit=1)[0].strip().casefold()
+        if name == dependency_key:
+            return token[len(name) :].strip()
+    return ""
+
+
+def _version_components(version: str) -> tuple[int, ...]:
+    numbers = re.findall(r"\d+", str(version or ""))
+    return tuple(int(item) for item in numbers[:4]) if numbers else (0,)
+
+
+def _compare_versions(left: str, right: str) -> int:
+    left_parts = list(_version_components(left))
+    right_parts = list(_version_components(right))
+    width = max(len(left_parts), len(right_parts))
+    left_parts.extend([0] * (width - len(left_parts)))
+    right_parts.extend([0] * (width - len(right_parts)))
+    if left_parts < right_parts:
+        return -1
+    if left_parts > right_parts:
+        return 1
+    return 0
+
+
+def _version_matches_specifier(version: str, specifier: str) -> bool:
+    token = str(specifier or "").strip()
+    if not token:
+        return True
+    for part in token.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        match = re.match(r"(<=|>=|==|!=|<|>|~=)\s*([A-Za-z0-9_.!+\\-]+)", part)
+        if not match:
+            continue
+        operator, expected = match.groups()
+        comparison = _compare_versions(version, expected)
+        if operator == "<" and not comparison < 0:
+            return False
+        if operator == "<=" and not comparison <= 0:
+            return False
+        if operator == ">" and not comparison > 0:
+            return False
+        if operator == ">=" and not comparison >= 0:
+            return False
+        if operator == "==" and not comparison == 0:
+            return False
+        if operator == "!=" and not comparison != 0:
+            return False
+        if operator == "~=" and not comparison >= 0:
+            return False
+    return True
+
+
+def _mineru_transformers_dependency_status() -> dict[str, Any]:
     missing: list[str] = []
     if importlib.util.find_spec("addict") is None:
         missing.append("addict")
 
-    transformers_version = ""
-    try:
-        transformers_version = str(importlib.metadata.version("transformers"))
-    except Exception:
-        transformers_version = ""
+    transformers_version = _package_version("transformers")
 
     try:
         from transformers.pytorch_utils import find_pruneable_heads_and_indices as _heads_helper  # noqa: PLC0415
@@ -401,6 +469,74 @@ def _mineru_dependency_status() -> dict[str, Any]:
         "status": "ok",
         "detail": f"MinerU runtime dependencies 확인됨 (transformers={transformers_version or 'unknown'})",
         "fixCommand": "",
+    }
+
+
+def _mineru_fastapi_starlette_status() -> dict[str, Any]:
+    mineru_version = _package_version("mineru")
+    fastapi_version = _package_version("fastapi")
+    starlette_version = _package_version("starlette")
+    expected_starlette_range = _dependency_specifier(package_name="fastapi", dependency_name="starlette")
+    base = {
+        "mineruVersion": mineru_version,
+        "fastapiVersion": fastapi_version,
+        "starletteVersion": starlette_version,
+        "expectedStarletteRange": expected_starlette_range,
+    }
+    missing = [name for name, version in (("fastapi", fastapi_version), ("starlette", starlette_version)) if not version]
+    if missing:
+        return {
+            "available": False,
+            "status": "blocked",
+            "reason": "mineru_runtime_dependency_missing",
+            "detail": f"MinerU runtime dependency check failed: missing {', '.join(missing)}",
+            "fixCommand": "python -m pip install -e '.[mineru]'",
+            **base,
+        }
+    if expected_starlette_range and not _version_matches_specifier(starlette_version, expected_starlette_range):
+        return {
+            "available": False,
+            "status": "blocked",
+            "reason": "fastapi_starlette_incompatible",
+            "detail": (
+                "MinerU runtime dependency check failed: "
+                f"fastapi={fastapi_version} requires starlette{expected_starlette_range}, "
+                f"but starlette={starlette_version} is installed"
+            ),
+            "startupFailureSummary": "FastAPI APIRouter passes on_startup to Starlette Router, but the installed Starlette Router rejects it.",
+            "fixCommand": "python -m pip install -e '.[mineru]'",
+            **base,
+        }
+    return {
+        "available": True,
+        "status": "ok",
+        "reason": "",
+        "detail": (
+            "MinerU FastAPI/Starlette runtime dependencies 확인됨 "
+            f"(fastapi={fastapi_version}, starlette={starlette_version or 'unknown'})"
+        ),
+        "fixCommand": "",
+        **base,
+    }
+
+
+def _mineru_dependency_status() -> dict[str, Any]:
+    transformers_status = _mineru_transformers_dependency_status()
+    if not transformers_status["available"]:
+        return transformers_status
+    api_status = _mineru_fastapi_starlette_status()
+    if not api_status["available"]:
+        return api_status
+    return {
+        "available": True,
+        "status": "ok",
+        "reason": "",
+        "detail": f"{transformers_status['detail']}; {api_status['detail']}",
+        "fixCommand": "",
+        "mineruVersion": api_status.get("mineruVersion", ""),
+        "fastapiVersion": api_status.get("fastapiVersion", ""),
+        "starletteVersion": api_status.get("starletteVersion", ""),
+        "expectedStarletteRange": api_status.get("expectedStarletteRange", ""),
     }
 
 
@@ -462,23 +598,24 @@ def parser_runtime_status(parser_name: str) -> dict[str, Any]:
         }
     if token == "mineru":
         cli_path = shutil.which("mineru")
-        try:
-            version = importlib.metadata.version("mineru")
-        except Exception:
-            version = ""
+        version = _package_version("mineru")
         if not version and not cli_path:
             return {
                 "available": False,
                 "status": "needs_setup",
+                "reason": "mineru_missing",
                 "detail": "MinerU 패키지 또는 CLI가 설치되어 있지 않습니다.",
                 "fixCommand": "python -m pip install -e '.[mineru]'",
+                "mineruVersion": "",
             }
         if not cli_path:
             return {
                 "available": True,
                 "status": "degraded",
+                "reason": "missing_command:mineru",
                 "detail": f"MinerU 패키지는 설치되어 있지만 CLI가 감지되지 않았습니다 (version={version or 'unknown'}).",
                 "fixCommand": "python -m pip install -e '.[mineru]'",
+                "mineruVersion": version,
             }
         dependency_status = _mineru_dependency_status()
         if not dependency_status["available"]:
@@ -486,8 +623,13 @@ def parser_runtime_status(parser_name: str) -> dict[str, Any]:
         return {
             "available": True,
             "status": "ok",
+            "reason": "",
             "detail": f"MinerU CLI 감지됨 ({version or 'version unknown'}).",
             "fixCommand": "",
+            "mineruVersion": version,
+            "fastapiVersion": dependency_status.get("fastapiVersion", ""),
+            "starletteVersion": dependency_status.get("starletteVersion", ""),
+            "expectedStarletteRange": dependency_status.get("expectedStarletteRange", ""),
         }
     return {
         "available": True,
