@@ -29,6 +29,11 @@ def _decode_response(contents):
     return json.loads(text)
 
 
+@pytest.fixture(autouse=True)
+def _labs_profile_for_direct_tool_contract_tests(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "labs")
+
+
 class _FakeSearcher:
     def __init__(self):
         self.database = SimpleNamespace(get_stats=lambda: {"total_documents": 3, "collection_name": "knowledge_hub"})
@@ -1363,6 +1368,29 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "transform_run" not in names
     assert "ask_graph" not in names
     assert "notebook_workbench_chat" not in names
+
+
+def test_default_profile_blocks_direct_calls_to_hidden_mcp_tools(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "default")
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    for tool_name, arguments in (
+        ("learning_start_or_resume_topic", {"topic": "rag"}),
+        ("crawl_web_ingest", {"url": "https://example.com", "topic": "rag"}),
+        ("run_agentic_query", {"goal": "RAG 비교"}),
+        ("build_paper_memory", {"paper_id": "2501.00001"}),
+        ("mcp_job_list", {"limit": 5}),
+    ):
+        blocked = _decode_response(asyncio.run(module.call_tool(tool_name, arguments)))
+        assert blocked["status"] == "failed"
+        assert blocked["statusMessage"] == "tool blocked by MCP profile"
+        assert blocked["payload"]["profile"] == "default"
+        assert blocked["payload"]["allowedProfiles"] == ["labs", "all"]
+        assert blocked["requestEcho"]["tool"] == tool_name
+
+    ok = _decode_response(asyncio.run(module.call_tool("search_knowledge", {"query": "rag"})))
+    assert ok["status"] == "ok"
 
 
 def test_list_tools_includes_labs_profile(monkeypatch):

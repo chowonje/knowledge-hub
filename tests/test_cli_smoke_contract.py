@@ -149,14 +149,18 @@ def test_run_release_smoke_collects_full_plan_after_first_failure(monkeypatch):
     assert calls == [
         "top_help",
         "setup",
+        "advanced_help",
+        "labs_help",
+        "papers_help",
+        "hidden_paper_help",
         "capture_help",
         "status",
         "doctor",
         "invalid_command",
     ]
     assert payload["status"] == "failed"
-    assert payload["checkedCount"] == 6
-    assert payload["passedCount"] == 5
+    assert payload["checkedCount"] == 10
+    assert payload["passedCount"] == 9
     assert [item["name"] for item in payload["commands"]] == calls
     assert payload["commands"][1]["status"] == "failed"
     assert payload["commands"][-1]["status"] == "ok"
@@ -475,11 +479,15 @@ def test_release_smoke_script_passes_with_local_contract():
     assert completed.returncode == 0, completed.stderr or completed.stdout
     payload = json.loads(completed.stdout)
     assert payload["status"] == "ok"
-    assert payload["checkedCount"] == 6
-    assert payload["passedCount"] == 6
+    assert payload["checkedCount"] == 10
+    assert payload["passedCount"] == 10
     assert [item["name"] for item in payload["commands"]] == [
         "top_help",
         "setup",
+        "advanced_help",
+        "labs_help",
+        "papers_help",
+        "hidden_paper_help",
         "capture_help",
         "status",
         "doctor",

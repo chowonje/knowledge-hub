@@ -26,24 +26,31 @@ khub labs crawl --help
 khub labs paper --help
 ```
 
-## 매일 자주 쓰는 커맨드
+## 매일 자주 쓰는 public default 커맨드
 
 ```bash
 khub doctor
 khub status
-khub dinger ingest --paper "주제"
-khub dinger ask "질문"
-khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
 khub search "주제"
 khub ask "질문"
 khub inspect corpus --json
 khub compare "비교 질문" --json
 khub trace "질문" --source paper --json
-khub agent context "작업 목표" --repo-path .
 khub discover "주제" -n 5 --judge
 khub papers list
 khub papers board-export --json
 khub index
+```
+
+## Hidden/labs/operator 메모
+
+아래 command들은 default top-level product promise가 아니라 직접 실행 가능한 hidden compatibility 또는 labs/operator surface입니다.
+
+```bash
+khub dinger ingest --paper "주제"
+khub dinger ask "질문"
+khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
+khub agent context "작업 목표" --repo-path .
 ```
 
 ## Evidence-substrate facades
@@ -577,10 +584,12 @@ khub mcp
 
 용도:
 - MCP 서버 실행
+- hidden top-level command로 직접 실행 가능하지만 default `khub --help`에는 표시하지 않는다
 
-MCP tool discovery:
+MCP tool discovery and calls:
 - default profile: read/retrieval/context and paper lookup tools only (`search_knowledge`, `ask_knowledge`, `build_task_context`, paper search/detail/citation/reference helpers, paper-memory read helpers)
 - labs/all profile: learning, crawl ingest, agentic execution, paper build/index, async job, ops, ontology, conflict/merge, transform, and workbench tools
+- default profile rejects direct calls to known labs/operator tool names; set `KHUB_MCP_PROFILE=labs|all` before launching the server when those tools are intended
 
 ```bash
 KHUB_MCP_PROFILE=default khub mcp
