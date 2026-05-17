@@ -79,6 +79,36 @@ def _summary_payload(**overrides: object) -> dict:
     return payload
 
 
+def _source_aligned_summary_payload() -> dict:
+    return _summary_payload(
+        counts={
+            "totalCandidates": 86,
+            "byLayer": {
+                "sectionspan": 61,
+                "figure_caption": 11,
+                "equation_quote": 9,
+                "table_region": 5,
+            },
+            "strictEligibleCandidates": 0,
+            "citationGradeCandidates": 0,
+            "runtimeEvidenceCandidates": 0,
+            "sectionspanOriginalPdfOffsetReadyForReviewRows": 61,
+        },
+        releaseCandidateAssessment={
+            "candidateLayerReviewReady": True,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "mainBlockers": [
+                "equation_quote_alignment_missing",
+                "table_cell_row_column_bbox_provenance_missing",
+                "figure_region_link_unverified",
+                "sectionspan_pdf_offsets_require_human_review_before_strict_promotion",
+                "non_sectionspan_layers_lack_original_pdf_offsets",
+            ],
+        },
+    )
+
+
 def _eval_payload(**overrides: object) -> dict:
     payload = {
         "schema": "knowledge-hub.paper.complex-qa-eval-design.v1",
@@ -137,6 +167,53 @@ def test_candidate_layer_blocker_backlog_classifies_open_blockers_and_validates_
     assert equation["affected_layers"] == ["equation_quote"]
     assert equation["affected_candidate_count"] == 9
     assert equation["affected_eval_question_count"] == 1
+
+
+def test_candidate_layer_blocker_backlog_classifies_source_aligned_sectionspan_blockers(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(
+        tmp_path,
+        gate=_gate_payload(
+            gate={
+                "candidateLayerReviewReady": True,
+                "strictEvidenceReady": False,
+                "parserRoutingReady": False,
+                "answerIntegrationReady": False,
+                "blockers": [
+                    "sectionspan_pdf_offsets_require_human_review_before_strict_promotion",
+                    "non_sectionspan_layers_lack_original_pdf_offsets",
+                    "candidate_layers_are_report_only",
+                    "runtime_promotion_disabled_for_tranche",
+                ],
+            }
+        ),
+        summary=_source_aligned_summary_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    sectionspan = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "sectionspan_pdf_offsets_require_human_review_before_strict_promotion"
+    )
+    non_sectionspan = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "non_sectionspan_layers_lack_original_pdf_offsets"
+    )
+    assert sectionspan["priority"] == "P0"
+    assert sectionspan["affected_layers"] == ["sectionspan"]
+    assert sectionspan["affected_candidate_count"] == 61
+    assert sectionspan["recommendedNextTranche"] == "sectionspan_pdf_offset_human_review_gate"
+    assert non_sectionspan["priority"] == "P0"
+    assert non_sectionspan["affected_layers"] == ["figure_caption", "equation_quote", "table_region"]
+    assert non_sectionspan["affected_candidate_count"] == 25
+    assert non_sectionspan["recommendedNextTranche"] == "non_sectionspan_original_pdf_offset_feasibility_audit"
 
 
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:

@@ -77,6 +77,32 @@ _BLOCKER_RULES = {
         ],
         "stopRule": "stop_if_only_generated_mineru_markdown_offsets_are_available",
     },
+    "sectionspan_pdf_offsets_require_human_review_before_strict_promotion": {
+        "priority": "P0",
+        "layers": ["sectionspan"],
+        "category": "source_span_promotion_review",
+        "recommendedNextTranche": "sectionspan_pdf_offset_human_review_gate",
+        "evidenceNeededBeforePromotion": [
+            "human review of recovered original-PDF SectionSpan offsets",
+            "explicit strict-promotion gate for SectionSpan only",
+            "tests proving reviewed SectionSpan rows do not authorize other candidate types",
+            "runtime tests preserving fail-closed no-answer behavior",
+        ],
+        "stopRule": "stop_if_human_review_or_explicit_promotion_approval_is_missing",
+    },
+    "non_sectionspan_layers_lack_original_pdf_offsets": {
+        "priority": "P0",
+        "layers": ["figure_caption", "equation_quote", "table_region"],
+        "category": "source_span_provenance",
+        "recommendedNextTranche": "non_sectionspan_original_pdf_offset_feasibility_audit",
+        "evidenceNeededBeforePromotion": [
+            "figure caption original-PDF source span recovery",
+            "equation quote original-PDF source span recovery",
+            "table caption or table region original-PDF source span recovery",
+            "explicit distinction from SectionSpan-only source alignment",
+        ],
+        "stopRule": "stop_if_non_sectionspan_candidates_only_have_generated_markdown_offsets",
+    },
     "candidate_layers_are_report_only": {
         "priority": "P2",
         "layers": ["sectionspan", "figure_caption", "equation_quote", "table_region"],
@@ -149,6 +175,12 @@ def _affected_candidate_count(blocker: str, layers: list[str], summary: dict[str
         return _safe_int(by_layer.get("table_region"))
     if blocker == "figure_region_link_unverified":
         return _safe_int(by_layer.get("figure_caption"))
+    if blocker == "sectionspan_pdf_offsets_require_human_review_before_strict_promotion":
+        return _safe_int((summary.get("counts") or {}).get("sectionspanOriginalPdfOffsetReadyForReviewRows")) or _safe_int(
+            by_layer.get("sectionspan")
+        )
+    if blocker == "non_sectionspan_layers_lack_original_pdf_offsets":
+        return sum(_safe_int(by_layer.get(layer)) for layer in ("figure_caption", "equation_quote", "table_region"))
     return sum(_safe_int(by_layer.get(layer)) for layer in layers)
 
 
