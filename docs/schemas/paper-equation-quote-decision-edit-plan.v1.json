@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.equation-quote-decision-edit-plan.v1",
+  "title": "EquationQuote Decision Edit Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "editRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.equation-quote-decision-edit-plan.v1" },
+    "status": { "type": "string", "enum": ["edit_plan_ready", "no_edit_rows", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equationQuoteDecisionRecommendationPackReport",
+        "equationQuoteDecisionRecommendationPackSchema",
+        "equationQuoteDecisionsFile",
+        "equationQuoteDecisionInputRows"
+      ],
+      "properties": {
+        "equationQuoteDecisionRecommendationPackReport": { "type": "string" },
+        "equationQuoteDecisionRecommendationPackSchema": { "type": "string" },
+        "equationQuoteDecisionsFile": { "type": "string" },
+        "equationQuoteDecisionInputRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "editRows",
+        "readyForManualEditRows",
+        "blockedMissingDecisionFileRows",
+        "blockedRecommendationNotAllowedRows",
+        "currentNeedsReviewRows",
+        "currentNonNeedsReviewRows",
+        "proposedAcceptDiagnosticContextRows",
+        "proposedRejectRows",
+        "proposedReextractRequestRows",
+        "proposedKeepBlockedRows",
+        "proposedNeedsReviewRows",
+        "acceptedHumanDecisionRows",
+        "sourceSpanCreatedRows",
+        "originalPdfOffsetRecoveredRows",
+        "equationSemanticsInterpretedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "unsafeUpstreamFlagCount",
+        "byEditStatus",
+        "byCurrentDecision",
+        "byRecommendedDecision",
+        "byPaper",
+        "byActionType"
+      ],
+      "properties": {
+        "editRows": { "type": "integer", "minimum": 0 },
+        "readyForManualEditRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingDecisionFileRows": { "type": "integer", "minimum": 0 },
+        "blockedRecommendationNotAllowedRows": { "type": "integer", "minimum": 0 },
+        "currentNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "currentNonNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "proposedAcceptDiagnosticContextRows": { "type": "integer", "minimum": 0 },
+        "proposedRejectRows": { "type": "integer", "minimum": 0 },
+        "proposedReextractRequestRows": { "type": "integer", "minimum": 0 },
+        "proposedKeepBlockedRows": { "type": "integer", "minimum": 0 },
+        "proposedNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "acceptedHumanDecisionRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "originalPdfOffsetRecoveredRows": { "const": 0 },
+        "equationSemanticsInterpretedRows": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byEditStatus": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byCurrentDecision": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byRecommendedDecision": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byPaper": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byActionType": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "editPlanReady",
+        "manualDecisionFileEditRequired",
+        "decisionFileModified",
+        "humanReviewComplete",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "editPlanReady": { "type": "boolean" },
+        "manualDecisionFileEditRequired": { "type": "boolean" },
+        "decisionFileModified": { "const": false },
+        "humanReviewComplete": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["manual_edit_still_required", "no_equation_quote_decision_recommendations", "blocked"]
+        },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "decisionEditPlanOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "decisionEditPlanOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "editRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "edit_row_id",
+          "source_recommendation_row_id",
+          "source_review_sheet_row_id",
+          "source_action_card_id",
+          "source_equation_quote_candidate_id",
+          "paper_id",
+          "candidate_text",
+          "equation_label",
+          "action_type",
+          "action_status",
+          "priority",
+          "current_decision",
+          "recommended_decision",
+          "recommended_decision_reason",
+          "recommendation_confidence",
+          "allowed_decisions",
+          "edit_status",
+          "reviewer_required",
+          "notes_required",
+          "human_decision_required",
+          "accepted_as_human_decision",
+          "decision_file_patch_hint",
+          "source_span_created",
+          "original_pdf_offset_recovered",
+          "equation_semantics_interpreted",
+          "evidence_tier",
+          "report_only",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "edit_row_id": { "type": "string" },
+          "source_recommendation_row_id": { "type": "string" },
+          "source_review_sheet_row_id": { "type": "string" },
+          "source_action_card_id": { "type": "string" },
+          "source_equation_quote_candidate_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "equation_label": { "type": "string" },
+          "action_type": { "type": "string" },
+          "action_status": { "type": "string" },
+          "priority": { "type": "string" },
+          "current_decision": { "type": "string" },
+          "recommended_decision": { "type": "string" },
+          "recommended_decision_reason": { "type": "string" },
+          "recommendation_confidence": { "type": "string" },
+          "allowed_decisions": { "type": "array", "items": { "type": "string" } },
+          "edit_status": {
+            "type": "string",
+            "enum": [
+              "ready_for_manual_edit",
+              "blocked_missing_decision_file_row",
+              "blocked_recommendation_not_allowed"
+            ]
+          },
+          "reviewer_required": { "type": "boolean" },
+          "notes_required": { "type": "boolean" },
+          "human_decision_required": { "const": true },
+          "accepted_as_human_decision": { "const": false },
+          "decision_file_patch_hint": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_review_sheet_row_id", "decision", "reviewer", "notes"],
+            "properties": {
+              "source_review_sheet_row_id": { "type": "string" },
+              "decision": { "type": "string" },
+              "reviewer": { "type": "string" },
+              "notes": { "type": "string" }
+            }
+          },
+          "source_span_created": { "const": false },
+          "original_pdf_offset_recovered": { "const": false },
+          "equation_semantics_interpreted": { "const": false },
+          "evidence_tier": { "const": "equation_quote_decision_edit_plan_only" },
+          "report_only": { "const": true },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
