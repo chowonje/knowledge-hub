@@ -79,6 +79,7 @@ def test_papers_help_keeps_operator_remediation_hidden():
     assert "repair-source" not in commands
     assert "repair-source-queue" not in commands
     assert "materialize-parsed" not in commands
+    assert "layout-parser-pilot" not in commands
     assert "review-card" not in commands
     assert "review-card-apply" not in commands
     assert "review-card-apply-batch" not in commands

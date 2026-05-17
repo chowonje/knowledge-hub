@@ -50,6 +50,7 @@ khub index
 ```bash
 khub dinger ingest --paper "주제"
 khub dinger ask "질문"
+khub paper layout-parser-pilot --paper-id 1706.03762 --parser pymupdf --json
 khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
 khub agent context "작업 목표" --repo-path .
 ```
@@ -217,6 +218,19 @@ khub papers extraction-report --degraded-only --limit 50 --json
 - parser, page/text coverage, OCR 적용 여부, column probe, table/figure/equation signal, degraded reason을 `knowledge-hub.paper.extraction-report.v1` payload로 반환한다.
 - parsed artifact가 없으면 실패하지 않고 `parsed_artifact_missing` degraded diagnostic으로 보고한다.
 - 이 command는 parser 실행, source repair, indexing, embedding, SQLite mutation을 하지 않는다.
+
+### `khub paper layout-parser-pilot` (hidden operator)
+
+```bash
+khub paper layout-parser-pilot --paper-id 1706.03762 --json
+khub paper layout-parser-pilot --paper-id 1706.03762 --parser pymupdf --run --output-dir ~/.khub/reports/layout-parser-pilot/manual --json
+```
+
+용도:
+- 명시한 paper allowlist에 대해 PyMuPDF / OpenDataLoader / MinerU 후보를 비교한다.
+- 기본값은 plan-only이며, `--run`을 줘도 parser output은 configured `papers_dir/parsed`가 아니라 지정한 isolated report root 아래에만 쓴다.
+- parser install 누락, source PDF 누락, parser failure를 schema-backed result에 남긴다.
+- 이 command는 SQLite mutation, reindex, reembed, global parser routing, source acquisition, strict evidence policy 변경을 하지 않는다.
 
 ### `khub ask`
 

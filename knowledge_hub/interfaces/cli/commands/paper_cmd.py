@@ -15,6 +15,7 @@ khub paper - 논문 개별 관리 명령어
   khub paper review-card-export  audit/rebuild 대상 paper id export
   khub paper canon-quality-audit AI canon 9편 전용 deterministic quality audit
   khub paper materialize-parsed parsed artifact dry-run/apply backfill
+  khub paper layout-parser-pilot isolated parser comparison report
   khub paper repair-source       known source contamination relink + artifact rebuild
   khub paper repair-source-queue paper source repair action queue 적재
 
@@ -103,6 +104,11 @@ from knowledge_hub.papers.corpus_bootstrap import bootstrap_corpus_artifacts
 from knowledge_hub.papers.extraction_diagnostics import (
     EXTRACTION_REPORT_SCHEMA_ID,
     build_extraction_report,
+)
+from knowledge_hub.papers.layout_parser_pilot import (
+    LAYOUT_PARSER_PILOT_SCHEMA_ID,
+    SUPPORTED_LAYOUT_PILOT_PARSERS,
+    run_layout_parser_pilot,
 )
 from knowledge_hub.papers.parsed_materialization import (
     PARSED_MATERIALIZATION_SCHEMA_ID,
@@ -259,6 +265,57 @@ def paper_materialize_parsed(ctx, paper_ids, parser, apply, overwrite, as_json):
             f"- {item.get('paperId')} status={item.get('status')} "
             f"reason={item.get('reason') or '-'} action={item.get('action') or '-'}"
         )
+
+
+@paper_group.command("layout-parser-pilot", hidden=True)
+@click.option("--paper-id", "paper_ids", multiple=True, help="Compare one registered paper id; repeat for a bounded pilot set.")
+@click.option(
+    "--parser",
+    "parsers",
+    multiple=True,
+    type=click.Choice(SUPPORTED_LAYOUT_PILOT_PARSERS),
+    help="Parser candidate to compare; repeat to restrict the pilot. Defaults to all supported candidates.",
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(file_okay=False, dir_okay=True, path_type=Path),
+    default=None,
+    help="Isolated report/artifact output root. Defaults under ~/.khub/reports/layout-parser-pilot/.",
+)
+@click.option("--run/--plan", default=False, show_default=True, help="Run parsers into isolated output root; default plans only.")
+@click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
+@click.pass_context
+def paper_layout_parser_pilot(ctx, paper_ids, parsers, output_dir, run, as_json):
+    """Compare parser candidates in an isolated report-only pilot."""
+
+    khub = ctx.obj["khub"]
+    payload = run_layout_parser_pilot(
+        sqlite_db=_sqlite_db(khub.config, khub=khub),
+        papers_dir=khub.config.papers_dir,
+        paper_ids=list(paper_ids or []),
+        parsers=list(parsers or []),
+        output_dir=output_dir,
+        run=bool(run),
+    )
+    _validate_cli_payload(khub.config, payload, LAYOUT_PARSER_PILOT_SCHEMA_ID)
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper layout parser pilot[/bold] status={payload.get('status')} "
+        f"planned={counts.get('planned', 0)} ok={counts.get('ok', 0)} "
+        f"blocked={counts.get('blocked', 0)} failed={counts.get('failed', 0)}"
+    )
+    if not run:
+        console.print("[dim]plan only; pass --run to write isolated parser outputs[/dim]")
+    for paper in list(payload.get("papers") or [])[:10]:
+        parser_summary = ", ".join(
+            f"{item.get('parser')}:{item.get('status')}/{item.get('reason')}"
+            for item in list(paper.get("parsers") or [])
+        )
+        console.print(f"- {paper.get('paperId')} {parser_summary}")
 
 
 def _paper_card_feedback_context(*, khub, paper_id: str) -> dict[str, Any]:
