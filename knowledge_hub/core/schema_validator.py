@@ -44,6 +44,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.figure-caption-candidate-report.v1": "paper-figure-caption-candidate-report.v1.json",
     "knowledge-hub.paper.equation-quote-candidate-report.v1": "paper-equation-quote-candidate-report.v1.json",
     "knowledge-hub.paper.table-region-candidate-report.v1": "paper-table-region-candidate-report.v1.json",
+    "knowledge-hub.paper.structured-candidate-summary.v1": "paper-structured-candidate-summary.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
