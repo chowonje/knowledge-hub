@@ -206,6 +206,7 @@ _DISCOVER_QUERY_RESCUES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
         ("Mamba", "RetNet", "Hyena", "RWKV", "linear attention"),
     ),
 )
+_AMBIGUOUS_SHORT_SOURCE_ALIASES = {"cnn", "gpt", "rag"}
 _EXPLICIT_TITLE_RESCUES = {
     normalize_term("Attention Is All You Need"): {
         "paper_id": "1706.03762",
@@ -475,6 +476,18 @@ def _bounded_entity_rescue_forms(entities: list[str]) -> list[str]:
     return _dedupe_lines(rescue, limit=6)
 
 
+def _is_ambiguous_short_source_alias(value: Any) -> bool:
+    return normalize_term(value) in _AMBIGUOUS_SHORT_SOURCE_ALIASES
+
+
+def _has_ambiguous_short_source_alias(values: list[str]) -> bool:
+    return any(_is_ambiguous_short_source_alias(value) for value in values)
+
+
+def _remove_ambiguous_short_source_alias_forms(values: list[str]) -> list[str]:
+    return [value for value in values if not _is_ambiguous_short_source_alias(value)]
+
+
 def _compare_query_rescue_forms(query: str) -> list[str]:
     text = _clean_text(query)
     if not text:
@@ -502,7 +515,11 @@ def _discover_query_rescue_forms(query: str) -> list[str]:
 def _lookup_seed_forms(query: str, *, entities: list[str], bounded_rescue_forms: list[str], family: str) -> list[str]:
     title_candidate = extract_lookup_title_candidate(query)
     seeds: list[str] = []
-    if family != PAPER_FAMILY_COMPARE and looks_like_explicit_paper_title(title_candidate):
+    if (
+        family != PAPER_FAMILY_COMPARE
+        and looks_like_explicit_paper_title(title_candidate)
+        and not _is_ambiguous_short_source_alias(title_candidate)
+    ):
         seeds.append(title_candidate)
     if family == PAPER_FAMILY_COMPARE:
         rescued_entities = {
@@ -532,9 +549,11 @@ def _prefer_explainer_representative_candidates(candidates: list[dict[str, Any]]
     return role_appropriate or candidates
 
 
-def _explicit_title_rescue(title_candidate: str) -> tuple[list[str], list[str]]:
+def _explicit_title_rescue(title_candidate: str, *, family: str = "") -> tuple[list[str], list[str]]:
     token = normalize_term(title_candidate)
     if not token:
+        return [], []
+    if family != PAPER_FAMILY_COMPARE and token in _AMBIGUOUS_SHORT_SOURCE_ALIASES:
         return [], []
     row = _EXPLICIT_TITLE_RESCUES.get(token) or {}
     paper_id = _clean_text(row.get("paper_id"))
@@ -694,24 +713,33 @@ def build_rule_based_query_frame(
     # Prefer bounded rescue forms here so lookup can recover the second paper even
     # when the ontology lacks the compare-side alias. Lookup queries also try a
     # stripped title candidate before the raw query so title-like prompts stay scoped.
+    ambiguous_lookup_alias = family == PAPER_FAMILY_LOOKUP and (
+        _is_ambiguous_short_source_alias(title_candidate) or _has_ambiguous_short_source_alias(entities)
+    )
     lookup_seed = _lookup_seed_forms(
         query,
         entities=entities,
         bounded_rescue_forms=bounded_rescue_forms,
         family=family,
     )
-    lookup_forms = _dedupe_lines([*lookup_seed, *bounded_rescue_forms], limit=10 if family == PAPER_FAMILY_COMPARE else 6)
+    lookup_rescue_forms = [] if ambiguous_lookup_alias else bounded_rescue_forms
+    if ambiguous_lookup_alias:
+        lookup_seed = _remove_ambiguous_short_source_alias_forms(lookup_seed)
+    lookup_forms = _dedupe_lines([*lookup_seed, *lookup_rescue_forms], limit=10 if family == PAPER_FAMILY_COMPARE else 6)
     if family in {PAPER_FAMILY_LOOKUP, PAPER_FAMILY_COMPARE}:
         card_lookup_ids, card_lookup_titles = resolve_lookup(lookup_forms, sqlite_db=sqlite_db)
         lookup_ids, lookup_titles = list(card_lookup_ids), list(card_lookup_titles)
         if family == PAPER_FAMILY_LOOKUP and title_candidate:
-            local_lookup_ids, local_lookup_titles = resolve_lookup_from_local_titles(
-                [title_candidate],
-                sqlite_db=sqlite_db,
-            )
-            strict_title_lookup = looks_like_explicit_paper_title(title_candidate)
+            if _is_ambiguous_short_source_alias(title_candidate):
+                local_lookup_ids, local_lookup_titles = [], []
+            else:
+                local_lookup_ids, local_lookup_titles = resolve_lookup_from_local_titles(
+                    [title_candidate],
+                    sqlite_db=sqlite_db,
+                )
+            strict_title_lookup = looks_like_explicit_paper_title(title_candidate) and not _is_ambiguous_short_source_alias(title_candidate)
             if strict_title_lookup:
-                rescue_ids, rescue_titles = _explicit_title_rescue(title_candidate)
+                rescue_ids, rescue_titles = _explicit_title_rescue(title_candidate, family=family)
                 strict_card_lookup_ids, strict_card_lookup_titles = resolve_lookup([title_candidate], sqlite_db=sqlite_db)
                 strict_lookup_ids = _dedupe_lines(
                     [*rescue_ids, *local_lookup_ids, *strict_card_lookup_ids],
@@ -743,7 +771,7 @@ def build_rule_based_query_frame(
                 limit=10,
             )
             for candidate in compare_lookup_forms:
-                rescue_ids, rescue_titles = _explicit_title_rescue(candidate)
+                rescue_ids, rescue_titles = _explicit_title_rescue(candidate, family=family)
                 local_ids, local_titles = resolve_lookup_from_local_titles([candidate], sqlite_db=sqlite_db)
                 strict_card_ids, strict_card_titles = resolve_lookup([candidate], sqlite_db=sqlite_db)
                 compare_rescue_ids.extend(rescue_ids)
