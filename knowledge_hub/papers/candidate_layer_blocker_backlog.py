@@ -26,6 +26,9 @@ TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID = (
 SECTIONSPAN_PDF_OFFSET_HUMAN_REVIEW_GATE_SCHEMA_ID = (
     "knowledge-hub.paper.sectionspan-pdf-offset-human-review-gate.v1"
 )
+SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_DECISION_PROPOSAL_SCHEMA_ID = (
+    "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-decision-proposal.v1"
+)
 
 _BLOCKER_RULES = {
     "equation_quote_alignment_missing": {
@@ -108,6 +111,19 @@ _BLOCKER_RULES = {
             "separate explicit apply tranche before any strict/runtime evidence use",
         ],
         "stopRule": "stop_if_any_sectionspan_pdf_offset_rows_are_still_pending_human_review",
+    },
+    "sectionspan_selected_review_decision_file_required": {
+        "priority": "P0",
+        "layers": ["sectionspan"],
+        "category": "source_span_promotion_review",
+        "recommendedNextTranche": "manual_record_selected_sectionspan_review_decisions",
+        "evidenceNeededBeforePromotion": [
+            "explicit human decision file for the selected SectionSpan review rows",
+            "approval or rejection recorded with reviewer/notes",
+            "decision record proving proposals were not consumed automatically",
+            "separate explicit apply tranche before any strict/runtime evidence use",
+        ],
+        "stopRule": "stop_if_selected_review_decision_proposals_have_not_been_accepted_by_a_human_decision_file",
     },
     "non_sectionspan_layers_lack_original_pdf_offsets": {
         "priority": "P0",
@@ -258,6 +274,7 @@ def _affected_candidate_count(
     summary: dict[str, Any],
     table_cell_result: dict[str, Any] | None = None,
     sectionspan_human_review_gate: dict[str, Any] | None = None,
+    sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
 ) -> int:
     by_layer = _candidate_counts_by_layer(summary)
     table_cell_counts = dict((table_cell_result or {}).get("counts") or {})
@@ -266,6 +283,8 @@ def _affected_candidate_count(
         return _safe_int(sectionspan_gate_counts.get("pendingHumanReviewRows")) or _safe_int(
             sectionspan_gate_counts.get("gateRows")
         )
+    if blocker == "sectionspan_selected_review_decision_file_required":
+        return _safe_int(((sectionspan_selected_decision_proposal or {}).get("counts") or {}).get("proposalRows"))
     if blocker == "table_cell_isolated_extractor_approval_required":
         return _safe_int(table_cell_counts.get("approvalRequiredRows")) or _safe_int(table_cell_counts.get("targetRows"))
     if blocker == "table_cell_isolated_extractor_unavailable_or_blocked":
@@ -327,6 +346,7 @@ def _backlog_item(
     eval_design: dict[str, Any],
     table_cell_result: dict[str, Any] | None = None,
     sectionspan_human_review_gate: dict[str, Any] | None = None,
+    sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     rule = dict(_BLOCKER_RULES.get(blocker) or {})
     layers = list(rule.get("layers") or [])
@@ -343,6 +363,7 @@ def _backlog_item(
             summary,
             table_cell_result,
             sectionspan_human_review_gate,
+            sectionspan_selected_decision_proposal,
         ),
         "affected_eval_question_count": _affected_question_count(blocker, layers, eval_design),
         "evidenceNeededBeforePromotion": list(rule.get("evidenceNeededBeforePromotion") or []),
@@ -413,12 +434,28 @@ def _sectionspan_human_review_gate_blockers(result: dict[str, Any]) -> list[str]
     return []
 
 
+def _sectionspan_selected_decision_proposal_blockers(result: dict[str, Any]) -> list[str]:
+    if not result:
+        return []
+    counts = dict(result.get("counts") or {})
+    gate = dict(result.get("gate") or {})
+    status = str(result.get("status") or "")
+    if (
+        status == "decision_proposal_ready"
+        or _safe_int(counts.get("proposalRows"))
+        or (gate.get("decisionProposalReady") and not gate.get("humanReviewComplete"))
+    ):
+        return ["sectionspan_selected_review_decision_file_required"]
+    return []
+
+
 def _collect_blockers(
     gate: dict[str, Any],
     summary: dict[str, Any],
     eval_design: dict[str, Any],
     table_cell_result: dict[str, Any] | None = None,
     sectionspan_human_review_gate: dict[str, Any] | None = None,
+    sectionspan_selected_decision_proposal: dict[str, Any] | None = None,
 ) -> list[str]:
     blockers: list[str] = []
     blockers.extend(str(item) for item in list((gate.get("gate") or {}).get("blockers") or []))
@@ -427,6 +464,7 @@ def _collect_blockers(
         blockers.extend(str(item) for item in list(question.get("blocked_by_current_candidates") or []))
     blockers.extend(_table_cell_result_blockers(table_cell_result or {}))
     blockers.extend(_sectionspan_human_review_gate_blockers(sectionspan_human_review_gate or {}))
+    blockers.extend(_sectionspan_selected_decision_proposal_blockers(sectionspan_selected_decision_proposal or {}))
     return [item for item in dict.fromkeys(blockers) if item]
 
 
@@ -437,6 +475,7 @@ def build_candidate_layer_blocker_backlog(
     complex_qa_eval_design_report: str | Path,
     table_cell_isolated_extractor_pilot_result_report: str | Path | None = None,
     sectionspan_pdf_offset_human_review_gate_report: str | Path | None = None,
+    sectionspan_pdf_offset_selected_review_decision_proposal_report: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build a report-only backlog over current candidate-layer blockers."""
 
@@ -460,6 +499,14 @@ def build_candidate_layer_blocker_backlog(
     sectionspan_human_review_gate = (
         _read_json(sectionspan_human_review_gate_path) if sectionspan_human_review_gate_path else {}
     )
+    sectionspan_selected_decision_proposal_path = (
+        Path(str(sectionspan_pdf_offset_selected_review_decision_proposal_report)).expanduser()
+        if sectionspan_pdf_offset_selected_review_decision_proposal_report
+        else None
+    )
+    sectionspan_selected_decision_proposal = (
+        _read_json(sectionspan_selected_decision_proposal_path) if sectionspan_selected_decision_proposal_path else {}
+    )
     schema_violations = _schema_violations(gate, summary, eval_design)
     if table_cell_result and table_cell_result.get("schema") != TABLE_CELL_ISOLATED_EXTRACTOR_PILOT_RESULT_SCHEMA_ID:
         schema_violations.append("table_cell_isolated_extractor_pilot_result_schema_mismatch")
@@ -468,9 +515,30 @@ def build_candidate_layer_blocker_backlog(
         and sectionspan_human_review_gate.get("schema") != SECTIONSPAN_PDF_OFFSET_HUMAN_REVIEW_GATE_SCHEMA_ID
     ):
         schema_violations.append("sectionspan_pdf_offset_human_review_gate_schema_mismatch")
-    blockers = _collect_blockers(gate, summary, eval_design, table_cell_result, sectionspan_human_review_gate)
+    if (
+        sectionspan_selected_decision_proposal
+        and sectionspan_selected_decision_proposal.get("schema")
+        != SECTIONSPAN_PDF_OFFSET_SELECTED_REVIEW_DECISION_PROPOSAL_SCHEMA_ID
+    ):
+        schema_violations.append("sectionspan_pdf_offset_selected_review_decision_proposal_schema_mismatch")
+    blockers = _collect_blockers(
+        gate,
+        summary,
+        eval_design,
+        table_cell_result,
+        sectionspan_human_review_gate,
+        sectionspan_selected_decision_proposal,
+    )
     items = [
-        _backlog_item(index, blocker, summary, eval_design, table_cell_result, sectionspan_human_review_gate)
+        _backlog_item(
+            index,
+            blocker,
+            summary,
+            eval_design,
+            table_cell_result,
+            sectionspan_human_review_gate,
+            sectionspan_selected_decision_proposal,
+        )
         for index, blocker in enumerate(blockers, start=1)
     ]
     by_priority = Counter(str(item.get("priority") or "") for item in items)
@@ -488,11 +556,17 @@ def build_candidate_layer_blocker_backlog(
             "complexQaEvalDesignReport": str(eval_path),
             "tableCellIsolatedExtractorPilotResultReport": str(table_cell_result_path or ""),
             "sectionspanPdfOffsetHumanReviewGateReport": str(sectionspan_human_review_gate_path or ""),
+            "sectionspanPdfOffsetSelectedReviewDecisionProposalReport": str(
+                sectionspan_selected_decision_proposal_path or ""
+            ),
             "candidateLayerReviewGateSchema": str(gate.get("schema") or ""),
             "structuredSummarySchema": str(summary.get("schema") or ""),
             "complexQaEvalDesignSchema": str(eval_design.get("schema") or ""),
             "tableCellIsolatedExtractorPilotResultSchema": str(table_cell_result.get("schema") or ""),
             "sectionspanPdfOffsetHumanReviewGateSchema": str(sectionspan_human_review_gate.get("schema") or ""),
+            "sectionspanPdfOffsetSelectedReviewDecisionProposalSchema": str(
+                sectionspan_selected_decision_proposal.get("schema") or ""
+            ),
         },
         "counts": {
             "backlogItemCount": len(items),
@@ -519,6 +593,17 @@ def build_candidate_layer_blocker_backlog(
             ),
             "sectionspanHumanReviewApprovedRows": _safe_int(
                 (sectionspan_human_review_gate.get("counts") or {}).get("approvedForLaterPromotionDesignRows")
+            ),
+            "sectionspanSelectedDecisionProposalRows": _safe_int(
+                (sectionspan_selected_decision_proposal.get("counts") or {}).get("proposalRows")
+            ),
+            "sectionspanSelectedDecisionProposalApproveRows": _safe_int(
+                (sectionspan_selected_decision_proposal.get("counts") or {}).get(
+                    "proposedApproveForLaterPromotionDesignRows"
+                )
+            ),
+            "sectionspanSelectedDecisionAcceptedRows": _safe_int(
+                (sectionspan_selected_decision_proposal.get("counts") or {}).get("acceptedHumanDecisionRows")
             ),
         },
         "gate": {
@@ -618,6 +703,11 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Optional path to the latest SectionSpan PDF offset human review gate JSON.",
     )
+    parser.add_argument(
+        "--sectionspan-pdf-offset-selected-review-decision-proposal-report",
+        default="",
+        help="Optional path to the latest SectionSpan selected review decision proposal JSON.",
+    )
     parser.add_argument("--output-dir", default="", help="Directory for local JSON/Markdown reports.")
     parser.add_argument("--json", action="store_true", help="Print backlog payload as JSON.")
     args = parser.parse_args(argv)
@@ -628,6 +718,9 @@ def main(argv: list[str] | None = None) -> int:
         complex_qa_eval_design_report=args.complex_qa_eval_design_report,
         table_cell_isolated_extractor_pilot_result_report=args.table_cell_isolated_extractor_pilot_result_report or None,
         sectionspan_pdf_offset_human_review_gate_report=args.sectionspan_pdf_offset_human_review_gate_report or None,
+        sectionspan_pdf_offset_selected_review_decision_proposal_report=(
+            args.sectionspan_pdf_offset_selected_review_decision_proposal_report or None
+        ),
     )
     paths: dict[str, str] = {}
     if args.output_dir:

@@ -31,9 +31,11 @@
         "candidateLayerReviewGateReport": { "type": "string" },
         "structuredSummaryReport": { "type": "string" },
         "complexQaEvalDesignReport": { "type": "string" },
+        "sectionspanPdfOffsetSelectedReviewDecisionProposalReport": { "type": "string" },
         "candidateLayerReviewGateSchema": { "type": "string" },
         "structuredSummarySchema": { "type": "string" },
-        "complexQaEvalDesignSchema": { "type": "string" }
+        "complexQaEvalDesignSchema": { "type": "string" },
+        "sectionspanPdfOffsetSelectedReviewDecisionProposalSchema": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -61,7 +63,10 @@
         "strictEligibleCandidates": { "const": 0 },
         "citationGradeCandidates": { "const": 0 },
         "runtimeEvidenceCandidates": { "const": 0 },
-        "currentRuntimeAnswerableQuestions": { "const": 0 }
+        "currentRuntimeAnswerableQuestions": { "const": 0 },
+        "sectionspanSelectedDecisionProposalRows": { "type": "integer", "minimum": 0 },
+        "sectionspanSelectedDecisionProposalApproveRows": { "type": "integer", "minimum": 0 },
+        "sectionspanSelectedDecisionAcceptedRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },

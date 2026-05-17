@@ -193,6 +193,43 @@ def _sectionspan_human_review_gate_payload(**overrides: object) -> dict:
     return payload
 
 
+def _sectionspan_selected_decision_proposal_payload(**overrides: object) -> dict:
+    payload = {
+        "schema": "knowledge-hub.paper.sectionspan-pdf-offset-selected-review-decision-proposal.v1",
+        "status": "decision_proposal_ready",
+        "counts": {
+            "proposalRows": 12,
+            "proposedApproveForLaterPromotionDesignRows": 12,
+            "proposedNeedsReviewRows": 0,
+            "acceptedHumanDecisionRows": 0,
+            "strictEligibleRows": 0,
+            "citationGradeRows": 0,
+            "runtimeEvidenceRows": 0,
+        },
+        "gate": {
+            "decisionProposalReady": True,
+            "humanReviewComplete": False,
+            "strictEvidenceReady": False,
+            "parserRoutingReady": False,
+            "answerIntegrationReady": False,
+            "runtimePromotionAllowed": False,
+        },
+        "policy": {
+            "reportOnly": True,
+            "decisionProposalOnly": True,
+            "strictEvidenceCreated": False,
+            "runtimePromotionAllowed": False,
+            "parserRoutingChanged": False,
+            "canonicalParsedArtifactsWritten": False,
+            "databaseMutation": False,
+            "reindexOrReembed": False,
+            "answerIntegrationChanged": False,
+        },
+    }
+    payload.update(overrides)
+    return payload
+
+
 def _reports(root: Path, *, gate: dict | None = None, summary: dict | None = None, eval_design: dict | None = None) -> tuple[Path, Path, Path]:
     gate_path = _write(root, "candidate-layer-review-gate.json", gate or _gate_payload())
     summary_path = _write(root, "structured-candidate-summary.json", summary or _summary_payload())
@@ -636,6 +673,56 @@ def test_candidate_layer_blocker_backlog_blocks_wrong_sectionspan_human_review_g
     assert payload["status"] == "blocked"
     assert payload["gate"]["decision"] == "blocked"
     assert "sectionspan_pdf_offset_human_review_gate_schema_mismatch" in payload["gate"]["schemaViolations"]
+
+
+def test_candidate_layer_blocker_backlog_includes_selected_decision_file_required_gate(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    proposal = _write(
+        tmp_path / "inputs",
+        "sectionspan-selected-decision-proposal.json",
+        _sectionspan_selected_decision_proposal_payload(),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        sectionspan_pdf_offset_selected_review_decision_proposal_report=proposal,
+    )
+
+    assert validate_payload(payload, CANDIDATE_LAYER_BLOCKER_BACKLOG_SCHEMA_ID, strict=True).ok
+    item = next(
+        item
+        for item in payload["backlog"]
+        if item["blocker"] == "sectionspan_selected_review_decision_file_required"
+    )
+    assert item["priority"] == "P0"
+    assert item["affected_layers"] == ["sectionspan"]
+    assert item["affected_candidate_count"] == 12
+    assert item["recommendedNextTranche"] == "manual_record_selected_sectionspan_review_decisions"
+    assert payload["counts"]["sectionspanSelectedDecisionProposalRows"] == 12
+    assert payload["counts"]["sectionspanSelectedDecisionProposalApproveRows"] == 12
+    assert payload["counts"]["sectionspanSelectedDecisionAcceptedRows"] == 0
+
+
+def test_candidate_layer_blocker_backlog_blocks_wrong_selected_decision_proposal_schema(tmp_path: Path) -> None:
+    gate_path, summary_path, eval_path = _reports(tmp_path / "inputs")
+    proposal = _write(
+        tmp_path / "inputs",
+        "sectionspan-selected-decision-proposal.json",
+        _sectionspan_selected_decision_proposal_payload(schema="example.wrong.selected-decision-proposal.v1"),
+    )
+
+    payload = build_candidate_layer_blocker_backlog(
+        candidate_layer_review_gate_report=gate_path,
+        structured_summary_report=summary_path,
+        complex_qa_eval_design_report=eval_path,
+        sectionspan_pdf_offset_selected_review_decision_proposal_report=proposal,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["gate"]["decision"] == "blocked"
+    assert "sectionspan_pdf_offset_selected_review_decision_proposal_schema_mismatch" in payload["gate"]["schemaViolations"]
 
 
 def test_candidate_layer_blocker_backlog_remains_non_strict_and_blocks_runtime_actions(tmp_path: Path) -> None:
