@@ -56,6 +56,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.sectionspan-contract-review.v1": "paper-sectionspan-contract-review.v1.json",
     "knowledge-hub.paper.sectionspan-contract-review-pack.v1": "paper-sectionspan-contract-review-pack.v1.json",
     "knowledge-hub.paper.sectionspan-strict-promotion-design.v1": "paper-sectionspan-strict-promotion-design.v1.json",
+    "knowledge-hub.paper.sectionspan-source-authority-options.v1": "paper-sectionspan-source-authority-options.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
