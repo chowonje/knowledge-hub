@@ -41,6 +41,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.mineru-source-alignment-audit.v1": "paper-mineru-source-alignment-audit.v1.json",
     "knowledge-hub.paper.mineru-potential-review-pack.v1": "paper-mineru-potential-review-pack.v1.json",
     "knowledge-hub.paper.sectionspan-candidate-report.v1": "paper-sectionspan-candidate-report.v1.json",
+    "knowledge-hub.paper.figure-caption-candidate-report.v1": "paper-figure-caption-candidate-report.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
