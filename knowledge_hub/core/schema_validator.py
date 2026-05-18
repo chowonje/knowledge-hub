@@ -38,6 +38,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-materialization.result.v1": "paper-parsed-materialization-result.v1.json",
     "knowledge-hub.paper.layout-parser-pilot.result.v1": "paper-layout-parser-pilot-result.v1.json",
     "knowledge-hub.paper.arxiv-source-tex-availability-audit.v1": "paper-arxiv-source-tex-availability-audit.v1.json",
+    "knowledge-hub.paper.tex-structure-candidate-alignment-audit.v1": "paper-tex-structure-candidate-alignment-audit.v1.json",
     "knowledge-hub.paper.mineru-normalizer-audit.v1": "paper-mineru-normalizer-audit.v1.json",
     "knowledge-hub.paper.mineru-source-alignment-audit.v1": "paper-mineru-source-alignment-audit.v1.json",
     "knowledge-hub.paper.mineru-potential-review-pack.v1": "paper-mineru-potential-review-pack.v1.json",
