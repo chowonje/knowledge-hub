@@ -285,6 +285,40 @@ def test_pdf_region_anchor_blocks_rows_without_line_local_window(tmp_path: Path)
     assert row["selected_pdf_region"]["bbox"] == []
 
 
+def test_pdf_region_anchor_can_recover_pdf_only_region_without_line_local_window(tmp_path: Path) -> None:
+    parsed = _parsed_root(tmp_path)
+    report_path = _line_report(
+        tmp_path,
+        [
+            _line_row(
+                "anchor:0006",
+                "h = W0x + Delta W x = W0x + BAx",
+                ["W0", "Delta", "BA"],
+                normalized_window_count=0,
+            )
+        ],
+    )
+
+    payload = build_tex_equation_pdf_region_anchor_audit(
+        line_local_anchor_report=report_path,
+        parsed_root=parsed,
+        pdf_block_loader=_fake_pdf_blocks,
+    )
+
+    row = payload["rows"][0]
+    assert row["pdf_region_anchor_status"] == "unique_pdf_region_without_line_local_window_candidate_only"
+    assert row["pdf_region_anchor_method"] == "formula_like_pdf_block_window_without_line_local_window"
+    assert row["selected_pdf_region"]["block_indexes"] == [9]
+    assert row["normalized_window_count"] == 0
+    assert row["pdf_region_anchor_unique"] is True
+    assert row["strict_eligible"] is False
+    assert row["runtime_evidence"] is False
+    assert "canonical_line_local_anchor_missing_for_pdf_only_region_candidate" in row["strict_blockers"]
+    assert "pdf_region_recovered_without_canonical_line_local_window" in row["non_strict_reason"]
+    assert payload["counts"]["pdfRegionWithoutLineLocalWindowRows"] == 1
+    assert payload["counts"]["strictEligibleRows"] == 0
+
+
 def test_pdf_region_anchor_blocks_wrong_parent_schema(tmp_path: Path) -> None:
     parsed = _parsed_root(tmp_path)
     report_path = _line_report(

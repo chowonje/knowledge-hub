@@ -32,6 +32,7 @@ def _pdf_region_row(
     bbox: list[float] | None = None,
     page: int | None = 2,
     resolved_ambiguous: bool = False,
+    normalized_window_count: int = 1,
 ) -> dict:
     return {
         "pdf_region_anchor_id": row_id,
@@ -45,7 +46,7 @@ def _pdf_region_row(
         "equation_environment": "equation",
         "candidate_text": text,
         "normalized_terms": ["Pr", "Class", "Object"],
-        "normalized_window_count": 1,
+        "normalized_window_count": normalized_window_count,
         "line_local_anchor_status": (
             "ambiguous_same_line_local_anchor_candidate_only"
             if resolved_ambiguous
@@ -139,6 +140,29 @@ def test_equation_quote_v2_design_emits_unique_pdf_region_rows_non_strict(tmp_pa
     assert "pdf_region_bbox_is_not_source_span" in candidate["strict_blockers"]
 
 
+def test_equation_quote_v2_design_accepts_pdf_only_region_as_non_strict_candidate(tmp_path: Path) -> None:
+    report_path = _pdf_region_report(
+        tmp_path,
+        [
+            _pdf_region_row(
+                "pdf:0001",
+                r"lrate = d^{-0.5}_{model} \cdot min(step_num^{-0.5}, step_num \cdot warmup_steps^{-1.5})",
+                status="unique_pdf_region_without_line_local_window_candidate_only",
+                normalized_window_count=0,
+            )
+        ],
+    )
+
+    payload = build_tex_equation_quote_candidate_v2_design(report_path)
+
+    assert payload["counts"]["v2DesignCandidates"] == 1
+    candidate = payload["candidates"][0]
+    assert candidate["canonical_context"]["normalizedWindowCount"] == 0
+    assert candidate["pdf_region"]["pdfRegionAnchorStatus"] == "unique_pdf_region_without_line_local_window_candidate_only"
+    assert candidate["strict_eligible"] is False
+    assert candidate["runtime_evidence"] is False
+
+
 def test_equation_quote_v2_design_holds_out_missing_or_nonunique_region_rows(tmp_path: Path) -> None:
     report_path = _pdf_region_report(
         tmp_path,
@@ -147,15 +171,17 @@ def test_equation_quote_v2_design_holds_out_missing_or_nonunique_region_rows(tmp
             _pdf_region_row("pdf:0002", "x = y", source_hash=""),
             _pdf_region_row("pdf:0003", "x = y", bbox=[]),
             _pdf_region_row("pdf:0004", "", status="empty_equation_text", unique=False),
+            _pdf_region_row("pdf:0005", r"\label{eq:x}", status="insufficient_normalized_terms", unique=False),
         ],
     )
 
     payload = build_tex_equation_quote_candidate_v2_design(report_path)
 
     assert payload["counts"]["v2DesignCandidates"] == 0
-    assert payload["counts"]["heldOutRows"] == 4
+    assert payload["counts"]["heldOutRows"] == 5
     assert payload["counts"]["heldOutByReason"] == {
         "empty_equation_text": 1,
+        "insufficient_normalized_terms": 1,
         "missing_pdf_region_bbox": 1,
         "missing_source_content_hash": 1,
         "pdf_region_anchor_not_unique": 1,

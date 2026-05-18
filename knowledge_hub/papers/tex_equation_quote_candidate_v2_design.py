@@ -90,6 +90,8 @@ def _held_out_reason(row: dict[str, Any]) -> str | None:
         return str(row.get("pdf_region_anchor_status") or "blocked")
     if str(row.get("pdf_region_anchor_status") or "") == "empty_equation_text":
         return "empty_equation_text"
+    if str(row.get("pdf_region_anchor_status") or "") == "insufficient_normalized_terms":
+        return "insufficient_normalized_terms"
     if not bool(row.get("pdf_region_anchor_unique")):
         return "pdf_region_anchor_not_unique"
     selected = dict(row.get("selected_pdf_region") or {})
