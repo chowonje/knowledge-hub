@@ -175,6 +175,71 @@ def test_tex_equation_line_local_anchor_audit_never_creates_source_span_or_runti
     assert "line_local_windows_are_diagnostic_not_provenance" in row["strict_blockers"]
 
 
+def test_tex_equation_line_local_anchor_audit_matches_split_canonical_math_tokens(
+    tmp_path: Path,
+) -> None:
+    parsed = tmp_path / "parsed"
+    (parsed / "paper-1").mkdir(parents=True)
+    (parsed / "paper-1" / "document.md").write_text(
+        "## Page 4\n"
+        "MultiHead(Q, K, V) = Concat(head1, ..., headh)W O where "
+        "headi = Attention(QW Q i, KW K i, V W V i).\n",
+        encoding="utf-8",
+    )
+    report_path = _design_report(
+        tmp_path,
+        [
+            _design_row(
+                "design:0001",
+                "multihead",
+                ["MultiHead", "Concat", "head1", "headh", "WO", "headi", "Attention", "QWQi", "KWKi", "VWVi"],
+            )
+        ],
+    )
+
+    payload = build_tex_equation_line_local_anchor_audit(
+        normalizer_design_report=report_path,
+        parsed_root=parsed,
+    )
+
+    assert validate_payload(payload, TEX_EQUATION_LINE_LOCAL_ANCHOR_AUDIT_SCHEMA_ID, strict=True).ok
+    assert payload["counts"]["uniqueLineLocalAnchorRows"] == 1
+    row = payload["rows"][0]
+    assert row["line_local_anchor_status"] == "unique_line_local_anchor_candidate_only"
+    assert row["normalized_window_count"] == 1
+    assert row["window_details"][0]["page_marker"] == 4
+    assert row["source_span_created"] is False
+    assert row["strict_eligible"] is False
+
+
+def test_tex_equation_line_local_anchor_audit_bridges_unicode_math_symbols(
+    tmp_path: Path,
+) -> None:
+    parsed = tmp_path / "parsed"
+    (parsed / "paper-1").mkdir(parents=True)
+    (parsed / "paper-1" / "document.md").write_text(
+        "## Page 5\n"
+        "The adapted forward pass is h = W0x + ∆Wx = W0x + BAx (3).\n",
+        encoding="utf-8",
+    )
+    report_path = _design_report(
+        tmp_path,
+        [_design_row("design:0001", "lora", ["W0", "Delta", "BA"])],
+    )
+
+    payload = build_tex_equation_line_local_anchor_audit(
+        normalizer_design_report=report_path,
+        parsed_root=parsed,
+    )
+
+    assert validate_payload(payload, TEX_EQUATION_LINE_LOCAL_ANCHOR_AUDIT_SCHEMA_ID, strict=True).ok
+    row = payload["rows"][0]
+    assert row["line_local_anchor_status"] == "unique_line_local_anchor_candidate_only"
+    assert row["window_details"][0]["page_marker"] == 5
+    assert row["source_span_created"] is False
+    assert row["runtime_evidence"] is False
+
+
 def test_tex_equation_line_local_anchor_audit_blocks_wrong_parent_schema(tmp_path: Path) -> None:
     parsed = _parsed_root(tmp_path)
     report_path = _design_report(

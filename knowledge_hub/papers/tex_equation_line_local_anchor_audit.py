@@ -101,6 +101,14 @@ def _canonical_bridge_text_with_offsets(value: str) -> tuple[str, list[int]]:
         "–": " - ",
         "—": " - ",
         "√": " sqrt ",
+        "∆": " Delta ",
+        "Δ": " Delta ",
+        "Φ": " Phi ",
+        "φ": " phi ",
+        "Θ": " Theta ",
+        "θ": " theta ",
+        "∈": " in ",
+        "·": " cdot ",
     }
     chars: list[str] = []
     offsets: list[int] = []
@@ -133,6 +141,29 @@ def _matches_anchor(token: str, anchor: str) -> bool:
     return token_norm.startswith(anchor_norm) or anchor_norm in token_norm
 
 
+def _anchor_match_end_index(
+    canonical_tokens: list[_Token],
+    start_index: int,
+    anchor: str,
+    *,
+    max_span_tokens: int = 4,
+) -> int | None:
+    if _matches_anchor(canonical_tokens[start_index].text, anchor):
+        return start_index
+    anchor_norm = _normalize_token(anchor)
+    if len(anchor_norm) < 3 and not any(char.isupper() or char.isdigit() for char in anchor):
+        return None
+    compact = ""
+    span_stop = min(len(canonical_tokens), start_index + max_span_tokens)
+    for end_index in range(start_index, span_stop):
+        compact += _normalize_token(canonical_tokens[end_index].text)
+        if compact == anchor_norm or compact.startswith(anchor_norm):
+            return end_index
+        if len(compact) >= len(anchor_norm):
+            break
+    return None
+
+
 def _ordered_windows(
     anchors: list[str],
     canonical_tokens: list[_Token],
@@ -143,16 +174,18 @@ def _ordered_windows(
         return []
     windows: list[tuple[int, int]] = []
     for start_index, token in enumerate(canonical_tokens):
-        if not _matches_anchor(token.text, anchors[0]):
+        first_end = _anchor_match_end_index(canonical_tokens, start_index, anchors[0])
+        if first_end is None:
             continue
-        current_index = start_index
+        current_index = first_end
         matched = 1
         for anchor in anchors[1:]:
             next_index = None
             search_stop = min(len(canonical_tokens), current_index + max_gap_tokens + 1)
             for candidate_index in range(current_index + 1, search_stop):
-                if _matches_anchor(canonical_tokens[candidate_index].text, anchor):
-                    next_index = candidate_index
+                match_end = _anchor_match_end_index(canonical_tokens, candidate_index, anchor)
+                if match_end is not None:
+                    next_index = match_end
                     break
             if next_index is None:
                 break

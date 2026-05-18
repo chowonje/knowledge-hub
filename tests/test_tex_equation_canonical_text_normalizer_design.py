@@ -133,6 +133,87 @@ def test_tex_equation_canonical_text_normalizer_design_compares_profiles_and_val
     assert by_id["diagnostic:0004"]["recommended_status"] == "empty_equation_text"
 
 
+def test_tex_equation_canonical_text_normalizer_design_matches_split_canonical_math_tokens(
+    tmp_path: Path,
+) -> None:
+    parsed = tmp_path / "parsed"
+    (parsed / "paper-1").mkdir(parents=True)
+    (parsed / "paper-1" / "document.md").write_text(
+        "MultiHead(Q, K, V) = Concat(head1, ..., headh)W O where "
+        "headi = Attention(QW Q i, KW K i, V W V i).\n",
+        encoding="utf-8",
+    )
+    report_path = _diagnostic_report(
+        tmp_path,
+        [
+            _diagnostic_row(
+                "diagnostic:0001",
+                r"\mathrm{MultiHead}(Q, K, V) &= \mathrm{Concat}(\mathrm{head_1}, ..., \mathrm{head_h})W^O\\ "
+                r"\text{where}~\mathrm{head_i} &= \mathrm{Attention}(QW^Q_i, KW^K_i, VW^V_i)\\",
+            )
+        ],
+    )
+
+    payload = build_tex_equation_canonical_text_normalizer_design(
+        diagnostic_report=report_path,
+        parsed_root=parsed,
+    )
+
+    assert validate_payload(payload, TEX_EQUATION_CANONICAL_TEXT_NORMALIZER_DESIGN_SCHEMA_ID, strict=True).ok
+    assert payload["counts"]["bestUniqueWindowRows"] == 1
+    row = payload["rows"][0]
+    assert row["recommended_status"] == "unique_normalized_window_candidate_only"
+    compact_profile = [
+        result
+        for result in row["profile_results"]
+        if result["profile_name"] == "canonical_math_compaction_v1"
+    ][0]
+    assert compact_profile["window_count"] == 1
+    assert "QWQi" in compact_profile["normalized_terms"]
+    assert "VWVi" in compact_profile["normalized_terms"]
+    assert row["strict_eligible"] is False
+    assert row["source_span_created"] is False
+
+
+def test_tex_equation_canonical_text_normalizer_design_elides_labels_and_bridges_unicode_math(
+    tmp_path: Path,
+) -> None:
+    parsed = tmp_path / "parsed"
+    (parsed / "paper-1").mkdir(parents=True)
+    (parsed / "paper-1" / "document.md").write_text(
+        "The adapted forward pass is h = W0x + ∆Wx = W0x + BAx (3).\n",
+        encoding="utf-8",
+    )
+    report_path = _diagnostic_report(
+        tmp_path,
+        [
+            _diagnostic_row(
+                "diagnostic:0001",
+                r"h = W_0 x + \Delta W x = W_0 x + BA x \label{eq:lora}",
+            )
+        ],
+    )
+
+    payload = build_tex_equation_canonical_text_normalizer_design(
+        diagnostic_report=report_path,
+        parsed_root=parsed,
+    )
+
+    assert validate_payload(payload, TEX_EQUATION_CANONICAL_TEXT_NORMALIZER_DESIGN_SCHEMA_ID, strict=True).ok
+    row = payload["rows"][0]
+    assert row["recommended_status"] == "unique_normalized_window_candidate_only"
+    compact_profile = [
+        result
+        for result in row["profile_results"]
+        if result["profile_name"] == "canonical_math_compaction_v1"
+    ][0]
+    assert compact_profile["window_count"] == 1
+    assert "Delta" in compact_profile["normalized_terms"]
+    assert "lora" not in [term.casefold() for term in compact_profile["normalized_terms"]]
+    assert row["strict_eligible"] is False
+    assert row["runtime_evidence"] is False
+
+
 def test_tex_equation_canonical_text_normalizer_design_never_creates_evidence_or_source_spans(
     tmp_path: Path,
 ) -> None:
