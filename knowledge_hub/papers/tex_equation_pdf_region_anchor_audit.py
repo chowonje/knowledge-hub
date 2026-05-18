@@ -150,6 +150,14 @@ def _normalize_text(value: str) -> str:
         "–": " - ",
         "—": " - ",
         "√": " sqrt ",
+        "∆": " Delta ",
+        "Δ": " Delta ",
+        "Φ": " Phi ",
+        "φ": " phi ",
+        "Θ": " Theta ",
+        "θ": " theta ",
+        "∈": " in ",
+        "·": " cdot ",
         "|": " ",
     }
     for char in str(value or ""):
@@ -181,12 +189,32 @@ def _token_matches_anchor(token: str, anchor: str) -> bool:
     return token.startswith(anchor) or anchor in token
 
 
+def _compact_token_matches_anchor(tokens: list[str], term: str, anchor: str, *, max_span_tokens: int = 4) -> bool:
+    if not tokens or not anchor:
+        return False
+    if len(anchor) < 3 and not any(char.isdigit() for char in anchor) and not any(char.isupper() for char in term):
+        return False
+    for start_index in range(len(tokens)):
+        compact = ""
+        span_stop = min(len(tokens), start_index + max_span_tokens)
+        for end_index in range(start_index, span_stop):
+            compact += tokens[end_index]
+            if compact == anchor:
+                return True
+            if len(compact) >= len(anchor):
+                break
+    return False
+
+
 def _matched_terms(text: str, terms: list[str]) -> list[str]:
     tokens = _tokens(text)
     matched: list[str] = []
     for term in terms:
         anchor = _term_token(term)
-        if anchor and any(_token_matches_anchor(token, anchor) for token in tokens):
+        if anchor and (
+            any(_token_matches_anchor(token, anchor) for token in tokens)
+            or _compact_token_matches_anchor(tokens, term, anchor)
+        ):
             matched.append(term)
     return list(dict.fromkeys(matched))
 
@@ -254,6 +282,32 @@ def _block_windows(blocks: list[dict[str, Any]], max_window_size: int = 2) -> li
                     continue
                 windows.append(window)
     return windows
+
+
+def _remove_dominated_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    kept: list[dict[str, Any]] = []
+    for candidate in candidates:
+        candidate_blocks = set(candidate.get("block_indexes") or [])
+        candidate_terms = set(candidate.get("matched_terms") or [])
+        dominated = False
+        for other in candidates:
+            if other is candidate:
+                continue
+            if _safe_int(other.get("page")) != _safe_int(candidate.get("page")):
+                continue
+            other_blocks = set(other.get("block_indexes") or [])
+            other_terms = set(other.get("matched_terms") or [])
+            if (
+                other_blocks
+                and other_blocks < candidate_blocks
+                and other_terms == candidate_terms
+                and _safe_float(other.get("coverage")) >= _safe_float(candidate.get("coverage"))
+            ):
+                dominated = True
+                break
+        if not dominated:
+            kept.append(candidate)
+    return kept
 
 
 def _page_filter(row: dict[str, Any]) -> list[int]:
@@ -341,6 +395,7 @@ def _pdf_region_candidates(row: dict[str, Any], context: dict[str, Any]) -> list
                     "text_preview": _clean_text(text[:500]),
                 }
             )
+    candidates = _remove_dominated_candidates(candidates)
     candidates.sort(
         key=lambda item: (
             -_safe_float(item.get("formula_score")),

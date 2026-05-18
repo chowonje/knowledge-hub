@@ -149,6 +149,21 @@ def _fake_pdf_blocks(_: str | Path) -> list[dict]:
                     "bbox": [225.0, 353.0, 390.0, 367.0],
                     "text": "PE(pos,2i+1) = cos(pos/100002i/dmodel)",
                 },
+                {
+                    "block_index": 7,
+                    "bbox": [112.0, 677.0, 142.0, 688.0],
+                    "text": "φ(x) =",
+                },
+                {
+                    "block_index": 8,
+                    "bbox": [145.0, 667.0, 286.0, 696.0],
+                    "text": "( x, if x > 0\n0.1x, otherwise\n(2)",
+                },
+                {
+                    "block_index": 9,
+                    "bbox": [235.0, 460.0, 504.0, 472.0],
+                    "text": "h = W0x + ∆Wx = W0x + BAx (3)",
+                },
             ],
         }
     ]
@@ -213,11 +228,49 @@ def test_pdf_region_anchor_uses_adjacent_block_window_for_split_equation(tmp_pat
     assert row["bbox"]
 
 
+def test_pdf_region_anchor_bridges_unicode_and_compact_pdf_tokens(tmp_path: Path) -> None:
+    parsed = _parsed_root(tmp_path)
+    report_path = _line_report(
+        tmp_path,
+        [
+            _line_row(
+                "anchor:0003",
+                r"\phi(x) = \begin{cases} x, & \text{if } x > 0\\ 0.1x, & \text{otherwise} \end{cases}",
+                ["phi", "if", "01", "otherwise"],
+            ),
+            _line_row(
+                "anchor:0004",
+                r"h = W_0 x + \Delta W x = W_0 x + BA x",
+                ["W0", "Delta", "BA"],
+            ),
+        ],
+    )
+
+    payload = build_tex_equation_pdf_region_anchor_audit(
+        line_local_anchor_report=report_path,
+        parsed_root=parsed,
+        pdf_block_loader=_fake_pdf_blocks,
+    )
+
+    by_anchor = {row["source_line_local_anchor_id"]: row for row in payload["rows"]}
+    phi_row = by_anchor["anchor:0003"]
+    assert phi_row["pdf_region_anchor_status"] == "unique_pdf_region_anchor_candidate_only"
+    assert phi_row["selected_pdf_region"]["block_indexes"] == [7, 8]
+    assert phi_row["selected_pdf_region"]["matched_terms"] == ["phi", "if", "01", "otherwise"]
+    assert phi_row["strict_eligible"] is False
+
+    lora_row = by_anchor["anchor:0004"]
+    assert lora_row["pdf_region_anchor_status"] == "unique_pdf_region_anchor_candidate_only"
+    assert lora_row["selected_pdf_region"]["block_indexes"] == [9]
+    assert lora_row["selected_pdf_region"]["matched_terms"] == ["W0", "Delta", "BA"]
+    assert lora_row["runtime_evidence"] is False
+
+
 def test_pdf_region_anchor_blocks_rows_without_line_local_window(tmp_path: Path) -> None:
     parsed = _parsed_root(tmp_path)
     report_path = _line_report(
         tmp_path,
-        [_line_row("anchor:0003", "missing", ["Missing", "Pair"], normalized_window_count=0)],
+        [_line_row("anchor:0005", "missing", ["Missing", "Pair"], normalized_window_count=0)],
     )
 
     payload = build_tex_equation_pdf_region_anchor_audit(
