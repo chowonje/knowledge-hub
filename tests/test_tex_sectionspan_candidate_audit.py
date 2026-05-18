@@ -28,7 +28,9 @@ def _row(
     method: str = "exact",
     page: int | None = 1,
     source_hash: str | None = "hash-source",
+    source_ready: bool | None = None,
 ) -> dict:
+    ready = status == "aligned" and page is not None and bool(source_hash) if source_ready is None else source_ready
     return {
         "candidate_id": candidate_id,
         "candidate_type": "tex_structure_candidate",
@@ -50,7 +52,7 @@ def _row(
         "sourceContentHashSource": "manifest",
         "confidence": 0.99 if method == "exact" else 0.82,
         "source_span_locator": {"path": "document.md", "chars": {"start": 20, "end": 20 + len(text)}} if status == "aligned" else {},
-        "source_span_candidate_ready": status == "aligned" and page is not None and bool(source_hash),
+        "source_span_candidate_ready": ready,
         "classification": "source_span_candidate_only",
         "mineru_layout_link_status": "failed",
         "mineru_layout_link_method": "none",
@@ -133,6 +135,56 @@ def test_tex_sectionspan_candidate_report_filters_paper_id(tmp_path: Path) -> No
     assert payload["counts"]["inputRows"] == 0
     assert payload["counts"]["sectionSpanCandidates"] == 0
     assert payload["policy"]["runtimePromotionAllowed"] is False
+
+
+def test_tex_sectionspan_candidate_report_fails_closed_on_parent_schema_mismatch(tmp_path: Path) -> None:
+    report_path = _write_json(
+        tmp_path,
+        "wrong-report.json",
+        {
+            "schema": "wrong.schema",
+            "status": "ok",
+            "candidates": [_row("tex:0001", structure_type="section", text="Introduction")],
+        },
+    )
+
+    payload = build_tex_sectionspan_candidate_report(report_path)
+
+    assert validate_payload(payload, TEX_SECTIONSPAN_CANDIDATE_REPORT_SCHEMA_ID, strict=True).ok
+    assert payload["status"] == "empty"
+    assert payload["counts"]["inputRows"] == 0
+    assert payload["counts"]["sectionSpanCandidates"] == 0
+    assert "alignment_report_schema_mismatch" in payload["warnings"]
+
+
+def test_tex_sectionspan_candidate_report_requires_parent_source_span_ready(tmp_path: Path) -> None:
+    report_path = _write_json(
+        tmp_path,
+        "tex-structure-candidate-alignment-report.json",
+        {
+            "schema": "knowledge-hub.paper.tex-structure-candidate-alignment-audit.v1",
+            "status": "ok",
+            "candidates": [
+                _row(
+                    "tex:0001",
+                    structure_type="section",
+                    text="Introduction",
+                    status="aligned",
+                    method="exact",
+                    page=1,
+                    source_hash="hash-source",
+                    source_ready=False,
+                )
+            ],
+        },
+    )
+
+    payload = build_tex_sectionspan_candidate_report(report_path)
+
+    assert validate_payload(payload, TEX_SECTIONSPAN_CANDIDATE_REPORT_SCHEMA_ID, strict=True).ok
+    assert payload["status"] == "empty"
+    assert payload["counts"]["sectionSpanCandidates"] == 0
+    assert payload["counts"]["heldOutByReason"]["source_span_candidate_not_ready"] == 1
 
 
 def test_tex_sectionspan_candidate_writer_outputs_schema_valid_reports(tmp_path: Path) -> None:

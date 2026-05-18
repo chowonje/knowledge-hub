@@ -16,6 +16,10 @@ from pathlib import Path
 import re
 from typing import Any
 
+from knowledge_hub.papers.tex_structure_candidate_alignment_audit import (
+    TEX_STRUCTURE_CANDIDATE_ALIGNMENT_AUDIT_SCHEMA_ID,
+)
+
 
 TEX_SECTIONSPAN_CANDIDATE_REPORT_SCHEMA_ID = "knowledge-hub.paper.tex-sectionspan-candidate-report.v1"
 
@@ -91,6 +95,8 @@ def _hold_reason(row: dict[str, Any]) -> str | None:
         return "missing_page"
     if not str(row.get("sourceContentHash") or "").strip():
         return "missing_source_content_hash"
+    if row.get("source_span_candidate_ready") is not True:
+        return "source_span_candidate_not_ready"
     return None
 
 
@@ -186,10 +192,12 @@ def build_tex_sectionspan_candidate_report(
     alignment_report = _read_json(input_path)
     requested = [str(item).strip() for item in (paper_ids or []) if str(item).strip()]
     allowed = set(requested)
+    parent_schema = str(alignment_report.get("schema") or "")
+    parent_contract_valid = parent_schema == TEX_STRUCTURE_CANDIDATE_ALIGNMENT_AUDIT_SCHEMA_ID
     rows = [
         dict(row)
         for row in list(alignment_report.get("candidates") or [])
-        if isinstance(row, dict) and (not allowed or str(row.get("paper_id") or "") in allowed)
+        if parent_contract_valid and isinstance(row, dict) and (not allowed or str(row.get("paper_id") or "") in allowed)
     ]
     candidates: list[dict[str, Any]] = []
     held_out: list[dict[str, Any]] = []
@@ -209,7 +217,7 @@ def build_tex_sectionspan_candidate_report(
         "generatedAt": _now(),
         "input": {
             "alignmentReportPath": str(input_path),
-            "alignmentReportSchema": alignment_report.get("schema") or "",
+            "alignmentReportSchema": parent_schema,
             "paperIds": requested,
         },
         "counts": counts,
@@ -226,7 +234,9 @@ def build_tex_sectionspan_candidate_report(
             "answerIntegrationChanged": False,
         },
         "promotionRules": [
+            "require_expected_tex_structure_alignment_schema",
             "emit_only_tex_section_subsection_subsubsection_rows",
+            "require_parent_source_span_candidate_ready",
             "require_exact_canonical_generated_markdown_alignment",
             "require_page_chars_and_source_hash",
             "keep_sectionspan_candidates_non_strict",
@@ -235,6 +245,7 @@ def build_tex_sectionspan_candidate_report(
             "tex_sectionspan_candidates_are_not_runtime_evidence",
             "canonical_generated_markdown_offsets_are_not_original_pdf_byte_offsets",
             "source_hash_page_and_chars_do_not_imply_strict_eligibility",
+            *([] if parent_contract_valid else ["alignment_report_schema_mismatch"]),
         ],
         "candidates": candidates,
         "heldOut": held_out,

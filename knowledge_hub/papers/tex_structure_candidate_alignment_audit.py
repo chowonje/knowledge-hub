@@ -63,6 +63,9 @@ _TEXT_SPAN_STRUCTURE_TYPES = {
     "figure_caption",
     "table_caption",
 }
+_HEADING_STRUCTURE_TYPES = {"section", "subsection", "subsubsection"}
+_MARKDOWN_HEADING_PREFIX_RE = re.compile(r"^\s*#{1,6}\s+")
+_HEADING_CONTEXT_PREFIX_RE = re.compile(r"(?:^|[\n\r]|[\.\?!]\s+|\s)(?:\d+(?:\.\d+)*|[A-Z])\.?\s+$")
 
 
 @dataclass(frozen=True)
@@ -243,6 +246,70 @@ def _align_text(markdown_text: str, candidate_text: str) -> _Alignment:
     return _Alignment("failed", "none", None, None, 0.0, "no_canonical_text_match")
 
 
+def _heading_line_span(line: str) -> tuple[int, int, str]:
+    content = line.rstrip("\r\n")
+    prefix = _MARKDOWN_HEADING_PREFIX_RE.match(content)
+    segment_start = prefix.end() if prefix else 0
+    segment = content[segment_start:]
+    left_trimmed = len(segment) - len(segment.lstrip())
+    right_trimmed = len(segment.rstrip())
+    start = segment_start + left_trimmed
+    end = segment_start + right_trimmed
+    return start, end, segment[left_trimmed:right_trimmed]
+
+
+def _heading_match_allowed(markdown_text: str, start: int, end: int, candidate_text: str) -> bool:
+    line_start = markdown_text.rfind("\n", 0, start) + 1
+    line_end = markdown_text.find("\n", end)
+    if line_end < 0:
+        line_end = len(markdown_text)
+    _segment_start, _segment_end, line_text = _heading_line_span(markdown_text[line_start:line_end])
+    if line_text == candidate_text or _fold_text(line_text) == _fold_text(candidate_text):
+        return True
+    prefix = markdown_text[max(0, start - 80) : start]
+    return bool(_HEADING_CONTEXT_PREFIX_RE.search(prefix))
+
+
+def _heading_text_alignment(markdown_text: str, candidate_text: str) -> _Alignment:
+    text = _clean_text(candidate_text)
+    if not markdown_text:
+        return _Alignment("blocked", "none", None, None, 0.0, "canonical_markdown_missing")
+    if not text:
+        return _Alignment("blocked", "none", None, None, 0.0, "candidate_text_empty")
+
+    exact_matches: list[tuple[int, int]] = []
+    normalized_matches: list[tuple[int, int]] = []
+    for start in _find_all(markdown_text, text):
+        end = start + len(text)
+        if _heading_match_allowed(markdown_text, start, end, text):
+            exact_matches.append((start, end))
+
+    exact_unique = list(dict.fromkeys(exact_matches))
+    if len(exact_unique) == 1:
+        start, end = exact_unique[0]
+        return _Alignment("aligned", "exact", start, end, 0.99, "single_heading_context_exact_match")
+    if len(exact_unique) > 1:
+        return _Alignment("ambiguous", "exact", None, None, 0.2, "ambiguous_heading_context_exact_match")
+
+    normalized_markdown = _normalized_text_with_map(markdown_text)
+    normalized_candidate = _normalized_text_with_map(text).text
+    for start in _find_all(normalized_markdown.text, normalized_candidate):
+        end = start + len(normalized_candidate)
+        if end <= len(normalized_markdown.original_index_by_char):
+            original_start = normalized_markdown.original_index_by_char[start]
+            original_end = normalized_markdown.original_index_by_char[end - 1] + 1
+            if _heading_match_allowed(markdown_text, original_start, original_end, text):
+                normalized_matches.append((original_start, original_end))
+    normalized_unique = list(dict.fromkeys(normalized_matches))
+    if len(normalized_unique) == 1:
+        start, end = normalized_unique[0]
+        return _Alignment("aligned", "normalized", start, end, 0.82, "single_heading_context_normalized_match")
+    if len(normalized_unique) > 1:
+        return _Alignment("ambiguous", "normalized", None, None, 0.18, "ambiguous_heading_context_normalized_match")
+
+    return _Alignment("failed", "none", None, None, 0.0, "no_heading_context_text_match")
+
+
 def _source_hash_from_manifest(manifest: dict[str, Any]) -> tuple[str, str]:
     parser_meta = dict(manifest.get("parser_meta") or {})
     for key in (
@@ -385,7 +452,9 @@ def _aligned_row(
 ) -> dict[str, Any]:
     structure_type = str(row.get("structure_type") or "")
     candidate_text = _clean_text(row.get("candidate_text"))
-    if structure_type in _TEXT_SPAN_STRUCTURE_TYPES:
+    if structure_type in _HEADING_STRUCTURE_TYPES:
+        alignment = _heading_text_alignment(markdown_text, candidate_text)
+    elif structure_type in _TEXT_SPAN_STRUCTURE_TYPES:
         alignment = _align_text(markdown_text, candidate_text)
     else:
         alignment = _Alignment("blocked", "none", None, None, 0.0, "structure_type_has_no_text_span")
