@@ -59,6 +59,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.candidate-layer-blocker-manual-decision-command-packet.v1": "paper-candidate-layer-blocker-manual-decision-command-packet.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-nonbinding-decision-recommendations.v1": "paper-candidate-layer-blocker-nonbinding-decision-recommendations.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-resolution-preview.v1": "paper-candidate-layer-blocker-resolution-preview.v1.json",
+    "knowledge-hub.paper.candidate-layer-remaining-manual-blocker-review-pack.v1": "paper-candidate-layer-remaining-manual-blocker-review-pack.v1.json",
     "knowledge-hub.paper.non-sectionspan-pdf-offset-feasibility-audit.v1": "paper-non-sectionspan-pdf-offset-feasibility-audit.v1.json",
     "knowledge-hub.paper.source-span-offset-authority-audit.v1": "paper-source-span-offset-authority-audit.v1.json",
     "knowledge-hub.paper.equation-alignment-feasibility-audit.v1": "paper-equation-alignment-feasibility-audit.v1.json",
