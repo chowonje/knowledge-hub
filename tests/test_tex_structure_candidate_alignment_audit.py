@@ -190,6 +190,49 @@ def test_tex_structure_alignment_audit_filters_paper_ids_and_keeps_missing_unali
     assert payload["gate"]["runtimePromotionAllowed"] is False
 
 
+def test_tex_structure_alignment_audit_does_not_align_section_to_body_text_only(tmp_path: Path) -> None:
+    paper_id = "1234.5678"
+    _parsed_paper(
+        tmp_path / "parsed",
+        paper_id,
+        "# Paper\n\n## Page 1\n\nThis paragraph mentions Introduction exactly once, but it is not a heading.\n",
+    )
+    report_path = _availability_report(tmp_path, paper_id)
+
+    payload = build_tex_structure_candidate_alignment_audit(
+        input_report=report_path,
+        parsed_root=tmp_path / "parsed",
+    )
+
+    section = next(item for item in payload["candidates"] if item["candidate_id"] == "tex:0001")
+    assert section["alignment_status"] == "failed"
+    assert section["alignment_reason"] == "no_heading_context_text_match"
+    assert section["source_span_candidate_ready"] is False
+    assert section["classification"] == "blocked_no_canonical_match"
+    assert "canonical_text_alignment_not_available" in section["strict_blockers"]
+
+
+def test_tex_structure_alignment_audit_aligns_numbered_heading_inside_page_blob(tmp_path: Path) -> None:
+    paper_id = "1234.5678"
+    _parsed_paper(
+        tmp_path / "parsed",
+        paper_id,
+        "# Paper\n\n## Page 1\n\nOpening prose. 1 Introduction This starts a section in page-blob text.\n",
+    )
+    report_path = _availability_report(tmp_path, paper_id)
+
+    payload = build_tex_structure_candidate_alignment_audit(
+        input_report=report_path,
+        parsed_root=tmp_path / "parsed",
+    )
+
+    section = next(item for item in payload["candidates"] if item["candidate_id"] == "tex:0001")
+    assert section["alignment_status"] == "aligned"
+    assert section["alignment_method"] == "exact"
+    assert section["alignment_reason"] == "single_heading_context_exact_match"
+    assert section["source_span_candidate_ready"] is True
+
+
 def test_tex_structure_alignment_audit_writer_outputs_schema_valid_reports(tmp_path: Path) -> None:
     paper_id = "1234.5678"
     _parsed_paper(tmp_path / "parsed", paper_id, "# Paper\n\n## Page 1\n\nIntroduction\n")
