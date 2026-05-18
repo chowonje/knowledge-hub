@@ -1,0 +1,313 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.arxiv-source-tex-availability-audit.v1",
+  "title": "arXiv Source / TeX Availability Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "papers",
+    "structureRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.arxiv-source-tex-availability-audit.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paperIds",
+        "allowNetwork",
+        "parsedRoot",
+        "sourceCacheDir",
+        "mineruSourceAlignmentReport",
+        "timeoutSeconds"
+      ],
+      "properties": {
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "allowNetwork": { "type": "boolean" },
+        "parsedRoot": { "type": "string" },
+        "sourceCacheDir": { "type": "string" },
+        "mineruSourceAlignmentReport": { "type": "string" },
+        "timeoutSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paperCount",
+        "sourceAvailablePapers",
+        "sourceDownloadedPapers",
+        "sourceCachedPapers",
+        "sourceUnavailablePapers",
+        "sourceSkippedNetworkDisabledPapers",
+        "texFilePapers",
+        "structureRows",
+        "sectionCommandRows",
+        "subsectionCommandRows",
+        "subsubsectionCommandRows",
+        "equationEnvironmentRows",
+        "tableEnvironmentRows",
+        "tabularEnvironmentRows",
+        "figureEnvironmentRows",
+        "captionCommandRows",
+        "canonicalAlignedRows",
+        "mineruLayoutLinkedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "byFetchStatus",
+        "bySourceFormat",
+        "byStructureType",
+        "byCanonicalAlignmentStatus",
+        "byMineruLayoutLinkStatus"
+      ],
+      "properties": {
+        "paperCount": { "type": "integer", "minimum": 0 },
+        "sourceAvailablePapers": { "type": "integer", "minimum": 0 },
+        "sourceDownloadedPapers": { "type": "integer", "minimum": 0 },
+        "sourceCachedPapers": { "type": "integer", "minimum": 0 },
+        "sourceUnavailablePapers": { "type": "integer", "minimum": 0 },
+        "sourceSkippedNetworkDisabledPapers": { "type": "integer", "minimum": 0 },
+        "texFilePapers": { "type": "integer", "minimum": 0 },
+        "structureRows": { "type": "integer", "minimum": 0 },
+        "sectionCommandRows": { "type": "integer", "minimum": 0 },
+        "subsectionCommandRows": { "type": "integer", "minimum": 0 },
+        "subsubsectionCommandRows": { "type": "integer", "minimum": 0 },
+        "equationEnvironmentRows": { "type": "integer", "minimum": 0 },
+        "tableEnvironmentRows": { "type": "integer", "minimum": 0 },
+        "tabularEnvironmentRows": { "type": "integer", "minimum": 0 },
+        "figureEnvironmentRows": { "type": "integer", "minimum": 0 },
+        "captionCommandRows": { "type": "integer", "minimum": 0 },
+        "canonicalAlignedRows": { "type": "integer", "minimum": 0 },
+        "mineruLayoutLinkedRows": { "type": "integer", "minimum": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "byFetchStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "bySourceFormat": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byStructureType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byCanonicalAlignmentStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byMineruLayoutLinkStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "auditReady",
+        "networkUsed",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "auditReady": { "type": "boolean" },
+        "networkUsed": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "tex_source_candidates_available_report_only",
+            "no_tex_source_candidates_available",
+            "blocked_no_target_papers"
+          ]
+        },
+        "recommendedNextTranche": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "sourceStructureCandidateOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "sourceStructureCandidateOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "paper_id",
+          "arxiv_source_url",
+          "fetch_status",
+          "failure_reason",
+          "source_archive_path",
+          "source_format",
+          "tex_file_count",
+          "canonical_document_present",
+          "mineru_candidate_count",
+          "structure_row_count",
+          "canonical_aligned_structure_rows",
+          "mineru_layout_linked_rows",
+          "strict_eligible_rows",
+          "citation_grade_rows",
+          "runtime_evidence_rows",
+          "byStructureType",
+          "evidence_tier",
+          "report_only",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed"
+        ],
+        "properties": {
+          "paper_id": { "type": "string" },
+          "arxiv_source_url": { "type": "string" },
+          "fetch_status": { "type": "string" },
+          "failure_reason": { "type": "string" },
+          "source_archive_path": { "type": "string" },
+          "source_format": { "type": "string" },
+          "tex_file_count": { "type": "integer", "minimum": 0 },
+          "canonical_document_present": { "type": "boolean" },
+          "mineru_candidate_count": { "type": "integer", "minimum": 0 },
+          "structure_row_count": { "type": "integer", "minimum": 0 },
+          "canonical_aligned_structure_rows": { "type": "integer", "minimum": 0 },
+          "mineru_layout_linked_rows": { "type": "integer", "minimum": 0 },
+          "strict_eligible_rows": { "const": 0 },
+          "citation_grade_rows": { "const": 0 },
+          "runtime_evidence_rows": { "const": 0 },
+          "byStructureType": { "type": "object" },
+          "evidence_tier": { "const": "arxiv_source_tex_availability_audit_only" },
+          "report_only": { "const": true },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false }
+        }
+      }
+    },
+    "structureRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "structure_row_id",
+          "paper_id",
+          "source_file",
+          "structure_type",
+          "tex_command",
+          "tex_environment",
+          "tex_chars_start",
+          "tex_chars_end",
+          "candidate_text",
+          "canonical_alignment_status",
+          "canonical_alignment_method",
+          "canonical_chars_start",
+          "canonical_chars_end",
+          "canonical_alignment_confidence",
+          "canonical_alignment_reason",
+          "mineru_layout_link_status",
+          "mineru_layout_link_method",
+          "mineru_candidate_ids",
+          "mineru_bbox_link_count",
+          "mineru_layout_link_reason",
+          "evidence_tier",
+          "report_only",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "structure_row_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "source_file": { "type": "string" },
+          "structure_type": { "type": "string" },
+          "tex_command": { "type": "string" },
+          "tex_environment": { "type": "string" },
+          "tex_chars_start": { "type": "integer", "minimum": 0 },
+          "tex_chars_end": { "type": "integer", "minimum": 0 },
+          "candidate_text": { "type": "string" },
+          "canonical_alignment_status": { "type": "string" },
+          "canonical_alignment_method": { "type": "string" },
+          "canonical_chars_start": { "type": ["integer", "null"], "minimum": 0 },
+          "canonical_chars_end": { "type": ["integer", "null"], "minimum": 0 },
+          "canonical_alignment_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "canonical_alignment_reason": { "type": "string" },
+          "mineru_layout_link_status": { "type": "string" },
+          "mineru_layout_link_method": { "type": "string" },
+          "mineru_candidate_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "mineru_bbox_link_count": { "type": "integer", "minimum": 0 },
+          "mineru_layout_link_reason": { "type": "string" },
+          "evidence_tier": { "const": "source_structure_candidate_only" },
+          "report_only": { "const": true },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "non_strict_reason": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
