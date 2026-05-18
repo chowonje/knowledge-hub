@@ -100,6 +100,7 @@ def test_arxiv_source_tex_audit_extracts_cached_tex_structure_without_runtime_au
     assert payload["counts"]["sectionCommandRows"] == 1
     assert payload["counts"]["subsectionCommandRows"] == 1
     assert payload["counts"]["equationEnvironmentRows"] == 1
+    assert payload["counts"]["equationEnvironmentTextRows"] == 1
     assert payload["counts"]["figureEnvironmentRows"] == 1
     assert payload["counts"]["tableEnvironmentRows"] == 1
     assert payload["counts"]["tabularEnvironmentRows"] == 1
@@ -114,6 +115,10 @@ def test_arxiv_source_tex_audit_extracts_cached_tex_structure_without_runtime_au
     assert row["mineru_layout_link_status"] == "linked"
     assert row["strict_eligible"] is False
     assert "source_structure_candidate_only" in row["strict_blockers"]
+    equation = next(item for item in payload["structureRows"] if item["structure_type"] == "equation_environment")
+    assert equation["candidate_text"] == "a=b"
+    assert equation["tex_chars_end"] > equation["tex_chars_start"]
+    assert "equation_text_or_semantics_not_citation_grade" in equation["strict_blockers"]
 
 
 def test_arxiv_source_tex_audit_requires_explicit_network_without_cached_source(tmp_path: Path) -> None:
