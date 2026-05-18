@@ -284,6 +284,25 @@ def _nearest_environment(text: str, offset: int) -> str:
     return ""
 
 
+def _find_environment_end(text: str, env: str, start: int) -> tuple[int, int] | None:
+    pattern = re.compile(rf"\\(?:begin|end)\s*\{{\s*{re.escape(env)}\s*\}}", re.DOTALL)
+    depth = 1
+    for match in pattern.finditer(text, start):
+        token = match.group(0)
+        if token.startswith("\\begin"):
+            depth += 1
+        else:
+            depth -= 1
+            if depth == 0:
+                return match.start(), match.end()
+    return None
+
+
+def _clean_environment_body(value: str) -> str:
+    without_comments = re.sub(r"(?<!\\)%.*", "", value)
+    return _clean_text(without_comments)
+
+
 def _extract_structure_rows(paper_id: str, files: list[_SourceFile]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     index = 1
@@ -332,6 +351,15 @@ def _extract_structure_rows(paper_id: str, files: list[_SourceFile]) -> list[dic
             group = _TARGET_ENV_GROUP_BY_NAME.get(env)
             if not group:
                 continue
+            end_match = _find_environment_end(text, env, match.end())
+            if end_match is None:
+                tex_chars_end = match.end()
+                candidate_text = ""
+            else:
+                body_start = match.end()
+                body_end, end_token_end = end_match
+                tex_chars_end = end_token_end
+                candidate_text = _clean_environment_body(text[body_start:body_end]) if group == "equation" else ""
             rows.append(
                 {
                     "structure_row_id": f"arxiv-source-structure:{paper_id}:{index:04d}",
@@ -341,8 +369,8 @@ def _extract_structure_rows(paper_id: str, files: list[_SourceFile]) -> list[dic
                     "tex_command": "\\begin",
                     "tex_environment": env,
                     "tex_chars_start": match.start(),
-                    "tex_chars_end": match.end(),
-                    "candidate_text": "",
+                    "tex_chars_end": tex_chars_end,
+                    "candidate_text": candidate_text,
                 }
             )
             index += 1
@@ -450,6 +478,8 @@ def _row_with_alignment(
         strict_blockers.append("non_exact_or_missing_canonical_alignment")
     if mineru["status"] != "linked":
         strict_blockers.append("mineru_layout_link_not_unique")
+    if str(row.get("structure_type") or "").startswith("equation"):
+        strict_blockers.append("equation_text_or_semantics_not_citation_grade")
     return {
         **row,
         "canonical_alignment_status": alignment.status,
@@ -512,6 +542,12 @@ def _paper_row(
         for row in raw_structure_rows
     ]
     by_type = Counter(str(row.get("structure_type") or "") for row in structure_rows)
+    equation_text_rows = sum(
+        1
+        for row in structure_rows
+        if str(row.get("structure_type") or "") == "equation_environment"
+        and bool(_clean_text(row.get("candidate_text")))
+    )
     aligned = sum(1 for row in structure_rows if row.get("canonical_alignment_status") == "aligned")
     mineru_linked = sum(1 for row in structure_rows if row.get("mineru_layout_link_status") == "linked")
     paper = {
@@ -527,6 +563,7 @@ def _paper_row(
         "canonical_document_present": bool(canonical_text),
         "mineru_candidate_count": len(candidates_by_paper.get(paper_id, [])),
         "structure_row_count": len(structure_rows),
+        "equation_environment_text_rows": equation_text_rows,
         "canonical_aligned_structure_rows": aligned,
         "mineru_layout_linked_rows": mineru_linked,
         "strict_eligible_rows": 0,
@@ -549,6 +586,12 @@ def _counts(papers: list[dict[str, Any]], structure_rows: list[dict[str, Any]]) 
     by_structure = Counter(str(row.get("structure_type") or "") for row in structure_rows)
     by_alignment = Counter(str(row.get("canonical_alignment_status") or "") for row in structure_rows)
     by_mineru = Counter(str(row.get("mineru_layout_link_status") or "") for row in structure_rows)
+    equation_text_rows = sum(
+        1
+        for row in structure_rows
+        if str(row.get("structure_type") or "") == "equation_environment"
+        and bool(_clean_text(row.get("candidate_text")))
+    )
     return {
         "paperCount": len(papers),
         "sourceAvailablePapers": sum(1 for paper in papers if int(paper.get("tex_file_count") or 0) > 0),
@@ -562,6 +605,7 @@ def _counts(papers: list[dict[str, Any]], structure_rows: list[dict[str, Any]]) 
         "subsectionCommandRows": by_structure.get("subsection", 0),
         "subsubsectionCommandRows": by_structure.get("subsubsection", 0),
         "equationEnvironmentRows": by_structure.get("equation_environment", 0),
+        "equationEnvironmentTextRows": equation_text_rows,
         "tableEnvironmentRows": by_structure.get("table_environment", 0),
         "tabularEnvironmentRows": by_structure.get("tabular_environment", 0),
         "figureEnvironmentRows": by_structure.get("figure_environment", 0),
@@ -690,6 +734,7 @@ def render_arxiv_source_tex_availability_audit_markdown(report: dict[str, Any]) 
         f"- Papers: `{int(counts.get('paperCount') or 0)}`",
         f"- Source available papers: `{int(counts.get('sourceAvailablePapers') or 0)}`",
         f"- Structure rows: `{int(counts.get('structureRows') or 0)}`",
+        f"- Equation environment text rows: `{int(counts.get('equationEnvironmentTextRows') or 0)}`",
         f"- Canonical aligned rows: `{int(counts.get('canonicalAlignedRows') or 0)}`",
         f"- MinerU layout linked rows: `{int(counts.get('mineruLayoutLinkedRows') or 0)}`",
         f"- Strict eligible rows: `{int(counts.get('strictEligibleRows') or 0)}`",
