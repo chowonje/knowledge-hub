@@ -44,6 +44,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.tex-equation-quote-candidate-report.v1": "paper-tex-equation-quote-candidate-report.v1.json",
     "knowledge-hub.paper.tex-equation-canonical-alignment-diagnostic-audit.v1": "paper-tex-equation-canonical-alignment-diagnostic-audit.v1.json",
     "knowledge-hub.paper.tex-equation-normalization-bridge-audit.v1": "paper-tex-equation-normalization-bridge-audit.v1.json",
+    "knowledge-hub.paper.tex-equation-canonical-text-normalizer-design.v1": "paper-tex-equation-canonical-text-normalizer-design.v1.json",
     "knowledge-hub.paper.mineru-normalizer-audit.v1": "paper-mineru-normalizer-audit.v1.json",
     "knowledge-hub.paper.mineru-source-alignment-audit.v1": "paper-mineru-source-alignment-audit.v1.json",
     "knowledge-hub.paper.mineru-potential-review-pack.v1": "paper-mineru-potential-review-pack.v1.json",
