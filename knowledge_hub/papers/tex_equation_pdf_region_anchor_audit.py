@@ -445,9 +445,6 @@ def _row(index: int, source_row: dict[str, Any], context: dict[str, Any]) -> dic
     elif not candidate_text:
         status = "empty_equation_text"
         failure_reason = "empty_equation_text"
-    elif normalized_window_count <= 0:
-        status = "blocked_no_line_local_normalized_window"
-        failure_reason = "line_local_normalized_window_missing"
     elif len(terms) < 2:
         status = "insufficient_normalized_terms"
         failure_reason = "insufficient_normalized_terms"
@@ -455,17 +452,45 @@ def _row(index: int, source_row: dict[str, Any], context: dict[str, Any]) -> dic
         candidates = _pdf_region_candidates(source_row, context)
         selected, unique = _select_region(candidates)
         if selected and unique:
-            if line_status.startswith("ambiguous"):
+            if normalized_window_count <= 0:
+                status = "unique_pdf_region_without_line_local_window_candidate_only"
+                method = "formula_like_pdf_block_window_without_line_local_window"
+                confidence = min(
+                    0.62,
+                    0.36
+                    + _safe_float(selected.get("coverage")) * 0.14
+                    + _safe_float(selected.get("formula_score")) * 0.04,
+                )
+            elif line_status.startswith("ambiguous"):
                 status = "pdf_region_resolves_line_local_ambiguity_candidate_only"
+                method = "formula_like_pdf_block_window"
+                confidence = min(
+                    0.78,
+                    0.5
+                    + _safe_float(selected.get("coverage")) * 0.2
+                    + _safe_float(selected.get("formula_score")) * 0.05,
+                )
             else:
                 status = "unique_pdf_region_anchor_candidate_only"
-            method = "formula_like_pdf_block_window"
-            confidence = min(0.78, 0.5 + _safe_float(selected.get("coverage")) * 0.2 + _safe_float(selected.get("formula_score")) * 0.05)
+                method = "formula_like_pdf_block_window"
+                confidence = min(
+                    0.78,
+                    0.5
+                    + _safe_float(selected.get("coverage")) * 0.2
+                    + _safe_float(selected.get("formula_score")) * 0.05,
+                )
         elif candidates:
-            status = "ambiguous_pdf_region_anchor_candidate_only"
-            method = "formula_like_pdf_block_window"
+            if normalized_window_count <= 0:
+                status = "ambiguous_pdf_region_without_line_local_window_candidate_only"
+                method = "formula_like_pdf_block_window_without_line_local_window"
+            else:
+                status = "ambiguous_pdf_region_anchor_candidate_only"
+                method = "formula_like_pdf_block_window"
             confidence = 0.35
             failure_reason = "pdf_region_anchor_ambiguous"
+        elif normalized_window_count <= 0:
+            status = "blocked_no_line_local_normalized_window"
+            failure_reason = "line_local_normalized_window_missing"
         else:
             status = "no_pdf_region_anchor_candidate"
             failure_reason = "no_formula_like_pdf_block_window"
@@ -483,6 +508,11 @@ def _row(index: int, source_row: dict[str, Any], context: dict[str, Any]) -> dic
                 "equation_region_link_unverified_for_runtime",
                 "runtime_promotion_disabled_for_tranche",
                 "strict_promotion_requires_later_explicit_tranche",
+                *(
+                    ["canonical_line_local_anchor_missing_for_pdf_only_region_candidate"]
+                    if normalized_window_count <= 0 and selected
+                    else []
+                ),
                 *[str(item) for item in list(source_row.get("strict_blockers") or [])],
             ]
         )
@@ -541,6 +571,11 @@ def _row(index: int, source_row: dict[str, Any], context: dict[str, Any]) -> dic
         "non_strict_reason": [
             "pdf_region_anchor_rows_are_not_evidence",
             "pdf_region_bbox_is_diagnostic_not_provenance",
+            *(
+                ["pdf_region_recovered_without_canonical_line_local_window"]
+                if normalized_window_count <= 0 and selected
+                else []
+            ),
             "later_explicit_promotion_tranche_required",
         ],
     }
@@ -557,7 +592,13 @@ def _counts(rows: list[dict[str, Any]], schema_violations: list[str]) -> dict[st
         "pdfRegionResolvedAmbiguousRows": sum(
             1 for row in rows if bool(row.get("line_local_ambiguity_resolved_by_pdf_region"))
         ),
-        "ambiguousPdfRegionAnchorRows": int(by_status.get("ambiguous_pdf_region_anchor_candidate_only", 0)),
+        "pdfRegionWithoutLineLocalWindowRows": int(
+            by_status.get("unique_pdf_region_without_line_local_window_candidate_only", 0)
+        ),
+        "ambiguousPdfRegionAnchorRows": int(
+            by_status.get("ambiguous_pdf_region_anchor_candidate_only", 0)
+            + by_status.get("ambiguous_pdf_region_without_line_local_window_candidate_only", 0)
+        ),
         "failedPdfRegionAnchorRows": sum(
             count
             for status, count in by_status.items()
@@ -566,6 +607,8 @@ def _counts(rows: list[dict[str, Any]], schema_violations: list[str]) -> dict[st
                 "unique_pdf_region_anchor_candidate_only",
                 "pdf_region_resolves_line_local_ambiguity_candidate_only",
                 "ambiguous_pdf_region_anchor_candidate_only",
+                "unique_pdf_region_without_line_local_window_candidate_only",
+                "ambiguous_pdf_region_without_line_local_window_candidate_only",
             }
         ),
         "sourceSpanCreatedRows": 0,
@@ -678,6 +721,7 @@ def render_tex_equation_pdf_region_anchor_audit_markdown(report: dict[str, Any])
         f"- PDF-region candidate rows: `{int(counts.get('pdfRegionCandidateRows') or 0)}`",
         f"- Unique PDF-region anchor rows: `{int(counts.get('uniquePdfRegionAnchorRows') or 0)}`",
         f"- Ambiguous rows resolved by PDF region: `{int(counts.get('pdfRegionResolvedAmbiguousRows') or 0)}`",
+        f"- PDF-only rows without line-local window: `{int(counts.get('pdfRegionWithoutLineLocalWindowRows') or 0)}`",
         f"- Ambiguous PDF-region anchor rows: `{int(counts.get('ambiguousPdfRegionAnchorRows') or 0)}`",
         f"- Failed PDF-region anchor rows: `{int(counts.get('failedPdfRegionAnchorRows') or 0)}`",
         f"- Source spans created: `{int(counts.get('sourceSpanCreatedRows') or 0)}`",
