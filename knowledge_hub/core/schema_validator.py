@@ -52,6 +52,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
     "knowledge-hub.paper.tex-equation-rendered-macro-term-profile-design.v1": "paper-tex-equation-rendered-macro-term-profile-design.v1.json",
     "knowledge-hub.paper.tex-equation-label-number-pdf-region-disambiguation-design.v1": "paper-tex-equation-label-number-pdf-region-disambiguation-design.v1.json",
+    "knowledge-hub.paper.tex-equation-source-span-promotion-readiness-audit.v1": "paper-tex-equation-source-span-promotion-readiness-audit.v1.json",
     "knowledge-hub.paper.mineru-normalizer-audit.v1": "paper-mineru-normalizer-audit.v1.json",
     "knowledge-hub.paper.mineru-source-alignment-audit.v1": "paper-mineru-source-alignment-audit.v1.json",
     "knowledge-hub.paper.mineru-potential-review-pack.v1": "paper-mineru-potential-review-pack.v1.json",
