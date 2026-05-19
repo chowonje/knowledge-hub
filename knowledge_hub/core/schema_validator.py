@@ -84,6 +84,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.strict-evidence-pilot-tranche-completion-gate.v1": "paper-strict-evidence-pilot-tranche-completion-gate.v1.json",
     "knowledge-hub.paper.strict-evidence-post-pilot-promotion-hold-review.v1": "paper-strict-evidence-post-pilot-promotion-hold-review.v1.json",
     "knowledge-hub.paper.strict-evidence-strict-eligible-mutation-decision-record.v1": "paper-strict-evidence-strict-eligible-mutation-decision-record.v1.json",
+    "knowledge-hub.paper.strict-evidence-eligibility-record-contract.v1": "paper-strict-evidence-eligibility-record-contract.v1.json",
+    "knowledge-hub.paper.strict-evidence-eligibility-record.v1": "paper-strict-evidence-eligibility-record.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
