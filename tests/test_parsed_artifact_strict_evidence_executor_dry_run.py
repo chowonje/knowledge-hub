@@ -20,6 +20,7 @@ from knowledge_hub.papers.parsed_artifact_strict_evidence_record_contract import
 from knowledge_hub.papers.parsed_artifact_strict_evidence_executor_dry_run import (
     DRY_RUN_STATUS_BLOCKED_NORM_MISMATCH,
     DRY_RUN_STATUS_READY,
+    PARSED_ARTIFACT_STRICT_EVIDENCE_NORMALIZATION_HASH_REPAIR_SCHEMA_ID,
     PARSED_ARTIFACT_STRICT_EVIDENCE_EXECUTOR_DRY_RUN_SCHEMA_ID,
     build_parsed_artifact_strict_evidence_executor_dry_run,
     compute_contract_substring_sha256,
@@ -137,6 +138,109 @@ def _packet_review_report(*rows: dict) -> dict:
         "packetRows": row_list,
         "excludedManualOrExtractorRows": [],
         "rows": row_list,
+    }
+
+
+def _repair_report(*, original_row: dict, repaired_row: dict) -> dict:
+    return {
+        "schema": PARSED_ARTIFACT_STRICT_EVIDENCE_NORMALIZATION_HASH_REPAIR_SCHEMA_ID,
+        "status": "ok",
+        "generatedAt": "2026-05-19T00:00:00Z",
+        "input": {
+            "executorDryRunReportPath": "/tmp/dry-run.json",
+            "executorDryRunSchema": PARSED_ARTIFACT_STRICT_EVIDENCE_EXECUTOR_DRY_RUN_SCHEMA_ID,
+            "designPacketReviewReportPath": "/tmp/packet.json",
+            "designPacketReviewSchema": PARSED_ARTIFACT_SOURCE_SPAN_STRICT_EVIDENCE_DESIGN_PACKET_REVIEW_SCHEMA_ID,
+            "papersDir": "/tmp/papers",
+            "parsedRoot": "/tmp/papers/parsed",
+            "runId": "repair-run",
+            "requestedPaperIds": [],
+        },
+        "counts": {
+            "inputRows": 1,
+            "targetMismatchRows": 1,
+            "normalizationHashRepairCandidateOnlyRows": 1,
+            "blockedSourceTextUnavailableRows": 0,
+            "blockedMissingCharsRows": 0,
+            "blockedInvalidCharsBasisRows": 0,
+            "blockedUnsupportedNormalizationRows": 0,
+            "blockedHashRepairNotNeededRows": 0,
+            "blockedInputSchemaViolationRows": 0,
+            "strictEvidenceWriteRows": 0,
+            "strictEvidenceCreatedRows": 0,
+            "citationGradeEvidenceCreatedRows": 0,
+            "runtimeEvidenceCreatedRows": 0,
+            "parserRoutingChangedRows": 0,
+            "answerIntegrationChangedRows": 0,
+            "databaseMutationRows": 0,
+            "canonicalParsedArtifactWriteRows": 0,
+            "designPacketReviewReportWriteRows": 0,
+            "sourceSpanUpdatedRows": 0,
+            "schemaViolationCount": 0,
+            "byPaperId": {"paper-1": 1},
+            "byArtifactType": {"section": 1},
+            "byRepairStatus": {"normalization_hash_repair_candidate_only": 1},
+            "byRecommendedAction": {
+                "queue_for_strict_evidence_executor_dry_run_with_repaired_packet": 1
+            },
+        },
+        "gate": {
+            "normalizationHashRepairCandidateReady": True,
+            "executorDryRunConsumesRepairedHashesDirectly": False,
+            "executorDryRunConsumptionNote": "test fixture",
+            "strictEvidenceCreated": False,
+            "strictEvidenceReady": False,
+            "runtimeMutationAllowed": False,
+            "schemaViolations": [],
+            "decision": "parsed_artifact_strict_evidence_normalization_hash_repair_ready",
+            "recommendedNextTranche": "parsed_artifact_strict_evidence_executor_dry_run_with_repaired_design_packet",
+        },
+        "policy": {
+            "reportOnly": True,
+            "designPacketReviewReportMutated": False,
+            "strictEvidenceStoreWrite": False,
+            "sourceSpanStoreWrite": False,
+            "strictEvidenceCreated": False,
+            "citationGradeEvidenceCreated": False,
+            "runtimeEvidenceCreated": False,
+            "parserRoutingChanged": False,
+            "answerIntegrationChanged": False,
+            "databaseMutation": False,
+            "vaultScan": False,
+            "reindexOrReembed": False,
+            "canonicalParsedArtifactsWritten": False,
+        },
+        "warnings": [],
+        "rows": [
+            {
+                "repair_row_id": "repair:0000",
+                "dry_run_row_id": "dry-run:0000",
+                "packet_review_row_id": original_row["packet_review_row_id"],
+                "paper_id": original_row["paper_id"],
+                "artifact_type": original_row["artifact_type"],
+                "sourceSpanId": original_row["sourceSpanId"],
+                "candidateRecordId": original_row["candidateRecordId"],
+                "dry_run_status": DRY_RUN_STATUS_BLOCKED_NORM_MISMATCH,
+                "repair_status": "normalization_hash_repair_candidate_only",
+                "repair_blockers": ["strict_evidence_normalization_hash_repair_only"],
+                "recommended_action": "queue_for_strict_evidence_executor_dry_run_with_repaired_packet",
+                "hashRepair": {
+                    "priorExpectedSubstringSha256": original_row["proposed_chars"][
+                        "expectedSubstringSha256"
+                    ],
+                    "repairedExpectedSubstringSha256": repaired_row["proposed_chars"][
+                        "expectedSubstringSha256"
+                    ],
+                },
+                "repairedPacketRow": repaired_row,
+                "writeMatrix": {
+                    "writeEnabled": False,
+                    "strictEvidenceStoreWrite": False,
+                    "sourceSpanStoreWrite": False,
+                },
+            }
+        ],
+        "repairedPacketRows": [repaired_row],
     }
 
 
@@ -263,6 +367,66 @@ def test_dry_run_ready_when_contract_hash_matches(tmp_path: Path) -> None:
     )
 
     assert report["counts"]["dryRunReadyStrictEvidenceRecordOnlyRows"] == 1
+    assert report["rows"][0]["dry_run_status"] == DRY_RUN_STATUS_READY
+    assert report["counts"]["strictEvidenceWriteRows"] == 0
+    assert validate_payload(
+        report,
+        PARSED_ARTIFACT_STRICT_EVIDENCE_EXECUTOR_DRY_RUN_SCHEMA_ID,
+        strict=True,
+    ).ok
+
+
+def test_dry_run_consumes_normalization_hash_repair_report_in_memory(tmp_path: Path) -> None:
+    canonical = "A  B"
+    start = 1
+    end = 4
+    raw_hash = compute_raw_utf8_slice_sha256(canonical, start, end)
+    contract_hash = compute_contract_substring_sha256(
+        canonical,
+        start,
+        end,
+        normalization=CHARS_NORMALIZATION,
+    )
+    source_hash = _paper_fixture(tmp_path, pdf_text=canonical)
+
+    packet_row = _packet_row(
+        text_surface="  B",
+        start=start,
+        end=end,
+        expected_hash=raw_hash,
+    )
+    packet_row["sourceContentHash"] = source_hash
+    packet_row["proposed_chars"]["sourceContentHash"] = source_hash
+    packet_path = tmp_path / "packet.json"
+    packet_path.write_text(json.dumps(_packet_review_report(packet_row)), encoding="utf-8")
+
+    repaired_row = json.loads(json.dumps(packet_row))
+    repaired_row["proposed_chars"]["expectedSubstringSha256"] = contract_hash
+    repair_path = tmp_path / "repair.json"
+    repair_path.write_text(
+        json.dumps(_repair_report(original_row=packet_row, repaired_row=repaired_row)),
+        encoding="utf-8",
+    )
+
+    contract_path = tmp_path / "contract.json"
+    contract_path.write_text(
+        json.dumps(build_parsed_artifact_strict_evidence_record_contract()),
+        encoding="utf-8",
+    )
+
+    report = build_parsed_artifact_strict_evidence_executor_dry_run(
+        design_packet_review_report_path=packet_path,
+        contract_report_path=contract_path,
+        normalization_hash_repair_report_path=repair_path,
+        papers_dir=tmp_path / "papers",
+        parsed_root=tmp_path / "papers" / "parsed",
+        page_loader=lambda _path: [{"page": 1, "text": canonical}],
+    )
+
+    assert report["input"]["normalizationHashRepairApplied"] is True
+    assert report["input"]["normalizationHashRepairAppliedRows"] == 1
+    assert report["counts"]["dryRunReadyStrictEvidenceRecordOnlyRows"] == 1
+    assert report["counts"]["blockedNormalizationHashContractMismatchRows"] == 0
     assert report["rows"][0]["dry_run_status"] == DRY_RUN_STATUS_READY
     assert report["counts"]["strictEvidenceWriteRows"] == 0
     assert validate_payload(

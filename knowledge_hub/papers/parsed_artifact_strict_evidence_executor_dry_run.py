@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from argparse import ArgumentParser
 from collections import Counter
+from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -87,6 +88,33 @@ DEFAULT_OUTPUT_DIR = (
     / "01-parsed-artifact-strict-evidence-executor-dry-run"
 )
 
+DEFAULT_REPAIRED_OUTPUT_DIR = (
+    Path.home()
+    / ".khub"
+    / "reports"
+    / "layout-parser-pilot"
+    / "2026-05-19"
+    / "parsed-artifact-strict-evidence-executor-dry-run"
+    / "02-parsed-artifact-strict-evidence-executor-dry-run-repaired-design-packet"
+)
+
+DEFAULT_NORMALIZATION_HASH_REPAIR_REPORT_PATH = (
+    Path.home()
+    / ".khub"
+    / "reports"
+    / "layout-parser-pilot"
+    / "2026-05-19"
+    / "parsed-artifact-strict-evidence-normalization-hash-repair"
+    / "01-parsed-artifact-strict-evidence-normalization-hash-repair"
+    / "parsed-artifact-strict-evidence-normalization-hash-repair.json"
+)
+
+PARSED_ARTIFACT_STRICT_EVIDENCE_NORMALIZATION_HASH_REPAIR_SCHEMA_ID = (
+    "knowledge-hub.paper.parsed-artifact-strict-evidence-normalization-hash-repair.v1"
+)
+
+REPAIR_STATUS_CANDIDATE = "normalization_hash_repair_candidate_only"
+
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -126,6 +154,37 @@ def _read_json(path: str | Path | None) -> dict[str, Any]:
     except Exception:
         return {}
     return payload if isinstance(payload, dict) else {}
+
+
+def _apply_normalization_hash_repair_to_packet_report(
+    packet_report: dict[str, Any],
+    repair_report: dict[str, Any],
+) -> tuple[dict[str, Any], int]:
+    repair_by_packet_id = {
+        _safe_text(row.get("packet_review_row_id")): row
+        for row in repair_report.get("rows", [])
+        if isinstance(row, dict)
+        and row.get("repair_status") == REPAIR_STATUS_CANDIDATE
+        and isinstance(row.get("repairedPacketRow"), dict)
+    }
+    repaired = deepcopy(packet_report)
+    repaired_rows: list[dict[str, Any]] = []
+    applied = 0
+    for row in repaired.get("packetRows", []):
+        if not isinstance(row, dict):
+            continue
+        packet_review_row_id = _safe_text(row.get("packet_review_row_id"))
+        repair_row = repair_by_packet_id.get(packet_review_row_id)
+        if repair_row:
+            repaired_rows.append(deepcopy(repair_row["repairedPacketRow"]))
+            applied += 1
+        else:
+            repaired_rows.append(deepcopy(row))
+    repaired["packetRows"] = repaired_rows
+    repaired["rows"] = repaired_rows
+    repaired["normalizationHashRepairApplied"] = applied > 0
+    repaired["normalizationHashRepairAppliedRows"] = applied
+    return repaired, applied
 
 
 def normalize_nfkc_whitespace_casefold_v1(text: str) -> str:
@@ -402,6 +461,7 @@ def build_parsed_artifact_strict_evidence_executor_dry_run(
     *,
     design_packet_review_report_path: str | Path = DEFAULT_DESIGN_PACKET_REVIEW_REPORT_PATH,
     contract_report_path: str | Path = DEFAULT_CONTRACT_REPORT_PATH,
+    normalization_hash_repair_report_path: str | Path | None = None,
     papers_dir: str | Path = DEFAULT_PAPERS_DIR,
     parsed_root: str | Path | None = None,
     run_id: str = "parsed-artifact-strict-evidence-executor-dry-run",
@@ -410,20 +470,29 @@ def build_parsed_artifact_strict_evidence_executor_dry_run(
 ) -> dict[str, Any]:
     packet_path = Path(str(design_packet_review_report_path)).expanduser()
     contract_path = Path(str(contract_report_path)).expanduser()
+    repair_path = (
+        Path(str(normalization_hash_repair_report_path)).expanduser()
+        if normalization_hash_repair_report_path
+        else None
+    )
     papers_path = Path(str(papers_dir)).expanduser()
     parsed_path = Path(str(parsed_root or (papers_path / "parsed"))).expanduser()
     loader = page_loader or _extract_pdf_pages
 
     warnings: list[str] = []
     input_schema_violations: list[str] = []
+    normalization_repair_applied_rows = 0
 
     packet_report = _read_json(packet_path)
     contract_report = _read_json(contract_path)
+    repair_report = _read_json(repair_path) if repair_path else {}
 
     if not packet_report:
         warnings.append("design_packet_review_report_missing_or_unreadable")
     if not contract_report:
         warnings.append("strict_evidence_contract_report_missing_or_unreadable")
+    if repair_path and not repair_report:
+        warnings.append("normalization_hash_repair_report_missing_or_unreadable")
 
     packet_validation = validate_payload(
         packet_report,
@@ -440,6 +509,28 @@ def build_parsed_artifact_strict_evidence_executor_dry_run(
     )
     if not contract_validation.ok:
         input_schema_violations.extend(str(error) for error in contract_validation.errors)
+
+    if repair_path:
+        repair_validation = validate_payload(
+            repair_report,
+            PARSED_ARTIFACT_STRICT_EVIDENCE_NORMALIZATION_HASH_REPAIR_SCHEMA_ID,
+            strict=True,
+        )
+        if not repair_validation.ok:
+            input_schema_violations.extend(str(error) for error in repair_validation.errors)
+        elif not input_schema_violations:
+            packet_report, normalization_repair_applied_rows = (
+                _apply_normalization_hash_repair_to_packet_report(packet_report, repair_report)
+            )
+            repaired_packet_validation = validate_payload(
+                packet_report,
+                PARSED_ARTIFACT_SOURCE_SPAN_STRICT_EVIDENCE_DESIGN_PACKET_REVIEW_SCHEMA_ID,
+                strict=True,
+            )
+            if not repaired_packet_validation.ok:
+                input_schema_violations.extend(
+                    str(error) for error in repaired_packet_validation.errors
+                )
 
     packet_rows = [
         row
@@ -526,6 +617,10 @@ def build_parsed_artifact_strict_evidence_executor_dry_run(
             "designPacketReviewSchema": _safe_text(packet_report.get("schema")),
             "contractReportPath": str(contract_path),
             "contractSchema": _safe_text(contract_report.get("schema")),
+            "normalizationHashRepairReportPath": str(repair_path or ""),
+            "normalizationHashRepairSchema": _safe_text(repair_report.get("schema")),
+            "normalizationHashRepairApplied": bool(normalization_repair_applied_rows),
+            "normalizationHashRepairAppliedRows": normalization_repair_applied_rows,
             "papersDir": str(papers_path),
             "parsedRoot": str(parsed_path),
             "runId": run_id,
@@ -534,6 +629,8 @@ def build_parsed_artifact_strict_evidence_executor_dry_run(
         "counts": counts,
         "gate": {
             "readyForStrictEvidenceExecutorApply": ready_count > 0 and not input_schema_violations,
+            "normalizationHashRepairApplied": bool(normalization_repair_applied_rows),
+            "normalizationHashRepairAppliedRows": normalization_repair_applied_rows,
             "strictEvidenceCreated": False,
             "strictEvidenceReady": False,
             "citationReady": False,
@@ -552,6 +649,7 @@ def build_parsed_artifact_strict_evidence_executor_dry_run(
         "policy": {
             "reportOnly": True,
             "executorImplemented": False,
+            "normalizationHashRepairReportOnly": True,
             "strictEvidenceStoreWrite": False,
             "sourceSpanStoreWrite": False,
             "strictEvidenceCreated": False,
@@ -642,33 +740,45 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover
         default=str(DEFAULT_DESIGN_PACKET_REVIEW_REPORT_PATH),
     )
     parser.add_argument("--contract-report", default=str(DEFAULT_CONTRACT_REPORT_PATH))
+    parser.add_argument(
+        "--normalization-hash-repair-report",
+        default="",
+        help="Optional normalization/hash repair report to apply in-memory before dry-run planning.",
+    )
     parser.add_argument("--papers-dir", default=str(DEFAULT_PAPERS_DIR))
     parser.add_argument("--parsed-root", default="")
     parser.add_argument("--run-id", default="parsed-artifact-strict-evidence-executor-dry-run")
     parser.add_argument("--paper-id", action="append", default=[])
-    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--output-dir", default="")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
+
+    output_dir = args.output_dir or str(
+        DEFAULT_REPAIRED_OUTPUT_DIR
+        if args.normalization_hash_repair_report
+        else DEFAULT_OUTPUT_DIR
+    )
 
     report = build_parsed_artifact_strict_evidence_executor_dry_run(
         design_packet_review_report_path=args.design_packet_review_report,
         contract_report_path=args.contract_report,
+        normalization_hash_repair_report_path=args.normalization_hash_repair_report or None,
         papers_dir=args.papers_dir,
         parsed_root=args.parsed_root or None,
         run_id=args.run_id,
         paper_ids=args.paper_id or None,
     )
 
-    if args.output_dir:
+    if output_dir:
         paths = write_parsed_artifact_strict_evidence_executor_dry_run_reports(
             report,
-            args.output_dir,
+            output_dir,
         )
         print(f"wrote report: {paths['report']}")
         print(f"wrote summary: {paths['summary']}")
         print(f"wrote markdown: {paths['markdown']}")
 
-    if args.json or not args.output_dir:
+    if args.json or not output_dir:
         print(json.dumps(_summary_payload(report), ensure_ascii=False, indent=2))
 
     return 0
@@ -687,4 +797,6 @@ __all__ = [
     "normalize_nfkc_whitespace_casefold_v1",
     "build_parsed_artifact_strict_evidence_executor_dry_run",
     "write_parsed_artifact_strict_evidence_executor_dry_run_reports",
+    "DEFAULT_NORMALIZATION_HASH_REPAIR_REPORT_PATH",
+    "DEFAULT_REPAIRED_OUTPUT_DIR",
 ]
