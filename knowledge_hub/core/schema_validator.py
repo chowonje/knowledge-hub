@@ -65,6 +65,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-review.v1": "paper-parsed-artifact-source-span-strict-evidence-design-review.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-span-text-match-disambiguation-design.v1": "paper-parsed-artifact-source-span-text-match-disambiguation-design.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-review-reconciliation.v1": "paper-parsed-artifact-source-span-strict-evidence-design-review-reconciliation.v1.json",
+    "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-packet-review.v1": "paper-parsed-artifact-source-span-strict-evidence-design-packet-review.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
