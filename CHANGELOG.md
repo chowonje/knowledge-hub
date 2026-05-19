@@ -11,6 +11,7 @@
 
 ### Changed
 
+- Added a contract-only StrictEvidence record definition (`parsed_artifact_strict_evidence_record_contract`) with JSONL store path templates, record schema, normalization/hash contract, readback requirements, and rollback strategy without creating StrictEvidence records or mutating SourceSpan JSONL.
 - Added a report-only strict-evidence design packet review helper (`parsed_artifact_source_span_strict_evidence_design_packet_review`) that validates reconciled design-ready rows for internal consistency before any StrictEvidence executor or SourceSpan apply tranche without mutating SourceSpan records or creating StrictEvidence.
 - Added a report-only strict-evidence design-review reconciliation helper (`parsed_artifact_source_span_strict_evidence_design_review_reconciliation`) that merges design-review-ready rows with disambiguation design candidates into a final 99-row design packet and preserves still-blocked ambiguous rows for manual follow-up without mutating SourceSpan records or creating StrictEvidence.
 - Added a report-only text-match disambiguation design helper (`parsed_artifact_source_span_text_match_disambiguation_design`) that consumes ambiguous strict-evidence design-review rows and attempts to narrow duplicate PDF text matches using page/locator/block/bbox context without mutating SourceSpan records or creating StrictEvidence.
