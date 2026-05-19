@@ -72,6 +72,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-strict-evidence-normalization-hash-repair.v1": "paper-parsed-artifact-strict-evidence-normalization-hash-repair.v1.json",
     "knowledge-hub.paper.parsed-artifact-strict-evidence-executor-apply.v1": "paper-parsed-artifact-strict-evidence-executor-apply.v1.json",
     "knowledge-hub.paper.parsed-artifact-strict-evidence-promotion-readback-review.v1": "paper-parsed-artifact-strict-evidence-promotion-readback-review.v1.json",
+    "knowledge-hub.paper.parsed-artifact-strict-evidence-policy-gate.v1": "paper-parsed-artifact-strict-evidence-policy-gate.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
