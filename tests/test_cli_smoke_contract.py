@@ -98,6 +98,41 @@ def test_extract_trailing_json_object_parses_index_prelude():
     assert payload["status"] == "ok"
 
 
+def test_stdout_shows_config_path_direct_match():
+    module = _load_script_module()
+    config_path = Path("/tmp/khub-release-smoke/.khub/config.yaml")
+    stdout = f"설정: {config_path}\n"
+
+    assert module._stdout_shows_config_path(stdout, config_path) is True
+
+
+def test_stdout_shows_config_path_rich_wrapped():
+    module = _load_script_module()
+    config_path = Path(
+        "/var/folders/lp/55747bln3b33wm29kzlpr97w0000gn/T/khub-release-smoke-djb8x10v/.khub/config.yaml"
+    )
+    stdout = (
+        "╭──────────────────────────────── 시스템 정보 ─────────────────────────────────╮\n"
+        "│ Knowledge Hub v0.1.5                                                         │\n"
+        "│                                                                              │\n"
+        "│ 설정:                                                                        │\n"
+        "│ /var/folders/lp/55747bln3b33wm29kzlpr97w0000gn/T/khub-release-smoke-djb8x10v │\n"
+        "│ /.khub/config.yaml                                                           │\n"
+        "╰──────────────────────────────────────────────────────────────────────────────╯\n"
+    )
+
+    assert str(config_path) not in stdout
+    assert module._stdout_shows_config_path(stdout, config_path) is True
+
+
+def test_stdout_shows_config_path_missing():
+    module = _load_script_module()
+    config_path = Path("/tmp/khub-release-smoke/.khub/config.yaml")
+    stdout = "Knowledge Hub v0.1.0\nRetrieval Runtime\nvector corpus\n"
+
+    assert module._stdout_shows_config_path(stdout, config_path) is False
+
+
 def test_validate_status_result_requires_runtime_markers():
     module = _load_script_module()
     result = module.CommandResult(
