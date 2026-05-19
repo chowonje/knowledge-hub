@@ -88,6 +88,29 @@ def build_env(home_dir: Path) -> dict[str, str]:
     return env
 
 
+RICH_BOX_BORDER_CHARS = frozenset("│╭╮╰╯┏┓┗┛┡┩┣┫╞╡═━┃├┤")
+
+
+def _compact_rich_stdout(stdout: str) -> str:
+    """Collapse Rich panel line wraps so wrapped paths can be matched."""
+    fragments: list[str] = []
+    for line in stdout.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        compact_line = "".join(ch for ch in stripped if ch not in RICH_BOX_BORDER_CHARS).strip()
+        if compact_line:
+            fragments.append(compact_line)
+    return "".join(fragments)
+
+
+def _stdout_shows_config_path(stdout: str, config_path: Path) -> bool:
+    path_text = str(config_path)
+    if path_text in stdout:
+        return True
+    return path_text in _compact_rich_stdout(stdout)
+
+
 def _ensure_text(value: Any) -> str:
     if value is None:
         return ""
@@ -187,7 +210,7 @@ def validate_status_result(result: CommandResult, *, config_path: Path) -> Valid
     for marker in STATUS_REQUIRED_MARKERS:
         if marker not in result.stdout:
             errors.append(f"status output missing marker: {marker}")
-    if str(config_path) not in result.stdout:
+    if not _stdout_shows_config_path(result.stdout, config_path):
         errors.append("status output does not show the isolated config path")
     summary = "status surface rendered runtime diagnostics" if not errors else "status contract failed"
     return ValidationResult(
