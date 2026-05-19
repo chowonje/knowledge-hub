@@ -22,6 +22,9 @@ from knowledge_hub.papers.parsed_artifact_structured_evidence_execution_plan imp
     EXECUTION_STATUS_DRY_RUN_READY,
     PARSED_ARTIFACT_STRUCTURED_EVIDENCE_EXECUTION_PLAN_SCHEMA_ID,
 )
+from knowledge_hub.papers.parsed_artifact_source_span_candidate_store_contract import (
+    KNOWN_WRITE_TARGET_CONTRACTS,
+)
 
 
 PARSED_ARTIFACT_STRUCTURED_EVIDENCE_WRITE_TARGET_CONTRACT_AUDIT_SCHEMA_ID = (
@@ -38,10 +41,6 @@ DEFAULT_EXECUTION_PLAN_REPORT_PATH = str(
     / "01-parsed-artifact-structured-evidence-execution-plan"
     / "parsed-artifact-structured-evidence-execution-plan.json"
 )
-
-# Known destination contracts for planned write targets.
-# Kept intentionally minimal until a durable product contract is explicit.
-KNOWN_WRITE_TARGET_CONTRACTS: dict[str, str] = {}
 
 RECOMMENDED_ACTION_BY_EXECUTION_STATUS = {
     EXECUTION_STATUS_DRY_RUN_READY: "queue_for_explicit_source_span_promotion_executor_review",
@@ -177,8 +176,8 @@ def _audit_rows(
         source_content_hash = _safe_text(execution_row.get("sourceContentHash"))
         planned_write_target = _safe_text(execution_row.get("planned_write_target"))
         execution_blockers = _normalize_execution_blockers(execution_row.get("execution_blockers"))
-        write_target_contract_reference = ""
-        write_target_contract_known = False
+        write_target_contract_reference = _safe_text(KNOWN_WRITE_TARGET_CONTRACTS.get(planned_write_target))
+        write_target_contract_known = bool(write_target_contract_reference)
 
         if execution_status == EXECUTION_STATUS_DRY_RUN_READY:
             if not source_content_hash:
@@ -188,9 +187,7 @@ def _audit_rows(
                 execution_status = EXECUTION_STATUS_BLOCKED_MISSING_LOCATION
                 execution_blockers.append("location_context_missing")
             else:
-                write_target_contract_reference = _safe_text(KNOWN_WRITE_TARGET_CONTRACTS.get(planned_write_target))
                 if write_target_contract_reference:
-                    write_target_contract_known = True
                     ready_contract_count += 1
                 else:
                     execution_status = EXECUTION_STATUS_BLOCKED_UNKNOWN_WRITE_TARGET
@@ -247,7 +244,11 @@ def _audit_rows(
                 "rollback_strategy": (
                     f"discard planned source-span operation against {planned_write_target}"
                     if is_ready
-                    else "hold row until write-target contract is confirmed"
+                    else (
+                        "hold row until non-write-target blockers are resolved"
+                        if write_target_contract_known
+                        else "hold row until write-target contract is confirmed"
+                    )
                 ),
                 "execution_status": execution_status,
                 "execution_blockers": _dedupe(execution_blockers),
