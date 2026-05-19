@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-review-reconciliation.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "finalReadyRows",
+    "manualOrExtractorFollowUpRows",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-review-reconciliation.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "designReviewReportPath",
+        "designReviewSchema",
+        "disambiguationReportPath",
+        "disambiguationSchema"
+      ],
+      "properties": {
+        "designReviewReportPath": { "type": "string" },
+        "designReviewSchema": { "type": "string" },
+        "disambiguationReportPath": { "type": "string" },
+        "disambiguationSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputDesignReviewRows",
+        "inputDisambiguationRows",
+        "readyFromOriginalDesignReviewRows",
+        "readyFromDisambiguationRows",
+        "finalReadyForStrictEvidenceDesignReviewRows",
+        "stillBlockedAmbiguousRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "citationGradeEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "schemaViolationCount",
+        "byPaperId",
+        "byArtifactType",
+        "bySource",
+        "byFinalStatus",
+        "byRecommendedAction"
+      ],
+      "properties": {
+        "inputDesignReviewRows": { "type": "integer", "minimum": 0 },
+        "inputDisambiguationRows": { "type": "integer", "minimum": 0 },
+        "readyFromOriginalDesignReviewRows": { "type": "integer", "minimum": 0 },
+        "readyFromDisambiguationRows": { "type": "integer", "minimum": 0 },
+        "finalReadyForStrictEvidenceDesignReviewRows": { "type": "integer", "minimum": 0 },
+        "stillBlockedAmbiguousRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "citationGradeEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byPaperId": { "type": "object" },
+        "byArtifactType": { "type": "object" },
+        "bySource": { "type": "object" },
+        "byFinalStatus": { "type": "object" },
+        "byRecommendedAction": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "designReviewPacketReconciled",
+        "strictEvidenceCreated",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimeMutationAllowed",
+        "schemaViolations",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "designReviewPacketReconciled": { "type": "boolean" },
+        "strictEvidenceCreated": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "strictEligibleMutation",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "finalReadyRows": { "type": "array", "items": { "type": "object" } },
+    "manualOrExtractorFollowUpRows": { "type": "array", "items": { "type": "object" } },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "reconciliation_row_id",
+          "source",
+          "review_row_id",
+          "design_row_id",
+          "sourceSpanId",
+          "candidateRecordId",
+          "paper_id",
+          "artifact_type",
+          "final_status",
+          "recommended_action",
+          "readyForStrictEvidenceDesignReview",
+          "strictEligible",
+          "strictEvidenceCreated",
+          "runtimeEvidenceCreated",
+          "sourceSpanUpdatedRows"
+        ],
+        "properties": {
+          "reconciliation_row_id": { "type": "string" },
+          "source": { "type": "string" },
+          "review_row_id": { "type": "string" },
+          "design_row_id": { "type": "string" },
+          "disambiguation_row_id": { "type": "string" },
+          "sourceSpanId": { "type": "string" },
+          "candidateRecordId": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "artifact_type": { "type": "string" },
+          "final_status": { "type": "string" },
+          "recommended_action": { "type": "string" },
+          "readyForStrictEvidenceDesignReview": { "type": "boolean" },
+          "strictEligible": { "const": false },
+          "strictEvidenceCreated": { "const": false },
+          "runtimeEvidenceCreated": { "const": false },
+          "sourceSpanUpdatedRows": { "const": 0 }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
