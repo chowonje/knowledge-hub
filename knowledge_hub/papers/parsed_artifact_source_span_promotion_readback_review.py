@@ -103,6 +103,136 @@ def _run_manifest_path(papers_dir: str | Path, run_id: str) -> Path:
     )
 
 
+def _read_json(path: str | Path | None) -> dict[str, Any]:
+    if not path:
+        return {}
+    payload_path = Path(str(path)).expanduser()
+    try:
+        payload = json.loads(payload_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _collect_manifest_run_id_candidates(manifest: dict[str, Any], *, manifest_path: str) -> list[str]:
+    candidates: list[str] = []
+
+    def add(value: Any) -> None:
+        text = _safe_text(value)
+        if text:
+            candidates.append(text)
+
+    add(manifest.get("runId"))
+    for section_name in ("input", "output"):
+        section = manifest.get(section_name)
+        if not isinstance(section, dict):
+            continue
+        for key, value in section.items():
+            key_text = _safe_text(key).lower()
+            if key_text == "runid" or key_text.endswith("runid"):
+                add(value)
+
+    for record in _safe_list(manifest.get("sourceSpanRecords")):
+        if isinstance(record, dict):
+            add(record.get("runId"))
+
+    for row in _safe_list(manifest.get("rows")):
+        if not isinstance(row, dict):
+            continue
+        add(row.get("runId"))
+        record = row.get("record")
+        if isinstance(record, dict):
+            add(record.get("runId"))
+
+    if manifest_path:
+        add(Path(manifest_path).stem)
+
+    return _dedupe(candidates)
+
+
+def _manifest_record_match_keys(manifest: dict[str, Any]) -> tuple[set[str], set[str]]:
+    source_span_ids: set[str] = set()
+    idempotency_keys: set[str] = set()
+
+    def absorb(record: dict[str, Any]) -> None:
+        source_span_id = _safe_text(record.get("sourceSpanId"))
+        idempotency_key = _safe_text(record.get("idempotencyKey"))
+        if source_span_id:
+            source_span_ids.add(source_span_id)
+        if idempotency_key:
+            idempotency_keys.add(idempotency_key)
+
+    for record in _safe_list(manifest.get("sourceSpanRecords")):
+        if isinstance(record, dict):
+            absorb(record)
+
+    for row in _safe_list(manifest.get("rows")):
+        if not isinstance(row, dict):
+            continue
+        record = row.get("record")
+        if isinstance(record, dict):
+            absorb(record)
+        absorb(row)
+
+    return source_span_ids, idempotency_keys
+
+
+def _observed_record_run_ids(raw_rows: list[dict[str, Any]]) -> list[str]:
+    return _dedupe(
+        _safe_text(row.get("record", {}).get("runId"))
+        for row in raw_rows
+        if _safe_text(row.get("record", {}).get("runId"))
+    )
+
+
+def _resolve_record_run_ids_from_manifest(
+    *,
+    manifest: dict[str, Any],
+    manifest_path: str,
+    raw_rows: list[dict[str, Any]],
+) -> tuple[list[str], dict[str, Any]]:
+    manifest_candidate_run_ids = _collect_manifest_run_id_candidates(manifest, manifest_path=manifest_path)
+    observed_record_run_ids = _observed_record_run_ids(raw_rows)
+    observed_set = set(observed_record_run_ids)
+
+    direct_matches = [run_id for run_id in manifest_candidate_run_ids if run_id in observed_set]
+    if direct_matches:
+        return _dedupe(direct_matches), {
+            "resolution": "manifest_run_id_direct_match",
+            "manifestCandidateRunIds": manifest_candidate_run_ids,
+            "observedRecordRunIds": observed_record_run_ids,
+            "resolvedRecordRunIds": _dedupe(direct_matches),
+        }
+
+    source_span_ids, idempotency_keys = _manifest_record_match_keys(manifest)
+    inferred_run_ids: list[str] = []
+    if source_span_ids or idempotency_keys:
+        for raw_row in raw_rows:
+            record = raw_row.get("record") if isinstance(raw_row.get("record"), dict) else {}
+            source_span_id = _safe_text(record.get("sourceSpanId"))
+            idempotency_key = _safe_text(record.get("idempotencyKey"))
+            if source_span_id in source_span_ids or idempotency_key in idempotency_keys:
+                run_id = _safe_text(record.get("runId"))
+                if run_id:
+                    inferred_run_ids.append(run_id)
+
+    inferred_run_ids = _dedupe(inferred_run_ids)
+    if inferred_run_ids:
+        return inferred_run_ids, {
+            "resolution": "manifest_record_metadata_match",
+            "manifestCandidateRunIds": manifest_candidate_run_ids,
+            "observedRecordRunIds": observed_record_run_ids,
+            "resolvedRecordRunIds": inferred_run_ids,
+        }
+
+    return [], {
+        "resolution": "run_manifest_record_run_id_mismatch",
+        "manifestCandidateRunIds": manifest_candidate_run_ids,
+        "observedRecordRunIds": observed_record_run_ids,
+        "resolvedRecordRunIds": [],
+    }
+
+
 def _iter_source_span_records(root: Path) -> list[dict[str, Any]]:
     if not root.exists():
         return []
@@ -341,27 +471,73 @@ def build_parsed_artifact_source_span_promotion_readback_review(
     *,
     papers_dir: str | Path = DEFAULT_PAPERS_DIR,
     run_id: str | None = None,
+    run_manifest: str | Path | None = None,
     paper_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     papers_root = Path(str(papers_dir)).expanduser()
     source_span_root = _source_span_store_root(papers_root)
     requested_papers = {str(item).strip() for item in (paper_ids or []) if str(item).strip()}
     requested_run_id = _safe_text(run_id)
+    requested_run_manifest = _safe_text(run_manifest)
     warnings: list[str] = []
     schema_violations: list[str] = []
-    run_manifest_path = ""
+    run_manifest_path = requested_run_manifest
+    run_identity: dict[str, Any] = {
+        "requestedRunId": requested_run_id,
+        "requestedRunManifestPath": requested_run_manifest,
+        "runIdFilterMode": "none",
+        "manifestCandidateRunIds": [],
+        "observedRecordRunIds": [],
+        "resolvedRecordRunIds": [],
+        "resolution": "",
+    }
 
     if not source_span_root.exists():
         warnings.append("source_span_store_root_missing")
 
-    raw_rows = _iter_source_span_records(source_span_root)
-    if requested_run_id:
-        run_manifest_path = str(_run_manifest_path(papers_root, requested_run_id))
+    all_raw_rows = _iter_source_span_records(source_span_root)
+    raw_rows = list(all_raw_rows)
+    run_identity["observedRecordRunIds"] = _observed_record_run_ids(all_raw_rows)
+
+    if requested_run_manifest:
+        run_manifest_path = str(Path(requested_run_manifest).expanduser())
+        manifest = _read_json(run_manifest_path)
+        if not manifest:
+            warnings.append("run_manifest_unreadable")
+        resolved_run_ids, resolution = _resolve_record_run_ids_from_manifest(
+            manifest=manifest,
+            manifest_path=run_manifest_path,
+            raw_rows=all_raw_rows,
+        )
+        run_identity.update(resolution)
+        run_identity["runIdFilterMode"] = "run_manifest_resolved_record_run_id"
+        if resolved_run_ids:
+            resolved_set = set(resolved_run_ids)
+            raw_rows = [
+                row
+                for row in raw_rows
+                if _safe_text(row.get("record", {}).get("runId")) in resolved_set
+            ]
+        else:
+            warnings.append("run_manifest_record_run_id_mismatch")
+            raw_rows = []
+    elif requested_run_id:
+        run_manifest_path = run_manifest_path or str(_run_manifest_path(papers_root, requested_run_id))
         if not Path(run_manifest_path).exists():
             warnings.append("run_manifest_missing")
-        raw_rows = [
+        run_identity["runIdFilterMode"] = "record_run_id_exact"
+        filtered_rows = [
             row for row in raw_rows if _safe_text(row.get("record", {}).get("runId")) == requested_run_id
         ]
+        if not filtered_rows and all_raw_rows:
+            warnings.append("requested_run_id_matches_no_records")
+            run_identity["manifestCandidateRunIds"] = [requested_run_id]
+        raw_rows = filtered_rows
+        run_identity["resolvedRecordRunIds"] = [requested_run_id] if filtered_rows else []
+
+    classify_run_id = ""
+    if run_identity.get("resolvedRecordRunIds") and len(run_identity["resolvedRecordRunIds"]) == 1:
+        classify_run_id = str(run_identity["resolvedRecordRunIds"][0])
 
     if requested_papers:
         found_papers = {
@@ -378,7 +554,7 @@ def build_parsed_artifact_source_span_promotion_readback_review(
     if not raw_rows:
         warnings.append("source_span_records_missing")
 
-    rows, row_schema_violations = _review_rows(raw_rows, requested_run_id=requested_run_id)
+    rows, row_schema_violations = _review_rows(raw_rows, requested_run_id=classify_run_id)
     schema_violations.extend(row_schema_violations)
     schema_violations = _dedupe(schema_violations)
     counts = _count_rows(rows=rows, schema_violations=schema_violations)
@@ -397,7 +573,9 @@ def build_parsed_artifact_source_span_promotion_readback_review(
             "sourceSpanStoreRoot": str(source_span_root),
             "runManifestPath": run_manifest_path,
             "requestedRunId": requested_run_id,
+            "requestedRunManifestPath": requested_run_manifest,
             "requestedPaperIds": sorted(requested_papers),
+            "runIdentity": run_identity,
         },
         "counts": counts,
         "gate": {
@@ -520,7 +698,19 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover
         )
     )
     parser.add_argument("--papers-dir", default=str(DEFAULT_PAPERS_DIR), help="Local papers_dir root.")
-    parser.add_argument("--run-id", default="", help="Filter records by run id.")
+    parser.add_argument(
+        "--run-id",
+        default="",
+        help="Filter records by SourceSpan record runId (exact match).",
+    )
+    parser.add_argument(
+        "--run-manifest",
+        default="",
+        help=(
+            "Apply run manifest path and resolve manifest/input run ids to the "
+            "actual SourceSpan record runId values in the JSONL store."
+        ),
+    )
     parser.add_argument("--paper-id", action="append", default=[], help="Filter to paper id; repeatable.")
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
     parser.add_argument("--json", action="store_true", help="Print summary payload as JSON.")
@@ -529,6 +719,7 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover
     report = build_parsed_artifact_source_span_promotion_readback_review(
         papers_dir=args.papers_dir,
         run_id=args.run_id or None,
+        run_manifest=args.run_manifest or None,
         paper_ids=args.paper_id or None,
     )
 
@@ -554,6 +745,7 @@ if __name__ == "__main__":  # pragma: no cover
 __all__ = [
     "PARSED_ARTIFACT_SOURCE_SPAN_PROMOTION_READBACK_REVIEW_SCHEMA_ID",
     "READBACK_STATUS_VALIDATED",
+    "_resolve_record_run_ids_from_manifest",
     "build_parsed_artifact_source_span_promotion_readback_review",
     "render_parsed_artifact_source_span_promotion_readback_review_markdown",
     "write_parsed_artifact_source_span_promotion_readback_review_reports",

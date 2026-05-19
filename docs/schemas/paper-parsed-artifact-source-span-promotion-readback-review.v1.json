@@ -26,14 +26,39 @@
         "sourceSpanStoreRoot",
         "runManifestPath",
         "requestedRunId",
-        "requestedPaperIds"
+        "requestedRunManifestPath",
+        "requestedPaperIds",
+        "runIdentity"
       ],
       "properties": {
         "papersDir": { "type": "string" },
         "sourceSpanStoreRoot": { "type": "string" },
         "runManifestPath": { "type": "string" },
         "requestedRunId": { "type": "string" },
-        "requestedPaperIds": { "type": "array", "items": { "type": "string" } }
+        "requestedRunManifestPath": { "type": "string" },
+        "requestedPaperIds": { "type": "array", "items": { "type": "string" } },
+        "runIdentity": {
+          "type": "object",
+          "required": [
+            "requestedRunId",
+            "requestedRunManifestPath",
+            "runIdFilterMode",
+            "manifestCandidateRunIds",
+            "observedRecordRunIds",
+            "resolvedRecordRunIds",
+            "resolution"
+          ],
+          "properties": {
+            "requestedRunId": { "type": "string" },
+            "requestedRunManifestPath": { "type": "string" },
+            "runIdFilterMode": { "type": "string" },
+            "manifestCandidateRunIds": { "type": "array", "items": { "type": "string" } },
+            "observedRecordRunIds": { "type": "array", "items": { "type": "string" } },
+            "resolvedRecordRunIds": { "type": "array", "items": { "type": "string" } },
+            "resolution": { "type": "string" }
+          },
+          "additionalProperties": true
+        }
       },
       "additionalProperties": true
     },

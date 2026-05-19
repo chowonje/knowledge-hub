@@ -7,6 +7,7 @@ from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.papers.parsed_artifact_source_span_promotion_readback_review import (
     PARSED_ARTIFACT_SOURCE_SPAN_PROMOTION_READBACK_REVIEW_SCHEMA_ID,
     READBACK_STATUS_VALIDATED,
+    _resolve_record_run_ids_from_manifest,
     build_parsed_artifact_source_span_promotion_readback_review,
     write_parsed_artifact_source_span_promotion_readback_review_reports,
 )
@@ -167,6 +168,113 @@ def test_source_span_promotion_readback_review_filters_by_paper_id(tmp_path: Pat
         PARSED_ARTIFACT_SOURCE_SPAN_PROMOTION_READBACK_REVIEW_SCHEMA_ID,
         strict=True,
     ).ok
+
+
+def test_source_span_promotion_readback_review_filters_by_record_run_id(tmp_path: Path) -> None:
+    papers_dir = tmp_path / "papers"
+    _write_jsonl(
+        papers_dir / "structured_evidence" / "source_span" / "paper-1.jsonl",
+        [
+            _source_span_record(index=1, run_id="run-a"),
+            _source_span_record(index=2, run_id="run-b"),
+        ],
+    )
+
+    report = build_parsed_artifact_source_span_promotion_readback_review(
+        papers_dir=papers_dir,
+        run_id="run-a",
+    )
+
+    assert report["status"] == "ok"
+    assert report["counts"]["sourceSpanRecordRows"] == 1
+    assert report["input"]["runIdentity"]["runIdFilterMode"] == "record_run_id_exact"
+    assert report["input"]["runIdentity"]["resolvedRecordRunIds"] == ["run-a"]
+
+
+def test_source_span_promotion_readback_review_resolves_manifest_alias_to_record_run_id(
+    tmp_path: Path,
+) -> None:
+    papers_dir = tmp_path / "papers"
+    record = _source_span_record(index=1, run_id="actual-run-id")
+    _write_jsonl(
+        papers_dir / "structured_evidence" / "source_span" / "paper-1.jsonl",
+        [record],
+    )
+    manifest_path = papers_dir / "structured_evidence" / "runs" / "alias-run.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "input": {"runId": "alias-run"},
+                "sourceSpanRecords": [
+                    {
+                        "sourceSpanId": record["sourceSpanId"],
+                        "idempotencyKey": record["idempotencyKey"],
+                        "runId": "alias-run",
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    report = build_parsed_artifact_source_span_promotion_readback_review(
+        papers_dir=papers_dir,
+        run_manifest=manifest_path,
+    )
+
+    assert report["status"] == "ok"
+    assert report["counts"]["sourceSpanRecordRows"] == 1
+    assert report["counts"]["readbackValidatedRows"] == 1
+    assert report["input"]["runIdentity"]["resolution"] == "manifest_record_metadata_match"
+    assert report["input"]["runIdentity"]["resolvedRecordRunIds"] == ["actual-run-id"]
+    assert "alias-run" in report["input"]["runIdentity"]["manifestCandidateRunIds"]
+
+
+def test_source_span_promotion_readback_review_blocks_manifest_run_id_mismatch(
+    tmp_path: Path,
+) -> None:
+    papers_dir = tmp_path / "papers"
+    _write_jsonl(
+        papers_dir / "structured_evidence" / "source_span" / "paper-1.jsonl",
+        [_source_span_record(index=1, run_id="actual-run-id")],
+    )
+    manifest_path = papers_dir / "structured_evidence" / "runs" / "missing-run.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(
+        json.dumps({"input": {"runId": "missing-run"}}, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    report = build_parsed_artifact_source_span_promotion_readback_review(
+        papers_dir=papers_dir,
+        run_manifest=manifest_path,
+    )
+
+    assert report["status"] == "blocked"
+    assert report["counts"]["sourceSpanRecordRows"] == 0
+    assert "run_manifest_record_run_id_mismatch" in report["warnings"]
+    assert report["input"]["runIdentity"]["resolution"] == "run_manifest_record_run_id_mismatch"
+    assert report["input"]["runIdentity"]["observedRecordRunIds"] == ["actual-run-id"]
+    assert report["counts"]["sourceSpanCreatedRows"] == 0
+    assert report["counts"]["strictEvidenceCreatedRows"] == 0
+
+
+def test_resolve_record_run_ids_from_manifest_prefers_direct_match() -> None:
+    manifest = {"input": {"runId": "run-a"}, "output": {"runId": "run-b"}}
+    raw_rows = [
+        {"record": {"runId": "run-b", "sourceSpanId": "span-1", "idempotencyKey": "idem-1"}}
+    ]
+    resolved, resolution = _resolve_record_run_ids_from_manifest(
+        manifest=manifest,
+        manifest_path="/tmp/run-a.json",
+        raw_rows=raw_rows,
+    )
+    assert resolved == ["run-b"]
+    assert resolution["resolution"] == "manifest_run_id_direct_match"
 
 
 def test_source_span_promotion_readback_review_writer_outputs_schema_valid_reports(
