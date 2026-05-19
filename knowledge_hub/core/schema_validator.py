@@ -61,6 +61,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.equation-quote-candidate-report.v1": "paper-equation-quote-candidate-report.v1.json",
     "knowledge-hub.paper.table-region-candidate-report.v1": "paper-table-region-candidate-report.v1.json",
     "knowledge-hub.paper.structured-candidate-summary.v1": "paper-structured-candidate-summary.v1.json",
+    "knowledge-hub.paper.parsed-artifact-structured-evidence-readiness-audit.v1": "paper-parsed-artifact-structured-evidence-readiness-audit.v1.json",
     "knowledge-hub.paper.complex-qa-eval-design.v1": "paper-complex-qa-eval-design.v1.json",
     "knowledge-hub.paper.candidate-layer-review-gate.v1": "paper-candidate-layer-review-gate.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-backlog.v1": "paper-candidate-layer-blocker-backlog.v1.json",
