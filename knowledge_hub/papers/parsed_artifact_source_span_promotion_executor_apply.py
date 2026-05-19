@@ -58,15 +58,35 @@ DEFAULT_STORE_CONTRACT_REPORT_PATH = (
     / "parsed-artifact-source-span-store-contract.json"
 )
 
-DEFAULT_OUTPUT_DIR = (
+DEFAULT_REPORT_ROOT = (
     Path.home()
     / ".khub"
     / "reports"
     / "layout-parser-pilot"
     / "2026-05-19"
     / "parsed-artifact-source-span-promotion-executor-apply"
-    / "01-parsed-artifact-source-span-promotion-executor-apply"
 )
+
+DEFAULT_DRY_RUN_OUTPUT_DIR = (
+    DEFAULT_REPORT_ROOT / "01-parsed-artifact-source-span-promotion-executor-apply-dry-run"
+)
+
+DEFAULT_APPLY_OUTPUT_DIR = (
+    DEFAULT_REPORT_ROOT / "02-parsed-artifact-source-span-promotion-executor-apply"
+)
+
+# Backward-compatible alias for dry-run default output.
+DEFAULT_OUTPUT_DIR = DEFAULT_DRY_RUN_OUTPUT_DIR
+
+
+def default_output_dir(*, apply: bool) -> Path:
+    return DEFAULT_APPLY_OUTPUT_DIR if apply else DEFAULT_DRY_RUN_OUTPUT_DIR
+
+
+def resolve_output_dir(output_dir: str | Path | None, *, apply: bool) -> Path:
+    if output_dir is not None and str(output_dir).strip():
+        return Path(str(output_dir)).expanduser()
+    return default_output_dir(apply=apply)
 
 NO_RUNTIME_WRITE_POLICY = {
     "executorRequired": True,
@@ -699,29 +719,37 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover
     parser.add_argument("--papers-dir", default="", help="Local papers_dir root. Required with --apply.")
     parser.add_argument("--run-id", default="", help="Run id recorded into SourceSpan records.")
     parser.add_argument("--apply", action="store_true", help="Write SourceSpan store JSONL records.")
-    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument(
+        "--output-dir",
+        default="",
+        help=(
+            "Report output directory. Defaults to a dry-run-specific directory without --apply, "
+            "or an apply-specific directory with --apply."
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Print summary payload as JSON.")
     args = parser.parse_args(argv)
 
+    apply_mode = bool(args.apply)
     report = execute_parsed_artifact_source_span_promotion_executor_apply(
         promotion_executor_dry_run_report=args.promotion_executor_dry_run_report,
         store_contract_report=args.store_contract_report,
         papers_dir=args.papers_dir or None,
         run_id=args.run_id or None,
-        apply=bool(args.apply),
+        apply=apply_mode,
         paper_ids=args.paper_id or None,
     )
 
-    if args.output_dir:
-        paths = write_parsed_artifact_source_span_promotion_executor_apply_reports(
-            report,
-            args.output_dir,
-        )
-        print(f"wrote report: {paths['report']}")
-        print(f"wrote summary: {paths['summary']}")
-        print(f"wrote markdown: {paths['markdown']}")
+    output_dir = resolve_output_dir(args.output_dir or None, apply=apply_mode)
+    paths = write_parsed_artifact_source_span_promotion_executor_apply_reports(
+        report,
+        output_dir,
+    )
+    print(f"wrote report: {paths['report']}")
+    print(f"wrote summary: {paths['summary']}")
+    print(f"wrote markdown: {paths['markdown']}")
 
-    if args.json or not args.output_dir:
+    if args.json:
         print(json.dumps(_summary_payload(report), ensure_ascii=False, indent=2))
 
     return 0
@@ -732,13 +760,18 @@ if __name__ == "__main__":  # pragma: no cover
 
 
 __all__ = [
+    "DEFAULT_APPLY_OUTPUT_DIR",
+    "DEFAULT_DRY_RUN_OUTPUT_DIR",
     "DEFAULT_OUTPUT_DIR",
+    "DEFAULT_REPORT_ROOT",
     "DEFAULT_PROMOTION_EXECUTOR_DRY_RUN_REPORT_PATH",
     "DEFAULT_STORE_CONTRACT_REPORT_PATH",
     "APPLY_STATUS_APPLIED",
     "APPLY_STATUS_PLANNED",
     "PARSED_ARTIFACT_SOURCE_SPAN_PROMOTION_EXECUTOR_APPLY_SCHEMA_ID",
+    "default_output_dir",
     "execute_parsed_artifact_source_span_promotion_executor_apply",
     "render_parsed_artifact_source_span_promotion_executor_apply_markdown",
+    "resolve_output_dir",
     "write_parsed_artifact_source_span_promotion_executor_apply_reports",
 ]

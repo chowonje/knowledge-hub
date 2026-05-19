@@ -7,8 +7,12 @@ from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.papers.parsed_artifact_source_span_promotion_executor_apply import (
     APPLY_STATUS_APPLIED,
     APPLY_STATUS_PLANNED,
+    DEFAULT_APPLY_OUTPUT_DIR,
+    DEFAULT_DRY_RUN_OUTPUT_DIR,
     PARSED_ARTIFACT_SOURCE_SPAN_PROMOTION_EXECUTOR_APPLY_SCHEMA_ID,
+    default_output_dir,
     execute_parsed_artifact_source_span_promotion_executor_apply,
+    resolve_output_dir,
     write_parsed_artifact_source_span_promotion_executor_apply_reports,
 )
 from knowledge_hub.papers.parsed_artifact_source_span_promotion_executor_dry_run import (
@@ -226,6 +230,56 @@ def test_promotion_executor_apply_blocks_non_ready_dry_run_rows(tmp_path: Path) 
     assert report["status"] == "blocked"
     assert report["counts"]["plannedApplyRows"] == 1
     assert report["counts"]["blockedNonReadyInputRows"] == 1
+
+
+def test_default_output_dirs_differ_for_dry_run_and_apply() -> None:
+    dry_run_dir = default_output_dir(apply=False)
+    apply_dir = default_output_dir(apply=True)
+
+    assert dry_run_dir == DEFAULT_DRY_RUN_OUTPUT_DIR
+    assert apply_dir == DEFAULT_APPLY_OUTPUT_DIR
+    assert dry_run_dir != apply_dir
+    assert "apply-dry-run" in str(dry_run_dir)
+    assert dry_run_dir.name.endswith("apply-dry-run")
+    assert apply_dir.name.endswith("promotion-executor-apply")
+    assert apply_dir.name != dry_run_dir.name
+
+
+def test_dry_run_and_apply_reports_use_distinct_default_paths(tmp_path: Path) -> None:
+    dry_run_path, contract_path = _fixture_reports(tmp_path)
+
+    dry_run_report = execute_parsed_artifact_source_span_promotion_executor_apply(
+        promotion_executor_dry_run_report=dry_run_path,
+        store_contract_report=contract_path,
+        apply=False,
+    )
+    apply_report = execute_parsed_artifact_source_span_promotion_executor_apply(
+        promotion_executor_dry_run_report=dry_run_path,
+        store_contract_report=contract_path,
+        papers_dir=tmp_path / "papers",
+        run_id="distinct-path-test",
+        apply=True,
+    )
+
+    dry_run_paths = write_parsed_artifact_source_span_promotion_executor_apply_reports(
+        dry_run_report,
+        resolve_output_dir(None, apply=False),
+    )
+    apply_paths = write_parsed_artifact_source_span_promotion_executor_apply_reports(
+        apply_report,
+        resolve_output_dir(None, apply=True),
+    )
+
+    assert dry_run_paths["report"] != apply_paths["report"]
+    assert Path(dry_run_paths["report"]).exists()
+    assert Path(apply_paths["report"]).exists()
+    assert dry_run_report["counts"]["sourceSpanWriteRows"] == 0
+    assert apply_report["counts"]["sourceSpanWriteRows"] == 2
+    assert apply_report["counts"]["readbackValidatedRows"] == 2
+    assert apply_report["counts"]["strictEvidenceCreatedRows"] == 0
+    assert apply_report["counts"]["runtimeEvidenceCreatedRows"] == 0
+    assert apply_report["counts"]["databaseMutationRows"] == 0
+    assert apply_report["counts"]["canonicalParsedArtifactWriteRows"] == 0
 
 
 def test_promotion_executor_apply_writer_outputs_schema_valid_reports(tmp_path: Path) -> None:
