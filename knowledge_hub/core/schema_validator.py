@@ -47,6 +47,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.tex-equation-canonical-text-normalizer-design.v1": "paper-tex-equation-canonical-text-normalizer-design.v1.json",
     "knowledge-hub.paper.tex-equation-line-local-anchor-audit.v1": "paper-tex-equation-line-local-anchor-audit.v1.json",
     "knowledge-hub.paper.tex-equation-pdf-region-anchor-audit.v1": "paper-tex-equation-pdf-region-anchor-audit.v1.json",
+    "knowledge-hub.paper.parsed-artifact-structured-evidence-execution-plan.v1": "paper-parsed-artifact-structured-evidence-execution-plan.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
