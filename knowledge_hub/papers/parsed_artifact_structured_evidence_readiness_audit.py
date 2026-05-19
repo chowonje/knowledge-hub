@@ -63,21 +63,31 @@ RECOMMENDED_ACTION_BY_STATUS = {
 _ARTIFACT_INPUTS = {
     "sectionspan": {
         "schema": SECTIONSPAN_CANDIDATE_REPORT_SCHEMA_ID,
+        "schema_aliases": (
+            "knowledge-hub.paper.tex-sectionspan-candidate-report.v1",
+        ),
         "row_keys": ("candidates",),
         "artifact_type": "section",
     },
     "table_region": {
         "schema": TABLE_REGION_CANDIDATE_REPORT_SCHEMA_ID,
+        "schema_aliases": (),
         "row_keys": ("candidates",),
         "artifact_type": "table",
     },
     "figure_caption": {
         "schema": FIGURE_CAPTION_CANDIDATE_REPORT_SCHEMA_ID,
+        "schema_aliases": (
+            "knowledge-hub.paper.tex-figure-caption-candidate-report.v1",
+        ),
         "row_keys": ("candidates",),
         "artifact_type": "figure",
     },
     "equation_quote": {
         "schema": EQUATION_QUOTE_CANDIDATE_REPORT_SCHEMA_ID,
+        "schema_aliases": (
+            "knowledge-hub.paper.tex-equation-quote-candidate-report.v1",
+        ),
         "row_keys": ("candidates",),
         "artifact_type": "equation",
     },
@@ -407,7 +417,9 @@ def _read_report_input(
         return
 
     expected_schema = config["schema"]
-    if _safe_text(payload.get("schema")) != expected_schema:
+    schema_aliases = tuple(config.get("schema_aliases", ()))
+    accepted_schemas = {str(expected_schema), *[str(item) for item in schema_aliases]}
+    if _safe_text(payload.get("schema")) not in accepted_schemas:
         warnings.append(f"{layer_name}_schema_missing_or_mismatch")
         schema_violations.append(f"{layer_name}_schema_mismatch")
         return
