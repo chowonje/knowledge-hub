@@ -11,6 +11,7 @@
 
 ### Changed
 
+- Added a contract-only parsed-artifact SourceSpan store definition for later explicit apply. The contract declares `parsed_artifact_source_span_store`, the `knowledge-hub.paper.parsed-artifact-source-span-record.v1` record shape, local JSONL path templates under `{papers_dir}/structured_evidence/source_span/{paper_id}.jsonl`, readback checks, rollback rules, and no-mutation policy flags while keeping executor implementation, source-span writes, strict/citation/runtime evidence, parser routing, answer integration, DB/index/reembed changes, vault scans, and canonical parsed-artifact writes disabled.
 - Added a report-only parsed-artifact SourceSpan promotion executor dry-run helper. The helper consumes the promotion policy gate report, validates policy-gate-ready candidate-only rows, and emits planned SourceSpan creation rows with deterministic planned keys, disabled write matrix, and rollback notes while keeping source-span store writes, candidate-store writes, strict/citation/runtime evidence, parser routing, answer integration, DB/index/reembed changes, vault scans, and canonical parsed-artifact writes at zero. The measured local dry run planned 102 source-span rows across 3 papers from the current policy-gate report.
 - Hardened `scripts/check_release_smoke.py` status validation for Rich-wrapped
   config paths. The release smoke gate still requires the isolated config path
