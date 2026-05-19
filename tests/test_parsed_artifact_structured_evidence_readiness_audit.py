@@ -62,8 +62,18 @@ def _sectionspan_row(
     }
 
 
-def _sectionspan_report(root: Path, *, wrong_schema: bool = False) -> Path:
-    schema = "example.wrong.schema" if wrong_schema else SECTIONSPAN_CANDIDATE_REPORT_SCHEMA_ID
+def _sectionspan_report(
+    root: Path,
+    *,
+    wrong_schema: bool = False,
+    legacy_schema: bool = False,
+) -> Path:
+    if wrong_schema:
+        schema = "example.wrong.schema"
+    elif legacy_schema:
+        schema = "knowledge-hub.paper.tex-sectionspan-candidate-report.v1"
+    else:
+        schema = SECTIONSPAN_CANDIDATE_REPORT_SCHEMA_ID
     rows = [
         _sectionspan_row(
             candidate_id="ready-section",
@@ -173,6 +183,17 @@ def test_parsed_artifact_structured_evidence_readiness_audit_blocks_wrong_parent
     assert payload["gate"]["decision"] == "blocked"
     assert payload["gate"]["readyForPromotionReadinessReview"] is False
     assert "sectionspan_schema_mismatch" in payload["gate"]["schemaViolations"]
+
+
+
+def test_parsed_artifact_structured_evidence_readiness_audit_accepts_legacy_tex_sectionspan_schema(tmp_path: Path) -> None:
+    report_path = _sectionspan_report(tmp_path, legacy_schema=True)
+    payload = build_parsed_artifact_structured_evidence_readiness_audit(
+        sectionspan_candidate_report=report_path,
+    )
+
+    assert payload["status"] == "ok"
+    assert "sectionspan_schema_mismatch" not in payload["warnings"]
 
 
 
