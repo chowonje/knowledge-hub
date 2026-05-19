@@ -174,6 +174,9 @@ def test_parsed_artifact_structured_evidence_execution_plan_classifies_all_readi
     assert payload["counts"]["blockedMissingLocationRows"] == 0
     assert payload["counts"]["blockedUnknownWriteTargetRows"] == 0
     assert payload["counts"]["blockedNonReadyInputRows"] == 4
+    assert payload["counts"]["sourceSpanCreatedRows"] == 0
+    assert payload["counts"]["strictEvidenceCreatedRows"] == 0
+    assert payload["counts"]["databaseMutationRows"] == 0
     assert payload["counts"]["schemaViolationCount"] == 0
     assert payload["policy"]["reportOnly"] is True
     assert payload["policy"]["dryRunOnly"] is True

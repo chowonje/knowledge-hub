@@ -44,11 +44,15 @@ RECOMMENDED_ACTION_BY_EXECUTION_STATUS = {
     EXECUTION_STATUS_BLOCKED_NON_READY_INPUT: "resolve_readiness_input_before_plan",
 }
 
-DEFAULT_READINESS_REPORT_PATH = (
-    "/Users/won/.khub/reports/layout-parser-pilot/2026-05-19/"
-    "parsed-artifact-structured-evidence-readiness-measured-run/"
-    "01-parsed-artifact-structured-evidence-readiness/"
-    "parsed-artifact-structured-evidence-readiness-audit.json"
+DEFAULT_READINESS_REPORT_PATH = str(
+    Path.home()
+    / ".khub"
+    / "reports"
+    / "layout-parser-pilot"
+    / "2026-05-19"
+    / "parsed-artifact-structured-evidence-readiness-measured-run"
+    / "01-parsed-artifact-structured-evidence-readiness"
+    / "parsed-artifact-structured-evidence-readiness-audit.json"
 )
 
 
@@ -262,15 +266,13 @@ def _count_rows(
             for row in plan_rows
             if _safe_text(row.get("execution_status")) == EXECUTION_STATUS_BLOCKED_NON_READY_INPUT
         ),
-        "sourceSpanCreatedRows": sum(1 for row in plan_rows if _safe_bool(row.get("would_create_source_span"))),
-        "strictEvidenceCreatedRows": sum(
-            1 for row in plan_rows if _safe_bool(row.get("would_create_strict_evidence"))
-        ),
+        "sourceSpanCreatedRows": 0,
+        "strictEvidenceCreatedRows": 0,
         "citationGradeEvidenceCreatedRows": 0,
         "runtimeEvidenceCreatedRows": 0,
         "parserRoutingChangedRows": 0,
         "answerIntegrationChangedRows": 0,
-        "databaseMutationRows": sum(1 for row in plan_rows if _safe_bool(row.get("would_mutate_database"))),
+        "databaseMutationRows": 0,
         "schemaViolationCount": len(schema_violations),
         "byArtifactType": dict(Counter(str(row.get("artifact_type") or "") for row in plan_rows)),
         "byExecutionStatus": dict(Counter(str(row.get("execution_status") or "") for row in plan_rows)),
