@@ -13,7 +13,6 @@ from knowledge_hub.papers.parsed_artifact_structured_evidence_execution_plan imp
     PARSED_ARTIFACT_STRUCTURED_EVIDENCE_EXECUTION_PLAN_SCHEMA_ID,
 )
 from knowledge_hub.papers.parsed_artifact_structured_evidence_write_target_contract_audit import (
-    KNOWN_WRITE_TARGET_CONTRACTS,
     PARSED_ARTIFACT_STRUCTURED_EVIDENCE_WRITE_TARGET_CONTRACT_AUDIT_SCHEMA_ID,
     build_parsed_artifact_structured_evidence_write_target_contract_audit,
     write_parsed_artifact_structured_evidence_write_target_contract_audit_reports,
@@ -139,14 +138,8 @@ def _build_execution_plan_report(tmp_path: Path, *, wrong_schema: bool = False) 
 
 def test_parsed_artifact_structured_evidence_write_target_contract_audit_classifies_contract_readiness(
     tmp_path: Path,
-    monkeypatch: object,
 ) -> None:
     execution_plan_path = _build_execution_plan_report(tmp_path)
-    monkeypatch.setitem(
-        KNOWN_WRITE_TARGET_CONTRACTS,
-        "parsed_artifact_source_span_candidate_store",
-        "knowledge-hub.paper.sectionspan-candidate-report.v1",
-    )
 
     payload = build_parsed_artifact_structured_evidence_write_target_contract_audit(
         execution_plan_report=execution_plan_path
@@ -157,11 +150,11 @@ def test_parsed_artifact_structured_evidence_write_target_contract_audit_classif
     assert payload["counts"]["inputRows"] == 6
     assert payload["counts"]["readyInputRows"] == 2
     assert payload["counts"]["plannedRows"] == 6
-    assert payload["counts"]["blockedUnknownWriteTargetRows"] == 2
+    assert payload["counts"]["blockedUnknownWriteTargetRows"] == 1
     assert payload["counts"]["blockedMissingSourceHashRows"] == 1
     assert payload["counts"]["blockedMissingLocationRows"] == 1
     assert payload["counts"]["blockedNonReadyInputRows"] == 1
-    assert payload["counts"]["writeTargetContractKnownRows"] == 1
+    assert payload["counts"]["writeTargetContractKnownRows"] == 6
     assert payload["counts"]["sourceSpanCreatedRows"] == 0
     assert payload["counts"]["strictEvidenceCreatedRows"] == 0
     assert payload["counts"]["databaseMutationRows"] == 0
@@ -173,11 +166,20 @@ def test_parsed_artifact_structured_evidence_write_target_contract_audit_classif
         row["plan_id"]: row["execution_status"] for row in payload["rows"]
     }
     assert status_by_id["plan-0001"] == EXECUTION_STATUS_DRY_RUN_READY
-    assert status_by_id["plan-0002"] == EXECUTION_STATUS_BLOCKED_UNKNOWN_WRITE_TARGET
+    assert status_by_id["plan-0002"] == EXECUTION_STATUS_DRY_RUN_READY
     assert status_by_id["plan-0003"] == EXECUTION_STATUS_BLOCKED_MISSING_SOURCE_HASH
     assert status_by_id["plan-0004"] == EXECUTION_STATUS_BLOCKED_MISSING_LOCATION
     assert status_by_id["plan-0005"] == EXECUTION_STATUS_BLOCKED_UNKNOWN_WRITE_TARGET
     assert status_by_id["plan-0006"] == EXECUTION_STATUS_BLOCKED_NON_READY_INPUT
+    ready_rows = [
+        row
+        for row in payload["rows"]
+        if row["execution_status"] == EXECUTION_STATUS_DRY_RUN_READY
+    ]
+    assert all(row["write_target_contract_known"] is True for row in ready_rows)
+    assert all(row["write_target_contract_reference"] for row in ready_rows)
+    assert all(row["write_target_contract_known"] is True for row in payload["rows"])
+    assert payload["rows"][3]["rollback_strategy"] == "hold row until non-write-target blockers are resolved"
     assert payload["policy"]["reportOnly"] is True
     assert payload["policy"]["dryRunOnly"] is True
     assert payload["policy"]["sourceSpanCreated"] is False
