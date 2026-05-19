@@ -54,6 +54,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.structured-evidence-candidate-record.v1": "paper-structured-evidence-candidate-record.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-span-candidate-executor.v1": "paper-parsed-artifact-source-span-candidate-executor.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-span-candidate-readback-review.v1": "paper-parsed-artifact-source-span-candidate-readback-review.v1.json",
+    "knowledge-hub.paper.parsed-artifact-source-span-candidate-promotion-policy-gate.v1": "paper-parsed-artifact-source-span-candidate-promotion-policy-gate.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
