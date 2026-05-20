@@ -182,6 +182,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.table-cell-pymupdf-overlay-review-pack.v1": "paper-table-cell-pymupdf-overlay-review-pack.v1.json",
     "knowledge-hub.paper.table-cell-pymupdf-pairing-diagnostic.v1": "paper-table-cell-pymupdf-pairing-diagnostic.v1.json",
     "knowledge-hub.paper.table-cell-next-action-gate.v1": "paper-table-cell-next-action-gate.v1.json",
+    "knowledge-hub.paper.table-cell-structured-evidence-readiness-audit.v1": "paper-table-cell-structured-evidence-readiness-audit.v1.json",
     "knowledge-hub.paper.table-cell-isolated-extractor-pilot-plan.v1": "paper-table-cell-isolated-extractor-pilot-plan.v1.json",
     "knowledge-hub.paper.table-cell-isolated-extractor-pilot-result.v1": "paper-table-cell-isolated-extractor-pilot-result.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
