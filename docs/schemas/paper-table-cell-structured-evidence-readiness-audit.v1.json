@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.table-cell-structured-evidence-readiness-audit.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.table-cell-structured-evidence-readiness-audit.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "tableCellProvenanceFeasibilityReport": {
+          "type": "string"
+        },
+        "tableCellProvenanceFeasibilitySchema": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "targetRows",
+        "tableCellStructuredAuthorityCandidateOnlyRows",
+        "blockedMissingTableIdRows",
+        "blockedMissingCellCoordinatesRows",
+        "blockedMissingCellTextRows",
+        "blockedMissingSourceHashRows",
+        "blockedMissingLocatorRows",
+        "blockedNumericNormalizationUnverifiedRows",
+        "blockedInputReportMissingRows",
+        "blockedInputSchemaViolationRows",
+        "sourceSpanCreatedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byReadinessStatus",
+        "byRecommendedAction"
+      ],
+      "properties": {
+        "inputRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "targetRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tableCellStructuredAuthorityCandidateOnlyRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedMissingTableIdRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedMissingCellCoordinatesRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedMissingCellTextRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedMissingSourceHashRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedMissingLocatorRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedNumericNormalizationUnverifiedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedInputReportMissingRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedInputSchemaViolationRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceSpanCreatedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "strictEligibleRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "citationGradeRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "runtimeEvidenceRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parserRoutingChangedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "answerIntegrationChangedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "databaseMutationRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "schemaViolationCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byArtifactType": {
+          "type": "object"
+        },
+        "byReadinessStatus": {
+          "type": "object"
+        },
+        "byRecommendedAction": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "readyForTableCellStructuredEvidenceReadinessReview",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "schemaViolations",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "readyForTableCellStructuredEvidenceReadinessReview": {
+          "type": "boolean"
+        },
+        "strictEvidenceReady": {
+          "const": false
+        },
+        "parserRoutingReady": {
+          "const": false
+        },
+        "answerIntegrationReady": {
+          "const": false
+        },
+        "schemaViolations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "table_cell_structured_evidence_readiness_audit_ready",
+            "blocked"
+          ]
+        },
+        "recommendedNextTranche": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "designOnly",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": {
+          "const": true
+        },
+        "designOnly": {
+          "const": true
+        },
+        "databaseMutation": {
+          "const": false
+        },
+        "vaultScan": {
+          "const": false
+        },
+        "reindexOrReembed": {
+          "const": false
+        },
+        "canonicalParsedArtifactsWritten": {
+          "const": false
+        },
+        "sourceSpanCreated": {
+          "const": false
+        },
+        "strictEvidenceCreated": {
+          "const": false
+        },
+        "runtimeEvidenceCreated": {
+          "const": false
+        },
+        "parserRoutingChanged": {
+          "const": false
+        },
+        "answerIntegrationChanged": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_type",
+          "paper_id",
+          "source_candidate_id",
+          "sourceContentHash",
+          "source_tex_row_id",
+          "source_file",
+          "page",
+          "bbox",
+          "blockIndexes",
+          "labelNumberHint",
+          "strict_blockers",
+          "non_strict_reason",
+          "readiness_status",
+          "recommended_action",
+          "source_span_created",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "parser_routing_changed",
+          "answer_integration_changed"
+        ],
+        "properties": {
+          "artifact_type": {
+            "type": "string",
+            "const": "table"
+          },
+          "paper_id": {
+            "type": "string"
+          },
+          "source_candidate_id": {
+            "type": "string"
+          },
+          "table_region_candidate_id": {
+            "type": "string"
+          },
+          "sourceContentHash": {
+            "type": "string"
+          },
+          "source_tex_row_id": {
+            "type": "string"
+          },
+          "source_file": {
+            "type": "string"
+          },
+          "page": {
+            "type": ["integer", "null"],
+            "minimum": 0
+          },
+          "bbox": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "blockIndexes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "labelNumberHint": {},
+          "strict_blockers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "non_strict_reason": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "readiness_status": {
+            "type": "string",
+            "enum": [
+              "table_cell_structured_authority_candidate_only",
+              "blocked_missing_table_id",
+              "blocked_missing_cell_coordinates",
+              "blocked_missing_cell_text",
+              "blocked_missing_source_hash",
+              "blocked_missing_locator",
+              "blocked_numeric_normalization_unverified",
+              "blocked_input_report_missing",
+              "blocked_input_schema_violation"
+            ]
+          },
+          "recommended_action": {
+            "type": "string"
+          },
+          "source_span_created": {
+            "type": "boolean"
+          },
+          "strict_eligible": {
+            "type": "boolean"
+          },
+          "citation_grade": {
+            "type": "boolean"
+          },
+          "runtime_evidence": {
+            "type": "boolean"
+          },
+          "parser_routing_changed": {
+            "type": "boolean"
+          },
+          "answer_integration_changed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
