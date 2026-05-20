@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.complex-qa-abstain-baseline-runner.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "runner",
+    "inputs",
+    "counts",
+    "policy",
+    "warnings",
+    "semanticViolations",
+    "rows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.complex-qa-abstain-baseline-runner.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "runner": {
+      "type": "object",
+      "required": ["name", "version", "mode", "purpose", "nextRecommendedTranche"],
+      "properties": {
+        "name": { "const": "complex-qa-abstain-baseline-runner" },
+        "version": { "type": "string" },
+        "mode": { "const": "contract_only_static_baseline" },
+        "purpose": { "type": "string" },
+        "nextRecommendedTranche": { "const": "structured evidence gated complex QA comparison runner" }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["seedPackReport", "seedPackSchema", "seedPackQuestionRows", "seedPackPaperRows"],
+      "properties": {
+        "seedPackReport": { "type": "string" },
+        "seedPackSchema": { "const": "knowledge-hub.paper.complex-qa-seed-pack.v1" },
+        "seedPackQuestionRows": { "type": "integer", "minimum": 0 },
+        "seedPackPaperRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "paperRows",
+        "questionRows",
+        "expectedNoAnswerRows",
+        "blockedUntilStructuredEvidenceRows",
+        "expectedNoAnswerOrBlockedRows",
+        "answerableRows",
+        "strictEvidenceAvailableRows",
+        "abstainExpectedRows",
+        "abstainBaselinePassRows",
+        "abstainBaselineFailRows",
+        "unsafeAnsweredRows",
+        "answerGeneratedRows",
+        "llmCallRows",
+        "answerPathInvokedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "vaultScanRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "reindexOrReembedRows",
+        "schemaViolationCount",
+        "abstainNoAnswerPassRate",
+        "unsafeAnswerRate",
+        "byQuestionCategory",
+        "byAnswerabilityExpectation",
+        "byBaselineVerdict",
+        "byExpectedEvidenceType",
+        "byStrictMissingBlocker"
+      ],
+      "properties": {
+        "paperRows": { "type": "integer", "minimum": 0 },
+        "questionRows": { "type": "integer", "minimum": 0 },
+        "expectedNoAnswerRows": { "type": "integer", "minimum": 0 },
+        "blockedUntilStructuredEvidenceRows": { "type": "integer", "minimum": 0 },
+        "expectedNoAnswerOrBlockedRows": { "type": "integer", "minimum": 0 },
+        "answerableRows": { "type": "integer", "minimum": 0 },
+        "strictEvidenceAvailableRows": { "const": 0 },
+        "abstainExpectedRows": { "type": "integer", "minimum": 0 },
+        "abstainBaselinePassRows": { "type": "integer", "minimum": 0 },
+        "abstainBaselineFailRows": { "const": 0 },
+        "unsafeAnsweredRows": { "const": 0 },
+        "answerGeneratedRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "abstainNoAnswerPassRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "unsafeAnswerRate": { "const": 0 },
+        "byQuestionCategory": { "type": "object" },
+        "byAnswerabilityExpectation": { "type": "object" },
+        "byBaselineVerdict": { "type": "object" },
+        "byExpectedEvidenceType": { "type": "object" },
+        "byStrictMissingBlocker": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "contractOnlyStaticBaseline",
+        "questionExecutionRun",
+        "answerGenerationRun",
+        "llmCalls",
+        "answerPathChanged",
+        "answerPathInvoked",
+        "searchIndexQueried",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "runtimeEvidenceCreated",
+        "citationEvidenceCreated",
+        "strictEvidenceCreated",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "contractOnlyStaticBaseline": { "const": true },
+        "questionExecutionRun": { "const": false },
+        "answerGenerationRun": { "const": false },
+        "llmCalls": { "const": false },
+        "answerPathChanged": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "searchIndexQueried": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "semanticViolations": {
+      "type": "array",
+      "maxItems": 0,
+      "items": { "type": "string" }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "questionId",
+          "paperIds",
+          "questionCategory",
+          "expectedEvidenceType",
+          "answerabilityExpectation",
+          "expectedBaselineBehavior",
+          "baselineVerdict",
+          "abstainBaselinePass",
+          "strictEvidenceAvailable",
+          "answerGenerated",
+          "unsafeAnswered",
+          "llmCall",
+          "answerPathInvoked",
+          "strictMissingBlockers",
+          "requiredEvidenceContract",
+          "riskNotes"
+        ],
+        "properties": {
+          "questionId": { "type": "string", "minLength": 1 },
+          "paperIds": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "questionCategory": {
+            "type": "string",
+            "enum": [
+              "table_numeric_qa",
+              "equation_citation_qa",
+              "figure_caption_qa",
+              "method_comparison_qa",
+              "limitation_qa",
+              "appendix_table_lookup_qa"
+            ]
+          },
+          "expectedEvidenceType": {
+            "type": "string",
+            "enum": [
+              "table_cell_numeric",
+              "equation_source_span",
+              "figure_caption_source_span",
+              "cross_paper_method_spans",
+              "limitation_section_span",
+              "appendix_table_cell"
+            ]
+          },
+          "answerabilityExpectation": {
+            "type": "string",
+            "enum": [
+              "answerable",
+              "expected_no_answer",
+              "blocked_until_structured_evidence"
+            ]
+          },
+          "expectedBaselineBehavior": {
+            "type": "string",
+            "enum": [
+              "no_answer",
+              "abstain_until_strict_structured_evidence",
+              "requires_future_strict_evidence_check",
+              "blocked_schema_violation"
+            ]
+          },
+          "baselineVerdict": {
+            "type": "string",
+            "enum": [
+              "pass_expected_no_answer",
+              "pass_blocked_until_structured_evidence",
+              "blocked_answerable_without_strict_evidence",
+              "schema_violation_unknown_answerability"
+            ]
+          },
+          "abstainBaselinePass": { "type": "boolean" },
+          "strictEvidenceAvailable": { "const": false },
+          "answerGenerated": { "const": false },
+          "unsafeAnswered": { "const": false },
+          "llmCall": { "const": false },
+          "answerPathInvoked": { "const": false },
+          "strictMissingBlockers": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "requiredEvidenceContract": { "type": "object" },
+          "riskNotes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "reportPaths": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}
