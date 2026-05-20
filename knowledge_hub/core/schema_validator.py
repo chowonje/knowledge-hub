@@ -102,6 +102,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.strict-evidence-runtime-binding-record-contract.v1": "paper-strict-evidence-runtime-binding-record-contract.v1.json",
     "knowledge-hub.paper.strict-evidence-runtime-binding-record.v1": "paper-strict-evidence-runtime-binding-record.v1.json",
     "knowledge-hub.paper.strict-evidence-runtime-binding-executor-dry-run.v1": "paper-strict-evidence-runtime-binding-executor-dry-run.v1.json",
+    "knowledge-hub.paper.strict-evidence-runtime-binding-executor-apply.v1": "paper-strict-evidence-runtime-binding-executor-apply.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
