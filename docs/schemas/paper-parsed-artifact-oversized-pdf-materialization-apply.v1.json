@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-oversized-pdf-materialization-apply.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "inputDryRun",
+    "baselineBefore",
+    "baselineAfter",
+    "selectedCandidatePaperIds",
+    "materializedPaperIds",
+    "items",
+    "counts",
+    "statusTaxonomy",
+    "materializationValidation",
+    "observedCoverageChange",
+    "nextRecommendedTranche",
+    "mutationPolicy",
+    "mutationCounters",
+    "materialization",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-oversized-pdf-materialization-apply.v1" },
+    "status": { "type": "string", "enum": ["ready", "applied", "partial", "blocked", "failed"] },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": [
+        "name",
+        "applyRequested",
+        "overwrite",
+        "dryRunReportPath",
+        "selectionRule",
+        "writeRoot",
+        "nonScope"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "applyRequested": { "type": "boolean" },
+        "overwrite": { "type": "boolean" },
+        "dryRunReportPath": { "type": "string" },
+        "selectionRule": { "type": "string" },
+        "writeRoot": { "const": "papers_dir/parsed/<paper_id>" },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "inputDryRun": {
+      "type": "object",
+      "required": ["schemaValidation", "status", "ready", "selectedDryRunRows", "expectedCoverageChangeIfApplied"],
+      "properties": {
+        "schemaValidation": { "$ref": "#/$defs/validation" },
+        "status": { "type": "string" },
+        "ready": { "type": "boolean" },
+        "selectedDryRunRows": { "type": "integer", "minimum": 0 },
+        "expectedCoverageChangeIfApplied": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "baselineBefore": { "$ref": "#/$defs/extractionCounts" },
+    "baselineAfter": { "$ref": "#/$defs/extractionCounts" },
+    "selectedCandidatePaperIds": { "type": "array", "items": { "type": "string" } },
+    "materializedPaperIds": { "type": "array", "items": { "type": "string" } },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "counts": {
+      "type": "object",
+      "required": ["planned", "materialized", "blocked", "failed", "skippedExisting"],
+      "properties": {
+        "planned": { "type": "integer", "minimum": 0 },
+        "materialized": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skippedExisting": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "statusTaxonomy": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/counterItem" }
+    },
+    "materializationValidation": { "$ref": "#/$defs/validation" },
+    "observedCoverageChange": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifactsBefore",
+        "expectedMissingParsedArtifactsReduction",
+        "expectedMissingParsedArtifactsAfter",
+        "actualMissingParsedArtifactsReduction",
+        "missingParsedArtifactsAfter"
+      ],
+      "properties": {
+        "missingParsedArtifactsBefore": { "type": "integer", "minimum": 0 },
+        "expectedMissingParsedArtifactsReduction": { "type": "integer", "minimum": 0 },
+        "expectedMissingParsedArtifactsAfter": { "type": "integer", "minimum": 0 },
+        "actualMissingParsedArtifactsReduction": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifactsAfter": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "nextRecommendedTranche": {
+      "type": "object",
+      "required": ["name", "candidateCount", "rationale"],
+      "properties": {
+        "name": { "type": "string" },
+        "candidateCount": { "type": "integer", "minimum": 0 },
+        "rationale": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": { "type": "object" },
+    "mutationCounters": { "type": "object" },
+    "materialization": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "extractionCounts": {
+      "type": "object",
+      "required": ["scannedPapers", "reportedPapers", "degradedPapers", "missingParsedArtifacts"],
+      "properties": {
+        "scannedPapers": { "type": "integer", "minimum": 0 },
+        "reportedPapers": { "type": "integer", "minimum": 0 },
+        "degradedPapers": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counterItem": {
+      "type": "object",
+      "required": ["reason", "count"],
+      "properties": {
+        "reason": { "type": "string" },
+        "count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "validation": {
+      "type": "object",
+      "required": ["ok", "errors"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    }
+  }
+}
