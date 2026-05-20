@@ -116,6 +116,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.equation-authority-readiness-audit.v1": "paper-equation-authority-readiness-audit.v1.json",
     "knowledge-hub.paper.equation-authority-hash-identity-design.v1": "paper-equation-authority-hash-identity-design.v1.json",
     "knowledge-hub.paper.equation-authority-contract-design.v1": "paper-equation-authority-contract-design.v1.json",
+    "knowledge-hub.paper.equation-authority-record-contract.v1": "paper-equation-authority-record-contract.v1.json",
+    "knowledge-hub.paper.equation-authority-record.v1": "paper-equation-authority-record.v1.json",
     "knowledge-hub.paper.mineru-normalizer-audit.v1": "paper-mineru-normalizer-audit.v1.json",
     "knowledge-hub.paper.mineru-source-alignment-audit.v1": "paper-mineru-source-alignment-audit.v1.json",
     "knowledge-hub.paper.mineru-potential-review-pack.v1": "paper-mineru-potential-review-pack.v1.json",
