@@ -130,6 +130,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.complex-qa-abstain-baseline-runner.v1": "paper-complex-qa-abstain-baseline-runner.v1.json",
     "knowledge-hub.paper.complex-qa-structured-evidence-comparison-runner.v1": "paper-complex-qa-structured-evidence-comparison-runner.v1.json",
     "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-dry-run.v1": "paper-complex-qa-strict-evidence-answer-quality-dry-run.v1.json",
+    "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-grader-design.v1": "paper-complex-qa-strict-evidence-answer-quality-grader-design.v1.json",
     "knowledge-hub.paper.candidate-layer-review-gate.v1": "paper-candidate-layer-review-gate.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-backlog.v1": "paper-candidate-layer-blocker-backlog.v1.json",
     "knowledge-hub.paper.candidate-layer-blocker-review-pack.v1": "paper-candidate-layer-blocker-review-pack.v1.json",
