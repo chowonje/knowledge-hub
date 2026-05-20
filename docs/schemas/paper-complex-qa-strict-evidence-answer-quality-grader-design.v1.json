@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-grader-design.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "runner",
+    "inputs",
+    "counts",
+    "policy",
+    "warnings",
+    "semanticViolations",
+    "rows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-grader-design.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "runner": {
+      "type": "object",
+      "required": ["name", "version", "mode", "purpose", "nextRecommendedTranche"],
+      "properties": {
+        "name": { "const": "complex-qa-strict-evidence-answer-quality-grader-design" },
+        "version": { "type": "string" },
+        "mode": { "const": "report_only_grader_design" },
+        "purpose": { "type": "string" },
+        "nextRecommendedTranche": {
+          "const": "complex QA supplied strict-evidence synthetic grading fixture runner"
+        }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dryRunReport",
+        "dryRunReportSchema",
+        "dryRunStatus",
+        "dryRunQuestionRows",
+        "dryRunReadyRows"
+      ],
+      "properties": {
+        "dryRunReport": { "type": "string" },
+        "dryRunReportSchema": {
+          "const": "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-dry-run.v1"
+        },
+        "dryRunStatus": { "type": "string", "enum": ["ok", "blocked", ""] },
+        "dryRunQuestionRows": { "type": "integer", "minimum": 0 },
+        "dryRunReadyRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "questionRows",
+        "dryRunRows",
+        "rubricDesignRows",
+        "readyForFutureGradingRows",
+        "expectedNoAnswerRows",
+        "blockedMissingStrictEvidenceRows",
+        "notRunExpectedNoAnswerRows",
+        "answerGeneratedRows",
+        "scoreComputedRows",
+        "llmCallRows",
+        "judgeModelCallRows",
+        "answerPathInvokedRows",
+        "unsafeAnsweredRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "vaultScanRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "reindexOrReembedRows",
+        "schemaViolationCount",
+        "readyForFutureGradingRate",
+        "unsafeAnswerRate",
+        "byQuestionCategory",
+        "byAnswerabilityExpectation",
+        "byGraderExecutionExpectation",
+        "byExpectedEvidenceType"
+      ],
+      "properties": {
+        "questionRows": { "type": "integer", "minimum": 0 },
+        "dryRunRows": { "type": "integer", "minimum": 0 },
+        "rubricDesignRows": { "type": "integer", "minimum": 0 },
+        "readyForFutureGradingRows": { "type": "integer", "minimum": 0 },
+        "expectedNoAnswerRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingStrictEvidenceRows": { "type": "integer", "minimum": 0 },
+        "notRunExpectedNoAnswerRows": { "type": "integer", "minimum": 0 },
+        "answerGeneratedRows": { "const": 0 },
+        "scoreComputedRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "unsafeAnsweredRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "readyForFutureGradingRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "unsafeAnswerRate": { "const": 0 },
+        "byQuestionCategory": { "type": "object" },
+        "byAnswerabilityExpectation": { "type": "object" },
+        "byGraderExecutionExpectation": { "type": "object" },
+        "byExpectedEvidenceType": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "designOnly",
+        "graderDesignOnly",
+        "strictEvidenceReadOnly",
+        "questionExecutionRun",
+        "answerGenerationRun",
+        "answerQualityScoringRun",
+        "scoreComputed",
+        "llmCalls",
+        "judgeModelCalls",
+        "answerPathChanged",
+        "answerPathInvoked",
+        "searchIndexQueried",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "runtimeEvidenceCreated",
+        "citationEvidenceCreated",
+        "strictEvidenceCreated",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "designOnly": { "const": true },
+        "graderDesignOnly": { "const": true },
+        "strictEvidenceReadOnly": { "const": true },
+        "questionExecutionRun": { "const": false },
+        "answerGenerationRun": { "const": false },
+        "answerQualityScoringRun": { "const": false },
+        "scoreComputed": { "const": false },
+        "llmCalls": { "const": false },
+        "judgeModelCalls": { "const": false },
+        "answerPathChanged": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "searchIndexQueried": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "semanticViolations": {
+      "type": "array",
+      "maxItems": 0,
+      "items": { "type": "string" }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "questionId",
+          "paperIds",
+          "questionCategory",
+          "expectedEvidenceType",
+          "answerabilityExpectation",
+          "readyForAnswerQualityComparison",
+          "graderExecutionExpectation",
+          "requiredGraderInputs",
+          "categorySpecificChecks",
+          "hardFailRules",
+          "structuredEvidenceRefs",
+          "dryRunBlockers",
+          "plannedScoringContract",
+          "answerGenerated",
+          "scoreComputed",
+          "llmCall",
+          "judgeModelCall",
+          "answerPathInvoked",
+          "unsafeAnswered",
+          "riskNotes"
+        ],
+        "properties": {
+          "questionId": { "type": "string", "minLength": 1 },
+          "paperIds": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "questionCategory": {
+            "type": "string",
+            "enum": [
+              "table_numeric_qa",
+              "equation_citation_qa",
+              "figure_caption_qa",
+              "method_comparison_qa",
+              "limitation_qa",
+              "appendix_table_lookup_qa"
+            ]
+          },
+          "expectedEvidenceType": {
+            "type": "string",
+            "enum": [
+              "table_cell_numeric",
+              "equation_source_span",
+              "figure_caption_source_span",
+              "cross_paper_method_spans",
+              "limitation_section_span",
+              "appendix_table_cell"
+            ]
+          },
+          "answerabilityExpectation": {
+            "type": "string",
+            "enum": [
+              "answerable",
+              "expected_no_answer",
+              "blocked_until_structured_evidence"
+            ]
+          },
+          "readyForAnswerQualityComparison": { "type": "boolean" },
+          "graderExecutionExpectation": {
+            "type": "string",
+            "enum": [
+              "not_run_expected_no_answer",
+              "blocked_missing_strict_evidence",
+              "eligible_for_future_grading"
+            ]
+          },
+          "requiredGraderInputs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "categorySpecificChecks": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "hardFailRules": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "structuredEvidenceRefs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "dryRunBlockers": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "plannedScoringContract": {
+            "type": "object",
+            "required": [
+              "scoreComputedNow",
+              "futureScoreScale",
+              "requiresAllCategorySpecificChecks",
+              "requiresNoHardFailRulesTriggered",
+              "requiresCitationCoverageForAllSupportedClaims",
+              "requiresAbstainForExpectedNoAnswer"
+            ],
+            "properties": {
+              "scoreComputedNow": { "const": false },
+              "futureScoreScale": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["pass", "fail"] },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "requiresAllCategorySpecificChecks": { "const": true },
+              "requiresNoHardFailRulesTriggered": { "const": true },
+              "requiresCitationCoverageForAllSupportedClaims": { "const": true },
+              "requiresAbstainForExpectedNoAnswer": { "const": true }
+            },
+            "additionalProperties": true
+          },
+          "answerGenerated": { "const": false },
+          "scoreComputed": { "const": false },
+          "llmCall": { "const": false },
+          "judgeModelCall": { "const": false },
+          "answerPathInvoked": { "const": false },
+          "unsafeAnswered": { "const": false },
+          "riskNotes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "reportPaths": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}
