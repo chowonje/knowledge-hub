@@ -36,6 +36,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.public.related.v1": "paper-public-related-result.v1.json",
     "knowledge-hub.paper.extraction-report.v1": "paper-extraction-report-result.v1.json",
     "knowledge-hub.paper.parsed-materialization.result.v1": "paper-parsed-materialization-result.v1.json",
+    "knowledge-hub.paper.parsed-artifact-coverage-batch-report.v1": "paper-parsed-artifact-coverage-batch-report.v1.json",
     "knowledge-hub.paper.layout-parser-pilot.result.v1": "paper-layout-parser-pilot-result.v1.json",
     "knowledge-hub.paper.arxiv-source-tex-availability-audit.v1": "paper-arxiv-source-tex-availability-audit.v1.json",
     "knowledge-hub.paper.tex-structure-candidate-alignment-audit.v1": "paper-tex-structure-candidate-alignment-audit.v1.json",
