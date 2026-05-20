@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.strict-evidence-runtime-binding-visibility-record-contract.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "contractPrinciples",
+    "writeTargets",
+    "sampleRuntimeVisibilityRecord",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.strict-evidence-runtime-binding-visibility-record-contract.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "runtimeBindingVisibilityDecisionReportPath",
+        "runtimeBindingVisibilityDecisionSchema",
+        "runtimeBindingVisibilityDecisionStatus",
+        "runtimeBindingVisibilityDecisionDecision",
+        "visibilityDecisionCandidateOnlyRows",
+        "sectionVisibilityDecisionRows",
+        "figureCaptionVisibilityDecisionRows",
+        "expectedInputRows",
+        "expectedPlannedRuntimeVisibilityRows"
+      ],
+      "properties": {
+        "runtimeBindingVisibilityDecisionReportPath": { "type": "string" },
+        "runtimeBindingVisibilityDecisionSchema": { "type": "string" },
+        "runtimeBindingVisibilityDecisionStatus": { "type": "string" },
+        "runtimeBindingVisibilityDecisionDecision": { "type": "string" },
+        "visibilityDecisionCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionVisibilityDecisionRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionVisibilityDecisionRows": { "type": "integer", "minimum": 0 },
+        "expectedInputRows": { "type": "integer", "minimum": 0 },
+        "expectedPlannedRuntimeVisibilityRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "runtimeVisibilityRecordContracts",
+        "runtimeVisibilityRecordSchemas",
+        "plannedRuntimeVisibilityRows",
+        "visibilityDecisionCandidateOnlyRows",
+        "sectionVisibilityDecisionRows",
+        "figureCaptionVisibilityDecisionRows",
+        "executorImplementedRows",
+        "runtimeVisibilityRecordWriteRows",
+        "runtimeBindingRecordWriteRows",
+        "runtimeEvidenceCreatedRows",
+        "runtimeVisibleMutationRows",
+        "answerIntegrationVisibleMutationRows",
+        "runtimeVisibleRows",
+        "answerIntegrationVisibleRows",
+        "citationGradeRecordWriteRows",
+        "citationGradeBooleanMutationRows",
+        "eligibilityRecordWriteRows",
+        "strictEligibleMutationRows",
+        "strictEvidenceWriteRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "manifestWriteRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "schemaViolationCount",
+        "sampleRecordSchemaValidRows",
+        "sampleRecordSemanticViolationRows"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "runtimeVisibilityRecordContracts": { "const": 1 },
+        "runtimeVisibilityRecordSchemas": { "const": 1 },
+        "plannedRuntimeVisibilityRows": { "type": "integer", "minimum": 0 },
+        "visibilityDecisionCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionVisibilityDecisionRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionVisibilityDecisionRows": { "type": "integer", "minimum": 0 },
+        "executorImplementedRows": { "const": 0 },
+        "runtimeVisibilityRecordWriteRows": { "const": 0 },
+        "runtimeBindingRecordWriteRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "runtimeVisibleMutationRows": { "const": 0 },
+        "answerIntegrationVisibleMutationRows": { "const": 0 },
+        "runtimeVisibleRows": { "const": 0 },
+        "answerIntegrationVisibleRows": { "const": 0 },
+        "citationGradeRecordWriteRows": { "const": 0 },
+        "citationGradeBooleanMutationRows": { "const": 0 },
+        "eligibilityRecordWriteRows": { "const": 0 },
+        "strictEligibleMutationRows": { "const": 0 },
+        "strictEvidenceWriteRows": { "const": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "manifestWriteRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "sampleRecordSchemaValidRows": { "type": "integer", "minimum": 0 },
+        "sampleRecordSemanticViolationRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "writeTargetContractsDefined",
+        "runtimeVisibilityStoreContractDefined",
+        "runtimeVisibilityRecordSchemaDefined",
+        "executorReady",
+        "runtimeVisibilityRecordWriteAllowed",
+        "runtimeBindingRecordWriteAllowed",
+        "runtimeMutationAllowed",
+        "runtimeVisibleMutationAllowed",
+        "answerIntegrationVisibleAllowed",
+        "runtimeEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "citationGradeRecordWriteAllowed",
+        "parentRecordMutationAllowed",
+        "runManifestWriteAllowed",
+        "decision",
+        "schemaViolations",
+        "sampleRecordSemanticViolations",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "writeTargetContractsDefined": { "const": true },
+        "runtimeVisibilityStoreContractDefined": { "const": true },
+        "runtimeVisibilityRecordSchemaDefined": { "const": true },
+        "executorReady": { "const": false },
+        "runtimeVisibilityRecordWriteAllowed": { "const": false },
+        "runtimeBindingRecordWriteAllowed": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "runtimeVisibleMutationAllowed": { "const": false },
+        "answerIntegrationVisibleAllowed": { "const": false },
+        "runtimeEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "citationGradeRecordWriteAllowed": { "const": false },
+        "parentRecordMutationAllowed": { "const": false },
+        "runManifestWriteAllowed": { "const": false },
+        "decision": { "type": "string" },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "sampleRecordSemanticViolations": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "contractOnly",
+        "executorImplemented",
+        "runtimeVisibilityRecordWrite",
+        "runtimeBindingRecordWrite",
+        "runtimeVisible",
+        "answerIntegrationVisible",
+        "runtimeEvidenceCreated",
+        "citationGradeRecordWrite",
+        "citationGradeBooleanMutation",
+        "eligibilityRecordWrite",
+        "strictEligibleMutation",
+        "strictEvidenceStoreWrite",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten",
+        "manifestWrite"
+      ],
+      "properties": {
+        "contractOnly": { "const": true },
+        "executorImplemented": { "const": false },
+        "runtimeVisibilityRecordWrite": { "const": false },
+        "runtimeBindingRecordWrite": { "const": false },
+        "runtimeVisible": { "const": false },
+        "answerIntegrationVisible": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationGradeRecordWrite": { "const": false },
+        "citationGradeBooleanMutation": { "const": false },
+        "eligibilityRecordWrite": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "strictEvidenceStoreWrite": { "const": false },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "manifestWrite": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "contractPrinciples": { "type": "array", "items": { "type": "string" } },
+    "writeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "plannedWriteTarget",
+          "contractReference",
+          "runtimeVisibilityRecordSchema",
+          "storeKind",
+          "storeRootTemplate",
+          "recordPathTemplate",
+          "runManifestPathTemplate",
+          "allowedArtifactTypes",
+          "requiredRecordFields",
+          "idempotencyKeyFields",
+          "writeSemantics",
+          "readbackChecks",
+          "rollbackStrategy",
+          "rollbackImplemented",
+          "executorImplemented",
+          "runtimeBindingRecordInPlaceMutationAllowed",
+          "citationGradeRecordInPlaceMutationAllowed",
+          "strictEvidenceInPlaceMutationAllowed",
+          "eligibilityRecordInPlaceMutationAllowed",
+          "sourceSpanInPlaceMutationAllowed",
+          "runtimeUseAllowed",
+          "parserRoutingAllowed",
+          "answerIntegrationAllowed",
+          "databaseMutationAllowed",
+          "vaultScanAllowed",
+          "manifestWriteAllowed"
+        ],
+        "properties": {
+          "plannedWriteTarget": {
+            "const": "parsed_artifact_strict_evidence_runtime_visibility_store"
+          },
+          "contractReference": {
+            "const": "knowledge-hub.paper.strict-evidence-runtime-binding-visibility-record-contract.v1"
+          },
+          "runtimeVisibilityRecordSchema": {
+            "const": "knowledge-hub.paper.strict-evidence-runtime-binding-visibility-record.v1"
+          },
+          "storeKind": {
+            "const": "local_papers_dir_jsonl_strict_evidence_runtime_visibility_store"
+          },
+          "storeRootTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_runtime_visibility"
+          },
+          "recordPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_runtime_visibility/{paper_id}.jsonl"
+          },
+          "runManifestPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/runs/{run_id}.json"
+          },
+          "allowedArtifactTypes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["section", "figure"] }
+          },
+          "requiredRecordFields": { "type": "array", "items": { "type": "string" } },
+          "idempotencyKeyFields": { "type": "array", "items": { "type": "string" } },
+          "writeSemantics": {
+            "const": "explicit_apply_executor_appends_or_replaces_same_idempotency_key"
+          },
+          "readbackChecks": { "type": "array", "items": { "type": "string" } },
+          "rollbackStrategy": { "type": "string" },
+          "rollbackImplemented": { "const": false },
+          "executorImplemented": { "const": false },
+          "runtimeBindingRecordInPlaceMutationAllowed": { "const": false },
+          "citationGradeRecordInPlaceMutationAllowed": { "const": false },
+          "strictEvidenceInPlaceMutationAllowed": { "const": false },
+          "eligibilityRecordInPlaceMutationAllowed": { "const": false },
+          "sourceSpanInPlaceMutationAllowed": { "const": false },
+          "runtimeUseAllowed": { "const": false },
+          "parserRoutingAllowed": { "const": false },
+          "answerIntegrationAllowed": { "const": false },
+          "databaseMutationAllowed": { "const": false },
+          "vaultScanAllowed": { "const": false },
+          "manifestWriteAllowed": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sampleRuntimeVisibilityRecord": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
