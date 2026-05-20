@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.strict-evidence-citation-grade-record-contract.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "contractPrinciples",
+    "writeTargets",
+    "sampleCitationGradeRecord",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.strict-evidence-citation-grade-record-contract.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "policyGateDesignReportPath",
+        "policyGateDesignSchema",
+        "policyGateDesignStatus",
+        "policyGateDecision",
+        "citationGradePolicyDesignCandidateOnlyRows",
+        "sectionCitationGradePolicyDesignRows",
+        "figureCaptionCitationGradePolicyDesignRows"
+      ],
+      "properties": {
+        "policyGateDesignReportPath": { "type": "string" },
+        "policyGateDesignSchema": { "type": "string" },
+        "policyGateDesignStatus": { "type": "string" },
+        "policyGateDecision": { "type": "string" },
+        "citationGradePolicyDesignCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionCitationGradePolicyDesignRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionCitationGradePolicyDesignRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "writeTargetContracts",
+        "citationGradeStoreContracts",
+        "citationGradeRecordSchemas",
+        "citationGradePolicyDesignCandidateOnlyRows",
+        "sectionCitationGradePolicyDesignRows",
+        "figureCaptionCitationGradePolicyDesignRows",
+        "executorImplementedRows",
+        "citationGradeRecordWriteRows",
+        "citationGradeBooleanMutationRows",
+        "eligibilityRecordWriteRows",
+        "strictEligibleMutationRows",
+        "strictEvidenceWriteRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "manifestWriteRows",
+        "reindexOrReembedRows",
+        "schemaViolationCount",
+        "sampleRecordSchemaValidRows",
+        "sampleRecordSemanticViolationRows"
+      ],
+      "properties": {
+        "writeTargetContracts": { "const": 1 },
+        "citationGradeStoreContracts": { "const": 1 },
+        "citationGradeRecordSchemas": { "const": 1 },
+        "citationGradePolicyDesignCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionCitationGradePolicyDesignRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionCitationGradePolicyDesignRows": { "type": "integer", "minimum": 0 },
+        "executorImplementedRows": { "const": 0 },
+        "citationGradeRecordWriteRows": { "const": 0 },
+        "citationGradeBooleanMutationRows": { "const": 0 },
+        "eligibilityRecordWriteRows": { "const": 0 },
+        "strictEligibleMutationRows": { "const": 0 },
+        "strictEvidenceWriteRows": { "const": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "manifestWriteRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "sampleRecordSchemaValidRows": { "type": "integer", "minimum": 0 },
+        "sampleRecordSemanticViolationRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "writeTargetContractsDefined",
+        "citationGradeStoreContractDefined",
+        "citationGradeRecordSchemaDefined",
+        "executorReady",
+        "runtimeMutationAllowed",
+        "citationGradeRecordWriteAllowed",
+        "citationGradeBooleanMutationAllowed",
+        "strictEligibleMutationAllowed",
+        "runtimeEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "decision",
+        "schemaViolations",
+        "sampleRecordSemanticViolations",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "writeTargetContractsDefined": { "const": true },
+        "citationGradeStoreContractDefined": { "const": true },
+        "citationGradeRecordSchemaDefined": { "const": true },
+        "executorReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "citationGradeRecordWriteAllowed": { "const": false },
+        "citationGradeBooleanMutationAllowed": { "const": false },
+        "strictEligibleMutationAllowed": { "const": false },
+        "runtimeEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "decision": { "type": "string" },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "sampleRecordSemanticViolations": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "contractOnly",
+        "executorImplemented",
+        "citationGradeRecordWrite",
+        "citationGradeBooleanMutation",
+        "eligibilityRecordWrite",
+        "strictEligibleMutation",
+        "strictEvidenceStoreWrite",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten",
+        "manifestWrite"
+      ],
+      "properties": {
+        "contractOnly": { "const": true },
+        "executorImplemented": { "const": false },
+        "citationGradeRecordWrite": { "const": false },
+        "citationGradeBooleanMutation": { "const": false },
+        "eligibilityRecordWrite": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "strictEvidenceStoreWrite": { "const": false },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "manifestWrite": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "contractPrinciples": { "type": "array", "items": { "type": "string" } },
+    "writeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "plannedWriteTarget",
+          "contractReference",
+          "citationGradeRecordSchema",
+          "storeKind",
+          "storeRootTemplate",
+          "recordPathTemplate",
+          "runManifestPathTemplate",
+          "allowedArtifactTypes",
+          "requiredRecordFields",
+          "idempotencyKeyFields",
+          "writeSemantics",
+          "readbackChecks",
+          "rollbackStrategy",
+          "rollbackImplemented",
+          "executorImplemented",
+          "strictEvidenceInPlaceMutationAllowed",
+          "eligibilityRecordInPlaceMutationAllowed",
+          "sourceSpanInPlaceMutationAllowed",
+          "citationGradeBooleanMutationAllowed",
+          "runtimeUseAllowed",
+          "parserRoutingAllowed",
+          "answerIntegrationAllowed",
+          "databaseMutationAllowed",
+          "sourceSpanMutationAllowed"
+        ],
+        "properties": {
+          "plannedWriteTarget": {
+            "const": "parsed_artifact_strict_evidence_citation_grade_store"
+          },
+          "contractReference": {
+            "const": "knowledge-hub.paper.strict-evidence-citation-grade-record-contract.v1"
+          },
+          "citationGradeRecordSchema": {
+            "const": "knowledge-hub.paper.strict-evidence-citation-grade-record.v1"
+          },
+          "storeKind": {
+            "const": "local_papers_dir_jsonl_strict_evidence_citation_grade_store"
+          },
+          "storeRootTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_citation_grade"
+          },
+          "recordPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_citation_grade/{paper_id}.jsonl"
+          },
+          "runManifestPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/runs/{run_id}.json"
+          },
+          "allowedArtifactTypes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["section", "figure"] }
+          },
+          "requiredRecordFields": { "type": "array", "items": { "type": "string" } },
+          "idempotencyKeyFields": { "type": "array", "items": { "type": "string" } },
+          "writeSemantics": {
+            "const": "explicit_apply_executor_appends_or_replaces_same_idempotency_key"
+          },
+          "readbackChecks": { "type": "array", "items": { "type": "string" } },
+          "rollbackStrategy": { "type": "string" },
+          "rollbackImplemented": { "const": false },
+          "executorImplemented": { "const": false },
+          "strictEvidenceInPlaceMutationAllowed": { "const": false },
+          "eligibilityRecordInPlaceMutationAllowed": { "const": false },
+          "sourceSpanInPlaceMutationAllowed": { "const": false },
+          "citationGradeBooleanMutationAllowed": { "const": false },
+          "runtimeUseAllowed": { "const": false },
+          "parserRoutingAllowed": { "const": false },
+          "answerIntegrationAllowed": { "const": false },
+          "databaseMutationAllowed": { "const": false },
+          "sourceSpanMutationAllowed": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sampleCitationGradeRecord": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
