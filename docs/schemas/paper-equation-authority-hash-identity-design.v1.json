@@ -1,0 +1,435 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.equation-authority-hash-identity-design.v1",
+  "title": "Equation Authority Hash/Identity Design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "inputBlockers",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.equation-authority-hash-identity-design.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paperIds",
+        "equationAuthorityReadinessAuditReportPath",
+        "equationAuthorityReadinessAuditReportSchema",
+        "equationAuthorityReadinessAuditReportExists",
+        "equationAuthorityReadinessAuditReportStrictSchemaValid"
+      ],
+      "properties": {
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "equationAuthorityReadinessAuditReportPath": { "type": "string" },
+        "equationAuthorityReadinessAuditReportSchema": { "type": "string" },
+        "equationAuthorityReadinessAuditReportExists": { "type": "boolean" },
+        "equationAuthorityReadinessAuditReportStrictSchemaValid": { "type": "boolean" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputRows",
+        "targetRows",
+        "hashIdentityDesignCandidateOnlyRows",
+        "blockedMissingEquationIdentitySignalRows",
+        "blockedMissingTexOrMathmlTextRows",
+        "blockedMissingSourceHashRows",
+        "blockedAmbiguousEquationMatchRows",
+        "blockedRasterOnlyEquationRows",
+        "heldOutNonHashIdentityBlockerRows",
+        "blockedInputReportMissingRows",
+        "blockedInputSchemaViolationRows",
+        "equationArtifactCreatedRows",
+        "strictEvidenceCreatedRows",
+        "sourceSpanMutatedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "authorityPolicyCreatedRows",
+        "inputBlockerCount",
+        "byDesignStatus",
+        "byReadinessStatus",
+        "byPaper",
+        "byEnvironment"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "targetRows": { "type": "integer", "minimum": 0 },
+        "hashIdentityDesignCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingEquationIdentitySignalRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingTexOrMathmlTextRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingSourceHashRows": { "type": "integer", "minimum": 0 },
+        "blockedAmbiguousEquationMatchRows": { "type": "integer", "minimum": 0 },
+        "blockedRasterOnlyEquationRows": { "type": "integer", "minimum": 0 },
+        "heldOutNonHashIdentityBlockerRows": { "type": "integer", "minimum": 0 },
+        "blockedInputReportMissingRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "equationArtifactCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "sourceSpanMutatedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "authorityPolicyCreatedRows": { "const": 0 },
+        "inputBlockerCount": { "type": "integer", "minimum": 0 },
+        "byDesignStatus": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byReadinessStatus": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byPaper": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byEnvironment": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hashIdentityDesignRows",
+        "equationAuthorityPromotionReady",
+        "equationArtifactCreationReady",
+        "strictEvidenceReady",
+        "sourceSpanMutationReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "recommendedNextTranche",
+        "inputBlockers"
+      ],
+      "properties": {
+        "hashIdentityDesignRows": { "type": "boolean" },
+        "equationAuthorityPromotionReady": { "const": false },
+        "equationArtifactCreationReady": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "sourceSpanMutationReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" },
+        "inputBlockers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputBlocker" }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "designOnly",
+        "classificationOnly",
+        "authorityPolicyCreated",
+        "equationIdentityPromoted",
+        "equationHashPromoted",
+        "equationArtifactCreated",
+        "strictEvidenceCreated",
+        "sourceSpanMutation",
+        "databaseMutation",
+        "indexMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "canonicalParsedArtifactsWritten",
+        "equationInterpretationAllowed"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "designOnly": { "const": true },
+        "classificationOnly": { "const": true },
+        "authorityPolicyCreated": { "const": false },
+        "equationIdentityPromoted": { "const": false },
+        "equationHashPromoted": { "const": false },
+        "equationArtifactCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "sourceSpanMutation": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "equationInterpretationAllowed": { "const": false }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "inputBlockers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/inputBlocker" }
+    },
+    "rows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/designRow" }
+    }
+  },
+  "$defs": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "hash_identity_design_candidate_only",
+        "blocked_missing_equation_identity_signal",
+        "blocked_missing_tex_or_mathml_text",
+        "blocked_missing_source_hash",
+        "blocked_ambiguous_equation_match",
+        "blocked_raster_only_equation",
+        "held_out_non_hash_identity_blocker",
+        "blocked_input_report_missing",
+        "blocked_input_schema_violation"
+      ]
+    },
+    "inputBlocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputName", "inputLabel", "path", "design_status", "detail"],
+      "properties": {
+        "inputName": { "type": "string" },
+        "inputLabel": { "type": "string" },
+        "path": { "type": "string" },
+        "design_status": { "$ref": "#/$defs/status" },
+        "detail": { "type": "string" }
+      }
+    },
+    "equationIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equationId",
+        "sourceCandidateId",
+        "sourceTexRowId",
+        "latexLabels",
+        "equationNumbers",
+        "identityBasis",
+        "available"
+      ],
+      "properties": {
+        "equationId": { "type": "string" },
+        "sourceCandidateId": { "type": "string" },
+        "sourceTexRowId": { "type": "string" },
+        "latexLabels": { "type": "array", "items": { "type": "string" } },
+        "equationNumbers": { "type": "array", "items": { "type": "string" } },
+        "identityBasis": { "type": "string" },
+        "available": { "type": "boolean" }
+      }
+    },
+    "texMathmlHashSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateText",
+        "normalizedCandidateText",
+        "normalizedCandidateTextSha256",
+        "equationTeXHash",
+        "mathmlHash",
+        "texAvailable",
+        "mathmlAvailable",
+        "hashAvailable",
+        "designHashSource",
+        "selectedDesignHash",
+        "designHashAvailable"
+      ],
+      "properties": {
+        "candidateText": { "type": "string" },
+        "normalizedCandidateText": { "type": "string" },
+        "normalizedCandidateTextSha256": { "type": "string" },
+        "equationTeXHash": { "type": "string" },
+        "mathmlHash": { "type": "string" },
+        "texAvailable": { "type": "boolean" },
+        "mathmlAvailable": { "type": "boolean" },
+        "hashAvailable": { "type": "boolean" },
+        "designHashSource": { "type": "string" },
+        "selectedDesignHash": { "type": "string" },
+        "designHashAvailable": { "type": "boolean" }
+      }
+    },
+    "pdfRegionSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available", "page", "bbox"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "page": { "type": ["integer", "null"] },
+        "bbox": { "type": "array", "items": { "type": "number" } }
+      }
+    },
+    "proposedIdentityDesign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "designOnly",
+        "identityDigestAlgorithm",
+        "identityComponents",
+        "identityDigestSha256",
+        "proposedEquationAuthorityDesignId",
+        "equationIdentityPromoted",
+        "promotionAllowed"
+      ],
+      "properties": {
+        "designOnly": { "const": true },
+        "identityDigestAlgorithm": { "const": "equation_authority_identity_design_digest_v1" },
+        "identityComponents": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "paperId",
+            "sourceContentHash",
+            "equationId",
+            "sourceCandidateId",
+            "sourceTexRowId",
+            "latexLabels",
+            "equationNumbers",
+            "identityBasis",
+            "selectedDesignHash",
+            "readinessAuditRowId"
+          ],
+          "properties": {
+            "paperId": { "type": "string" },
+            "sourceContentHash": { "type": "string" },
+            "equationId": { "type": "string" },
+            "sourceCandidateId": { "type": "string" },
+            "sourceTexRowId": { "type": "string" },
+            "latexLabels": { "type": "array", "items": { "type": "string" } },
+            "equationNumbers": { "type": "array", "items": { "type": "string" } },
+            "identityBasis": { "type": "string" },
+            "selectedDesignHash": { "type": "string" },
+            "readinessAuditRowId": { "type": "string" }
+          }
+        },
+        "identityDigestSha256": { "type": "string" },
+        "proposedEquationAuthorityDesignId": { "type": "string" },
+        "equationIdentityPromoted": { "const": false },
+        "promotionAllowed": { "const": false }
+      }
+    },
+    "proposedHashDesign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "designOnly",
+        "textNormalization",
+        "hashSource",
+        "normalizedCandidateTextSha256",
+        "inputEquationTeXHash",
+        "inputMathMLHash",
+        "selectedDesignHash",
+        "equationHashPromoted",
+        "promotionAllowed"
+      ],
+      "properties": {
+        "designOnly": { "const": true },
+        "textNormalization": { "const": "equation_text_nfkc_whitespace_v1" },
+        "hashSource": { "type": "string" },
+        "normalizedCandidateTextSha256": { "type": "string" },
+        "inputEquationTeXHash": { "type": "string" },
+        "inputMathMLHash": { "type": "string" },
+        "selectedDesignHash": { "type": "string" },
+        "equationHashPromoted": { "const": false },
+        "promotionAllowed": { "const": false }
+      }
+    },
+    "designRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "design_row_id",
+        "candidate_type",
+        "readiness_audit_row_id",
+        "paper_id",
+        "source_candidate_id",
+        "source_file",
+        "equation_environment",
+        "readiness_status",
+        "equation_identity",
+        "tex_mathml_hash_signal",
+        "pdf_region_signal",
+        "canonical_text_alignment",
+        "sourceContentHash",
+        "source_hash_available",
+        "surrounding_context",
+        "ambiguity",
+        "raster_image_only_blocker",
+        "proposed_identity_design",
+        "proposed_hash_design",
+        "downstream_strict_evidence_blockers",
+        "design_status",
+        "blockers",
+        "recommended_action",
+        "equationArtifactCreated",
+        "strictEvidenceCreated",
+        "sourceSpanMutated",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "authorityPolicyCreated"
+      ],
+      "properties": {
+        "design_row_id": { "type": "string" },
+        "candidate_type": { "const": "equation_authority_hash_identity_design" },
+        "readiness_audit_row_id": { "type": "string" },
+        "paper_id": { "type": "string" },
+        "source_candidate_id": { "type": "string" },
+        "source_file": { "type": "string" },
+        "equation_environment": { "type": "string" },
+        "readiness_status": { "type": "string" },
+        "equation_identity": { "$ref": "#/$defs/equationIdentity" },
+        "tex_mathml_hash_signal": { "$ref": "#/$defs/texMathmlHashSignal" },
+        "pdf_region_signal": { "$ref": "#/$defs/pdfRegionSignal" },
+        "canonical_text_alignment": { "type": "object" },
+        "sourceContentHash": { "type": "string" },
+        "source_hash_available": { "type": "boolean" },
+        "surrounding_context": { "type": "object" },
+        "ambiguity": { "type": "object" },
+        "raster_image_only_blocker": { "type": "boolean" },
+        "proposed_identity_design": { "$ref": "#/$defs/proposedIdentityDesign" },
+        "proposed_hash_design": { "$ref": "#/$defs/proposedHashDesign" },
+        "downstream_strict_evidence_blockers": { "type": "array", "items": { "type": "string" } },
+        "design_status": { "$ref": "#/$defs/status" },
+        "blockers": { "type": "array", "items": { "type": "string" } },
+        "recommended_action": { "type": "string" },
+        "equationArtifactCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "sourceSpanMutated": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "authorityPolicyCreated": { "const": false }
+      }
+    }
+  }
+}
