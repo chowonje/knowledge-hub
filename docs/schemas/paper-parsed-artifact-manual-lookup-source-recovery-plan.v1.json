@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-plan.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "inputFeasibility",
+    "baseline",
+    "candidatePool",
+    "manualLookupCandidatePaperIds",
+    "manualLookupCandidates",
+    "textSourceHoldoutPaperIds",
+    "textSourceHoldouts",
+    "coverageTarget",
+    "expectedCoverageChangeIfApplied",
+    "nextRecommendedTranche",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-plan.v1" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "manual_lookup_source_recovery_plan_candidate_only",
+        "no_manual_lookup_source_recovery_candidates",
+        "blocked_input_schema_violation"
+      ]
+    },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": [
+        "name",
+        "inputFeasibilityReportPath",
+        "selectionRule",
+        "targetMissingParsedArtifacts",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "nonScope"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "inputFeasibilityReportPath": { "type": "string" },
+        "selectionRule": { "type": "string" },
+        "targetMissingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "inputFeasibility": {
+      "type": "object",
+      "required": [
+        "schemaValidation",
+        "status",
+        "baselineMissingParsedArtifacts",
+        "sourcePdfMissingRows",
+        "manualLookupRequiredRows",
+        "textSourceUnsupportedRows"
+      ],
+      "properties": {
+        "schemaValidation": { "$ref": "#/$defs/validation" },
+        "status": { "type": "string" },
+        "baselineMissingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "sourcePdfMissingRows": { "type": "integer", "minimum": 0 },
+        "manualLookupRequiredRows": { "type": "integer", "minimum": 0 },
+        "textSourceUnsupportedRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "baseline": {
+      "type": "object",
+      "properties": {
+        "scannedPapers": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "candidatePool": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "manualLookupCandidateOnlyRows",
+        "textSourceContractHoldRows",
+        "automatedRecoveryCandidateRows",
+        "manualLookupModeTaxonomy",
+        "lookupPriorityTaxonomy",
+        "textSourceHoldoutTaxonomy"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "manualLookupCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "textSourceContractHoldRows": { "type": "integer", "minimum": 0 },
+        "automatedRecoveryCandidateRows": { "const": 0 },
+        "manualLookupModeTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "lookupPriorityTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "textSourceHoldoutTaxonomy": { "$ref": "#/$defs/taxonomy" }
+      },
+      "additionalProperties": true
+    },
+    "manualLookupCandidatePaperIds": { "type": "array", "items": { "type": "string" } },
+    "manualLookupCandidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/manualLookupCandidate" }
+    },
+    "textSourceHoldoutPaperIds": { "type": "array", "items": { "type": "string" } },
+    "textSourceHoldouts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/textSourceHoldout" }
+    },
+    "coverageTarget": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifactsBefore",
+        "targetMissingParsedArtifacts",
+        "manualRecoveriesNeededForTarget",
+        "manualLookupCandidateRows",
+        "targetReachableIfEnoughManualSourcesResolved",
+        "potentialMissingParsedArtifactsAfterAllManualLookupRecovered",
+        "textSourceRowsRemainAfterManualLookup"
+      ],
+      "properties": {
+        "missingParsedArtifactsBefore": { "type": "integer", "minimum": 0 },
+        "targetMissingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "manualRecoveriesNeededForTarget": { "type": "integer", "minimum": 0 },
+        "manualLookupCandidateRows": { "type": "integer", "minimum": 0 },
+        "targetReachableIfEnoughManualSourcesResolved": { "type": "boolean" },
+        "potentialMissingParsedArtifactsAfterAllManualLookupRecovered": { "type": "integer", "minimum": 0 },
+        "textSourceRowsRemainAfterManualLookup": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "expectedCoverageChangeIfApplied": {
+      "type": "object",
+      "required": [
+        "expectedImmediateMissingParsedArtifactsReduction",
+        "expectedMissingParsedArtifactsAfterImmediateApply",
+        "potentialManualLookupMissingParsedArtifactsReduction",
+        "potentialMissingParsedArtifactsAfterManualLookupApply"
+      ],
+      "properties": {
+        "expectedImmediateMissingParsedArtifactsReduction": { "const": 0 },
+        "expectedMissingParsedArtifactsAfterImmediateApply": { "type": "integer", "minimum": 0 },
+        "potentialManualLookupMissingParsedArtifactsReduction": { "type": "integer", "minimum": 0 },
+        "potentialMissingParsedArtifactsAfterManualLookupApply": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "nextRecommendedTranche": {
+      "type": "object",
+      "required": ["name", "candidateCount", "paperIds", "rationale"],
+      "properties": {
+        "name": { "type": "string" },
+        "candidateCount": { "type": "integer", "minimum": 0 },
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "rationale": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": { "$ref": "#/$defs/mutationPolicy" },
+    "mutationCounters": { "$ref": "#/$defs/mutationCounters" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "validation": {
+      "type": "object",
+      "required": ["ok", "errors"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "manualLookupCandidate": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "sourceArtifact",
+        "manualLookupPlanStatus",
+        "manualLookupMode",
+        "lookupPriority",
+        "lookupQueries",
+        "preferredReviewOrder",
+        "requiredFutureApproval",
+        "futureApplyTarget",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "sourceRegistrationMutationAttempted",
+        "parsedArtifactWriteAttempted",
+        "recommendedAction"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "sourceArtifact": { "type": "object" },
+        "manualLookupPlanStatus": { "const": "manual_lookup_source_recovery_plan_candidate_only" },
+        "manualLookupMode": { "type": "string" },
+        "lookupPriority": { "type": "string" },
+        "lookupQueries": { "type": "object", "additionalProperties": { "type": "string" } },
+        "preferredReviewOrder": { "type": "array", "items": { "type": "string" } },
+        "requiredFutureApproval": { "type": "string" },
+        "futureApplyTarget": { "type": "string" },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "sourceRegistrationMutationAttempted": { "const": false },
+        "parsedArtifactWriteAttempted": { "const": false },
+        "recommendedAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "textSourceHoldout": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "sourceArtifact",
+        "textSourcePlanStatus",
+        "requiredFutureApproval",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "sourceRegistrationMutationAttempted",
+        "parsedArtifactWriteAttempted",
+        "recommendedAction"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "sourceArtifact": { "type": "object" },
+        "textSourcePlanStatus": { "const": "held_out_text_source_contract_required" },
+        "futurePolicyOption": { "type": "string" },
+        "decisionRecommendation": { "type": "string" },
+        "requiredFutureApproval": { "type": "string" },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "sourceRegistrationMutationAttempted": { "const": false },
+        "parsedArtifactWriteAttempted": { "const": false },
+        "recommendedAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": {
+      "type": "object",
+      "properties": {
+        "externalLookup": { "const": false },
+        "sourceDownload": { "const": false },
+        "sourcePathRewrite": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "parserRouting": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationEvidence": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "vaultWrite": { "const": false },
+        "answerIntegration": { "const": false },
+        "manualBlockerResolution": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationCounters": {
+      "type": "object",
+      "properties": {
+        "externalLookupRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 },
+        "parsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    }
+  }
+}
