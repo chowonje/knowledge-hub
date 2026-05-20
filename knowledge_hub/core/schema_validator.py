@@ -40,6 +40,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-source-blocker-report.v1": "paper-parsed-artifact-source-blocker-report.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-missing-resolution-plan.v1": "paper-parsed-artifact-source-missing-resolution-plan.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-recovery-feasibility.v1": "paper-parsed-artifact-source-recovery-feasibility.v1.json",
+    "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-plan.v1": "paper-parsed-artifact-manual-lookup-source-recovery-plan.v1.json",
     "knowledge-hub.paper.parsed-artifact-oversized-pdf-materialization-dry-run.v1": "paper-parsed-artifact-oversized-pdf-materialization-dry-run.v1.json",
     "knowledge-hub.paper.parsed-artifact-oversized-pdf-materialization-apply.v1": "paper-parsed-artifact-oversized-pdf-materialization-apply.v1.json",
     "knowledge-hub.paper.parsed-artifact-arxiv-source-recovery.v1": "paper-parsed-artifact-arxiv-source-recovery.v1.json",
