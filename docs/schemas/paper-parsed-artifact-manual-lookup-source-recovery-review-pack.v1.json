@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-review-pack.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "inputPlan",
+    "counts",
+    "coverageTarget",
+    "manualLookupReviewCardPaperIds",
+    "reviewCards",
+    "allowlistTemplateRows",
+    "textSourceHoldoutPaperIds",
+    "textSourceHoldouts",
+    "gate",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-review-pack.v1" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "manual_lookup_source_recovery_review_pack_candidate_only",
+        "no_manual_lookup_source_recovery_review_candidates",
+        "blocked_input_schema_violation"
+      ]
+    },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": ["name", "inputManualLookupPlanReportPath", "selectionRule", "nonScope"],
+      "properties": {
+        "name": { "type": "string" },
+        "inputManualLookupPlanReportPath": { "type": "string" },
+        "selectionRule": { "type": "string" },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "inputPlan": {
+      "type": "object",
+      "required": [
+        "schemaValidation",
+        "schema",
+        "status",
+        "manualLookupCandidateOnlyRows",
+        "textSourceContractHoldRows"
+      ],
+      "properties": {
+        "schemaValidation": { "$ref": "#/$defs/validation" },
+        "schema": { "type": "string" },
+        "status": { "type": "string" },
+        "manualLookupCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "textSourceContractHoldRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "manualLookupReviewCardRows",
+        "textSourceHoldoutRows",
+        "approvalTemplateRows",
+        "approvedSourceRows",
+        "applyReadyRows"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "manualLookupReviewCardRows": { "type": "integer", "minimum": 0 },
+        "textSourceHoldoutRows": { "type": "integer", "minimum": 0 },
+        "approvalTemplateRows": { "type": "integer", "minimum": 0 },
+        "approvedSourceRows": { "const": 0 },
+        "applyReadyRows": { "const": 0 },
+        "manualLookupHighPriorityRows": { "type": "integer", "minimum": 0 },
+        "manualLookupNormalPriorityRows": { "type": "integer", "minimum": 0 },
+        "manualLookupModeTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "lookupPriorityTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "textSourceHoldoutTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "externalLookupRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 },
+        "parsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "runManifestWriteRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "coverageTarget": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifactsBefore",
+        "targetMissingParsedArtifacts",
+        "manualRecoveriesNeededForTarget",
+        "manualLookupCandidateRows",
+        "targetReachableIfEnoughManualSourcesResolved",
+        "potentialMissingParsedArtifactsAfterAllManualLookupRecovered",
+        "textSourceRowsRemainAfterManualLookup"
+      ],
+      "properties": {
+        "missingParsedArtifactsBefore": { "type": "integer", "minimum": 0 },
+        "targetMissingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "manualRecoveriesNeededForTarget": { "type": "integer", "minimum": 0 },
+        "manualLookupCandidateRows": { "type": "integer", "minimum": 0 },
+        "targetReachableIfEnoughManualSourcesResolved": { "type": "boolean" },
+        "potentialMissingParsedArtifactsAfterAllManualLookupRecovered": { "type": "integer", "minimum": 0 },
+        "textSourceRowsRemainAfterManualLookup": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "manualLookupReviewCardPaperIds": { "type": "array", "items": { "type": "string" } },
+    "reviewCards": { "type": "array", "items": { "$ref": "#/$defs/reviewCard" } },
+    "allowlistTemplateRows": { "type": "array", "items": { "$ref": "#/$defs/approvalTemplate" } },
+    "textSourceHoldoutPaperIds": { "type": "array", "items": { "type": "string" } },
+    "textSourceHoldouts": { "type": "array", "items": { "$ref": "#/$defs/textSourceHoldout" } },
+    "gate": {
+      "type": "object",
+      "required": [
+        "reviewPackReady",
+        "manualApprovalsAccepted",
+        "applyReady",
+        "sourceRegistrationMutationReady",
+        "parsedArtifactMaterializationReady",
+        "parserRoutingReady",
+        "strictEvidenceReady",
+        "answerIntegrationReady",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "reviewPackReady": { "type": "boolean" },
+        "manualApprovalsAccepted": { "const": false },
+        "applyReady": { "const": false },
+        "sourceRegistrationMutationReady": { "const": false },
+        "parsedArtifactMaterializationReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": { "$ref": "#/$defs/mutationPolicy" },
+    "mutationCounters": { "$ref": "#/$defs/mutationCounters" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "validation": {
+      "type": "object",
+      "required": ["ok", "errors"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "approvalTemplate": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "decision",
+        "approvedSourceType",
+        "approvedSourceUrl",
+        "approvedLocalPdfPath",
+        "approvedSourceContentHash",
+        "approvedBy",
+        "approvedAt",
+        "notes",
+        "templateOnly",
+        "acceptedByThisTranche"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "decision": { "const": "needs_review" },
+        "approvedSourceType": { "const": "" },
+        "approvedSourceUrl": { "const": "" },
+        "approvedLocalPdfPath": { "const": "" },
+        "approvedSourceContentHash": { "const": "" },
+        "approvedBy": { "const": "" },
+        "approvedAt": { "const": "" },
+        "notes": { "const": "" },
+        "templateOnly": { "const": true },
+        "acceptedByThisTranche": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "reviewCard": {
+      "type": "object",
+      "required": [
+        "reviewCardId",
+        "paperId",
+        "paperTitle",
+        "manualLookupMode",
+        "lookupPriority",
+        "sourceArtifact",
+        "lookupQueries",
+        "preferredReviewOrder",
+        "requiredFutureApproval",
+        "futureApplyTarget",
+        "operatorDecisionDefault",
+        "reviewStatus",
+        "approvalTemplate",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "sourceRegistrationMutationAttempted",
+        "parsedArtifactWriteAttempted",
+        "applyReady",
+        "strictEligible",
+        "citationGrade",
+        "runtimeEvidence",
+        "answerIntegration",
+        "nonScopeReasons"
+      ],
+      "properties": {
+        "reviewCardId": { "type": "string" },
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "manualLookupMode": { "type": "string" },
+        "lookupPriority": { "type": "string" },
+        "sourceArtifact": { "type": "object" },
+        "lookupQueries": { "type": "object", "additionalProperties": { "type": "string" } },
+        "preferredReviewOrder": { "type": "array", "items": { "type": "string" } },
+        "requiredFutureApproval": { "type": "string" },
+        "futureApplyTarget": { "type": "string" },
+        "operatorDecisionDefault": { "const": "needs_review" },
+        "reviewStatus": { "const": "manual_lookup_source_recovery_review_card_candidate_only" },
+        "approvalTemplate": { "$ref": "#/$defs/approvalTemplate" },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "sourceRegistrationMutationAttempted": { "const": false },
+        "parsedArtifactWriteAttempted": { "const": false },
+        "applyReady": { "const": false },
+        "strictEligible": { "const": false },
+        "citationGrade": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "answerIntegration": { "const": false },
+        "nonScopeReasons": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "textSourceHoldout": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "sourceArtifact",
+        "textSourceHoldoutStatus",
+        "requiredFutureApproval",
+        "recommendedAction",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "sourceRegistrationMutationAttempted",
+        "parsedArtifactWriteAttempted",
+        "applyReady"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "sourceArtifact": { "type": "object" },
+        "textSourceHoldoutStatus": { "const": "text_source_contract_holdout" },
+        "futurePolicyOption": { "type": "string" },
+        "decisionRecommendation": { "type": "string" },
+        "requiredFutureApproval": { "type": "string" },
+        "recommendedAction": { "const": "parsed_artifact_text_source_materialization_contract" },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "sourceRegistrationMutationAttempted": { "const": false },
+        "parsedArtifactWriteAttempted": { "const": false },
+        "applyReady": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": {
+      "type": "object",
+      "properties": {
+        "externalLookup": { "const": false },
+        "sourceDownload": { "const": false },
+        "sourcePathRewrite": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "parserRouting": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationEvidence": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "vaultWrite": { "const": false },
+        "answerIntegration": { "const": false },
+        "manualBlockerResolution": { "const": false },
+        "runManifestWrite": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationCounters": {
+      "type": "object",
+      "properties": {
+        "externalLookupRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 },
+        "parsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "runManifestWriteRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    }
+  }
+}
