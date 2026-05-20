@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-decision-file-validation.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "inputDecisionFileDraft",
+    "inputDecisionFile",
+    "counts",
+    "coverageTarget",
+    "textSourceHoldoutPaperIds",
+    "validationRows",
+    "gate",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-decision-file-validation.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["decision_file_validation_ready", "blocked"]
+    },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": ["name", "inputDecisionFileDraftReportPath", "inputDecisionFilePath", "selectionRule", "nonScope"],
+      "properties": {
+        "name": { "type": "string" },
+        "inputDecisionFileDraftReportPath": { "type": "string" },
+        "inputDecisionFilePath": { "type": "string" },
+        "selectionRule": { "type": "string" },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "inputDecisionFileDraft": {
+      "type": "object",
+      "required": ["schemaValidation", "schema", "status", "draftDecisionRows", "textSourceHoldoutRows"],
+      "properties": {
+        "schemaValidation": { "$ref": "#/$defs/validation" },
+        "schema": { "type": "string" },
+        "status": { "type": "string" },
+        "draftDecisionRows": { "type": "integer", "minimum": 0 },
+        "textSourceHoldoutRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "inputDecisionFile": {
+      "type": "object",
+      "required": ["draftOnly", "decisionRows", "shapeValidation"],
+      "properties": {
+        "draftOnly": { "type": "boolean" },
+        "decisionRows": { "type": "integer", "minimum": 0 },
+        "shapeValidation": { "$ref": "#/$defs/validation" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "validRows",
+        "invalidRows",
+        "needsReviewRows",
+        "approvedDecisionRows",
+        "rejectedDecisionRows",
+        "holdForManualLookupRows",
+        "applyReadyRows",
+        "textSourceHoldoutRows",
+        "draftDecisionRows",
+        "missingDraftDecisionRows",
+        "extraDecisionRows",
+        "unsafeUpstreamFlagCount",
+        "inputSchemaViolationCount",
+        "validationStatusTaxonomy",
+        "decisionTaxonomy"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "validRows": { "type": "integer", "minimum": 0 },
+        "invalidRows": { "type": "integer", "minimum": 0 },
+        "needsReviewRows": { "type": "integer", "minimum": 0 },
+        "approvedDecisionRows": { "type": "integer", "minimum": 0 },
+        "rejectedDecisionRows": { "type": "integer", "minimum": 0 },
+        "holdForManualLookupRows": { "type": "integer", "minimum": 0 },
+        "applyReadyRows": { "type": "integer", "minimum": 0 },
+        "textSourceHoldoutRows": { "type": "integer", "minimum": 0 },
+        "draftDecisionRows": { "type": "integer", "minimum": 0 },
+        "missingDraftDecisionRows": { "type": "integer", "minimum": 0 },
+        "extraDecisionRows": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "inputSchemaViolationCount": { "type": "integer", "minimum": 0 },
+        "validationStatusTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "decisionTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "externalLookupRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 },
+        "parsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "runManifestWriteRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "coverageTarget": { "type": "object" },
+    "textSourceHoldoutPaperIds": { "type": "array", "items": { "type": "string" } },
+    "validationRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/validationRow" }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "decisionFileValidationReady",
+        "containsOnlyValidatedNeedsReviewRows",
+        "containsApplyReadyRows",
+        "containsApprovedDecisionRows",
+        "containsRejectedDecisionRows",
+        "applyReady",
+        "sourceRegistrationMutationReady",
+        "parsedArtifactMaterializationReady",
+        "parserRoutingReady",
+        "strictEvidenceReady",
+        "answerIntegrationReady",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "decisionFileValidationReady": { "type": "boolean" },
+        "containsOnlyValidatedNeedsReviewRows": { "type": "boolean" },
+        "containsApplyReadyRows": { "type": "boolean" },
+        "containsApprovedDecisionRows": { "type": "boolean" },
+        "containsRejectedDecisionRows": { "type": "boolean" },
+        "applyReady": { "const": false },
+        "sourceRegistrationMutationReady": { "const": false },
+        "parsedArtifactMaterializationReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "decision": { "type": "string" },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": { "$ref": "#/$defs/mutationPolicy" },
+    "mutationCounters": { "$ref": "#/$defs/mutationCounters" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "validation": {
+      "type": "object",
+      "required": ["ok", "errors"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "validationRow": {
+      "type": "object",
+      "required": [
+        "validationRowId",
+        "sourceReviewCardId",
+        "paperId",
+        "paperTitle",
+        "manualLookupMode",
+        "lookupPriority",
+        "decision",
+        "allowedDecisions",
+        "validationStatus",
+        "validationBlockers",
+        "validDecisionRow",
+        "applyReadyForLaterApply",
+        "needsReviewDecisionRow",
+        "approvedDecisionRow",
+        "rejectedDecisionRow",
+        "holdForManualLookupRow",
+        "reportOnly",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "sourceRegistrationMutationAttempted",
+        "parsedArtifactWriteAttempted",
+        "strictEligible",
+        "citationGrade",
+        "runtimeEvidence",
+        "answerIntegration"
+      ],
+      "properties": {
+        "validationRowId": { "type": "string" },
+        "sourceReviewCardId": { "type": "string" },
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "manualLookupMode": { "type": "string" },
+        "lookupPriority": { "type": "string" },
+        "decision": { "type": "string" },
+        "allowedDecisions": { "type": "array", "items": { "type": "string" } },
+        "validationStatus": { "type": "string" },
+        "validationBlockers": { "type": "array", "items": { "type": "string" } },
+        "validDecisionRow": { "type": "boolean" },
+        "applyReadyForLaterApply": { "type": "boolean" },
+        "needsReviewDecisionRow": { "type": "boolean" },
+        "approvedDecisionRow": { "type": "boolean" },
+        "rejectedDecisionRow": { "type": "boolean" },
+        "holdForManualLookupRow": { "type": "boolean" },
+        "reportOnly": { "const": true },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "sourceRegistrationMutationAttempted": { "const": false },
+        "parsedArtifactWriteAttempted": { "const": false },
+        "strictEligible": { "const": false },
+        "citationGrade": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "answerIntegration": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": {
+      "type": "object",
+      "properties": {
+        "externalLookup": { "const": false },
+        "sourceDownload": { "const": false },
+        "sourcePathRewrite": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "parserRouting": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationEvidence": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "vaultWrite": { "const": false },
+        "answerIntegration": { "const": false },
+        "manualBlockerResolution": { "const": false },
+        "runManifestWrite": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationCounters": {
+      "type": "object",
+      "properties": {
+        "externalLookupRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 },
+        "parsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "runManifestWriteRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    }
+  }
+}
