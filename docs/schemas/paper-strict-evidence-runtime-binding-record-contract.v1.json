@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.strict-evidence-runtime-binding-record-contract.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "contractPrinciples",
+    "writeTargets",
+    "sampleRuntimeBindingRecord",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.strict-evidence-runtime-binding-record-contract.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "runtimeBindingGateDesignReportPath",
+        "runtimeBindingGateDesignSchema",
+        "runtimeBindingGateDesignStatus",
+        "runtimeBindingGateDesignDecision",
+        "runtimeBindingGateDesignCandidateOnlyRows",
+        "sectionRuntimeBindingGateDesignRows",
+        "figureCaptionRuntimeBindingGateDesignRows",
+        "expectedInputRows",
+        "expectedPlannedRuntimeBindingRows"
+      ],
+      "properties": {
+        "runtimeBindingGateDesignReportPath": { "type": "string" },
+        "runtimeBindingGateDesignSchema": { "type": "string" },
+        "runtimeBindingGateDesignStatus": { "type": "string" },
+        "runtimeBindingGateDesignDecision": { "type": "string" },
+        "runtimeBindingGateDesignCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionRuntimeBindingGateDesignRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionRuntimeBindingGateDesignRows": { "type": "integer", "minimum": 0 },
+        "expectedInputRows": { "type": "integer", "minimum": 0 },
+        "expectedPlannedRuntimeBindingRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "runtimeBindingRecordContracts",
+        "runtimeBindingRecordSchemas",
+        "plannedRuntimeBindingRows",
+        "runtimeBindingGateDesignCandidateOnlyRows",
+        "sectionRuntimeBindingGateDesignRows",
+        "figureCaptionRuntimeBindingGateDesignRows",
+        "executorImplementedRows",
+        "runtimeBindingRecordWriteRows",
+        "runtimeEvidenceCreatedRows",
+        "runtimeVisibleMutationRows",
+        "answerIntegrationVisibleMutationRows",
+        "citationGradeRecordWriteRows",
+        "citationGradeBooleanMutationRows",
+        "eligibilityRecordWriteRows",
+        "strictEligibleMutationRows",
+        "strictEvidenceWriteRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "manifestWriteRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "schemaViolationCount",
+        "sampleRecordSchemaValidRows",
+        "sampleRecordSemanticViolationRows"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "runtimeBindingRecordContracts": { "const": 1 },
+        "runtimeBindingRecordSchemas": { "const": 1 },
+        "plannedRuntimeBindingRows": { "type": "integer", "minimum": 0 },
+        "runtimeBindingGateDesignCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionRuntimeBindingGateDesignRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionRuntimeBindingGateDesignRows": { "type": "integer", "minimum": 0 },
+        "executorImplementedRows": { "const": 0 },
+        "runtimeBindingRecordWriteRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "runtimeVisibleMutationRows": { "const": 0 },
+        "answerIntegrationVisibleMutationRows": { "const": 0 },
+        "citationGradeRecordWriteRows": { "const": 0 },
+        "citationGradeBooleanMutationRows": { "const": 0 },
+        "eligibilityRecordWriteRows": { "const": 0 },
+        "strictEligibleMutationRows": { "const": 0 },
+        "strictEvidenceWriteRows": { "const": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "manifestWriteRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "sampleRecordSchemaValidRows": { "type": "integer", "minimum": 0 },
+        "sampleRecordSemanticViolationRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "writeTargetContractsDefined",
+        "runtimeBindingStoreContractDefined",
+        "runtimeBindingRecordSchemaDefined",
+        "executorReady",
+        "runtimeMutationAllowed",
+        "runtimeBindingRecordWriteAllowed",
+        "runtimeEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "citationGradeRecordWriteAllowed",
+        "parentRecordMutationAllowed",
+        "decision",
+        "schemaViolations",
+        "sampleRecordSemanticViolations",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "writeTargetContractsDefined": { "const": true },
+        "runtimeBindingStoreContractDefined": { "const": true },
+        "runtimeBindingRecordSchemaDefined": { "const": true },
+        "executorReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "runtimeBindingRecordWriteAllowed": { "const": false },
+        "runtimeEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "citationGradeRecordWriteAllowed": { "const": false },
+        "parentRecordMutationAllowed": { "const": false },
+        "decision": { "type": "string" },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "sampleRecordSemanticViolations": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "contractOnly",
+        "executorImplemented",
+        "runtimeBindingRecordWrite",
+        "runtimeEvidenceCreated",
+        "runtimeVisible",
+        "answerIntegrationVisible",
+        "citationGradeRecordWrite",
+        "citationGradeBooleanMutation",
+        "eligibilityRecordWrite",
+        "strictEligibleMutation",
+        "strictEvidenceStoreWrite",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten",
+        "manifestWrite"
+      ],
+      "properties": {
+        "contractOnly": { "const": true },
+        "executorImplemented": { "const": false },
+        "runtimeBindingRecordWrite": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "runtimeVisible": { "const": false },
+        "answerIntegrationVisible": { "const": false },
+        "citationGradeRecordWrite": { "const": false },
+        "citationGradeBooleanMutation": { "const": false },
+        "eligibilityRecordWrite": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "strictEvidenceStoreWrite": { "const": false },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "manifestWrite": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "contractPrinciples": { "type": "array", "items": { "type": "string" } },
+    "writeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "plannedWriteTarget",
+          "contractReference",
+          "runtimeBindingRecordSchema",
+          "storeKind",
+          "storeRootTemplate",
+          "recordPathTemplate",
+          "runManifestPathTemplate",
+          "allowedArtifactTypes",
+          "requiredRecordFields",
+          "idempotencyKeyFields",
+          "writeSemantics",
+          "readbackChecks",
+          "rollbackStrategy",
+          "rollbackImplemented",
+          "executorImplemented",
+          "citationGradeRecordInPlaceMutationAllowed",
+          "strictEvidenceInPlaceMutationAllowed",
+          "eligibilityRecordInPlaceMutationAllowed",
+          "sourceSpanInPlaceMutationAllowed",
+          "runtimeUseAllowed",
+          "parserRoutingAllowed",
+          "answerIntegrationAllowed",
+          "databaseMutationAllowed",
+          "vaultScanAllowed"
+        ],
+        "properties": {
+          "plannedWriteTarget": {
+            "const": "parsed_artifact_strict_evidence_runtime_binding_store"
+          },
+          "contractReference": {
+            "const": "knowledge-hub.paper.strict-evidence-runtime-binding-record-contract.v1"
+          },
+          "runtimeBindingRecordSchema": {
+            "const": "knowledge-hub.paper.strict-evidence-runtime-binding-record.v1"
+          },
+          "storeKind": {
+            "const": "local_papers_dir_jsonl_strict_evidence_runtime_binding_store"
+          },
+          "storeRootTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_runtime_binding"
+          },
+          "recordPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_runtime_binding/{paper_id}.jsonl"
+          },
+          "runManifestPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/runs/{run_id}.json"
+          },
+          "allowedArtifactTypes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["section", "figure"] }
+          },
+          "requiredRecordFields": { "type": "array", "items": { "type": "string" } },
+          "idempotencyKeyFields": { "type": "array", "items": { "type": "string" } },
+          "writeSemantics": {
+            "const": "explicit_apply_executor_appends_or_replaces_same_idempotency_key"
+          },
+          "readbackChecks": { "type": "array", "items": { "type": "string" } },
+          "rollbackStrategy": { "type": "string" },
+          "rollbackImplemented": { "const": false },
+          "executorImplemented": { "const": false },
+          "citationGradeRecordInPlaceMutationAllowed": { "const": false },
+          "strictEvidenceInPlaceMutationAllowed": { "const": false },
+          "eligibilityRecordInPlaceMutationAllowed": { "const": false },
+          "sourceSpanInPlaceMutationAllowed": { "const": false },
+          "runtimeUseAllowed": { "const": false },
+          "parserRoutingAllowed": { "const": false },
+          "answerIntegrationAllowed": { "const": false },
+          "databaseMutationAllowed": { "const": false },
+          "vaultScanAllowed": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sampleRuntimeBindingRecord": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

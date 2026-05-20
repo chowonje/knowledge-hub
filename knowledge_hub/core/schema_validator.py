@@ -98,6 +98,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.strict-evidence-citation-grade-executor-apply-readback-review.v1": "paper-strict-evidence-citation-grade-executor-apply-readback-review.v1.json",
     "knowledge-hub.paper.strict-evidence-citation-grade-post-apply-promotion-hold-review.v1": "paper-strict-evidence-citation-grade-post-apply-promotion-hold-review.v1.json",
     "knowledge-hub.paper.strict-evidence-citation-grade-runtime-binding-gate-design.v1": "paper-strict-evidence-citation-grade-runtime-binding-gate-design.v1.json",
+    "knowledge-hub.paper.strict-evidence-runtime-binding-record-contract.v1": "paper-strict-evidence-runtime-binding-record-contract.v1.json",
+    "knowledge-hub.paper.strict-evidence-runtime-binding-record.v1": "paper-strict-evidence-runtime-binding-record.v1.json",
     "knowledge-hub.paper.tex-equation-quote-candidate-v2-design.v1": "paper-tex-equation-quote-candidate-v2-design.v1.json",
     "knowledge-hub.paper.tex-equation-remaining-window-diagnostic.v1": "paper-tex-equation-remaining-window-diagnostic.v1.json",
     "knowledge-hub.paper.tex-equation-segmented-multiline-matching-design.v1": "paper-tex-equation-segmented-multiline-matching-design.v1.json",
