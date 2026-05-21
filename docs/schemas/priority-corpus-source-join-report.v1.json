@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.priority-corpus-source-join-report.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generated_at",
+    "scope_note",
+    "inputs",
+    "inventory_summary",
+    "join_rules",
+    "counts",
+    "rows",
+    "first_tranche_recommendation"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.priority-corpus-source-join-report.v1" },
+    "generated_at": { "type": "string" },
+    "scope_note": { "type": "string" },
+    "inputs": { "type": "object", "additionalProperties": true },
+    "inventory_summary": {
+      "type": "object",
+      "required": ["inventory_file_rows", "inventory_unique_source_ids"],
+      "properties": {
+        "inventory_file_rows": { "type": "integer", "minimum": 0 },
+        "inventory_unique_source_ids": { "type": "integer", "minimum": 0 },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "join_rules": { "type": "object", "additionalProperties": true },
+    "counts": {
+      "type": "object",
+      "required": [
+        "total_candidate_rows",
+        "unique_source_id_count",
+        "matched_to_artifact_count",
+        "unmatched_or_source_missing_count",
+        "metadata_only_count",
+        "hash_missing_count",
+        "hash_mismatch_count",
+        "ambiguous_count",
+        "available_count",
+        "parsed_missing_count",
+        "already_in_manifest_count",
+        "expansion_allowlist_count",
+        "first_tranche_recommended_count",
+        "expansion_allowlist_by_tier",
+        "join_status_breakdown"
+      ],
+      "properties": {
+        "total_candidate_rows": { "type": "integer", "minimum": 0 },
+        "unique_source_id_count": { "type": "integer", "minimum": 0 },
+        "matched_to_artifact_count": { "type": "integer", "minimum": 0 },
+        "unmatched_or_source_missing_count": { "type": "integer", "minimum": 0 },
+        "metadata_only_count": { "type": "integer", "minimum": 0 },
+        "hash_missing_count": { "type": "integer", "minimum": 0 },
+        "hash_mismatch_count": { "type": "integer", "minimum": 0 },
+        "ambiguous_count": { "type": "integer", "minimum": 0 },
+        "available_count": { "type": "integer", "minimum": 0 },
+        "parsed_missing_count": { "type": "integer", "minimum": 0 },
+        "already_in_manifest_count": { "type": "integer", "minimum": 0 },
+        "expansion_allowlist_count": { "type": "integer", "minimum": 0 },
+        "first_tranche_recommended_count": { "type": "integer", "minimum": 0 },
+        "expansion_allowlist_by_tier": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "join_status_breakdown": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      },
+      "additionalProperties": true
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "candidate_tier",
+          "current_manifest_status",
+          "join_method",
+          "join_status",
+          "parsed_status",
+          "mapped_inventory_file_rows",
+          "warnings",
+          "expansion_allowlist_eligible"
+        ],
+        "properties": {
+          "source_id": { "type": "string", "minLength": 1 },
+          "title": { "type": ["string", "null"] },
+          "year": { "type": ["integer", "null"] },
+          "candidate_tier": { "type": "string" },
+          "current_manifest_status": { "type": "string", "enum": ["in_manifest", "not_in_manifest"] },
+          "join_method": { "type": "string" },
+          "join_status": {
+            "type": "string",
+            "enum": ["available", "source_missing", "metadata_only", "hash_missing", "hash_mismatch", "ambiguous"]
+          },
+          "parsed_status": { "type": "string" },
+          "expected_source_content_hash": { "type": ["string", "null"] },
+          "observed_sha256": { "type": ["string", "null"] },
+          "byte_length": { "type": ["integer", "null"], "minimum": 0 },
+          "canonical_filename": { "type": ["string", "null"] },
+          "corpus_location_ref": { "type": ["string", "null"] },
+          "source_type": { "type": ["string", "null"] },
+          "mapped_inventory_file_rows": { "type": "integer", "minimum": 0 },
+          "warnings": { "type": "array", "items": { "type": "string" } },
+          "expansion_allowlist_eligible": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "first_tranche_recommendation": { "type": "array" }
+  },
+  "additionalProperties": true
+}

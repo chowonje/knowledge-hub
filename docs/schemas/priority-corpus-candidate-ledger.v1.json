@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.priority-corpus-candidate-ledger.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generated_at",
+    "scope_note",
+    "source_pools",
+    "status_vocabulary",
+    "counts",
+    "candidates"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.priority-corpus-candidate-ledger.v1" },
+    "generated_at": { "type": "string" },
+    "scope_note": { "type": "string" },
+    "source_pools": { "type": "object", "additionalProperties": true },
+    "status_vocabulary": { "type": "object", "additionalProperties": true },
+    "counts": {
+      "type": "object",
+      "required": [
+        "candidate_rows",
+        "in_manifest",
+        "not_in_manifest",
+        "source_verification_pending"
+      ],
+      "properties": {
+        "candidate_rows": { "type": "integer", "minimum": 0 },
+        "by_candidate_tier": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "in_manifest": { "type": "integer", "minimum": 0 },
+        "not_in_manifest": { "type": "integer", "minimum": 0 },
+        "source_verification_pending": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "title",
+          "year",
+          "provider",
+          "candidate_tier",
+          "current_manifest_status",
+          "source_artifact_status"
+        ],
+        "properties": {
+          "source_id": { "type": "string", "minLength": 1 },
+          "title": { "type": ["string", "null"] },
+          "year": { "type": ["integer", "null"] },
+          "provider": { "type": ["string", "null"] },
+          "provenance_url": { "type": ["string", "null"] },
+          "doi": { "type": ["string", "null"] },
+          "priority_reason": { "type": "string" },
+          "candidate_tier": {
+            "type": "string",
+            "enum": ["eval_critical", "foundational", "recent_ai", "local_corpus_candidate"]
+          },
+          "current_manifest_status": {
+            "type": "string",
+            "enum": ["in_manifest", "not_in_manifest"]
+          },
+          "source_artifact_status": {
+            "type": "string",
+            "enum": ["unknown", "join_pending"]
+          },
+          "local_registry_signals": { "type": "object", "additionalProperties": true },
+          "manifest_artifact_id": { "type": "string" },
+          "manifest_expected_filename": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

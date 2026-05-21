@@ -3,7 +3,9 @@
   "artifacts": [
     {
       "artifactId": "paper_2005_11401",
-      "sourceIds": ["2005.11401"],
+      "sourceIds": [
+        "2005.11401"
+      ],
       "expectedFilename": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.pdf",
       "expectedSourceContentHash": "sha256:23e3249e9a1e75418d82efecab0ea8c4d033b89c93742f63208d47ce01f21233",
       "byteLength": 885323,
@@ -14,7 +16,9 @@
     },
     {
       "artifactId": "paper_2007_01282",
-      "sourceIds": ["2007.01282"],
+      "sourceIds": [
+        "2007.01282"
+      ],
       "expectedFilename": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering.pdf",
       "expectedSourceContentHash": "sha256:f1ee7e927c3fb31beb2146f8c205692a91b40dadd65d80e025c6686e4d430953",
       "byteLength": 326612,
@@ -25,7 +29,9 @@
     },
     {
       "artifactId": "paper_2404_16130",
-      "sourceIds": ["2404.16130"],
+      "sourceIds": [
+        "2404.16130"
+      ],
       "expectedFilename": "From Local to Global A Graph RAG Approach to Query-Focused Summarization.pdf",
       "expectedSourceContentHash": "sha256:730f1a9f38d16689900969a3eeeb1b31e45eda1dcc1f37a043afa90aff76c867",
       "byteLength": 6893854,
@@ -36,7 +42,9 @@
     },
     {
       "artifactId": "paper_2410_05779",
-      "sourceIds": ["2410.05779"],
+      "sourceIds": [
+        "2410.05779"
+      ],
       "expectedFilename": "LightRAG Simple and Fast Retrieval-Augmented Generation.pdf",
       "expectedSourceContentHash": "sha256:bd72eebf611df1366b251c16ce4eac7aac699e519783c586feb2c5c43899347a",
       "byteLength": 1123301,
@@ -47,7 +55,9 @@
     },
     {
       "artifactId": "alexnet_krizhevsky_2012",
-      "sourceIds": ["alexnet-2012"],
+      "sourceIds": [
+        "alexnet-2012"
+      ],
       "expectedFilename": "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
       "expectedSourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
       "byteLength": 1418820,
@@ -58,7 +68,9 @@
     },
     {
       "artifactId": "paper_2010_11929",
-      "sourceIds": ["2010.11929"],
+      "sourceIds": [
+        "2010.11929"
+      ],
       "expectedFilename": "An Image is Worth 16x16 Words Transformers for Image Recognition at Scale.pdf",
       "expectedSourceContentHash": "sha256:8ce7b83971a14508ca711a27c875c9b6914c4f6767cf3150fb1ca6c07aa056d6",
       "byteLength": 3743814,
@@ -69,7 +81,9 @@
     },
     {
       "artifactId": "paper_1706_03762",
-      "sourceIds": ["1706.03762"],
+      "sourceIds": [
+        "1706.03762"
+      ],
       "expectedFilename": "Attention Is All You Need.pdf",
       "expectedSourceContentHash": "sha256:bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
       "byteLength": 2215244,
@@ -80,7 +94,9 @@
     },
     {
       "artifactId": "paper_2312_00752",
-      "sourceIds": ["2312.00752"],
+      "sourceIds": [
+        "2312.00752"
+      ],
       "expectedFilename": "Mamba Linear-Time Sequence Modeling with Selective State Spaces.pdf",
       "expectedSourceContentHash": "sha256:adf70ed1803c85b1899dec3e21f3af0b124411439e8654b840ea65f7b9f52b2e",
       "byteLength": 1168615,
@@ -91,7 +107,9 @@
     },
     {
       "artifactId": "paper_1810_04805",
-      "sourceIds": ["1810.04805"],
+      "sourceIds": [
+        "1810.04805"
+      ],
       "expectedFilename": "BERT Pre-training of Deep Bidirectional Transformers for Language Understanding.pdf",
       "expectedSourceContentHash": "sha256:5692a5514787a8c6727b4ff3b726a3385798bc68e12138d1d4af83947e2acf6e",
       "byteLength": 775166,
@@ -102,7 +120,9 @@
     },
     {
       "artifactId": "paper_2005_14165",
-      "sourceIds": ["2005.14165"],
+      "sourceIds": [
+        "2005.14165"
+      ],
       "expectedFilename": "Language Models are Few-Shot Learners.pdf",
       "expectedSourceContentHash": "sha256:97fd272f1fdfc18677462d0292f5fbf26ca86b4d1b485c2dba03269b643a0e83",
       "byteLength": 6768044,
@@ -113,7 +133,9 @@
     },
     {
       "artifactId": "paper_1312_5602",
-      "sourceIds": ["1312.5602"],
+      "sourceIds": [
+        "1312.5602"
+      ],
       "expectedFilename": "Playing Atari with Deep Reinforcement Learning.pdf",
       "expectedSourceContentHash": "sha256:8db04120cace173151c77e0faa6f3eaa4207009da66b9417597dc70bfee56d9c",
       "byteLength": 483443,
@@ -124,7 +146,9 @@
     },
     {
       "artifactId": "paper_1707_06347",
-      "sourceIds": ["1707.06347"],
+      "sourceIds": [
+        "1707.06347"
+      ],
       "expectedFilename": "Proximal Policy Optimization Algorithms.pdf",
       "expectedSourceContentHash": "sha256:e78feadadbdbb0b601b3c2bcc81404722cd431a489b307545f9b7bea1e8c4f5b",
       "byteLength": 2923532,
@@ -135,7 +159,9 @@
     },
     {
       "artifactId": "paper_1406_2661",
-      "sourceIds": ["1406.2661"],
+      "sourceIds": [
+        "1406.2661"
+      ],
       "expectedFilename": "Generative Adversarial Nets.pdf",
       "expectedSourceContentHash": "sha256:ff5819e3a7b713c3bd3107b7de3d51fe0a347aa5d8444f0efdcf2345ef0a8b63",
       "byteLength": 530482,
@@ -146,7 +172,9 @@
     },
     {
       "artifactId": "paper_2006_11239",
-      "sourceIds": ["2006.11239"],
+      "sourceIds": [
+        "2006.11239"
+      ],
       "expectedFilename": "Denoising Diffusion Probabilistic Models.pdf",
       "expectedSourceContentHash": "sha256:aee5e07a802e8dfd2a386374c94fd61d1d056cb7e1e0fec4f28e8120ff5d8505",
       "byteLength": 10267274,
@@ -157,7 +185,9 @@
     },
     {
       "artifactId": "paper_1512_03385",
-      "sourceIds": ["1512.03385"],
+      "sourceIds": [
+        "1512.03385"
+      ],
       "expectedFilename": "Deep Residual Learning for Image Recognition.pdf",
       "expectedSourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
       "byteLength": 819383,
@@ -168,7 +198,9 @@
     },
     {
       "artifactId": "paper_2310_11511",
-      "sourceIds": ["2310.11511"],
+      "sourceIds": [
+        "2310.11511"
+      ],
       "expectedFilename": "Self-RAG Learning to Retrieve, Generate, and Critique through Self-Reflection.pdf",
       "expectedSourceContentHash": "sha256:d9eaa1398abac0df67a9d0933a5bf8b6d9d83d2e72da2a486073cd842dd52978",
       "byteLength": 1405127,
@@ -179,7 +211,9 @@
     },
     {
       "artifactId": "paper_1502_03167",
-      "sourceIds": ["1502.03167"],
+      "sourceIds": [
+        "1502.03167"
+      ],
       "expectedFilename": "Batch Normalization Accelerating Deep Network Training by Reducing Internal Covariate Shift.pdf",
       "expectedSourceContentHash": "sha256:bdc69e0b568f41d8d3181cc9077a461f58fcdd1c70c9f49efe60a05ee6109655",
       "byteLength": 173548,
@@ -190,7 +224,9 @@
     },
     {
       "artifactId": "paper_1409_3215",
-      "sourceIds": ["1409.3215"],
+      "sourceIds": [
+        "1409.3215"
+      ],
       "expectedFilename": "Sequence to Sequence Learning with Neural Networks.pdf",
       "expectedSourceContentHash": "sha256:5c74e1db863e2d61b869c9b0603494b34c41fb05db1a4fa7f9a83d5a42b7350f",
       "byteLength": 112084,
@@ -201,7 +237,9 @@
     },
     {
       "artifactId": "paper_2201_11903",
-      "sourceIds": ["2201.11903"],
+      "sourceIds": [
+        "2201.11903"
+      ],
       "expectedFilename": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.pdf",
       "expectedSourceContentHash": "sha256:7d9f878c23b460e4566aa4ec9201b1abfb3b8faefb2b1356e411cb90fef72a12",
       "byteLength": 891773,
@@ -209,6 +247,1059 @@
       "license": "external_public_paper_not_redistributed",
       "corpusTier": "local_corpus",
       "notes": "Required by the wide live compare local-corpus operator eval."
+    },
+    {
+      "artifactId": "paper_2501_12948",
+      "sourceIds": [
+        "2501.12948"
+      ],
+      "expectedFilename": "DeepSeek-R1 incentivizes reasoning in LLMs through reinforcement learning.pdf",
+      "expectedSourceContentHash": "sha256:b191b0a365a64b4ab2791d117069ed17a2933d03554a662ced58b37df52018f4",
+      "byteLength": 5034998,
+      "provenanceUrl": "https://arxiv.org/pdf/2501.12948",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2503_21460",
+      "sourceIds": [
+        "2503.21460"
+      ],
+      "expectedFilename": "Large Language Model Agent A Survey on Methodology, Applications and Challenges.pdf",
+      "expectedSourceContentHash": "sha256:f3fb80781228b11acf8e9e579e01e399be538677ff645411ced5f779f5980d08",
+      "byteLength": 1468499,
+      "provenanceUrl": "https://arxiv.org/pdf/2503.21460",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2504_19413",
+      "sourceIds": [
+        "2504.19413"
+      ],
+      "expectedFilename": "Mem0 Building Production-Ready AI Agents with Scalable Long-Term Memory.pdf",
+      "expectedSourceContentHash": "sha256:bec870b657aa73405275a6d8fe27bcd4271799e028bc62986ab9c4cd27a3712d",
+      "byteLength": 1144031,
+      "provenanceUrl": "https://arxiv.org/pdf/2504.19413",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2505_10468",
+      "sourceIds": [
+        "2505.10468"
+      ],
+      "expectedFilename": "AI Agents vs. Agentic AI A Conceptual Taxonomy, Applications and Challenges.pdf",
+      "expectedSourceContentHash": "sha256:70a0c89f937f35af4e6af06dff86be7121f67882130d787bdf6cc0ff9730bba7",
+      "byteLength": 6116051,
+      "provenanceUrl": "https://arxiv.org/pdf/2505.10468",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_01828",
+      "sourceIds": [
+        "2601.01828"
+      ],
+      "expectedFilename": "Emergent Introspective Awareness in Large Language Models.pdf",
+      "expectedSourceContentHash": "sha256:84b1ad2f1b4ee14553ff731cc77aca028eb01fed143806a2c4d55bad3ed9a0db",
+      "byteLength": 42962723,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.01828",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_03236",
+      "sourceIds": [
+        "2601.03236"
+      ],
+      "expectedFilename": "MAGMA A Multi-Graph based Agentic Memory Architecture for AI Agents.pdf",
+      "expectedSourceContentHash": "sha256:c5899aa2bd4c686cef22ae38d3f59eca8ed8ff8804f7568708f6af59bde3739f",
+      "byteLength": 1506073,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.03236",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_04720",
+      "sourceIds": [
+        "2601.04720"
+      ],
+      "expectedFilename": "Qwen3-VL-Embedding and Qwen3-VL-Reranker A Unified Framework for Multimodal Retrieval.pdf",
+      "expectedSourceContentHash": "sha256:d7cab1b67d4777abc1c85a28b73004e27ad556f5932bb960fb2a8d9d80398b85",
+      "byteLength": 2523011,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.04720",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_09668",
+      "sourceIds": [
+        "2601.09668"
+      ],
+      "expectedFilename": "STEP3-VL-10B Technical Report.pdf",
+      "expectedSourceContentHash": "sha256:5c5dd52f86f5d9f81753235b82a5d8a9a0f83c6be01b19abf49fe34a275f6c38",
+      "byteLength": 3273002,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.09668",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_11077",
+      "sourceIds": [
+        "2601.11077"
+      ],
+      "expectedFilename": "ABC-Bench Benchmarking Agentic Backend Coding in Real-World Development.pdf",
+      "expectedSourceContentHash": "sha256:58710164975ad5646dedb6c5bdc0b31bb428a0ad6a7d692c5c69bd29b88a5da0",
+      "byteLength": 978949,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.11077",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_12542",
+      "sourceIds": [
+        "2601.12542"
+      ],
+      "expectedFilename": "Rethinking the AI Scientist Interactive Multi-Agent Workflows for Scientific Discovery.pdf",
+      "expectedSourceContentHash": "sha256:4180a76ae805e6b72c1c5d5bbaded126d97e138e9cd8dc3b350553df9cd05e05",
+      "byteLength": 15885594,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.12542",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2601_23086",
+      "sourceIds": [
+        "2601.23086"
+      ],
+      "expectedFilename": "Chain-of-thought obfuscation learned from output supervision can generalise to unseen tasks.pdf",
+      "expectedSourceContentHash": "sha256:132784b0920adb21201f71fbc074eb027f4326049a2aaaba3a63f83b2ff78035",
+      "byteLength": 1886173,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.23086",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_00103",
+      "sourceIds": [
+        "2602.00103"
+      ],
+      "expectedFilename": "Autonomous Multi-Agent AI for High-Throughput Polymer Discovery.pdf",
+      "expectedSourceContentHash": "sha256:67e3a07b208b6106773b62afd635e81b70f61fa581295c381dface5d91ebdaaf",
+      "byteLength": 11007434,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.00103",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_00185",
+      "sourceIds": [
+        "2602.00185"
+      ],
+      "expectedFilename": "QUASAR A Universal Autonomous System for Atomistic Simulation and a Benchmark of Its Capabilities.pdf",
+      "expectedSourceContentHash": "sha256:0338d0a26c6420fa72ac9113285e31690e7c2e792d76b8210f5dc6ae1186d18e",
+      "byteLength": 31910004,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.00185",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_01237",
+      "sourceIds": [
+        "2602.01237"
+      ],
+      "expectedFilename": "Predictive Scheduling for Efficient Inference-Time Reasoning in Large Language Models.pdf",
+      "expectedSourceContentHash": "sha256:df39574a8b19c7b2c0ebbdc736400ef329a250aadd107eedefcbca9c0b1844e1",
+      "byteLength": 698648,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.01237",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_01655",
+      "sourceIds": [
+        "2602.01655"
+      ],
+      "expectedFilename": "ProjDevBench Benchmarking AI Coding Agents on End-to-End Project Development.pdf",
+      "expectedSourceContentHash": "sha256:5ef6ac77b2a6a153798eba8380f009db1b92eba094b6f618d0f3def2a45cc527",
+      "byteLength": 1311726,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.01655",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_01853",
+      "sourceIds": [
+        "2602.01853"
+      ],
+      "expectedFilename": "Designing Time Series Experiments in AB Testing with Transformer Reinforcement Learning.pdf",
+      "expectedSourceContentHash": "sha256:32dcd4da7780361d19c335a129a522bb3eaead9e837775e8e513234de27722cb",
+      "byteLength": 906617,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.01853",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_02007",
+      "sourceIds": [
+        "2602.02007"
+      ],
+      "expectedFilename": "Beyond RAG for Agent Memory Retrieval by Decoupling and Aggregation.pdf",
+      "expectedSourceContentHash": "sha256:63610642f97d890327c0335fe114c4e6c827ae01285e6b25d0df9d3aa04caa96",
+      "byteLength": 2051330,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.02007",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_02262",
+      "sourceIds": [
+        "2602.02262"
+      ],
+      "expectedFilename": "OmniCode A Benchmark for Evaluating Software Engineering Agents.pdf",
+      "expectedSourceContentHash": "sha256:82b460a9bd43fa0ae9b33cfbbe7c8ced2fb55a2a610ca7ecb0e4f2a0ad6f94cb",
+      "byteLength": 4189581,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.02262",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_02905",
+      "sourceIds": [
+        "2602.02905"
+      ],
+      "expectedFilename": "FIRE-Bench Evaluating Agents on the Rediscovery of Scientific Insights.pdf",
+      "expectedSourceContentHash": "sha256:118934c2fa48f564fca2aa77c78a6a1d64fec631c02ba257d6ce2912d4a0441f",
+      "byteLength": 3826612,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.02905",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_03117",
+      "sourceIds": [
+        "2602.03117"
+      ],
+      "expectedFilename": "AgentDyn A Dynamic Open-Ended Benchmark for Evaluating Prompt Injection Attacks of Real-World Agent.pdf",
+      "expectedSourceContentHash": "sha256:eae68071a5696eb78ea46a52396ddba4069dc3f4731aeba39d67bf75e8d52153",
+      "byteLength": 723505,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.03117",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_03442",
+      "sourceIds": [
+        "2602.03442"
+      ],
+      "expectedFilename": "A-RAG Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces.pdf",
+      "expectedSourceContentHash": "sha256:b167650db7b6ba73f8f4462ce4147f7b826dfb700cca00ef8bfa226f8d02de60",
+      "byteLength": 4870286,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.03442",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_10715",
+      "sourceIds": [
+        "2602.10715"
+      ],
+      "expectedFilename": "Locomo-Plus Beyond-Factual Cognitive Memory Evaluation Framework for LLM Agents.pdf",
+      "expectedSourceContentHash": "sha256:88b00f2a94d9250ca275aca885fbc73a3c6c412e48447d0cc4a99f906a98b6d0",
+      "byteLength": 2352131,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.10715",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_10975",
+      "sourceIds": [
+        "2602.10975"
+      ],
+      "expectedFilename": "FeatureBench Benchmarking Agentic Coding for Complex Feature Development.pdf",
+      "expectedSourceContentHash": "sha256:a676bd02a9c617fb608460f7ca5c96b75ac32645c924f9209c8f1a8960a6a6f6",
+      "byteLength": 2691293,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.10975",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_11964",
+      "sourceIds": [
+        "2602.11964"
+      ],
+      "expectedFilename": "Gaia2 Benchmarking LLM Agents on Dynamic and Asynchronous Environments.pdf",
+      "expectedSourceContentHash": "sha256:d777d8a33f9a646ac982aa845071775424c404759d208c14bdd9ea488a27ab67",
+      "byteLength": 3630349,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.11964",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_11988",
+      "sourceIds": [
+        "2602.11988"
+      ],
+      "expectedFilename": "Evaluating AGENTS.md Are Repository-Level Context Files Helpful for Coding Agents.pdf",
+      "expectedSourceContentHash": "sha256:0b7038fe327dd06e3172cff64ce3f50d707c741c8284973232eac0724d2548ba",
+      "byteLength": 2150680,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.11988",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_12670",
+      "sourceIds": [
+        "2602.12670"
+      ],
+      "expectedFilename": "SkillsBench Benchmarking How Well Agent Skills Work Across Diverse Tasks.pdf",
+      "expectedSourceContentHash": "sha256:2a0d831c7a584372d6fe4655d3faa4a7d590c2bc324eb434aea9f3ebc2711d4a",
+      "byteLength": 1855395,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.12670",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_15112",
+      "sourceIds": [
+        "2602.15112"
+      ],
+      "expectedFilename": "ResearchGym Evaluating Language Model Agents on Real-World AI Research.pdf",
+      "expectedSourceContentHash": "sha256:ffbe8bf2b40fe45828b96d87f1b7e50e8d65e5f66d121ce926a6c839d14c0c1f",
+      "byteLength": 10263519,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.15112",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_16313",
+      "sourceIds": [
+        "2602.16313"
+      ],
+      "expectedFilename": "MemoryArena Benchmarking Agent Memory in Interdependent Multi-Session Agentic Tasks.pdf",
+      "expectedSourceContentHash": "sha256:379c6eb30b30b2e6a4643ea34c2e9d714a68e7b8ff39860110b38ffeb950d76c",
+      "byteLength": 1964840,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16313",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_18297",
+      "sourceIds": [
+        "2602.18297"
+      ],
+      "expectedFilename": "Analyzing and Improving Chain-of-Thought Monitorability Through Information Theory.pdf",
+      "expectedSourceContentHash": "sha256:c543bfc726897820de59fccb63ac071a3817c51aaa14700f6d246b34cd482467",
+      "byteLength": 17030384,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.18297",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_20021",
+      "sourceIds": [
+        "2602.20021"
+      ],
+      "expectedFilename": "Agents of Chaos.pdf",
+      "expectedSourceContentHash": "sha256:80dbb0539b8d1d3f656c224729d1efe8e2994b42c4397d6e853db5c4043e7c76",
+      "byteLength": 6520680,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.20021",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2602_22769",
+      "sourceIds": [
+        "2602.22769"
+      ],
+      "expectedFilename": "AMA-Bench Evaluating Long-Horizon Memory for Agentic Applications.pdf",
+      "expectedSourceContentHash": "sha256:62d3670a733f10e66d8eede66960e0060c35b2182942fb2a9a096eec7cf67e04",
+      "byteLength": 6128396,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.22769",
+      "license": "external_public_paper_not_redistributed",
+      "notes": "Priority AI paper corpus seed expansion; source bytes verified from the configured local corpus before manifest registration.",
+      "corpusTier": "local_corpus"
+    },
+    {
+      "artifactId": "paper_2603_07379",
+      "sourceIds": [
+        "2603.07379"
+      ],
+      "expectedFilename": "SoK Agentic Retrieval-Augmented Generation (RAG) Taxonomy, Architectures, Evaluation, and Research D.pdf",
+      "expectedSourceContentHash": "sha256:8b0453f1044655dc0144fc1f3904d5e6d8b4efb3531e918affe0fbccc0e2d34a",
+      "byteLength": 2704278,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.07379",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=eval_critical."
+    },
+    {
+      "artifactId": "paper_2502_05151",
+      "sourceIds": [
+        "2502.05151"
+      ],
+      "expectedFilename": "Transforming Science with Large Language Models A Survey on AI-assisted Scientific Discovery, Experi.pdf",
+      "expectedSourceContentHash": "sha256:954a331aec4c6b9fc5901f517d0ac5a23760cc3a7f1237f053afcffb4b0cd8c6",
+      "byteLength": 7003750,
+      "provenanceUrl": "https://arxiv.org/pdf/2502.05151",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=eval_critical."
+    },
+    {
+      "artifactId": "paper_1505_04597",
+      "sourceIds": [
+        "1505.04597"
+      ],
+      "expectedFilename": "U-Net Convolutional Networks for Biomedical Image Segmentation.pdf",
+      "expectedSourceContentHash": "sha256:a3172b2124f38e260dc2c7ed968d87c31bc94dbc19a42a7ab3dcbd7534319c44",
+      "byteLength": 1648684,
+      "provenanceUrl": "https://arxiv.org/pdf/1505.04597",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1506_01497",
+      "sourceIds": [
+        "1506.01497"
+      ],
+      "expectedFilename": "Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+      "expectedSourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "byteLength": 6913803,
+      "provenanceUrl": "https://arxiv.org/pdf/1506.01497",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1506_02640",
+      "sourceIds": [
+        "1506.02640"
+      ],
+      "expectedFilename": "You Only Look Once Unified, Real-Time Object Detection.pdf",
+      "expectedSourceContentHash": "sha256:54bcd2dd05dc618849e8a94d8b88fe3eeb37f80e96e200600d38f1f733931678",
+      "byteLength": 5296750,
+      "provenanceUrl": "https://arxiv.org/pdf/1506.02640",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1406_1078",
+      "sourceIds": [
+        "1406.1078"
+      ],
+      "expectedFilename": "Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation.pdf",
+      "expectedSourceContentHash": "sha256:6b144afadf0e721d9adbec8c20373a86b5d0224dfc22ba2254e03e7522d669ba",
+      "byteLength": 1681358,
+      "provenanceUrl": "https://arxiv.org/pdf/1406.1078",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1409_1556",
+      "sourceIds": [
+        "1409.1556"
+      ],
+      "expectedFilename": "Very Deep Convolutional Networks for Large-Scale Image Recognition.pdf",
+      "expectedSourceContentHash": "sha256:83728f9efc21081792902b4c17a4657022d1e4a92ec81655c2427f4ef0755e50",
+      "byteLength": 200010,
+      "provenanceUrl": "https://arxiv.org/pdf/1409.1556",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1410_5401",
+      "sourceIds": [
+        "1410.5401"
+      ],
+      "expectedFilename": "Neural Turing Machines.pdf",
+      "expectedSourceContentHash": "sha256:b8d2939cd7c76097f2cc2e5061188ca824ef8cad12de4500dfbd014b60dd16a9",
+      "byteLength": 1357690,
+      "provenanceUrl": "https://arxiv.org/pdf/1410.5401",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1301_3781",
+      "sourceIds": [
+        "1301.3781"
+      ],
+      "expectedFilename": "Efficient Estimation of Word Representations in Vector Space.pdf",
+      "expectedSourceContentHash": "sha256:a44d7e22d2005752271c9cc1929c6462d4c8270916b063977992a883e3a54362",
+      "byteLength": 228716,
+      "provenanceUrl": "https://arxiv.org/pdf/1301.3781",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1310_4546",
+      "sourceIds": [
+        "1310.4546"
+      ],
+      "expectedFilename": "Distributed Representations of Words and Phrases and their Compositionality.pdf",
+      "expectedSourceContentHash": "sha256:b21848e7b9b6ba1191f8283892a72b5529205bfdeca462403bd69ab6c6f8c6d1",
+      "byteLength": 125222,
+      "provenanceUrl": "https://arxiv.org/pdf/1310.4546",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1311_2524",
+      "sourceIds": [
+        "1311.2524"
+      ],
+      "expectedFilename": "Rich feature hierarchies for accurate object detection and semantic segmentation.pdf",
+      "expectedSourceContentHash": "sha256:c68dc50b1f73e1641a592f777984fc360759e84b7fe65ac4f6e1377927f20b2e",
+      "byteLength": 15823906,
+      "provenanceUrl": "https://arxiv.org/pdf/1311.2524",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_1207_0580",
+      "sourceIds": [
+        "1207.0580"
+      ],
+      "expectedFilename": "Improving neural networks by preventing co-adaptation of feature detectors.pdf",
+      "expectedSourceContentHash": "sha256:6eae057a9faf4f671c3101e0745ed704460c6d3dec77243dfd3a9f2d2ab68970",
+      "byteLength": 3651992,
+      "provenanceUrl": "https://arxiv.org/pdf/1207.0580",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=foundational."
+    },
+    {
+      "artifactId": "paper_2601_10744",
+      "sourceIds": [
+        "2601.10744"
+      ],
+      "expectedFilename": "Explore with Long-term Memory A Benchmark and Multimodal LLM-based Reinforcement Learning Framework.pdf",
+      "expectedSourceContentHash": "sha256:55ebac56e23b804fc61703eaf81daeb68b99c1ed4e875768b7105a524eb182f4",
+      "byteLength": 5871951,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.10744",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2601_21666",
+      "sourceIds": [
+        "2601.21666"
+      ],
+      "expectedFilename": "SONIC-O1 A Real-World Benchmark for Evaluating Multimodal Large Language Models on Audio-Video Under.pdf",
+      "expectedSourceContentHash": "sha256:a2d798b5166095b32ec36ccfd73f962744a6740efeea4080e89f5fb494fd0337",
+      "byteLength": 7064399,
+      "provenanceUrl": "https://arxiv.org/pdf/2601.21666",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2602_22953",
+      "sourceIds": [
+        "2602.22953"
+      ],
+      "expectedFilename": "General Agent Evaluation.pdf",
+      "expectedSourceContentHash": "sha256:19ccc5d746467da153ee19dcd554d4a7045c3924ff49fd7f105f52aa99826653",
+      "byteLength": 1223087,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.22953",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_05414",
+      "sourceIds": [
+        "2603.05414"
+      ],
+      "expectedFilename": "Dissociating Direct Access from Inference in AI Introspection.pdf",
+      "expectedSourceContentHash": "sha256:dd9cdc18ba9a8548bf7c474ef39a1ab24be2461da27d6841de1efb0247f793c3",
+      "byteLength": 1122133,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.05414",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_05706",
+      "sourceIds": [
+        "2603.05706"
+      ],
+      "expectedFilename": "Reasoning Models Struggle to Control their Chains of Thought.pdf",
+      "expectedSourceContentHash": "sha256:0739b5d4b8da2d1b9956216e7111ceaa1625d232ec137cc6cd3cf8658eaafb0f",
+      "byteLength": 1340377,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.05706",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_14473",
+      "sourceIds": [
+        "2603.14473"
+      ],
+      "expectedFilename": "AI Can Learn Scientific Taste.pdf",
+      "expectedSourceContentHash": "sha256:bcab0572e3685101dc2d70702a15a08fb7a45503567dd6fab573866649999732",
+      "byteLength": 1221410,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.14473",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_15798",
+      "sourceIds": [
+        "2603.15798"
+      ],
+      "expectedFilename": "CUBE A Standard for Unifying Agent Benchmarks.pdf",
+      "expectedSourceContentHash": "sha256:438f84f75b43e2c5a7581e7910e1193bbcfed941f59876c5b875b90b86baa52c",
+      "byteLength": 746309,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.15798",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_16659",
+      "sourceIds": [
+        "2603.16659"
+      ],
+      "expectedFilename": "Machines acquire scientific taste from institutional traces.pdf",
+      "expectedSourceContentHash": "sha256:de5e52f632ce8ff32d7d842ede6a22d03c49b18d4af5b820a49709b819a74915",
+      "byteLength": 7137130,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.16659",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_17216",
+      "sourceIds": [
+        "2603.17216"
+      ],
+      "expectedFilename": "AI Scientist via Synthetic Task Scaling.pdf",
+      "expectedSourceContentHash": "sha256:43f77cb4ed5a2de11a751a32ecc8a8e5534389936e37f55b75b72fde1d955520",
+      "byteLength": 1102332,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.17216",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_18000",
+      "sourceIds": [
+        "2603.18000"
+      ],
+      "expectedFilename": "AgentFactory A Self-Evolving Framework Through Executable Subagent Accumulation and Reuse.pdf",
+      "expectedSourceContentHash": "sha256:d007ce0c32e5fe63811416937a6d1c705ef619dee0198fffbaa96be463358348",
+      "byteLength": 790547,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.18000",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_18002",
+      "sourceIds": [
+        "2603.18002"
+      ],
+      "expectedFilename": "Loc3R-VLM Language-based Localization and 3D Reasoning with Vision-Language Models.pdf",
+      "expectedSourceContentHash": "sha256:651c74586fe8467525d7794060377d0d605286cdfd11c20b9903a54e85312ca2",
+      "byteLength": 18719664,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.18002",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_18003",
+      "sourceIds": [
+        "2603.18003"
+      ],
+      "expectedFilename": "Universal Skeleton Understanding via Differentiable Rendering and MLLMs.pdf",
+      "expectedSourceContentHash": "sha256:6dfdc0975fade8fb96ac3f193d0fb82d61c9d9b23ca24444ae8a9d371a46d232",
+      "byteLength": 9629177,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.18003",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_18004",
+      "sourceIds": [
+        "2603.18004"
+      ],
+      "expectedFilename": "Unified Spatio-Temporal Token Scoring for Efficient Video VLMs.pdf",
+      "expectedSourceContentHash": "sha256:2bed130cb7a20025c161dd371b17f37e9f32aedff34ce62a921ab95e6e90f7b6",
+      "byteLength": 4010976,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.18004",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2603_23749",
+      "sourceIds": [
+        "2603.23749"
+      ],
+      "expectedFilename": "Efficient Benchmarking of AI Agents.pdf",
+      "expectedSourceContentHash": "sha256:3f73933d1e1a5422bcfee1916994ae990baec19a8f0a0f6b198e653b91a670cc",
+      "byteLength": 720945,
+      "provenanceUrl": "https://arxiv.org/pdf/2603.23749",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_08545",
+      "sourceIds": [
+        "2604.08545"
+      ],
+      "expectedFilename": "Act Wisely Cultivating Meta-Cognitive Tool Use in Agentic Multimodal Models.pdf",
+      "expectedSourceContentHash": "sha256:bc95267217a5ae9280dd475b10eb603e1165311b1ac748ea04e7d6fb3416657b",
+      "byteLength": 5789923,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.08545",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_08546",
+      "sourceIds": [
+        "2604.08546"
+      ],
+      "expectedFilename": "When Numbers Speak Aligning Textual Numerals and Visual Instances in Text-to-Video Diffusion Models.pdf",
+      "expectedSourceContentHash": "sha256:674d8b880476d9775edfcd47e5eb201ef2625c91b06d70e6bce6570c83fc616f",
+      "byteLength": 6038846,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.08546",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_08548",
+      "sourceIds": [
+        "2604.08548"
+      ],
+      "expectedFilename": "ETCH-X Robustify Expressive Body Fitting to Clothed Humans with Composable Datasets.pdf",
+      "expectedSourceContentHash": "sha256:e8dbd25f6afb1e13a50c5695beb60f12038adde006bb97a12e103de9550e3f15",
+      "byteLength": 16748857,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.08548",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_11407",
+      "sourceIds": [
+        "2604.11407"
+      ],
+      "expectedFilename": "Retrieval as Generation A Unified Framework with Self-Triggered Information Planning.pdf",
+      "expectedSourceContentHash": "sha256:c959858483b6cf2aac40d7ff5c7971d681fac57bc43229ab8e0237928b9030e3",
+      "byteLength": 3216494,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.11407",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_13346",
+      "sourceIds": [
+        "2604.13346"
+      ],
+      "expectedFilename": "AgentSPEX An Agent SPecification and EXecution Language.pdf",
+      "expectedSourceContentHash": "sha256:d2e0347e8a8312c45a60753256e4b852bf5a319d0dc4ed37bdbc42c4396e5ba2",
+      "byteLength": 2436182,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.13346",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_15270",
+      "sourceIds": [
+        "2604.15270"
+      ],
+      "expectedFilename": "Enhancing Large Language Models with Retrieval Augmented Generation for Software Testing and Inspect.pdf",
+      "expectedSourceContentHash": "sha256:e221f11b28e3bc94cc41cf26ea22645368b80faafefe0aff08dfc24431fd3d91",
+      "byteLength": 5823050,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.15270",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_15706",
+      "sourceIds": [
+        "2604.15706"
+      ],
+      "expectedFilename": "Target-Oriented Pretraining Data Selection via Neuron-Activated Graph.pdf",
+      "expectedSourceContentHash": "sha256:b1af7e47bd004e4c405bfbbf3f7ffe3006a7b089a4b7b01a3f22cc74a2c698f0",
+      "byteLength": 3509926,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.15706",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_17761",
+      "sourceIds": [
+        "2604.17761"
+      ],
+      "expectedFilename": "Contrastive Attribution in the Wild An Interpretability Analysis of LLM Failures on Realistic Benchm.pdf",
+      "expectedSourceContentHash": "sha256:80a24efdd5d3b1d48f1d7c7b157f47b06df49923327ee8d948aa49fba5d570b7",
+      "byteLength": 4478688,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.17761",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_18164",
+      "sourceIds": [
+        "2604.18164"
+      ],
+      "expectedFilename": "MM-JudgeBias A Benchmark for Evaluating Compositional Biases in MLLM-as-a-Judge.pdf",
+      "expectedSourceContentHash": "sha256:323d13b41e52ff7c3ef1f1c48ab1655d1e164151eb513a7df1d11fa109575549",
+      "byteLength": 3753225,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.18164",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_18845",
+      "sourceIds": [
+        "2604.18845"
+      ],
+      "expectedFilename": "Dual-View Training for Instruction-Following Information Retrieval.pdf",
+      "expectedSourceContentHash": "sha256:bf58440d942304980cb7f8dd11555e9a8c6fbc19a96692e30cbe5e1d6ed833ee",
+      "byteLength": 366612,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.18845",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_19295",
+      "sourceIds": [
+        "2604.19295"
+      ],
+      "expectedFilename": "TEMPO Scaling Test-time Training for Large Reasoning Models.pdf",
+      "expectedSourceContentHash": "sha256:c8505636ede6683f54f40e4eeda347a012a6b7eddadefc44aa809376439f6e90",
+      "byteLength": 1042184,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.19295",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_19638",
+      "sourceIds": [
+        "2604.19638"
+      ],
+      "expectedFilename": "SafetyALFRED Evaluating Safety-Conscious Planning of Multimodal Large Language Models.pdf",
+      "expectedSourceContentHash": "sha256:1ba79f93aa0347c0a9d00c63309b546d4505c0b5a6cb368b058dea6a0979212d",
+      "byteLength": 8042103,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.19638",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_19656",
+      "sourceIds": [
+        "2604.19656"
+      ],
+      "expectedFilename": "Pause or Fabricate Training Language Models for Grounded Reasoning.pdf",
+      "expectedSourceContentHash": "sha256:e3203e26f5bebfc8cdf3d635a8e9ab3f0452a6207fa365153e87fec250bb7ddc",
+      "byteLength": 1249873,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.19656",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_19667",
+      "sourceIds": [
+        "2604.19667"
+      ],
+      "expectedFilename": "Chat2Workflow A Benchmark for Generating Executable Visual Workflows with Natural Language.pdf",
+      "expectedSourceContentHash": "sha256:c5e49867cc51e70232a46e05e350956e764db4e19c4932ecf26e96c160ffaaa0",
+      "byteLength": 7617284,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.19667",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_19728",
+      "sourceIds": [
+        "2604.19728"
+      ],
+      "expectedFilename": "VLA Foundry A Unified Framework for Training Vision-Language-Action Models.pdf",
+      "expectedSourceContentHash": "sha256:ccd7f4cde47f0ff00e0561ed895ac8af37f6b8b8d349c9a7e457913553924785",
+      "byteLength": 17764190,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.19728",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2604_19734",
+      "sourceIds": [
+        "2604.19734"
+      ],
+      "expectedFilename": "UniT Toward a Unified Physical Language for Human-to-Humanoid Policy Learning and World Modeling.pdf",
+      "expectedSourceContentHash": "sha256:266c48aeee1b4bb7b3cf750d7c214291b215c111d3cc5976ed6e682bc59d2962",
+      "byteLength": 7527944,
+      "provenanceUrl": "https://arxiv.org/pdf/2604.19734",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_01148",
+      "sourceIds": [
+        "2605.01148"
+      ],
+      "expectedFilename": "Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+      "expectedSourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+      "byteLength": 40812787,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.01148",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_01203",
+      "sourceIds": [
+        "2605.01203"
+      ],
+      "expectedFilename": "GR-Ben A General Reasoning Benchmark for Evaluating Process Reward Models.pdf",
+      "expectedSourceContentHash": "sha256:da080f4154904740fe5705d54338b99af2da151d9b0677dcb41575f99e9ee894",
+      "byteLength": 766501,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.01203",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_02363",
+      "sourceIds": [
+        "2605.02363"
+      ],
+      "expectedFilename": "When Correct Isn't Usable Improving Structured Output Reliability in Small Language Models.pdf",
+      "expectedSourceContentHash": "sha256:e8fefa89cb772b23f56d48cc74485b8b7ac0f5a4774445f1ead1b5b523de5ce6",
+      "byteLength": 1543958,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.02363",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_02364",
+      "sourceIds": [
+        "2605.02364"
+      ],
+      "expectedFilename": "InfoLaw Information Scaling Laws for Large Language Models with Quality-Weighted Mixture Data and Re.pdf",
+      "expectedSourceContentHash": "sha256:524e7fd4c18f3ab0483c74e306ee4ff7d2ccf04a53f0292cd3e515b3e7c999da",
+      "byteLength": 4081255,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.02364",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_03476",
+      "sourceIds": [
+        "2605.03476"
+      ],
+      "expectedFilename": "CuraView A Multi-Agent Framework for Medical Hallucination Detection with GraphRAG-Enhanced Knowledg.pdf",
+      "expectedSourceContentHash": "sha256:65f9c474dc459e18053104b14ac8647814e76395932ab7c9b6c9030e5e455b6a",
+      "byteLength": 7724846,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.03476",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_03534",
+      "sourceIds": [
+        "2605.03534"
+      ],
+      "expectedFilename": "SURE-RAG Sufficiency and Uncertainty-Aware Evidence Verification for Selective Retrieval-Augmented G.pdf",
+      "expectedSourceContentHash": "sha256:d23b1433519ff97d5af9334d5dec9c57c67470583446fcace15d700958c6b25e",
+      "byteLength": 1515796,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.03534",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_03667",
+      "sourceIds": [
+        "2605.03667"
+      ],
+      "expectedFilename": "ELAS Efficient Pre-Training of Low-Rank Large Language Models via 24 Activation Sparsity.pdf",
+      "expectedSourceContentHash": "sha256:1338d3d4642e9220c83bfba3e41d2f9ddfae363bfb5b29a0aeb19902c06f99ce",
+      "byteLength": 8229909,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.03667",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
+    },
+    {
+      "artifactId": "paper_2605_03808",
+      "sourceIds": [
+        "2605.03808"
+      ],
+      "expectedFilename": "Agentic-imodels Evolving agentic interpretability tools via autoresearch.pdf",
+      "expectedSourceContentHash": "sha256:6f5ac242048e35d54207d9b1f8d035c6e14d81675eb47abcdf479bf6f3461203",
+      "byteLength": 1087919,
+      "provenanceUrl": "https://arxiv.org/pdf/2605.03808",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority AI paper corpus verified allowlist expansion tranche 1; source bytes verified from configured local corpus before manifest registration. tier=recent_ai."
     }
   ]
 }

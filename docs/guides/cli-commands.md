@@ -677,6 +677,8 @@ khub paper review-card-plan 2401.12345
 khub paper review-card-apply 2401.12345 --allow-external --provider openai --model gpt-5-nano
 khub paper corpus-bootstrap --artifact-id alexnet_krizhevsky_2012 --dry-run --json
 khub paper corpus-bootstrap --artifact-id alexnet_krizhevsky_2012 --apply --allow-network --json
+khub paper corpus-manifest-validate --json
+khub paper corpus-source-artifact-inventory --json
 khub paper repair-source --paper-id 2401.12345 --dry-run --json
 ```
 
@@ -685,6 +687,20 @@ paper corpus files. Dry-run is the default. Network download requires both
 `--apply` and `--allow-network`, promotes a file into `papers_dir` only after
 manifest hash and byte-length verification, skips `repo_fixture` entries, and
 does not run `repair-source`, rebuild derivatives, or write SQLite rows.
+
+`corpus-manifest-validate` is a report-only manifest/source-health check. It
+verifies `artifactId` / `sourceIds` / `expectedSourceContentHash` linkage,
+checks local artifact hashes when configured, and reports parsed artifact
+presence separately from source availability. It performs no network, DB/index
+mutation, vault scan, source registration write, parsed artifact write, or
+evidence promotion.
+
+`corpus-source-artifact-inventory` is a report-only local source inventory for
+manifest expansion planning. It scans configured `papers_dir` PDF/text source
+files, computes SHA-256 and byte length, compares against the public corpus
+manifest, and classifies rows as `already_registered` or `unregistered_available`.
+It does not modify the manifest, download sources, scan vault content, or emit
+absolute local paths in public output.
 
 ### `khub paper-memory`
 
