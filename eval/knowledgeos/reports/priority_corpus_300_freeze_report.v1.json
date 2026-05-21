@@ -1,6 +1,6 @@
 {
   "schema": "knowledge-hub.priority-corpus-300-freeze-report.v1",
-  "generatedAt": "2026-05-21T06:39:23.167243+00:00",
+  "generatedAt": "2026-05-21T08:02:18.984472+00:00",
   "status": "locked",
   "scopeNote": "Report-only freeze of the verified priority corpus lower bound. The corpus manifest is not mutated; source_missing and ambiguous candidates remain hold-only.",
   "inputs": {
@@ -74,8 +74,8 @@
     "ambiguousPromoted": false,
     "sourceMissingRowsExcluded": true,
     "ambiguousRowsExcluded": true,
-    "hashMismatchGreen": false,
-    "hashMissingGreen": false
+    "hashMismatchGreen": true,
+    "hashMissingGreen": true
   },
   "holdRows": [
     {

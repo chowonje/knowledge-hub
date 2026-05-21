@@ -98,8 +98,8 @@
         "ambiguousPromoted": { "const": false },
         "sourceMissingRowsExcluded": { "const": true },
         "ambiguousRowsExcluded": { "const": true },
-        "hashMismatchGreen": { "const": false },
-        "hashMissingGreen": { "const": false }
+        "hashMismatchGreen": { "const": true },
+        "hashMissingGreen": { "const": true }
       },
       "additionalProperties": true
     },

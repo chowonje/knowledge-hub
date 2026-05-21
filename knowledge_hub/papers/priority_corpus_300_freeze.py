@@ -28,6 +28,8 @@ PRIORITY_CORPUS_300_FREEZE_SCHEMA_ID = "knowledge-hub.priority-corpus-300-freeze
 STRUCTURED_EVIDENCE_NEXT_SLICE_SCHEMA_ID = (
     "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1"
 )
+SOURCE_SPAN_RECORD_SCHEMA_ID = "knowledge-hub.paper.parsed-artifact-source-span-record.v1"
+STRICT_EVIDENCE_RECORD_SCHEMA_ID = "knowledge-hub.paper.parsed-artifact-strict-evidence-record.v1"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_JOIN_REPORT_PATH = PROJECT_ROOT / "eval" / "knowledgeos" / "reports" / (
@@ -281,8 +283,8 @@ def build_priority_corpus_300_freeze_report(
             ),
             "ambiguousRowsExcluded": not any(row.get("join_status") == "ambiguous" for row in manifest_bad_join_rows)
             and not any(_clean(row.get("source_id")) in allowlist_source_ids for row in ambiguous_rows),
-            "hashMismatchGreen": int(validation_counts.get("hashMismatchRows") or 0) > 0,
-            "hashMissingGreen": int(validation_counts.get("hashMissingRows") or 0) > 0,
+            "hashMismatchGreen": int(validation_counts.get("hashMismatchRows") or 0) == 0,
+            "hashMissingGreen": int(validation_counts.get("hashMissingRows") or 0) == 0,
         },
         "holdRows": [_public_join_row(row) for row in sorted(hold_rows, key=lambda item: (_clean(item.get("join_status")), _clean(item.get("source_id"))))],
         "manifestBadJoinRows": [_public_join_row(row) for row in manifest_bad_join_rows],
@@ -296,12 +298,20 @@ def build_priority_corpus_300_freeze_report(
     return payload
 
 
-def _jsonl_counts(path: Path) -> dict[str, int]:
+def _jsonl_counts(path: Path, *, schema_id: str | None = None, expected_paper_id: str = "") -> dict[str, int]:
     total = 0
     operator_local = 0
     malformed = 0
+    schema_invalid = 0
+    public_reviewable = 0
     if not path.is_file():
-        return {"total": 0, "operatorLocalExcluded": 0, "publicReviewable": 0, "malformed": 0}
+        return {
+            "total": 0,
+            "operatorLocalExcluded": 0,
+            "publicReviewable": 0,
+            "malformed": 0,
+            "schemaInvalid": 0,
+        }
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
@@ -311,13 +321,24 @@ def _jsonl_counts(path: Path) -> dict[str, int]:
         except Exception:
             malformed += 1
             continue
+        if schema_id:
+            validation = validate_payload(item, schema_id, strict=True)
+            if not validation.ok or not validation.schema_found:
+                schema_invalid += 1
+                continue
+        if expected_paper_id and _clean(item.get("paperId")) != expected_paper_id:
+            schema_invalid += 1
+            continue
         if _clean(item.get("runId")) in OPERATOR_LOCAL_RUN_IDS_EXCLUDED:
             operator_local += 1
+            continue
+        public_reviewable += 1
     return {
         "total": total,
         "operatorLocalExcluded": operator_local,
-        "publicReviewable": max(0, total - operator_local),
+        "publicReviewable": public_reviewable,
         "malformed": malformed,
+        "schemaInvalid": schema_invalid,
     }
 
 
@@ -363,6 +384,7 @@ def _store_counts(store: dict[str, Any]) -> dict[str, int]:
         "operatorLocalExcluded": int(store.get("operatorLocalExcluded") or 0),
         "publicReviewable": int(store.get("publicReviewable") or 0),
         "malformed": int(store.get("malformed") or 0),
+        "schemaInvalid": int(store.get("schemaInvalid") or 0),
     }
 
 
@@ -432,10 +454,14 @@ def build_structured_evidence_next_slice_candidate_report(
         join_row = join_by_source.get(source_id, {})
         validation_item = validation_by_source.get(source_id, {})
         source_span_counts = _jsonl_counts(
-            resolved_papers_dir / "structured_evidence" / "source_span" / f"{source_id}.jsonl"
+            resolved_papers_dir / "structured_evidence" / "source_span" / f"{source_id}.jsonl",
+            schema_id=SOURCE_SPAN_RECORD_SCHEMA_ID,
+            expected_paper_id=source_id,
         )
         strict_counts = _jsonl_counts(
-            resolved_papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl"
+            resolved_papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl",
+            schema_id=STRICT_EVIDENCE_RECORD_SCHEMA_ID,
+            expected_paper_id=source_id,
         )
         parsed = _parsed_document_summary(resolved_papers_dir, source_id)
         evidence_status = _evidence_status(strict_counts)
@@ -541,8 +567,9 @@ def build_structured_evidence_next_slice_candidate_report(
                 "public-reviewable strict evidence store rows",
             ],
             "strictCoverageRule": (
-                "Strict coverage counts only public-reviewable strict_evidence JSONL rows; "
-                "operator-local runId=structured-evidence-vertical-slice-20260521 rows remain greenfield carry-over."
+                "Strict coverage counts only schema-valid public-reviewable strict_evidence JSONL rows whose "
+                "paperId matches the manifest source id; operator-local runId=structured-evidence-vertical-slice-20260521 "
+                "rows remain greenfield carry-over."
             ),
         },
         "counts": {
@@ -557,6 +584,9 @@ def build_structured_evidence_next_slice_candidate_report(
                 1
                 for row in rows
                 if row["strictEvidenceStore"]["total"] > 0 and row["strictEvidenceStore"]["publicReviewable"] == 0
+            ),
+            "strictEvidenceStoreRowsSchemaInvalid": sum(
+                1 for row in rows if row["strictEvidenceStore"].get("schemaInvalid", 0) > 0
             ),
             "strictCoveredRows": strict_covered_rows,
             "strictCoveragePct": (

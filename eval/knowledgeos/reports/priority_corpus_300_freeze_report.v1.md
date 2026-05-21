@@ -1,6 +1,6 @@
 # Priority Corpus 300 Freeze Report
 
-Generated: `2026-05-21T06:39:23.167243+00:00`
+Generated: `2026-05-21T08:02:18.984472+00:00`
 
 - status: `locked`
 - manifest rows: **300**

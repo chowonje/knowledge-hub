@@ -52,6 +52,51 @@ def _write_jsonl(path: Path, rows: list[dict]) -> None:
     path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
 
 
+def _strict_record(source_id: str, *, run_id: str = "committed") -> dict:
+    return {
+        "schema": "knowledge-hub.paper.parsed-artifact-strict-evidence-record.v1",
+        "strictEvidenceId": f"strict-evidence:{source_id}:section:test",
+        "runId": run_id,
+        "plannedWriteTarget": "parsed_artifact_strict_evidence_store",
+        "paperId": source_id,
+        "artifactType": "section",
+        "claimSurface": "fixture",
+        "sourceSpanIds": [f"source-span:{source_id}:section:test"],
+        "candidateRecordIds": [f"candidate:{source_id}:section:test"],
+        "sourceContentHash": "a" * 64,
+        "sourceFile": "",
+        "verbatimText": "fixture",
+        "verbatimSubstringSha256": "b" * 64,
+        "authority": {
+            "type": "text_offset",
+            "chars": {
+                "start": 0,
+                "end": 7,
+                "basis": "sourceContentHash",
+                "normalization": "nfkc_whitespace_casefold_v1",
+                "expectedSubstringSha256": "b" * 64,
+            },
+        },
+        "provenanceTrace": {},
+        "designPacketReviewRowId": f"review:{source_id}",
+        "promotionGateId": "fixture_gate",
+        "idempotencyKey": f"strict:{source_id}:fixture",
+        "evidenceTier": "parsed_artifact_strict_evidence",
+        "strictEligible": False,
+        "citationGrade": False,
+        "runtimeEvidence": False,
+        "writePolicy": {
+            "executorRequired": True,
+            "sourceSpanStoreWrite": False,
+            "databaseMutation": False,
+            "parserRoutingChanged": False,
+            "answerIntegrationChanged": False,
+            "reindexOrReembed": False,
+            "canonicalParsedArtifactsWritten": False,
+        },
+    }
+
+
 def test_priority_corpus_freeze_blocks_hold_rows_from_manifest_and_allowlist(tmp_path: Path) -> None:
     papers_dir = tmp_path / "papers"
     papers_dir.mkdir()
@@ -173,6 +218,8 @@ def test_priority_corpus_freeze_blocks_hold_rows_from_manifest_and_allowlist(tmp
     assert payload["counts"]["sourceMissingHoldRows"] == 1
     assert payload["counts"]["ambiguousHoldRows"] == 1
     assert payload["targets"]["additionalVerifiedAvailableNeededForUpperBound"] == 1
+    assert payload["safetyChecks"]["hashMismatchGreen"] is True
+    assert payload["safetyChecks"]["hashMissingGreen"] is True
     assert payload["schemaValidation"]["ok"] is True
 
 
@@ -203,7 +250,7 @@ def test_structured_evidence_next_slice_excludes_existing_strict_evidence(tmp_pa
         _touch_parsed(papers_dir, source_id, figure_count=1 if source_id == "paper-b" else 0)
     _write_jsonl(
         papers_dir / "structured_evidence" / "strict_evidence" / "paper-a.jsonl",
-        [{"recordId": "strict-a", "runId": "committed"}],
+        [_strict_record("paper-a")],
     )
     _write_jsonl(
         papers_dir / "structured_evidence" / "source_span" / "paper-a.jsonl",
@@ -294,7 +341,7 @@ def test_structured_evidence_next_slice_reports_all_readback_candidates(tmp_path
         _touch_parsed(papers_dir, source_id)
         _write_jsonl(
             papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl",
-            [{"recordId": f"strict-{source_id}", "runId": "committed"}],
+            [_strict_record(source_id)],
         )
     join_report_path = _write_json(
         tmp_path / "join.json",
@@ -330,6 +377,64 @@ def test_structured_evidence_next_slice_reports_all_readback_candidates(tmp_path
     assert payload["selectedGreenfieldCandidates"] == []
 
 
+def test_structured_evidence_next_slice_requires_schema_valid_strict_evidence(tmp_path: Path) -> None:
+    papers_dir = tmp_path / "papers"
+    source_meta = {"paper-a": _write_source(papers_dir, "paper-a.pdf", b"%PDF paper-a")}
+    manifest_path = _write_json(
+        tmp_path / "corpus_manifest.json",
+        {
+            "schema": "knowledge-hub.corpus-manifest.v1",
+            "artifacts": [
+                {
+                    "artifactId": "paper-a",
+                    "sourceIds": ["paper-a"],
+                    "expectedFilename": "paper-a.pdf",
+                    "expectedSourceContentHash": source_meta["paper-a"][0],
+                    "byteLength": source_meta["paper-a"][1],
+                    "corpusTier": "local_corpus",
+                }
+            ],
+        },
+    )
+    _touch_parsed(papers_dir, "paper-a")
+    _write_jsonl(
+        papers_dir / "structured_evidence" / "strict_evidence" / "paper-a.jsonl",
+        [{"recordId": "strict-paper-a", "runId": "committed"}],
+    )
+    join_report_path = _write_json(
+        tmp_path / "join.json",
+        {
+            "schema": "knowledge-hub.priority-corpus-source-join-report.v1",
+            "rows": [
+                {
+                    "source_id": "paper-a",
+                    "title": "A",
+                    "year": 2026,
+                    "candidate_tier": "eval_critical",
+                    "join_status": "available",
+                    "current_manifest_status": "in_manifest",
+                    "parsed_status": "parsed_present",
+                    "warnings": [],
+                }
+            ],
+        },
+    )
+
+    payload = build_structured_evidence_next_slice_candidate_report(
+        config=_ConfigWithPapersDir(papers_dir),
+        manifest_path=manifest_path,
+        join_report_path=join_report_path,
+        papers_dir=papers_dir,
+        greenfield_target_rows=1,
+    )
+
+    assert payload["status"] == "ready"
+    assert payload["counts"]["strictCoveredRows"] == 0
+    assert payload["counts"]["strictEvidenceStoreRowsSchemaInvalid"] == 1
+    assert payload["readbackCandidates"] == []
+    assert [row["sourceId"] for row in payload["selectedGreenfieldCandidates"]] == ["paper-a"]
+
+
 def test_structured_evidence_next_slice_carries_over_operator_local_side_effects(
     tmp_path: Path,
 ) -> None:
@@ -360,7 +465,7 @@ def test_structured_evidence_next_slice_carries_over_operator_local_side_effects
     for source_id in ("2005.11401", "1512.03385"):
         _write_jsonl(
             papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl",
-            [{"recordId": f"strict-{source_id}", "runId": "structured-evidence-vertical-slice-20260521"}],
+            [_strict_record(source_id, run_id="structured-evidence-vertical-slice-20260521")],
         )
     join_report_path = _write_json(
         tmp_path / "join.json",

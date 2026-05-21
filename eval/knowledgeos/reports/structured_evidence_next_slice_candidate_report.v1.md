@@ -1,6 +1,6 @@
 # Structured Evidence Next Slice Candidate Report
 
-Generated: `2026-05-21T07:41:11.402981+00:00`
+Generated: `2026-05-21T08:02:20.090337+00:00`
 
 - status: `complete`
 - manifest rows: **300**
