@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.priority-corpus-300-freeze-report.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generatedAt",
+    "status",
+    "scopeNote",
+    "inputs",
+    "targets",
+    "counts",
+    "tierBreakdown",
+    "lockRules",
+    "safetyChecks",
+    "holdRows",
+    "manifestBadJoinRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.priority-corpus-300-freeze-report.v1" },
+    "generatedAt": { "type": "string" },
+    "status": { "type": "string", "enum": ["locked", "blocked"] },
+    "scopeNote": { "type": "string" },
+    "inputs": { "type": "object", "additionalProperties": true },
+    "targets": {
+      "type": "object",
+      "required": [
+        "lowerBoundTargetRows",
+        "upperBoundTargetRows",
+        "lowerBoundReached",
+        "upperBoundReachedWithVerifiedAvailable",
+        "currentLedgerCandidateRows",
+        "immediateManifestCeilingWithVerifiedAvailable",
+        "currentLedgerCeilingIfAllHoldsResolved",
+        "additionalVerifiedAvailableNeededForUpperBound",
+        "additionalNewCandidateRowsNeededForUpperBoundAfterAllCurrentHoldsResolved"
+      ],
+      "properties": {
+        "lowerBoundTargetRows": { "type": "integer", "minimum": 0 },
+        "upperBoundTargetRows": { "type": "integer", "minimum": 0 },
+        "lowerBoundReached": { "type": "boolean" },
+        "upperBoundReachedWithVerifiedAvailable": { "type": "boolean" },
+        "currentLedgerCandidateRows": { "type": "integer", "minimum": 0 },
+        "immediateManifestCeilingWithVerifiedAvailable": { "type": "integer", "minimum": 0 },
+        "currentLedgerCeilingIfAllHoldsResolved": { "type": "integer", "minimum": 0 },
+        "additionalVerifiedAvailableNeededForUpperBound": { "type": "integer", "minimum": 0 },
+        "additionalNewCandidateRowsNeededForUpperBoundAfterAllCurrentHoldsResolved": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "manifestRows",
+        "sourceAvailableRows",
+        "sourceMissingRowsInManifest",
+        "hashMissingRowsInManifest",
+        "hashMismatchRowsInManifest",
+        "parsedAvailableRows",
+        "parsedMissingRows",
+        "blockerRows",
+        "verifiedAvailableCandidateRows",
+        "alreadyInManifestRows",
+        "remainingVerifiedAllowlistRows",
+        "sourceMissingHoldRows",
+        "ambiguousHoldRows",
+        "holdOrExcludeRows",
+        "manifestRowsWithNonAvailableJoinStatus",
+        "manifestRowsStillInAllowlist",
+        "holdRowsInManifest",
+        "holdRowsInAllowlist"
+      ],
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "tierBreakdown": { "type": "object", "additionalProperties": true },
+    "lockRules": { "type": "object", "additionalProperties": true },
+    "safetyChecks": {
+      "type": "object",
+      "required": [
+        "manifestMutation",
+        "networkUsed",
+        "vaultScan",
+        "sourceMissingPromoted",
+        "ambiguousPromoted",
+        "sourceMissingRowsExcluded",
+        "ambiguousRowsExcluded",
+        "hashMismatchGreen",
+        "hashMissingGreen"
+      ],
+      "properties": {
+        "manifestMutation": { "const": false },
+        "networkUsed": { "const": false },
+        "vaultScan": { "const": false },
+        "sourceMissingPromoted": { "const": false },
+        "ambiguousPromoted": { "const": false },
+        "sourceMissingRowsExcluded": { "const": true },
+        "ambiguousRowsExcluded": { "const": true },
+        "hashMismatchGreen": { "const": true },
+        "hashMissingGreen": { "const": true }
+      },
+      "additionalProperties": true
+    },
+    "holdRows": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "manifestBadJoinRows": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "schemaValidation": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

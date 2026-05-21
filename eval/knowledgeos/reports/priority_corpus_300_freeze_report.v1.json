@@ -1,0 +1,618 @@
+{
+  "schema": "knowledge-hub.priority-corpus-300-freeze-report.v1",
+  "generatedAt": "2026-05-21T08:02:18.984472+00:00",
+  "status": "locked",
+  "scopeNote": "Report-only freeze of the verified priority corpus lower bound. The corpus manifest is not mutated; source_missing and ambiguous candidates remain hold-only.",
+  "inputs": {
+    "corpusManifest": "eval/knowledgeos/fixtures/corpus_manifest.json",
+    "prioritySourceJoinReport": "eval/knowledgeos/reports/priority_corpus_source_join_report.v1.json",
+    "priorityManifestExpansionAllowlist": "eval/knowledgeos/fixtures/priority_corpus_manifest_expansion_allowlist.v1.json",
+    "papersDirRef": "papers_dir"
+  },
+  "targets": {
+    "lowerBoundTargetRows": 300,
+    "upperBoundTargetRows": 500,
+    "lowerBoundReached": true,
+    "upperBoundReachedWithVerifiedAvailable": false,
+    "currentLedgerCandidateRows": 446,
+    "immediateManifestCeilingWithVerifiedAvailable": 396,
+    "currentLedgerCeilingIfAllHoldsResolved": 446,
+    "additionalVerifiedAvailableNeededForUpperBound": 104,
+    "additionalNewCandidateRowsNeededForUpperBoundAfterAllCurrentHoldsResolved": 54
+  },
+  "counts": {
+    "manifestRows": 300,
+    "sourceAvailableRows": 300,
+    "sourceMissingRowsInManifest": 0,
+    "hashMissingRowsInManifest": 0,
+    "hashMismatchRowsInManifest": 0,
+    "parsedAvailableRows": 300,
+    "parsedMissingRows": 0,
+    "blockerRows": 0,
+    "verifiedAvailableCandidateRows": 396,
+    "alreadyInManifestRows": 300,
+    "remainingVerifiedAllowlistRows": 96,
+    "sourceMissingHoldRows": 41,
+    "ambiguousHoldRows": 9,
+    "holdOrExcludeRows": 50,
+    "manifestRowsWithNonAvailableJoinStatus": 0,
+    "manifestRowsStillInAllowlist": 0,
+    "holdRowsInManifest": 0,
+    "holdRowsInAllowlist": 0
+  },
+  "tierBreakdown": {
+    "manifestByTier": {
+      "eval_critical": 55,
+      "foundational": 11,
+      "local_corpus_candidate": 32,
+      "recent_ai": 202
+    },
+    "remainingAllowlistByTier": {
+      "local_corpus_candidate": 96
+    },
+    "sourceMissingHoldByTier": {
+      "foundational": 5,
+      "local_corpus_candidate": 30,
+      "recent_ai": 6
+    },
+    "ambiguousHoldByTier": {
+      "local_corpus_candidate": 7,
+      "recent_ai": 2
+    }
+  },
+  "lockRules": {
+    "registeredAvailableRule": "Only rows with local source bytes, SHA-256, byteLength, and resolver-visible source artifacts may be registered as available manifest rows.",
+    "holdRule": "source_missing and ambiguous rows are report-only holds until bytes/hash/operator selection is verified.",
+    "parsedRule": "parsed_missing is reported separately from source artifact availability.",
+    "publicPathRule": "Public reports use `papers_dir/...` refs only and do not include absolute local paths."
+  },
+  "safetyChecks": {
+    "manifestMutation": false,
+    "networkUsed": false,
+    "vaultScan": false,
+    "sourceMissingPromoted": false,
+    "ambiguousPromoted": false,
+    "sourceMissingRowsExcluded": true,
+    "ambiguousRowsExcluded": true,
+    "hashMismatchGreen": true,
+    "hashMissingGreen": true
+  },
+  "holdRows": [
+    {
+      "source_id": "1803.10122",
+      "title": "World Models",
+      "year": 2018,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "2301.04104",
+      "title": "Mastering Diverse Domains through World Models",
+      "year": 2023,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "2304.02643",
+      "title": "Segment Anything",
+      "year": 2023,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "2408.00714",
+      "title": "SAM 2: Segment Anything in Images and Videos",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "2502.20694",
+      "title": "WorldModelBench: Judging Video Generation Models As World Models",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "Batch_Normalization_c72acd36",
+      "title": "Batch Normalization",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "Deep_Residual_Learning_efbb7871",
+      "title": "Deep Residual Learning",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "SAM_Audio_Segment_Anything_in__a58477dd",
+      "title": "SAM Audio Segment Anything in Audio",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "Sequence_to_Sequence_Learning_0e5054e7",
+      "title": "Sequence to Sequence Learning",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "ambiguous",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": [
+        "ambiguous_multiple_hashes",
+        "pdf_preferred_over_text"
+      ]
+    },
+    {
+      "source_id": "2020.30163",
+      "title": "Brain Tumor Identification and Classification of MRI Images Using Deep Learning Techniques",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "2024.00346",
+      "title": "근거 기반 나트륨 저감 건강 식생활 프로그램의 리빙랩 모델 적용",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "2025.16582",
+      "title": "Comprehensive safety evaluation of Withania somnifera (Ashwagandha): an AI-driven meta-analysis and quantitative structure–activity relationship based toxicity assessment",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "2025.16785",
+      "title": "Development of an AI-driven digital assistance system for real-time safety evaluation and quality control in laparoscopic liver surgery",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "2310.06825",
+      "title": "Mistral 7B",
+      "year": 2023,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "3841.17480",
+      "title": "A review of taste-active compounds in meat: Identification, influencing factors, and taste transduction mechanism.",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "4417.2025",
+      "title": "AI Agents and Agentic Systems: A Multi-Expert Analysis",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "A_Survey_of_LLM_Driven_AI_Agen_c019fb13",
+      "title": "A Survey of LLM-Driven AI Agent Communication Protocols, Security Risks, and Defense Countermeasures",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Continuous_control_with_deep_r_520424f2",
+      "title": "Continuous control with deep reinforcement learning",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Controlling_AI_Agent_Participa_0a663b0a",
+      "title": "Controlling AI Agent Participation in Group Conversations A Human-Centered Approach",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Conversion_of_Neural_Networks__20f30836",
+      "title": "Conversion of Neural Networks into Logic Flows",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Convex_Optimization_for_Machin_67919d59",
+      "title": "Convex Optimization for Machine Learning",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "DINOv3_b015eba7",
+      "title": "DINOv3",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Delving_Deep_into_Rectifiers_S_dc706a84",
+      "title": "Delving Deep into Rectifiers Surpassing Human-Level Performance on ImageNet Classification",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Discovering_Hidden_Gems_in_Mod_c7f0ea09",
+      "title": "Discovering Hidden Gems in Model Repositories",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Early_Detection_of_Pancreatic__80a53ca4",
+      "title": "Early Detection of Pancreatic Cancer from CT",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Exploring_Reasoning_Reward_Mod_8d482d9e",
+      "title": "Exploring Reasoning Reward Model for Agents",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "LLM_Powered_AI_Agent_Systems_a_c20e9ebd",
+      "title": "LLM-Powered AI Agent Systems and Their Applications in Industry",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "LLM_Shepherding_for_Cost_Effic_9f261034",
+      "title": "LLM Shepherding for Cost-Efficient Inference",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "NeRF_1b9d0d11",
+      "title": "NeRF",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "One_step_Latent_free_Image_Gen_174b2c73",
+      "title": "One-step Latent-free Image Generation with Pixel Mean Flows",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "PC_Agent_A_Hierarchical_Multi__c84398dc",
+      "title": "PC-Agent A Hierarchical Multi-Agent Collaboration Framework for Complex Task Automation on PC",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "PRISM_Distribution_free_Adapti_734e22b0",
+      "title": "PRISM Distribution-free Adaptive Computation",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Partitioning_Large_Scale_Deep__6aeccc2d",
+      "title": "Partitioning Large Scale Deep Belief Networks Using Dropout",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "StepShield_When_to_Intervene_o_4c6542f0",
+      "title": "StepShield When to Intervene on Rogue Agents",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Surgical_AI_Copilot_Energy_Bas_4125dfd8",
+      "title": "Surgical AI Copilot Energy-Based Fourier Gradient Low-Rank Adaptation for Surgical LLM Agent Reasoni",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Towards_a_Science_of_AI_Agent__882682ff",
+      "title": "Towards a Science of AI Agent Reliability",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "UEval_A_Benchmark_for_Unified__bb7e1c9c",
+      "title": "UEval A Benchmark for Unified Multimodal Generation",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "Visualizing_and_Understanding__21f6dbe2",
+      "title": "Visualizing and Understanding Convolutional Networks",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "WebArbiter_Reasoning_Process_R_d4ffbb61",
+      "title": "WebArbiter Reasoning Process Reward Model",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "backpropagation-1986",
+      "title": "Learning Representations by Back-Propagating Errors",
+      "year": 1986,
+      "candidate_tier": "foundational",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "gradient-boosting-machine-2001",
+      "title": "Greedy Function Approximation: A Gradient Boosting Machine",
+      "year": 2001,
+      "candidate_tier": "foundational",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "http___yann_lecun_com_exdb_pub_e15f8b7d",
+      "title": "lecun-01a",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "https___nlp_stanford_edu_pubs__811f5066",
+      "title": "glove",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "https___www_bioinf_jku_at_publ_6c13d20f",
+      "title": "2604",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "nature14236_51843b70",
+      "title": "nature14236",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "nature16961_0c20613b",
+      "title": "nature16961",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "paper-understanding-training-difficulty",
+      "title": "Understanding the difficulty of training deep feedforward neural networks",
+      "year": 2010,
+      "candidate_tier": "foundational",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "random-forests-2001",
+      "title": "Random Forests",
+      "year": 2001,
+      "candidate_tier": "foundational",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "s41586_021_03819_2_0cc4af67",
+      "title": "s41586-021-03819-2",
+      "year": null,
+      "candidate_tier": "local_corpus_candidate",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    },
+    {
+      "source_id": "svm-1992",
+      "title": "A Training Algorithm for Optimal Margin Classifiers",
+      "year": 1992,
+      "candidate_tier": "foundational",
+      "join_status": "source_missing",
+      "current_manifest_status": "not_in_manifest",
+      "parsed_status": "not_applicable",
+      "warnings": []
+    }
+  ],
+  "manifestBadJoinRows": [],
+  "manifestRowsStillInAllowlist": [],
+  "holdRowsInManifest": [],
+  "holdRowsInAllowlist": [],
+  "schemaValidation": {
+    "ok": true,
+    "schemaFound": true,
+    "errors": []
+  }
+}

@@ -1,0 +1,152 @@
+# Structured Evidence Next Slice Apply/Readback
+
+- generatedAt: 2026-05-21T07:29:04Z
+- runId: structured-evidence-next-slice-20260521
+- apply: true
+- status: ready
+- manifestRows: 300
+- baselineStrictCoveredRows: 90
+- strictCoveredRowsAfterLocalApply: 120
+- readbackPassRows: 90
+- greenfieldGeneratedRows: 30
+- appliedGreenfieldRows: 30
+- postApplyReadbackPassRows: 30
+
+## Candidate Input Snapshot
+
+- candidateReport: `eval/knowledgeos/reports/structured_evidence_next_slice_candidate_report.v1.json`
+- snapshotStrictCoveredRows: **90**
+- snapshotReadbackSourceIds: **90**
+- snapshotGreenfieldSourceIds: **30**
+
+## Greenfield Rows
+
+- `2602.16707` status=`generated` applied=`True` postReadback=`pass`
+- `2602.16708` status=`generated` applied=`True` postReadback=`pass`
+- `2602.16711` status=`generated` applied=`True` postReadback=`pass`
+- `2602.16712` status=`generated` applied=`True` postReadback=`pass`
+- `2602.18304` status=`generated` applied=`True` postReadback=`pass`
+- `2602.18346` status=`generated` applied=`True` postReadback=`pass`
+- `2602.18357` status=`generated` applied=`True` postReadback=`pass`
+- `2602.18397` status=`generated` applied=`True` postReadback=`pass`
+- `2602.18415` status=`generated` applied=`True` postReadback=`pass`
+- `2602.22953` status=`generated` applied=`True` postReadback=`pass`
+- `2603.05414` status=`generated` applied=`True` postReadback=`pass`
+- `2603.05706` status=`generated` applied=`True` postReadback=`pass`
+- `2603.14473` status=`generated` applied=`True` postReadback=`pass`
+- `2603.15798` status=`generated` applied=`True` postReadback=`pass`
+- `2603.16659` status=`generated` applied=`True` postReadback=`pass`
+- `2603.17216` status=`generated` applied=`True` postReadback=`pass`
+- `2603.18000` status=`generated` applied=`True` postReadback=`pass`
+- `2603.18002` status=`generated` applied=`True` postReadback=`pass`
+- `2603.18003` status=`generated` applied=`True` postReadback=`pass`
+- `2603.18004` status=`generated` applied=`True` postReadback=`pass`
+- `2603.23749` status=`generated` applied=`True` postReadback=`pass`
+- `2604.08545` status=`generated` applied=`True` postReadback=`pass`
+- `2604.08546` status=`generated` applied=`True` postReadback=`pass`
+- `2604.08548` status=`generated` applied=`True` postReadback=`pass`
+- `2604.11407` status=`generated` applied=`True` postReadback=`pass`
+- `2604.13346` status=`generated` applied=`True` postReadback=`pass`
+- `2604.15270` status=`generated` applied=`True` postReadback=`pass`
+- `2604.15706` status=`generated` applied=`True` postReadback=`pass`
+- `2604.17761` status=`generated` applied=`True` postReadback=`pass`
+- `2604.18164` status=`generated` applied=`True` postReadback=`pass`
+
+## Readback Rows
+
+- `1312.5602` status=`pass` strictEvidence=1
+- `1406.2661` status=`pass` strictEvidence=1
+- `1409.3215` status=`pass` strictEvidence=1
+- `1502.03167` status=`pass` strictEvidence=1
+- `1512.03385` status=`pass` strictEvidence=1
+- `1706.03762` status=`pass` strictEvidence=23
+- `1707.06347` status=`pass` strictEvidence=1
+- `1810.04805` status=`pass` strictEvidence=1
+- `2005.11401` status=`pass` strictEvidence=1
+- `2005.14165` status=`pass` strictEvidence=60
+- `2006.11239` status=`pass` strictEvidence=1
+- `2007.01282` status=`pass` strictEvidence=1
+- `2010.11929` status=`pass` strictEvidence=1
+- `2201.11903` status=`pass` strictEvidence=1
+- `2310.11511` status=`pass` strictEvidence=1
+- `2312.00752` status=`pass` strictEvidence=1
+- `2404.16130` status=`pass` strictEvidence=1
+- `2410.05779` status=`pass` strictEvidence=1
+- `2501.06322` status=`pass` strictEvidence=1
+- `2501.12948` status=`pass` strictEvidence=1
+- `2502.05151` status=`pass` strictEvidence=1
+- `2503.10970` status=`pass` strictEvidence=1
+- `2503.21460` status=`pass` strictEvidence=1
+- `2504.19413` status=`pass` strictEvidence=1
+- `2505.10468` status=`pass` strictEvidence=1
+- `2601.01828` status=`pass` strictEvidence=1
+- `2601.03236` status=`pass` strictEvidence=1
+- `2601.04720` status=`pass` strictEvidence=1
+- `2601.09668` status=`pass` strictEvidence=1
+- `2601.11077` status=`pass` strictEvidence=1
+- `2601.12542` status=`pass` strictEvidence=1
+- `2601.23086` status=`pass` strictEvidence=1
+- `2602.00103` status=`pass` strictEvidence=1
+- `2602.00185` status=`pass` strictEvidence=1
+- `2602.01237` status=`pass` strictEvidence=1
+- `2602.01655` status=`pass` strictEvidence=1
+- `2602.01853` status=`pass` strictEvidence=1
+- `2602.02007` status=`pass` strictEvidence=1
+- `2602.02262` status=`pass` strictEvidence=1
+- `2602.02905` status=`pass` strictEvidence=1
+- `2602.03117` status=`pass` strictEvidence=1
+- `2602.03442` status=`pass` strictEvidence=1
+- `2602.10715` status=`pass` strictEvidence=1
+- `2602.10975` status=`pass` strictEvidence=1
+- `2602.11964` status=`pass` strictEvidence=1
+- `2602.11988` status=`pass` strictEvidence=1
+- `2602.12670` status=`pass` strictEvidence=1
+- `2602.15112` status=`pass` strictEvidence=1
+- `2602.16313` status=`pass` strictEvidence=1
+- `2602.16698` status=`pass` strictEvidence=1
+- `2602.18297` status=`pass` strictEvidence=1
+- `2602.20021` status=`pass` strictEvidence=1
+- `2602.22769` status=`pass` strictEvidence=1
+- `2603.07379` status=`pass` strictEvidence=1
+- `alexnet-2012` status=`pass` strictEvidence=1
+- `1207.0580` status=`pass` strictEvidence=1
+- `1301.3781` status=`pass` strictEvidence=1
+- `1310.4546` status=`pass` strictEvidence=1
+- `1311.2524` status=`pass` strictEvidence=1
+- `1406.1078` status=`pass` strictEvidence=1
+- `1409.1556` status=`pass` strictEvidence=1
+- `1410.5401` status=`pass` strictEvidence=1
+- `1505.04597` status=`pass` strictEvidence=1
+- `1506.01497` status=`pass` strictEvidence=1
+- `1506.02640` status=`pass` strictEvidence=16
+- `1708.07747` status=`pass` strictEvidence=1
+- `2403.14403` status=`pass` strictEvidence=1
+- `2407.02485` status=`pass` strictEvidence=1
+- `2410.11414` status=`pass` strictEvidence=1
+- `2601.10744` status=`pass` strictEvidence=1
+- `2601.21666` status=`pass` strictEvidence=1
+- `2602.16624` status=`pass` strictEvidence=1
+- `2602.16662` status=`pass` strictEvidence=1
+- `2602.16669` status=`pass` strictEvidence=1
+- `2602.16671` status=`pass` strictEvidence=1
+- `2602.16678` status=`pass` strictEvidence=1
+- `2602.16682` status=`pass` strictEvidence=1
+- `2602.16683` status=`pass` strictEvidence=1
+- `2602.16687` status=`pass` strictEvidence=1
+- `2602.16689` status=`pass` strictEvidence=1
+- `2602.16699` status=`pass` strictEvidence=1
+- `2602.16700` status=`pass` strictEvidence=1
+- `2602.16701` status=`pass` strictEvidence=1
+- `2602.16702` status=`pass` strictEvidence=1
+- `2602.16703` status=`pass` strictEvidence=1
+- `2602.16704` status=`pass` strictEvidence=1
+- `2602.16705` status=`pass` strictEvidence=1
+- `2308.08155` status=`pass` strictEvidence=1
+- `2309.15217` status=`pass` strictEvidence=1
+- `2312.10997` status=`pass` strictEvidence=1
+
+## Deferred
+
+- `table_cell_numeric`
+- `equation_citation`
+- `appendix_table_lookup`
