@@ -1,6 +1,6 @@
 # Priority Corpus Source Join Report
 
-Generated: `2026-05-21T05:25:56.626367+00:00`
+Generated: `2026-05-21T05:43:55.906087+00:00`
 
 ## Scope
 
@@ -9,7 +9,7 @@ Report-only join of priority corpus candidate ledger rows against local source a
 ## Inventory Input (file rows, not paper count)
 
 - Inventory file rows: **841**
-- Inventory unique source ids (unjoined): **531**
+- Inventory unique source ids (unjoined): **572**
 
 ## Join Result
 
@@ -22,70 +22,70 @@ Report-only join of priority corpus candidate ledger rows against local source a
 - Hash mismatch: **0**
 - Ambiguous: **9**
 - Parsed missing (available only): **0**
-- Already in manifest (excluded from allowlist): **100**
+- Already in manifest (excluded from allowlist): **150**
 
 ## Expansion Allowlist
 
-- Allowlist rows: **251**
+- Allowlist rows: **201**
 - First tranche recommended: **50**
 
 ### Allowlist by tier
 
-- `recent_ai`: **127**
+- `recent_ai`: **77**
 - `local_corpus_candidate`: **124**
 
 ## First Tranche Recommendation (up to 50)
 
-- `2605.03838` (recent_ai, 2026) — TRACE: A Metrologically-Grounded Engineering Framework for Trustworthy
-- `2605.03862` (recent_ai, 2026) — Correct Is Not Enough: Training Reasoning Planners with Executor-Groun
-- `2605.03871` (recent_ai, 2026) — EvoLM: Self-Evolving Language Models through Co-Evolved Discriminative
-- `2605.03903` (recent_ai, 2026) — CC-OCR V2: Benchmarking Large Multimodal Models for Literacy in Real-w
-- `2605.03986` (recent_ai, 2026) — From Intent to Execution: Composing Agentic Workflows with Agent Recom
-- `2605.03989` (recent_ai, 2026) — An Agent-Oriented Pluggable Experience-RAG Skill for Experience-Driven
-- `2605.04036` (recent_ai, 2026) — OpenSeeker-v2: Pushing the Limits of Search Agents with Informative an
-- `2605.10616` (recent_ai, 2026) — MulTaBench: Benchmarking Multimodal Tabular Learning with Text and Ima
-- `attnres2026` (recent_ai, 2026) — Attention Residuals
-- `2501.05031` (recent_ai, 2025) — ECBench: Can Multi-modal Foundation Models Understand Embodied Cogniti
-- `2501.13956` (recent_ai, 2025) — Zep: A Temporal Knowledge Graph Architecture for Agent Memory
-- `2502.04463` (recent_ai, 2025) — Training Language Models to Reason Efficiently
-- `2502.07191` (recent_ai, 2025) — Bag of Tricks for Inference-time Computation of LLM Reasoning
-- `2502.12521` (recent_ai, 2025) — Inference-Time Computations for LLM Reasoning and Planning: A Benchmar
-- `2502.13130` (recent_ai, 2025) — Magma: A Foundation Model for Multimodal AI Agents
-- `2502.15224` (recent_ai, 2025) — Auto-Bench: An Automated Benchmark for Scientific Discovery in LLMs
-- `2502.15840` (recent_ai, 2025) — Vending-Bench: A Benchmark for Long-Term Coherence of Autonomous Agent
-- `2502.19918` (recent_ai, 2025) — Meta-Reasoner: Dynamic Guidance for Optimized Inference-time Reasoning
-- `2503.03734` (recent_ai, 2025) — OTTER: A Vision-Language-Action Model with Text-Aware Visual Feature E
-- `2503.04412` (recent_ai, 2025) — Wider or Deeper? Scaling LLM Inference-Time Compute with Adaptive Bran
-- `2503.07885` (recent_ai, 2025) — Safety Guardrails for LLM-Enabled Robots
-- `2503.10965` (recent_ai, 2025) — Auditing language models for hidden objectives
-- `2503.11926` (recent_ai, 2025) — Monitoring Reasoning Models for Misbehavior and the Risks of Promoting
-- `2503.16248` (recent_ai, 2025) — Real AI Agents with Fake Memories: Fatal Context Manipulation Attacks
-- `2503.16416` (recent_ai, 2025) — Survey on Evaluation of LLM-based Agents
-- `2503.19786` (recent_ai, 2025) — Gemma 3 Technical Report
-- `2503.23077` (recent_ai, 2025) — Efficient Inference for Large Reasoning Models: A Survey
-- `2504.00983` (recent_ai, 2025) — WorldScore: A Unified Evaluation Benchmark for World Generation
-- `2504.10449` (recent_ai, 2025) — M1: Towards Scalable Test-Time Compute with Mamba Reasoning Models
-- `2504.11168` (recent_ai, 2025) — Bypassing LLM Guardrails: An Empirical Analysis of Evasion Attacks aga
-- `2504.14191` (recent_ai, 2025) — AI Idea Bench 2025: AI Research Idea Generation Benchmark
-- `2504.14891` (recent_ai, 2025) — Retrieval Augmented Generation Evaluation in the Era of Large Language
-- `2504.16736` (recent_ai, 2025) — A Survey of AI Agent Protocols
-- `2504.18575` (recent_ai, 2025) — WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks
-- `2505.03574` (recent_ai, 2025) — LlamaFirewall: An open source guardrail system for building secure AI
-- `2505.05541` (recent_ai, 2025) — Safety by Measurement: A Systematic Literature Review of AI Safety Eva
-- `2505.05849` (recent_ai, 2025) — AgentXploit: End-to-End Redteaming of Black-Box AI Agents
-- `2505.07062` (recent_ai, 2025) — Seed1.5-VL Technical Report
-- `2505.08341` (recent_ai, 2025) — Benchmarking AI scientists for omics data driven biological discovery
-- `2505.09388` (recent_ai, 2025) — Qwen3 Technical Report
-- `2505.16100` (recent_ai, 2025) — BioDSA-1K: Benchmarking Data Science Agents for Biomedical Hypothesis
-- `2505.20873` (recent_ai, 2025) — Fork-Merge Decoding: Enhancing Multimodal Understanding in Audio-Visua
-- `2505.23450` (recent_ai, 2025) — Agentic Robot: A Brain-Inspired Framework for Vision-Language-Action M
-- `2505.23621` (recent_ai, 2025) — Table-R1: Inference-Time Scaling for Table Reasoning
-- `2506.01844` (recent_ai, 2025) — SmolVLA: A Vision-Language-Action Model for Affordable and Efficient R
-- `2506.02153` (recent_ai, 2025) — Small Language Models are the Future of Agentic AI
-- `2506.05176` (recent_ai, 2025) — Qwen3 Embedding: Advancing Text Embedding and Reranking Through Founda
-- `2506.05813` (recent_ai, 2025) — MAPLE: Multi-Agent Adaptive Planning with Long-Term Memory for Table R
-- `2506.06326` (recent_ai, 2025) — Memory OS of AI Agent
-- `2506.06941` (recent_ai, 2025) — The Illusion of Thinking: Understanding the Strengths and Limitations
+- `2506.12104` (recent_ai, 2025) — DRIFT: Dynamic Rule-Based Defense with Injection Isolation for Securin
+- `2506.15635` (recent_ai, 2025) — A Benchmark to Evaluate Memory in Embodied Agents
+- `2506.15882` (recent_ai, 2025) — Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Tim
+- `2506.21448` (recent_ai, 2025) — ThinkSound: Chain-of-Thought Reasoning in Multimodal Large Language Mo
+- `2506.21605` (recent_ai, 2025) — MemBench: Towards More Comprehensive Evaluation on the Memory of LLM-b
+- `2506.21734` (recent_ai, 2025) — Hierarchical Reasoning Model
+- `2507.01949` (recent_ai, 2025) — Kwai Keye-VL Technical Report
+- `2507.02076` (recent_ai, 2025) — Reasoning on a Budget: A Survey of Adaptive and Controllable Test-Time
+- `2507.05257` (recent_ai, 2025) — Evaluating Memory in LLM Agents via Incremental Multi-Turn Interaction
+- `2507.06261` (recent_ai, 2025) — Gemini 2.5: Pushing the Frontier with Advanced Reasoning and Multimoda
+- `2507.07957` (recent_ai, 2025) — MIRIX: Multi-Agent Memory System for LLM-Based Agents
+- `2507.11473` (recent_ai, 2025) — A New and Fragile Opportunity for AI Safety
+- `2507.13575` (recent_ai, 2025) — Apple Intelligence Foundation Language Models
+- `2507.20526` (recent_ai, 2025) — Security Challenges in AI Agent Deployment: Insights from a Large Scal
+- `2508.02324` (recent_ai, 2025) — Qwen-Image Technical Report
+- `2508.04039` (recent_ai, 2025) — Large Reasoning Models Are Autonomous Jailbreak Agents
+- `2508.15763` (recent_ai, 2025) — Intern-S1: A Scientific Multimodal Foundation Model
+- `2509.06917` (recent_ai, 2025) — Paper2Agent: Reimagining Research Papers As Interactive and Reliable A
+- `2509.14260` (recent_ai, 2025) — Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs
+- `2509.16861` (recent_ai, 2025) — AdaptiveGuard: Towards Adaptive Runtime Safety for LLM-Powered Softwar
+- `2509.16870` (recent_ai, 2025) — DecipherGuard: Understanding and Deciphering Jailbreak Prompts for a S
+- `2509.16941` (recent_ai, 2025) — SWE-Bench Pro: Can AI Agents Solve Long-Horizon Software Engineering T
+- `2509.17765` (recent_ai, 2025) — Qwen3-Omni Technical Report
+- `2509.19480` (recent_ai, 2025) — OmniVLA: An Omni-Modal Vision-Language-Action Model for Robot Navigati
+- `2509.21766` (recent_ai, 2025) — UltraHorizon: Benchmarking Agent Capabilities in Ultra Long-Horizon Sc
+- `2510.01375` (recent_ai, 2025) — Fine-tuning with RAG for Improving LLM Learning of New Skills
+- `2510.04852` (recent_ai, 2025) — FreshBrew: A Benchmark for Evaluating AI Agents on Java Code Migration
+- `2510.07172` (recent_ai, 2025) — NewtonBench: Benchmarking Generalizable Scientific Law Discovery in LL
+- `2510.08002` (recent_ai, 2025) — Learning on the Job: An Experience-Driven Self-Evolving Agent for Long
+- `2510.08996` (recent_ai, 2025) — Saving SWE-Bench: A Benchmark Mutation Approach for Realistic Agent Ev
+- `2510.15682` (recent_ai, 2025) — SQuAI: Scientific Question-Answering with Multi-Agent Retrieval-Augmen
+- `2510.21571` (recent_ai, 2025) — Scalable Vision-Language-Action Model Pretraining for Robotic Manipula
+- `2510.21652` (recent_ai, 2025) — AstaBench: Rigorous Benchmarking of AI Agents with a Holistic Scientif
+- `2510.22075` (recent_ai, 2025) — Agentic Reinforcement Learning for Real-World Code Repair
+- `2510.24358` (recent_ai, 2025) — Automatically Benchmarking LLM Code Agents through Agent-Driven Annota
+- `2510.24699` (recent_ai, 2025) — AgentFold: Long-Horizon Web Agents with Proactive Context Management
+- `2510.26583` (recent_ai, 2025) — Emu3.5: Native Multimodal Models are World Learners
+- `2510.27598` (recent_ai, 2025) — InnovatorBench: Evaluating Agents' Ability to Innovate in Machine Lear
+- `2511.13646` (recent_ai, 2025) — Can Software Engineering Agents Self-Evolve on the Fly?
+- `2511.18298` (recent_ai, 2025) — Cross-Disciplinary Knowledge Retrieval and Synthesis: A Compound AI Ar
+- `2511.21631` (recent_ai, 2025) — Qwen3-VL Technical Report
+- `2511.22138` (recent_ai, 2025) — TinyLLM: Evaluation and Optimization of Small Language Models for Agen
+- `2511.23404` (recent_ai, 2025) — LFM2 Technical Report
+- `2512.01822` (recent_ai, 2025) — InnoGym: Benchmarking the Innovation Potential of AI Agents
+- `2512.02008` (recent_ai, 2025) — The Art of Scaling Test-Time Compute for Large Language Models
+- `2512.02425` (recent_ai, 2025) — WorldMM: Dynamic Multimodal Memory Agent for Long Video Reasoning
+- `2512.03262` (recent_ai, 2025) — Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Cod
+- `2512.07582` (recent_ai, 2025) — See Once, Then Act: Vision-Language-Action Model with Task Learning fr
+- `2512.13564` (recent_ai, 2025) — Memory in the Age of AI Agents
+- `2512.15840` (recent_ai, 2025) — Large Video Planner Enables Generalizable Robot Control
 
 ## Status Breakdown
 

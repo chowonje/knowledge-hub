@@ -9,8 +9,8 @@
     },
     "corpus_manifest": {
       "path": "eval/knowledgeos/fixtures/corpus_manifest.json",
-      "artifact_count": 100,
-      "unique_source_ids": 100
+      "artifact_count": 150,
+      "unique_source_ids": 150
     },
     "eval_critical_references": {
       "paths": [
@@ -45,8 +45,8 @@
       "recent_ai": 210,
       "local_corpus_candidate": 165
     },
-    "in_manifest": 100,
-    "not_in_manifest": 346,
+    "in_manifest": 150,
+    "not_in_manifest": 296,
     "source_verification_pending": 446
   },
   "candidates": [
@@ -86,7 +86,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2503.21460",
@@ -764,7 +766,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2404.16130",
@@ -1142,7 +1146,9 @@
         "primary_lane": "memory_inference",
         "field": "cs.LG",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "paper-understanding-training-difficulty",
@@ -1160,7 +1166,9 @@
         "primary_lane": "architecture",
         "field": "deep_learning_theory",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1708.07747",
@@ -1178,7 +1186,9 @@
         "primary_lane": "agent",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "gradient-boosting-machine-2001",
@@ -1196,7 +1206,9 @@
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "random-forests-2001",
@@ -1214,7 +1226,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "svm-1992",
@@ -1232,7 +1246,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "backpropagation-1986",
@@ -1250,7 +1266,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1505.04597",
@@ -1468,7 +1486,9 @@
         "primary_lane": "architecture",
         "field": "Medicine, Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.22953",
@@ -2019,14 +2039,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_03838",
+      "manifest_expected_filename": "TRACE A Metrologically-Grounded Engineering Framework for Trustworthy Agentic AI Systems in Operatio.pdf"
     },
     {
       "source_id": "2605.03862",
@@ -2037,14 +2059,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_03862",
+      "manifest_expected_filename": "Correct Is Not Enough Training Reasoning Planners with Executor-Grounded Rewards.pdf"
     },
     {
       "source_id": "2605.03871",
@@ -2055,14 +2079,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_03871",
+      "manifest_expected_filename": "EvoLM Self-Evolving Language Models through Co-Evolved Discriminative Rubrics.pdf"
     },
     {
       "source_id": "2605.03903",
@@ -2073,14 +2099,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_03903",
+      "manifest_expected_filename": "CC-OCR V2 Benchmarking Large Multimodal Models for Literacy in Real-world Document Processing.pdf"
     },
     {
       "source_id": "2605.03986",
@@ -2091,14 +2119,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_03986",
+      "manifest_expected_filename": "From Intent to Execution Composing Agentic Workflows with Agent Recommendation.pdf"
     },
     {
       "source_id": "2605.03989",
@@ -2109,14 +2139,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_03989",
+      "manifest_expected_filename": "An Agent-Oriented Pluggable Experience-RAG Skill for Experience-Driven Retrieval Strategy Orchestrat.pdf"
     },
     {
       "source_id": "2605.04036",
@@ -2127,14 +2159,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_04036",
+      "manifest_expected_filename": "OpenSeeker-v2 Pushing the Limits of Search Agents with Informative and High-Difficulty Trajectories.pdf"
     },
     {
       "source_id": "2605.10616",
@@ -2145,14 +2179,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2605_10616",
+      "manifest_expected_filename": "MulTaBench Benchmarking Multimodal Tabular Learning with Text and Image.pdf"
     },
     {
       "source_id": "attnres2026",
@@ -2163,14 +2199,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_attnres2026",
+      "manifest_expected_filename": "Attention Residuals.pdf"
     },
     {
       "source_id": "2501.01765",
@@ -2188,7 +2226,9 @@
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2501.05031",
@@ -2199,14 +2239,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2501_05031",
+      "manifest_expected_filename": "ECBench Can Multi-modal Foundation Models Understand Embodied Cognition.pdf"
     },
     {
       "source_id": "2501.05366",
@@ -2224,7 +2266,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2501.09004",
@@ -2242,7 +2286,9 @@
         "primary_lane": "safety_evaluation",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2501.09136",
@@ -2260,7 +2306,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2501.13956",
@@ -2271,14 +2319,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2501_13956",
+      "manifest_expected_filename": "Zep A Temporal Knowledge Graph Architecture for Agent Memory.pdf"
     },
     {
       "source_id": "2502.04463",
@@ -2289,14 +2339,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_04463",
+      "manifest_expected_filename": "Training Language Models to Reason Efficiently.pdf"
     },
     {
       "source_id": "2502.07191",
@@ -2307,14 +2359,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_07191",
+      "manifest_expected_filename": "Bag of Tricks for Inference-time Computation of LLM Reasoning.pdf"
     },
     {
       "source_id": "2502.12521",
@@ -2325,14 +2379,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_12521",
+      "manifest_expected_filename": "Inference-Time Computations for LLM Reasoning and Planning A Benchmark and Insights.pdf"
     },
     {
       "source_id": "2502.13130",
@@ -2343,14 +2399,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_13130",
+      "manifest_expected_filename": "Magma A Foundation Model for Multimodal AI Agents.pdf"
     },
     {
       "source_id": "2502.15224",
@@ -2361,14 +2419,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_15224",
+      "manifest_expected_filename": "Auto-Bench An Automated Benchmark for Scientific Discovery in LLMs.pdf"
     },
     {
       "source_id": "2502.15840",
@@ -2379,14 +2439,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_15840",
+      "manifest_expected_filename": "Vending-Bench A Benchmark for Long-Term Coherence of Autonomous Agents.pdf"
     },
     {
       "source_id": "2502.19918",
@@ -2397,14 +2459,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2502_19918",
+      "manifest_expected_filename": "Meta-Reasoner Dynamic Guidance for Optimized Inference-time Reasoning in Large Language Models.pdf"
     },
     {
       "source_id": "2502.20694",
@@ -2422,7 +2486,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2502.20766",
@@ -2440,7 +2506,9 @@
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2503.03734",
@@ -2451,14 +2519,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_03734",
+      "manifest_expected_filename": "OTTER A Vision-Language-Action Model with Text-Aware Visual Feature Extraction.pdf"
     },
     {
       "source_id": "2503.04412",
@@ -2469,14 +2539,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_04412",
+      "manifest_expected_filename": "Wider or Deeper Scaling LLM Inference-Time Compute with Adaptive Branching Tree Search.pdf"
     },
     {
       "source_id": "2503.07885",
@@ -2487,14 +2559,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_07885",
+      "manifest_expected_filename": "Safety Guardrails for LLM-Enabled Robots.pdf"
     },
     {
       "source_id": "2503.10965",
@@ -2505,14 +2579,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_10965",
+      "manifest_expected_filename": "Auditing language models for hidden objectives.pdf"
     },
     {
       "source_id": "2503.11926",
@@ -2523,14 +2599,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_11926",
+      "manifest_expected_filename": "Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation.pdf"
     },
     {
       "source_id": "2503.16248",
@@ -2541,14 +2619,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_16248",
+      "manifest_expected_filename": "Real AI Agents with Fake Memories Fatal Context Manipulation Attacks on Web3 Agents.pdf"
     },
     {
       "source_id": "2503.16416",
@@ -2559,14 +2639,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_16416",
+      "manifest_expected_filename": "Survey on Evaluation of LLM-based Agents.pdf"
     },
     {
       "source_id": "2503.19786",
@@ -2577,14 +2659,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_19786",
+      "manifest_expected_filename": "Gemma 3 Technical Report.pdf"
     },
     {
       "source_id": "2503.23077",
@@ -2595,14 +2679,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2503_23077",
+      "manifest_expected_filename": "Efficient Inference for Large Reasoning Models A Survey.pdf"
     },
     {
       "source_id": "2504.00983",
@@ -2613,14 +2699,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_00983",
+      "manifest_expected_filename": "WorldScore A Unified Evaluation Benchmark for World Generation.pdf"
     },
     {
       "source_id": "2504.10449",
@@ -2631,14 +2719,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_10449",
+      "manifest_expected_filename": "M1 Towards Scalable Test-Time Compute with Mamba Reasoning Models.pdf"
     },
     {
       "source_id": "2504.11168",
@@ -2649,14 +2739,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_11168",
+      "manifest_expected_filename": "Bypassing LLM Guardrails An Empirical Analysis of Evasion Attacks against Prompt Injection and Jailb.pdf"
     },
     {
       "source_id": "2504.14191",
@@ -2667,14 +2759,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_14191",
+      "manifest_expected_filename": "AI Idea Bench 2025 AI Research Idea Generation Benchmark.pdf"
     },
     {
       "source_id": "2504.14891",
@@ -2685,14 +2779,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_14891",
+      "manifest_expected_filename": "Retrieval Augmented Generation Evaluation in the Era of Large Language Models A Comprehensive Survey.pdf"
     },
     {
       "source_id": "2504.16736",
@@ -2703,14 +2799,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_16736",
+      "manifest_expected_filename": "localpdf_A_Survey_of_AI_Agent_Protocols_0a5048aa16.pdf"
     },
     {
       "source_id": "2504.18575",
@@ -2721,14 +2819,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2504_18575",
+      "manifest_expected_filename": "WASP Benchmarking Web Agent Security Against Prompt Injection Attacks.pdf"
     },
     {
       "source_id": "2505.03574",
@@ -2739,14 +2839,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_03574",
+      "manifest_expected_filename": "LlamaFirewall An open source guardrail system for building secure AI agents.pdf"
     },
     {
       "source_id": "2505.05849",
@@ -2757,14 +2859,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_05849",
+      "manifest_expected_filename": "AgentXploit End-to-End Redteaming of Black-Box AI Agents.pdf"
     },
     {
       "source_id": "2505.07062",
@@ -2775,14 +2879,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "multimodal",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_07062",
+      "manifest_expected_filename": "Seed1.5-VL Technical Report.pdf"
     },
     {
       "source_id": "2505.08341",
@@ -2793,14 +2899,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": "Computer Science, Biology",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_08341",
+      "manifest_expected_filename": "Benchmarking AI scientists for omics data driven biological discovery.pdf"
     },
     {
       "source_id": "2505.09388",
@@ -2811,14 +2919,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_09388",
+      "manifest_expected_filename": "Qwen3 Technical Report.pdf"
     },
     {
       "source_id": "2505.16100",
@@ -2829,14 +2939,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_16100",
+      "manifest_expected_filename": "BioDSA-1K Benchmarking Data Science Agents for Biomedical Hypothesis Validation.pdf"
     },
     {
       "source_id": "2505.19591",
@@ -2854,7 +2966,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2505.23450",
@@ -2865,14 +2979,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_23450",
+      "manifest_expected_filename": "Agentic Robot A Brain-Inspired Framework for Vision-Language-Action Models in Embodied Agents.pdf"
     },
     {
       "source_id": "2506.00054",
@@ -2890,7 +3006,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.01844",
@@ -2901,14 +3019,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "multimodal",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2506_01844",
+      "manifest_expected_filename": "SmolVLA A Vision-Language-Action Model for Affordable and Efficient Robotics.pdf"
     },
     {
       "source_id": "2506.02153",
@@ -2919,14 +3039,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2506_02153",
+      "manifest_expected_filename": "Small Language Models are the Future of Agentic AI.pdf"
     },
     {
       "source_id": "2506.05176",
@@ -2937,14 +3059,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2506_05176",
+      "manifest_expected_filename": "Qwen3 Embedding Advancing Text Embedding and Reranking Through Foundation Models.pdf"
     },
     {
       "source_id": "2506.06326",
@@ -2955,14 +3079,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2506_06326",
+      "manifest_expected_filename": "Memory OS of AI Agent.pdf"
     },
     {
       "source_id": "2506.06941",
@@ -2973,14 +3099,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 3,
         "primary_lane": "safety_evaluation",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2506_06941",
+      "manifest_expected_filename": "The Illusion of Thinking Understanding the Strengths and Limitations of Reasoning Models via the Len.pdf"
     },
     {
       "source_id": "2506.10408",
@@ -2998,7 +3126,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.12104",
@@ -3016,7 +3146,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.15635",
@@ -3034,7 +3166,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.15882",
@@ -3052,7 +3186,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.21448",
@@ -3070,7 +3206,9 @@
         "primary_lane": "multimodal",
         "field": "Engineering, Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.21605",
@@ -3088,7 +3226,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2506.21734",
@@ -3106,7 +3246,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.01949",
@@ -3124,7 +3266,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.02076",
@@ -3142,7 +3286,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.05257",
@@ -3160,7 +3306,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.06261",
@@ -3178,7 +3326,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.07957",
@@ -3196,7 +3346,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.08191",
@@ -3214,7 +3366,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.11473",
@@ -3232,7 +3386,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.13575",
@@ -3250,7 +3406,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2507.20526",
@@ -3268,7 +3426,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2508.02324",
@@ -3286,7 +3446,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2508.04039",
@@ -3304,7 +3466,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2508.15763",
@@ -3322,7 +3486,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.06917",
@@ -3340,7 +3506,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.14260",
@@ -3358,7 +3526,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.16861",
@@ -3376,7 +3546,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.16870",
@@ -3394,7 +3566,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.16941",
@@ -3412,7 +3586,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.17765",
@@ -3430,7 +3606,9 @@
         "primary_lane": "multimodal",
         "field": "Computer Science, Engineering",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.19480",
@@ -3448,7 +3626,9 @@
         "primary_lane": "multimodal",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2509.21766",
@@ -3466,7 +3646,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.01375",
@@ -3484,7 +3666,9 @@
         "primary_lane": "rag_retrieval",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.04852",
@@ -3502,7 +3686,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.07172",
@@ -3520,7 +3706,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.08002",
@@ -3538,7 +3726,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.08996",
@@ -3556,7 +3746,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.15682",
@@ -3574,7 +3766,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.21571",
@@ -3592,7 +3786,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.21652",
@@ -3610,7 +3806,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.22075",
@@ -3628,7 +3826,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.24358",
@@ -3646,7 +3846,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.24699",
@@ -3664,7 +3866,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.26583",
@@ -3682,7 +3886,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2510.27598",
@@ -3700,7 +3906,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2511.13646",
@@ -3718,7 +3926,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2511.18298",
@@ -3736,7 +3946,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2511.21631",
@@ -3754,7 +3966,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2511.22138",
@@ -3772,7 +3986,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2511.23404",
@@ -3790,7 +4006,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.01822",
@@ -3808,7 +4026,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.02008",
@@ -3826,7 +4046,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.02425",
@@ -3844,7 +4066,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.03262",
@@ -3862,7 +4086,9 @@
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.07582",
@@ -3880,7 +4106,9 @@
         "primary_lane": "multimodal",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.13564",
@@ -3898,7 +4126,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.15840",
@@ -3916,7 +4146,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.15943",
@@ -3934,7 +4166,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.18470",
@@ -3952,7 +4186,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.18552",
@@ -3970,7 +4206,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.21373",
@@ -3988,7 +4226,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.21919",
@@ -4006,7 +4246,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2512.22414",
@@ -4024,7 +4266,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "4417.2025",
@@ -4042,7 +4286,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": false
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2401.04088",
@@ -4060,7 +4306,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2401.15391",
@@ -4078,7 +4326,9 @@
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2401.15884",
@@ -4096,7 +4346,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2401.17043",
@@ -4114,7 +4366,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2402.01881",
@@ -4132,7 +4386,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2403.05530",
@@ -4150,7 +4406,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2403.09611",
@@ -4168,7 +4426,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2403.14403",
@@ -4186,7 +4446,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2404.14219",
@@ -4204,7 +4466,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2405.07437",
@@ -4222,7 +4486,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2406.09246",
@@ -4240,7 +4506,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2406.16828",
@@ -4258,7 +4526,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2407.02485",
@@ -4276,7 +4546,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2407.21783",
@@ -4294,7 +4566,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2408.00714",
@@ -4312,7 +4586,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2408.06361",
@@ -4330,7 +4606,9 @@
         "primary_lane": "agent",
         "field": "Economics, Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2410.02644",
@@ -4348,7 +4626,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2410.05080",
@@ -4366,7 +4646,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2410.10813",
@@ -4384,7 +4666,9 @@
         "primary_lane": "rag_retrieval",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2410.11414",
@@ -4402,11 +4686,13 @@
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2410.24164",
-      "title": "$π_0$: A Vision-Language-Action Flow Model for General Robot Control",
+      "title": "$\u03c0_0$: A Vision-Language-Action Flow Model for General Robot Control",
       "year": 2024,
       "provider": "arxiv",
       "provenance_url": "https://arxiv.org/abs/2410.24164",
@@ -4420,7 +4706,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2412.08905",
@@ -4438,7 +4726,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2412.15115",
@@ -4456,7 +4746,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2412.19437",
@@ -4474,7 +4766,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "3841.17480",
@@ -4492,7 +4786,9 @@
         "primary_lane": null,
         "field": "Medicine",
         "has_pdf_path_hint": false
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2505.05541",
@@ -4503,14 +4799,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 2,
         "primary_lane": "safety_evaluation",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_05541",
+      "manifest_expected_filename": "Safety by Measurement A Systematic Literature Review of AI Safety Evaluation Methods.pdf"
     },
     {
       "source_id": "2505.23621",
@@ -4521,14 +4819,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 2,
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_23621",
+      "manifest_expected_filename": "Table-R1 Inference-Time Scaling for Table Reasoning.pdf"
     },
     {
       "source_id": "2601.10744",
@@ -4586,7 +4886,9 @@
         "primary_lane": null,
         "field": "physics.plasm-ph, physics.acc-ph",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16662",
@@ -4604,7 +4906,9 @@
         "primary_lane": "agent",
         "field": "cs.MA",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16669",
@@ -4622,7 +4926,9 @@
         "primary_lane": "architecture",
         "field": "cs.CV",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16671",
@@ -4640,7 +4946,9 @@
         "primary_lane": "agent",
         "field": "cs.SE, cs.AI",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16678",
@@ -4658,7 +4966,9 @@
         "primary_lane": null,
         "field": "cs.MA, eess.SY",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16682",
@@ -4676,7 +4986,9 @@
         "primary_lane": "architecture",
         "field": "cs.CV",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16683",
@@ -4694,7 +5006,9 @@
         "primary_lane": "memory_inference",
         "field": "hep-ph",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16687",
@@ -4712,7 +5026,9 @@
         "primary_lane": "architecture",
         "field": "cs.SD, cs.CL, eess.AS",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16689",
@@ -4730,7 +5046,9 @@
         "primary_lane": "architecture",
         "field": "cs.CV, cs.LG",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16699",
@@ -4748,7 +5066,9 @@
         "primary_lane": "memory_inference",
         "field": "cs.CL, cs.AI",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16700",
@@ -4766,7 +5086,9 @@
         "primary_lane": null,
         "field": "cs.IT, cs.CR, cs.NI",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16701",
@@ -4784,7 +5106,9 @@
         "primary_lane": null,
         "field": "cond-mat.mtrl-sci",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16702",
@@ -4802,7 +5126,9 @@
         "primary_lane": "multimodal",
         "field": "cs.CV",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16703",
@@ -4820,7 +5146,9 @@
         "primary_lane": "memory_inference",
         "field": "cs.CY, cs.AI",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16704",
@@ -4838,7 +5166,9 @@
         "primary_lane": "agent",
         "field": "cs.CL",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16705",
@@ -4856,7 +5186,9 @@
         "primary_lane": "architecture",
         "field": "cs.RO, cs.CV",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16707",
@@ -4874,7 +5206,9 @@
         "primary_lane": "agent",
         "field": "cs.PL",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16708",
@@ -4892,7 +5226,9 @@
         "primary_lane": "agent",
         "field": "cs.CR, cs.AI, cs.MA",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16711",
@@ -4910,7 +5246,9 @@
         "primary_lane": "memory_inference",
         "field": "cs.CV",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.16712",
@@ -4928,7 +5266,9 @@
         "primary_lane": "architecture",
         "field": "cs.RO",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.18304",
@@ -4946,7 +5286,9 @@
         "primary_lane": "architecture",
         "field": "cs.CR",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.18346",
@@ -4964,7 +5306,9 @@
         "primary_lane": "architecture",
         "field": "cs.CL, cs.AI",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.18357",
@@ -4982,7 +5326,9 @@
         "primary_lane": "safety_evaluation",
         "field": "cs.SE",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.18397",
@@ -5000,7 +5346,9 @@
         "primary_lane": "memory_inference",
         "field": "cs.RO",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2602.18415",
@@ -5018,7 +5366,9 @@
         "primary_lane": "memory_inference",
         "field": "cs.HC",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2603.14473",
@@ -5202,7 +5552,7 @@
     },
     {
       "source_id": "2024.00346",
-      "title": "근거 기반 나트륨 저감 건강 식생활 프로그램의 리빙랩 모델 적용",
+      "title": "\uadfc\uac70 \uae30\ubc18 \ub098\ud2b8\ub968 \uc800\uac10 \uac74\uac15 \uc2dd\uc0dd\ud65c \ud504\ub85c\uadf8\ub7a8\uc758 \ub9ac\ube59\ub7a9 \ubaa8\ub378 \uc801\uc6a9",
       "year": 2025,
       "provider": "arxiv",
       "provenance_url": "https://arxiv.org/abs/2024.00346",
@@ -5216,11 +5566,13 @@
         "primary_lane": null,
         "field": "Medicine",
         "has_pdf_path_hint": false
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2025.16582",
-      "title": "Comprehensive safety evaluation of Withania somnifera (Ashwagandha): an AI-driven meta-analysis and quantitative structure–activity relationship based toxicity assessment",
+      "title": "Comprehensive safety evaluation of Withania somnifera (Ashwagandha): an AI-driven meta-analysis and quantitative structure\u2013activity relationship based toxicity assessment",
       "year": 2025,
       "provider": "arxiv",
       "provenance_url": "https://arxiv.org/abs/2025.16582",
@@ -5234,7 +5586,9 @@
         "primary_lane": "safety_evaluation",
         "field": "Medicine",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2025.16785",
@@ -5252,7 +5606,9 @@
         "primary_lane": "safety_evaluation",
         "field": "Medicine",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2505.20873",
@@ -5263,14 +5619,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 1,
         "primary_lane": "multimodal",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2505_20873",
+      "manifest_expected_filename": "Fork-Merge Decoding Enhancing Multimodal Understanding in Audio-Visual Large Language Models.pdf"
     },
     {
       "source_id": "2506.05813",
@@ -5281,14 +5639,16 @@
       "doi": null,
       "priority_reason": "recent AI paper (2024+) in local registry",
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "source_artifact_status": "join_pending",
       "local_registry_signals": {
         "importance": 1,
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "paper_2506_05813",
+      "manifest_expected_filename": "MAPLE Multi-Agent Adaptive Planning with Long-Term Memory for Table Reasoning.pdf"
     },
     {
       "source_id": "2509.24065",
@@ -5306,7 +5666,9 @@
         "primary_lane": "safety_evaluation",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2301.04104",
@@ -5324,7 +5686,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2302.04761",
@@ -5342,7 +5706,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2302.13971",
@@ -5360,7 +5726,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2303.03378",
@@ -5378,7 +5746,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2303.08774",
@@ -5396,7 +5766,9 @@
         "primary_lane": "multimodal",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2303.11366",
@@ -5414,7 +5786,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2303.17580",
@@ -5432,7 +5806,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2303.17651",
@@ -5450,7 +5826,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2304.02643",
@@ -5468,7 +5846,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2304.03442",
@@ -5486,7 +5866,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2304.08485",
@@ -5504,7 +5886,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2305.04091",
@@ -5522,7 +5906,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2305.06983",
@@ -5540,7 +5926,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2305.10601",
@@ -5558,7 +5946,9 @@
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2305.14314",
@@ -5576,7 +5966,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2305.16291",
@@ -5594,7 +5986,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2305.18290",
@@ -5612,7 +6006,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2307.00360",
@@ -5630,7 +6026,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2307.09288",
@@ -5648,7 +6046,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2307.15818",
@@ -5666,7 +6066,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2308.08155",
@@ -5684,7 +6086,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2309.01431",
@@ -5702,7 +6106,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2309.15217",
@@ -5720,7 +6126,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2310.06825",
@@ -5738,7 +6146,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2310.08864",
@@ -5756,7 +6166,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2312.10997",
@@ -5774,7 +6186,9 @@
         "primary_lane": "rag_retrieval",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2312.11805",
@@ -5792,7 +6206,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2112.10752",
@@ -5810,7 +6226,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2203.02155",
@@ -5828,7 +6246,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2203.11171",
@@ -5846,7 +6266,9 @@
         "primary_lane": "rag_retrieval",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2203.15556",
@@ -5864,7 +6286,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2204.01691",
@@ -5882,7 +6306,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2204.02311",
@@ -5900,7 +6326,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2204.14198",
@@ -5918,7 +6346,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2205.10625",
@@ -5936,7 +6366,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2205.11487",
@@ -5954,7 +6386,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2205.14135",
@@ -5972,7 +6406,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2208.03299",
@@ -5990,7 +6426,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2208.07339",
@@ -6008,7 +6446,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2209.14988",
@@ -6026,7 +6466,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2210.03629",
@@ -6044,7 +6486,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2210.08726",
@@ -6062,7 +6506,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2211.12588",
@@ -6080,7 +6526,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.04356",
@@ -6098,7 +6546,9 @@
         "primary_lane": "rag_retrieval",
         "field": "Engineering, Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.06817",
@@ -6116,7 +6566,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.08073",
@@ -6134,7 +6586,9 @@
         "primary_lane": "safety_evaluation",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.09748",
@@ -6152,7 +6606,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.10496",
@@ -6170,7 +6626,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.10509",
@@ -6188,7 +6646,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2212.10560",
@@ -6206,7 +6666,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2101.03961",
@@ -6224,7 +6686,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2103.00020",
@@ -6242,7 +6706,9 @@
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2103.14030",
@@ -6260,7 +6726,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2104.14294",
@@ -6278,7 +6746,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2106.01345",
@@ -6296,7 +6766,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2106.09685",
@@ -6314,7 +6786,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2108.07258",
@@ -6332,7 +6806,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2109.01652",
@@ -6350,7 +6826,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2111.06377",
@@ -6368,7 +6846,9 @@
         "primary_lane": "memory_inference",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2112.04426",
@@ -6386,7 +6866,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2112.09118",
@@ -6404,7 +6886,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "RewardIsEnough",
@@ -6422,7 +6906,9 @@
         "primary_lane": "agent",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1911.08265",
@@ -6440,7 +6926,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2001.08361",
@@ -6458,7 +6946,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2002.05709",
@@ -6476,7 +6966,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2002.08909",
@@ -6494,7 +6986,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2003.08934",
@@ -6512,7 +7006,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2003.10555",
@@ -6530,7 +7026,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2004.04906",
@@ -6548,7 +7046,9 @@
         "primary_lane": "rag_retrieval",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2004.12832",
@@ -6566,7 +7066,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2006.07733",
@@ -6584,7 +7086,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2010.02502",
@@ -6602,7 +7106,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "2012.12877",
@@ -6620,7 +7126,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1907.05600",
@@ -6638,7 +7146,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1907.11692",
@@ -6656,7 +7166,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1909.08053",
@@ -6674,7 +7186,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1910.02054",
@@ -6692,7 +7206,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1910.10683",
@@ -6710,7 +7226,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1911.05722",
@@ -6728,7 +7246,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1802.05365",
@@ -6746,7 +7266,9 @@
         "primary_lane": null,
         "field": "Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1803.10122",
@@ -6764,7 +7286,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1701.06538",
@@ -6782,7 +7306,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1602.01783",
@@ -6800,7 +7326,9 @@
         "primary_lane": "architecture",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1603.02754",
@@ -6818,7 +7346,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1608.06993",
@@ -6836,7 +7366,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1611.01578",
@@ -6854,7 +7386,9 @@
         "primary_lane": null,
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1409.0473",
@@ -6872,7 +7406,9 @@
         "primary_lane": "memory_inference",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1409.4842",
@@ -6890,7 +7426,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1410.3916",
@@ -6908,7 +7446,9 @@
         "primary_lane": "multimodal",
         "field": "Computer Science, Mathematics",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "1412.6980",
@@ -6926,7 +7466,9 @@
         "primary_lane": "memory_inference",
         "field": "Mathematics, Computer Science",
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "AI_Safety__Alignment__and_Ethi_6660d98d",
@@ -6944,7 +7486,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "ARE_Scaling_Up_Agent_Environme_670684c1",
@@ -6962,7 +7506,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "A_Compound_AI_Architecture_for_1847aa95",
@@ -6980,7 +7526,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "A_Neural_Image_Caption_Generat_a5185c3a",
@@ -6998,7 +7546,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "A_Survey_of_LLM_Driven_AI_Agen_c019fb13",
@@ -7016,7 +7566,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "A_Survey_on_Vision_Language_Ac_21312683",
@@ -7034,7 +7586,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Auto_Encoding_Variational_Baye_b618f42d",
@@ -7052,7 +7606,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "BLO_Inst_YOLO_and_SAM_Alignmen_d748305d",
@@ -7070,7 +7626,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Batch_Normalization_c72acd36",
@@ -7088,7 +7646,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Chain_Of_Thought_Compression_fc8482f3",
@@ -7106,7 +7666,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Continuous_control_with_deep_r_520424f2",
@@ -7124,7 +7686,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Controlling_AI_Agent_Participa_0a663b0a",
@@ -7142,7 +7706,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Conversion_of_Neural_Networks__20f30836",
@@ -7160,7 +7726,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Convex_Optimization_for_Machin_67919d59",
@@ -7178,7 +7746,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "DINOv3_b015eba7",
@@ -7196,7 +7766,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Deep_Residual_Learning_efbb7871",
@@ -7214,7 +7786,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Deep_Think_with_Confidence_785d83b4",
@@ -7232,7 +7806,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Delving_Deep_into_Rectifiers_S_dc706a84",
@@ -7250,7 +7826,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Discovering_Hidden_Gems_in_Mod_c7f0ea09",
@@ -7268,7 +7846,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Distributed_Deep_Q_Learning_ea7a4715",
@@ -7286,7 +7866,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Do_As_I_Can__Not_As_I_Say_Grou_f9e23df7",
@@ -7304,7 +7886,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Do_VLMs_Perceive_or_Recall_d6f25d74",
@@ -7322,7 +7906,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Early_Detection_of_Pancreatic__80a53ca4",
@@ -7340,7 +7926,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "EditYourself_Talking_Head_Vide_dc1cd0d8",
@@ -7358,7 +7946,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Exploring_Reasoning_Reward_Mod_8d482d9e",
@@ -7376,7 +7966,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "From_Meta_Thought_to_Execution_623b7e35",
@@ -7394,7 +7986,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "GAIA_a_benchmark_for_General_A_8d905fc3",
@@ -7412,7 +8006,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Gemini_Embedding_Generalizable_b5cf39ed",
@@ -7430,7 +8026,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "GeoNorm_Unify_Pre_Norm_and_Pos_9dbf504a",
@@ -7448,7 +8046,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Image_to_Image_Translation_wit_f7c97006",
@@ -7466,7 +8066,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Improved_protein_structure_pre_eb1b4b76",
@@ -7484,7 +8086,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Improving_Language_Understandi_152e4970",
@@ -7502,7 +8106,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Intriguing_properties_of_neura_cda45e3f",
@@ -7520,7 +8126,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "JADE_Dynamic_Agentic_RAG_fe2a6a84",
@@ -7538,7 +8146,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "LLM_Powered_AI_Agent_Systems_a_c20e9ebd",
@@ -7556,7 +8166,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "LLM_Shepherding_for_Cost_Effic_9f261034",
@@ -7574,7 +8186,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Language_Models_are_Unsupervis_4ac3c998",
@@ -7592,7 +8206,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Latent_Adversarial_Regularizat_1352056f",
@@ -7610,7 +8226,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Mastering_the_Game_of_Go_5619b394",
@@ -7628,7 +8246,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Monitoring_Reasoning_Models_fo_abbea400",
@@ -7646,7 +8266,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "NeRF_1b9d0d11",
@@ -7664,7 +8286,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "One_step_Latent_free_Image_Gen_174b2c73",
@@ -7682,7 +8306,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "PARTNR_A_Benchmark_for_Plannin_519ee7e1",
@@ -7700,7 +8326,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "PC_Agent_A_Hierarchical_Multi__c84398dc",
@@ -7718,7 +8346,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "PI_Light_Physics_Inspired_Diff_dba54f86",
@@ -7736,7 +8366,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "PRISM_Distribution_free_Adapti_734e22b0",
@@ -7754,7 +8386,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Partitioning_Large_Scale_Deep__6aeccc2d",
@@ -7772,7 +8406,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "PerceptionLM_Open_Access_Data__fda8e5dc",
@@ -7790,7 +8426,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "ProRAG_Process_Supervised_RL_f_d54214a3",
@@ -7808,7 +8446,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "QUASAR_A_Universal_Autonomous__aacfe819",
@@ -7826,7 +8466,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "ReasonIR_Training_Retrievers_f_2c1f0a7c",
@@ -7844,7 +8486,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "RefAny3D_3D_Asset_Referenced_D_15984bd6",
@@ -7862,7 +8506,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Retrieval_Infused_Reasoning_Sa_558dc733",
@@ -7880,7 +8526,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Rich_feature_hierarchies_for_a_4690ef10",
@@ -7898,7 +8546,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "SAM_Audio_Segment_Anything_in__a58477dd",
@@ -7916,7 +8566,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Self_Compression_of_Chain_of_T_09e16c6d",
@@ -7934,7 +8586,9 @@
         "primary_lane": "memory_inference",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Sequence_to_Sequence_Learning_0e5054e7",
@@ -7952,7 +8606,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "StepShield_When_to_Intervene_o_4c6542f0",
@@ -7970,7 +8626,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Surgical_AI_Copilot_Energy_Bas_4125dfd8",
@@ -7988,7 +8646,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "The_AI_Agent_Index_3ff0fe8c",
@@ -8006,7 +8666,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "ToolWeaver_Scalable_Tool_Use_i_5912c21b",
@@ -8024,7 +8686,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Towards_a_Science_of_AI_Agent__882682ff",
@@ -8042,7 +8706,9 @@
         "primary_lane": "safety_evaluation",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "UEval_A_Benchmark_for_Unified__bb7e1c9c",
@@ -8060,7 +8726,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "V_JEPA_2_Self_Supervised_Video_a9f76a1c",
@@ -8078,7 +8746,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Video_models_are_zero_shot_lea_fcc95777",
@@ -8096,7 +8766,9 @@
         "primary_lane": "multimodal",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Vision_DeepResearch_e9c97333",
@@ -8114,7 +8786,9 @@
         "primary_lane": "rag_retrieval",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "Visualizing_and_Understanding__21f6dbe2",
@@ -8132,7 +8806,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "WebArbiter_Reasoning_Process_R_d4ffbb61",
@@ -8150,7 +8826,9 @@
         "primary_lane": "agent",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "http___yann_lecun_com_exdb_pub_e15f8b7d",
@@ -8168,7 +8846,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "https___aclanthology_org_2024__1e73f455",
@@ -8186,7 +8866,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "https___nlp_stanford_edu_pubs__811f5066",
@@ -8204,7 +8886,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "https___www_bioinf_jku_at_publ_6c13d20f",
@@ -8222,7 +8906,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "nature14236_51843b70",
@@ -8240,7 +8926,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "nature16961_0c20613b",
@@ -8258,7 +8946,9 @@
         "primary_lane": null,
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     },
     {
       "source_id": "s41586_021_03819_2_0cc4af67",
@@ -8276,7 +8966,9 @@
         "primary_lane": "architecture",
         "field": null,
         "has_pdf_path_hint": true
-      }
+      },
+      "manifest_artifact_id": "",
+      "manifest_expected_filename": ""
     }
   ]
 }

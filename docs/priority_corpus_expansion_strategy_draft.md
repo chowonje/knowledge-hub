@@ -4,7 +4,7 @@ Date: 2026-05-21
 
 ## Objective
 
-Expand the priority AI paper corpus from the current **100** verified `corpus_manifest.json`
+Expand the priority AI paper corpus from the current **150** verified `corpus_manifest.json`
 entries toward a **300–500** paper target. The candidate ledger remains metadata-first;
 source availability is confirmed only by the join report and manifest validator.
 
@@ -13,7 +13,7 @@ source availability is confirmed only by the join report and manifest validator.
 | Source pool | Location | Count | Role in this tranche |
 | --- | --- | ---: | --- |
 | Local papers registry | `local_operator_registry::papers` | 446 | Primary candidate seed list |
-| Public corpus manifest | `eval/knowledgeos/fixtures/corpus_manifest.json` | 100 artifacts | Eval-critical/local-corpus baseline; hash-declared and validator-checked |
+| Public corpus manifest | `eval/knowledgeos/fixtures/corpus_manifest.json` | 150 artifacts | Eval-critical/local-corpus baseline; hash-declared and validator-checked |
 | Eval-critical references | `eval/knowledgeos/queries/*.csv`, paper eval fixtures, complex QA seed ids | 55 unique source ids | Tier elevation to `eval_critical` |
 | Local PDF inventory hint | `local_operator_papers_dir/*.pdf` | 338 files | Inventory signal only; **not** availability proof |
 | Paper memory eval fixture | `tests/fixtures/paper_memory_eval/cases.json` | 3 cases | Eval-critical reference |
@@ -37,8 +37,8 @@ Ledger row count: **446** (within the 300–500 target band).
 
 ### Manifest overlap
 
-- Already in manifest: **100**
-- Not yet in manifest: **346**
+- Already in manifest: **150**
+- Not yet in manifest: **296**
 - Source verification pending (`unknown` or `join_pending`): **446** (all rows)
 
 ## Expansion Path (Tranche Sequence)
@@ -58,8 +58,8 @@ Latest output:
 
 - Join report: `eval/knowledgeos/reports/priority_corpus_source_join_report.v1.json`
 - Expansion allowlist: `eval/knowledgeos/fixtures/priority_corpus_manifest_expansion_allowlist.v1.json`
-- Already in manifest: **100**
-- Verified expansion allowlist remaining: **251**
+- Already in manifest: **150**
+- Verified expansion allowlist remaining: **201**
 - Excluded: **86** `source_missing`, **9** `ambiguous`
 
 For each regeneration:
@@ -82,6 +82,11 @@ Only rows that pass join with `available` may be considered for manifest registr
 `priority_corpus_manifest_expansion_allowlist.v1.json` first tranche, with local
 hash re-verification. Excluded: 86 `source_missing`, 9 `ambiguous`. Remaining
 verified allowlist: 251 rows.
+
+**Applied 2026-05-21:** second batch registered 50 rows (manifest 100 → 150) from
+`corpus_manifest_100_to_150_dry_run_plan.v1.json`, with local source-byte,
+SHA-256, and byte-length re-verification. Post-apply join regeneration records
+`already_in_manifest=150` and 201 verified allowlist rows remaining.
 
 For each subsequent batch:
 

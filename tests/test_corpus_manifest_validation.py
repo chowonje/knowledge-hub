@@ -86,6 +86,38 @@ def test_corpus_manifest_validation_reports_source_and_parsed_available_without_
     assert "_resolvedPath" not in json.dumps(payload)
 
 
+def test_corpus_manifest_validation_finds_localpdf_subdir_artifact(tmp_path: Path) -> None:
+    papers_dir = tmp_path / "papers"
+    localpdf_dir = papers_dir / "localpdf_pdfs"
+    localpdf_dir.mkdir(parents=True)
+    content = b"%PDF-1.4 localpdf"
+    (localpdf_dir / "localpdf-paper.pdf").write_bytes(content)
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            _artifact(
+                artifact_id="paper_localpdf",
+                source_id="localpdf-paper",
+                filename="localpdf-paper.pdf",
+                content=content,
+            )
+        ],
+    )
+
+    payload = validate_corpus_manifest(
+        config=_ConfigWithPapersDir(papers_dir),
+        manifest_path=manifest_path,
+        check_parsed=False,
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["counts"]["sourceAvailableRows"] == 1
+    item = payload["items"][0]
+    assert item["sourceArtifactStatus"] == "available"
+    assert item["artifact"]["path"] == "papers_dir/localpdf_pdfs/localpdf-paper.pdf"
+    assert str(papers_dir) not in json.dumps(payload)
+
+
 def test_corpus_manifest_validation_blocks_hash_mismatch_without_green_source(tmp_path: Path) -> None:
     papers_dir = tmp_path / "papers"
     papers_dir.mkdir()

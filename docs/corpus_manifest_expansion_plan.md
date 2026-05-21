@@ -65,6 +65,27 @@ Explicitly excluded from this tranche:
 
 Remaining verified allowlist rows after this tranche: 251.
 
+## Third Tranche (100 -> 150, verified allowlist)
+
+Date applied: 2026-05-21
+
+Input artifact:
+
+- `eval/knowledgeos/reports/corpus_manifest_100_to_150_dry_run_plan.v1.json`
+
+Added exactly 50 rows from the dry-run plan after every selected row was
+rechecked against configured local source bytes. The applied rows had no
+already-in-manifest collisions, source-missing rows, ambiguous rows, hash-missing
+rows, or hash mismatches.
+
+Post-apply join/allowlist regeneration records:
+
+- already in manifest: 150
+- verified expansion allowlist remaining: 201
+- excluded: 86 `source_missing`, 9 `ambiguous`
+- hash missing: 0
+- hash mismatch: 0
+
 Next tranche should repeat the same gate: allowlist slice only, local hash
 re-verification, `corpus-manifest-validate`, and `corpus-bootstrap --all --dry-run`.
 

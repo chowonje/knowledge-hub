@@ -104,6 +104,38 @@ def test_corpus_bootstrap_dry_run_plans_missing_artifact_without_network(tmp_pat
     assert not (papers_dir / "alexnet.pdf").exists()
 
 
+def test_corpus_bootstrap_treats_localpdf_subdir_artifact_as_present(tmp_path: Path, monkeypatch):
+    content = b"%PDF-1.4 localpdf"
+    artifact = _artifact(content=content)
+    artifact["expectedFilename"] = "localpdf-paper.pdf"
+    artifact["artifactId"] = "paper_localpdf"
+    artifact["sourceIds"] = ["localpdf-paper"]
+    manifest_path = _write_manifest(tmp_path / "manifest.json", [artifact])
+    papers_dir = tmp_path / "papers"
+    localpdf_dir = papers_dir / "localpdf_pdfs"
+    localpdf_dir.mkdir(parents=True)
+    (localpdf_dir / "localpdf-paper.pdf").write_bytes(content)
+
+    monkeypatch.setattr(
+        corpus_bootstrap.requests,
+        "get",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("network should not be called")),
+    )
+
+    payload = corpus_bootstrap.bootstrap_corpus_artifacts(
+        config=_ConfigWithPapersDir(papers_dir),
+        manifest_path=manifest_path,
+        artifact_ids=["paper_localpdf"],
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["counts"]["alreadyPresent"] == 1
+    assert payload["counts"]["plannedDownload"] == 0
+    item = payload["items"][0]
+    assert item["status"] == "already_present"
+    assert item["targetPath"] == "papers_dir/localpdf_pdfs/localpdf-paper.pdf"
+
+
 def test_corpus_bootstrap_apply_requires_explicit_network(tmp_path: Path, monkeypatch):
     content = b"%PDF-1.4 corpus"
     manifest_path = _write_manifest(tmp_path / "manifest.json", [_artifact(content=content)])
@@ -296,7 +328,11 @@ def test_local_corpus_tier_does_not_resolve_from_repo_fixture_path(tmp_path: Pat
     result = inspect_corpus_artifact(entry, config=_ConfigWithPapersDir(papers_dir))
 
     assert result["status"] == "missing_artifact"
-    assert result["searchedPaths"] == ["papers_dir/fixture.txt"]
+    assert result["searchedPaths"] == [
+        "papers_dir/fixture.txt",
+        "papers_dir/localpdf_pdfs/fixture.txt",
+        "papers_dir/localpdf_texts/fixture.txt",
+    ]
 
 
 def test_local_corpus_first_candidate_hash_mismatch_does_not_fall_through(tmp_path: Path):

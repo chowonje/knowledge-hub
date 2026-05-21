@@ -16,8 +16,8 @@ corpus availability declarations.
 - `foundational`: **16**
 - `recent_ai`: **210**
 - `local_corpus_candidate`: **165**
-- In manifest already: **100**
-- Not in manifest yet: **346**
+- In manifest already: **150**
+- Not in manifest yet: **296**
 - Source verification still pending (unknown or join_pending): **446**
 
 ## Source Pools Surveyed
@@ -25,7 +25,7 @@ corpus availability declarations.
 | Pool | Location | Rows |
 | --- | --- | ---: |
 | Local papers registry | `local_operator_registry::papers` | 446 |
-| Public corpus manifest | `eval/knowledgeos/fixtures/corpus_manifest.json` | 100 artifacts / 100 source ids |
+| Public corpus manifest | `eval/knowledgeos/fixtures/corpus_manifest.json` | 150 artifacts / 150 source ids |
 | Eval-critical references | queries + fixtures + complex QA seed ids | 28 unique source ids |
 | Local PDF inventory hint | `local_operator_papers_dir/*.pdf` | 338 files (not availability proof) |
 
