@@ -303,7 +303,13 @@ def test_repair_paper_sources_reports_missing_manifest_artifact_without_write(tm
     assert item["rebuildApplied"] is False
     assert item["artifact"]["artifactId"] == "alexnet_krizhevsky_2012"
     assert item["artifact"]["expectedSourceContentHash"] == "sha256:" + "0" * 64
-    assert item["artifact"]["searchedPaths"] == [f"papers_dir/{missing_pdf.name}"]
+    assert item["artifact"]["searchedPaths"] == [
+        f"papers_dir/{missing_pdf.name}",
+        f"papers_dir/localpdf_pdfs/{missing_pdf.name}",
+        f"papers_dir/localpdf_texts/{missing_pdf.name}",
+        f"papers_dir/recovered_sources/arxiv/{missing_pdf.name}",
+        f"papers_dir/recovered_sources/url/{missing_pdf.name}",
+    ]
     assert str(papers_dir) not in json.dumps(item["artifact"])
     assert sqlite_db.get_paper("alexnet-2012")["pdf_path"] == ""
     assert sqlite_db.upserts == []

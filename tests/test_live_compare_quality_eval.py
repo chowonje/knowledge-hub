@@ -898,7 +898,13 @@ def test_live_compare_quality_eval_skips_case_for_missing_corpus_requirement(tmp
     assert case["skipReason"] == "skipped_missing_corpus"
     assert case["errors"] == []
     assert case["corpusRequirements"][0]["status"] == "missing_artifact"
-    assert case["corpusRequirements"][0]["searchedPaths"] == ["papers_dir/missing.pdf"]
+    assert case["corpusRequirements"][0]["searchedPaths"] == [
+        "papers_dir/missing.pdf",
+        "papers_dir/localpdf_pdfs/missing.pdf",
+        "papers_dir/localpdf_texts/missing.pdf",
+        "papers_dir/recovered_sources/arxiv/missing.pdf",
+        "papers_dir/recovered_sources/url/missing.pdf",
+    ]
     assert payload["evaluatedCaseCount"] == 0
     assert payload["skippedForMissingCorpus"] == 1
 

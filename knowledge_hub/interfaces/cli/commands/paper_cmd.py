@@ -101,6 +101,11 @@ from knowledge_hub.papers.canon_quality_audit import (
     write_canon_audit_outputs as _write_canon_audit_outputs,
 )
 from knowledge_hub.papers.corpus_bootstrap import bootstrap_corpus_artifacts
+from knowledge_hub.papers.corpus_manifest_validation import validate_corpus_manifest
+from knowledge_hub.papers.corpus_source_artifact_inventory import (
+    build_corpus_source_artifact_inventory,
+    render_corpus_source_artifact_inventory_markdown,
+)
 from knowledge_hub.papers.extraction_diagnostics import (
     EXTRACTION_REPORT_SCHEMA_ID,
     build_extraction_report,
@@ -1433,6 +1438,126 @@ def paper_corpus_bootstrap(
         )
     if payload.get("status") != "ok":
         raise click.ClickException("paper corpus bootstrap blocked")
+
+
+@paper_group.command("corpus-manifest-validate", hidden=True)
+@click.option(
+    "--manifest",
+    "manifest_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="corpus manifest 경로",
+)
+@click.option(
+    "--papers-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="config의 papers_dir 대신 사용할 local corpus root",
+)
+@click.option(
+    "--check-artifacts/--no-check-artifacts",
+    default=True,
+    show_default=True,
+    help="source artifact 존재/hash 검사",
+)
+@click.option(
+    "--check-parsed/--no-check-parsed",
+    default=True,
+    show_default=True,
+    help="parsed artifact manifest 존재를 별도 집계",
+)
+@click.option("--json/--no-json", "as_json", default=False, show_default=True, help="결과를 JSON으로 출력")
+@click.pass_context
+def paper_corpus_manifest_validate(
+    ctx,
+    manifest_path,
+    papers_dir,
+    check_artifacts,
+    check_parsed,
+    as_json,
+):
+    """manifest-backed source/artifact/hash linkage를 report-only로 검증."""
+    khub = ctx.obj["khub"]
+    payload = validate_corpus_manifest(
+        config=khub.config,
+        manifest_path=manifest_path,
+        papers_dir=papers_dir,
+        check_artifacts=bool(check_artifacts),
+        check_parsed=bool(check_parsed),
+    )
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        if payload.get("status") != "ok":
+            ctx.exit(1)
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper corpus manifest validation[/bold] status={payload.get('status')} "
+        f"rows={counts.get('manifestRows', 0)} source_available={counts.get('sourceAvailableRows', 0)} "
+        f"source_missing={counts.get('sourceMissingRows', 0)} hash_mismatch={counts.get('hashMismatchRows', 0)} "
+        f"parsed_missing={counts.get('parsedMissingRows', 0)}"
+    )
+    for item in [row for row in list(payload.get("items") or []) if row.get("blockers")][:10]:
+        console.print(
+            f"- {item.get('artifactId')} source={item.get('sourceArtifactStatus')} "
+            f"parsed={item.get('parsedArtifactStatus')} blockers={','.join(item.get('blockers') or [])}"
+        )
+    if payload.get("status") != "ok":
+        raise click.ClickException("paper corpus manifest validation blocked")
+
+
+@paper_group.command("corpus-source-artifact-inventory", hidden=True)
+@click.option(
+    "--manifest",
+    "manifest_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="corpus manifest 경로",
+)
+@click.option(
+    "--papers-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="config의 papers_dir 대신 사용할 local corpus root",
+)
+@click.option("--json/--no-json", "as_json", default=False, show_default=True, help="결과를 JSON으로 출력")
+@click.option(
+    "--markdown/--no-markdown",
+    default=False,
+    show_default=True,
+    help="JSON과 함께 Markdown inventory 요약을 출력",
+)
+@click.pass_context
+def paper_corpus_source_artifact_inventory(
+    ctx,
+    manifest_path,
+    papers_dir,
+    as_json,
+    markdown,
+):
+    """configured local papers_dir의 PDF/text source inventory를 report-only로 생성."""
+    khub = ctx.obj["khub"]
+    payload = build_corpus_source_artifact_inventory(
+        config=khub.config,
+        manifest_path=manifest_path,
+        papers_dir=papers_dir,
+    )
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        counts = dict(payload.get("counts") or {})
+        console.print(
+            f"[bold]paper corpus source artifact inventory[/bold] status={payload.get('status')} "
+            f"rows={counts.get('inventoryRows', 0)} registered={counts.get('alreadyRegisteredRows', 0)} "
+            f"unregistered_available={counts.get('unregisteredAvailableRows', 0)} "
+            f"manifest_source_missing={counts.get('manifestSourceMissingRows', 0)} "
+            f"manifest_hash_mismatch={counts.get('manifestHashMismatchRows', 0)}"
+        )
+    if markdown:
+        click.echo(render_corpus_source_artifact_inventory_markdown(payload))
+    if payload.get("status") != "ok":
+        ctx.exit(1)
 
 
 @paper_group.command("repair-source", hidden=True)

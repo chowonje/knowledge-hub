@@ -1,0 +1,62 @@
+# Corpus Manifest Expansion Tranche Plan
+
+- status: `applied`
+- tranche: `corpus_manifest_150_to_200`
+- before: **150**
+- after if applied: **200**
+- selected rows: **50**
+- ready rows: **50**
+- blocked rows: **0**
+
+## Selected Rows
+
+- `2602.16698` status=`ready` tier=`eval_critical` ref=`papers_dir/recovered_sources/arxiv/2602.16698.pdf`
+- `2501.06322` status=`ready` tier=`eval_critical` ref=`papers_dir/recovered_sources/arxiv/2501.06322.pdf`
+- `2503.10970` status=`ready` tier=`eval_critical` ref=`papers_dir/recovered_sources/arxiv/2503.10970.pdf`
+- `1708.07747` status=`ready` tier=`foundational` ref=`papers_dir/recovered_sources/arxiv/1708.07747.pdf`
+- `2602.16624` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16624.pdf`
+- `2602.16662` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16662.pdf`
+- `2602.16669` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16669.pdf`
+- `2602.16671` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16671.pdf`
+- `2602.16678` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16678.pdf`
+- `2602.16682` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16682.pdf`
+- `2602.16683` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16683.pdf`
+- `2602.16687` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16687.pdf`
+- `2602.16689` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16689.pdf`
+- `2602.16699` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16699.pdf`
+- `2602.16700` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16700.pdf`
+- `2602.16701` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16701.pdf`
+- `2602.16702` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16702.pdf`
+- `2602.16703` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16703.pdf`
+- `2602.16704` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16704.pdf`
+- `2602.16705` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16705.pdf`
+- `2602.16707` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16707.pdf`
+- `2602.16708` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16708.pdf`
+- `2602.16711` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16711.pdf`
+- `2602.16712` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.16712.pdf`
+- `2602.18304` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.18304.pdf`
+- `2602.18346` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.18346.pdf`
+- `2602.18357` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.18357.pdf`
+- `2602.18397` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.18397.pdf`
+- `2602.18415` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2602.18415.pdf`
+- `2501.01765` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2501.01765.pdf`
+- `2501.05366` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2501.05366.pdf`
+- `2501.09004` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2501.09004.pdf`
+- `2501.09136` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2501.09136.pdf`
+- `2502.20766` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2502.20766.pdf`
+- `2505.19591` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2505.19591.pdf`
+- `2506.00054` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2506.00054.pdf`
+- `2506.10408` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2506.10408.pdf`
+- `2506.12104` status=`ready` tier=`recent_ai` ref=`papers_dir/DRIFT Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents.pdf`
+- `2506.15635` status=`ready` tier=`recent_ai` ref=`papers_dir/A Benchmark to Evaluate Memory in Embodied Agents.pdf`
+- `2506.15882` status=`ready` tier=`recent_ai` ref=`papers_dir/Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling.pdf`
+- `2506.21448` status=`ready` tier=`recent_ai` ref=`papers_dir/ThinkSound Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and E.pdf`
+- `2506.21605` status=`ready` tier=`recent_ai` ref=`papers_dir/MemBench Towards More Comprehensive Evaluation on the Memory of LLM-based Agents.pdf`
+- `2506.21734` status=`ready` tier=`recent_ai` ref=`papers_dir/Hierarchical Reasoning Model.pdf`
+- `2507.01949` status=`ready` tier=`recent_ai` ref=`papers_dir/Kwai Keye-VL Technical Report.pdf`
+- `2507.02076` status=`ready` tier=`recent_ai` ref=`papers_dir/Reasoning on a Budget A Survey of Adaptive and Controllable Test-Time Compute in LLMs.pdf`
+- `2507.05257` status=`ready` tier=`recent_ai` ref=`papers_dir/Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.pdf`
+- `2507.06261` status=`ready` tier=`recent_ai` ref=`papers_dir/Gemini 2.5 Pushing the Frontier with Advanced Reasoning and Multimodality.pdf`
+- `2507.07957` status=`ready` tier=`recent_ai` ref=`papers_dir/MIRIX Multi-Agent Memory System for LLM-Based Agents.pdf`
+- `2507.08191` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2507.08191.pdf`
+- `2507.11473` status=`ready` tier=`recent_ai` ref=`papers_dir/A New and Fragile Opportunity for AI Safety.pdf`

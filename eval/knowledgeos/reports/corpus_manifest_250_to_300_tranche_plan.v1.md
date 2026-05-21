@@ -1,0 +1,62 @@
+# Corpus Manifest Expansion Tranche Plan
+
+- status: `applied`
+- tranche: `corpus_manifest_250_to_300`
+- before: **250**
+- after if applied: **300**
+- selected rows: **50**
+- ready rows: **50**
+- blocked rows: **0**
+
+## Selected Rows
+
+- `2403.05530` status=`ready` tier=`recent_ai` ref=`papers_dir/Gemini 1.5 Unlocking multimodal understanding across millions of tokens of context.pdf`
+- `2403.09611` status=`ready` tier=`recent_ai` ref=`papers_dir/MM1 Methods, Analysis & Insights from Multimodal LLM Pre-training.pdf`
+- `2403.14403` status=`ready` tier=`recent_ai` ref=`papers_dir/Adaptive-RAG Learning to Adapt Retrieval-Augmented Large Language Models through Question Complexity.pdf`
+- `2404.14219` status=`ready` tier=`recent_ai` ref=`papers_dir/Phi-3 Technical Report A Highly Capable Language Model Locally on Your Phone.pdf`
+- `2405.07437` status=`ready` tier=`recent_ai` ref=`papers_dir/Evaluation of Retrieval-Augmented Generation A Survey.pdf`
+- `2406.09246` status=`ready` tier=`recent_ai` ref=`papers_dir/OpenVLA An Open-Source Vision-Language-Action Model.pdf`
+- `2406.16828` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2406.16828.pdf`
+- `2407.02485` status=`ready` tier=`recent_ai` ref=`papers_dir/RankRAG Unifying Context Ranking with Retrieval-Augmented Generation in LLMs.pdf`
+- `2407.21783` status=`ready` tier=`recent_ai` ref=`papers_dir/The Llama 3 Herd of Models.pdf`
+- `2408.06361` status=`ready` tier=`recent_ai` ref=`papers_dir/Large Language Model Agent in Financial Trading A Survey.pdf`
+- `2410.02644` status=`ready` tier=`recent_ai` ref=`papers_dir/Agent Security Bench (ASB) Formalizing and Benchmarking Attacks and Defenses in LLM-based Agents.pdf`
+- `2410.05080` status=`ready` tier=`recent_ai` ref=`papers_dir/ScienceAgentBench Toward Rigorous Assessment of Language Agents for Scientific Discovery.pdf`
+- `2410.10813` status=`ready` tier=`recent_ai` ref=`papers_dir/LongMemEval Benchmarking Chat Assistants on Long-Term Interactive Memory.pdf`
+- `2410.11414` status=`ready` tier=`recent_ai` ref=`papers_dir/ReDeEP Detecting Hallucination in Retrieval-Augmented Generation via Mechanistic Interpretability.pdf`
+- `2410.24164` status=`ready` tier=`recent_ai` ref=`papers_dir/$π_0$ A Vision-Language-Action Flow Model for General Robot Control.pdf`
+- `2412.08905` status=`ready` tier=`recent_ai` ref=`papers_dir/Phi-4 Technical Report.pdf`
+- `2412.15115` status=`ready` tier=`recent_ai` ref=`papers_dir/Qwen2.5 Technical Report.pdf`
+- `2412.19437` status=`ready` tier=`recent_ai` ref=`papers_dir/DeepSeek-V3 Technical Report.pdf`
+- `2302.04761` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Toolformer Language Models Can Teach Themselves to Use Tools.pdf`
+- `2302.13971` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/LLaMA Open and Efficient Foundation Language Models.pdf`
+- `2303.03378` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/PaLM-E An Embodied Multimodal Language Model.pdf`
+- `2303.08774` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/GPT-4 Technical Report.pdf`
+- `2303.11366` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Reflexion language agents with verbal reinforcement learning.pdf`
+- `2303.17580` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/HuggingGPT Solving AI Tasks with ChatGPT and its Friends in Hugging Face.pdf`
+- `2303.17651` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Self-Refine Iterative Refinement with Self-Feedback.pdf`
+- `2304.03442` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Generative Agents Interactive Simulacra of Human Behavior.pdf`
+- `2304.08485` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Visual Instruction Tuning.pdf`
+- `2305.04091` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Plan-and-Solve Prompting Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models.pdf`
+- `2305.06983` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/recovered_sources/arxiv/2305.06983.pdf`
+- `2305.10601` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Tree of Thoughts Deliberate Problem Solving with Large Language Models.pdf`
+- `2305.14314` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/QLoRA Efficient Finetuning of Quantized LLMs.pdf`
+- `2305.16291` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Voyager An Open-Ended Embodied Agent with Large Language Models.pdf`
+- `2305.18290` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Direct Preference Optimization Your Language Model is Secretly a Reward Model.pdf`
+- `2307.00360` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/BatGPT A Bidirectional Autoregessive Talker from Generative Pre-trained Transformer.pdf`
+- `2307.09288` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Llama 2 Open Foundation and Fine-Tuned Chat Models.pdf`
+- `2307.15818` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf`
+- `2308.08155` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf`
+- `2309.01431` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/recovered_sources/arxiv/2309.01431.pdf`
+- `2309.15217` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Ragas Automated Evaluation of Retrieval Augmented Generation.pdf`
+- `2310.08864` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Open X-Embodiment Robotic Learning Datasets and RT-X Models.pdf`
+- `2312.10997` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Retrieval-Augmented Generation for Large Language Models A Survey.pdf`
+- `2312.11805` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Gemini A Family of Highly Capable Multimodal Models.pdf`
+- `2112.10752` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf`
+- `2203.02155` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Training language models to follow instructions with human feedback.pdf`
+- `2203.11171` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Self-Consistency Improves Chain of Thought Reasoning in Language Models.pdf`
+- `2203.15556` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Training Compute-Optimal Large Language Models.pdf`
+- `2204.01691` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/SayCan Grounding Large Language Models Using Affordances.pdf`
+- `2204.02311` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/PaLM Scaling Language Modeling with Pathways.pdf`
+- `2204.14198` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Flamingo a Visual Language Model for Few-Shot Learning.pdf`
+- `2205.10625` status=`ready` tier=`local_corpus_candidate` ref=`papers_dir/Least-to-Most Prompting Enables Complex Reasoning in Large Language Models.pdf`

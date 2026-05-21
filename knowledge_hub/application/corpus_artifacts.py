@@ -18,6 +18,13 @@ DEFAULT_CORPUS_MANIFEST_PATH = REPO_ROOT / "eval" / "knowledgeos" / "fixtures" /
 CORPUS_MANIFEST_SCHEMA = "knowledge-hub.corpus-manifest.v1"
 REPO_FIXTURE_TIER = "repo_fixture"
 LOCAL_CORPUS_TIERS = {"local_corpus", "optional_local_corpus"}
+LOCAL_CORPUS_SOURCE_SUBDIRS = (
+    "",
+    "localpdf_pdfs",
+    "localpdf_texts",
+    "recovered_sources/arxiv",
+    "recovered_sources/url",
+)
 
 
 def _clean_text(value: Any) -> str:
@@ -186,7 +193,10 @@ def inspect_corpus_artifact(entry: dict[str, Any], *, config: Any) -> dict[str, 
         search_roots.append(("repo_fixture", fixture_root, fixture_paths or candidate_names))
     elif tier in LOCAL_CORPUS_TIERS:
         papers_dir = _configured_papers_dir(config)
-        search_roots.append(("papers_dir", papers_dir, candidate_names))
+        for subdir in LOCAL_CORPUS_SOURCE_SUBDIRS:
+            label = "papers_dir" if not subdir else f"papers_dir/{subdir}"
+            root = papers_dir / subdir if papers_dir is not None and subdir else papers_dir
+            search_roots.append((label, root, candidate_names))
         base["papersDirConfigured"] = papers_dir is not None
     else:
         return {**base, "status": "missing_artifact", "reason": f"unsupported corpus tier: {tier}"}
