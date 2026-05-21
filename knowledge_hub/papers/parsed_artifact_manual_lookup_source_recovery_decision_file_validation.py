@@ -13,6 +13,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 from knowledge_hub.core.schema_validator import validate_payload
@@ -68,6 +69,7 @@ DEFAULT_OUTPUT_DIR = Path(
 
 EXPECTED_INPUT_ROWS = 15
 EXPECTED_TEXT_SOURCE_HOLDOUT_ROWS = 1
+SOURCE_CONTENT_HASH_RE = re.compile(r"^(?:sha256:)?[0-9a-fA-F]{64}$")
 
 
 def _utc_now() -> str:
@@ -76,6 +78,13 @@ def _utc_now() -> str:
 
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
+
+
+def _normalize_source_content_hash(value: Any) -> str:
+    token = _clean_text(value)
+    if token.casefold().startswith("sha256:"):
+        token = token[7:]
+    return token.lower()
 
 
 def _load_json(path: str | Path) -> dict[str, Any]:
@@ -250,6 +259,7 @@ def _validate_decision_semantics(
         return ROW_STATUS_VALID_NEEDS_REVIEW, [], False
 
     if decision in APPROVED_DECISIONS:
+        source_content_hash = _clean_text(row.get("approvedSourceContentHash"))
         if not _clean_text(row.get("approvedSourceType")):
             blockers.append("approvedSourceType_required")
         if not _clean_text(row.get("approvedBy")):
@@ -258,6 +268,10 @@ def _validate_decision_semantics(
             blockers.append("approvedAt_required")
         if not _clean_text(row.get("notes")):
             blockers.append("notes_required")
+        if not source_content_hash:
+            blockers.append("approvedSourceContentHash_required")
+        elif not SOURCE_CONTENT_HASH_RE.fullmatch(source_content_hash):
+            blockers.append("approvedSourceContentHash_must_be_sha256_hex")
         has_url = bool(_clean_text(row.get("approvedSourceUrl")))
         has_local = bool(_clean_text(row.get("approvedLocalPdfPath")))
         if has_url and has_local:
@@ -317,6 +331,12 @@ def _validation_row(
         "manualLookupMode": _clean_text(row.get("manualLookupMode")),
         "lookupPriority": _clean_text(row.get("lookupPriority")),
         "decision": decision,
+        "approvedSourceType": _clean_text(row.get("approvedSourceType")),
+        "approvedSourceUrl": _clean_text(row.get("approvedSourceUrl")),
+        "approvedLocalPdfPath": _clean_text(row.get("approvedLocalPdfPath")),
+        "approvedSourceContentHash": _normalize_source_content_hash(row.get("approvedSourceContentHash")),
+        "approvedBy": _clean_text(row.get("approvedBy")),
+        "approvedAt": _clean_text(row.get("approvedAt")),
         "allowedDecisions": list(row.get("allowedDecisions") or []),
         "validationStatus": status,
         "validationBlockers": blockers,

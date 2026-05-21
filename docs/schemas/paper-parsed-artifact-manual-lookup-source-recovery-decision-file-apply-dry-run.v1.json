@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-decision-file-apply-dry-run.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "inputValidation",
+    "baselineBefore",
+    "coverageTarget",
+    "selectedCandidatePaperIds",
+    "items",
+    "counts",
+    "expectedCoverageChangeIfApplied",
+    "dryRunMaterializationReadiness",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-decision-file-apply-dry-run.v1"
+    },
+    "status": { "type": "string", "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "report": { "type": "object" },
+    "inputValidation": { "type": "object" },
+    "baselineBefore": { "type": "object" },
+    "coverageTarget": { "type": "object" },
+    "selectedCandidatePaperIds": { "type": "array", "items": { "type": "string" } },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "counts": { "type": "object" },
+    "expectedCoverageChangeIfApplied": { "type": "object" },
+    "dryRunMaterializationReadiness": { "type": "object" },
+    "mutationPolicy": { "type": "object" },
+    "mutationCounters": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

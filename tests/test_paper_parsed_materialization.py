@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -54,13 +55,14 @@ class _FakePyMuPDFAdapter:
         )
         target = self.papers_dir / "parsed" / paper_id
         target.mkdir(parents=True, exist_ok=True)
+        source_hash = hashlib.sha256(Path(pdf_path).read_bytes()).hexdigest()
         (target / "document.md").write_text(f"# {paper_id}\n\nParsed text.", encoding="utf-8")
         (target / "document.json").write_text(
             json.dumps(
                 {
                     "markdown_text": f"# {paper_id}\n\nParsed text.",
                     "elements": [{"type": "paragraph", "text": "Parsed text.", "page": 1}],
-                    "parser_meta": {"parser": "pymupdf"},
+                    "parser_meta": {"parser": "pymupdf", "source_content_hash": source_hash},
                 },
                 indent=2,
             ),
@@ -70,7 +72,8 @@ class _FakePyMuPDFAdapter:
             json.dumps(
                 {
                     "paper_id": paper_id,
-                    "parser_meta": {"parser": "pymupdf"},
+                    "source_content_hash": source_hash,
+                    "parser_meta": {"parser": "pymupdf", "source_content_hash": source_hash},
                     "markdown_path": str(target / "document.md"),
                     "json_path": str(target / "document.json"),
                 },
@@ -109,7 +112,10 @@ def _write_existing_parse(papers_dir: Path, paper_id: str, marker: str = "old") 
     target.mkdir(parents=True, exist_ok=True)
     (target / "document.md").write_text(marker, encoding="utf-8")
     (target / "document.json").write_text(json.dumps({"marker": marker}), encoding="utf-8")
-    (target / "manifest.json").write_text(json.dumps({"marker": marker}), encoding="utf-8")
+    (target / "manifest.json").write_text(
+        json.dumps({"marker": marker, "source_content_hash": "a" * 64}),
+        encoding="utf-8",
+    )
 
 
 def test_materialization_dry_run_does_not_write(tmp_path: Path, monkeypatch) -> None:

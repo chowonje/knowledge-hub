@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import importlib.metadata
 import json
 from pathlib import Path
@@ -15,6 +16,21 @@ from knowledge_hub.papers.extraction_diagnostics import build_parser_meta_diagno
 
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
+
+
+def _sha256_for_path(path: Path) -> str:
+    if not path.is_file():
+        return ""
+    digest = hashlib.sha256()
+    try:
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                if not chunk:
+                    break
+                digest.update(chunk)
+    except OSError:
+        return ""
+    return digest.hexdigest()
 
 
 def _page_total(document: Any) -> int:
@@ -183,6 +199,13 @@ class PyMuPDFAdapter:
         parser_meta = dict(manifest.get("parser_meta") or {})
         if str(parser_meta.get("parser") or "").strip().lower() != "pymupdf":
             return None
+        if not (
+            _clean_text(parser_meta.get("source_content_hash"))
+            or _clean_text(parser_meta.get("sourceContentHash"))
+            or _clean_text(manifest.get("source_content_hash"))
+            or _clean_text(manifest.get("sourceContentHash"))
+        ):
+            return None
         markdown_path = Path(str(manifest.get("markdown_path") or "").strip())
         json_path = Path(str(manifest.get("json_path") or "").strip())
         if not markdown_path.exists() or not json_path.exists():
@@ -231,6 +254,7 @@ class PyMuPDFAdapter:
             document = fitz.open(str(source_pdf))
         except Exception as error:
             raise RuntimeError(f"pymupdf parse failed: {error}") from error
+        source_content_hash = _sha256_for_path(source_pdf)
 
         markdown_text = ""
         elements: list[dict[str, Any]] = []
@@ -299,6 +323,8 @@ class PyMuPDFAdapter:
             "mode": "local",
             "version": version,
             "source_pdf": str(source_pdf),
+            "source_content_hash": source_content_hash,
+            "sourceContentHash": source_content_hash,
             "extracted_from": extracted_from,
             "page_count": int(stats.get("page_count") or 0),
             "pages_with_text": int(stats.get("pages_with_text") or 0),
@@ -337,6 +363,8 @@ class PyMuPDFAdapter:
             json.dumps(
                 {
                     "paper_id": token,
+                    "source_content_hash": source_content_hash,
+                    "sourceContentHash": source_content_hash,
                     "parser_meta": parser_meta,
                     "markdown_path": str(markdown_path),
                     "json_path": str(json_path),
