@@ -158,6 +158,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.structured-evidence-vertical-slice-implementation.v1": "paper-structured-evidence-vertical-slice-implementation.v1.json",
     "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1": "paper-structured-evidence-next-slice-candidate-report.v1.json",
     "knowledge-hub.paper.structured-evidence-next-slice-apply-readback.v1": "paper-structured-evidence-next-slice-apply-readback.v1.json",
+    "knowledge-hub.paper.runtime-answer-integration-gap-report.v1": "paper-runtime-answer-integration-gap-report.v1.json",
     "knowledge-hub.paper.complex-qa-abstain-baseline-runner.v1": "paper-complex-qa-abstain-baseline-runner.v1.json",
     "knowledge-hub.paper.complex-qa-structured-evidence-comparison-runner.v1": "paper-complex-qa-structured-evidence-comparison-runner.v1.json",
     "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-dry-run.v1": "paper-complex-qa-strict-evidence-answer-quality-dry-run.v1.json",

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.runtime-answer-integration-gap-report.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generatedAt",
+    "status",
+    "scope",
+    "baseline",
+    "counts",
+    "currentDataFlow",
+    "gaps",
+    "complexQaClassification",
+    "minimalBridgeDecision",
+    "recommendedNextTranche",
+    "sourceReferences"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.runtime-answer-integration-gap-report.v1" },
+    "generatedAt": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "blocked_until_runtime_visibility_bridge",
+        "ready_for_runtime_bridge_tranche"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "answerPathChanged",
+        "runtimeEvidenceCreated",
+        "citationGradePromotion",
+        "tableEquationParserWork",
+        "complexQaExecution",
+        "vaultScan",
+        "externalDownload",
+        "databaseMutation",
+        "indexMutation"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "answerPathChanged": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationGradePromotion": { "const": false },
+        "tableEquationParserWork": { "const": false },
+        "complexQaExecution": { "const": false },
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "baseline": { "type": "object", "additionalProperties": true },
+    "counts": { "type": "object", "additionalProperties": { "type": ["integer", "number", "string", "boolean", "object", "array", "null"] } },
+    "currentDataFlow": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "gaps": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "complexQaClassification": { "type": "object", "additionalProperties": true },
+    "minimalBridgeDecision": { "type": "object", "additionalProperties": true },
+    "recommendedNextTranche": { "type": "object", "additionalProperties": true },
+    "sourceReferences": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+  },
+  "additionalProperties": true
+}

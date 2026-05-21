@@ -1,0 +1,298 @@
+{
+  "schema": "knowledge-hub.paper.runtime-answer-integration-gap-report.v1",
+  "generatedAt": "2026-05-21T08:46:28Z",
+  "status": "blocked_until_runtime_visibility_bridge",
+  "scope": {
+    "reportOnly": true,
+    "answerPathChanged": false,
+    "runtimeEvidenceCreated": false,
+    "citationGradePromotion": false,
+    "tableEquationParserWork": false,
+    "complexQaExecution": false,
+    "vaultScan": false,
+    "externalDownload": false,
+    "databaseMutation": false,
+    "indexMutation": false,
+    "manifestMutation": false,
+    "sourceBytesCommitted": false
+  },
+  "baseline": {
+    "mainHead": "0386e1861bd3ff11e1089a9827cbf9aa3a110c79",
+    "mergedPullRequests": [
+      {
+        "number": 160,
+        "title": "Manual lookup source recovery apply gates",
+        "mergedAt": "2026-05-21T08:36:59Z"
+      },
+      {
+        "number": 161,
+        "title": "Priority corpus source ledger and 300-row manifest",
+        "mergedAt": "2026-05-21T08:39:42Z"
+      },
+      {
+        "number": 162,
+        "title": "Structured evidence vertical slice to 300 papers",
+        "mergedAt": "2026-05-21T08:41:47Z"
+      }
+    ],
+    "localVerification": {
+      "corpusManifestValidate": "ok",
+      "corpusBootstrapDryRun": "ok",
+      "focusedPytest": "24 passed"
+    }
+  },
+  "counts": {
+    "manifestRows": 300,
+    "sourceAvailableRows": 300,
+    "parsedAvailableRows": 300,
+    "corpusBlockerRows": 0,
+    "strictEvidenceStoreRowsPublicReviewable": 300,
+    "strictEvidenceStoreRowsSchemaInvalid": 0,
+    "strictCoveragePct": 100.0,
+    "runtimeVisibleStrictEvidenceRows": 0,
+    "answerIntegrationVisibleStrictEvidenceRows": 0,
+    "complexQaQuestionRows": 50,
+    "complexQaExpectedNoAnswerRows": 17,
+    "complexQaBlockedUntilStructuredEvidenceRows": 33,
+    "sectionTextOffsetPotentialRows": 16,
+    "sectionTextOffsetActionableBlockedRows": 13,
+    "tableEvidenceBlockedRows": 10,
+    "equationEvidenceBlockedRows": 8,
+    "figureCaptionOrAppendixLookupBlockedRows": 16
+  },
+  "currentDataFlow": [
+    {
+      "step": "answer runtime request",
+      "status": "implemented",
+      "implementationRefs": [
+        "knowledge_hub/ai/rag_answer_runtime.py:122"
+      ],
+      "notes": [
+        "RAGAnswerRuntime owns the ask-family runtime request and execution wrapper."
+      ]
+    },
+    {
+      "step": "retrieval evidence assembly",
+      "status": "implemented",
+      "implementationRefs": [
+        "knowledge_hub/ai/evidence_assembly.py:1043",
+        "knowledge_hub/ai/evidence_assembly.py:1200"
+      ],
+      "notes": [
+        "EvidenceAssemblyService assembles retrieval-backed evidence, citations, answerability, and context budget into EvidencePacket.",
+        "It does not currently read papers_dir structured_evidence SourceSpan or StrictEvidence JSONL stores."
+      ]
+    },
+    {
+      "step": "evidence packet contract",
+      "status": "implemented_for_retrieval_spans",
+      "implementationRefs": [
+        "knowledge_hub/ai/answer_payload_builder.py:135",
+        "knowledge_hub/ai/answer_contracts.py:276"
+      ],
+      "notes": [
+        "Answer payloads build evidencePacketContract from the assembled EvidencePacket.",
+        "Strict mode keeps only spans with sourceContentHash, spanOffsetAvailable, source id, and non-stale status."
+      ]
+    },
+    {
+      "step": "answer contract citations",
+      "status": "implemented_for_strict_provenance_spans",
+      "implementationRefs": [
+        "knowledge_hub/ai/answer_contracts.py:447",
+        "knowledge_hub/ai/answer_contracts.py:520"
+      ],
+      "notes": [
+        "AnswerContract citations are emitted only for evidence spans with strict provenance.",
+        "If no strict citations survive, the answer contract abstains with missing_strict_citations or an answerability reason."
+      ]
+    },
+    {
+      "step": "strict evidence stores",
+      "status": "implemented_but_not_runtime_visible",
+      "implementationRefs": [
+        "knowledge_hub/papers/parsed_artifact_strict_evidence_record_contract.py:133",
+        "knowledge_hub/papers/parsed_artifact_strict_evidence_record_contract.py:196"
+      ],
+      "notes": [
+        "StrictEvidence rows have the right paperId, sourceContentHash, authority, and verbatim hash invariants.",
+        "Their store contract still explicitly sets runtimeUseAllowed, citationUseAllowed, and answerIntegrationAllowed to false."
+      ]
+    },
+    {
+      "step": "runtime binding records",
+      "status": "candidate_only_not_answer_visible",
+      "implementationRefs": [
+        "knowledge_hub/papers/strict_evidence_runtime_binding_record_contract.py:126",
+        "knowledge_hub/papers/strict_evidence_runtime_binding_executor_apply.py:1"
+      ],
+      "notes": [
+        "Runtime binding records are append-only candidates but still keep runtimeVisible and answerIntegrationVisible false.",
+        "The current executor explicitly says parent evidence stores are read-only and answer surfaces stay disabled."
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "strict_evidence_not_ingested_by_answer_runtime",
+      "severity": "blocker",
+      "description": "The answer runtime assembles retrieval evidence, but has no bridge that reads strict_evidence JSONL rows and injects verified section_text_offset spans into EvidencePacket.",
+      "safeFailurePolicy": "missing bridge means no StrictEvidence row should become answer-visible by accident"
+    },
+    {
+      "id": "runtime_visibility_contract_is_candidate_only",
+      "severity": "blocker",
+      "description": "Existing runtime binding and visibility contracts are candidate-only and explicitly keep runtimeVisible=false and answerIntegrationVisible=false.",
+      "safeFailurePolicy": "do not bypass these contracts by treating raw StrictEvidence as runtime evidence"
+    },
+    {
+      "id": "complex_qa_requires_type_specific_evidence",
+      "severity": "blocker_for_full_eval",
+      "description": "Only method/limitation style questions are plausible with section_text_offset evidence. Table, equation, figure-caption, and appendix lookup questions need later evidence types.",
+      "safeFailurePolicy": "unsupported categories remain blocked or expected-no-answer"
+    }
+  ],
+  "complexQaClassification": {
+    "source": "static seed-pack and baseline tests in tree",
+    "totalQuestions": 50,
+    "answerableWithSectionTextOffsetRows": 16,
+    "actionableSectionTextRows": 13,
+    "blockedByTableEvidenceRows": 10,
+    "blockedByEquationEvidenceRows": 8,
+    "blockedByFigureCaptionOrAppendixLookupRows": 16,
+    "stableExpectedNoAnswerRows": 17,
+    "recommendedFirstEvalSlice": {
+      "includeCategories": [
+        "method_comparison_qa",
+        "limitation_qa"
+      ],
+      "includeExpectation": "blocked_until_structured_evidence",
+      "excludeCategories": [
+        "table_numeric_qa",
+        "equation_citation_qa",
+        "figure_caption_qa",
+        "appendix_table_lookup_qa"
+      ],
+      "notes": [
+        "Use section_text_offset strict evidence only for method and limitation questions.",
+        "Keep expected_no_answer rows blocked even if section evidence exists."
+      ]
+    }
+  },
+  "minimalBridgeDecision": {
+    "decision": "do_not_feed_raw_strict_evidence_directly_to_answers",
+    "requiredBridgeShape": "ephemeral or append-only runtime visibility bridge that validates StrictEvidence before answer contract construction",
+    "safeInsertionPoint": "after EvidenceAssemblyService builds EvidencePacket and before answer_payload_builder builds evidencePacketContract and answerContract",
+    "answerVisibleEligibility": [
+      "paperId equals the corpus manifest sourceIds[0]",
+      "sourceContentHash equals corpus manifest expectedSourceContentHash",
+      "StrictEvidence record validates against knowledge-hub.paper.parsed-artifact-strict-evidence-record.v1",
+      "authority.type is text_offset",
+      "artifactType is section for the first runtime slice",
+      "verbatimSubstringSha256 equals authority.chars.expectedSubstringSha256",
+      "record maps to an allowed complex QA category or an explicitly scoped paper/query frame",
+      "runtime bridge emits a separate visibility decision rather than mutating StrictEvidence rows in place"
+    ],
+    "blockedConditions": [
+      "source missing",
+      "sourceContentHash mismatch",
+      "wrong paperId",
+      "schema-invalid StrictEvidence",
+      "missing authority.text_offset",
+      "table/equation/appendix evidence requirement",
+      "expected_no_answer QA rows",
+      "private absolute path leakage"
+    ],
+    "firstSliceNonGoals": [
+      "no table_cell_numeric bridge",
+      "no equation_citation bridge",
+      "no appendix_table_lookup bridge",
+      "no citation-grade promotion",
+      "no default answer generation changes",
+      "no DB/index/reembed/vault mutation"
+    ]
+  },
+  "recommendedNextTranche": {
+    "name": "strict-evidence-section-runtime-bridge-dry-run",
+    "recommendedModelSplit": {
+      "spark": [
+        "add fixture-backed tests around answer_contract strict span eligibility",
+        "add report builder boilerplate for section_text_offset bridge dry-run",
+        "regenerate schema-backed dry-run report"
+      ],
+      "gpt55": [
+        "decide final visibility contract and failure policy",
+        "review sourceContentHash and answer-visible eligibility boundaries",
+        "final PR-ready review"
+      ],
+      "geminiSubstitute": [
+        "classify large QA/report rows read-only; Spark can substitute if Gemini is unavailable"
+      ]
+    },
+    "implementationBoundary": [
+      "start with dry-run/report-only bridge availability",
+      "then add a fixture-backed adapter that can build strict-provenance span candidates without invoking answer generation",
+      "only after negative tests pass should any answer-visible path consume the bridge"
+    ],
+    "testsToAddOrExtend": [
+      "tests/test_answer_contracts_runtime.py",
+      "tests/test_complex_qa_structured_evidence_comparison_runner.py",
+      "new fixture-backed strict evidence runtime bridge test"
+    ],
+    "mustPass": [
+      "wrong paperId stays blocked",
+      "sourceContentHash mismatch stays blocked",
+      "schema-invalid StrictEvidence stays blocked",
+      "missing authority.text_offset stays blocked",
+      "table/equation/appendix questions stay blocked",
+      "no private local paths in public reports"
+    ]
+  },
+  "sourceReferences": [
+    {
+      "path": "knowledge_hub/ai/evidence_assembly.py",
+      "lines": "1043-1254",
+      "note": "retrieval-backed EvidencePacket assembly"
+    },
+    {
+      "path": "knowledge_hub/ai/answer_payload_builder.py",
+      "lines": "135-140",
+      "note": "evidencePacketContract construction"
+    },
+    {
+      "path": "knowledge_hub/ai/answer_contracts.py",
+      "lines": "267-300",
+      "note": "strict provenance span filter"
+    },
+    {
+      "path": "knowledge_hub/ai/answer_contracts.py",
+      "lines": "447-523",
+      "note": "answer citations and missing strict citation abstain policy"
+    },
+    {
+      "path": "knowledge_hub/papers/parsed_artifact_strict_evidence_record_contract.py",
+      "lines": "133-169",
+      "note": "StrictEvidence store contract keeps runtime and answer integration disabled"
+    },
+    {
+      "path": "knowledge_hub/papers/strict_evidence_runtime_binding_record_contract.py",
+      "lines": "126-167",
+      "note": "runtime binding contract is still candidate-only"
+    },
+    {
+      "path": "knowledge_hub/papers/strict_evidence_runtime_binding_executor_apply.py",
+      "lines": "1-8",
+      "note": "runtime binding executor applies records but keeps answer surfaces disabled"
+    },
+    {
+      "path": "tests/test_complex_qa_abstain_baseline_runner.py",
+      "lines": "62-85",
+      "note": "complex QA baseline counts and abstain state"
+    },
+    {
+      "path": "tests/test_complex_qa_structured_evidence_comparison_runner.py",
+      "lines": "66-151",
+      "note": "comparison runner requires supplied strict evidence refs before marking candidates"
+    }
+  ]
+}
