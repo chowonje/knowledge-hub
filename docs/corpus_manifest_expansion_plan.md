@@ -129,6 +129,46 @@ Post-apply join/allowlist regeneration records:
 Next registration tranche should run the same script with `--target-count 250`
 after the current allowlist has been regenerated against the 200-row manifest.
 
+## Two Additional Batches (200 -> 300, verified allowlist)
+
+Date applied: 2026-05-21
+
+Input artifacts:
+
+- `eval/knowledgeos/reports/corpus_manifest_200_to_250_tranche_plan.v1.json`
+- `eval/knowledgeos/reports/corpus_manifest_250_to_300_tranche_plan.v1.json`
+
+Applied two additional 50-row batches with the same gate:
+
+```bash
+python eval/knowledgeos/scripts/build_corpus_manifest_expansion_tranche.py --target-count 250
+python eval/knowledgeos/scripts/build_corpus_manifest_expansion_tranche.py --target-count 250 --apply
+python eval/knowledgeos/scripts/build_priority_corpus_source_join_report.py
+python eval/knowledgeos/scripts/build_corpus_manifest_expansion_tranche.py --target-count 300
+python eval/knowledgeos/scripts/build_corpus_manifest_expansion_tranche.py --target-count 300 --apply
+python eval/knowledgeos/scripts/build_priority_corpus_source_join_report.py
+```
+
+Both tranche plans recorded:
+
+- selected rows: 50
+- ready rows: 50
+- blocked rows: 0
+- already-in-manifest skipped rows: 0
+
+Current post-apply join/allowlist records:
+
+- already in manifest: 300
+- available: 396
+- verified expansion allowlist remaining: 96
+- excluded: 41 `source_missing`, 9 `ambiguous`
+- hash missing: 0
+- hash mismatch: 0
+
+The verified-only lower bound of the 300-500 target is now met. Reaching the
+upper end of the target still requires new candidates and/or resolving held
+source-missing and ambiguous rows.
+
 ## Validation Gate
 
 Use the hidden report-only validator:

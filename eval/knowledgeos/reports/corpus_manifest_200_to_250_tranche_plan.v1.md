@@ -1,0 +1,62 @@
+# Corpus Manifest Expansion Tranche Plan
+
+- status: `applied`
+- tranche: `corpus_manifest_200_to_250`
+- before: **200**
+- after if applied: **250**
+- selected rows: **50**
+- ready rows: **50**
+- blocked rows: **0**
+
+## Selected Rows
+
+- `2507.13575` status=`ready` tier=`recent_ai` ref=`papers_dir/Apple Intelligence Foundation Language Models.pdf`
+- `2507.20526` status=`ready` tier=`recent_ai` ref=`papers_dir/Security Challenges in AI Agent Deployment Insights from a Large Scale Public Competition.pdf`
+- `2508.02324` status=`ready` tier=`recent_ai` ref=`papers_dir/Qwen-Image Technical Report.pdf`
+- `2508.04039` status=`ready` tier=`recent_ai` ref=`papers_dir/Large Reasoning Models Are Autonomous Jailbreak Agents.pdf`
+- `2508.15763` status=`ready` tier=`recent_ai` ref=`papers_dir/Intern-S1 A Scientific Multimodal Foundation Model.pdf`
+- `2509.06917` status=`ready` tier=`recent_ai` ref=`papers_dir/Paper2Agent Reimagining Research Papers As Interactive and Reliable AI Agents.pdf`
+- `2509.14260` status=`ready` tier=`recent_ai` ref=`papers_dir/Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs.pdf`
+- `2509.16861` status=`ready` tier=`recent_ai` ref=`papers_dir/AdaptiveGuard Towards Adaptive Runtime Safety for LLM-Powered Software.pdf`
+- `2509.16870` status=`ready` tier=`recent_ai` ref=`papers_dir/DecipherGuard Understanding and Deciphering Jailbreak Prompts for a Safer Deployment of Intelligent.pdf`
+- `2509.16941` status=`ready` tier=`recent_ai` ref=`papers_dir/SWE-Bench Pro Can AI Agents Solve Long-Horizon Software Engineering Tasks.pdf`
+- `2509.17765` status=`ready` tier=`recent_ai` ref=`papers_dir/Qwen3-Omni Technical Report.pdf`
+- `2509.19480` status=`ready` tier=`recent_ai` ref=`papers_dir/OmniVLA An Omni-Modal Vision-Language-Action Model for Robot Navigation.pdf`
+- `2509.21766` status=`ready` tier=`recent_ai` ref=`papers_dir/UltraHorizon Benchmarking Agent Capabilities in Ultra Long-Horizon Scenarios.pdf`
+- `2509.24065` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2509.24065.pdf`
+- `2510.01375` status=`ready` tier=`recent_ai` ref=`papers_dir/Fine-tuning with RAG for Improving LLM Learning of New Skills.pdf`
+- `2510.04852` status=`ready` tier=`recent_ai` ref=`papers_dir/FreshBrew A Benchmark for Evaluating AI Agents on Java Code Migration.pdf`
+- `2510.07172` status=`ready` tier=`recent_ai` ref=`papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf`
+- `2510.08002` status=`ready` tier=`recent_ai` ref=`papers_dir/Learning on the Job An Experience-Driven Self-Evolving Agent for Long-Horizon Tasks.pdf`
+- `2510.08996` status=`ready` tier=`recent_ai` ref=`papers_dir/Saving SWE-Bench A Benchmark Mutation Approach for Realistic Agent Evaluation.pdf`
+- `2510.15682` status=`ready` tier=`recent_ai` ref=`papers_dir/SQuAI Scientific Question-Answering with Multi-Agent Retrieval-Augmented Generation.pdf`
+- `2510.21571` status=`ready` tier=`recent_ai` ref=`papers_dir/Scalable Vision-Language-Action Model Pretraining for Robotic Manipulation with Real-Life Human Acti.pdf`
+- `2510.21652` status=`ready` tier=`recent_ai` ref=`papers_dir/AstaBench Rigorous Benchmarking of AI Agents with a Holistic Scientific Research Suite.pdf`
+- `2510.22075` status=`ready` tier=`recent_ai` ref=`papers_dir/Agentic Reinforcement Learning for Real-World Code Repair.pdf`
+- `2510.24358` status=`ready` tier=`recent_ai` ref=`papers_dir/Automatically Benchmarking LLM Code Agents through Agent-Driven Annotation and Evaluation.pdf`
+- `2510.24699` status=`ready` tier=`recent_ai` ref=`papers_dir/AgentFold Long-Horizon Web Agents with Proactive Context Management.pdf`
+- `2510.26583` status=`ready` tier=`recent_ai` ref=`papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf`
+- `2510.27598` status=`ready` tier=`recent_ai` ref=`papers_dir/InnovatorBench Evaluating Agents' Ability to Innovate in Machine Learning Research.pdf`
+- `2511.13646` status=`ready` tier=`recent_ai` ref=`papers_dir/Can Software Engineering Agents Self-Evolve on the Fly.pdf`
+- `2511.18298` status=`ready` tier=`recent_ai` ref=`papers_dir/A Compound AI Architecture for Scientific Discovery.pdf`
+- `2511.21631` status=`ready` tier=`recent_ai` ref=`papers_dir/Qwen3-VL Technical Report.pdf`
+- `2511.22138` status=`ready` tier=`recent_ai` ref=`papers_dir/TinyLLM Evaluation and Optimization of Small Language Models for Agentic Tasks on Edge Devices.pdf`
+- `2511.23404` status=`ready` tier=`recent_ai` ref=`papers_dir/LFM2 Technical Report.pdf`
+- `2512.01822` status=`ready` tier=`recent_ai` ref=`papers_dir/InnoGym Benchmarking the Innovation Potential of AI Agents.pdf`
+- `2512.02008` status=`ready` tier=`recent_ai` ref=`papers_dir/The Art of Scaling Test-Time Compute for Large Language Models.pdf`
+- `2512.02425` status=`ready` tier=`recent_ai` ref=`papers_dir/WorldMM Dynamic Multimodal Memory Agent for Long Video Reasoning.pdf`
+- `2512.03262` status=`ready` tier=`recent_ai` ref=`papers_dir/Is Vibe Coding Safe Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks.pdf`
+- `2512.07582` status=`ready` tier=`recent_ai` ref=`papers_dir/See Once, Then Act Vision-Language-Action Model with Task Learning from One-Shot Video Demonstration.pdf`
+- `2512.13564` status=`ready` tier=`recent_ai` ref=`papers_dir/Memory in the Age of AI Agents.pdf`
+- `2512.15840` status=`ready` tier=`recent_ai` ref=`papers_dir/Large Video Planner Enables Generalizable Robot Control.pdf`
+- `2512.15943` status=`ready` tier=`recent_ai` ref=`papers_dir/Small Language Models for Efficient Agentic Tool Calling Outperforming Large Models with Targeted Fi.pdf`
+- `2512.18470` status=`ready` tier=`recent_ai` ref=`papers_dir/SWE-EVO Benchmarking Coding Agents in Long-Horizon Software Evolution Scenarios.pdf`
+- `2512.18552` status=`ready` tier=`recent_ai` ref=`papers_dir/Toward Training Superintelligent Software Agents through Self-Play.pdf`
+- `2512.21373` status=`ready` tier=`recent_ai` ref=`papers_dir/AInsteinBench Benchmarking Coding Agents on Scientific Computing Development.pdf`
+- `2512.21919` status=`ready` tier=`recent_ai` ref=`papers_dir/SWE-RM Execution-free Feedback For Training and Test-Time Scaling of SWE Agents.pdf`
+- `2512.22414` status=`ready` tier=`recent_ai` ref=`papers_dir/Emergence of Human to Robot Transfer in Vision-Language-Action Models.pdf`
+- `2401.04088` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2401.04088.pdf`
+- `2401.15391` status=`ready` tier=`recent_ai` ref=`papers_dir/MultiHop-RAG Benchmarking Retrieval-Augmented Generation for Multi-Hop Queries.pdf`
+- `2401.15884` status=`ready` tier=`recent_ai` ref=`papers_dir/Corrective Retrieval Augmented Generation.pdf`
+- `2401.17043` status=`ready` tier=`recent_ai` ref=`papers_dir/recovered_sources/arxiv/2401.17043.pdf`
+- `2402.01881` status=`ready` tier=`recent_ai` ref=`papers_dir/Large Language Model Agent for Hyper-Parameter Optimization.pdf`

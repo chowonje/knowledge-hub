@@ -4,8 +4,8 @@ Date: 2026-05-21
 
 ## Objective
 
-Expand the priority AI paper corpus from the current **200** verified `corpus_manifest.json`
-entries toward a **300–500** paper target. The candidate ledger remains metadata-first;
+Expand the priority AI paper corpus from the current **300** verified `corpus_manifest.json`
+entries toward the remaining **300–500** paper target band. The candidate ledger remains metadata-first;
 source availability is confirmed only by the join report and manifest validator.
 
 ## Current Baseline (Surveyed)
@@ -13,7 +13,7 @@ source availability is confirmed only by the join report and manifest validator.
 | Source pool | Location | Count | Role in this tranche |
 | --- | --- | ---: | --- |
 | Local papers registry | `local_operator_registry::papers` | 446 | Primary candidate seed list |
-| Public corpus manifest | `eval/knowledgeos/fixtures/corpus_manifest.json` | 200 artifacts | Eval-critical/local-corpus baseline; hash-declared and validator-checked |
+| Public corpus manifest | `eval/knowledgeos/fixtures/corpus_manifest.json` | 300 artifacts | Eval-critical/local-corpus baseline; hash-declared and validator-checked |
 | Eval-critical references | `eval/knowledgeos/queries/*.csv`, paper eval fixtures, complex QA seed ids | 55 unique source ids | Tier elevation to `eval_critical` |
 | Local PDF inventory hint | `local_operator_papers_dir/*.pdf` | 338 files | Inventory signal only; **not** availability proof |
 | Paper memory eval fixture | `tests/fixtures/paper_memory_eval/cases.json` | 3 cases | Eval-critical reference |
@@ -37,8 +37,8 @@ Ledger row count: **446** (within the 300–500 target band).
 
 ### Manifest overlap
 
-- Already in manifest: **200**
-- Not yet in manifest: **246**
+- Already in manifest: **300**
+- Not yet in manifest: **146**
 - Source verification pending (`unknown` or `join_pending`): **446** (all rows)
 
 ## Expansion Path (Tranche Sequence)
@@ -58,8 +58,8 @@ Latest output:
 
 - Join report: `eval/knowledgeos/reports/priority_corpus_source_join_report.v1.json`
 - Expansion allowlist: `eval/knowledgeos/fixtures/priority_corpus_manifest_expansion_allowlist.v1.json`
-- Already in manifest: **200**
-- Verified expansion allowlist remaining: **196**
+- Already in manifest: **300**
+- Verified expansion allowlist remaining: **96**
 - Excluded: **41** `source_missing`, **9** `ambiguous`
 
 The latest regeneration includes operator-recovered source roots under
@@ -101,6 +101,12 @@ The schema-backed tranche plan reverified source bytes and resolver status befor
 writing. Post-apply join regeneration records `already_in_manifest=200` and 196
 verified allowlist rows remaining.
 
+**Applied 2026-05-21:** two additional batches registered 100 rows total
+(manifest 200 → 250 → 300) using the same schema-backed tranche planner. Both
+tranche plans recorded `ready_rows=50`, `blocked_rows=0`, and no
+already-in-manifest skips. Post-apply join regeneration records
+`already_in_manifest=300` and 96 verified allowlist rows remaining.
+
 For each subsequent batch:
 
 1. Take join-verified `available` rows not yet in manifest.
@@ -109,7 +115,10 @@ For each subsequent batch:
 4. Run `khub paper corpus-bootstrap --all --dry-run --json`.
 5. Stop if duplicates, hash mismatch, or source-missing rows appear.
 
-Repeat until manifest reaches 300–500 entries with boring validator output.
+The verified-only lower bound is now reached. Further expansion toward 500
+requires either consuming the remaining 96 verified allowlist rows and/or adding
+new verified candidates; the 41 `source_missing` and 9 `ambiguous` rows remain
+blocked until separately resolved.
 
 ### Tranche 3 — Parsed derivative coverage (out of scope for ledger tranche)
 
