@@ -1,47 +1,47 @@
 # Structured Evidence Next Slice Candidate Report
 
-Generated: `2026-05-21T07:24:43.587054+00:00`
+Generated: `2026-05-21T07:29:12.446282+00:00`
 
 - status: `ready`
 - manifest rows: **300**
-- strict covered rows: **90**
-- strict coverage pct: **30.0**
+- strict covered rows: **120**
+- strict coverage pct: **40.0**
 - operator-local generated-only rows: **0**
-- greenfield eligible rows: **210**
+- greenfield eligible rows: **180**
 - selected greenfield rows: **30**
 
 ## Selected Greenfield Candidates
 
-- `2602.16707` (recent_ai, 2026) — `section_text_offset`
-- `2602.16708` (recent_ai, 2026) — `section_text_offset`
-- `2602.16711` (recent_ai, 2026) — `section_text_offset`
-- `2602.16712` (recent_ai, 2026) — `section_text_offset`
-- `2602.18304` (recent_ai, 2026) — `section_text_offset`
-- `2602.18346` (recent_ai, 2026) — `section_text_offset`
-- `2602.18357` (recent_ai, 2026) — `section_text_offset`
-- `2602.18397` (recent_ai, 2026) — `section_text_offset`
-- `2602.18415` (recent_ai, 2026) — `section_text_offset`
-- `2602.22953` (recent_ai, 2026) — `section_text_offset`
-- `2603.05414` (recent_ai, 2026) — `section_text_offset`
-- `2603.05706` (recent_ai, 2026) — `section_text_offset`
-- `2603.14473` (recent_ai, 2026) — `section_text_offset`
-- `2603.15798` (recent_ai, 2026) — `section_text_offset`
-- `2603.16659` (recent_ai, 2026) — `section_text_offset`
-- `2603.17216` (recent_ai, 2026) — `section_text_offset`
-- `2603.18000` (recent_ai, 2026) — `section_text_offset`
-- `2603.18002` (recent_ai, 2026) — `section_text_offset`
-- `2603.18003` (recent_ai, 2026) — `section_text_offset`
-- `2603.18004` (recent_ai, 2026) — `section_text_offset`
-- `2603.23749` (recent_ai, 2026) — `section_text_offset`
-- `2604.08545` (recent_ai, 2026) — `section_text_offset`
-- `2604.08546` (recent_ai, 2026) — `section_text_offset`
-- `2604.08548` (recent_ai, 2026) — `section_text_offset`
-- `2604.11407` (recent_ai, 2026) — `section_text_offset`
-- `2604.13346` (recent_ai, 2026) — `section_text_offset`
-- `2604.15270` (recent_ai, 2026) — `section_text_offset`
-- `2604.15706` (recent_ai, 2026) — `section_text_offset`
-- `2604.17761` (recent_ai, 2026) — `section_text_offset`
-- `2604.18164` (recent_ai, 2026) — `section_text_offset`
+- `2604.18845` (recent_ai, 2026) — `section_text_offset`
+- `2604.19295` (recent_ai, 2026) — `section_text_offset`
+- `2604.19638` (recent_ai, 2026) — `section_text_offset`
+- `2604.19656` (recent_ai, 2026) — `section_text_offset`
+- `2604.19667` (recent_ai, 2026) — `section_text_offset`
+- `2604.19728` (recent_ai, 2026) — `section_text_offset`
+- `2604.19734` (recent_ai, 2026) — `section_text_offset`
+- `2605.01148` (recent_ai, 2026) — `section_text_offset`
+- `2605.01203` (recent_ai, 2026) — `section_text_offset`
+- `2605.02363` (recent_ai, 2026) — `section_text_offset`
+- `2605.02364` (recent_ai, 2026) — `section_text_offset`
+- `2605.03476` (recent_ai, 2026) — `section_text_offset`
+- `2605.03534` (recent_ai, 2026) — `section_text_offset`
+- `2605.03667` (recent_ai, 2026) — `section_text_offset`
+- `2605.03808` (recent_ai, 2026) — `section_text_offset`
+- `2605.03838` (recent_ai, 2026) — `section_text_offset`
+- `2605.03862` (recent_ai, 2026) — `section_text_offset`
+- `2605.03871` (recent_ai, 2026) — `section_text_offset`
+- `2605.03903` (recent_ai, 2026) — `section_text_offset`
+- `2605.03986` (recent_ai, 2026) — `section_text_offset`
+- `2605.03989` (recent_ai, 2026) — `section_text_offset`
+- `2605.04036` (recent_ai, 2026) — `section_text_offset`
+- `2605.10616` (recent_ai, 2026) — `section_text_offset`
+- `attnres2026` (recent_ai, 2026) — `section_text_offset`
+- `2501.01765` (recent_ai, 2025) — `section_text_offset`
+- `2501.05031` (recent_ai, 2025) — `section_text_offset`
+- `2501.05366` (recent_ai, 2025) — `section_text_offset`
+- `2501.09004` (recent_ai, 2025) — `section_text_offset`
+- `2501.09136` (recent_ai, 2025) — `section_text_offset`
+- `2501.13956` (recent_ai, 2025) — `section_text_offset`
 
 ## Readback Candidates
 
@@ -132,6 +132,36 @@ Generated: `2026-05-21T07:24:43.587054+00:00`
 - `2602.16703` status=`public_reviewable` strict_records=1
 - `2602.16704` status=`public_reviewable` strict_records=1
 - `2602.16705` status=`public_reviewable` strict_records=1
+- `2602.16707` status=`public_reviewable` strict_records=1
+- `2602.16708` status=`public_reviewable` strict_records=1
+- `2602.16711` status=`public_reviewable` strict_records=1
+- `2602.16712` status=`public_reviewable` strict_records=1
+- `2602.18304` status=`public_reviewable` strict_records=1
+- `2602.18346` status=`public_reviewable` strict_records=1
+- `2602.18357` status=`public_reviewable` strict_records=1
+- `2602.18397` status=`public_reviewable` strict_records=1
+- `2602.18415` status=`public_reviewable` strict_records=1
+- `2602.22953` status=`public_reviewable` strict_records=1
+- `2603.05414` status=`public_reviewable` strict_records=1
+- `2603.05706` status=`public_reviewable` strict_records=1
+- `2603.14473` status=`public_reviewable` strict_records=1
+- `2603.15798` status=`public_reviewable` strict_records=1
+- `2603.16659` status=`public_reviewable` strict_records=1
+- `2603.17216` status=`public_reviewable` strict_records=1
+- `2603.18000` status=`public_reviewable` strict_records=1
+- `2603.18002` status=`public_reviewable` strict_records=1
+- `2603.18003` status=`public_reviewable` strict_records=1
+- `2603.18004` status=`public_reviewable` strict_records=1
+- `2603.23749` status=`public_reviewable` strict_records=1
+- `2604.08545` status=`public_reviewable` strict_records=1
+- `2604.08546` status=`public_reviewable` strict_records=1
+- `2604.08548` status=`public_reviewable` strict_records=1
+- `2604.11407` status=`public_reviewable` strict_records=1
+- `2604.13346` status=`public_reviewable` strict_records=1
+- `2604.15270` status=`public_reviewable` strict_records=1
+- `2604.15706` status=`public_reviewable` strict_records=1
+- `2604.17761` status=`public_reviewable` strict_records=1
+- `2604.18164` status=`public_reviewable` strict_records=1
 - `2308.08155` status=`public_reviewable` strict_records=1
 - `2309.15217` status=`public_reviewable` strict_records=1
 - `2312.10997` status=`public_reviewable` strict_records=1

@@ -1,6 +1,6 @@
 {
   "schema": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1",
-  "generatedAt": "2026-05-21T07:24:43.587054+00:00",
+  "generatedAt": "2026-05-21T07:29:12.446282+00:00",
   "status": "ready",
   "scopeNote": "Report-only next-slice candidate list for structured evidence over the 300-row verified corpus. It does not create SourceSpan or StrictEvidence records.",
   "inputs": {
@@ -33,18 +33,18 @@
     "manifestRows": 300,
     "sourceAvailableRows": 300,
     "parsedAvailableRows": 300,
-    "strictEvidenceStoreRowsRaw": 90,
-    "strictEvidenceStoreRowsPublicReviewable": 90,
+    "strictEvidenceStoreRowsRaw": 120,
+    "strictEvidenceStoreRowsPublicReviewable": 120,
     "strictEvidenceStoreRowsOperatorLocalOnly": 0,
-    "strictCoveredRows": 90,
-    "strictCoveragePct": 30.0,
-    "greenfieldEligibleRows": 210,
+    "strictCoveredRows": 120,
+    "strictCoveragePct": 40.0,
+    "greenfieldEligibleRows": 180,
     "selectedGreenfieldRows": 30,
-    "readbackCandidateRows": 90,
+    "readbackCandidateRows": 120,
     "greenfieldCarryoverRows": 0,
     "structuredEvidenceStatusBreakdown": {
-      "missing": 210,
-      "public_reviewable": 90
+      "missing": 180,
+      "public_reviewable": 120
     },
     "selectedGreenfieldByTier": {
       "recent_ai": 30
@@ -2847,6 +2847,966 @@
       "selectionReason": "existing strict evidence readback candidate"
     },
     {
+      "sourceId": "2602.16707",
+      "artifactId": "paper_2602_16707",
+      "title": "E-Graphs as a Persistent Compiler Abstraction",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 21,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.16708",
+      "artifactId": "paper_2602_16708",
+      "title": "Policy Compiler for Secure Agentic Systems",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 36,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.16711",
+      "artifactId": "paper_2602_16711",
+      "title": "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 19,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.16712",
+      "artifactId": "paper_2602_16712",
+      "title": "One Hand to Rule Them All: Canonical Representations for Unified Dexterous Manipulation",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 17,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.18304",
+      "artifactId": "paper_2602_18304",
+      "title": "FeatureBleed: Inferring Private Enriched Attributes From Sparsity-Optimized AI Accelerators",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 4,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.18346",
+      "artifactId": "paper_2602_18346",
+      "title": "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 13,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.18357",
+      "artifactId": "paper_2602_18357",
+      "title": "Statistical Confidence in Functional Correctness: An Approach for AI Product Functional Correctness Evaluation",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 11,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.18397",
+      "artifactId": "paper_2602_18397",
+      "title": "How Fast Can I Run My VLA? Demystifying VLA Inference Performance with VLA-Perf",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 17,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.18415",
+      "artifactId": "paper_2602_18415",
+      "title": "AI-Wrapped: Participatory, Privacy-Preserving Measurement of Longitudinal LLM Use In-the-Wild",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 11,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.22953",
+      "artifactId": "paper_2602_22953",
+      "title": "General Agent Evaluation",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 20,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.05414",
+      "artifactId": "paper_2603_05414",
+      "title": "Dissociating Direct Access from Inference in AI Introspection",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.05706",
+      "artifactId": "paper_2603_05706",
+      "title": "Reasoning Models Struggle to Control their Chains of Thought",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 40,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.14473",
+      "artifactId": "paper_2603_14473",
+      "title": "AI Can Learn Scientific Taste",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 1230,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.15798",
+      "artifactId": "paper_2603_15798",
+      "title": "CUBE: A Standard for Unifying Agent Benchmarks",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 12,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.16659",
+      "artifactId": "paper_2603_16659",
+      "title": "Machines acquire scientific taste from institutional traces",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 57,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.17216",
+      "artifactId": "paper_2603_17216",
+      "title": "AI Scientist via Synthetic Task Scaling",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 28,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.18000",
+      "artifactId": "paper_2603_18000",
+      "title": "AgentFactory: A Self-Evolving Framework Through Executable Subagent Accumulation and Reuse",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 10,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.18002",
+      "artifactId": "paper_2603_18002",
+      "title": "Loc3R-VLM: Language-based Localization and 3D Reasoning with Vision-Language Models",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 29,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.18003",
+      "artifactId": "paper_2603_18003",
+      "title": "Universal Skeleton Understanding via Differentiable Rendering and MLLMs",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 32,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.18004",
+      "artifactId": "paper_2603_18004",
+      "title": "Unified Spatio-Temporal Token Scoring for Efficient Video VLMs",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 17,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2603.23749",
+      "artifactId": "paper_2603_23749",
+      "title": "Efficient Benchmarking of AI Agents",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 679,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.08545",
+      "artifactId": "paper_2604_08545",
+      "title": "Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic Multimodal Models",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 21,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.08546",
+      "artifactId": "paper_2604_08546",
+      "title": "When Numbers Speak: Aligning Textual Numerals and Visual Instances in Text-to-Video Diffusion Models",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 15,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.08548",
+      "artifactId": "paper_2604_08548",
+      "title": "ETCH-X: Robustify Expressive Body Fitting to Clothed Humans with Composable Datasets",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 19,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.11407",
+      "artifactId": "paper_2604_11407",
+      "title": "Retrieval as Generation: A Unified Framework with Self-Triggered Information Planning",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 21,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.13346",
+      "artifactId": "paper_2604_13346",
+      "title": "AgentSPEX: An Agent SPecification and EXecution Language",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 18,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.15270",
+      "artifactId": "paper_2604_15270",
+      "title": "Enhancing Large Language Models with Retrieval Augmented Generation for Software Testing and Inspection Automation",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 18,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.15706",
+      "artifactId": "paper_2604_15706",
+      "title": "Target-Oriented Pretraining Data Selection via Neuron-Activated Graph",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 21,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.17761",
+      "artifactId": "paper_2604_17761",
+      "title": "Contrastive Attribution in the Wild: An Interpretability Analysis of LLM Failures on Realistic Benchmarks",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 45,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2604.18164",
+      "artifactId": "paper_2604_18164",
+      "title": "MM-JudgeBias: A Benchmark for Evaluating Compositional Biases in MLLM-as-a-Judge",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 38,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
       "sourceId": "2308.08155",
       "artifactId": "paper_2308_08155",
       "title": "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation",
@@ -2945,16 +3905,16 @@
   ],
   "selectedGreenfieldCandidates": [
     {
-      "sourceId": "2602.16707",
-      "artifactId": "paper_2602_16707",
-      "title": "E-Graphs as a Persistent Compiler Abstraction",
+      "sourceId": "2604.18845",
+      "artifactId": "paper_2604_18845",
+      "title": "Dual-View Training for Instruction-Following Information Retrieval",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 21,
+        "elementCount": 6,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -2977,393 +3937,9 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2602.16708",
-      "artifactId": "paper_2602_16708",
-      "title": "Policy Compiler for Secure Agentic Systems",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 36,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.16711",
-      "artifactId": "paper_2602_16711",
-      "title": "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 19,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.16712",
-      "artifactId": "paper_2602_16712",
-      "title": "One Hand to Rule Them All: Canonical Representations for Unified Dexterous Manipulation",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 17,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.18304",
-      "artifactId": "paper_2602_18304",
-      "title": "FeatureBleed: Inferring Private Enriched Attributes From Sparsity-Optimized AI Accelerators",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 4,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.18346",
-      "artifactId": "paper_2602_18346",
-      "title": "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 13,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.18357",
-      "artifactId": "paper_2602_18357",
-      "title": "Statistical Confidence in Functional Correctness: An Approach for AI Product Functional Correctness Evaluation",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 11,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.18397",
-      "artifactId": "paper_2602_18397",
-      "title": "How Fast Can I Run My VLA? Demystifying VLA Inference Performance with VLA-Perf",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 17,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.18415",
-      "artifactId": "paper_2602_18415",
-      "title": "AI-Wrapped: Participatory, Privacy-Preserving Measurement of Longitudinal LLM Use In-the-Wild",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 11,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.22953",
-      "artifactId": "paper_2602_22953",
-      "title": "General Agent Evaluation",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 20,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.05414",
-      "artifactId": "paper_2603_05414",
-      "title": "Dissociating Direct Access from Inference in AI Introspection",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 23,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.05706",
-      "artifactId": "paper_2603_05706",
-      "title": "Reasoning Models Struggle to Control their Chains of Thought",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 40,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.14473",
-      "artifactId": "paper_2603_14473",
-      "title": "AI Can Learn Scientific Taste",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 1230,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.15798",
-      "artifactId": "paper_2603_15798",
-      "title": "CUBE: A Standard for Unifying Agent Benchmarks",
+      "sourceId": "2604.19295",
+      "artifactId": "paper_2604_19295",
+      "title": "TEMPO: Scaling Test-time Training for Large Reasoning Models",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
@@ -3393,16 +3969,16 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2603.16659",
-      "artifactId": "paper_2603_16659",
-      "title": "Machines acquire scientific taste from institutional traces",
+      "sourceId": "2604.19638",
+      "artifactId": "paper_2604_19638",
+      "title": "SafetyALFRED: Evaluating Safety-Conscious Planning of Multimodal Large Language Models",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 57,
+        "elementCount": 22,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -3425,16 +4001,16 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2603.17216",
-      "artifactId": "paper_2603_17216",
-      "title": "AI Scientist via Synthetic Task Scaling",
+      "sourceId": "2604.19656",
+      "artifactId": "paper_2604_19656",
+      "title": "Pause or Fabricate? Training Language Models for Grounded Reasoning",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 28,
+        "elementCount": 24,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -3457,201 +4033,9 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2603.18000",
-      "artifactId": "paper_2603_18000",
-      "title": "AgentFactory: A Self-Evolving Framework Through Executable Subagent Accumulation and Reuse",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 10,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.18002",
-      "artifactId": "paper_2603_18002",
-      "title": "Loc3R-VLM: Language-based Localization and 3D Reasoning with Vision-Language Models",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 29,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.18003",
-      "artifactId": "paper_2603_18003",
-      "title": "Universal Skeleton Understanding via Differentiable Rendering and MLLMs",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 32,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.18004",
-      "artifactId": "paper_2603_18004",
-      "title": "Unified Spatio-Temporal Token Scoring for Efficient Video VLMs",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 17,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2603.23749",
-      "artifactId": "paper_2603_23749",
-      "title": "Efficient Benchmarking of AI Agents",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 679,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2604.08545",
-      "artifactId": "paper_2604_08545",
-      "title": "Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic Multimodal Models",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 21,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2604.08546",
-      "artifactId": "paper_2604_08546",
-      "title": "When Numbers Speak: Aligning Textual Numerals and Visual Instances in Text-to-Video Diffusion Models",
+      "sourceId": "2604.19667",
+      "artifactId": "paper_2604_19667",
+      "title": "Chat2Workflow: A Benchmark for Generating Executable Visual Workflows with Natural Language",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
@@ -3681,16 +4065,16 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2604.08548",
-      "artifactId": "paper_2604_08548",
-      "title": "ETCH-X: Robustify Expressive Body Fitting to Clothed Humans with Composable Datasets",
+      "sourceId": "2604.19728",
+      "artifactId": "paper_2604_19728",
+      "title": "VLA Foundry: A Unified Framework for Training Vision-Language-Action Models",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 19,
+        "elementCount": 32,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -3713,105 +4097,9 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2604.11407",
-      "artifactId": "paper_2604_11407",
-      "title": "Retrieval as Generation: A Unified Framework with Self-Triggered Information Planning",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 21,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2604.13346",
-      "artifactId": "paper_2604_13346",
-      "title": "AgentSPEX: An Agent SPecification and EXecution Language",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 18,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2604.15270",
-      "artifactId": "paper_2604_15270",
-      "title": "Enhancing Large Language Models with Retrieval Augmented Generation for Software Testing and Inspection Automation",
-      "year": 2026,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 18,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2604.15706",
-      "artifactId": "paper_2604_15706",
-      "title": "Target-Oriented Pretraining Data Selection via Neuron-Activated Graph",
+      "sourceId": "2604.19734",
+      "artifactId": "paper_2604_19734",
+      "title": "UniT: Toward a Unified Physical Language for Human-to-Humanoid Policy Learning and World Modeling",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
@@ -3841,9 +4129,489 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2604.17761",
-      "artifactId": "paper_2604_17761",
-      "title": "Contrastive Attribution in the Wild: An Interpretability Analysis of LLM Failures on Realistic Benchmarks",
+      "sourceId": "2605.01148",
+      "artifactId": "paper_2605_01148",
+      "title": "Arithmetic in the Wild: Llama uses Base-10 Addition to Reason About Cyclic Concepts",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 62,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.01203",
+      "artifactId": "paper_2605_01203",
+      "title": "GR-Ben: A General Reasoning Benchmark for Evaluating Process Reward Models",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 18,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.02363",
+      "artifactId": "paper_2605_02363",
+      "title": "When Correct Isn't Usable: Improving Structured Output Reliability in Small Language Models",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 18,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.02364",
+      "artifactId": "paper_2605_02364",
+      "title": "InfoLaw: Information Scaling Laws for Large Language Models with Quality-Weighted Mixture Data and Repetition",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 21,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03476",
+      "artifactId": "paper_2605_03476",
+      "title": "CuraView: A Multi-Agent Framework for Medical Hallucination Detection with GraphRAG-Enhanced Knowledge Verification",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 44,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03534",
+      "artifactId": "paper_2605_03534",
+      "title": "SURE-RAG: Sufficiency and Uncertainty-Aware Evidence Verification for Selective Retrieval-Augmented Generation",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 8,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03667",
+      "artifactId": "paper_2605_03667",
+      "title": "ELAS: Efficient Pre-Training of Low-Rank Large Language Models via 2:4 Activation Sparsity",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 13,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03808",
+      "artifactId": "paper_2605_03808",
+      "title": "Agentic-imodels: Evolving agentic interpretability tools via autoresearch",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03838",
+      "artifactId": "paper_2605_03838",
+      "title": "TRACE: A Metrologically-Grounded Engineering Framework for Trustworthy Agentic AI Systems in Operationally Critical Domains",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 11,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03862",
+      "artifactId": "paper_2605_03862",
+      "title": "Correct Is Not Enough: Training Reasoning Planners with Executor-Grounded Rewards",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 36,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03871",
+      "artifactId": "paper_2605_03871",
+      "title": "EvoLM: Self-Evolving Language Models through Co-Evolved Discriminative Rubrics",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 32,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03903",
+      "artifactId": "paper_2605_03903",
+      "title": "CC-OCR V2: Benchmarking Large Multimodal Models for Literacy in Real-world Document Processing",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 10,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03986",
+      "artifactId": "paper_2605_03986",
+      "title": "From Intent to Execution: Composing Agentic Workflows with Agent Recommendation",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 14,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.03989",
+      "artifactId": "paper_2605_03989",
+      "title": "An Agent-Oriented Pluggable Experience-RAG Skill for Experience-Driven Retrieval Strategy Orchestration",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 6,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.04036",
+      "artifactId": "paper_2605_04036",
+      "title": "OpenSeeker-v2: Pushing the Limits of Search Agents with Informative and High-Difficulty Trajectories",
+      "year": 2026,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 7,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2605.10616",
+      "artifactId": "paper_2605_10616",
+      "title": "MulTaBench: Benchmarking Multimodal Tabular Learning with Text and Image",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
@@ -3873,16 +4641,208 @@
       "selectionReason": "no strict evidence store yet"
     },
     {
-      "sourceId": "2604.18164",
-      "artifactId": "paper_2604_18164",
-      "title": "MM-JudgeBias: A Benchmark for Evaluating Compositional Biases in MLLM-as-a-Judge",
+      "sourceId": "attnres2026",
+      "artifactId": "paper_attnres2026",
+      "title": "Attention Residuals",
       "year": 2026,
       "candidateTier": "recent_ai",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 38,
+        "elementCount": 21,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.01765",
+      "artifactId": "paper_2501_01765",
+      "title": "SaLoRA: Safety-Alignment Preserved Low-Rank Adaptation",
+      "year": 2025,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 14,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.05031",
+      "artifactId": "paper_2501_05031",
+      "title": "ECBench: Can Multi-modal Foundation Models Understand Embodied Cognition?",
+      "year": 2025,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 22,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.05366",
+      "artifactId": "paper_2501_05366",
+      "title": "arXiv 2501.05366",
+      "year": 2025,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.09004",
+      "artifactId": "paper_2501_09004",
+      "title": "Aegis2.0: A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Guardrails",
+      "year": 2025,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 33,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.09136",
+      "artifactId": "paper_2501_09136",
+      "title": "arXiv 2501.09136",
+      "year": 2025,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 42,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.13956",
+      "artifactId": "paper_2501_13956",
+      "title": "Zep: A Temporal Knowledge Graph Architecture for Agent Memory",
+      "year": 2025,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 12,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -5970,23 +6930,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.05414",
@@ -6002,23 +6962,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.05706",
@@ -6034,23 +6994,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.14473",
@@ -6066,23 +7026,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.15798",
@@ -6098,23 +7058,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.16659",
@@ -6130,23 +7090,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.17216",
@@ -6162,23 +7122,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.18000",
@@ -6194,23 +7154,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.18002",
@@ -6226,23 +7186,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.18003",
@@ -6258,23 +7218,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.18004",
@@ -6290,23 +7250,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2603.23749",
@@ -6322,23 +7282,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.08545",
@@ -6354,23 +7314,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.08546",
@@ -6386,23 +7346,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.08548",
@@ -6418,23 +7378,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.11407",
@@ -6450,23 +7410,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.13346",
@@ -6482,23 +7442,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.15270",
@@ -6514,23 +7474,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.15706",
@@ -6546,23 +7506,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.17761",
@@ -6578,23 +7538,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.18164",
@@ -6610,23 +7570,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2604.18845",
@@ -9362,23 +10322,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.16708",
@@ -9394,23 +10354,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.16711",
@@ -9426,23 +10386,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.16712",
@@ -9458,23 +10418,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.18304",
@@ -9490,23 +10450,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.18346",
@@ -9522,23 +10482,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.18357",
@@ -9554,23 +10514,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.18397",
@@ -9586,23 +10546,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.18415",
@@ -9618,23 +10578,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2501.01765",
