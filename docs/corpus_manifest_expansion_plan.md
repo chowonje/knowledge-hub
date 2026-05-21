@@ -81,12 +81,25 @@ rows, or hash mismatches.
 Post-apply join/allowlist regeneration records:
 
 - already in manifest: 150
-- verified expansion allowlist remaining: 201
-- excluded: 86 `source_missing`, 9 `ambiguous`
+- verified expansion allowlist remaining: 201 before recovered-source scan expansion
+- excluded before recovered-source scan expansion: 86 `source_missing`, 9 `ambiguous`
 - hash missing: 0
 - hash mismatch: 0
 
-Next tranche should repeat the same gate: allowlist slice only, local hash
+The subsequent recovered-source scan-root correction included
+`papers_dir/recovered_sources/arxiv` and `papers_dir/recovered_sources/url` in
+the report-only source inventory and the shared artifact resolver used by
+`corpus-manifest-validate` and `corpus-bootstrap`. The current regenerated join
+now records:
+
+- already in manifest: 150
+- available: 396
+- verified expansion allowlist remaining: 246
+- excluded: 41 `source_missing`, 9 `ambiguous`
+- hash missing: 0
+- hash mismatch: 0
+
+Next registration tranche should repeat the same gate: allowlist slice only, local hash
 re-verification, `corpus-manifest-validate`, and `corpus-bootstrap --all --dry-run`.
 
 ## Validation Gate

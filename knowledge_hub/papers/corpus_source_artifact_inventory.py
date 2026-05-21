@@ -38,10 +38,15 @@ DERIVATIVE_SUBDIRS = frozenset(
         "structured_evidence_candidates",
         "summaries",
         "translated",
-        "recovered_sources",
     }
 )
-SOURCE_SCAN_REL_DIRS = ("", "localpdf_pdfs", "localpdf_texts")
+SOURCE_SCAN_REL_DIRS = (
+    "",
+    "localpdf_pdfs",
+    "localpdf_texts",
+    "recovered_sources/arxiv",
+    "recovered_sources/url",
+)
 _ARXIV_ID_RE = re.compile(r"^\d{4}\.\d{4,5}$")
 
 

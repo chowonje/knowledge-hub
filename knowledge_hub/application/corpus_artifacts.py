@@ -18,7 +18,13 @@ DEFAULT_CORPUS_MANIFEST_PATH = REPO_ROOT / "eval" / "knowledgeos" / "fixtures" /
 CORPUS_MANIFEST_SCHEMA = "knowledge-hub.corpus-manifest.v1"
 REPO_FIXTURE_TIER = "repo_fixture"
 LOCAL_CORPUS_TIERS = {"local_corpus", "optional_local_corpus"}
-LOCAL_CORPUS_SOURCE_SUBDIRS = ("", "localpdf_pdfs", "localpdf_texts")
+LOCAL_CORPUS_SOURCE_SUBDIRS = (
+    "",
+    "localpdf_pdfs",
+    "localpdf_texts",
+    "recovered_sources/arxiv",
+    "recovered_sources/url",
+)
 
 
 def _clean_text(value: Any) -> str:

@@ -59,8 +59,12 @@ Latest output:
 - Join report: `eval/knowledgeos/reports/priority_corpus_source_join_report.v1.json`
 - Expansion allowlist: `eval/knowledgeos/fixtures/priority_corpus_manifest_expansion_allowlist.v1.json`
 - Already in manifest: **150**
-- Verified expansion allowlist remaining: **201**
-- Excluded: **86** `source_missing`, **9** `ambiguous`
+- Verified expansion allowlist remaining: **246**
+- Excluded: **41** `source_missing`, **9** `ambiguous`
+
+The latest regeneration includes operator-recovered source roots under
+`papers_dir/recovered_sources/arxiv` and `papers_dir/recovered_sources/url`.
+Those roots are source-artifact scan roots, not derivative/evidence outputs.
 
 For each regeneration:
 
@@ -86,7 +90,10 @@ verified allowlist: 251 rows.
 **Applied 2026-05-21:** second batch registered 50 rows (manifest 100 → 150) from
 `corpus_manifest_100_to_150_dry_run_plan.v1.json`, with local source-byte,
 SHA-256, and byte-length re-verification. Post-apply join regeneration records
-`already_in_manifest=150` and 201 verified allowlist rows remaining.
+`already_in_manifest=150` and 201 verified allowlist rows remaining before the
+recovered-source scan-root correction. After adding recovered source roots to the
+report-only inventory, the current join records 246 verified allowlist rows
+remaining and 41 `source_missing` rows.
 
 For each subsequent batch:
 

@@ -114,6 +114,43 @@ def test_corpus_source_artifact_inventory_flags_hash_mismatch_registered(tmp_pat
     assert item["manifestRegistered"] is True
 
 
+def test_corpus_source_artifact_inventory_scans_recovered_source_roots(tmp_path: Path) -> None:
+    papers_dir = tmp_path / "papers"
+    recovered_arxiv = papers_dir / "recovered_sources" / "arxiv"
+    recovered_arxiv.mkdir(parents=True)
+    content = b"%PDF-1.4 recovered arxiv source"
+    (recovered_arxiv / "2501.00001.pdf").write_bytes(content)
+    manifest_path = _write_manifest(
+        tmp_path / "manifest.json",
+        [
+            {
+                "artifactId": "paper_2501_00001",
+                "sourceIds": ["2501.00001"],
+                "expectedFilename": "2501.00001.pdf",
+                "expectedSourceContentHash": _hash(content),
+                "byteLength": len(content),
+                "provenanceUrl": "https://arxiv.org/pdf/2501.00001",
+                "corpusTier": "local_corpus",
+            }
+        ],
+    )
+
+    payload = build_corpus_source_artifact_inventory(
+        config=_ConfigWithPapersDir(papers_dir),
+        manifest_path=manifest_path,
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["counts"]["inventoryRows"] == 1
+    assert payload["counts"]["alreadyRegisteredRows"] == 1
+    assert "recovered_sources" not in payload["checks"]["derivativeSubdirsExcluded"]
+    assert "papers_dir/recovered_sources/arxiv" in payload["checks"]["scanRoots"]
+    item = payload["items"][0]
+    assert item["sourceId"] == "2501.00001"
+    assert item["registrationStatus"] == "already_registered"
+    assert item["corpusLocationRef"] == "papers_dir/recovered_sources/arxiv/2501.00001.pdf"
+
+
 def test_paper_corpus_source_artifact_inventory_cli_reports_json(tmp_path: Path) -> None:
     papers_dir = tmp_path / "papers"
     papers_dir.mkdir()
