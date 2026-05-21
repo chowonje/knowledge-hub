@@ -24,13 +24,14 @@ class _ConfigStub:
 def test_structured_evidence_vertical_slice_discovery_builds_report() -> None:
     root = Path(__file__).resolve().parents[1]
     manifest = root / "eval/knowledgeos/fixtures/corpus_manifest.json"
+    expected_manifest_rows = len(json.loads(manifest.read_text(encoding="utf-8"))["artifacts"])
     payload = build_structured_evidence_vertical_slice_discovery(
         config=_ConfigStub(),
         manifest_path=manifest,
     )
 
     assert payload["schema"] == STRUCTURED_EVIDENCE_VERTICAL_SLICE_DISCOVERY_SCHEMA_ID
-    assert payload["counts"]["corpusManifestRows"] == 100
+    assert payload["counts"]["corpusManifestRows"] == expected_manifest_rows
     assert len(payload["recommendedFirstSlice"]) == len(RECOMMENDED_PAPER_IDS)
     assert payload["policy"]["runtimeAnswerIntegration"] is False
     assert payload["policy"]["manifestMutation"] is False

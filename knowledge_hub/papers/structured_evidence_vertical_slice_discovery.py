@@ -306,7 +306,7 @@ def build_structured_evidence_vertical_slice_discovery(
         "generatedAt": _now_iso(),
         "scopeNote": (
             "Discovery-only report for Structured Evidence vertical slice planning on the "
-            "verified 100-row corpus manifest. Does not mutate manifests, create runtime "
+            "verified corpus manifest. Does not mutate manifests, create runtime "
             "evidence, integrate answers, scan vault content, or download external sources."
         ),
         "inputs": {

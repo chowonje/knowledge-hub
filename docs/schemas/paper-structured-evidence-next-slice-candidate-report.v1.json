@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generatedAt",
+    "status",
+    "scopeNote",
+    "inputs",
+    "selectionPolicy",
+    "counts",
+    "minimalEvidenceTypes",
+    "deferredEvidenceTypes",
+    "readbackCandidates",
+    "selectedGreenfieldCandidates",
+    "allRows",
+    "policy"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1" },
+    "generatedAt": { "type": "string" },
+    "status": { "type": "string", "enum": ["ready", "blocked"] },
+    "scopeNote": { "type": "string" },
+    "inputs": { "type": "object", "additionalProperties": true },
+    "selectionPolicy": { "type": "object", "additionalProperties": true },
+    "counts": {
+      "type": "object",
+      "required": [
+        "manifestRows",
+        "sourceAvailableRows",
+        "parsedAvailableRows",
+        "strictEvidenceStoreRowsRaw",
+        "strictEvidenceStoreRowsPublicReviewable",
+        "strictEvidenceStoreRowsOperatorLocalOnly",
+        "strictCoveredRows",
+        "strictCoveragePct",
+        "greenfieldEligibleRows",
+        "selectedGreenfieldRows",
+        "readbackCandidateRows",
+        "greenfieldCarryoverRows",
+        "structuredEvidenceStatusBreakdown",
+        "selectedGreenfieldByTier"
+      ],
+      "properties": {
+        "manifestRows": { "type": "integer", "minimum": 0 },
+        "sourceAvailableRows": { "type": "integer", "minimum": 0 },
+        "parsedAvailableRows": { "type": "integer", "minimum": 0 },
+        "strictEvidenceStoreRowsRaw": { "type": "integer", "minimum": 0 },
+        "strictEvidenceStoreRowsPublicReviewable": { "type": "integer", "minimum": 0 },
+        "strictEvidenceStoreRowsOperatorLocalOnly": { "type": "integer", "minimum": 0 },
+        "strictCoveredRows": { "type": "integer", "minimum": 0 },
+        "strictCoveragePct": { "type": "number", "minimum": 0 },
+        "greenfieldEligibleRows": { "type": "integer", "minimum": 0 },
+        "selectedGreenfieldRows": { "type": "integer", "minimum": 0 },
+        "readbackCandidateRows": { "type": "integer", "minimum": 0 },
+        "greenfieldCarryoverRows": { "type": "integer", "minimum": 0 },
+        "structuredEvidenceStatusBreakdown": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "selectedGreenfieldByTier": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      },
+      "additionalProperties": true
+    },
+    "minimalEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+    "deferredEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+    "readbackCandidates": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "selectedGreenfieldCandidates": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "allRows": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "manifestMutation",
+        "sourceSpanWrite",
+        "strictEvidenceWrite",
+        "runtimeAnswerIntegration",
+        "citationGradePromotion",
+        "tableEquationParser",
+        "vaultScan",
+        "externalDownload"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "manifestMutation": { "const": false },
+        "sourceSpanWrite": { "const": false },
+        "strictEvidenceWrite": { "const": false },
+        "runtimeAnswerIntegration": { "const": false },
+        "citationGradePromotion": { "const": false },
+        "tableEquationParser": { "const": false },
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "schemaValidation": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}
