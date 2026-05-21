@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.structured-evidence-next-slice-apply-readback.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generatedAt",
+    "runId",
+    "apply",
+    "status",
+    "scopeNote",
+    "inputs",
+    "selection",
+    "policy",
+    "deferredEvidenceTypes",
+    "counts",
+    "readbackRows",
+    "greenfieldRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.structured-evidence-next-slice-apply-readback.v1" },
+    "generatedAt": { "type": "string" },
+    "runId": { "type": "string" },
+    "apply": { "type": "boolean" },
+    "status": { "type": "string", "enum": ["ready", "blocked"] },
+    "scopeNote": { "type": "string" },
+    "inputs": { "type": "object", "additionalProperties": true },
+    "selection": {
+      "type": "object",
+      "required": ["readbackSourceIds", "greenfieldSourceIds", "greenfieldSelectionPolicy"],
+      "properties": {
+        "readbackSourceIds": { "type": "array", "items": { "type": "string" } },
+        "greenfieldSourceIds": { "type": "array", "items": { "type": "string" } },
+        "greenfieldSelectionPolicy": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "runtimeAnswerIntegration",
+        "complexQaEval",
+        "manifestMutation",
+        "tableEquationParser",
+        "citationGradePromotion",
+        "runtimeEvidencePromotion",
+        "externalDownload",
+        "vaultScan",
+        "databaseMutation",
+        "indexMutation",
+        "sourceContentHashAuthority"
+      ],
+      "properties": {
+        "runtimeAnswerIntegration": { "const": false },
+        "complexQaEval": { "const": false },
+        "manifestMutation": { "const": false },
+        "tableEquationParser": { "const": false },
+        "citationGradePromotion": { "const": false },
+        "runtimeEvidencePromotion": { "const": false },
+        "externalDownload": { "const": false },
+        "vaultScan": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "sourceContentHashAuthority": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "deferredEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+    "counts": {
+      "type": "object",
+      "required": [
+        "manifestRows",
+        "baselineStrictCoveredRows",
+        "readbackRows",
+        "greenfieldSelectedRows",
+        "generatedSourceSpanRecords",
+        "generatedStrictEvidenceRecords",
+        "strictCoveredRowsAfterLocalApply"
+      ],
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "readbackRows": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "greenfieldRows": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "schemaValidation": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

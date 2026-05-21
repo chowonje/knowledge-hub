@@ -157,8 +157,12 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _read_jsonl_excluding_run(path: Path, *, run_id: str = RUN_ID) -> list[dict[str, Any]]:
+    return [row for row in _read_jsonl(path) if _clean(row.get("runId")) != _clean(run_id)]
+
+
 def _read_jsonl_excluding_current_run(path: Path) -> list[dict[str, Any]]:
-    return [row for row in _read_jsonl(path) if _clean(row.get("runId")) != RUN_ID]
+    return _read_jsonl_excluding_run(path, run_id=RUN_ID)
 
 
 def _write_jsonl_idempotent(path: Path, records: list[dict[str, Any]]) -> int:
@@ -293,6 +297,7 @@ def _source_span_record(
     locator: dict[str, Any],
     suffix: str,
     claim_hint: str,
+    run_id: str = RUN_ID,
 ) -> dict[str, Any]:
     source_span_id = f"source-span:{paper_id}:{artifact_type}:{suffix}"
     candidate_record_id = f"source-span-candidate:{paper_id}:{artifact_type}:{suffix}"
@@ -305,7 +310,7 @@ def _source_span_record(
         "schema": PARSED_ARTIFACT_SOURCE_SPAN_RECORD_SCHEMA_ID,
         "sourceSpanId": source_span_id,
         "candidateRecordId": candidate_record_id,
-        "runId": RUN_ID,
+        "runId": run_id,
         "plannedWriteTarget": PARSED_ARTIFACT_SOURCE_SPAN_STORE,
         "paperId": paper_id,
         "artifactType": artifact_type,
@@ -336,6 +341,7 @@ def _strict_evidence_record(
     source_content_hash: str,
     source_file: str,
     parsed_locator_ref: str,
+    run_id: str = RUN_ID,
 ) -> dict[str, Any]:
     source_span_id = _clean(source_span_record.get("sourceSpanId"))
     candidate_record_id = _clean(source_span_record.get("candidateRecordId"))
@@ -350,7 +356,7 @@ def _strict_evidence_record(
     return {
         "schema": PARSED_ARTIFACT_STRICT_EVIDENCE_RECORD_SCHEMA_ID,
         "strictEvidenceId": strict_evidence_id,
-        "runId": RUN_ID,
+        "runId": run_id,
         "plannedWriteTarget": PARSED_ARTIFACT_STRICT_EVIDENCE_STORE,
         "paperId": paper_id,
         "artifactType": artifact_type,
@@ -522,7 +528,7 @@ def _pilot_readback(
     return {
         "sourceId": source_id,
         "artifactId": corpus_entry_ref(entry),
-        "mode": PAPER_MODES[source_id],
+        "mode": PAPER_MODES.get(source_id, "strict_evidence_readback"),
         "status": status,
         "expectedSourceContentHash": expected_hash,
         "parsedArtifactLocator": f"papers_dir/parsed/{source_id}/document.json",
@@ -600,6 +606,7 @@ def _greenfield_section(
     pdf_path: Path,
     expected_hash: str,
     apply: bool,
+    run_id: str = RUN_ID,
 ) -> dict[str, Any]:
     expected_hash_body = _hash_body(expected_hash)
     source_file = _clean(entry.get("expectedFilename"))
@@ -643,6 +650,7 @@ def _greenfield_section(
             },
             suffix=suffix,
             claim_hint=_clean(match.get("claimSurface")),
+            run_id=run_id,
         )
         generated_strict = _strict_evidence_record(
             paper_id=source_id,
@@ -652,6 +660,7 @@ def _greenfield_section(
             source_content_hash=expected_hash,
             source_file=source_file,
             parsed_locator_ref=parsed_locator,
+            run_id=run_id,
         )
         source_span_ids = {_clean(generated_source_span.get("sourceSpanId"))}
         trace_validation = _validate_strict_record_trace(
@@ -685,22 +694,24 @@ def _greenfield_section(
     return {
         "sourceId": source_id,
         "artifactId": corpus_entry_ref(entry),
-        "mode": PAPER_MODES[source_id],
+        "mode": PAPER_MODES.get(source_id, "greenfield_section"),
         "status": status,
         "expectedSourceContentHash": expected_hash,
         "parsedArtifactLocator": parsed_locator,
         "existingRecords": {
             "sourceSpanCount": len(
-                _read_jsonl_excluding_current_run(
-                    papers_dir / "structured_evidence" / "source_span" / f"{source_id}.jsonl"
+                _read_jsonl_excluding_run(
+                    papers_dir / "structured_evidence" / "source_span" / f"{source_id}.jsonl",
+                    run_id=run_id,
                 )
             ),
             "strictEvidenceCount": len(
-                _read_jsonl_excluding_current_run(
-                    papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl"
+                _read_jsonl_excluding_run(
+                    papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl",
+                    run_id=run_id,
                 )
             ),
-            "operatorLocalRunIdExcluded": RUN_ID,
+            "runIdExcluded": run_id,
         },
         "generatedRecords": {
             "sourceSpanCount": 1 if generated_source_span and trace_validation.get("pass") else 0,
