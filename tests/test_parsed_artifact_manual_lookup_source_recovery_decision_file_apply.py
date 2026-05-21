@@ -158,6 +158,23 @@ def test_apply_dry_run_plans_apply_ready_row(tmp_path: Path) -> None:
     assert payload["coverageTarget"]["minRecoveriesForTarget"] == 6
 
 
+def test_apply_dry_run_blocks_decision_file_changed_after_validation(tmp_path: Path) -> None:
+    _draft_report, validation, decision_file, db, papers_dir = _approved_bundle(tmp_path)
+    decision_file["decisions"][0]["approvedSourceUrl"] = "https://example.com/replaced.pdf"
+    payload = build_parsed_artifact_manual_lookup_source_recovery_decision_file_apply_dry_run(
+        validation_report=validation,
+        decision_file=decision_file,
+        sqlite_db=db,
+        papers_dir=papers_dir,
+        limit=1,
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["counts"]["selectedRows"] == 1
+    assert payload["counts"]["blockedRows"] == 1
+    assert payload["items"][0]["reason"] == "decision_file_changed_after_validation"
+
+
 def test_apply_plan_from_ready_dry_run(tmp_path: Path) -> None:
     _draft_report, validation, decision_file, db, papers_dir = _approved_bundle(tmp_path)
     dry_run = build_parsed_artifact_manual_lookup_source_recovery_decision_file_apply_dry_run(
@@ -181,6 +198,33 @@ def test_apply_plan_from_ready_dry_run(tmp_path: Path) -> None:
     assert apply_report["status"] == "ready"
     assert apply_report["counts"]["planned"] == 1
     assert apply_report["mutationCounters"]["sourceDownloadRows"] == 0
+
+
+def test_apply_helper_defaults_to_network_blocked_for_url_rows(tmp_path: Path, monkeypatch) -> None:
+    _draft_report, validation, decision_file, db, papers_dir = _approved_bundle(tmp_path)
+    dry_run = build_parsed_artifact_manual_lookup_source_recovery_decision_file_apply_dry_run(
+        validation_report=validation,
+        decision_file=decision_file,
+        sqlite_db=db,
+        papers_dir=papers_dir,
+        limit=1,
+    )
+
+    def fail_download(*_args, **_kwargs):
+        raise AssertionError("download must require explicit allow_network=True")
+
+    monkeypatch.setattr(apply_module, "_download_pdf", fail_download)
+    report = build_parsed_artifact_manual_lookup_source_recovery_decision_file_apply(
+        sqlite_db=db,
+        papers_dir=papers_dir,
+        dry_run_report=dry_run,
+        apply=True,
+    )
+
+    assert report["status"] == "blocked"
+    assert report["items"][0]["reason"] == "network_not_allowed_for_approved_source_url"
+    assert report["mutationPolicy"]["networkAllowed"] is False
+    assert report["mutationCounters"]["sourceDownloadRows"] == 0
 
 
 def test_local_pdf_apply_requires_matching_source_content_hash(tmp_path: Path, monkeypatch) -> None:

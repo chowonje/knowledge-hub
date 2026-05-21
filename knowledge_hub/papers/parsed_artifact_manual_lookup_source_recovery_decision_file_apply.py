@@ -285,7 +285,7 @@ def build_parsed_artifact_manual_lookup_source_recovery_decision_file_apply(
     dry_run_report_path: str | Path = "",
     report_name: str = "parsed-artifact-manual-lookup-source-recovery-decision-file-apply",
     apply: bool = False,
-    allow_network: bool = True,
+    allow_network: bool = False,
     overwrite: bool = False,
     timeout_seconds: float = 30.0,
     delay_seconds: float = 0.0,

@@ -101,6 +101,18 @@ def _decision_index(decision_file: dict[str, Any]) -> dict[str, dict[str, Any]]:
     }
 
 
+def _approval_fingerprint(row: dict[str, Any]) -> tuple[str, ...]:
+    return (
+        _clean_text(row.get("decision")),
+        _clean_text(row.get("approvedSourceType")),
+        _clean_text(row.get("approvedSourceUrl")),
+        _clean_text(row.get("approvedLocalPdfPath")),
+        _normalize_source_content_hash(row.get("approvedSourceContentHash")),
+        _clean_text(row.get("approvedBy")),
+        _clean_text(row.get("approvedAt")),
+    )
+
+
 def _select_apply_ready_rows(
     validation_report: dict[str, Any],
     decision_file: dict[str, Any],
@@ -113,8 +125,13 @@ def _select_apply_ready_rows(
         if not isinstance(vrow, dict) or not bool(vrow.get("applyReadyForLaterApply")):
             continue
         key = _row_key(_clean_text(vrow.get("paperId")), _clean_text(vrow.get("sourceReviewCardId")))
-        drow = decision_index.get(key) or {}
-        selected.append({**vrow, **drow})
+        drow = decision_index.get(key)
+        if not drow:
+            selected.append({**vrow, "_decisionValidationBlocker": "decision_file_row_missing_after_validation"})
+        elif _approval_fingerprint(vrow) != _approval_fingerprint(drow):
+            selected.append({**vrow, **drow, "_decisionValidationBlocker": "decision_file_changed_after_validation"})
+        else:
+            selected.append({**vrow, **drow})
         if len(selected) >= max(0, limit):
             break
     return selected
@@ -147,6 +164,7 @@ def _dry_run_item(
     approved_url = _clean_text(row.get("approvedSourceUrl"))
     approved_local = _clean_text(row.get("approvedLocalPdfPath"))
     approved_hash = _normalize_source_content_hash(row.get("approvedSourceContentHash"))
+    validation_blocker = _clean_text(row.get("_decisionValidationBlocker"))
     if decision == DECISION_APPROVE_SOURCE_URL:
         source_action = "download_approved_source_url_to_recovered_sources"
         source_target = _target_recovered_path(papers_dir=papers_dir, paper_id=paper_id)
@@ -155,7 +173,7 @@ def _dry_run_item(
         source_action = "register_approved_local_pdf_path"
         source_target = Path(approved_local).expanduser()
         source_input = approved_local
-    return {
+    item = {
         "paperId": paper_id,
         "paperTitle": _clean_text(row.get("paperTitle")),
         "sourceReviewCardId": _clean_text(row.get("sourceReviewCardId")),
@@ -182,6 +200,22 @@ def _dry_run_item(
         "strictEvidenceAttempted": False,
         "runtimeEvidenceAttempted": False,
     }
+    if validation_blocker:
+        item.update(
+            {
+                "status": "blocked",
+                "reason": validation_blocker,
+                "sourceRecoveryAction": "blocked",
+                "sourceRecoveryInput": "",
+                "targetSourceArtifactPath": "",
+                "sourceIntegrity": {
+                    "algorithm": "sha256",
+                    "expectedSourceContentHash": approved_hash,
+                    "hashCheckRequiredAtApply": True,
+                },
+            }
+        )
+    return item
 
 
 def build_parsed_artifact_manual_lookup_source_recovery_decision_file_apply_dry_run(
