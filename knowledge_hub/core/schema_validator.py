@@ -149,6 +149,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.complex-qa-seed-pack.v1": "paper-complex-qa-seed-pack.v1.json",
     "knowledge-hub.paper.corpus-manifest-validation.v1": "paper-corpus-manifest-validation.v1.json",
     "knowledge-hub.paper.corpus-source-artifact-inventory.v1": "paper-corpus-source-artifact-inventory.v1.json",
+    "knowledge-hub.corpus-manifest-expansion-tranche-plan.v1": "corpus-manifest-expansion-tranche-plan.v1.json",
     "knowledge-hub.priority-corpus-candidate-ledger.v1": "priority-corpus-candidate-ledger.v1.json",
     "knowledge-hub.priority-corpus-source-join-report.v1": "priority-corpus-source-join-report.v1.json",
     "knowledge-hub.priority-corpus-manifest-expansion-allowlist.v1": "priority-corpus-manifest-expansion-allowlist.v1.json",

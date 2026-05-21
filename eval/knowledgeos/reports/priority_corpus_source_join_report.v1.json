@@ -1,16 +1,16 @@
 {
   "schema": "knowledge-hub.priority-corpus-source-join-report.v1",
-  "generated_at": "2026-05-21T05:52:21.944100+00:00",
+  "generated_at": "2026-05-21T06:04:17.825159+00:00",
   "scope_note": "Report-only join of priority corpus candidate ledger rows against local source artifact inventory file rows. Does not mutate corpus_manifest.json, download sources, or register manifest entries.",
   "inputs": {
     "candidate_ledger": "eval/knowledgeos/fixtures/priority_corpus_candidate_ledger.v1.json",
     "corpus_manifest": "eval/knowledgeos/fixtures/corpus_manifest.json",
     "inventory_schema": "knowledge-hub.paper.corpus-source-artifact-inventory.v1",
-    "inventory_generated_at": "2026-05-21T05:52:20.994158+00:00"
+    "inventory_generated_at": "2026-05-21T06:04:17.061339+00:00"
   },
   "inventory_summary": {
     "inventory_file_rows": 888,
-    "inventory_unique_source_ids": 617,
+    "inventory_unique_source_ids": 627,
     "note": "inventory_file_rows is file-row count, not unique paper/source_id count"
   },
   "join_rules": {
@@ -33,13 +33,11 @@
     "ambiguous_count": 9,
     "available_count": 396,
     "parsed_missing_count": 0,
-    "already_in_manifest_count": 150,
-    "expansion_allowlist_count": 246,
+    "already_in_manifest_count": 200,
+    "expansion_allowlist_count": 196,
     "first_tranche_recommended_count": 50,
     "expansion_allowlist_by_tier": {
-      "eval_critical": 3,
-      "foundational": 1,
-      "recent_ai": 114,
+      "recent_ai": 68,
       "local_corpus_candidate": 128
     },
     "join_status_breakdown": {
@@ -73,19 +71,21 @@
       "title": "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
       "year": 2025,
       "candidate_tier": "eval_critical",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:badaf8bb47535df96252be38c5a5b81d979478b860ed67c2c4ac0ebaa4483ae5",
       "observed_sha256": "sha256:badaf8bb47535df96252be38c5a5b81d979478b860ed67c2c4ac0ebaa4483ae5",
       "byte_length": 2420086,
       "canonical_filename": "2501.06322.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2501.06322.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2503.21460",
@@ -751,19 +751,21 @@
       "title": "TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools",
       "year": 2025,
       "candidate_tier": "eval_critical",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:a5e092675098f212c88d43aaafefc0370ef572eec477ec117486937c0ee0f77f",
       "observed_sha256": "sha256:a5e092675098f212c88d43aaafefc0370ef572eec477ec117486937c0ee0f77f",
       "byte_length": 3554649,
       "canonical_filename": "2503.10970.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2503.10970.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2404.16130",
@@ -1112,11 +1114,11 @@
       "title": "Causality is Key for Interpretability Claims to Generalise",
       "year": 2026,
       "candidate_tier": "eval_critical",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:f1fdbe10cf8ef5895b1ad60ccf156becc24d645ce8ea1a5c098bc66d2db93d63",
       "observed_sha256": "sha256:f1fdbe10cf8ef5895b1ad60ccf156becc24d645ce8ea1a5c098bc66d2db93d63",
       "byte_length": 847812,
       "canonical_filename": "2602.16698.pdf",
@@ -1124,7 +1126,7 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "paper-understanding-training-difficulty",
@@ -1150,11 +1152,11 @@
       "title": "Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning Algorithms",
       "year": 2017,
       "candidate_tier": "foundational",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:253b6ef70144cb56d13b4e67d3f8cafad42df78d5984265e0a6e4812ad1715ae",
       "observed_sha256": "sha256:253b6ef70144cb56d13b4e67d3f8cafad42df78d5984265e0a6e4812ad1715ae",
       "byte_length": 233983,
       "canonical_filename": "1708.07747.pdf",
@@ -1162,7 +1164,7 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "gradient-boosting-machine-2001",
@@ -2144,19 +2146,21 @@
       "title": "SaLoRA: Safety-Alignment Preserved Low-Rank Adaptation",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:f2290474479f11a8b105f52809dbff49420167952cf50b40863a69c007e7de7e",
       "observed_sha256": "sha256:f2290474479f11a8b105f52809dbff49420167952cf50b40863a69c007e7de7e",
       "byte_length": 633905,
       "canonical_filename": "2501.01765.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2501.01765.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2501.05031",
@@ -2182,11 +2186,11 @@
       "title": "arXiv 2501.05366",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:b3f9be1ef90348bc29ef3c46b13d1642f4f0e44b6702fbe69ab0b0a0c046b022",
       "observed_sha256": "sha256:b3f9be1ef90348bc29ef3c46b13d1642f4f0e44b6702fbe69ab0b0a0c046b022",
       "byte_length": 655837,
       "canonical_filename": "2501.05366.pdf",
@@ -2194,45 +2198,49 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2501.09004",
       "title": "Aegis2.0: A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Guardrails",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:d23b44ac11090867b7f9ae5ef06934c239476bd38241973d5a49ae1f7077adcf",
       "observed_sha256": "sha256:d23b44ac11090867b7f9ae5ef06934c239476bd38241973d5a49ae1f7077adcf",
       "byte_length": 1666610,
       "canonical_filename": "2501.09004.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2501.09004.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2501.09136",
       "title": "arXiv 2501.09136",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:e1041580a2fecec215b203f5232d558cd6e2802af3d4f5f04fe8bff5080460f8",
       "observed_sha256": "sha256:e1041580a2fecec215b203f5232d558cd6e2802af3d4f5f04fe8bff5080460f8",
       "byte_length": 14269078,
       "canonical_filename": "2501.09136.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2501.09136.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2501.13956",
@@ -2413,19 +2421,21 @@
       "title": "FlexPrefill: A Context-Aware Sparse Attention Mechanism for Efficient Long-Sequence Inference",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:d2240298d13ad238d6a0f8c9332dc65321cbcd269f9cca2ebb32d1858063ffe2",
       "observed_sha256": "sha256:d2240298d13ad238d6a0f8c9332dc65321cbcd269f9cca2ebb32d1858063ffe2",
       "byte_length": 5057080,
       "canonical_filename": "2502.20766.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2502.20766.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2503.03734",
@@ -2862,19 +2872,21 @@
       "title": "Multi-Agent Collaboration via Evolving Orchestration",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:244c86ebd95a9fa7ca06539854186ea3dcdbf794ceb6e7827fff6e642e647bf6",
       "observed_sha256": "sha256:244c86ebd95a9fa7ca06539854186ea3dcdbf794ceb6e7827fff6e642e647bf6",
       "byte_length": 7407808,
       "canonical_filename": "2505.19591.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2505.19591.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2505.23450",
@@ -2900,11 +2912,11 @@
       "title": "arXiv 2506.00054",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:a85e25a72c29602a881174cf0689ddca6cc0368367f1d8db095f4452916e27fa",
       "observed_sha256": "sha256:a85e25a72c29602a881174cf0689ddca6cc0368367f1d8db095f4452916e27fa",
       "byte_length": 2369183,
       "canonical_filename": "2506.00054.pdf",
@@ -2912,7 +2924,7 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.01844",
@@ -3016,11 +3028,11 @@
       "title": "arXiv 2506.10408",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:acd0425864420f0faf297eb393b57a1fbaec9f46f9ab11f2b49b98696edba3e3",
       "observed_sha256": "sha256:acd0425864420f0faf297eb393b57a1fbaec9f46f9ab11f2b49b98696edba3e3",
       "byte_length": 655690,
       "canonical_filename": "2506.10408.pdf",
@@ -3028,274 +3040,260 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.12104",
       "title": "DRIFT: Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:3e974ae0759e32d1b4340b5463a0a6f6cf159b299ec1f8dbdbfbf909e2f8a69a",
       "observed_sha256": "sha256:3e974ae0759e32d1b4340b5463a0a6f6cf159b299ec1f8dbdbfbf909e2f8a69a",
       "byte_length": 2972503,
       "canonical_filename": "DRIFT Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents.pdf",
       "corpus_location_ref": "papers_dir/DRIFT Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.15635",
       "title": "A Benchmark to Evaluate Memory in Embodied Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:1be176cc83f54e8bdc84b29a770d312f0504a716abd8f39f2bb9efea90377482",
       "observed_sha256": "sha256:1be176cc83f54e8bdc84b29a770d312f0504a716abd8f39f2bb9efea90377482",
       "byte_length": 43244178,
       "canonical_filename": "A Benchmark to Evaluate Memory in Embodied Agents.pdf",
       "corpus_location_ref": "papers_dir/A Benchmark to Evaluate Memory in Embodied Agents.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.15882",
       "title": "Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:5f4f4ad933d0ef67198baf2279267f738fda833290ccf1002aba7f35cc6ddd74",
       "observed_sha256": "sha256:5f4f4ad933d0ef67198baf2279267f738fda833290ccf1002aba7f35cc6ddd74",
       "byte_length": 1131611,
       "canonical_filename": "Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling.pdf",
       "corpus_location_ref": "papers_dir/Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.21448",
       "title": "ThinkSound: Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and Editing",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:f5b675e671b3212b9d8ad7dbfe1e55346db24f12afc5fe827495003410440239",
       "observed_sha256": "sha256:f5b675e671b3212b9d8ad7dbfe1e55346db24f12afc5fe827495003410440239",
       "byte_length": 5028202,
       "canonical_filename": "ThinkSound Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and E.pdf",
       "corpus_location_ref": "papers_dir/ThinkSound Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and E.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.21605",
       "title": "MemBench: Towards More Comprehensive Evaluation on the Memory of LLM-based Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:499acafb5507457a69d57448ed61ff0911c93882abf1aaa4f95615d8ea13ffff",
       "observed_sha256": "sha256:499acafb5507457a69d57448ed61ff0911c93882abf1aaa4f95615d8ea13ffff",
       "byte_length": 1858980,
       "canonical_filename": "MemBench Towards More Comprehensive Evaluation on the Memory of LLM-based Agents.pdf",
       "corpus_location_ref": "papers_dir/MemBench Towards More Comprehensive Evaluation on the Memory of LLM-based Agents.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2506.21734",
       "title": "Hierarchical Reasoning Model",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:81b05b03ebd92748b1bc0e59d4b6e0d8271e1e56b84d1d589a03430db79b6e25",
       "observed_sha256": "sha256:81b05b03ebd92748b1bc0e59d4b6e0d8271e1e56b84d1d589a03430db79b6e25",
       "byte_length": 2268976,
       "canonical_filename": "Hierarchical Reasoning Model.pdf",
       "corpus_location_ref": "papers_dir/Hierarchical Reasoning Model.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.01949",
       "title": "Kwai Keye-VL Technical Report",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:97a73b94d5b5ac436e05135d71805e2a2fe8c97114396f9293febccd93b07e31",
       "observed_sha256": "sha256:97a73b94d5b5ac436e05135d71805e2a2fe8c97114396f9293febccd93b07e31",
       "byte_length": 27904845,
       "canonical_filename": "Kwai Keye-VL Technical Report.pdf",
       "corpus_location_ref": "papers_dir/Kwai Keye-VL Technical Report.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.02076",
       "title": "Reasoning on a Budget: A Survey of Adaptive and Controllable Test-Time Compute in LLMs",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:031a7af9a2244706f2a75642bcf5acf03d05a871a5f41a2eb5a5b9bc895e2eec",
       "observed_sha256": "sha256:031a7af9a2244706f2a75642bcf5acf03d05a871a5f41a2eb5a5b9bc895e2eec",
       "byte_length": 915399,
       "canonical_filename": "Reasoning on a Budget A Survey of Adaptive and Controllable Test-Time Compute in LLMs.pdf",
       "corpus_location_ref": "papers_dir/Reasoning on a Budget A Survey of Adaptive and Controllable Test-Time Compute in LLMs.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.05257",
       "title": "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:91d07f0757126e6abaf91556ab5b5df96948e9c76cf0ee8d09a6c2ac9e060fe1",
       "observed_sha256": "sha256:91d07f0757126e6abaf91556ab5b5df96948e9c76cf0ee8d09a6c2ac9e060fe1",
       "byte_length": 1989561,
       "canonical_filename": "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.pdf",
       "corpus_location_ref": "papers_dir/Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.06261",
       "title": "Gemini 2.5: Pushing the Frontier with Advanced Reasoning and Multimodality",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:b4cfe19f7eea7b0308cb0282127ef4821bb8f1d1e270e7a6f398b30fe57d41cb",
       "observed_sha256": "sha256:b4cfe19f7eea7b0308cb0282127ef4821bb8f1d1e270e7a6f398b30fe57d41cb",
       "byte_length": 10501019,
       "canonical_filename": "Gemini 2.5 Pushing the Frontier with Advanced Reasoning and Multimodality.pdf",
       "corpus_location_ref": "papers_dir/Gemini 2.5 Pushing the Frontier with Advanced Reasoning and Multimodality.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.07957",
       "title": "MIRIX: Multi-Agent Memory System for LLM-Based Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:8204e2a238a86af14b358b28a7ef1f682956f1b41f7023d08cc7e2762e45c5ea",
       "observed_sha256": "sha256:8204e2a238a86af14b358b28a7ef1f682956f1b41f7023d08cc7e2762e45c5ea",
       "byte_length": 2304996,
       "canonical_filename": "MIRIX Multi-Agent Memory System for LLM-Based Agents.pdf",
       "corpus_location_ref": "papers_dir/MIRIX Multi-Agent Memory System for LLM-Based Agents.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.08191",
       "title": "Overview of the TREC 2021 Deep Learning Track",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:66268df9c81abee702a410508624c34c7162eb82e362af7fabb5857af1ba5ec2",
       "observed_sha256": "sha256:66268df9c81abee702a410508624c34c7162eb82e362af7fabb5857af1ba5ec2",
       "byte_length": 6012193,
       "canonical_filename": "2507.08191.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2507.08191.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.11473",
       "title": "A New and Fragile Opportunity for AI Safety",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
-      "join_method": "title_filename_bridge",
+      "current_manifest_status": "in_manifest",
+      "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:420d2c12a787b6903242b4369d3b6c5c7949e27fdfa62dd4c2dc5b4e2f399307",
       "observed_sha256": "sha256:420d2c12a787b6903242b4369d3b6c5c7949e27fdfa62dd4c2dc5b4e2f399307",
       "byte_length": 416330,
       "canonical_filename": "A New and Fragile Opportunity for AI Safety.pdf",
       "corpus_location_ref": "papers_dir/A New and Fragile Opportunity for AI Safety.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 2,
-      "warnings": [
-        "pdf_preferred_over_text"
-      ],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 1,
+      "warnings": [],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2507.13575",
@@ -4815,182 +4813,200 @@
       "title": "Measurement of the Saturation Length of the Self-Modulation Instability",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:0f714afa2aac1e783a17bcc323a0cb831c9e9e819129347caed85ec37ddb6216",
       "observed_sha256": "sha256:0f714afa2aac1e783a17bcc323a0cb831c9e9e819129347caed85ec37ddb6216",
       "byte_length": 10628373,
       "canonical_filename": "2602.16624.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16624.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16662",
       "title": "Evaluating Collective Behaviour of Hundreds of LLM Agents",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:96107b947d9e7ae7b9cc3d018e0b5ab59aebd1b2be2402735591625fb3b30d60",
       "observed_sha256": "sha256:96107b947d9e7ae7b9cc3d018e0b5ab59aebd1b2be2402735591625fb3b30d60",
       "byte_length": 3203003,
       "canonical_filename": "2602.16662.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16662.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16669",
       "title": "PredMapNet: Future and Historical Reasoning for Consistent Online HD Vectorized Map Construction",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:8e647ee986700d588d5f1d2cc1936e7228ba1ea29555fc280c522c85207fc28c",
       "observed_sha256": "sha256:8e647ee986700d588d5f1d2cc1936e7228ba1ea29555fc280c522c85207fc28c",
       "byte_length": 1752281,
       "canonical_filename": "2602.16669.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16669.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16671",
       "title": "SPARC: Scenario Planning and Reasoning for Automated C Unit Test Generation",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:0398fc24eb7da015d3253760873620b75985c4f78a1e2c92282594155d8692fc",
       "observed_sha256": "sha256:0398fc24eb7da015d3253760873620b75985c4f78a1e2c92282594155d8692fc",
       "byte_length": 2535688,
       "canonical_filename": "2602.16671.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16671.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16678",
       "title": "Consensus Based Task Allocation for Angles-Only Local Catalog Maintenance of Satellite Systems",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:c77cc03e7541c1bcd74ec8a4ddda2297b8f56ce6e756adf72cb1e1273a360b28",
       "observed_sha256": "sha256:c77cc03e7541c1bcd74ec8a4ddda2297b8f56ce6e756adf72cb1e1273a360b28",
       "byte_length": 352689,
       "canonical_filename": "2602.16678.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16678.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16682",
       "title": "Learning Situated Awareness in the Real World",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:e8d11f09336d0156b6ac5a2c5faebfc78573fc038553adc77d9fa9ddf20cae17",
       "observed_sha256": "sha256:e8d11f09336d0156b6ac5a2c5faebfc78573fc038553adc77d9fa9ddf20cae17",
       "byte_length": 21943995,
       "canonical_filename": "2602.16682.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16682.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16683",
       "title": "Scattering data and correlation function for the $K f_1(1285)$ interaction",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:5bd04e3e0a60d99c5fe3ff11ffa6b68511c4fe579fa7a77e6425f217e9dff3e5",
       "observed_sha256": "sha256:5bd04e3e0a60d99c5fe3ff11ffa6b68511c4fe579fa7a77e6425f217e9dff3e5",
       "byte_length": 658482,
       "canonical_filename": "2602.16683.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16683.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16687",
       "title": "Scaling Open Discrete Audio Foundation Models with Interleaved Semantic, Acoustic, and Text Tokens",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:44f0f4bda70ce8f445829d47eb3e37b1d6bde7cb51288b3c284eb9b207a6e5ed",
       "observed_sha256": "sha256:44f0f4bda70ce8f445829d47eb3e37b1d6bde7cb51288b3c284eb9b207a6e5ed",
       "byte_length": 1871771,
       "canonical_filename": "2602.16687.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16687.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16689",
       "title": "Are Object-Centric Representations Better At Compositional Generalization?",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:2bdbf2aa592b67602e78b6d1bb2b1c6cd0c56952bddbf12e05920f2f0fbda056",
       "observed_sha256": "sha256:2bdbf2aa592b67602e78b6d1bb2b1c6cd0c56952bddbf12e05920f2f0fbda056",
       "byte_length": 7106986,
       "canonical_filename": "2602.16689.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16689.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16699",
       "title": "Calibrate-Then-Act: Cost-Aware Exploration in LLM Agents",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:1169305b7d9d7bfc0c379103742d8e841a39d66d4418d69821636025fdf5613f",
       "observed_sha256": "sha256:1169305b7d9d7bfc0c379103742d8e841a39d66d4418d69821636025fdf5613f",
       "byte_length": 8813692,
       "canonical_filename": "2602.16699.pdf",
@@ -4998,113 +5014,123 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16700",
       "title": "The Role of Common Randomness Replication in Symmetric PIR on Graph-Based Replicated Systems",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:53bd507af1c2d45763303fac2aa1da428561ad682def5382df2c43923b6103be",
       "observed_sha256": "sha256:53bd507af1c2d45763303fac2aa1da428561ad682def5382df2c43923b6103be",
       "byte_length": 671965,
       "canonical_filename": "2602.16700.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16700.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16701",
       "title": "Understanding the kinetics of static recrystallization in Mg-Zn-Ca alloys using an integrated PRISMS simulation framework",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:0c77835d299aba6e7c6b2fff23568a828ba211e62f67a301aa7b320bd2600955",
       "observed_sha256": "sha256:0c77835d299aba6e7c6b2fff23568a828ba211e62f67a301aa7b320bd2600955",
       "byte_length": 1600205,
       "canonical_filename": "2602.16701.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16701.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16702",
       "title": "Saliency-Aware Multi-Route Thinking: Revisiting Vision-Language Reasoning",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:67144f6c8a6bb5667a20cfedb113b16a17a68d5c685ef1c8ee4810f858197e3a",
       "observed_sha256": "sha256:67144f6c8a6bb5667a20cfedb113b16a17a68d5c685ef1c8ee4810f858197e3a",
       "byte_length": 1078309,
       "canonical_filename": "2602.16702.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16702.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16703",
       "title": "Measuring Mid-2025 LLM-Assistance on Novice Performance in Biology",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:18df05b48257500a9aa04bec42aff2a242d5385df6fb590292f359234b5b7761",
       "observed_sha256": "sha256:18df05b48257500a9aa04bec42aff2a242d5385df6fb590292f359234b5b7761",
       "byte_length": 1431377,
       "canonical_filename": "2602.16703.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16703.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16704",
       "title": "Reinforced Fast Weights with Next-Sequence Prediction",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:3240b0ad2332dcfd3bade49f34354d2dad23b82b4783826735c26f86f9efc56d",
       "observed_sha256": "sha256:3240b0ad2332dcfd3bade49f34354d2dad23b82b4783826735c26f86f9efc56d",
       "byte_length": 986929,
       "canonical_filename": "2602.16704.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16704.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16705",
       "title": "Learning Humanoid End-Effector Control for Open-Vocabulary Visual Loco-Manipulation",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:0e38cc05069505a9571789d3d37d051e3b004f0727107124f955ab40e09efbc5",
       "observed_sha256": "sha256:0e38cc05069505a9571789d3d37d051e3b004f0727107124f955ab40e09efbc5",
       "byte_length": 46535366,
       "canonical_filename": "2602.16705.pdf",
@@ -5112,37 +5138,39 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16707",
       "title": "E-Graphs as a Persistent Compiler Abstraction",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:244c6a69cac1227c58ea3787219198c824bfbed03c00dc57e045d46abfea223c",
       "observed_sha256": "sha256:244c6a69cac1227c58ea3787219198c824bfbed03c00dc57e045d46abfea223c",
       "byte_length": 1134830,
       "canonical_filename": "2602.16707.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16707.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16708",
       "title": "Policy Compiler for Secure Agentic Systems",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:3700a28b47d3866cf3994250349c1b5c755d145d072ed0b77a73c9b3ad2a2859",
       "observed_sha256": "sha256:3700a28b47d3866cf3994250349c1b5c755d145d072ed0b77a73c9b3ad2a2859",
       "byte_length": 535397,
       "canonical_filename": "2602.16708.pdf",
@@ -5150,37 +5178,39 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16711",
       "title": "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:db2f6c364cd193658948d03fc957af1d29299abd2ceb42dceda67ca541a1b18d",
       "observed_sha256": "sha256:db2f6c364cd193658948d03fc957af1d29299abd2ceb42dceda67ca541a1b18d",
       "byte_length": 10602456,
       "canonical_filename": "2602.16711.pdf",
       "corpus_location_ref": "papers_dir/recovered_sources/arxiv/2602.16711.pdf",
       "source_type": "pdf",
-      "mapped_inventory_file_rows": 1,
-      "warnings": [],
-      "expansion_allowlist_eligible": true
+      "mapped_inventory_file_rows": 2,
+      "warnings": [
+        "duplicate_file_rows_canonicalized"
+      ],
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.16712",
       "title": "One Hand to Rule Them All: Canonical Representations for Unified Dexterous Manipulation",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:c451df65b95c736bfa706d18b7c70102d8b2e2e70bda3b6254cdf8f1936f93ae",
       "observed_sha256": "sha256:c451df65b95c736bfa706d18b7c70102d8b2e2e70bda3b6254cdf8f1936f93ae",
       "byte_length": 47106868,
       "canonical_filename": "2602.16712.pdf",
@@ -5188,18 +5218,18 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.18304",
       "title": "FeatureBleed: Inferring Private Enriched Attributes From Sparsity-Optimized AI Accelerators",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:f0397a42d67e80643dbe37491d0372b9a61c74aff892b624677c35a089e02f66",
       "observed_sha256": "sha256:f0397a42d67e80643dbe37491d0372b9a61c74aff892b624677c35a089e02f66",
       "byte_length": 226378,
       "canonical_filename": "2602.18304.pdf",
@@ -5207,18 +5237,18 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.18346",
       "title": "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:77daea06d6fd30798df0780a69fa4bb10070b1375f31eba41377ec3d178ff5bd",
       "observed_sha256": "sha256:77daea06d6fd30798df0780a69fa4bb10070b1375f31eba41377ec3d178ff5bd",
       "byte_length": 1482734,
       "canonical_filename": "2602.18346.pdf",
@@ -5226,18 +5256,18 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.18357",
       "title": "Statistical Confidence in Functional Correctness: An Approach for AI Product Functional Correctness Evaluation",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:9d6bd7ae71f4f4352df659774b613dc39760f251b090ff9a754231c6611c710e",
       "observed_sha256": "sha256:9d6bd7ae71f4f4352df659774b613dc39760f251b090ff9a754231c6611c710e",
       "byte_length": 807242,
       "canonical_filename": "2602.18357.pdf",
@@ -5245,18 +5275,18 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.18397",
       "title": "How Fast Can I Run My VLA? Demystifying VLA Inference Performance with VLA-Perf",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:b7e67a7f05fcd6e34e3f0c71c4d2b834d1715fe02673874c77efb608c8ba7c95",
       "observed_sha256": "sha256:b7e67a7f05fcd6e34e3f0c71c4d2b834d1715fe02673874c77efb608c8ba7c95",
       "byte_length": 1121043,
       "canonical_filename": "2602.18397.pdf",
@@ -5264,18 +5294,18 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2602.18415",
       "title": "AI-Wrapped: Participatory, Privacy-Preserving Measurement of Longitudinal LLM Use In-the-Wild",
       "year": 2026,
       "candidate_tier": "recent_ai",
-      "current_manifest_status": "not_in_manifest",
+      "current_manifest_status": "in_manifest",
       "join_method": "direct_source_id",
       "join_status": "available",
       "parsed_status": "parsed_present",
-      "expected_source_content_hash": null,
+      "expected_source_content_hash": "sha256:2ceb6ee183c18b48a3f168ae1fc5dcb20cc681248c2c76d8fc82fd286bf47e9e",
       "observed_sha256": "sha256:2ceb6ee183c18b48a3f168ae1fc5dcb20cc681248c2c76d8fc82fd286bf47e9e",
       "byte_length": 1207954,
       "canonical_filename": "2602.18415.pdf",
@@ -5283,7 +5313,7 @@
       "source_type": "pdf",
       "mapped_inventory_file_rows": 1,
       "warnings": [],
-      "expansion_allowlist_eligible": true
+      "expansion_allowlist_eligible": false
     },
     {
       "source_id": "2603.14473",
@@ -8948,454 +8978,454 @@
   ],
   "first_tranche_recommendation": [
     {
-      "source_id": "2602.16698",
-      "title": "Causality is Key for Interpretability Claims to Generalise",
-      "year": 2026,
-      "candidate_tier": "eval_critical",
-      "observed_sha256": "sha256:f1fdbe10cf8ef5895b1ad60ccf156becc24d645ce8ea1a5c098bc66d2db93d63",
-      "byte_length": 847812,
-      "canonical_filename": "2602.16698.pdf"
-    },
-    {
-      "source_id": "2501.06322",
-      "title": "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
-      "year": 2025,
-      "candidate_tier": "eval_critical",
-      "observed_sha256": "sha256:badaf8bb47535df96252be38c5a5b81d979478b860ed67c2c4ac0ebaa4483ae5",
-      "byte_length": 2420086,
-      "canonical_filename": "2501.06322.pdf"
-    },
-    {
-      "source_id": "2503.10970",
-      "title": "TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools",
-      "year": 2025,
-      "candidate_tier": "eval_critical",
-      "observed_sha256": "sha256:a5e092675098f212c88d43aaafefc0370ef572eec477ec117486937c0ee0f77f",
-      "byte_length": 3554649,
-      "canonical_filename": "2503.10970.pdf"
-    },
-    {
-      "source_id": "1708.07747",
-      "title": "Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning Algorithms",
-      "year": 2017,
-      "candidate_tier": "foundational",
-      "observed_sha256": "sha256:253b6ef70144cb56d13b4e67d3f8cafad42df78d5984265e0a6e4812ad1715ae",
-      "byte_length": 233983,
-      "canonical_filename": "1708.07747.pdf"
-    },
-    {
-      "source_id": "2602.16624",
-      "title": "Measurement of the Saturation Length of the Self-Modulation Instability",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:0f714afa2aac1e783a17bcc323a0cb831c9e9e819129347caed85ec37ddb6216",
-      "byte_length": 10628373,
-      "canonical_filename": "2602.16624.pdf"
-    },
-    {
-      "source_id": "2602.16662",
-      "title": "Evaluating Collective Behaviour of Hundreds of LLM Agents",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:96107b947d9e7ae7b9cc3d018e0b5ab59aebd1b2be2402735591625fb3b30d60",
-      "byte_length": 3203003,
-      "canonical_filename": "2602.16662.pdf"
-    },
-    {
-      "source_id": "2602.16669",
-      "title": "PredMapNet: Future and Historical Reasoning for Consistent Online HD Vectorized Map Construction",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:8e647ee986700d588d5f1d2cc1936e7228ba1ea29555fc280c522c85207fc28c",
-      "byte_length": 1752281,
-      "canonical_filename": "2602.16669.pdf"
-    },
-    {
-      "source_id": "2602.16671",
-      "title": "SPARC: Scenario Planning and Reasoning for Automated C Unit Test Generation",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:0398fc24eb7da015d3253760873620b75985c4f78a1e2c92282594155d8692fc",
-      "byte_length": 2535688,
-      "canonical_filename": "2602.16671.pdf"
-    },
-    {
-      "source_id": "2602.16678",
-      "title": "Consensus Based Task Allocation for Angles-Only Local Catalog Maintenance of Satellite Systems",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:c77cc03e7541c1bcd74ec8a4ddda2297b8f56ce6e756adf72cb1e1273a360b28",
-      "byte_length": 352689,
-      "canonical_filename": "2602.16678.pdf"
-    },
-    {
-      "source_id": "2602.16682",
-      "title": "Learning Situated Awareness in the Real World",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:e8d11f09336d0156b6ac5a2c5faebfc78573fc038553adc77d9fa9ddf20cae17",
-      "byte_length": 21943995,
-      "canonical_filename": "2602.16682.pdf"
-    },
-    {
-      "source_id": "2602.16683",
-      "title": "Scattering data and correlation function for the $K f_1(1285)$ interaction",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:5bd04e3e0a60d99c5fe3ff11ffa6b68511c4fe579fa7a77e6425f217e9dff3e5",
-      "byte_length": 658482,
-      "canonical_filename": "2602.16683.pdf"
-    },
-    {
-      "source_id": "2602.16687",
-      "title": "Scaling Open Discrete Audio Foundation Models with Interleaved Semantic, Acoustic, and Text Tokens",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:44f0f4bda70ce8f445829d47eb3e37b1d6bde7cb51288b3c284eb9b207a6e5ed",
-      "byte_length": 1871771,
-      "canonical_filename": "2602.16687.pdf"
-    },
-    {
-      "source_id": "2602.16689",
-      "title": "Are Object-Centric Representations Better At Compositional Generalization?",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:2bdbf2aa592b67602e78b6d1bb2b1c6cd0c56952bddbf12e05920f2f0fbda056",
-      "byte_length": 7106986,
-      "canonical_filename": "2602.16689.pdf"
-    },
-    {
-      "source_id": "2602.16699",
-      "title": "Calibrate-Then-Act: Cost-Aware Exploration in LLM Agents",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:1169305b7d9d7bfc0c379103742d8e841a39d66d4418d69821636025fdf5613f",
-      "byte_length": 8813692,
-      "canonical_filename": "2602.16699.pdf"
-    },
-    {
-      "source_id": "2602.16700",
-      "title": "The Role of Common Randomness Replication in Symmetric PIR on Graph-Based Replicated Systems",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:53bd507af1c2d45763303fac2aa1da428561ad682def5382df2c43923b6103be",
-      "byte_length": 671965,
-      "canonical_filename": "2602.16700.pdf"
-    },
-    {
-      "source_id": "2602.16701",
-      "title": "Understanding the kinetics of static recrystallization in Mg-Zn-Ca alloys using an integrated PRISMS simulation framework",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:0c77835d299aba6e7c6b2fff23568a828ba211e62f67a301aa7b320bd2600955",
-      "byte_length": 1600205,
-      "canonical_filename": "2602.16701.pdf"
-    },
-    {
-      "source_id": "2602.16702",
-      "title": "Saliency-Aware Multi-Route Thinking: Revisiting Vision-Language Reasoning",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:67144f6c8a6bb5667a20cfedb113b16a17a68d5c685ef1c8ee4810f858197e3a",
-      "byte_length": 1078309,
-      "canonical_filename": "2602.16702.pdf"
-    },
-    {
-      "source_id": "2602.16703",
-      "title": "Measuring Mid-2025 LLM-Assistance on Novice Performance in Biology",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:18df05b48257500a9aa04bec42aff2a242d5385df6fb590292f359234b5b7761",
-      "byte_length": 1431377,
-      "canonical_filename": "2602.16703.pdf"
-    },
-    {
-      "source_id": "2602.16704",
-      "title": "Reinforced Fast Weights with Next-Sequence Prediction",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:3240b0ad2332dcfd3bade49f34354d2dad23b82b4783826735c26f86f9efc56d",
-      "byte_length": 986929,
-      "canonical_filename": "2602.16704.pdf"
-    },
-    {
-      "source_id": "2602.16705",
-      "title": "Learning Humanoid End-Effector Control for Open-Vocabulary Visual Loco-Manipulation",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:0e38cc05069505a9571789d3d37d051e3b004f0727107124f955ab40e09efbc5",
-      "byte_length": 46535366,
-      "canonical_filename": "2602.16705.pdf"
-    },
-    {
-      "source_id": "2602.16707",
-      "title": "E-Graphs as a Persistent Compiler Abstraction",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:244c6a69cac1227c58ea3787219198c824bfbed03c00dc57e045d46abfea223c",
-      "byte_length": 1134830,
-      "canonical_filename": "2602.16707.pdf"
-    },
-    {
-      "source_id": "2602.16708",
-      "title": "Policy Compiler for Secure Agentic Systems",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:3700a28b47d3866cf3994250349c1b5c755d145d072ed0b77a73c9b3ad2a2859",
-      "byte_length": 535397,
-      "canonical_filename": "2602.16708.pdf"
-    },
-    {
-      "source_id": "2602.16711",
-      "title": "TeCoNeRV: Leveraging Temporal Coherence for Compressible Neural Representations for Videos",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:db2f6c364cd193658948d03fc957af1d29299abd2ceb42dceda67ca541a1b18d",
-      "byte_length": 10602456,
-      "canonical_filename": "2602.16711.pdf"
-    },
-    {
-      "source_id": "2602.16712",
-      "title": "One Hand to Rule Them All: Canonical Representations for Unified Dexterous Manipulation",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:c451df65b95c736bfa706d18b7c70102d8b2e2e70bda3b6254cdf8f1936f93ae",
-      "byte_length": 47106868,
-      "canonical_filename": "2602.16712.pdf"
-    },
-    {
-      "source_id": "2602.18304",
-      "title": "FeatureBleed: Inferring Private Enriched Attributes From Sparsity-Optimized AI Accelerators",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:f0397a42d67e80643dbe37491d0372b9a61c74aff892b624677c35a089e02f66",
-      "byte_length": 226378,
-      "canonical_filename": "2602.18304.pdf"
-    },
-    {
-      "source_id": "2602.18346",
-      "title": "Vichara: Appellate Judgment Prediction and Explanation for the Indian Judicial System",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:77daea06d6fd30798df0780a69fa4bb10070b1375f31eba41377ec3d178ff5bd",
-      "byte_length": 1482734,
-      "canonical_filename": "2602.18346.pdf"
-    },
-    {
-      "source_id": "2602.18357",
-      "title": "Statistical Confidence in Functional Correctness: An Approach for AI Product Functional Correctness Evaluation",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:9d6bd7ae71f4f4352df659774b613dc39760f251b090ff9a754231c6611c710e",
-      "byte_length": 807242,
-      "canonical_filename": "2602.18357.pdf"
-    },
-    {
-      "source_id": "2602.18397",
-      "title": "How Fast Can I Run My VLA? Demystifying VLA Inference Performance with VLA-Perf",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:b7e67a7f05fcd6e34e3f0c71c4d2b834d1715fe02673874c77efb608c8ba7c95",
-      "byte_length": 1121043,
-      "canonical_filename": "2602.18397.pdf"
-    },
-    {
-      "source_id": "2602.18415",
-      "title": "AI-Wrapped: Participatory, Privacy-Preserving Measurement of Longitudinal LLM Use In-the-Wild",
-      "year": 2026,
-      "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:2ceb6ee183c18b48a3f168ae1fc5dcb20cc681248c2c76d8fc82fd286bf47e9e",
-      "byte_length": 1207954,
-      "canonical_filename": "2602.18415.pdf"
-    },
-    {
-      "source_id": "2501.01765",
-      "title": "SaLoRA: Safety-Alignment Preserved Low-Rank Adaptation",
+      "source_id": "2507.13575",
+      "title": "Apple Intelligence Foundation Language Models",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:f2290474479f11a8b105f52809dbff49420167952cf50b40863a69c007e7de7e",
-      "byte_length": 633905,
-      "canonical_filename": "2501.01765.pdf"
+      "observed_sha256": "sha256:b3b1587cb6fe12940921c4b2eddb73c4edc6f48eb530d32ec12e9c5eb031ca66",
+      "byte_length": 1025485,
+      "canonical_filename": "Apple Intelligence Foundation Language Models.pdf"
     },
     {
-      "source_id": "2501.05366",
-      "title": "arXiv 2501.05366",
+      "source_id": "2507.20526",
+      "title": "Security Challenges in AI Agent Deployment: Insights from a Large Scale Public Competition",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:b3f9be1ef90348bc29ef3c46b13d1642f4f0e44b6702fbe69ab0b0a0c046b022",
-      "byte_length": 655837,
-      "canonical_filename": "2501.05366.pdf"
+      "observed_sha256": "sha256:dd47a8416b0cdb6cf2365b51f9c9042b0213f172280a215719b09b7ff60414ca",
+      "byte_length": 1861702,
+      "canonical_filename": "Security Challenges in AI Agent Deployment Insights from a Large Scale Public Competition.pdf"
     },
     {
-      "source_id": "2501.09004",
-      "title": "Aegis2.0: A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Guardrails",
+      "source_id": "2508.02324",
+      "title": "Qwen-Image Technical Report",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:d23b44ac11090867b7f9ae5ef06934c239476bd38241973d5a49ae1f7077adcf",
-      "byte_length": 1666610,
-      "canonical_filename": "2501.09004.pdf"
+      "observed_sha256": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+      "byte_length": 43156117,
+      "canonical_filename": "Qwen-Image Technical Report.pdf"
     },
     {
-      "source_id": "2501.09136",
-      "title": "arXiv 2501.09136",
+      "source_id": "2508.04039",
+      "title": "Large Reasoning Models Are Autonomous Jailbreak Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:e1041580a2fecec215b203f5232d558cd6e2802af3d4f5f04fe8bff5080460f8",
-      "byte_length": 14269078,
-      "canonical_filename": "2501.09136.pdf"
+      "observed_sha256": "sha256:175a4c0209b6b1a1b19f5e87db9b7194184d533db37b16b88553a9aebe1e4de1",
+      "byte_length": 1400255,
+      "canonical_filename": "Large Reasoning Models Are Autonomous Jailbreak Agents.pdf"
     },
     {
-      "source_id": "2502.20766",
-      "title": "FlexPrefill: A Context-Aware Sparse Attention Mechanism for Efficient Long-Sequence Inference",
+      "source_id": "2508.15763",
+      "title": "Intern-S1: A Scientific Multimodal Foundation Model",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:d2240298d13ad238d6a0f8c9332dc65321cbcd269f9cca2ebb32d1858063ffe2",
-      "byte_length": 5057080,
-      "canonical_filename": "2502.20766.pdf"
+      "observed_sha256": "sha256:08b812d19d83c83dc351078c346828ab7ebb812208fa54db990eaed954195fd0",
+      "byte_length": 1576152,
+      "canonical_filename": "Intern-S1 A Scientific Multimodal Foundation Model.pdf"
     },
     {
-      "source_id": "2505.19591",
-      "title": "Multi-Agent Collaboration via Evolving Orchestration",
+      "source_id": "2509.06917",
+      "title": "Paper2Agent: Reimagining Research Papers As Interactive and Reliable AI Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:244c86ebd95a9fa7ca06539854186ea3dcdbf794ceb6e7827fff6e642e647bf6",
-      "byte_length": 7407808,
-      "canonical_filename": "2505.19591.pdf"
+      "observed_sha256": "sha256:40aa69655396d272826cf97400f05722712ab583260fb4a3e57cf495994ab58e",
+      "byte_length": 8933956,
+      "canonical_filename": "Paper2Agent Reimagining Research Papers As Interactive and Reliable AI Agents.pdf"
     },
     {
-      "source_id": "2506.00054",
-      "title": "arXiv 2506.00054",
+      "source_id": "2509.14260",
+      "title": "Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:a85e25a72c29602a881174cf0689ddca6cc0368367f1d8db095f4452916e27fa",
-      "byte_length": 2369183,
-      "canonical_filename": "2506.00054.pdf"
+      "observed_sha256": "sha256:46107b6bd6b94461edb396deec534c7e4d6618fe8045a177b6a6d4107f3ef82d",
+      "byte_length": 1397696,
+      "canonical_filename": "Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs.pdf"
     },
     {
-      "source_id": "2506.10408",
-      "title": "arXiv 2506.10408",
+      "source_id": "2509.16861",
+      "title": "AdaptiveGuard: Towards Adaptive Runtime Safety for LLM-Powered Software",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:acd0425864420f0faf297eb393b57a1fbaec9f46f9ab11f2b49b98696edba3e3",
-      "byte_length": 655690,
-      "canonical_filename": "2506.10408.pdf"
+      "observed_sha256": "sha256:9702e3f1341cabfb8c7d4d76781a122fcf0736212735f647d49203fe91cc186f",
+      "byte_length": 7226456,
+      "canonical_filename": "AdaptiveGuard Towards Adaptive Runtime Safety for LLM-Powered Software.pdf"
     },
     {
-      "source_id": "2506.12104",
-      "title": "DRIFT: Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents",
+      "source_id": "2509.16870",
+      "title": "DecipherGuard: Understanding and Deciphering Jailbreak Prompts for a Safer Deployment of Intelligent Software Systems",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:3e974ae0759e32d1b4340b5463a0a6f6cf159b299ec1f8dbdbfbf909e2f8a69a",
-      "byte_length": 2972503,
-      "canonical_filename": "DRIFT Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents.pdf"
+      "observed_sha256": "sha256:b8b50bacf41b51a04208a7180774fca6b0bc2db99b61c0dadbc9d66febd8287f",
+      "byte_length": 1616348,
+      "canonical_filename": "DecipherGuard Understanding and Deciphering Jailbreak Prompts for a Safer Deployment of Intelligent.pdf"
     },
     {
-      "source_id": "2506.15635",
-      "title": "A Benchmark to Evaluate Memory in Embodied Agents",
+      "source_id": "2509.16941",
+      "title": "SWE-Bench Pro: Can AI Agents Solve Long-Horizon Software Engineering Tasks?",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:1be176cc83f54e8bdc84b29a770d312f0504a716abd8f39f2bb9efea90377482",
-      "byte_length": 43244178,
-      "canonical_filename": "A Benchmark to Evaluate Memory in Embodied Agents.pdf"
+      "observed_sha256": "sha256:38bafe017fe2e259f27aba35ec3583b0332af001d4a8e7b3330e522076beeb0f",
+      "byte_length": 1585853,
+      "canonical_filename": "SWE-Bench Pro Can AI Agents Solve Long-Horizon Software Engineering Tasks.pdf"
     },
     {
-      "source_id": "2506.15882",
-      "title": "Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling",
+      "source_id": "2509.17765",
+      "title": "Qwen3-Omni Technical Report",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:5f4f4ad933d0ef67198baf2279267f738fda833290ccf1002aba7f35cc6ddd74",
-      "byte_length": 1131611,
-      "canonical_filename": "Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling.pdf"
+      "observed_sha256": "sha256:4608d7f5d0694dd09a66144dac921797e161331d92b5eef133615bec392ec928",
+      "byte_length": 4036466,
+      "canonical_filename": "Qwen3-Omni Technical Report.pdf"
     },
     {
-      "source_id": "2506.21448",
-      "title": "ThinkSound: Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and Editing",
+      "source_id": "2509.19480",
+      "title": "OmniVLA: An Omni-Modal Vision-Language-Action Model for Robot Navigation",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:f5b675e671b3212b9d8ad7dbfe1e55346db24f12afc5fe827495003410440239",
-      "byte_length": 5028202,
-      "canonical_filename": "ThinkSound Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and E.pdf"
+      "observed_sha256": "sha256:f6744c6c6b5ef1d23fc0db3345a287d91f0c1269c17b056236f760245a509ee9",
+      "byte_length": 3149452,
+      "canonical_filename": "OmniVLA An Omni-Modal Vision-Language-Action Model for Robot Navigation.pdf"
     },
     {
-      "source_id": "2506.21605",
-      "title": "MemBench: Towards More Comprehensive Evaluation on the Memory of LLM-based Agents",
+      "source_id": "2509.21766",
+      "title": "UltraHorizon: Benchmarking Agent Capabilities in Ultra Long-Horizon Scenarios",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:499acafb5507457a69d57448ed61ff0911c93882abf1aaa4f95615d8ea13ffff",
-      "byte_length": 1858980,
-      "canonical_filename": "MemBench Towards More Comprehensive Evaluation on the Memory of LLM-based Agents.pdf"
+      "observed_sha256": "sha256:08eb1c9b7c9ad1ce97e72c51deaa73a3861d2b735dd3d2faf77332cdc467b824",
+      "byte_length": 5115226,
+      "canonical_filename": "UltraHorizon Benchmarking Agent Capabilities in Ultra Long-Horizon Scenarios.pdf"
     },
     {
-      "source_id": "2506.21734",
-      "title": "Hierarchical Reasoning Model",
+      "source_id": "2509.24065",
+      "title": "Open Opportunities in AI Safety, Alignment, and Ethics (AI SAE)",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:81b05b03ebd92748b1bc0e59d4b6e0d8271e1e56b84d1d589a03430db79b6e25",
-      "byte_length": 2268976,
-      "canonical_filename": "Hierarchical Reasoning Model.pdf"
+      "observed_sha256": "sha256:40b586cf842976c92953103e35e606c611963cb8704110693cf7cb167c5c2921",
+      "byte_length": 2342156,
+      "canonical_filename": "2509.24065.pdf"
     },
     {
-      "source_id": "2507.01949",
-      "title": "Kwai Keye-VL Technical Report",
+      "source_id": "2510.01375",
+      "title": "Fine-tuning with RAG for Improving LLM Learning of New Skills",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:97a73b94d5b5ac436e05135d71805e2a2fe8c97114396f9293febccd93b07e31",
-      "byte_length": 27904845,
-      "canonical_filename": "Kwai Keye-VL Technical Report.pdf"
+      "observed_sha256": "sha256:3f50546cf030339d2e6fdbf4c45445665fbe700d7764cc4a3621bc77f63e2c2f",
+      "byte_length": 1052988,
+      "canonical_filename": "Fine-tuning with RAG for Improving LLM Learning of New Skills.pdf"
     },
     {
-      "source_id": "2507.02076",
-      "title": "Reasoning on a Budget: A Survey of Adaptive and Controllable Test-Time Compute in LLMs",
+      "source_id": "2510.04852",
+      "title": "FreshBrew: A Benchmark for Evaluating AI Agents on Java Code Migration",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:031a7af9a2244706f2a75642bcf5acf03d05a871a5f41a2eb5a5b9bc895e2eec",
-      "byte_length": 915399,
-      "canonical_filename": "Reasoning on a Budget A Survey of Adaptive and Controllable Test-Time Compute in LLMs.pdf"
+      "observed_sha256": "sha256:3aab7c92bf4d5314bb8c399123d1cf39a8aa0a47e3f4d5c9595f748f7fd66ad0",
+      "byte_length": 714316,
+      "canonical_filename": "FreshBrew A Benchmark for Evaluating AI Agents on Java Code Migration.pdf"
     },
     {
-      "source_id": "2507.05257",
-      "title": "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions",
+      "source_id": "2510.07172",
+      "title": "NewtonBench: Benchmarking Generalizable Scientific Law Discovery in LLM Agents",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:91d07f0757126e6abaf91556ab5b5df96948e9c76cf0ee8d09a6c2ac9e060fe1",
-      "byte_length": 1989561,
-      "canonical_filename": "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.pdf"
+      "observed_sha256": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+      "byte_length": 2799343,
+      "canonical_filename": "NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf"
     },
     {
-      "source_id": "2507.06261",
-      "title": "Gemini 2.5: Pushing the Frontier with Advanced Reasoning and Multimodality",
+      "source_id": "2510.08002",
+      "title": "Learning on the Job: An Experience-Driven Self-Evolving Agent for Long-Horizon Tasks",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:b4cfe19f7eea7b0308cb0282127ef4821bb8f1d1e270e7a6f398b30fe57d41cb",
-      "byte_length": 10501019,
-      "canonical_filename": "Gemini 2.5 Pushing the Frontier with Advanced Reasoning and Multimodality.pdf"
+      "observed_sha256": "sha256:8fd586a6b967663ba7cfdc0c869dc67563c60e375aaa415a645620d758b71e0e",
+      "byte_length": 4475156,
+      "canonical_filename": "Learning on the Job An Experience-Driven Self-Evolving Agent for Long-Horizon Tasks.pdf"
     },
     {
-      "source_id": "2507.07957",
-      "title": "MIRIX: Multi-Agent Memory System for LLM-Based Agents",
+      "source_id": "2510.08996",
+      "title": "Saving SWE-Bench: A Benchmark Mutation Approach for Realistic Agent Evaluation",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:8204e2a238a86af14b358b28a7ef1f682956f1b41f7023d08cc7e2762e45c5ea",
-      "byte_length": 2304996,
-      "canonical_filename": "MIRIX Multi-Agent Memory System for LLM-Based Agents.pdf"
+      "observed_sha256": "sha256:39ba6f2a980d3be8b8a4ae5d2ac6adf936652deb50baa383c7400da1274a9dc2",
+      "byte_length": 1389821,
+      "canonical_filename": "Saving SWE-Bench A Benchmark Mutation Approach for Realistic Agent Evaluation.pdf"
     },
     {
-      "source_id": "2507.08191",
-      "title": "Overview of the TREC 2021 Deep Learning Track",
+      "source_id": "2510.15682",
+      "title": "SQuAI: Scientific Question-Answering with Multi-Agent Retrieval-Augmented Generation",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:66268df9c81abee702a410508624c34c7162eb82e362af7fabb5857af1ba5ec2",
-      "byte_length": 6012193,
-      "canonical_filename": "2507.08191.pdf"
+      "observed_sha256": "sha256:5b45247a0ed911a79e43266f089865cb431f13d9cb1a7b323adb8f3fc4176230",
+      "byte_length": 774612,
+      "canonical_filename": "SQuAI Scientific Question-Answering with Multi-Agent Retrieval-Augmented Generation.pdf"
     },
     {
-      "source_id": "2507.11473",
-      "title": "A New and Fragile Opportunity for AI Safety",
+      "source_id": "2510.21571",
+      "title": "Scalable Vision-Language-Action Model Pretraining for Robotic Manipulation with Real-Life Human Activity Videos",
       "year": 2025,
       "candidate_tier": "recent_ai",
-      "observed_sha256": "sha256:420d2c12a787b6903242b4369d3b6c5c7949e27fdfa62dd4c2dc5b4e2f399307",
-      "byte_length": 416330,
-      "canonical_filename": "A New and Fragile Opportunity for AI Safety.pdf"
+      "observed_sha256": "sha256:64997d21ff29cbd2df7d7435940cd15757f34c17d4da8f62ca0e743dc8cf94dc",
+      "byte_length": 13996628,
+      "canonical_filename": "Scalable Vision-Language-Action Model Pretraining for Robotic Manipulation with Real-Life Human Acti.pdf"
+    },
+    {
+      "source_id": "2510.21652",
+      "title": "AstaBench: Rigorous Benchmarking of AI Agents with a Holistic Scientific Research Suite",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:9d88cb2c0ab3e58bf1f552dea3661dbacd8f585f18b6e633a20b3a6733baee6a",
+      "byte_length": 1190542,
+      "canonical_filename": "AstaBench Rigorous Benchmarking of AI Agents with a Holistic Scientific Research Suite.pdf"
+    },
+    {
+      "source_id": "2510.22075",
+      "title": "Agentic Reinforcement Learning for Real-World Code Repair",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:b749fee99689f8cbe17f5a98c545f9bcd79b107e34d8a609b86ec0b380bcef45",
+      "byte_length": 1823588,
+      "canonical_filename": "Agentic Reinforcement Learning for Real-World Code Repair.pdf"
+    },
+    {
+      "source_id": "2510.24358",
+      "title": "Automatically Benchmarking LLM Code Agents through Agent-Driven Annotation and Evaluation",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:c83c4ff907f0ef977ec2b23e0faef5efd6400c54cdf8196e16f6f209fd0e71a5",
+      "byte_length": 3793629,
+      "canonical_filename": "Automatically Benchmarking LLM Code Agents through Agent-Driven Annotation and Evaluation.pdf"
+    },
+    {
+      "source_id": "2510.24699",
+      "title": "AgentFold: Long-Horizon Web Agents with Proactive Context Management",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:87a0f274e46cc47da4fa50e308c2e9cc09baf9bf382e5a090acfb2910d286ed1",
+      "byte_length": 2064708,
+      "canonical_filename": "AgentFold Long-Horizon Web Agents with Proactive Context Management.pdf"
+    },
+    {
+      "source_id": "2510.26583",
+      "title": "Emu3.5: Native Multimodal Models are World Learners",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+      "byte_length": 48512313,
+      "canonical_filename": "Emu3.5 Native Multimodal Models are World Learners.pdf"
+    },
+    {
+      "source_id": "2510.27598",
+      "title": "InnovatorBench: Evaluating Agents' Ability to Innovate in Machine Learning Research",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:2eb8abd56fa7ea4e1187eb5cd347c7af18f26b9c57ab035ae6001b494bd4af6a",
+      "byte_length": 1836000,
+      "canonical_filename": "InnovatorBench Evaluating Agents' Ability to Innovate in Machine Learning Research.pdf"
+    },
+    {
+      "source_id": "2511.13646",
+      "title": "Can Software Engineering Agents Self-Evolve on the Fly?",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:7bd8e1c6345c2ff8d5a93674a8a88fcfc70ab6f657f946c82a2961f449e01535",
+      "byte_length": 1271380,
+      "canonical_filename": "Can Software Engineering Agents Self-Evolve on the Fly.pdf"
+    },
+    {
+      "source_id": "2511.18298",
+      "title": "Cross-Disciplinary Knowledge Retrieval and Synthesis: A Compound AI Architecture for Scientific Discovery",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:8b707328858682e139cdad95f667f28690f82074cd0b9ddcfc609e3eb39a829c",
+      "byte_length": 2617952,
+      "canonical_filename": "A Compound AI Architecture for Scientific Discovery.pdf"
+    },
+    {
+      "source_id": "2511.21631",
+      "title": "Qwen3-VL Technical Report",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:ee075d08e67de1148d6437c6c1d481f7894183b8793905a2deb5f62664f49380",
+      "byte_length": 4385558,
+      "canonical_filename": "Qwen3-VL Technical Report.pdf"
+    },
+    {
+      "source_id": "2511.22138",
+      "title": "TinyLLM: Evaluation and Optimization of Small Language Models for Agentic Tasks on Edge Devices",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:5bd6c5cffa39a18276995301bbb4f216379f27358714e81fec51a3b40433239c",
+      "byte_length": 1113729,
+      "canonical_filename": "TinyLLM Evaluation and Optimization of Small Language Models for Agentic Tasks on Edge Devices.pdf"
+    },
+    {
+      "source_id": "2511.23404",
+      "title": "LFM2 Technical Report",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:5bedd78570753385f6a8e817a29e1f218fbad39be79969122872761e92484c0d",
+      "byte_length": 18046243,
+      "canonical_filename": "LFM2 Technical Report.pdf"
+    },
+    {
+      "source_id": "2512.01822",
+      "title": "InnoGym: Benchmarking the Innovation Potential of AI Agents",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:5ed4fe2025eb2c3b759c52cdc0bd9b9fccdd0ffe1edee641ba9fe4b10e3d6fcb",
+      "byte_length": 2598637,
+      "canonical_filename": "InnoGym Benchmarking the Innovation Potential of AI Agents.pdf"
+    },
+    {
+      "source_id": "2512.02008",
+      "title": "The Art of Scaling Test-Time Compute for Large Language Models",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:675b01730cd5fd55f38dd23382c307f9be639b6fafc72b7fdf76ae81cb6a0b81",
+      "byte_length": 6001354,
+      "canonical_filename": "The Art of Scaling Test-Time Compute for Large Language Models.pdf"
+    },
+    {
+      "source_id": "2512.02425",
+      "title": "WorldMM: Dynamic Multimodal Memory Agent for Long Video Reasoning",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:444d8bd82dd964e8b150de8e68b597addeacaed2485468cb86b2dfd8963b15f1",
+      "byte_length": 3883266,
+      "canonical_filename": "WorldMM Dynamic Multimodal Memory Agent for Long Video Reasoning.pdf"
+    },
+    {
+      "source_id": "2512.03262",
+      "title": "Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:68dd905204ad3e9db99e515f1195f2bb30b6e5dbbcd79bf36db268f18b89066a",
+      "byte_length": 2505302,
+      "canonical_filename": "Is Vibe Coding Safe Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks.pdf"
+    },
+    {
+      "source_id": "2512.07582",
+      "title": "See Once, Then Act: Vision-Language-Action Model with Task Learning from One-Shot Video Demonstrations",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:165460863e8cf16468ab9306bf742d19ad2a2d30dd4ef5635aad8b7ae77fdf79",
+      "byte_length": 12644296,
+      "canonical_filename": "See Once, Then Act Vision-Language-Action Model with Task Learning from One-Shot Video Demonstration.pdf"
+    },
+    {
+      "source_id": "2512.13564",
+      "title": "Memory in the Age of AI Agents",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:10de3c050903bfa1113c9a954380e2786f42d25a9ea24478bf6cc69fef2e2b42",
+      "byte_length": 14916725,
+      "canonical_filename": "Memory in the Age of AI Agents.pdf"
+    },
+    {
+      "source_id": "2512.15840",
+      "title": "Large Video Planner Enables Generalizable Robot Control",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:590077ffef4b2e8a4827723516de8c347e6dbeb8b07b0f184dc765df5eeeb636",
+      "byte_length": 31836194,
+      "canonical_filename": "Large Video Planner Enables Generalizable Robot Control.pdf"
+    },
+    {
+      "source_id": "2512.15943",
+      "title": "Small Language Models for Efficient Agentic Tool Calling: Outperforming Large Models with Targeted Fine-tuning",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:c2b840a71dfb50b89bc23495c50797abb7d8a9e4a3542a376a0bf433ef80da67",
+      "byte_length": 525401,
+      "canonical_filename": "Small Language Models for Efficient Agentic Tool Calling Outperforming Large Models with Targeted Fi.pdf"
+    },
+    {
+      "source_id": "2512.18470",
+      "title": "SWE-EVO: Benchmarking Coding Agents in Long-Horizon Software Evolution Scenarios",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:78c6aeb874f3824f897b87ebacd0438aa38b69a86adf3b980600066d01714ee9",
+      "byte_length": 860004,
+      "canonical_filename": "SWE-EVO Benchmarking Coding Agents in Long-Horizon Software Evolution Scenarios.pdf"
+    },
+    {
+      "source_id": "2512.18552",
+      "title": "Toward Training Superintelligent Software Agents through Self-Play",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:26f9028c402a9eef0103a608aa19ab9b5ed43d9defd15b81c794f828211bbfde",
+      "byte_length": 1159612,
+      "canonical_filename": "Toward Training Superintelligent Software Agents through Self-Play.pdf"
+    },
+    {
+      "source_id": "2512.21373",
+      "title": "AInsteinBench: Benchmarking Coding Agents on Scientific Computing Development",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:97417c19e2054994e908bdcc75736e4a52fffe18df59e540d7b56d8a46f628dc",
+      "byte_length": 3565235,
+      "canonical_filename": "AInsteinBench Benchmarking Coding Agents on Scientific Computing Development.pdf"
+    },
+    {
+      "source_id": "2512.21919",
+      "title": "SWE-RM: Execution-free Feedback For Training and Test-Time Scaling of SWE Agents",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:212467c56eafe39a9311ce66df233c3334e28d8fda09975235b9a676a9e128b1",
+      "byte_length": 978684,
+      "canonical_filename": "SWE-RM Execution-free Feedback For Training and Test-Time Scaling of SWE Agents.pdf"
+    },
+    {
+      "source_id": "2512.22414",
+      "title": "Emergence of Human to Robot Transfer in Vision-Language-Action Models",
+      "year": 2025,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:e29e2545d0968988b7591ada7b329b478e879e3f476ef388780e4ad5294cc645",
+      "byte_length": 5128889,
+      "canonical_filename": "Emergence of Human to Robot Transfer in Vision-Language-Action Models.pdf"
+    },
+    {
+      "source_id": "2401.04088",
+      "title": "Mixtral of Experts",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:f8bbf0e9d979b7a8ce7be65119266545a229a85b57e077d8bd048e458bb642da",
+      "byte_length": 2475990,
+      "canonical_filename": "2401.04088.pdf"
+    },
+    {
+      "source_id": "2401.15391",
+      "title": "MultiHop-RAG: Benchmarking Retrieval-Augmented Generation for Multi-Hop Queries",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:cbabe586b43efcf21ad1801117fa959032dee5cdb9ca4f0e80ba038a762a0c97",
+      "byte_length": 646158,
+      "canonical_filename": "MultiHop-RAG Benchmarking Retrieval-Augmented Generation for Multi-Hop Queries.pdf"
+    },
+    {
+      "source_id": "2401.15884",
+      "title": "Corrective Retrieval Augmented Generation",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:975aa1fd3c1b603126e93ff99d6504858b61301bf1d34c9df88ebe53a0b026cb",
+      "byte_length": 667756,
+      "canonical_filename": "Corrective Retrieval Augmented Generation.pdf"
+    },
+    {
+      "source_id": "2401.17043",
+      "title": "arXiv 2401.17043",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:2e4ae0cb708fdca9d96bcf8d1c0713dae121195a0a31b78e3132e9ef4fa7db8a",
+      "byte_length": 2115072,
+      "canonical_filename": "2401.17043.pdf"
+    },
+    {
+      "source_id": "2402.01881",
+      "title": "Large Language Model Agent for Hyper-Parameter Optimization",
+      "year": 2024,
+      "candidate_tier": "recent_ai",
+      "observed_sha256": "sha256:c2d8097dd384e96728ab32368358d950295f236e2b3eed54adce01317cf5f971",
+      "byte_length": 1303069,
+      "canonical_filename": "Large Language Model Agent for Hyper-Parameter Optimization.pdf"
     }
   ]
 }

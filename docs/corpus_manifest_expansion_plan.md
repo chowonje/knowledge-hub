@@ -102,6 +102,33 @@ now records:
 Next registration tranche should repeat the same gate: allowlist slice only, local hash
 re-verification, `corpus-manifest-validate`, and `corpus-bootstrap --all --dry-run`.
 
+## Fourth Tranche (150 -> 200, verified allowlist)
+
+Date applied: 2026-05-21
+
+Input artifacts:
+
+- `eval/knowledgeos/fixtures/priority_corpus_manifest_expansion_allowlist.v1.json`
+- `eval/knowledgeos/reports/corpus_manifest_150_to_200_tranche_plan.v1.json`
+
+Added exactly 50 rows via `eval/knowledgeos/scripts/build_corpus_manifest_expansion_tranche.py --target-count 200 --apply`.
+The tranche planner selected only allowlist rows not already present in
+`corpus_manifest.json`, recomputed local source SHA-256 and byte length from
+`papers_dir/...` refs, and checked that the shared artifact resolver can find
+the proposed manifest entry before writing.
+
+Post-apply join/allowlist regeneration records:
+
+- already in manifest: 200
+- available: 396
+- verified expansion allowlist remaining: 196
+- excluded: 41 `source_missing`, 9 `ambiguous`
+- hash missing: 0
+- hash mismatch: 0
+
+Next registration tranche should run the same script with `--target-count 250`
+after the current allowlist has been regenerated against the 200-row manifest.
+
 ## Validation Gate
 
 Use the hidden report-only validator:

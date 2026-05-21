@@ -1950,6 +1950,656 @@
       "license": "external_public_paper_not_redistributed",
       "corpusTier": "local_corpus",
       "notes": "Priority corpus manifest expansion tranche 100\u2192150 dry-run plan; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16698",
+      "sourceIds": [
+        "2602.16698"
+      ],
+      "expectedFilename": "2602.16698.pdf",
+      "expectedSourceContentHash": "sha256:f1fdbe10cf8ef5895b1ad60ccf156becc24d645ce8ea1a5c098bc66d2db93d63",
+      "byteLength": 847812,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16698",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2501_06322",
+      "sourceIds": [
+        "2501.06322"
+      ],
+      "expectedFilename": "2501.06322.pdf",
+      "expectedSourceContentHash": "sha256:badaf8bb47535df96252be38c5a5b81d979478b860ed67c2c4ac0ebaa4483ae5",
+      "byteLength": 2420086,
+      "provenanceUrl": "https://arxiv.org/pdf/2501.06322",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2503_10970",
+      "sourceIds": [
+        "2503.10970"
+      ],
+      "expectedFilename": "2503.10970.pdf",
+      "expectedSourceContentHash": "sha256:a5e092675098f212c88d43aaafefc0370ef572eec477ec117486937c0ee0f77f",
+      "byteLength": 3554649,
+      "provenanceUrl": "https://arxiv.org/pdf/2503.10970",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_1708_07747",
+      "sourceIds": [
+        "1708.07747"
+      ],
+      "expectedFilename": "1708.07747.pdf",
+      "expectedSourceContentHash": "sha256:253b6ef70144cb56d13b4e67d3f8cafad42df78d5984265e0a6e4812ad1715ae",
+      "byteLength": 233983,
+      "provenanceUrl": "https://arxiv.org/pdf/1708.07747",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16624",
+      "sourceIds": [
+        "2602.16624"
+      ],
+      "expectedFilename": "2602.16624.pdf",
+      "expectedSourceContentHash": "sha256:0f714afa2aac1e783a17bcc323a0cb831c9e9e819129347caed85ec37ddb6216",
+      "byteLength": 10628373,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16624",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16662",
+      "sourceIds": [
+        "2602.16662"
+      ],
+      "expectedFilename": "2602.16662.pdf",
+      "expectedSourceContentHash": "sha256:96107b947d9e7ae7b9cc3d018e0b5ab59aebd1b2be2402735591625fb3b30d60",
+      "byteLength": 3203003,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16662",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16669",
+      "sourceIds": [
+        "2602.16669"
+      ],
+      "expectedFilename": "2602.16669.pdf",
+      "expectedSourceContentHash": "sha256:8e647ee986700d588d5f1d2cc1936e7228ba1ea29555fc280c522c85207fc28c",
+      "byteLength": 1752281,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16669",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16671",
+      "sourceIds": [
+        "2602.16671"
+      ],
+      "expectedFilename": "2602.16671.pdf",
+      "expectedSourceContentHash": "sha256:0398fc24eb7da015d3253760873620b75985c4f78a1e2c92282594155d8692fc",
+      "byteLength": 2535688,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16671",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16678",
+      "sourceIds": [
+        "2602.16678"
+      ],
+      "expectedFilename": "2602.16678.pdf",
+      "expectedSourceContentHash": "sha256:c77cc03e7541c1bcd74ec8a4ddda2297b8f56ce6e756adf72cb1e1273a360b28",
+      "byteLength": 352689,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16678",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16682",
+      "sourceIds": [
+        "2602.16682"
+      ],
+      "expectedFilename": "2602.16682.pdf",
+      "expectedSourceContentHash": "sha256:e8d11f09336d0156b6ac5a2c5faebfc78573fc038553adc77d9fa9ddf20cae17",
+      "byteLength": 21943995,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16682",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16683",
+      "sourceIds": [
+        "2602.16683"
+      ],
+      "expectedFilename": "2602.16683.pdf",
+      "expectedSourceContentHash": "sha256:5bd04e3e0a60d99c5fe3ff11ffa6b68511c4fe579fa7a77e6425f217e9dff3e5",
+      "byteLength": 658482,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16683",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16687",
+      "sourceIds": [
+        "2602.16687"
+      ],
+      "expectedFilename": "2602.16687.pdf",
+      "expectedSourceContentHash": "sha256:44f0f4bda70ce8f445829d47eb3e37b1d6bde7cb51288b3c284eb9b207a6e5ed",
+      "byteLength": 1871771,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16687",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16689",
+      "sourceIds": [
+        "2602.16689"
+      ],
+      "expectedFilename": "2602.16689.pdf",
+      "expectedSourceContentHash": "sha256:2bdbf2aa592b67602e78b6d1bb2b1c6cd0c56952bddbf12e05920f2f0fbda056",
+      "byteLength": 7106986,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16689",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16699",
+      "sourceIds": [
+        "2602.16699"
+      ],
+      "expectedFilename": "2602.16699.pdf",
+      "expectedSourceContentHash": "sha256:1169305b7d9d7bfc0c379103742d8e841a39d66d4418d69821636025fdf5613f",
+      "byteLength": 8813692,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16699",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16700",
+      "sourceIds": [
+        "2602.16700"
+      ],
+      "expectedFilename": "2602.16700.pdf",
+      "expectedSourceContentHash": "sha256:53bd507af1c2d45763303fac2aa1da428561ad682def5382df2c43923b6103be",
+      "byteLength": 671965,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16700",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16701",
+      "sourceIds": [
+        "2602.16701"
+      ],
+      "expectedFilename": "2602.16701.pdf",
+      "expectedSourceContentHash": "sha256:0c77835d299aba6e7c6b2fff23568a828ba211e62f67a301aa7b320bd2600955",
+      "byteLength": 1600205,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16701",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16702",
+      "sourceIds": [
+        "2602.16702"
+      ],
+      "expectedFilename": "2602.16702.pdf",
+      "expectedSourceContentHash": "sha256:67144f6c8a6bb5667a20cfedb113b16a17a68d5c685ef1c8ee4810f858197e3a",
+      "byteLength": 1078309,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16702",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16703",
+      "sourceIds": [
+        "2602.16703"
+      ],
+      "expectedFilename": "2602.16703.pdf",
+      "expectedSourceContentHash": "sha256:18df05b48257500a9aa04bec42aff2a242d5385df6fb590292f359234b5b7761",
+      "byteLength": 1431377,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16703",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16704",
+      "sourceIds": [
+        "2602.16704"
+      ],
+      "expectedFilename": "2602.16704.pdf",
+      "expectedSourceContentHash": "sha256:3240b0ad2332dcfd3bade49f34354d2dad23b82b4783826735c26f86f9efc56d",
+      "byteLength": 986929,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16704",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16705",
+      "sourceIds": [
+        "2602.16705"
+      ],
+      "expectedFilename": "2602.16705.pdf",
+      "expectedSourceContentHash": "sha256:0e38cc05069505a9571789d3d37d051e3b004f0727107124f955ab40e09efbc5",
+      "byteLength": 46535366,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16705",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16707",
+      "sourceIds": [
+        "2602.16707"
+      ],
+      "expectedFilename": "2602.16707.pdf",
+      "expectedSourceContentHash": "sha256:244c6a69cac1227c58ea3787219198c824bfbed03c00dc57e045d46abfea223c",
+      "byteLength": 1134830,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16707",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16708",
+      "sourceIds": [
+        "2602.16708"
+      ],
+      "expectedFilename": "2602.16708.pdf",
+      "expectedSourceContentHash": "sha256:3700a28b47d3866cf3994250349c1b5c755d145d072ed0b77a73c9b3ad2a2859",
+      "byteLength": 535397,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16708",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16711",
+      "sourceIds": [
+        "2602.16711"
+      ],
+      "expectedFilename": "2602.16711.pdf",
+      "expectedSourceContentHash": "sha256:db2f6c364cd193658948d03fc957af1d29299abd2ceb42dceda67ca541a1b18d",
+      "byteLength": 10602456,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16711",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_16712",
+      "sourceIds": [
+        "2602.16712"
+      ],
+      "expectedFilename": "2602.16712.pdf",
+      "expectedSourceContentHash": "sha256:c451df65b95c736bfa706d18b7c70102d8b2e2e70bda3b6254cdf8f1936f93ae",
+      "byteLength": 47106868,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.16712",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_18304",
+      "sourceIds": [
+        "2602.18304"
+      ],
+      "expectedFilename": "2602.18304.pdf",
+      "expectedSourceContentHash": "sha256:f0397a42d67e80643dbe37491d0372b9a61c74aff892b624677c35a089e02f66",
+      "byteLength": 226378,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.18304",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_18346",
+      "sourceIds": [
+        "2602.18346"
+      ],
+      "expectedFilename": "2602.18346.pdf",
+      "expectedSourceContentHash": "sha256:77daea06d6fd30798df0780a69fa4bb10070b1375f31eba41377ec3d178ff5bd",
+      "byteLength": 1482734,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.18346",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_18357",
+      "sourceIds": [
+        "2602.18357"
+      ],
+      "expectedFilename": "2602.18357.pdf",
+      "expectedSourceContentHash": "sha256:9d6bd7ae71f4f4352df659774b613dc39760f251b090ff9a754231c6611c710e",
+      "byteLength": 807242,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.18357",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_18397",
+      "sourceIds": [
+        "2602.18397"
+      ],
+      "expectedFilename": "2602.18397.pdf",
+      "expectedSourceContentHash": "sha256:b7e67a7f05fcd6e34e3f0c71c4d2b834d1715fe02673874c77efb608c8ba7c95",
+      "byteLength": 1121043,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.18397",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2602_18415",
+      "sourceIds": [
+        "2602.18415"
+      ],
+      "expectedFilename": "2602.18415.pdf",
+      "expectedSourceContentHash": "sha256:2ceb6ee183c18b48a3f168ae1fc5dcb20cc681248c2c76d8fc82fd286bf47e9e",
+      "byteLength": 1207954,
+      "provenanceUrl": "https://arxiv.org/pdf/2602.18415",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2501_01765",
+      "sourceIds": [
+        "2501.01765"
+      ],
+      "expectedFilename": "2501.01765.pdf",
+      "expectedSourceContentHash": "sha256:f2290474479f11a8b105f52809dbff49420167952cf50b40863a69c007e7de7e",
+      "byteLength": 633905,
+      "provenanceUrl": "https://arxiv.org/pdf/2501.01765",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2501_05366",
+      "sourceIds": [
+        "2501.05366"
+      ],
+      "expectedFilename": "2501.05366.pdf",
+      "expectedSourceContentHash": "sha256:b3f9be1ef90348bc29ef3c46b13d1642f4f0e44b6702fbe69ab0b0a0c046b022",
+      "byteLength": 655837,
+      "provenanceUrl": "https://arxiv.org/pdf/2501.05366",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2501_09004",
+      "sourceIds": [
+        "2501.09004"
+      ],
+      "expectedFilename": "2501.09004.pdf",
+      "expectedSourceContentHash": "sha256:d23b44ac11090867b7f9ae5ef06934c239476bd38241973d5a49ae1f7077adcf",
+      "byteLength": 1666610,
+      "provenanceUrl": "https://arxiv.org/pdf/2501.09004",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2501_09136",
+      "sourceIds": [
+        "2501.09136"
+      ],
+      "expectedFilename": "2501.09136.pdf",
+      "expectedSourceContentHash": "sha256:e1041580a2fecec215b203f5232d558cd6e2802af3d4f5f04fe8bff5080460f8",
+      "byteLength": 14269078,
+      "provenanceUrl": "https://arxiv.org/pdf/2501.09136",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2502_20766",
+      "sourceIds": [
+        "2502.20766"
+      ],
+      "expectedFilename": "2502.20766.pdf",
+      "expectedSourceContentHash": "sha256:d2240298d13ad238d6a0f8c9332dc65321cbcd269f9cca2ebb32d1858063ffe2",
+      "byteLength": 5057080,
+      "provenanceUrl": "https://arxiv.org/pdf/2502.20766",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2505_19591",
+      "sourceIds": [
+        "2505.19591"
+      ],
+      "expectedFilename": "2505.19591.pdf",
+      "expectedSourceContentHash": "sha256:244c86ebd95a9fa7ca06539854186ea3dcdbf794ceb6e7827fff6e642e647bf6",
+      "byteLength": 7407808,
+      "provenanceUrl": "https://arxiv.org/pdf/2505.19591",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_00054",
+      "sourceIds": [
+        "2506.00054"
+      ],
+      "expectedFilename": "2506.00054.pdf",
+      "expectedSourceContentHash": "sha256:a85e25a72c29602a881174cf0689ddca6cc0368367f1d8db095f4452916e27fa",
+      "byteLength": 2369183,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.00054",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_10408",
+      "sourceIds": [
+        "2506.10408"
+      ],
+      "expectedFilename": "2506.10408.pdf",
+      "expectedSourceContentHash": "sha256:acd0425864420f0faf297eb393b57a1fbaec9f46f9ab11f2b49b98696edba3e3",
+      "byteLength": 655690,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.10408",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_12104",
+      "sourceIds": [
+        "2506.12104"
+      ],
+      "expectedFilename": "DRIFT Dynamic Rule-Based Defense with Injection Isolation for Securing LLM Agents.pdf",
+      "expectedSourceContentHash": "sha256:3e974ae0759e32d1b4340b5463a0a6f6cf159b299ec1f8dbdbfbf909e2f8a69a",
+      "byteLength": 2972503,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.12104",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_15635",
+      "sourceIds": [
+        "2506.15635"
+      ],
+      "expectedFilename": "A Benchmark to Evaluate Memory in Embodied Agents.pdf",
+      "expectedSourceContentHash": "sha256:1be176cc83f54e8bdc84b29a770d312f0504a716abd8f39f2bb9efea90377482",
+      "byteLength": 43244178,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.15635",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_15882",
+      "sourceIds": [
+        "2506.15882"
+      ],
+      "expectedFilename": "Fractional Reasoning via Latent Steering Vectors Improves LLM Test-Time Scaling.pdf",
+      "expectedSourceContentHash": "sha256:5f4f4ad933d0ef67198baf2279267f738fda833290ccf1002aba7f35cc6ddd74",
+      "byteLength": 1131611,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.15882",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_21448",
+      "sourceIds": [
+        "2506.21448"
+      ],
+      "expectedFilename": "ThinkSound Chain-of-Thought Reasoning in Multimodal Large Language Models for Audio Generation and E.pdf",
+      "expectedSourceContentHash": "sha256:f5b675e671b3212b9d8ad7dbfe1e55346db24f12afc5fe827495003410440239",
+      "byteLength": 5028202,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.21448",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_21605",
+      "sourceIds": [
+        "2506.21605"
+      ],
+      "expectedFilename": "MemBench Towards More Comprehensive Evaluation on the Memory of LLM-based Agents.pdf",
+      "expectedSourceContentHash": "sha256:499acafb5507457a69d57448ed61ff0911c93882abf1aaa4f95615d8ea13ffff",
+      "byteLength": 1858980,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.21605",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2506_21734",
+      "sourceIds": [
+        "2506.21734"
+      ],
+      "expectedFilename": "Hierarchical Reasoning Model.pdf",
+      "expectedSourceContentHash": "sha256:81b05b03ebd92748b1bc0e59d4b6e0d8271e1e56b84d1d589a03430db79b6e25",
+      "byteLength": 2268976,
+      "provenanceUrl": "https://arxiv.org/pdf/2506.21734",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_01949",
+      "sourceIds": [
+        "2507.01949"
+      ],
+      "expectedFilename": "Kwai Keye-VL Technical Report.pdf",
+      "expectedSourceContentHash": "sha256:97a73b94d5b5ac436e05135d71805e2a2fe8c97114396f9293febccd93b07e31",
+      "byteLength": 27904845,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.01949",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_02076",
+      "sourceIds": [
+        "2507.02076"
+      ],
+      "expectedFilename": "Reasoning on a Budget A Survey of Adaptive and Controllable Test-Time Compute in LLMs.pdf",
+      "expectedSourceContentHash": "sha256:031a7af9a2244706f2a75642bcf5acf03d05a871a5f41a2eb5a5b9bc895e2eec",
+      "byteLength": 915399,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.02076",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_05257",
+      "sourceIds": [
+        "2507.05257"
+      ],
+      "expectedFilename": "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.pdf",
+      "expectedSourceContentHash": "sha256:91d07f0757126e6abaf91556ab5b5df96948e9c76cf0ee8d09a6c2ac9e060fe1",
+      "byteLength": 1989561,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.05257",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_06261",
+      "sourceIds": [
+        "2507.06261"
+      ],
+      "expectedFilename": "Gemini 2.5 Pushing the Frontier with Advanced Reasoning and Multimodality.pdf",
+      "expectedSourceContentHash": "sha256:b4cfe19f7eea7b0308cb0282127ef4821bb8f1d1e270e7a6f398b30fe57d41cb",
+      "byteLength": 10501019,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.06261",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_07957",
+      "sourceIds": [
+        "2507.07957"
+      ],
+      "expectedFilename": "MIRIX Multi-Agent Memory System for LLM-Based Agents.pdf",
+      "expectedSourceContentHash": "sha256:8204e2a238a86af14b358b28a7ef1f682956f1b41f7023d08cc7e2762e45c5ea",
+      "byteLength": 2304996,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.07957",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_08191",
+      "sourceIds": [
+        "2507.08191"
+      ],
+      "expectedFilename": "2507.08191.pdf",
+      "expectedSourceContentHash": "sha256:66268df9c81abee702a410508624c34c7162eb82e362af7fabb5857af1ba5ec2",
+      "byteLength": 6012193,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.08191",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
+    },
+    {
+      "artifactId": "paper_2507_11473",
+      "sourceIds": [
+        "2507.11473"
+      ],
+      "expectedFilename": "A New and Fragile Opportunity for AI Safety.pdf",
+      "expectedSourceContentHash": "sha256:420d2c12a787b6903242b4369d3b6c5c7949e27fdfa62dd4c2dc5b4e2f399307",
+      "byteLength": 416330,
+      "provenanceUrl": "https://arxiv.org/pdf/2507.11473",
+      "license": "external_public_paper_not_redistributed",
+      "corpusTier": "local_corpus",
+      "notes": "Priority corpus manifest expansion tranche 150->200; source bytes reverified locally before registration."
     }
   ]
 }
