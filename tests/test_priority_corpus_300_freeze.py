@@ -324,8 +324,10 @@ def test_structured_evidence_next_slice_reports_all_readback_candidates(tmp_path
         greenfield_target_rows=1,
     )
 
+    assert payload["status"] == "complete"
     assert payload["counts"]["readbackCandidateRows"] == len(source_ids)
     assert [row["sourceId"] for row in payload["readbackCandidates"]] == source_ids
+    assert payload["selectedGreenfieldCandidates"] == []
 
 
 def test_structured_evidence_next_slice_carries_over_operator_local_side_effects(

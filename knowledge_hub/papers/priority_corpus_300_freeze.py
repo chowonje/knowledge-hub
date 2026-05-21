@@ -504,10 +504,14 @@ def build_structured_evidence_next_slice_candidate_report(
 
     status_counts = Counter(row["structuredEvidenceStatus"] for row in rows)
     tier_counts = Counter(row["candidateTier"] for row in selected_greenfield)
+    strict_covered_rows = sum(1 for row in rows if row["strictEvidenceStore"]["publicReviewable"] > 0)
+    status = "ready" if selected_greenfield else "blocked"
+    if rows and strict_covered_rows >= len(rows):
+        status = "complete"
     payload: dict[str, Any] = {
         "schema": STRUCTURED_EVIDENCE_NEXT_SLICE_SCHEMA_ID,
         "generatedAt": _now_iso(),
-        "status": "ready" if selected_greenfield else "blocked",
+        "status": status,
         "scopeNote": (
             "Report-only next-slice candidate list for structured evidence over the 300-row verified corpus. "
             "It does not create SourceSpan or StrictEvidence records."
@@ -554,10 +558,10 @@ def build_structured_evidence_next_slice_candidate_report(
                 for row in rows
                 if row["strictEvidenceStore"]["total"] > 0 and row["strictEvidenceStore"]["publicReviewable"] == 0
             ),
-            "strictCoveredRows": sum(1 for row in rows if row["strictEvidenceStore"]["publicReviewable"] > 0),
+            "strictCoveredRows": strict_covered_rows,
             "strictCoveragePct": (
                 round(
-                    100 * sum(1 for row in rows if row["strictEvidenceStore"]["publicReviewable"] > 0) / len(rows),
+                    100 * strict_covered_rows / len(rows),
                     2,
                 )
                 if rows

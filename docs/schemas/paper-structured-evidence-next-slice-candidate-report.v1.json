@@ -20,7 +20,7 @@
   "properties": {
     "schema": { "const": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1" },
     "generatedAt": { "type": "string" },
-    "status": { "type": "string", "enum": ["ready", "blocked"] },
+    "status": { "type": "string", "enum": ["ready", "complete", "blocked"] },
     "scopeNote": { "type": "string" },
     "inputs": { "type": "object", "additionalProperties": true },
     "selectionPolicy": { "type": "object", "additionalProperties": true },

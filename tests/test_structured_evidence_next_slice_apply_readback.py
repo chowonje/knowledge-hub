@@ -49,8 +49,8 @@ def test_structured_evidence_next_slice_apply_readback_dry_run_builds_report() -
     assert payload["schemaValidation"]["ok"] is True
     assert payload["counts"]["baselineStrictCoveredRows"] == expected_baseline
     assert payload["counts"]["readbackPassRows"] == expected_readback
-    assert payload["counts"]["greenfieldSelectedRows"] == 2
-    assert payload["counts"]["generatedStrictEvidenceRecords"] == 2
+    assert payload["counts"]["greenfieldSelectedRows"] == len(expected_greenfield_ids)
+    assert payload["counts"]["generatedStrictEvidenceRecords"] == len(expected_greenfield_ids)
     assert payload["counts"]["appliedGreenfieldRows"] == 0
     assert payload["selection"]["greenfieldSourceIds"] == expected_greenfield_ids
     assert payload["policy"]["runtimeAnswerIntegration"] is False

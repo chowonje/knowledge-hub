@@ -96,7 +96,7 @@ def main() -> int:
             ensure_ascii=False,
         )
     )
-    return 0 if freeze.get("status") == "locked" and next_slice.get("status") == "ready" else 1
+    return 0 if freeze.get("status") == "locked" and next_slice.get("status") in {"ready", "complete"} else 1
 
 
 if __name__ == "__main__":

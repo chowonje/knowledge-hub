@@ -1,47 +1,17 @@
 # Structured Evidence Next Slice Candidate Report
 
-Generated: `2026-05-21T07:29:12.446282+00:00`
+Generated: `2026-05-21T07:41:11.402981+00:00`
 
-- status: `ready`
+- status: `complete`
 - manifest rows: **300**
-- strict covered rows: **120**
-- strict coverage pct: **40.0**
+- strict covered rows: **300**
+- strict coverage pct: **100.0**
 - operator-local generated-only rows: **0**
-- greenfield eligible rows: **180**
-- selected greenfield rows: **30**
+- greenfield eligible rows: **0**
+- selected greenfield rows: **0**
 
 ## Selected Greenfield Candidates
 
-- `2604.18845` (recent_ai, 2026) — `section_text_offset`
-- `2604.19295` (recent_ai, 2026) — `section_text_offset`
-- `2604.19638` (recent_ai, 2026) — `section_text_offset`
-- `2604.19656` (recent_ai, 2026) — `section_text_offset`
-- `2604.19667` (recent_ai, 2026) — `section_text_offset`
-- `2604.19728` (recent_ai, 2026) — `section_text_offset`
-- `2604.19734` (recent_ai, 2026) — `section_text_offset`
-- `2605.01148` (recent_ai, 2026) — `section_text_offset`
-- `2605.01203` (recent_ai, 2026) — `section_text_offset`
-- `2605.02363` (recent_ai, 2026) — `section_text_offset`
-- `2605.02364` (recent_ai, 2026) — `section_text_offset`
-- `2605.03476` (recent_ai, 2026) — `section_text_offset`
-- `2605.03534` (recent_ai, 2026) — `section_text_offset`
-- `2605.03667` (recent_ai, 2026) — `section_text_offset`
-- `2605.03808` (recent_ai, 2026) — `section_text_offset`
-- `2605.03838` (recent_ai, 2026) — `section_text_offset`
-- `2605.03862` (recent_ai, 2026) — `section_text_offset`
-- `2605.03871` (recent_ai, 2026) — `section_text_offset`
-- `2605.03903` (recent_ai, 2026) — `section_text_offset`
-- `2605.03986` (recent_ai, 2026) — `section_text_offset`
-- `2605.03989` (recent_ai, 2026) — `section_text_offset`
-- `2605.04036` (recent_ai, 2026) — `section_text_offset`
-- `2605.10616` (recent_ai, 2026) — `section_text_offset`
-- `attnres2026` (recent_ai, 2026) — `section_text_offset`
-- `2501.01765` (recent_ai, 2025) — `section_text_offset`
-- `2501.05031` (recent_ai, 2025) — `section_text_offset`
-- `2501.05366` (recent_ai, 2025) — `section_text_offset`
-- `2501.09004` (recent_ai, 2025) — `section_text_offset`
-- `2501.09136` (recent_ai, 2025) — `section_text_offset`
-- `2501.13956` (recent_ai, 2025) — `section_text_offset`
 
 ## Readback Candidates
 
@@ -111,9 +81,136 @@ Generated: `2026-05-21T07:29:12.446282+00:00`
 - `1506.01497` status=`public_reviewable` strict_records=1
 - `1506.02640` status=`public_reviewable` strict_records=16
 - `1708.07747` status=`public_reviewable` strict_records=1
+- `2401.04088` status=`public_reviewable` strict_records=1
+- `2401.15391` status=`public_reviewable` strict_records=1
+- `2401.15884` status=`public_reviewable` strict_records=1
+- `2401.17043` status=`public_reviewable` strict_records=1
+- `2402.01881` status=`public_reviewable` strict_records=1
+- `2403.05530` status=`public_reviewable` strict_records=1
+- `2403.09611` status=`public_reviewable` strict_records=1
 - `2403.14403` status=`public_reviewable` strict_records=1
+- `2404.14219` status=`public_reviewable` strict_records=1
+- `2405.07437` status=`public_reviewable` strict_records=1
+- `2406.09246` status=`public_reviewable` strict_records=1
+- `2406.16828` status=`public_reviewable` strict_records=1
 - `2407.02485` status=`public_reviewable` strict_records=1
+- `2407.21783` status=`public_reviewable` strict_records=1
+- `2408.06361` status=`public_reviewable` strict_records=1
+- `2410.02644` status=`public_reviewable` strict_records=1
+- `2410.05080` status=`public_reviewable` strict_records=1
+- `2410.10813` status=`public_reviewable` strict_records=1
 - `2410.11414` status=`public_reviewable` strict_records=1
+- `2410.24164` status=`public_reviewable` strict_records=1
+- `2412.08905` status=`public_reviewable` strict_records=1
+- `2412.15115` status=`public_reviewable` strict_records=1
+- `2412.19437` status=`public_reviewable` strict_records=1
+- `2501.01765` status=`public_reviewable` strict_records=1
+- `2501.05031` status=`public_reviewable` strict_records=1
+- `2501.05366` status=`public_reviewable` strict_records=1
+- `2501.09004` status=`public_reviewable` strict_records=1
+- `2501.09136` status=`public_reviewable` strict_records=1
+- `2501.13956` status=`public_reviewable` strict_records=1
+- `2502.04463` status=`public_reviewable` strict_records=1
+- `2502.07191` status=`public_reviewable` strict_records=1
+- `2502.12521` status=`public_reviewable` strict_records=1
+- `2502.13130` status=`public_reviewable` strict_records=1
+- `2502.15224` status=`public_reviewable` strict_records=1
+- `2502.15840` status=`public_reviewable` strict_records=1
+- `2502.19918` status=`public_reviewable` strict_records=1
+- `2502.20766` status=`public_reviewable` strict_records=1
+- `2503.03734` status=`public_reviewable` strict_records=1
+- `2503.04412` status=`public_reviewable` strict_records=1
+- `2503.07885` status=`public_reviewable` strict_records=1
+- `2503.10965` status=`public_reviewable` strict_records=1
+- `2503.11926` status=`public_reviewable` strict_records=1
+- `2503.16248` status=`public_reviewable` strict_records=1
+- `2503.16416` status=`public_reviewable` strict_records=1
+- `2503.19786` status=`public_reviewable` strict_records=1
+- `2503.23077` status=`public_reviewable` strict_records=1
+- `2504.00983` status=`public_reviewable` strict_records=1
+- `2504.10449` status=`public_reviewable` strict_records=1
+- `2504.11168` status=`public_reviewable` strict_records=1
+- `2504.14191` status=`public_reviewable` strict_records=1
+- `2504.14891` status=`public_reviewable` strict_records=1
+- `2504.16736` status=`public_reviewable` strict_records=1
+- `2504.18575` status=`public_reviewable` strict_records=1
+- `2505.03574` status=`public_reviewable` strict_records=1
+- `2505.05541` status=`public_reviewable` strict_records=1
+- `2505.05849` status=`public_reviewable` strict_records=1
+- `2505.07062` status=`public_reviewable` strict_records=1
+- `2505.08341` status=`public_reviewable` strict_records=1
+- `2505.09388` status=`public_reviewable` strict_records=1
+- `2505.16100` status=`public_reviewable` strict_records=1
+- `2505.19591` status=`public_reviewable` strict_records=1
+- `2505.20873` status=`public_reviewable` strict_records=1
+- `2505.23450` status=`public_reviewable` strict_records=1
+- `2505.23621` status=`public_reviewable` strict_records=1
+- `2506.00054` status=`public_reviewable` strict_records=1
+- `2506.01844` status=`public_reviewable` strict_records=1
+- `2506.02153` status=`public_reviewable` strict_records=1
+- `2506.05176` status=`public_reviewable` strict_records=1
+- `2506.05813` status=`public_reviewable` strict_records=1
+- `2506.06326` status=`public_reviewable` strict_records=1
+- `2506.06941` status=`public_reviewable` strict_records=1
+- `2506.10408` status=`public_reviewable` strict_records=1
+- `2506.12104` status=`public_reviewable` strict_records=1
+- `2506.15635` status=`public_reviewable` strict_records=1
+- `2506.15882` status=`public_reviewable` strict_records=1
+- `2506.21448` status=`public_reviewable` strict_records=1
+- `2506.21605` status=`public_reviewable` strict_records=1
+- `2506.21734` status=`public_reviewable` strict_records=1
+- `2507.01949` status=`public_reviewable` strict_records=1
+- `2507.02076` status=`public_reviewable` strict_records=1
+- `2507.05257` status=`public_reviewable` strict_records=1
+- `2507.06261` status=`public_reviewable` strict_records=1
+- `2507.07957` status=`public_reviewable` strict_records=1
+- `2507.08191` status=`public_reviewable` strict_records=1
+- `2507.11473` status=`public_reviewable` strict_records=1
+- `2507.13575` status=`public_reviewable` strict_records=1
+- `2507.20526` status=`public_reviewable` strict_records=1
+- `2508.02324` status=`public_reviewable` strict_records=1
+- `2508.04039` status=`public_reviewable` strict_records=1
+- `2508.15763` status=`public_reviewable` strict_records=1
+- `2509.06917` status=`public_reviewable` strict_records=1
+- `2509.14260` status=`public_reviewable` strict_records=1
+- `2509.16861` status=`public_reviewable` strict_records=1
+- `2509.16870` status=`public_reviewable` strict_records=1
+- `2509.16941` status=`public_reviewable` strict_records=1
+- `2509.17765` status=`public_reviewable` strict_records=1
+- `2509.19480` status=`public_reviewable` strict_records=1
+- `2509.21766` status=`public_reviewable` strict_records=1
+- `2509.24065` status=`public_reviewable` strict_records=1
+- `2510.01375` status=`public_reviewable` strict_records=1
+- `2510.04852` status=`public_reviewable` strict_records=1
+- `2510.07172` status=`public_reviewable` strict_records=1
+- `2510.08002` status=`public_reviewable` strict_records=1
+- `2510.08996` status=`public_reviewable` strict_records=1
+- `2510.15682` status=`public_reviewable` strict_records=1
+- `2510.21571` status=`public_reviewable` strict_records=1
+- `2510.21652` status=`public_reviewable` strict_records=1
+- `2510.22075` status=`public_reviewable` strict_records=1
+- `2510.24358` status=`public_reviewable` strict_records=1
+- `2510.24699` status=`public_reviewable` strict_records=1
+- `2510.26583` status=`public_reviewable` strict_records=1
+- `2510.27598` status=`public_reviewable` strict_records=1
+- `2511.13646` status=`public_reviewable` strict_records=1
+- `2511.18298` status=`public_reviewable` strict_records=1
+- `2511.21631` status=`public_reviewable` strict_records=1
+- `2511.22138` status=`public_reviewable` strict_records=1
+- `2511.23404` status=`public_reviewable` strict_records=1
+- `2512.01822` status=`public_reviewable` strict_records=1
+- `2512.02008` status=`public_reviewable` strict_records=1
+- `2512.02425` status=`public_reviewable` strict_records=1
+- `2512.03262` status=`public_reviewable` strict_records=1
+- `2512.07582` status=`public_reviewable` strict_records=1
+- `2512.13564` status=`public_reviewable` strict_records=1
+- `2512.15840` status=`public_reviewable` strict_records=1
+- `2512.15943` status=`public_reviewable` strict_records=1
+- `2512.18470` status=`public_reviewable` strict_records=1
+- `2512.18552` status=`public_reviewable` strict_records=1
+- `2512.21373` status=`public_reviewable` strict_records=1
+- `2512.21919` status=`public_reviewable` strict_records=1
+- `2512.22414` status=`public_reviewable` strict_records=1
 - `2601.10744` status=`public_reviewable` strict_records=1
 - `2601.21666` status=`public_reviewable` strict_records=1
 - `2602.16624` status=`public_reviewable` strict_records=1
@@ -162,9 +259,62 @@ Generated: `2026-05-21T07:29:12.446282+00:00`
 - `2604.15706` status=`public_reviewable` strict_records=1
 - `2604.17761` status=`public_reviewable` strict_records=1
 - `2604.18164` status=`public_reviewable` strict_records=1
+- `2604.18845` status=`public_reviewable` strict_records=1
+- `2604.19295` status=`public_reviewable` strict_records=1
+- `2604.19638` status=`public_reviewable` strict_records=1
+- `2604.19656` status=`public_reviewable` strict_records=1
+- `2604.19667` status=`public_reviewable` strict_records=1
+- `2604.19728` status=`public_reviewable` strict_records=1
+- `2604.19734` status=`public_reviewable` strict_records=1
+- `2605.01148` status=`public_reviewable` strict_records=1
+- `2605.01203` status=`public_reviewable` strict_records=1
+- `2605.02363` status=`public_reviewable` strict_records=1
+- `2605.02364` status=`public_reviewable` strict_records=1
+- `2605.03476` status=`public_reviewable` strict_records=1
+- `2605.03534` status=`public_reviewable` strict_records=1
+- `2605.03667` status=`public_reviewable` strict_records=1
+- `2605.03808` status=`public_reviewable` strict_records=1
+- `2605.03838` status=`public_reviewable` strict_records=1
+- `2605.03862` status=`public_reviewable` strict_records=1
+- `2605.03871` status=`public_reviewable` strict_records=1
+- `2605.03903` status=`public_reviewable` strict_records=1
+- `2605.03986` status=`public_reviewable` strict_records=1
+- `2605.03989` status=`public_reviewable` strict_records=1
+- `2605.04036` status=`public_reviewable` strict_records=1
+- `2605.10616` status=`public_reviewable` strict_records=1
+- `attnres2026` status=`public_reviewable` strict_records=1
+- `2112.10752` status=`public_reviewable` strict_records=1
+- `2203.02155` status=`public_reviewable` strict_records=1
+- `2203.11171` status=`public_reviewable` strict_records=1
+- `2203.15556` status=`public_reviewable` strict_records=1
+- `2204.01691` status=`public_reviewable` strict_records=1
+- `2204.02311` status=`public_reviewable` strict_records=1
+- `2204.14198` status=`public_reviewable` strict_records=1
+- `2205.10625` status=`public_reviewable` strict_records=1
+- `2302.04761` status=`public_reviewable` strict_records=1
+- `2302.13971` status=`public_reviewable` strict_records=1
+- `2303.03378` status=`public_reviewable` strict_records=1
+- `2303.08774` status=`public_reviewable` strict_records=1
+- `2303.11366` status=`public_reviewable` strict_records=1
+- `2303.17580` status=`public_reviewable` strict_records=1
+- `2303.17651` status=`public_reviewable` strict_records=1
+- `2304.03442` status=`public_reviewable` strict_records=1
+- `2304.08485` status=`public_reviewable` strict_records=1
+- `2305.04091` status=`public_reviewable` strict_records=1
+- `2305.06983` status=`public_reviewable` strict_records=1
+- `2305.10601` status=`public_reviewable` strict_records=1
+- `2305.14314` status=`public_reviewable` strict_records=1
+- `2305.16291` status=`public_reviewable` strict_records=1
+- `2305.18290` status=`public_reviewable` strict_records=1
+- `2307.00360` status=`public_reviewable` strict_records=1
+- `2307.09288` status=`public_reviewable` strict_records=1
+- `2307.15818` status=`public_reviewable` strict_records=1
 - `2308.08155` status=`public_reviewable` strict_records=1
+- `2309.01431` status=`public_reviewable` strict_records=1
 - `2309.15217` status=`public_reviewable` strict_records=1
+- `2310.08864` status=`public_reviewable` strict_records=1
 - `2312.10997` status=`public_reviewable` strict_records=1
+- `2312.11805` status=`public_reviewable` strict_records=1
 
 ## Deferred
 
