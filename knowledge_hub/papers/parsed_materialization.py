@@ -8,10 +8,12 @@ from already-registered local source PDFs.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import json
 from pathlib import Path
 from typing import Any
 
 from knowledge_hub.papers.pymupdf_adapter import PyMuPDFAdapter
+from knowledge_hub.papers.source_text import source_hash_for_path
 
 
 PARSED_MATERIALIZATION_SCHEMA_ID = "knowledge-hub.paper.parsed-materialization.result.v1"
@@ -54,16 +56,34 @@ def _safe_parsed_paths(*, papers_dir: str | Path, paper_id: str) -> dict[str, st
 
 
 def _artifact_state(paths: dict[str, Path]) -> dict[str, bool]:
+    manifest_source_hash_exists = False
+    if paths["manifestPath"].exists():
+        try:
+            manifest = json.loads(paths["manifestPath"].read_text(encoding="utf-8"))
+            parser_meta = dict(manifest.get("parser_meta") or {})
+            manifest_source_hash_exists = bool(
+                _clean_text(manifest.get("sourceContentHash"))
+                or _clean_text(manifest.get("source_content_hash"))
+                or _clean_text(parser_meta.get("sourceContentHash"))
+                or _clean_text(parser_meta.get("source_content_hash"))
+            )
+        except Exception:
+            manifest_source_hash_exists = False
     return {
         "artifactDirExists": bool(paths["artifactDir"].exists()),
         "documentMarkdownExists": bool(paths["documentMarkdownPath"].exists()),
         "documentJsonExists": bool(paths["documentJsonPath"].exists()),
         "manifestExists": bool(paths["manifestPath"].exists()),
+        "manifestSourceContentHashExists": manifest_source_hash_exists,
     }
 
 
 def _artifact_complete(state: dict[str, bool]) -> bool:
-    return bool(state.get("documentJsonExists") and state.get("manifestExists"))
+    return bool(
+        state.get("documentJsonExists")
+        and state.get("manifestExists")
+        and state.get("manifestSourceContentHashExists")
+    )
 
 
 def _source_artifact_for_paper(paper: dict[str, Any]) -> tuple[Path | None, str]:
@@ -124,6 +144,7 @@ def _materialization_item(
     action: str,
 ) -> dict[str, Any]:
     source_exists = bool(source_path and source_path.exists())
+    source_content_hash = source_hash_for_path(str(source_path)) if source_exists and source_path else ""
     parsed_paths = _safe_parsed_paths(papers_dir=papers_dir, paper_id=paper_id)
     return {
         "paperId": paper_id,
@@ -136,6 +157,8 @@ def _materialization_item(
             "kind": source_kind,
             "exists": source_exists,
             "path": _safe_relative(source_path, root=papers_dir) if source_path else "",
+            "sourceContentHash": source_content_hash,
+            "sourceContentHashAlgorithm": "sha256" if source_content_hash else "",
         },
         "parsedArtifacts": {
             "paths": parsed_paths,

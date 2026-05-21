@@ -203,7 +203,7 @@ def _decision_file_from_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "instructions": [
             "Edit a copy of this file before using it as a decision file.",
             "Keep decision=needs_review unless a human/operator has made an explicit source decision.",
-            "Source approvals require exactly one approvedSourceUrl or approvedLocalPdfPath plus reviewer notes.",
+            "Source approvals require exactly one approvedSourceUrl or approvedLocalPdfPath, approvedSourceContentHash, plus reviewer notes.",
             "This draft does not perform lookup, download sources, mutate registrations, or materialize parsed artifacts.",
         ],
         "decisions": [

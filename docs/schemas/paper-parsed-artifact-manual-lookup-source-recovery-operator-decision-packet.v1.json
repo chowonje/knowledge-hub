@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-operator-decision-packet.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "inputHumanReview",
+    "inputDecisionFile",
+    "counts",
+    "coverageTarget",
+    "remainingBlockerClosure",
+    "operatorReviewRows",
+    "humanRequiredFields",
+    "gate",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-manual-lookup-source-recovery-operator-decision-packet.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["operator_decision_packet_ready", "blocked"]
+    },
+    "generatedAt": { "type": "string" },
+    "report": { "type": "object" },
+    "inputHumanReview": { "type": "object" },
+    "inputDecisionFile": { "type": "object" },
+    "counts": {
+      "type": "object",
+      "required": [
+        "operatorReviewRows",
+        "needsReviewRows",
+        "approvedDecisionRows",
+        "rejectedDecisionRows",
+        "holdForManualLookupRows",
+        "textSourceHoldoutRows",
+        "unexpectedBlockerCount",
+        "decisionTaxonomy"
+      ],
+      "properties": {
+        "operatorReviewRows": { "type": "integer", "minimum": 0 },
+        "needsReviewRows": { "type": "integer", "minimum": 0 },
+        "approvedDecisionRows": { "type": "integer", "minimum": 0 },
+        "rejectedDecisionRows": { "type": "integer", "minimum": 0 },
+        "holdForManualLookupRows": { "type": "integer", "minimum": 0 },
+        "textSourceHoldoutRows": { "type": "integer", "minimum": 0 },
+        "unexpectedBlockerCount": { "type": "integer", "minimum": 0 },
+        "decisionTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "externalLookupRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 },
+        "parsedArtifactWriteRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "decisionFileMutationRows": { "const": 0 },
+        "humanDecisionRecordingRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "coverageTarget": { "type": "object" },
+    "remainingBlockerClosure": { "type": "object" },
+    "operatorReviewRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "operatorReviewRowId",
+          "paperId",
+          "currentMissingReason",
+          "lookupQuery",
+          "currentDecision",
+          "allowedDecisions",
+          "requiredApprovalFields",
+          "riskNote",
+          "reportOnly"
+        ],
+        "properties": {
+          "operatorReviewRowId": { "type": "string" },
+          "paperId": { "type": "string" },
+          "paperTitle": { "type": "string" },
+          "sourceReviewCardId": { "type": "string" },
+          "currentMissingReason": { "type": "string" },
+          "manualLookupMode": { "type": "string" },
+          "lookupPriority": { "type": "string" },
+          "lookupQuery": { "type": "string" },
+          "lookupQueries": { "type": "object" },
+          "currentDecision": { "type": "string" },
+          "allowedDecisions": { "type": "array", "items": { "type": "string" } },
+          "requiredApprovalFields": { "type": "array", "items": { "type": "string" } },
+          "requiredFieldsByDecision": { "type": "object" },
+          "riskNote": { "type": "string" },
+          "decisionEditTarget": { "type": "string" },
+          "reportOnly": { "const": true }
+        },
+        "additionalProperties": true
+      }
+    },
+    "humanRequiredFields": { "type": "object" },
+    "gate": { "type": "object" },
+    "mutationPolicy": { "type": "object" },
+    "mutationCounters": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

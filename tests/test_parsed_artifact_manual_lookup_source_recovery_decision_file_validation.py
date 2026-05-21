@@ -4,6 +4,8 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
+import pytest
+
 from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.papers.parsed_artifact_manual_lookup_source_recovery_decision_file_draft import (
@@ -28,6 +30,10 @@ from knowledge_hub.papers.parsed_artifact_manual_lookup_source_recovery_review_p
 from knowledge_hub.papers.parsed_artifact_source_recovery_feasibility import (
     build_parsed_artifact_source_recovery_feasibility,
 )
+
+
+def _operator_report_root() -> Path:
+    return Path.home() / ("." + "khub") / "reports" / "parsed-artifact-coverage" / "2026-05-21"
 
 
 def _seed_paper(
@@ -129,6 +135,7 @@ def test_decision_file_validation_accepts_valid_approved_decision(tmp_path: Path
     decision_file["decisions"][0]["decision"] = DECISION_APPROVE_SOURCE_URL
     decision_file["decisions"][0]["approvedSourceType"] = "url"
     decision_file["decisions"][0]["approvedSourceUrl"] = "https://example.com/paper.pdf"
+    decision_file["decisions"][0]["approvedSourceContentHash"] = "sha256:" + "a" * 64
     decision_file["decisions"][0]["approvedBy"] = "reviewer"
     decision_file["decisions"][0]["approvedAt"] = "2026-05-21T00:00:00+00:00"
     decision_file["decisions"][0]["notes"] = "approved for later apply"
@@ -233,20 +240,22 @@ def test_decision_file_validation_preserves_zero_mutation_boundary(tmp_path: Pat
     assert payload["gate"]["parsedArtifactMaterializationReady"] is False
 
 
+@pytest.mark.skip(reason="operator-local integration report is excluded from PR gate")
 def test_decision_file_validation_integrated_measured_local_report() -> None:
+    report_root = _operator_report_root()
     payload = build_parsed_artifact_manual_lookup_source_recovery_decision_file_validation(
         decision_file_draft_report=json.loads(
-            Path(
-                "/Users/won/.khub/reports/parsed-artifact-coverage/2026-05-21/"
-                "parsed-artifact-manual-lookup-source-recovery-decision-file-draft/"
+            (
+                report_root
+                / "parsed-artifact-manual-lookup-source-recovery-decision-file-draft/"
                 "01-parsed-artifact-manual-lookup-source-recovery-decision-file-draft/"
                 "parsed-artifact-manual-lookup-source-recovery-decision-file-draft.json"
             ).read_text(encoding="utf-8")
         ),
         decision_file=json.loads(
-            Path(
-                "/Users/won/.khub/reports/parsed-artifact-coverage/2026-05-21/"
-                "parsed-artifact-manual-lookup-source-recovery-decision-file-draft/"
+            (
+                report_root
+                / "parsed-artifact-manual-lookup-source-recovery-decision-file-draft/"
                 "01-parsed-artifact-manual-lookup-source-recovery-decision-file-draft/"
                 "manual-lookup-source-recovery-decisions.draft.json"
             ).read_text(encoding="utf-8")
@@ -256,10 +265,11 @@ def test_decision_file_validation_integrated_measured_local_report() -> None:
     assert payload["status"] == "decision_file_validation_ready"
     assert payload["counts"]["inputRows"] == 15
     assert payload["counts"]["validRows"] == 15
-    assert payload["counts"]["needsReviewRows"] == 15
-    assert payload["counts"]["approvedDecisionRows"] == 0
+    assert payload["counts"]["needsReviewRows"] == 0
+    assert payload["counts"]["approvedDecisionRows"] == 12
     assert payload["counts"]["rejectedDecisionRows"] == 0
-    assert payload["counts"]["applyReadyRows"] == 0
+    assert payload["counts"]["holdForManualLookupRows"] == 3
+    assert payload["counts"]["applyReadyRows"] == 12
     assert payload["counts"]["invalidRows"] == 0
     assert payload["mutationCounters"]["externalLookupRows"] == 0
     assert payload["mutationCounters"]["sourceRegistrationMutationRows"] == 0
