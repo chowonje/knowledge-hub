@@ -1,6 +1,6 @@
 {
   "schema": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1",
-  "generatedAt": "2026-05-21T06:39:24.091559+00:00",
+  "generatedAt": "2026-05-21T07:05:44.292524+00:00",
   "status": "ready",
   "scopeNote": "Report-only next-slice candidate list for structured evidence over the 300-row verified corpus. It does not create SourceSpan or StrictEvidence records.",
   "inputs": {
@@ -33,24 +33,21 @@
     "manifestRows": 300,
     "sourceAvailableRows": 300,
     "parsedAvailableRows": 300,
-    "strictEvidenceStoreRowsRaw": 5,
-    "strictEvidenceStoreRowsPublicReviewable": 3,
-    "strictEvidenceStoreRowsOperatorLocalOnly": 2,
-    "strictCoveredRows": 3,
-    "strictCoveragePct": 1.0,
-    "greenfieldEligibleRows": 297,
+    "strictEvidenceStoreRowsRaw": 30,
+    "strictEvidenceStoreRowsPublicReviewable": 30,
+    "strictEvidenceStoreRowsOperatorLocalOnly": 0,
+    "strictCoveredRows": 30,
+    "strictCoveragePct": 10.0,
+    "greenfieldEligibleRows": 270,
     "selectedGreenfieldRows": 30,
-    "readbackCandidateRows": 3,
-    "greenfieldCarryoverRows": 2,
+    "readbackCandidateRows": 30,
+    "greenfieldCarryoverRows": 0,
     "structuredEvidenceStatusBreakdown": {
-      "missing": 295,
-      "operator_local_only": 2,
-      "public_reviewable": 3
+      "missing": 270,
+      "public_reviewable": 30
     },
     "selectedGreenfieldByTier": {
-      "eval_critical": 24,
-      "recent_ai": 3,
-      "local_corpus_candidate": 3
+      "eval_critical": 30
     }
   },
   "minimalEvidenceTypes": [
@@ -63,6 +60,70 @@
     "appendix_table_lookup"
   ],
   "readbackCandidates": [
+    {
+      "sourceId": "1502.03167",
+      "artifactId": "paper_1502_03167",
+      "title": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+      "year": 2015,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 11,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "1512.03385",
+      "artifactId": "paper_1512_03385",
+      "title": "Deep Residual Learning for Image Recognition",
+      "year": 2015,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 12,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
     {
       "sourceId": "1706.03762",
       "artifactId": "paper_1706_03762",
@@ -97,6 +158,70 @@
       "selectionReason": "eval_critical corpus row; figure artifacts present; existing strict evidence readback candidate"
     },
     {
+      "sourceId": "1810.04805",
+      "artifactId": "paper_1810_04805",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "year": 2018,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 16,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2005.11401",
+      "artifactId": "paper_2005_11401",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "year": 2020,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 19,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
       "sourceId": "2005.14165",
       "artifactId": "paper_2005_14165",
       "title": "Language Models are Few-Shot Learners",
@@ -119,6 +244,550 @@
         "total": 60,
         "operatorLocalExcluded": 0,
         "publicReviewable": 60,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2007.01282",
+      "artifactId": "paper_2007_01282",
+      "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+      "year": 2020,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 6,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2201.11903",
+      "artifactId": "paper_2201_11903",
+      "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      "year": 2022,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 43,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2310.11511",
+      "artifactId": "paper_2310_11511",
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "year": 2023,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 30,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2312.00752",
+      "artifactId": "paper_2312_00752",
+      "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+      "year": 2023,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 36,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2404.16130",
+      "artifactId": "paper_2404_16130",
+      "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+      "year": 2024,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 26,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2410.05779",
+      "artifactId": "paper_2410_05779",
+      "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+      "year": 2024,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 16,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.01828",
+      "artifactId": "paper_2601_01828",
+      "title": "Emergent Introspective Awareness in Large Language Models",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 62,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.03236",
+      "artifactId": "paper_2601_03236",
+      "title": "MAGMA: A Multi-Graph based Agentic Memory Architecture for AI Agents",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 17,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.04720",
+      "artifactId": "paper_2601_04720",
+      "title": "Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for Multimodal Retrieval",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.09668",
+      "artifactId": "paper_2601_09668",
+      "title": "STEP3-VL-10B Technical Report",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 50,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.11077",
+      "artifactId": "paper_2601_11077",
+      "title": "ABC-Bench: Benchmarking Agentic Backend Coding in Real-World Development",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.12542",
+      "artifactId": "paper_2601_12542",
+      "title": "Rethinking the AI Scientist: Interactive Multi-Agent Workflows for Scientific Discovery",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 426,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2601.23086",
+      "artifactId": "paper_2601_23086",
+      "title": "Chain-of-thought obfuscation learned from output supervision can generalise to unseen tasks",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 67,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.00103",
+      "artifactId": "paper_2602_00103",
+      "title": "Autonomous Multi-Agent AI for High-Throughput Polymer Discovery",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 58,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.00185",
+      "artifactId": "paper_2602_00185",
+      "title": "QUASAR: A Universal Autonomous System for Atomistic Simulation and a Benchmark of Its Capabilities",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 12,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2602.01237",
+      "artifactId": "paper_2602_01237",
+      "title": "Predictive Scheduling for Efficient Inference-Time Reasoning in Large Language Models",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 20,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "alexnet-2012",
+      "artifactId": "alexnet_krizhevsky_2012",
+      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "year": 2012,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 9,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "structuredEvidenceStatus": "public_reviewable",
@@ -160,456 +829,6 @@
       ],
       "eligibleForGreenfieldSlice": false,
       "selectionReason": "foundational corpus row; figure artifacts present; existing strict evidence readback candidate"
-    }
-  ],
-  "selectedGreenfieldCandidates": [
-    {
-      "sourceId": "2005.11401",
-      "artifactId": "paper_2005_11401",
-      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-      "year": 2020,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 19,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "operator_local_only",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; generated-only local side effect exists; carry over as greenfield"
-    },
-    {
-      "sourceId": "1512.03385",
-      "artifactId": "paper_1512_03385",
-      "title": "Deep Residual Learning for Image Recognition",
-      "year": 2015,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 12,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "operator_local_only",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; generated-only local side effect exists; carry over as greenfield"
-    },
-    {
-      "sourceId": "2201.11903",
-      "artifactId": "paper_2201_11903",
-      "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
-      "year": 2022,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 43,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2312.00752",
-      "artifactId": "paper_2312_00752",
-      "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
-      "year": 2023,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 36,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2310.11511",
-      "artifactId": "paper_2310_11511",
-      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
-      "year": 2023,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 30,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2404.16130",
-      "artifactId": "paper_2404_16130",
-      "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
-      "year": 2024,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 26,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "1810.04805",
-      "artifactId": "paper_1810_04805",
-      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
-      "year": 2018,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 16,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2410.05779",
-      "artifactId": "paper_2410_05779",
-      "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
-      "year": 2024,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 16,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "1502.03167",
-      "artifactId": "paper_1502_03167",
-      "title": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
-      "year": 2015,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 11,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "alexnet-2012",
-      "artifactId": "alexnet_krizhevsky_2012",
-      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
-      "year": 2012,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 9,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2007.01282",
-      "artifactId": "paper_2007_01282",
-      "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
-      "year": 2020,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 6,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2410.11414",
-      "artifactId": "paper_2410_11414",
-      "title": "ReDeEP: Detecting Hallucination in Retrieval-Augmented Generation via Mechanistic Interpretability",
-      "year": 2024,
-      "candidateTier": "recent_ai",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 23,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2309.15217",
-      "artifactId": "paper_2309_15217",
-      "title": "Ragas: Automated Evaluation of Retrieval Augmented Generation",
-      "year": 2023,
-      "candidateTier": "local_corpus_candidate",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 42,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
-    },
-    {
-      "sourceId": "2312.10997",
-      "artifactId": "paper_2312_10997",
-      "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
-      "year": 2023,
-      "candidateTier": "local_corpus_candidate",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 21,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
     },
     {
       "sourceId": "2403.14403",
@@ -625,23 +844,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2407.02485",
@@ -657,23 +876,55 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2410.11414",
+      "artifactId": "paper_2410_11414",
+      "title": "ReDeEP: Detecting Hallucination in Retrieval-Augmented Generation via Mechanistic Interpretability",
+      "year": 2024,
+      "candidateTier": "recent_ai",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2308.08155",
@@ -689,344 +940,90 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
-      "sourceId": "2601.01828",
-      "artifactId": "paper_2601_01828",
-      "title": "Emergent Introspective Awareness in Large Language Models",
-      "year": 2026,
-      "candidateTier": "eval_critical",
+      "sourceId": "2309.15217",
+      "artifactId": "paper_2309_15217",
+      "title": "Ragas: Automated Evaluation of Retrieval Augmented Generation",
+      "year": 2023,
+      "candidateTier": "local_corpus_candidate",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 62,
+        "elementCount": 42,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
-      "sourceId": "2601.03236",
-      "artifactId": "paper_2601_03236",
-      "title": "MAGMA: A Multi-Graph based Agentic Memory Architecture for AI Agents",
-      "year": 2026,
-      "candidateTier": "eval_critical",
+      "sourceId": "2312.10997",
+      "artifactId": "paper_2312_10997",
+      "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+      "year": 2023,
+      "candidateTier": "local_corpus_candidate",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 17,
+        "elementCount": 21,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2601.04720",
-      "artifactId": "paper_2601_04720",
-      "title": "Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for Multimodal Retrieval",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 23,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2601.09668",
-      "artifactId": "paper_2601_09668",
-      "title": "STEP3-VL-10B Technical Report",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 50,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2601.11077",
-      "artifactId": "paper_2601_11077",
-      "title": "ABC-Bench: Benchmarking Agentic Backend Coding in Real-World Development",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 23,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2601.12542",
-      "artifactId": "paper_2601_12542",
-      "title": "Rethinking the AI Scientist: Interactive Multi-Agent Workflows for Scientific Discovery",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 426,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2601.23086",
-      "artifactId": "paper_2601_23086",
-      "title": "Chain-of-thought obfuscation learned from output supervision can generalise to unseen tasks",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 67,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.00103",
-      "artifactId": "paper_2602_00103",
-      "title": "Autonomous Multi-Agent AI for High-Throughput Polymer Discovery",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 58,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.00185",
-      "artifactId": "paper_2602_00185",
-      "title": "QUASAR: A Universal Autonomous System for Atomistic Simulation and a Benchmark of Its Capabilities",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 12,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
-    {
-      "sourceId": "2602.01237",
-      "artifactId": "paper_2602_01237",
-      "title": "Predictive Scheduling for Efficient Inference-Time Reasoning in Large Language Models",
-      "year": 2026,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 20,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 0,
-        "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "missing",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    },
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
+    }
+  ],
+  "selectedGreenfieldCandidates": [
     {
       "sourceId": "2602.01655",
       "artifactId": "paper_2602_01655",
@@ -1122,52 +1119,18 @@
       ],
       "eligibleForGreenfieldSlice": true,
       "selectionReason": "eval_critical corpus row; no strict evidence store yet"
-    }
-  ],
-  "allRows": [
-    {
-      "sourceId": "2005.11401",
-      "artifactId": "paper_2005_11401",
-      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-      "year": 2020,
-      "candidateTier": "eval_critical",
-      "sourceArtifactStatus": "available",
-      "parsedArtifactStatus": "available",
-      "parsedDocument": {
-        "documentJsonExists": true,
-        "elementCount": 19,
-        "figureArtifactCount": 0
-      },
-      "sourceSpanStore": {
-        "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "strictEvidenceStore": {
-        "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
-        "malformed": 0
-      },
-      "structuredEvidenceStatus": "operator_local_only",
-      "recommendedEvidenceTypes": [
-        "section_text_offset"
-      ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; generated-only local side effect exists; carry over as greenfield"
     },
     {
-      "sourceId": "2007.01282",
-      "artifactId": "paper_2007_01282",
-      "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
-      "year": 2020,
+      "sourceId": "2602.02262",
+      "artifactId": "paper_2602_02262",
+      "title": "OmniCode: A Benchmark for Evaluating Software Engineering Agents",
+      "year": 2026,
       "candidateTier": "eval_critical",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 6,
+        "elementCount": 32,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -1190,16 +1153,16 @@
       "selectionReason": "eval_critical corpus row; no strict evidence store yet"
     },
     {
-      "sourceId": "2404.16130",
-      "artifactId": "paper_2404_16130",
-      "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
-      "year": 2024,
+      "sourceId": "2602.02905",
+      "artifactId": "paper_2602_02905",
+      "title": "FIRE-Bench: Evaluating Agents on the Rediscovery of Scientific Insights",
+      "year": 2026,
       "candidateTier": "eval_critical",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 26,
+        "elementCount": 30,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -1222,10 +1185,74 @@
       "selectionReason": "eval_critical corpus row; no strict evidence store yet"
     },
     {
-      "sourceId": "2410.05779",
-      "artifactId": "paper_2410_05779",
-      "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
-      "year": 2024,
+      "sourceId": "2602.03117",
+      "artifactId": "paper_2602_03117",
+      "title": "AgentDyn: A Dynamic Open-Ended Benchmark for Evaluating Prompt Injection Attacks of Real-World Agent Security System",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.03442",
+      "artifactId": "paper_2602_03442",
+      "title": "A-RAG: Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 18,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.10715",
+      "artifactId": "paper_2602_10715",
+      "title": "Locomo-Plus: Beyond-Factual Cognitive Memory Evaluation Framework for LLM Agents",
+      "year": 2026,
       "candidateTier": "eval_critical",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
@@ -1254,16 +1281,16 @@
       "selectionReason": "eval_critical corpus row; no strict evidence store yet"
     },
     {
-      "sourceId": "alexnet-2012",
-      "artifactId": "alexnet_krizhevsky_2012",
-      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
-      "year": 2012,
+      "sourceId": "2602.10975",
+      "artifactId": "paper_2602_10975",
+      "title": "FeatureBench: Benchmarking Agentic Coding for Complex Feature Development",
+      "year": 2026,
       "candidateTier": "eval_critical",
       "sourceArtifactStatus": "available",
       "parsedArtifactStatus": "available",
       "parsedDocument": {
         "documentJsonExists": true,
-        "elementCount": 9,
+        "elementCount": 37,
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
@@ -1284,6 +1311,840 @@
       ],
       "eligibleForGreenfieldSlice": true,
       "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.11964",
+      "artifactId": "paper_2602_11964",
+      "title": "Gaia2: Benchmarking LLM Agents on Dynamic and Asynchronous Environments",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 32,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.11988",
+      "artifactId": "paper_2602_11988",
+      "title": "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 18,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.12670",
+      "artifactId": "paper_2602_12670",
+      "title": "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 34,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.15112",
+      "artifactId": "paper_2602_15112",
+      "title": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 1544,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.16313",
+      "artifactId": "paper_2602_16313",
+      "title": "MemoryArena: Benchmarking Agent Memory in Interdependent Multi-Session Agentic Tasks",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 29,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.16698",
+      "artifactId": "paper_2602_16698",
+      "title": "Causality is Key for Interpretability Claims to Generalise",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 39,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.18297",
+      "artifactId": "paper_2602_18297",
+      "title": "Analyzing and Improving Chain-of-Thought Monitorability Through Information Theory",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 64,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.20021",
+      "artifactId": "paper_2602_20021",
+      "title": "Agents of Chaos",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 84,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2602.22769",
+      "artifactId": "paper_2602_22769",
+      "title": "AMA-Bench: Evaluating Long-Horizon Memory for Agentic Applications",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 24,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2603.07379",
+      "artifactId": "paper_2603_07379",
+      "title": "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+      "year": 2026,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 25,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.06322",
+      "artifactId": "paper_2501_06322",
+      "title": "Multi-Agent Collaboration Mechanisms: A Survey of LLMs",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 35,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2501.12948",
+      "artifactId": "paper_2501_12948",
+      "title": "DeepSeek-R1 incentivizes reasoning in LLMs through reinforcement learning",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 86,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2502.05151",
+      "artifactId": "paper_2502_05151",
+      "title": "Transforming Science with Large Language Models: A Survey on AI-assisted Scientific Discovery, Experimentation, Content Generation, and Evaluation",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 46,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2503.10970",
+      "artifactId": "paper_2503_10970",
+      "title": "TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 74,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2503.21460",
+      "artifactId": "paper_2503_21460",
+      "title": "Large Language Model Agent: A Survey on Methodology, Applications and Challenges",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 26,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2504.19413",
+      "artifactId": "paper_2504_19413",
+      "title": "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 23,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2505.10468",
+      "artifactId": "paper_2505_10468",
+      "title": "AI Agents vs. Agentic AI: A Conceptual Taxonomy, Applications and Challenges",
+      "year": 2025,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 30,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2006.11239",
+      "artifactId": "paper_2006_11239",
+      "title": "Denoising Diffusion Probabilistic Models",
+      "year": 2020,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 25,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "2010.11929",
+      "artifactId": "paper_2010_11929",
+      "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+      "year": 2020,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 1650,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "1707.06347",
+      "artifactId": "paper_1707_06347",
+      "title": "Proximal Policy Optimization Algorithms",
+      "year": 2017,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 12,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    },
+    {
+      "sourceId": "1406.2661",
+      "artifactId": "paper_1406_2661",
+      "title": "Generative Adversarial Nets",
+      "year": 2014,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 300,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 0,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "missing",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": true,
+      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+    }
+  ],
+  "allRows": [
+    {
+      "sourceId": "2005.11401",
+      "artifactId": "paper_2005_11401",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "year": 2020,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 19,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2007.01282",
+      "artifactId": "paper_2007_01282",
+      "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+      "year": 2020,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 6,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2404.16130",
+      "artifactId": "paper_2404_16130",
+      "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+      "year": 2024,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 26,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "2410.05779",
+      "artifactId": "paper_2410_05779",
+      "title": "LightRAG: Simple and Fast Retrieval-Augmented Generation",
+      "year": 2024,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 16,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
+    },
+    {
+      "sourceId": "alexnet-2012",
+      "artifactId": "alexnet_krizhevsky_2012",
+      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "year": 2012,
+      "candidateTier": "eval_critical",
+      "sourceArtifactStatus": "available",
+      "parsedArtifactStatus": "available",
+      "parsedDocument": {
+        "documentJsonExists": true,
+        "elementCount": 9,
+        "figureArtifactCount": 0
+      },
+      "sourceSpanStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "strictEvidenceStore": {
+        "total": 1,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
+        "malformed": 0
+      },
+      "structuredEvidenceStatus": "public_reviewable",
+      "recommendedEvidenceTypes": [
+        "section_text_offset"
+      ],
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2010.11929",
@@ -1364,23 +2225,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "1810.04805",
@@ -1396,23 +2257,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2005.14165",
@@ -1589,22 +2450,22 @@
       },
       "sourceSpanStore": {
         "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
         "total": 1,
-        "operatorLocalExcluded": 1,
-        "publicReviewable": 0,
+        "operatorLocalExcluded": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "operator_local_only",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; generated-only local side effect exists; carry over as greenfield"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2310.11511",
@@ -1620,23 +2481,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "1502.03167",
@@ -1652,23 +2513,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "1409.3215",
@@ -1716,23 +2577,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2501.12948",
@@ -1876,23 +2737,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2601.03236",
@@ -1908,23 +2769,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2601.04720",
@@ -1940,23 +2801,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2601.09668",
@@ -1972,23 +2833,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2601.11077",
@@ -2004,23 +2865,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2601.12542",
@@ -2036,23 +2897,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2601.23086",
@@ -2068,23 +2929,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.00103",
@@ -2100,23 +2961,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.00185",
@@ -2132,23 +2993,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.01237",
@@ -2164,23 +3025,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "eval_critical corpus row; no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "eval_critical corpus row; existing strict evidence readback candidate"
     },
     {
       "sourceId": "2602.01655",
@@ -9205,23 +10066,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2404.14219",
@@ -9365,23 +10226,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2407.21783",
@@ -9557,23 +10418,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2410.24164",
@@ -10293,23 +11154,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2309.01431",
@@ -10357,23 +11218,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2310.08864",
@@ -10421,23 +11282,23 @@
         "figureArtifactCount": 0
       },
       "sourceSpanStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
       "strictEvidenceStore": {
-        "total": 0,
+        "total": 1,
         "operatorLocalExcluded": 0,
-        "publicReviewable": 0,
+        "publicReviewable": 1,
         "malformed": 0
       },
-      "structuredEvidenceStatus": "missing",
+      "structuredEvidenceStatus": "public_reviewable",
       "recommendedEvidenceTypes": [
         "section_text_offset"
       ],
-      "eligibleForGreenfieldSlice": true,
-      "selectionReason": "no strict evidence store yet"
+      "eligibleForGreenfieldSlice": false,
+      "selectionReason": "existing strict evidence readback candidate"
     },
     {
       "sourceId": "2312.11805",

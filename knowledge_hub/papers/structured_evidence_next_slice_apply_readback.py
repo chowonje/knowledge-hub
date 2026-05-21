@@ -306,6 +306,19 @@ def build_structured_evidence_next_slice_apply_readback(
     counts["baselineStrictCoveredRows"] = baseline_strict
     counts["strictCoveredRowsAfterLocalApply"] = baseline_strict + int(counts.get("appliedGreenfieldRows") or 0)
     counts["manifestRows"] = int(baseline_counts.get("manifestRows") or 0)
+    candidate_snapshot = {
+        "candidateReport": _project_ref(candidate_report_path),
+        "candidateReportSchema": schema,
+        "counts": {
+            "manifestRows": int(baseline_counts.get("manifestRows") or 0),
+            "strictCoveredRows": baseline_strict,
+            "readbackCandidateRows": int(baseline_counts.get("readbackCandidateRows") or len(readback_ids)),
+            "selectedGreenfieldRows": int(baseline_counts.get("selectedGreenfieldRows") or len(greenfield_ids)),
+            "greenfieldEligibleRows": int(baseline_counts.get("greenfieldEligibleRows") or 0),
+        },
+        "readbackSourceIds": readback_ids,
+        "greenfieldSourceIds": greenfield_ids,
+    }
 
     payload: dict[str, Any] = {
         "schema": STRUCTURED_EVIDENCE_NEXT_SLICE_APPLY_READBACK_SCHEMA_ID,
@@ -323,6 +336,7 @@ def build_structured_evidence_next_slice_apply_readback(
             "candidateReportSchema": schema,
             "papersDirRef": "papers_dir",
         },
+        "candidateReportSnapshot": candidate_snapshot,
         "selection": {
             "readbackSourceIds": readback_ids,
             "greenfieldSourceIds": greenfield_ids,
@@ -359,6 +373,10 @@ def build_structured_evidence_next_slice_apply_readback(
 
 def render_structured_evidence_next_slice_apply_readback_markdown(report: dict[str, Any]) -> str:
     counts = dict(report.get("counts") or {})
+    candidate_snapshot = report.get("candidateReportSnapshot")
+    if not isinstance(candidate_snapshot, dict):
+        candidate_snapshot = {}
+    snapshot_counts = candidate_snapshot.get("counts") if isinstance(candidate_snapshot.get("counts"), dict) else {}
     lines = [
         "# Structured Evidence Next Slice Apply/Readback",
         "",
@@ -373,6 +391,13 @@ def render_structured_evidence_next_slice_apply_readback_markdown(report: dict[s
         f"- greenfieldGeneratedRows: {int(counts.get('greenfieldGeneratedRows') or 0)}",
         f"- appliedGreenfieldRows: {int(counts.get('appliedGreenfieldRows') or 0)}",
         f"- postApplyReadbackPassRows: {int(counts.get('postApplyReadbackPassRows') or 0)}",
+        "",
+        "## Candidate Input Snapshot",
+        "",
+        f"- candidateReport: `{candidate_snapshot.get('candidateReport', '')}`",
+        f"- snapshotStrictCoveredRows: **{int(snapshot_counts.get('strictCoveredRows') or 0)}**",
+        f"- snapshotReadbackSourceIds: **{len(candidate_snapshot.get('readbackSourceIds') or [])}**",
+        f"- snapshotGreenfieldSourceIds: **{len(candidate_snapshot.get('greenfieldSourceIds') or [])}**",
         "",
         "## Greenfield Rows",
         "",

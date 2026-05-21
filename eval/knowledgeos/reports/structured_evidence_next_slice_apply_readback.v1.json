@@ -514,5 +514,30 @@
     "ok": true,
     "schemaFound": true,
     "errors": []
+  },
+  "candidateReportSnapshot": {
+    "candidateReport": "eval/knowledgeos/reports/structured_evidence_next_slice_candidate_report.v1.json",
+    "candidateReportSchema": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1",
+    "counts": {
+      "manifestRows": 300,
+      "strictCoveredRows": 3,
+      "readbackCandidateRows": 3,
+      "selectedGreenfieldRows": 30,
+      "greenfieldEligibleRows": 297
+    },
+    "readbackSourceIds": [
+      "1706.03762",
+      "2005.14165",
+      "1506.02640"
+    ],
+    "greenfieldSourceIds": [
+      "2005.11401",
+      "1512.03385",
+      "2201.11903",
+      "2312.00752",
+      "2310.11511",
+      "2404.16130",
+      "1810.04805"
+    ]
   }
 }

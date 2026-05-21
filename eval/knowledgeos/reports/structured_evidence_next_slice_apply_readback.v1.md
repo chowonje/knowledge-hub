@@ -12,6 +12,13 @@
 - appliedGreenfieldRows: 7
 - postApplyReadbackPassRows: 7
 
+## Candidate Input Snapshot
+
+- candidateReport: `eval/knowledgeos/reports/structured_evidence_next_slice_candidate_report.v1.json`
+- snapshotStrictCoveredRows: **3**
+- snapshotReadbackSourceIds: **3**
+- snapshotGreenfieldSourceIds: **7**
+
 ## Greenfield Rows
 
 - `2005.11401` status=`generated` applied=`True` postReadback=`pass`

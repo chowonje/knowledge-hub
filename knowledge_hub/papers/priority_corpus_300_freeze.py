@@ -572,7 +572,7 @@ def build_structured_evidence_next_slice_candidate_report(
         },
         "minimalEvidenceTypes": list(MINIMAL_EVIDENCE_TYPES),
         "deferredEvidenceTypes": list(DEFERRED_EVIDENCE_TYPES),
-        "readbackCandidates": [_evidence_candidate_public_row(row) for row in readback_candidates[:10]],
+        "readbackCandidates": [_evidence_candidate_public_row(row) for row in readback_candidates],
         "selectedGreenfieldCandidates": [_evidence_candidate_public_row(row) for row in selected_greenfield],
         "allRows": [_evidence_candidate_public_row(row) for row in rows],
         "policy": {

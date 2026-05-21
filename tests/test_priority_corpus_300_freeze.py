@@ -266,6 +266,68 @@ def test_structured_evidence_next_slice_excludes_existing_strict_evidence(tmp_pa
     assert payload["policy"]["strictEvidenceWrite"] is False
 
 
+def test_structured_evidence_next_slice_reports_all_readback_candidates(tmp_path: Path) -> None:
+    papers_dir = tmp_path / "papers"
+    source_ids = [f"paper-{idx:02d}" for idx in range(12)]
+    source_meta = {
+        source_id: _write_source(papers_dir, f"{source_id}.pdf", f"%PDF {source_id}".encode())
+        for source_id in source_ids
+    }
+    manifest_path = _write_json(
+        tmp_path / "corpus_manifest.json",
+        {
+            "schema": "knowledge-hub.corpus-manifest.v1",
+            "artifacts": [
+                {
+                    "artifactId": source_id,
+                    "sourceIds": [source_id],
+                    "expectedFilename": f"{source_id}.pdf",
+                    "expectedSourceContentHash": source_meta[source_id][0],
+                    "byteLength": source_meta[source_id][1],
+                    "corpusTier": "local_corpus",
+                }
+                for source_id in source_ids
+            ],
+        },
+    )
+    for source_id in source_ids:
+        _touch_parsed(papers_dir, source_id)
+        _write_jsonl(
+            papers_dir / "structured_evidence" / "strict_evidence" / f"{source_id}.jsonl",
+            [{"recordId": f"strict-{source_id}", "runId": "committed"}],
+        )
+    join_report_path = _write_json(
+        tmp_path / "join.json",
+        {
+            "schema": "knowledge-hub.priority-corpus-source-join-report.v1",
+            "rows": [
+                {
+                    "source_id": source_id,
+                    "title": source_id,
+                    "year": 2026,
+                    "candidate_tier": "eval_critical",
+                    "join_status": "available",
+                    "current_manifest_status": "in_manifest",
+                    "parsed_status": "parsed_present",
+                    "warnings": [],
+                }
+                for source_id in source_ids
+            ],
+        },
+    )
+
+    payload = build_structured_evidence_next_slice_candidate_report(
+        config=_ConfigWithPapersDir(papers_dir),
+        manifest_path=manifest_path,
+        join_report_path=join_report_path,
+        papers_dir=papers_dir,
+        greenfield_target_rows=1,
+    )
+
+    assert payload["counts"]["readbackCandidateRows"] == len(source_ids)
+    assert [row["sourceId"] for row in payload["readbackCandidates"]] == source_ids
+
+
 def test_structured_evidence_next_slice_carries_over_operator_local_side_effects(
     tmp_path: Path,
 ) -> None:
