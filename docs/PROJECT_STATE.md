@@ -72,6 +72,8 @@ The canonical dirty bucket decision is now recorded too. `eval/knowledgeos/scrip
 
 The cleanup/archive sequence is also fixed as a report-only plan. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_cleanup_plan.py` assigns all dirty buckets to cleanup sequences and records the execution policy: explicit approval is required, PR #149 should be resolved first, a snapshot/checkpoint is required before cleanup, and no dirty bucket may be directly merged into the text RC. This is still a no-mutation gate; destructive cleanup and canonical checkout edits remain zero.
 
+The remaining external mutation boundary is now represented by `eval/knowledgeos/scripts/build_text_evidence_rc_external_action_approval_packet.py`. The approval packet has two pending actions and executes neither: close PR #149 without merge, then snapshot and clean/archive the canonical dirty checkout. This makes the next operator decision explicit while keeping PR mutation, canonical checkout edits, destructive cleanup, vault scan, DB/index mutation, merge, cherry-pick, and worktree deletion at zero until the user approves the action.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

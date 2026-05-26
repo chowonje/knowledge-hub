@@ -1,0 +1,99 @@
+{
+  "schema": "knowledge-hub.paper.text-evidence-rc-external-action-approval-packet.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T07:55:20Z",
+  "scope": {
+    "writes": "report_only",
+    "pullRequestMutationPerformed": false,
+    "canonicalCheckoutEdited": false,
+    "destructiveCleanupRows": 0,
+    "vaultScanRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0
+  },
+  "inputReports": {
+    "pr149DispositionReportRef": "text_evidence_pr149_disposition.v1.json",
+    "pr149DispositionStatus": "ready",
+    "canonicalCleanupPlanReportRef": "text_evidence_canonical_dirty_cleanup_plan.v1.json",
+    "canonicalCleanupPlanStatus": "ready"
+  },
+  "approvalPolicy": {
+    "requiresExplicitUserApproval": true,
+    "noAutoExecution": true,
+    "closePr149BeforeCanonicalCleanup": true,
+    "snapshotBeforeCanonicalCleanup": true,
+    "allowsDirectTextRcMerge": false
+  },
+  "actionRows": 2,
+  "pendingApprovalRows": 2,
+  "executedRows": 0,
+  "actions": [
+    {
+      "actionId": "close_pr149_without_merge",
+      "actionType": "external_pr_mutation",
+      "targetRef": "github_pr_149",
+      "recommended": true,
+      "approvalStatus": "pending_user_approval",
+      "executionStatus": "not_executed",
+      "sequenceOrder": 1,
+      "requiresSnapshotFirst": false,
+      "requiresPr149ResolvedFirst": false,
+      "commandPreview": "gh pr close 149 --repo chowonje/knowledge-hub --comment <sanitized closeout>",
+      "reason": "PR #149 is open, draft, and conflicting; the disposition report recommends abandoning it before public RC rather than merging or recutting it into the text-evidence stack.",
+      "currentState": {
+        "state": "OPEN",
+        "isDraft": true,
+        "mergeable": "CONFLICTING",
+        "mergeStateStatus": "DIRTY"
+      }
+    },
+    {
+      "actionId": "snapshot_and_clean_canonical_dirty_checkout",
+      "actionType": "local_checkout_cleanup",
+      "targetRef": "canonical_product_checkout",
+      "recommended": true,
+      "approvalStatus": "pending_user_approval",
+      "executionStatus": "not_executed",
+      "sequenceOrder": 2,
+      "requiresSnapshotFirst": true,
+      "requiresPr149ResolvedFirst": true,
+      "commandPreview": "snapshot current dirty state, then clean/archive by cleanup-plan bucket",
+      "reason": "The cleanup plan excludes direct dirty-checkout inclusion from the text RC and requires a checkpoint before any physical cleanup.",
+      "currentState": {
+        "cleanupPlanStatus": "ready",
+        "dirtyRows": 168,
+        "planRows": 11
+      }
+    }
+  ],
+  "nextAction": "await_explicit_user_approval_to_close_pr149_without_merge",
+  "mutationCounters": {
+    "externalPrMutationRows": 0,
+    "canonicalCleanupRows": 0,
+    "destructiveCleanupRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "reportHash": "sha256:8ed82594e5b485c29a6228437865a62cc361d4999bea90179920261e97a127e6",
+  "warnings": [
+    "This approval packet does not close PR #149 and does not clean the canonical checkout.",
+    "The first executable mutation remains explicit user approval to close PR #149 without merge."
+  ],
+  "schemaErrors": []
+}

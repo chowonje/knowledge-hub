@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T07:50:15Z",
+  "generatedAt": "2026-05-26T07:55:36Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "87e4ac8",
-    "dirtyCount": 0
+    "head": "7948f49",
+    "dirtyCount": 8
   },
   "canonicalCheckout": {
     "available": true,
@@ -56,7 +56,11 @@
     "dispositionReportRef": "text_evidence_pr149_disposition.v1.json",
     "dispositionStatus": "ready",
     "dispositionDecision": "abandon_current_pr_before_public_rc",
-    "dispositionNextAction": "operator_close_or_abandon_pr149_without_merging_after_approval"
+    "dispositionNextAction": "operator_close_or_abandon_pr149_without_merging_after_approval",
+    "approvalPacketReportRef": "text_evidence_rc_external_action_approval_packet.v1.json",
+    "approvalPacketStatus": "ready",
+    "approvalPacketPendingRows": 2,
+    "approvalPacketNextAction": "await_explicit_user_approval_to_close_pr149_without_merge"
   },
   "phaseRows": 9,
   "readyPhaseRows": 9,
@@ -72,14 +76,14 @@
     {
       "blockerId": "pr_149_conflicting_or_draft",
       "severity": "hold",
-      "reason": "PR #149 has an abandon-before-RC disposition; external PR closure remains pending"
+      "reason": "PR #149 approval packet is ready; external close awaits explicit approval"
     }
   ],
   "mergeQueue": [
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "87e4ac8",
+      "head": "7948f49",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -262,8 +266,8 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:43cee9528fc570c0cffc3d9202ee64defbe81ce4dc922e1254c291f470fa2db8",
-  "nextAction": "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout",
+  "reportHash": "sha256:dc7c99f2d8d0b172637479d49535be1554d2051a77704ea0747b06aa9c651e14",
+  "nextAction": "await_explicit_user_approval_to_close_pr149_without_merge",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"

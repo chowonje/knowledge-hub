@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-evidence-rc-external-action-approval-packet.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "inputReports",
+    "approvalPolicy",
+    "actionRows",
+    "pendingApprovalRows",
+    "executedRows",
+    "actions",
+    "nextAction",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "reportHash",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-evidence-rc-external-action-approval-packet.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "pullRequestMutationPerformed",
+        "canonicalCheckoutEdited",
+        "destructiveCleanupRows",
+        "vaultScanRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "pullRequestMutationPerformed": { "const": false },
+        "canonicalCheckoutEdited": { "const": false },
+        "destructiveCleanupRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 }
+      }
+    },
+    "inputReports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pr149DispositionReportRef",
+        "pr149DispositionStatus",
+        "canonicalCleanupPlanReportRef",
+        "canonicalCleanupPlanStatus"
+      ],
+      "properties": {
+        "pr149DispositionReportRef": { "const": "text_evidence_pr149_disposition.v1.json" },
+        "pr149DispositionStatus": { "type": "string" },
+        "canonicalCleanupPlanReportRef": { "const": "text_evidence_canonical_dirty_cleanup_plan.v1.json" },
+        "canonicalCleanupPlanStatus": { "type": "string" }
+      }
+    },
+    "approvalPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiresExplicitUserApproval",
+        "noAutoExecution",
+        "closePr149BeforeCanonicalCleanup",
+        "snapshotBeforeCanonicalCleanup",
+        "allowsDirectTextRcMerge"
+      ],
+      "properties": {
+        "requiresExplicitUserApproval": { "const": true },
+        "noAutoExecution": { "const": true },
+        "closePr149BeforeCanonicalCleanup": { "const": true },
+        "snapshotBeforeCanonicalCleanup": { "const": true },
+        "allowsDirectTextRcMerge": { "const": false }
+      }
+    },
+    "actionRows": { "const": 2 },
+    "pendingApprovalRows": { "const": 2 },
+    "executedRows": { "const": 0 },
+    "actions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actionId",
+          "actionType",
+          "targetRef",
+          "recommended",
+          "approvalStatus",
+          "executionStatus",
+          "sequenceOrder",
+          "requiresSnapshotFirst",
+          "requiresPr149ResolvedFirst",
+          "commandPreview",
+          "reason",
+          "currentState"
+        ],
+        "properties": {
+          "actionId": { "type": "string", "minLength": 1 },
+          "actionType": { "enum": ["external_pr_mutation", "local_checkout_cleanup"] },
+          "targetRef": { "type": "string", "minLength": 1 },
+          "recommended": { "const": true },
+          "approvalStatus": { "const": "pending_user_approval" },
+          "executionStatus": { "const": "not_executed" },
+          "sequenceOrder": { "type": "integer", "minimum": 1 },
+          "requiresSnapshotFirst": { "type": "boolean" },
+          "requiresPr149ResolvedFirst": { "type": "boolean" },
+          "commandPreview": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 },
+          "currentState": { "type": "object", "additionalProperties": true }
+        }
+      }
+    },
+    "nextAction": { "const": "await_explicit_user_approval_to_close_pr149_without_merge" },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "externalPrMutationRows",
+        "canonicalCleanupRows",
+        "destructiveCleanupRows",
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "externalPrMutationRows": { "const": 0 },
+        "canonicalCleanupRows": { "const": 0 },
+        "destructiveCleanupRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "reportHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -16,6 +16,7 @@ PR149_DISPOSITION_REPORT_REF = "text_evidence_pr149_disposition.v1.json"
 CANONICAL_DIRTY_INVENTORY_REPORT_REF = "text_evidence_canonical_dirty_inventory.v1.json"
 CANONICAL_DIRTY_BUCKET_DECISION_REPORT_REF = "text_evidence_canonical_dirty_bucket_decision.v1.json"
 CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF = "text_evidence_canonical_dirty_cleanup_plan.v1.json"
+EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF = "text_evidence_rc_external_action_approval_packet.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -340,6 +341,22 @@ def _canonical_dirty_cleanup_plan_state(reports_root: Path) -> dict[str, Any]:
     }
 
 
+def _external_action_approval_packet_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF)
+    if not payload:
+        return {"available": False}
+    return {
+        "available": True,
+        "reportRef": EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "actionRows": int(payload.get("actionRows") or 0),
+        "pendingApprovalRows": int(payload.get("pendingApprovalRows") or 0),
+        "executedRows": int(payload.get("executedRows") or 0),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -368,6 +385,7 @@ def build_text_evidence_rc_convergence_report(
     canonical_dirty_inventory = _canonical_dirty_inventory_state(reports_root)
     canonical_dirty_bucket_decision = _canonical_dirty_bucket_decision_state(reports_root)
     canonical_dirty_cleanup_plan = _canonical_dirty_cleanup_plan_state(reports_root)
+    external_action_approval = _external_action_approval_packet_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -396,6 +414,11 @@ def build_text_evidence_rc_convergence_report(
         pr_149["dispositionStatus"] = _clean_text(pr149_disposition.get("status"))
         pr_149["dispositionDecision"] = _clean_text(pr149_disposition.get("decision"))
         pr_149["dispositionNextAction"] = _clean_text(pr149_disposition.get("nextAction"))
+    if external_action_approval.get("available"):
+        pr_149["approvalPacketReportRef"] = _clean_text(external_action_approval.get("reportRef"))
+        pr_149["approvalPacketStatus"] = _clean_text(external_action_approval.get("status"))
+        pr_149["approvalPacketPendingRows"] = int(external_action_approval.get("pendingApprovalRows") or 0)
+        pr_149["approvalPacketNextAction"] = _clean_text(external_action_approval.get("nextAction"))
     if not canonical.get("dirtyCount"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "canonical_checkout_dirty"]
     elif canonical_dirty_cleanup_plan.get("status") == "ready":
@@ -412,6 +435,10 @@ def build_text_evidence_rc_convergence_report(
                 row["reason"] = "canonical checkout dirty inventory is available; bucket-level keep/drop/replay decision remains pending"
     if not pr_149.get("blocked"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "pr_149_conflicting_or_draft"]
+    elif external_action_approval.get("status") == "ready":
+        for row in blocker_rows:
+            if row["blockerId"] == "pr_149_conflicting_or_draft":
+                row["reason"] = "PR #149 approval packet is ready; external close awaits explicit approval"
     elif pr149_disposition.get("decision") == "abandon_current_pr_before_public_rc":
         for row in blocker_rows:
             if row["blockerId"] == "pr_149_conflicting_or_draft":
@@ -479,7 +506,8 @@ def build_text_evidence_rc_convergence_report(
         "privatePathLeakRows": 0,
         "reportHash": "",
         "nextAction": _clean_text(
-            canonical_dirty_cleanup_plan.get("nextAction")
+            external_action_approval.get("nextAction")
+            or canonical_dirty_cleanup_plan.get("nextAction")
             or canonical_dirty_bucket_decision.get("nextAction")
             or canonical_dirty_inventory.get("nextAction")
             or pr149_disposition.get("nextAction")
