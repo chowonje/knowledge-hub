@@ -48,6 +48,8 @@ The current research-paper evidence slice is intentionally narrower and more con
 
 The next planned v0.1 tranches are deliberately sequential: connect caption-text FigureCaptionArtifact candidates to a product/internal paper-QA readback path, add SectionSpan/ParagraphSpan candidates, add table-caption/table-like text candidates, add equation locator plus surrounding-text candidates, re-scope complex-paper QA to text-answerable versus visual-unsupported cases, then handle source-alias normalization, public/operator surface cleanup, and final RC hygiene.
 
+The first roadmap tranche, `text_figure_caption_qa_path`, now has an internal caption-text-only readback path. `eval/knowledgeos/scripts/run_figure_caption_text_qa_readback.py` consumes the FigureCaptionArtifact candidate report and emits schema-backed answer/no-answer rows: caption-grounded Figure N questions can return a candidate answer packet with page/bbox/sourceContentHash, missing figures return no-answer, and visual-inspection questions are blocked as `visual_reasoning_not_supported_in_text_evidence_v01`.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.
