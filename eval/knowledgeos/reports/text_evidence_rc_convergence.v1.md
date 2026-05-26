@@ -7,7 +7,8 @@
 - blockedPhaseRows: `0`
 - publicRcBlockerRows: `2`
 - privatePathLeakRows: `0`
-- reportHash: `sha256:1fc8e11aa20d142f6764d4b58dd225e47b37a0e2dc4402363ca157555fd0c14b`
+- reportHash: `sha256:a2f511c6929e4b515f516e124ca94043caaa2a545eae1fa5f2b42ee77e6d35fc`
+- textOnlyScopeReady: `True`
 
 ## Blockers
 

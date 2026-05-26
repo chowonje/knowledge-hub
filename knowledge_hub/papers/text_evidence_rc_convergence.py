@@ -18,6 +18,7 @@ CANONICAL_DIRTY_BUCKET_DECISION_REPORT_REF = "text_evidence_canonical_dirty_buck
 CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF = "text_evidence_canonical_dirty_cleanup_plan.v1.json"
 EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF = "text_evidence_rc_external_action_approval_packet.v1.json"
 CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF = "text_evidence_canonical_dirty_snapshot_dry_run.v1.json"
+TEXT_ONLY_SCOPE_GATE_REPORT_REF = "text_evidence_rc_text_only_scope_gate.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -375,6 +376,39 @@ def _canonical_dirty_snapshot_dry_run_state(reports_root: Path) -> dict[str, Any
     }
 
 
+def _text_only_scope_gate_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / TEXT_ONLY_SCOPE_GATE_REPORT_REF)
+    if not payload:
+        return {
+            "available": False,
+            "reportRef": "",
+            "status": "",
+            "decision": "",
+            "textOnlyRcReady": False,
+            "publicRcReady": False,
+            "textReadyRows": 0,
+            "textHoldRows": 0,
+            "deferredRows": 0,
+            "blockerRows": 0,
+            "nextAction": "",
+            "privatePathLeakRows": 0,
+        }
+    return {
+        "available": True,
+        "reportRef": TEXT_ONLY_SCOPE_GATE_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "decision": _clean_text(payload.get("decision")),
+        "textOnlyRcReady": bool(payload.get("textOnlyRcReady")),
+        "publicRcReady": bool(payload.get("publicRcReady")),
+        "textReadyRows": int(payload.get("textReadyRows") or 0),
+        "textHoldRows": int(payload.get("textHoldRows") or 0),
+        "deferredRows": int(payload.get("deferredRows") or 0),
+        "blockerRows": int(payload.get("blockerRows") or 0),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -405,6 +439,7 @@ def build_text_evidence_rc_convergence_report(
     canonical_dirty_cleanup_plan = _canonical_dirty_cleanup_plan_state(reports_root)
     external_action_approval = _external_action_approval_packet_state(reports_root)
     canonical_dirty_snapshot = _canonical_dirty_snapshot_dry_run_state(reports_root)
+    text_only_scope_gate = _text_only_scope_gate_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -472,6 +507,14 @@ def build_text_evidence_rc_convergence_report(
         for row in blocker_rows:
             if row["blockerId"] == "pr_149_conflicting_or_draft":
                 row["reason"] = "PR #149 has an abandon-before-RC disposition; external PR closure remains pending"
+    if text_only_scope_gate.get("available") and not text_only_scope_gate.get("textOnlyRcReady"):
+        blocker_rows.append(
+            {
+                "blockerId": "text_only_scope_gate_not_ready",
+                "severity": "hold",
+                "reason": "text-only scope gate is present but not ready",
+            }
+        )
 
     ready_phase_rows = sum(
         1
@@ -495,6 +538,7 @@ def build_text_evidence_rc_convergence_report(
         "currentStack": _current_branch_state(project_root),
         "canonicalCheckout": canonical,
         "pullRequest149": pr_149,
+        "textOnlyScopeGate": text_only_scope_gate,
         "phaseRows": len(phase_rows),
         "readyPhaseRows": ready_phase_rows,
         "blockedPhaseRows": len(phase_rows) - ready_phase_rows,
@@ -535,6 +579,11 @@ def build_text_evidence_rc_convergence_report(
         "privatePathLeakRows": 0,
         "reportHash": "",
         "nextAction": _clean_text(
+            text_only_scope_gate.get("nextAction")
+            if text_only_scope_gate.get("available") and not text_only_scope_gate.get("textOnlyRcReady")
+            else ""
+        )
+        or _clean_text(
             canonical_dirty_snapshot.get("nextAction")
             or external_action_approval.get("nextAction")
             or canonical_dirty_cleanup_plan.get("nextAction")
@@ -545,6 +594,7 @@ def build_text_evidence_rc_convergence_report(
         ),
         "warnings": [
             "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
+            "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
         ],
         "schemaErrors": [],
@@ -570,6 +620,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
         f"- publicRcBlockerRows: `{report.get('publicRcBlockerRows')}`",
         f"- privatePathLeakRows: `{report.get('privatePathLeakRows')}`",
         f"- reportHash: `{report.get('reportHash')}`",
+        f"- textOnlyScopeReady: `{dict(report.get('textOnlyScopeGate') or {}).get('textOnlyRcReady')}`",
         "",
         "## Blockers",
         "",

@@ -11,6 +11,7 @@
     "currentStack",
     "canonicalCheckout",
     "pullRequest149",
+    "textOnlyScopeGate",
     "phaseRows",
     "readyPhaseRows",
     "blockedPhaseRows",
@@ -105,6 +106,38 @@
         "available": { "type": "boolean" },
         "number": { "const": 149 },
         "blocked": { "type": "boolean" }
+      }
+    },
+    "textOnlyScopeGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available",
+        "reportRef",
+        "status",
+        "decision",
+        "textOnlyRcReady",
+        "publicRcReady",
+        "textReadyRows",
+        "textHoldRows",
+        "deferredRows",
+        "blockerRows",
+        "nextAction",
+        "privatePathLeakRows"
+      ],
+      "properties": {
+        "available": { "type": "boolean" },
+        "reportRef": { "type": "string" },
+        "status": { "type": "string" },
+        "decision": { "type": "string" },
+        "textOnlyRcReady": { "type": "boolean" },
+        "publicRcReady": { "type": "boolean" },
+        "textReadyRows": { "type": "integer", "minimum": 0 },
+        "textHoldRows": { "type": "integer", "minimum": 0 },
+        "deferredRows": { "type": "integer", "minimum": 0 },
+        "blockerRows": { "type": "integer", "minimum": 0 },
+        "nextAction": { "type": "string" },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 }
       }
     },
     "phaseRows": { "type": "integer", "minimum": 0 },

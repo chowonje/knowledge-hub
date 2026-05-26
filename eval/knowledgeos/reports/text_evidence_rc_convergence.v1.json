@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T08:05:22Z",
+  "generatedAt": "2026-05-26T08:15:36Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "803f365",
-    "dirtyCount": 0
+    "head": "1c6e6d6",
+    "dirtyCount": 5
   },
   "canonicalCheckout": {
     "available": true,
@@ -67,6 +67,20 @@
     "approvalPacketPendingRows": 2,
     "approvalPacketNextAction": "await_explicit_user_approval_to_close_pr149_without_merge"
   },
+  "textOnlyScopeGate": {
+    "available": true,
+    "reportRef": "text_evidence_rc_text_only_scope_gate.v1.json",
+    "status": "ready",
+    "decision": "text_only_scope_ready_pending_rc_convergence_actions",
+    "textOnlyRcReady": true,
+    "publicRcReady": false,
+    "textReadyRows": 6,
+    "textHoldRows": 0,
+    "deferredRows": 6,
+    "blockerRows": 2,
+    "nextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot",
+    "privatePathLeakRows": 0
+  },
   "phaseRows": 9,
   "readyPhaseRows": 9,
   "blockedPhaseRows": 0,
@@ -88,7 +102,7 @@
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "803f365",
+      "head": "1c6e6d6",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -271,10 +285,11 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:1fc8e11aa20d142f6764d4b58dd225e47b37a0e2dc4402363ca157555fd0c14b",
+  "reportHash": "sha256:a2f511c6929e4b515f516e124ca94043caaa2a545eae1fa5f2b42ee77e6d35fc",
   "nextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
+    "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"
   ],
   "schemaErrors": []

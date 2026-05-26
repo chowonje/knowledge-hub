@@ -58,6 +58,7 @@ def test_convergence_report_records_rc_hold_without_mutation(tmp_path: Path) -> 
     assert report["status"] in {"ready_for_integration_review", "blocked"}
     assert report["phaseRows"] == 9
     assert report["publicRcReady"] is False
+    assert report["textOnlyScopeGate"]["available"] is False
     assert report["scope"]["mergePerformed"] is False
     assert report["scope"]["canonicalCheckoutEdited"] is False
     assert report["mutationCounters"]["vaultScanRows"] == 0
@@ -83,6 +84,20 @@ def test_writer_keeps_report_sanitized(tmp_path: Path) -> None:
         "currentStack": {"branch": "codex/test", "head": "abc1234", "dirtyCount": 0},
         "canonicalCheckout": {"available": False, "branch": "", "head": "", "dirtyCount": 0},
         "pullRequest149": {"available": False, "number": 149},
+        "textOnlyScopeGate": {
+            "available": False,
+            "reportRef": "",
+            "status": "",
+            "decision": "",
+            "textOnlyRcReady": False,
+            "publicRcReady": False,
+            "textReadyRows": 0,
+            "textHoldRows": 0,
+            "deferredRows": 0,
+            "blockerRows": 0,
+            "nextAction": "",
+            "privatePathLeakRows": 0,
+        },
         "phaseRows": 0,
         "readyPhaseRows": 0,
         "blockedPhaseRows": 0,

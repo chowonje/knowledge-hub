@@ -78,6 +78,8 @@ The canonical dirty cleanup path now also has a snapshot dry-run. `eval/knowledg
 
 The text-evidence RC line now also has a text-only scope gate. `eval/knowledgeos/scripts/build_text_evidence_rc_text_only_scope_gate.py` records that the six text phases are ready inside the text-only scope while image/layout/format/VLM evidence, bbox identity recovery, table-cell grids, equation LaTeX reconstruction, and figure visual binding are deferred to later branches. Public RC remains blocked by PR #149 and canonical dirty cleanup; the scope gate performs no strict-evidence promotion, runtime answer-visible exposure, canonical checkout edit, vault scan, DB/index mutation, or reindex/reembed.
 
+The RC convergence board now consumes that text-only scope gate directly. `eval/knowledgeos/scripts/build_text_evidence_rc_convergence_report.py` includes a `textOnlyScopeGate` section so reviewers can distinguish `textOnlyRcReady=true` from `publicRcReady=false`: the text roadmap is scoped and ready for integration review, but public RC remains held until PR #149 is closed without merge and the canonical dirty checkout is cleaned or archived under explicit approval.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.
