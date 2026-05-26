@@ -11,13 +11,16 @@ from knowledge_hub.papers.visual_annotation_expansion_attachment_pack import (
 from knowledge_hub.papers.visual_annotation_expansion_manual_output_capture import (
     VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID,
+    VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID,
     VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
     build_visual_annotation_expansion_manual_run_packet,
     build_visual_annotation_expansion_operator_handoff,
+    build_visual_annotation_expansion_web_output_template,
     build_visual_annotation_expansion_web_output_validation,
     write_visual_annotation_expansion_manual_run_packet,
     write_visual_annotation_expansion_operator_handoff,
+    write_visual_annotation_expansion_web_output_template,
     write_visual_annotation_expansion_web_output_validation,
 )
 from knowledge_hub.papers.visual_annotation_expansion_pack_design import (
@@ -188,6 +191,63 @@ def test_operator_handoff_preserves_template_only_policy_and_validation_command(
     assert validation.ok, validation.errors
 
 
+def test_web_output_template_is_fill_only_and_not_completed_output() -> None:
+    packet = build_visual_annotation_expansion_manual_run_packet(
+        _expansion_pack(),
+        _attachment_pack(),
+        batch_size=2,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    handoff = build_visual_annotation_expansion_operator_handoff(
+        packet,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    template = build_visual_annotation_expansion_web_output_template(
+        handoff,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert template["schema"] == VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID
+    assert template["schema"] != VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID
+    assert template["status"] == "ready"
+    assert template["decision"] == "ready_for_manual_web_output_fill"
+    assert template["nextRecommendedTranche"] == "visual_annotation_expansion_manual_output_capture"
+    assert template["targetOutput"]["schema"] == VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID
+    assert template["targetOutput"]["reportRef"] == (
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json"
+    )
+    assert template["counts"]["sourceTemplateRows"] == 3
+    assert template["counts"]["outputTemplateRows"] == 3
+    assert template["counts"]["batchRows"] == 2
+    assert template["counts"]["placeholderRows"] == 3
+    assert template["counts"]["completedWebOutputRows"] == 0
+    assert template["counts"]["privatePathLeakRows"] == 0
+    assert template["scope"]["templateOnly"] is True
+    assert template["scope"]["completedWebOutputRows"] == 0
+    assert template["scope"]["manualWebModelOutputRows"] == 0
+    assert template["scope"]["modelCalls"] is False
+    assert template["scope"]["webModelCalls"] is False
+    assert template["scope"]["vectorIndexing"] is False
+    assert template["scope"]["strictEvidencePromotionRows"] == 0
+    assert template["scope"]["candidateStoreMutationRows"] == 0
+    assert "FILL_IN" in template["templateRows"][0]["targetRowTemplate"]["derivedTextForRetrieval"]
+
+    validation = validate_payload(
+        template,
+        VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+    target_output_validation = validate_payload(
+        template,
+        VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+        strict=True,
+    )
+    assert not target_output_validation.ok
+
+
 def test_expansion_web_output_validation_ready_and_no_mutation_contract() -> None:
     output = _output()
     report = build_visual_annotation_expansion_web_output_validation(
@@ -308,6 +368,8 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
     packet_md = tmp_path / "packet.md"
     handoff_json = tmp_path / "handoff.json"
     handoff_md = tmp_path / "handoff.md"
+    template_json = tmp_path / "template.json"
+    template_md = tmp_path / "template.md"
     validation_json = tmp_path / "validation.json"
     validation_md = tmp_path / "validation.md"
 
@@ -328,6 +390,18 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         report_json=handoff_json,
         report_md=handoff_md,
     )
+    template = build_visual_annotation_expansion_web_output_template(
+        handoff,
+        source_operator_handoff_ref=(
+            "eval/knowledgeos/reports/visual_annotation_expansion_operator_handoff_002.v1.json"
+        ),
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    write_visual_annotation_expansion_web_output_template(
+        template,
+        report_json=template_json,
+        report_md=template_md,
+    )
     write_visual_annotation_expansion_web_output_validation(
         validation_report,
         report_json=validation_json,
@@ -339,6 +413,8 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         + packet_md.read_text(encoding="utf-8")
         + handoff_json.read_text(encoding="utf-8")
         + handoff_md.read_text(encoding="utf-8")
+        + template_json.read_text(encoding="utf-8")
+        + template_md.read_text(encoding="utf-8")
         + validation_json.read_text(encoding="utf-8")
         + validation_md.read_text(encoding="utf-8")
     )
