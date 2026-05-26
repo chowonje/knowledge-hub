@@ -76,6 +76,8 @@ The remaining external mutation boundary is now represented by `eval/knowledgeos
 
 The canonical dirty cleanup path now also has a snapshot dry-run. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_snapshot_dry_run.py` records a status-only fingerprint of the canonical checkout before cleanup; it does not read file contents or write a real snapshot. The current fingerprint covers 168 dirty rows and is used only to detect drift before any later approved cleanup execution.
 
+The text-evidence RC line now also has a text-only scope gate. `eval/knowledgeos/scripts/build_text_evidence_rc_text_only_scope_gate.py` records that the six text phases are ready inside the text-only scope while image/layout/format/VLM evidence, bbox identity recovery, table-cell grids, equation LaTeX reconstruction, and figure visual binding are deferred to later branches. Public RC remains blocked by PR #149 and canonical dirty cleanup; the scope gate performs no strict-evidence promotion, runtime answer-visible exposure, canonical checkout edit, vault scan, DB/index mutation, or reindex/reembed.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

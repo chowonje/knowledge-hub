@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-evidence-rc-text-only-scope-gate.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "inputReports",
+    "evidencePolicy",
+    "phaseRows",
+    "textReadyRows",
+    "textHoldRows",
+    "deferredRows",
+    "blockerRows",
+    "textOnlyRcReady",
+    "publicRcReady",
+    "decision",
+    "phaseReports",
+    "deferredItems",
+    "blockers",
+    "nextAction",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "reportHash",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-evidence-rc-text-only-scope-gate.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "scopePolicy",
+        "visualLayoutBranchDeferred",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows",
+        "canonicalCheckoutEdited",
+        "vaultScanRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "externalDownloadRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "scopePolicy": { "const": "text_evidence_v0_1_rc_only" },
+        "visualLayoutBranchDeferred": { "const": true },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "canonicalCheckoutEdited": { "const": false },
+        "vaultScanRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 }
+      }
+    },
+    "inputReports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["convergenceReportRef", "convergenceStatus", "convergenceNextAction"],
+      "properties": {
+        "convergenceReportRef": { "const": "text_evidence_rc_convergence.v1.json" },
+        "convergenceStatus": { "type": "string" },
+        "convergenceNextAction": { "type": "string" }
+      }
+    },
+    "evidencePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowsTextEvidence",
+        "allowsCaptionTextEvidence",
+        "allowsSectionParagraphTextSpans",
+        "allowsTableCaptionCandidates",
+        "allowsEquationLocatorContextCandidates",
+        "allowsVisualInspectionEvidence",
+        "allowsVlmDerivedCitationGradeEvidence",
+        "allowsStrictEvidencePromotion",
+        "allowsRuntimeAnswerVisibleExposure"
+      ],
+      "properties": {
+        "allowsTextEvidence": { "const": true },
+        "allowsCaptionTextEvidence": { "const": true },
+        "allowsSectionParagraphTextSpans": { "const": true },
+        "allowsTableCaptionCandidates": { "const": true },
+        "allowsEquationLocatorContextCandidates": { "const": true },
+        "allowsVisualInspectionEvidence": { "const": false },
+        "allowsVlmDerivedCitationGradeEvidence": { "const": false },
+        "allowsStrictEvidencePromotion": { "const": false },
+        "allowsRuntimeAnswerVisibleExposure": { "const": false }
+      }
+    },
+    "phaseRows": { "const": 6 },
+    "textReadyRows": { "type": "integer", "minimum": 0 },
+    "textHoldRows": { "type": "integer", "minimum": 0 },
+    "deferredRows": { "const": 6 },
+    "blockerRows": { "type": "integer", "minimum": 0 },
+    "textOnlyRcReady": { "type": "boolean" },
+    "publicRcReady": { "type": "boolean" },
+    "decision": {
+      "enum": [
+        "text_only_scope_ready_pending_rc_convergence_actions",
+        "text_only_scope_blocked"
+      ]
+    },
+    "phaseReports": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "phase",
+          "reportRef",
+          "reportSchema",
+          "reportStatus",
+          "requiredScope",
+          "textScopeReady",
+          "phaseDisposition",
+          "keyCounts",
+          "visualUnsupportedRows",
+          "strictEvidencePromotionRows",
+          "runtimeAnswerVisibleExposureRows",
+          "privatePathLeakRows"
+        ],
+        "properties": {
+          "phase": { "type": "string", "minLength": 1 },
+          "reportRef": { "type": "string", "minLength": 1 },
+          "reportSchema": { "type": "string" },
+          "reportStatus": { "type": "string" },
+          "requiredScope": { "type": "string", "minLength": 1 },
+          "textScopeReady": { "type": "boolean" },
+          "phaseDisposition": { "enum": ["text_scope_ready", "text_scope_hold"] },
+          "keyCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "minimum": 0 }
+          },
+          "visualUnsupportedRows": { "type": "integer", "minimum": 0 },
+          "strictEvidencePromotionRows": { "const": 0 },
+          "runtimeAnswerVisibleExposureRows": { "const": 0 },
+          "privatePathLeakRows": { "const": 0 }
+        }
+      }
+    },
+    "deferredItems": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "itemId",
+          "deferredReason",
+          "futureBranchHint",
+          "requiredBeforePublicTextRc"
+        ],
+        "properties": {
+          "itemId": { "type": "string", "minLength": 1 },
+          "deferredReason": { "type": "string", "minLength": 1 },
+          "futureBranchHint": { "type": "string", "minLength": 1 },
+          "requiredBeforePublicTextRc": { "const": false }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["blockerId", "severity", "reason"],
+        "properties": {
+          "blockerId": { "type": "string", "minLength": 1 },
+          "severity": { "enum": ["hold", "block"] },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "nextAction": { "type": "string", "minLength": 1 },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "reportHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}
