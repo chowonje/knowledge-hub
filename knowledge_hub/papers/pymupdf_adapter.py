@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import importlib.metadata
 import json
 from pathlib import Path
@@ -10,9 +11,26 @@ import shutil
 import subprocess
 from typing import Any
 
+from knowledge_hub.papers.extraction_diagnostics import build_parser_meta_diagnostic
+
 
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
+
+
+def _sha256_for_path(path: Path) -> str:
+    if not path.is_file():
+        return ""
+    digest = hashlib.sha256()
+    try:
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                if not chunk:
+                    break
+                digest.update(chunk)
+    except OSError:
+        return ""
+    return digest.hexdigest()
 
 
 def _page_total(document: Any) -> int:
@@ -28,17 +46,61 @@ def _page_total(document: Any) -> int:
         return 0
 
 
+def _page_column_count(page: Any) -> int:
+    try:
+        blocks = list(page.get_text("blocks") or [])
+    except Exception:
+        return 0
+    centers: list[float] = []
+    for block in blocks:
+        if not isinstance(block, (list, tuple)) or len(block) < 5:
+            continue
+        text = _clean_text(block[4])
+        if len(text) < 20:
+            continue
+        try:
+            x0 = float(block[0])
+            x1 = float(block[2])
+        except Exception:
+            continue
+        centers.append((x0 + x1) / 2.0)
+    if len(centers) < 4:
+        return 1 if centers else 0
+    try:
+        width = max(1.0, float(getattr(getattr(page, "rect", None), "width", 0.0) or 0.0))
+    except Exception:
+        width = 0.0
+    threshold = max(80.0, width * 0.18) if width else 120.0
+    clusters: list[list[float]] = []
+    for center in sorted(centers):
+        if not clusters:
+            clusters.append([center])
+            continue
+        current = clusters[-1]
+        mean = sum(current) / len(current)
+        if center - mean > threshold:
+            clusters.append([center])
+        else:
+            current.append(center)
+    substantial = [cluster for cluster in clusters if len(cluster) >= 2]
+    return max(1, min(3, len(substantial) or len(clusters)))
+
+
 def _extract_document_text(document: Any) -> tuple[str, list[dict[str, Any]], dict[str, Any]]:
     elements: list[dict[str, Any]] = []
     markdown_lines: list[str] = []
     pages_with_text = 0
     char_count = 0
+    column_count_distribution: dict[int, int] = {}
     for page_index in range(_page_total(document)):
         try:
             page = document.load_page(page_index)
+            column_count = _page_column_count(page)
             raw_text = str(page.get_text("text") or "")
         except Exception:
             continue
+        if column_count > 0:
+            column_count_distribution[column_count] = column_count_distribution.get(column_count, 0) + 1
         text = _clean_text(raw_text)
         if not text:
             continue
@@ -60,6 +122,9 @@ def _extract_document_text(document: Any) -> tuple[str, list[dict[str, Any]], di
         "page_count": _page_total(document),
         "pages_with_text": pages_with_text,
         "char_count": char_count,
+        "column_count_distribution": {str(key): value for key, value in sorted(column_count_distribution.items())},
+        "column_count_detected": max(column_count_distribution.keys(), default=0),
+        "reading_order_method": "column_probe_only" if max(column_count_distribution.keys(), default=0) >= 2 else "y_only",
     }
     return markdown_text, elements, stats
 
@@ -134,6 +199,13 @@ class PyMuPDFAdapter:
         parser_meta = dict(manifest.get("parser_meta") or {})
         if str(parser_meta.get("parser") or "").strip().lower() != "pymupdf":
             return None
+        if not (
+            _clean_text(parser_meta.get("source_content_hash"))
+            or _clean_text(parser_meta.get("sourceContentHash"))
+            or _clean_text(manifest.get("source_content_hash"))
+            or _clean_text(manifest.get("sourceContentHash"))
+        ):
+            return None
         markdown_path = Path(str(manifest.get("markdown_path") or "").strip())
         json_path = Path(str(manifest.get("json_path") or "").strip())
         if not markdown_path.exists() or not json_path.exists():
@@ -152,7 +224,14 @@ class PyMuPDFAdapter:
             manifest_path=str(manifest_path),
         )
 
-    def ensure_artifacts(self, *, paper_id: str, pdf_path: str, refresh: bool = False) -> PyMuPDFParseResult:
+    def ensure_artifacts(
+        self,
+        *,
+        paper_id: str,
+        pdf_path: str,
+        refresh: bool = False,
+        allow_ocr: bool = True,
+    ) -> PyMuPDFParseResult:
         token = str(paper_id).strip()
         existing = None if refresh else self._load_existing(paper_id=token)
         if existing is not None:
@@ -175,6 +254,7 @@ class PyMuPDFAdapter:
             document = fitz.open(str(source_pdf))
         except Exception as error:
             raise RuntimeError(f"pymupdf parse failed: {error}") from error
+        source_content_hash = _sha256_for_path(source_pdf)
 
         markdown_text = ""
         elements: list[dict[str, Any]] = []
@@ -192,7 +272,7 @@ class PyMuPDFAdapter:
         ocr_warning = ""
         ocr_output_pdf = ""
         extracted_from = str(source_pdf)
-        if _looks_like_scanned_pdf(stats):
+        if allow_ocr and _looks_like_scanned_pdf(stats):
             ocr_attempted = True
             prereq = _ocr_prerequisite_status()
             if prereq["status"] != "ok":
@@ -243,6 +323,8 @@ class PyMuPDFAdapter:
             "mode": "local",
             "version": version,
             "source_pdf": str(source_pdf),
+            "source_content_hash": source_content_hash,
+            "sourceContentHash": source_content_hash,
             "extracted_from": extracted_from,
             "page_count": int(stats.get("page_count") or 0),
             "pages_with_text": int(stats.get("pages_with_text") or 0),
@@ -253,7 +335,11 @@ class PyMuPDFAdapter:
             "ocr_applied": ocr_applied,
             "ocr_output_pdf": ocr_output_pdf,
             "ocr_warning": ocr_warning,
+            "column_count_distribution": dict(stats.get("column_count_distribution") or {}),
+            "column_count_detected": int(stats.get("column_count_detected") or 0),
+            "reading_order_method": str(stats.get("reading_order_method") or "y_only"),
         }
+        parser_meta["extraction_diagnostic"] = build_parser_meta_diagnostic(parser_meta, elements)
 
         artifact_dir = self.artifact_dir_for(paper_id=token)
         artifact_dir.mkdir(parents=True, exist_ok=True)
@@ -277,6 +363,8 @@ class PyMuPDFAdapter:
             json.dumps(
                 {
                     "paper_id": token,
+                    "source_content_hash": source_content_hash,
+                    "sourceContentHash": source_content_hash,
                     "parser_meta": parser_meta,
                     "markdown_path": str(markdown_path),
                     "json_path": str(json_path),

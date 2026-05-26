@@ -7,7 +7,8 @@ from uuid import uuid4
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
+from mcp.server.lowlevel.server import ReadResourceContents
+from mcp.types import Resource, ResourceTemplate, TextContent, Tool
 
 from knowledge_hub.application.agent.foundry_bridge import run_foundry_agent_goal
 from knowledge_hub.application.mcp.agent_payloads import (
@@ -18,6 +19,11 @@ from knowledge_hub.application.mcp.agent_payloads import (
     write_agent_run_report,
 )
 from knowledge_hub.application.mcp.jobs import ACTIVE_MCP_JOBS, run_async_tool
+from knowledge_hub.application.mcp.resources import (
+    list_khub_resource_templates,
+    list_khub_resources,
+    read_khub_resource,
+)
 from knowledge_hub.application.mcp.responses import (
     CORE_ONLY_TOOL_NAMES,
     JOB_TOOLS,
@@ -195,6 +201,20 @@ async def list_tools_impl() -> list[Tool]:
     return build_tools()
 
 
+async def list_resources_impl() -> list[Resource]:
+    return list_khub_resources()
+
+
+async def list_resource_templates_impl() -> list[ResourceTemplate]:
+    return list_khub_resource_templates()
+
+
+async def read_resource_impl(state: Any, uri: Any) -> list[ReadResourceContents]:
+    if getattr(state, "config", None) is None or getattr(state, "sqlite_db", None) is None:
+        initialize_core_only(state)
+    return read_khub_resource(state, str(uri))
+
+
 async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[TextContent]:
     if arguments is None:
         arguments = {}
@@ -214,25 +234,25 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
         "tool": name,
         "arguments": redact_payload(dict(arguments)),
     }
-    from knowledge_hub.mcp.tool_specs import build_tools, resolve_tool_profile, tool_allowed_for_profile
+    from knowledge_hub.mcp.tool_specs import _resolve_tool_profile, build_tool_name_set
 
-    tool_profile = resolve_tool_profile()
-    known_tool_names = {tool.name for tool in build_tools(profile="all")}
-    if name in known_tool_names and not tool_allowed_for_profile(name, tool_profile):
+    active_profile = _resolve_tool_profile()
+    all_tool_names = build_tool_name_set(profile="all")
+    active_tool_names = build_tool_name_set(profile=active_profile)
+    if name in all_tool_names and name not in active_tool_names:
         return build_text_response(
             _build_mcp_tool_response(
                 tool=name,
-                status=MCP_TOOL_STATUS_BLOCKED,
+                status=MCP_TOOL_STATUS_FAILED,
                 payload={
-                    "error": f"tool '{name}' requires labs or all MCP profile",
-                    "profile": tool_profile,
-                    "requiredProfile": "labs",
-                    "profileGate": True,
+                    "error": f"{name} is not available in the active MCP profile.",
+                    "profile": active_profile,
+                    "allowedProfiles": ["labs", "all"],
+                    "hint": "Set KHUB_MCP_PROFILE=labs or KHUB_MCP_PROFILE=all to expose labs/operator tools.",
                 },
                 started_at=started_at,
-                finished_at=now_iso(),
                 request_echo=request_echo,
-                status_message="tool requires labs profile",
+                status_message="tool blocked by MCP profile",
             ),
             compact=compact,
         )
@@ -412,6 +432,21 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
     return await call_tool_impl(SERVER_STATE, name, arguments)
 
 
+@app.list_resources()
+async def list_resources() -> list[Resource]:
+    return await list_resources_impl()
+
+
+@app.list_resource_templates()
+async def list_resource_templates() -> list[ResourceTemplate]:
+    return await list_resource_templates_impl()
+
+
+@app.read_resource()
+async def read_resource(uri: Any) -> list[ReadResourceContents]:
+    return await read_resource_impl(SERVER_STATE, uri)
+
+
 async def _async_main() -> None:
     async with stdio_server() as (read_stream, write_stream):
         await app.run(read_stream, write_stream, app.create_initialization_options())
@@ -441,9 +476,15 @@ __all__ = [
     "call_tool_impl",
     "initialize",
     "initialize_core_only",
+    "list_resource_templates",
+    "list_resource_templates_impl",
+    "list_resources",
+    "list_resources_impl",
     "list_tools",
     "list_tools_impl",
     "main",
+    "read_resource",
+    "read_resource_impl",
     "_build_fallback_agent_payload",
     "_build_mcp_tool_response",
     "_build_verify_block",

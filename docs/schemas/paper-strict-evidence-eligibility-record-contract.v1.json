@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.strict-evidence-eligibility-record-contract.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "contractPrinciples",
+    "writeTargets",
+    "sampleEligibilityRecord",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.strict-evidence-eligibility-record-contract.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "decisionRecordReportPath",
+        "decisionRecordSchema",
+        "decisionRecordStatus",
+        "decision",
+        "decisionRecordCandidateOnlyRows",
+        "sectionDecisionRows",
+        "figureCaptionDecisionRows"
+      ],
+      "properties": {
+        "decisionRecordReportPath": { "type": "string" },
+        "decisionRecordSchema": { "type": "string" },
+        "decisionRecordStatus": { "type": "string" },
+        "decision": { "type": "string" },
+        "decisionRecordCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionDecisionRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionDecisionRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "writeTargetContracts",
+        "eligibilityStoreContracts",
+        "eligibilityRecordSchemas",
+        "decisionRecordCandidateOnlyRows",
+        "sectionDecisionRows",
+        "figureCaptionDecisionRows",
+        "executorImplementedRows",
+        "eligibilityRecordWriteRows",
+        "strictEligibleMutationRows",
+        "strictEvidenceWriteRows",
+        "sourceSpanUpdatedRows",
+        "citationGradeEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "reindexOrReembedRows",
+        "schemaViolationCount",
+        "sampleRecordSchemaValidRows",
+        "sampleRecordSemanticViolationRows"
+      ],
+      "properties": {
+        "writeTargetContracts": { "const": 1 },
+        "eligibilityStoreContracts": { "const": 1 },
+        "eligibilityRecordSchemas": { "const": 1 },
+        "decisionRecordCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "sectionDecisionRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionDecisionRows": { "type": "integer", "minimum": 0 },
+        "executorImplementedRows": { "const": 0 },
+        "eligibilityRecordWriteRows": { "const": 0 },
+        "strictEligibleMutationRows": { "const": 0 },
+        "strictEvidenceWriteRows": { "const": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "citationGradeEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "sampleRecordSchemaValidRows": { "type": "integer", "minimum": 0 },
+        "sampleRecordSemanticViolationRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "writeTargetContractsDefined",
+        "eligibilityStoreContractDefined",
+        "eligibilityRecordSchemaDefined",
+        "executorReady",
+        "runtimeMutationAllowed",
+        "strictEligibleMutationAllowed",
+        "eligibilityRecordWriteAllowed",
+        "citationReady",
+        "runtimeEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "decision",
+        "schemaViolations",
+        "sampleRecordSemanticViolations",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "writeTargetContractsDefined": { "const": true },
+        "eligibilityStoreContractDefined": { "const": true },
+        "eligibilityRecordSchemaDefined": { "const": true },
+        "executorReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "strictEligibleMutationAllowed": { "const": false },
+        "eligibilityRecordWriteAllowed": { "const": false },
+        "citationReady": { "const": false },
+        "runtimeEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "decision": { "type": "string" },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "sampleRecordSemanticViolations": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "contractOnly",
+        "executorImplemented",
+        "eligibilityRecordWrite",
+        "strictEligibleMutation",
+        "strictEvidenceStoreWrite",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "contractOnly": { "const": true },
+        "executorImplemented": { "const": false },
+        "eligibilityRecordWrite": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "strictEvidenceStoreWrite": { "const": false },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "contractPrinciples": { "type": "array", "items": { "type": "string" } },
+    "writeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "plannedWriteTarget",
+          "contractReference",
+          "eligibilityRecordSchema",
+          "storeKind",
+          "storeRootTemplate",
+          "recordPathTemplate",
+          "runManifestPathTemplate",
+          "allowedArtifactTypes",
+          "requiredRecordFields",
+          "idempotencyKeyFields",
+          "writeSemantics",
+          "readbackChecks",
+          "rollbackStrategy",
+          "rollbackImplemented",
+          "executorImplemented",
+          "strictEvidenceInPlaceMutationAllowed",
+          "strictEligibleBooleanMutationAllowed",
+          "runtimeUseAllowed",
+          "citationUseAllowed",
+          "parserRoutingAllowed",
+          "answerIntegrationAllowed",
+          "databaseMutationAllowed",
+          "sourceSpanMutationAllowed"
+        ],
+        "properties": {
+          "plannedWriteTarget": { "const": "parsed_artifact_strict_evidence_eligibility_store" },
+          "contractReference": {
+            "const": "knowledge-hub.paper.strict-evidence-eligibility-record-contract.v1"
+          },
+          "eligibilityRecordSchema": {
+            "const": "knowledge-hub.paper.strict-evidence-eligibility-record.v1"
+          },
+          "storeKind": { "const": "local_papers_dir_jsonl_strict_evidence_eligibility_store" },
+          "storeRootTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_eligibility"
+          },
+          "recordPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence_eligibility/{paper_id}.jsonl"
+          },
+          "runManifestPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/runs/{run_id}.json"
+          },
+          "allowedArtifactTypes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["section", "figure"] }
+          },
+          "requiredRecordFields": { "type": "array", "items": { "type": "string" } },
+          "idempotencyKeyFields": { "type": "array", "items": { "type": "string" } },
+          "writeSemantics": {
+            "const": "explicit_apply_executor_appends_or_replaces_same_idempotency_key"
+          },
+          "readbackChecks": { "type": "array", "items": { "type": "string" } },
+          "rollbackStrategy": { "type": "string" },
+          "rollbackImplemented": { "const": false },
+          "executorImplemented": { "const": false },
+          "strictEvidenceInPlaceMutationAllowed": { "const": false },
+          "strictEligibleBooleanMutationAllowed": { "const": false },
+          "runtimeUseAllowed": { "const": false },
+          "citationUseAllowed": { "const": false },
+          "parserRoutingAllowed": { "const": false },
+          "answerIntegrationAllowed": { "const": false },
+          "databaseMutationAllowed": { "const": false },
+          "sourceSpanMutationAllowed": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sampleEligibilityRecord": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

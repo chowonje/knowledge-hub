@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.equation-authority-readiness-audit.v1",
+  "title": "Equation Authority Readiness Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "inputBlockers",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.equation-authority-readiness-audit.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paperIds",
+        "renderedMacroTermProfileDesignReportPath",
+        "renderedMacroTermProfileDesignReportSchema",
+        "renderedMacroTermProfileDesignReportExists",
+        "canonicalAlignmentDiagnosticReportPath",
+        "canonicalAlignmentDiagnosticReportSchema",
+        "canonicalAlignmentDiagnosticReportExists",
+        "pdfRegionAnchorAuditReportPath",
+        "pdfRegionAnchorAuditReportSchema",
+        "pdfRegionAnchorAuditReportExists",
+        "labelNumberPdfRegionDisambiguationDesignReportPath",
+        "labelNumberPdfRegionDisambiguationDesignReportSchema",
+        "labelNumberPdfRegionDisambiguationDesignReportExists"
+      ],
+      "properties": {
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "renderedMacroTermProfileDesignReportPath": { "type": "string" },
+        "renderedMacroTermProfileDesignReportSchema": { "type": "string" },
+        "renderedMacroTermProfileDesignReportExists": { "type": "boolean" },
+        "canonicalAlignmentDiagnosticReportPath": { "type": "string" },
+        "canonicalAlignmentDiagnosticReportSchema": { "type": "string" },
+        "canonicalAlignmentDiagnosticReportExists": { "type": "boolean" },
+        "pdfRegionAnchorAuditReportPath": { "type": "string" },
+        "pdfRegionAnchorAuditReportSchema": { "type": "string" },
+        "pdfRegionAnchorAuditReportExists": { "type": "boolean" },
+        "labelNumberPdfRegionDisambiguationDesignReportPath": { "type": "string" },
+        "labelNumberPdfRegionDisambiguationDesignReportSchema": { "type": "string" },
+        "labelNumberPdfRegionDisambiguationDesignReportExists": { "type": "boolean" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputRows",
+        "targetRows",
+        "equationAuthorityCandidateOnlyRows",
+        "blockedMissingEquationIdentityRows",
+        "blockedMissingTexOrMathmlHashRows",
+        "blockedMissingPdfRegionRows",
+        "blockedMissingSourceHashRows",
+        "blockedAmbiguousEquationMatchRows",
+        "blockedRasterOnlyEquationRows",
+        "blockedInputReportMissingRows",
+        "blockedInputSchemaViolationRows",
+        "equationArtifactCreatedRows",
+        "strictEvidenceCreatedRows",
+        "sourceSpanMutatedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "inputBlockerCount",
+        "byReadinessStatus",
+        "byPaper",
+        "byEnvironment"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "targetRows": { "type": "integer", "minimum": 0 },
+        "equationAuthorityCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingEquationIdentityRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingTexOrMathmlHashRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingPdfRegionRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingSourceHashRows": { "type": "integer", "minimum": 0 },
+        "blockedAmbiguousEquationMatchRows": { "type": "integer", "minimum": 0 },
+        "blockedRasterOnlyEquationRows": { "type": "integer", "minimum": 0 },
+        "blockedInputReportMissingRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "equationArtifactCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "sourceSpanMutatedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "inputBlockerCount": { "type": "integer", "minimum": 0 },
+        "byReadinessStatus": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byPaper": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byEnvironment": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readinessAuditRows",
+        "equationAuthorityPromotionReady",
+        "equationArtifactCreationReady",
+        "strictEvidenceReady",
+        "sourceSpanMutationReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "recommendedNextTranche",
+        "inputBlockers"
+      ],
+      "properties": {
+        "readinessAuditRows": { "type": "boolean" },
+        "equationAuthorityPromotionReady": { "const": false },
+        "equationArtifactCreationReady": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "sourceSpanMutationReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" },
+        "inputBlockers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputBlocker" }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "classificationOnly",
+        "equationArtifactCreated",
+        "strictEvidenceCreated",
+        "sourceSpanMutation",
+        "databaseMutation",
+        "indexMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "canonicalParsedArtifactsWritten",
+        "equationInterpretationAllowed"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "classificationOnly": { "const": true },
+        "equationArtifactCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "sourceSpanMutation": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "equationInterpretationAllowed": { "const": false }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "inputBlockers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/inputBlocker" }
+    },
+    "rows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/auditRow" }
+    }
+  },
+  "$defs": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "equation_authority_candidate_only",
+        "blocked_missing_equation_identity",
+        "blocked_missing_tex_or_mathml_hash",
+        "blocked_missing_pdf_region",
+        "blocked_missing_source_hash",
+        "blocked_ambiguous_equation_match",
+        "blocked_raster_only_equation",
+        "blocked_input_report_missing",
+        "blocked_input_schema_violation"
+      ]
+    },
+    "inputBlocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputName", "inputLabel", "path", "readiness_status", "detail"],
+      "properties": {
+        "inputName": { "type": "string" },
+        "inputLabel": { "type": "string" },
+        "path": { "type": "string" },
+        "readiness_status": { "$ref": "#/$defs/status" },
+        "detail": { "type": "string" }
+      }
+    },
+    "auditRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "audit_row_id",
+        "candidate_type",
+        "paper_id",
+        "source_candidate_id",
+        "source_file",
+        "equation_environment",
+        "source_diagnostic_ids",
+        "equation_identity",
+        "tex_mathml_hash_availability",
+        "pdf_region",
+        "canonical_text_alignment",
+        "sourceContentHash",
+        "source_hash_available",
+        "surrounding_context",
+        "ambiguity",
+        "raster_image_only_blocker",
+        "readiness_status",
+        "blockers",
+        "recommended_action",
+        "equationArtifactCreated",
+        "strictEvidenceCreated",
+        "sourceSpanMutated",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "parserRoutingChanged",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "audit_row_id": { "type": "string" },
+        "candidate_type": { "const": "equation_authority_readiness_audit" },
+        "paper_id": { "type": "string" },
+        "source_candidate_id": { "type": "string" },
+        "source_file": { "type": "string" },
+        "equation_environment": { "type": "string" },
+        "source_diagnostic_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalAlignmentDiagnosticId",
+            "renderedMacroDesignId",
+            "pdfRegionAnchorId",
+            "labelNumberDisambiguationDesignId"
+          ],
+          "properties": {
+            "canonicalAlignmentDiagnosticId": { "type": "string" },
+            "renderedMacroDesignId": { "type": "string" },
+            "pdfRegionAnchorId": { "type": "string" },
+            "labelNumberDisambiguationDesignId": { "type": "string" }
+          }
+        },
+        "equation_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "equationId",
+            "sourceCandidateId",
+            "sourceTexRowId",
+            "latexLabels",
+            "equationNumbers",
+            "identityBasis",
+            "available"
+          ],
+          "properties": {
+            "equationId": { "type": "string" },
+            "sourceCandidateId": { "type": "string" },
+            "sourceTexRowId": { "type": "string" },
+            "latexLabels": { "type": "array", "items": { "type": "string" } },
+            "equationNumbers": { "type": "array", "items": { "type": "string" } },
+            "identityBasis": { "type": "string" },
+            "available": { "type": "boolean" }
+          }
+        },
+        "tex_mathml_hash_availability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "texAvailable",
+            "mathmlAvailable",
+            "equationTeXHash",
+            "mathmlHash",
+            "hashAvailable",
+            "candidateText",
+            "renderedAliasText"
+          ],
+          "properties": {
+            "texAvailable": { "type": "boolean" },
+            "mathmlAvailable": { "type": "boolean" },
+            "equationTeXHash": { "type": "string" },
+            "mathmlHash": { "type": "string" },
+            "hashAvailable": { "type": "boolean" },
+            "candidateText": { "type": "string" },
+            "renderedAliasText": { "type": "string" }
+          }
+        },
+        "pdf_region": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "page",
+            "bbox",
+            "blockIndexes",
+            "matchedTerms",
+            "coverage",
+            "formulaScore",
+            "equationNumbers",
+            "textPreview",
+            "available"
+          ],
+          "properties": {
+            "page": { "type": ["integer", "null"] },
+            "bbox": { "type": "array", "items": { "type": "number" } },
+            "blockIndexes": { "type": "array", "items": { "type": "integer" } },
+            "matchedTerms": { "type": "array", "items": { "type": "string" } },
+            "coverage": { "type": "number" },
+            "formulaScore": { "type": "number" },
+            "equationNumbers": { "type": "array", "items": { "type": "string" } },
+            "textPreview": { "type": "string" },
+            "available": { "type": "boolean" }
+          }
+        },
+        "canonical_text_alignment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "renderedProfileCanonicalStatus",
+            "rawTexMatchCount",
+            "compactTexMatchCount",
+            "plainTextMatchCount",
+            "diagnosticTermCoverage",
+            "canonicalDocumentAvailable",
+            "matched",
+            "nonUnique"
+          ],
+          "properties": {
+            "status": { "type": "string" },
+            "renderedProfileCanonicalStatus": { "type": "string" },
+            "rawTexMatchCount": { "type": "integer", "minimum": 0 },
+            "compactTexMatchCount": { "type": "integer", "minimum": 0 },
+            "plainTextMatchCount": { "type": "integer", "minimum": 0 },
+            "diagnosticTermCoverage": { "type": "number" },
+            "canonicalDocumentAvailable": { "type": "boolean" },
+            "matched": { "type": "boolean" },
+            "nonUnique": { "type": "boolean" }
+          }
+        },
+        "sourceContentHash": { "type": "string" },
+        "source_hash_available": { "type": "boolean" },
+        "surrounding_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalDiagnosticTerms",
+            "canonicalDiagnosticTermMatches",
+            "renderedProfileTerms",
+            "pdfTextPreview",
+            "renderedAliasText"
+          ],
+          "properties": {
+            "canonicalDiagnosticTerms": { "type": "array", "items": { "type": "string" } },
+            "canonicalDiagnosticTermMatches": { "type": "array", "items": { "type": "string" } },
+            "renderedProfileTerms": { "type": "array", "items": { "type": "string" } },
+            "pdfTextPreview": { "type": "string" },
+            "renderedAliasText": { "type": "string" }
+          }
+        },
+        "ambiguity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "nonUniqueMatch",
+            "reasons",
+            "pdfRegionCandidateCount",
+            "labelNumberMatchingCandidateCount"
+          ],
+          "properties": {
+            "nonUniqueMatch": { "type": "boolean" },
+            "reasons": { "type": "array", "items": { "type": "string" } },
+            "pdfRegionCandidateCount": { "type": "integer", "minimum": 0 },
+            "labelNumberMatchingCandidateCount": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "raster_image_only_blocker": { "type": "boolean" },
+        "readiness_status": { "$ref": "#/$defs/status" },
+        "blockers": { "type": "array", "items": { "type": "string" } },
+        "recommended_action": { "type": "string" },
+        "equationArtifactCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "sourceSpanMutated": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    }
+  }
+}

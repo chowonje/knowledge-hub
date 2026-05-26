@@ -35,6 +35,10 @@ DOCTOR_REQUIRED_AREAS = {"settings", "Ollama", "vector corpus"}
 TOP_HELP_REQUIRED_MARKERS = ("Commands:", "doctor", "status", "setup")
 WEEKLY_TOP_HELP_REQUIRED_MARKERS = ("Commands:", "discover", "index", "search", "ask", "doctor", "status")
 CAPTURE_HELP_REQUIRED_MARKERS = ("Commands:", "cleanup", "requeue", "status")
+ADVANCED_HELP_REQUIRED_MARKERS = ("Public default:", "hidden/operator commands", "paper -> papers")
+LABS_HELP_REQUIRED_MARKERS = ("Commands:", "learn", "crawl", "ops", "paper")
+PAPERS_HELP_REQUIRED_MARKERS = ("Commands:", "add", "import-csv", "summary", "evidence", "memory", "extraction-report")
+HIDDEN_PAPER_HELP_REQUIRED_MARKERS = ("Usage:", "review-card-plan")
 INVALID_COMMAND_REQUIRED_MARKER = "No such command"
 INVALID_COMMAND_FORBIDDEN_MARKERS = ("Traceback (most recent call last)", "예상치 못한 오류")
 SMOKE_COMMAND_TIMEOUT_SEC = 20.0
@@ -82,6 +86,29 @@ def build_env(home_dir: Path) -> dict[str, str]:
     env["COLUMNS"] = "120"
     env["PYTHONIOENCODING"] = "utf-8"
     return env
+
+
+RICH_BOX_BORDER_CHARS = frozenset("│╭╮╰╯┏┓┗┛┡┩┣┫╞╡═━┃├┤")
+
+
+def _compact_rich_stdout(stdout: str) -> str:
+    """Collapse Rich panel line wraps so wrapped paths can be matched."""
+    fragments: list[str] = []
+    for line in stdout.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        compact_line = "".join(ch for ch in stripped if ch not in RICH_BOX_BORDER_CHARS).strip()
+        if compact_line:
+            fragments.append(compact_line)
+    return "".join(fragments)
+
+
+def _stdout_shows_config_path(stdout: str, config_path: Path) -> bool:
+    path_text = str(config_path)
+    if path_text in stdout:
+        return True
+    return path_text in _compact_rich_stdout(stdout)
 
 
 def _ensure_text(value: Any) -> str:
@@ -183,7 +210,7 @@ def validate_status_result(result: CommandResult, *, config_path: Path) -> Valid
     for marker in STATUS_REQUIRED_MARKERS:
         if marker not in result.stdout:
             errors.append(f"status output missing marker: {marker}")
-    if str(config_path) not in result.stdout:
+    if not _stdout_shows_config_path(result.stdout, config_path):
         errors.append("status output does not show the isolated config path")
     summary = "status surface rendered runtime diagnostics" if not errors else "status contract failed"
     return ValidationResult(
@@ -460,6 +487,10 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
     plan = [
         ("top_help", cli_argv + ["--help"]),
         ("setup", cli_argv + ["setup", "--quick", "--non-interactive"]),
+        ("advanced_help", cli_argv + ["help", "advanced"]),
+        ("labs_help", cli_argv + ["labs", "--help"]),
+        ("papers_help", cli_argv + ["papers", "--help"]),
+        ("hidden_paper_help", cli_argv + ["paper", "review-card-plan", "--help"]),
         ("capture_help", cli_argv + ["dinger", "capture", "--help"]),
         ("status", cli_argv + ["--config", str(config_path), "status"]),
         ("doctor", cli_argv + ["--config", str(config_path), "doctor", "--json"]),
@@ -478,6 +509,30 @@ def run_release_smoke(*, keep_temp_dir: bool = False) -> dict[str, Any]:
             )
         elif name == "setup":
             validation = validate_setup_result(result, config_path=config_path)
+        elif name == "advanced_help":
+            validation = validate_help_result(
+                result,
+                required_markers=ADVANCED_HELP_REQUIRED_MARKERS,
+                summary="advanced help inventory is present",
+            )
+        elif name == "labs_help":
+            validation = validate_help_result(
+                result,
+                required_markers=LABS_HELP_REQUIRED_MARKERS,
+                summary="labs help surface is present",
+            )
+        elif name == "papers_help":
+            validation = validate_help_result(
+                result,
+                required_markers=PAPERS_HELP_REQUIRED_MARKERS,
+                summary="papers help surface is present",
+            )
+        elif name == "hidden_paper_help":
+            validation = validate_help_result(
+                result,
+                required_markers=HIDDEN_PAPER_HELP_REQUIRED_MARKERS,
+                summary="hidden paper operator help remains directly invokable",
+            )
         elif name == "capture_help":
             validation = validate_help_result(
                 result,

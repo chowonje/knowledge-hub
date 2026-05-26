@@ -34,6 +34,11 @@ def _decode_response(contents):
     return json.loads(text)
 
 
+@pytest.fixture(autouse=True)
+def _labs_profile_for_direct_tool_contract_tests(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "labs")
+
+
 class _FakeSearcher:
     def __init__(self):
         self.database = SimpleNamespace(get_stats=lambda: {"total_documents": 3, "collection_name": "knowledge_hub"})
@@ -1301,9 +1306,9 @@ def test_list_tools_contains_paper_lookup_and_summarize(monkeypatch):
     tools = asyncio.run(module.list_tools())
     names = {tool.name for tool in tools}
     assert "paper_lookup_and_summarize" in names
-    assert "build_paper_memory" not in names
     assert "get_paper_memory_card" in names
     assert "search_paper_memory" in names
+    assert "build_paper_memory" not in names
 
 
 def test_foundry_conflict_list_response_shape():
@@ -1362,40 +1367,39 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "ops_action_list" not in names
     assert "rag_report" not in names
     assert "learn_reinforce" not in names
-    assert "mcp_job_list" in names
-    assert "mcp_job_status" in names
-    assert "mcp_job_cancel" in names
+    assert "mcp_job_list" not in names
+    assert "mcp_job_status" not in names
+    assert "mcp_job_cancel" not in names
     assert "crawl_pipeline_run" not in names
     assert "transform_run" not in names
     assert "ask_graph" not in names
     assert "notebook_workbench_chat" not in names
 
 
-def test_default_mcp_profile_blocks_labs_operator_direct_calls(monkeypatch):
+def test_default_profile_blocks_direct_calls_to_hidden_mcp_tools(monkeypatch):
     monkeypatch.setenv("KHUB_MCP_PROFILE", "default")
     module = _import_mcp_server()
     _setup_fakes(module)
 
-    blocked_tools = [
-        "run_agentic_query",
-        "learning_start_or_resume_topic",
-        "crawl_web_ingest",
-        "index_paper_keywords",
-        "discover_and_ingest",
-        "run_paper_ingest_flow",
-        "build_paper_memory",
-    ]
-    for tool_name in blocked_tools:
-        result = _decode_response(
-            asyncio.run(
-                module.call_tool(
-                    tool_name,
-                    {"topic": "rag", "goal": "rag", "paper_id": "2501.00001"},
-                )
-            )
-        )
-        assert result["status"] == "blocked"
-        assert result["payload"]["requiredProfile"] == "labs"
+    for tool_name, arguments in (
+        ("learning_start_or_resume_topic", {"topic": "rag"}),
+        ("crawl_web_ingest", {"url": "https://example.com", "topic": "rag"}),
+        ("run_agentic_query", {"goal": "RAG 비교"}),
+        ("build_paper_memory", {"paper_id": "2501.00001"}),
+        ("index_paper_keywords", {"paper_id": "2501.00001"}),
+        ("discover_and_ingest", {"topic": "rag"}),
+        ("run_paper_ingest_flow", {"topic": "rag"}),
+        ("mcp_job_list", {"limit": 5}),
+    ):
+        blocked = _decode_response(asyncio.run(module.call_tool(tool_name, arguments)))
+        assert blocked["status"] == "failed"
+        assert blocked["statusMessage"] == "tool blocked by MCP profile"
+        assert blocked["payload"]["profile"] == "default"
+        assert blocked["payload"]["allowedProfiles"] == ["labs", "all"]
+        assert blocked["requestEcho"]["tool"] == tool_name
+
+    ok = _decode_response(asyncio.run(module.call_tool("search_knowledge", {"query": "rag"})))
+    assert ok["status"] == "ok"
 
 
 def test_list_tools_includes_labs_profile(monkeypatch):
@@ -1423,6 +1427,21 @@ def test_list_tools_includes_labs_profile(monkeypatch):
     assert "transform_run" in names
     assert "ask_graph" in names
     assert "notebook_workbench_chat" in names
+
+
+def test_list_tools_all_profile_includes_labs_surface(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "all")
+    module = _import_mcp_server()
+
+    tools = asyncio.run(module.list_tools())
+    names = {tool.name for tool in tools}
+    assert "search_knowledge" in names
+    assert "run_agentic_query" in names
+    assert "discover_and_ingest" in names
+    assert "crawl_web_ingest" in names
+    assert "mcp_job_list" in names
+    assert "learning_start_or_resume_topic" in names
+    assert "build_paper_memory" in names
 
 
 def test_crawl_youtube_ingest_returns_schema_backed_payload():

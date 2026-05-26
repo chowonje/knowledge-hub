@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.complex-qa-eval-design.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "sourceSummary",
+    "counts",
+    "policy",
+    "warnings",
+    "questions"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.complex-qa-eval-design.v1" },
+    "status": { "type": "string", "enum": ["ok", "empty"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "structuredSummaryReport",
+        "sectionspanReport",
+        "figureCaptionReport",
+        "equationQuoteReport",
+        "tableRegionReport"
+      ],
+      "properties": {
+        "structuredSummaryReport": { "type": "string" },
+        "sectionspanReport": { "type": "string" },
+        "figureCaptionReport": { "type": "string" },
+        "equationQuoteReport": { "type": "string" },
+        "tableRegionReport": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "sourceSummary": {
+      "type": "object",
+      "required": [
+        "structuredCandidateSummarySchema",
+        "candidateLayerTotal",
+        "strictEligibleCandidates",
+        "citationGradeCandidates"
+      ],
+      "properties": {
+        "structuredCandidateSummarySchema": { "type": "string" },
+        "candidateLayerTotal": { "type": "integer", "minimum": 0 },
+        "strictEligibleCandidates": { "const": 0 },
+        "citationGradeCandidates": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "questionCount",
+        "byQuestionType",
+        "byTargetLayer",
+        "byPaper",
+        "currentRuntimeAnswerableQuestions",
+        "executedQuestions",
+        "strictEvidenceCreated"
+      ],
+      "properties": {
+        "questionCount": { "type": "integer", "minimum": 0 },
+        "byQuestionType": { "type": "object" },
+        "byTargetLayer": { "type": "object" },
+        "byPaper": { "type": "object" },
+        "currentRuntimeAnswerableQuestions": { "const": 0 },
+        "executedQuestions": { "const": 0 },
+        "strictEvidenceCreated": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "designOnly",
+        "questionsExecuted",
+        "answerGenerationRun",
+        "allQuestionsRequireStrictEvidenceBeforeAnswering",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "designOnly": { "const": true },
+        "questionsExecuted": { "const": false },
+        "answerGenerationRun": { "const": false },
+        "allQuestionsRequireStrictEvidenceBeforeAnswering": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "question_id",
+          "question_type",
+          "paper_ids",
+          "prompt",
+          "target_candidate_layers",
+          "source_candidate_ids",
+          "evidence_requirements",
+          "current_runtime_expectation",
+          "execution_status",
+          "strict_evidence_required_before_answering",
+          "strict_eligible_now",
+          "citation_grade_now",
+          "candidate_only",
+          "blocked_by_current_candidates",
+          "tags"
+        ],
+        "properties": {
+          "question_id": { "type": "string" },
+          "question_type": {
+            "type": "string",
+            "enum": [
+              "section_evidence_question",
+              "figure_caption_question",
+              "table_region_question",
+              "equation_quote_question",
+              "method_comparison_question"
+            ]
+          },
+          "paper_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "prompt": { "type": "string" },
+          "target_candidate_layers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["sectionspan", "figure_caption", "equation_quote", "table_region"]
+            },
+            "minItems": 1
+          },
+          "source_candidate_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "evidence_requirements": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "current_runtime_expectation": { "const": "abstain_until_strict_candidate_runtime_exists" },
+          "execution_status": { "const": "designed_not_executed" },
+          "strict_evidence_required_before_answering": { "const": true },
+          "strict_eligible_now": { "const": false },
+          "citation_grade_now": { "const": false },
+          "candidate_only": { "const": true },
+          "blocked_by_current_candidates": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

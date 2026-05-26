@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.compare.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "query", "comparePacket", "trace", "citations", "sources"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.compare.result.v1" },
+    "status": { "type": "string" },
+    "query": { "type": "string" },
+    "answer": { "type": "string" },
+    "comparePacket": { "type": "object" },
+    "trace": { "type": "object" },
+    "citations": { "type": "array", "items": { "type": "object" } },
+    "sources": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "nextSuggestedActions": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

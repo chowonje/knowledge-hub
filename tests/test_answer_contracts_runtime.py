@@ -22,6 +22,7 @@ def _packet() -> SimpleNamespace:
                 "source_id": "vault:Alpha.md",
                 "source_ref": "vault:Alpha.md",
                 "source_content_hash": "hash-alpha",
+                "snippet_hash": "snippet-alpha",
                 "span_locator": "chars:10-52",
                 "score": 0.9,
                 "semantic_score": 0.7,
@@ -35,9 +36,11 @@ def _packet() -> SimpleNamespace:
     )
 
 
-def test_parse_span_offsets_accepts_chars_locator():
+def test_parse_span_offsets_accepts_only_strict_chars_locator():
     assert parse_span_offsets("chars:10-52") == (10, 52)
-    assert parse_span_offsets("0-2") == (0, 2)
+    assert parse_span_offsets("bytes:10-52") == (None, None)
+    assert parse_span_offsets("0-2") == (None, None)
+    assert parse_span_offsets("char:10-52") == (None, None)
     assert parse_span_offsets("unit:abc") == (None, None)
 
 
@@ -57,7 +60,8 @@ def test_evidence_packet_contract_exposes_span_refs_and_hashes():
     assert span["spanRef"] == "span:1"
     assert span["sourceContentHash"] == "hash-alpha"
     assert span["source_content_hash"] == "hash-alpha"
-    assert span["content_hash"] == "hash-alpha"
+    assert span["content_hash"] == "snippet-alpha"
+    assert span["sourceContentHashAvailable"] is True
     assert span["charStart"] == 10
     assert span["charEnd"] == 52
     assert span["spanOffsetAvailable"] is True
@@ -143,6 +147,52 @@ def test_evidence_packet_strict_mode_excludes_low_provenance_spans_and_fails_ext
     assert contract["policy"]["classification"] == "UNKNOWN"
     assert contract["policy"]["external_allowed"] is False
     assert validate_payload(contract, "knowledge-hub.evidence-packet.v1", strict=True).ok
+
+
+def test_answer_contract_keeps_bytes_bare_and_memory_unit_locators_non_strict():
+    for locator in ("bytes:10-40", "10-40", "memory-unit:paper:alpha:summary"):
+        packet = SimpleNamespace(
+            evidence=[
+                {
+                    "title": "Loose locator",
+                    "excerpt": "Loose locators should not become citation-grade evidence.",
+                    "citation_label": "S1",
+                    "citation_target": "paper:alpha",
+                    "source_id": "paper:alpha",
+                    "source_content_hash": "source-alpha",
+                    "snippet_hash": "snippet-alpha",
+                    "span_locator": locator,
+                }
+            ],
+            citations=[{"label": "S1", "target": "paper:alpha", "kind": "source"}],
+            evidence_packet={"answerable": True, "answerableDecisionReason": "raw evidence present"},
+            evidence_policy={},
+        )
+        pipeline_result = SimpleNamespace(plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"source_type": "paper"}}))
+
+        evidence_contract = build_evidence_packet_contract(
+            query="loose locator?",
+            retrieval_mode="keyword",
+            pipeline_result=pipeline_result,
+            evidence_packet=packet,
+        )
+        answer_contract = build_answer_contract(
+            answer="Loose locator evidence is not citation-grade.",
+            evidence_packet=packet,
+            verification={"status": "verified", "unsupportedClaimCount": 0, "needsCaution": False},
+            rewrite={"attempted": False, "applied": False, "finalAnswerSource": "original"},
+            routing_meta={"provider": "local", "model": "test"},
+        )
+
+        assert evidence_contract["spans"] == []
+        assert evidence_contract["answerable"] is False
+        assert evidence_contract["coverage"]["excluded_low_provenance"] == 1
+        assert answer_contract["citations"] == []
+        assert answer_contract["abstain"] is True
+        assert answer_contract["abstainReason"] == "raw evidence present"
+        assert answer_contract["coverage"]["status"] == "insufficient"
+        assert validate_payload(evidence_contract, "knowledge-hub.evidence-packet.v1", strict=True).ok
+        assert validate_payload(answer_contract, "knowledge-hub.answer-contract.v1", strict=True).ok
 
 
 def test_answer_contract_coverage_uses_claim_to_citation_mapping_not_citation_count():

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.structured-evidence-vertical-slice-discovery.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generatedAt",
+    "scopeNote",
+    "inputs",
+    "currentStructure",
+    "counts",
+    "minimalEvidenceTypes",
+    "deferredEvidenceTypes",
+    "recommendedFirstSlice",
+    "papers",
+    "requiredContract",
+    "nextImplementationTranche",
+    "policy"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.structured-evidence-vertical-slice-discovery.v1" },
+    "generatedAt": { "type": "string" },
+    "scopeNote": { "type": "string" },
+    "inputs": { "type": "object", "additionalProperties": true },
+    "currentStructure": { "type": "object", "additionalProperties": true },
+    "counts": {
+      "type": "object",
+      "required": ["corpusManifestRows", "recommendedFirstSliceRows"],
+      "properties": {
+        "corpusManifestRows": { "type": "integer", "minimum": 0 },
+        "recommendedFirstSliceRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "minimalEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+    "deferredEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+    "recommendedFirstSlice": { "type": "array" },
+    "papers": { "type": "array" },
+    "requiredContract": { "type": "object", "additionalProperties": true },
+    "nextImplementationTranche": { "type": "object", "additionalProperties": true },
+    "policy": {
+      "type": "object",
+      "required": ["reportOnly", "manifestMutation", "runtimeAnswerIntegration", "vaultScan", "externalDownload"],
+      "properties": {
+        "reportOnly": { "const": true },
+        "manifestMutation": { "const": false },
+        "runtimeAnswerIntegration": { "const": false },
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "schemaValidation": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-packet-review.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "packetRows",
+    "excludedManualOrExtractorRows",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-packet-review.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": ["reconciliationReportPath", "reconciliationSchema"],
+      "properties": {
+        "reconciliationReportPath": { "type": "string" },
+        "reconciliationSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "packetCandidateRows",
+        "designPacketReviewReadyRows",
+        "excludedManualOrExtractorRows",
+        "blockedMissingRecordIdentityRows",
+        "blockedMissingProposedCharsRows",
+        "blockedInvalidCharsBasisRows",
+        "blockedMissingExpectedSubstringHashRows",
+        "blockedRuntimeOrStrictFlagViolationRows",
+        "blockedUnexpectedManualRowInPacketRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "citationGradeEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "schemaViolationCount",
+        "byPaperId",
+        "byArtifactType",
+        "byPacketSource",
+        "byReviewStatus",
+        "byRecommendedAction"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "packetCandidateRows": { "type": "integer", "minimum": 0 },
+        "designPacketReviewReadyRows": { "type": "integer", "minimum": 0 },
+        "excludedManualOrExtractorRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingRecordIdentityRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingProposedCharsRows": { "type": "integer", "minimum": 0 },
+        "blockedInvalidCharsBasisRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingExpectedSubstringHashRows": { "type": "integer", "minimum": 0 },
+        "blockedRuntimeOrStrictFlagViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedUnexpectedManualRowInPacketRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "citationGradeEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byPaperId": { "type": "object" },
+        "byArtifactType": { "type": "object" },
+        "byPacketSource": { "type": "object" },
+        "byReviewStatus": { "type": "object" },
+        "byRecommendedAction": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "designPacketReviewReady",
+        "strictEvidenceCreated",
+        "strictEvidenceReady",
+        "runtimeEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimeMutationAllowed",
+        "schemaViolations",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "designPacketReviewReady": { "type": "boolean" },
+        "strictEvidenceCreated": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "runtimeEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "strictEligibleMutation",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "packetRows": { "type": "array", "items": { "type": "object" } },
+    "excludedManualOrExtractorRows": { "type": "array", "items": { "type": "object" } },
+    "rows": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

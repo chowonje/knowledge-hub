@@ -127,6 +127,8 @@ ENTITY_MERGE_TOOL_NAMES = {
     "entity_merge_apply",
     "entity_merge_reject",
 }
+# Public default MCP discovery stays read/retrieval/context oriented. Mutating,
+# build-heavy, agentic, learning, crawl, job, and operator tools require labs/all.
 DEFAULT_TOOL_NAMES = {
     "get_paper_memory_card",
     "search_paper_memory",
@@ -144,9 +146,6 @@ DEFAULT_TOOL_NAMES = {
     "analyze_citation_network",
     "batch_paper_lookup",
     "check_paper_duplicate",
-    "mcp_job_status",
-    "mcp_job_list",
-    "mcp_job_cancel",
 }
 LABS_TOOL_NAMES = (
     LEARNING_TOOL_NAMES

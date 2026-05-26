@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-url-source-recovery.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "baseline",
+    "inputRecoverySummary",
+    "selectedCandidatePaperIds",
+    "unselectedCandidatePaperIds",
+    "recoveredPaperIds",
+    "items",
+    "counts",
+    "statusTaxonomy",
+    "sourceUrlPresenceTaxonomy",
+    "expectedCoverageChangeIfMaterialized",
+    "nextRecommendedTranche",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-url-source-recovery.v1" },
+    "status": { "type": "string", "enum": ["ready", "blocked", "applied", "partial", "failed"] },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": [
+        "name",
+        "limit",
+        "maxSourcePdfBytes",
+        "selectionRule",
+        "targetRoot",
+        "applyRequested",
+        "overwrite",
+        "probeNetwork",
+        "timeoutSeconds",
+        "delaySeconds",
+        "nonScope"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "limit": { "type": "integer", "minimum": 0 },
+        "maxSourcePdfBytes": { "type": "integer", "minimum": 0 },
+        "selectionRule": { "type": "string" },
+        "targetRoot": { "const": "papers_dir/recovered_sources/url" },
+        "applyRequested": { "type": "boolean" },
+        "overwrite": { "type": "boolean" },
+        "probeNetwork": { "type": "boolean" },
+        "timeoutSeconds": { "type": "number", "minimum": 0 },
+        "delaySeconds": { "type": "number", "minimum": 0 },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "baseline": {
+      "type": "object",
+      "required": ["scannedPapers", "missingParsedArtifacts"],
+      "properties": {
+        "scannedPapers": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "inputRecoverySummary": {
+      "type": "object",
+      "required": [
+        "sourcePdfMissingRows",
+        "arxivPdfReacquisitionCandidateRows",
+        "urlIdentifierReacquisitionCandidateRows",
+        "manualLookupRequiredRows"
+      ],
+      "properties": {
+        "sourcePdfMissingRows": { "type": "integer", "minimum": 0 },
+        "arxivPdfReacquisitionCandidateRows": { "type": "integer", "minimum": 0 },
+        "urlIdentifierReacquisitionCandidateRows": { "type": "integer", "minimum": 0 },
+        "manualLookupRequiredRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "selectedCandidatePaperIds": { "type": "array", "items": { "type": "string" } },
+    "unselectedCandidatePaperIds": { "type": "array", "items": { "type": "string" } },
+    "recoveredPaperIds": { "type": "array", "items": { "type": "string" } },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recoveryItem" }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["planned", "recovered", "blocked", "failed", "skippedExistingRegistered"],
+      "properties": {
+        "planned": { "type": "integer", "minimum": 0 },
+        "recovered": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skippedExistingRegistered": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "statusTaxonomy": { "$ref": "#/$defs/taxonomy" },
+    "sourceUrlPresenceTaxonomy": { "$ref": "#/$defs/taxonomy" },
+    "expectedCoverageChangeIfMaterialized": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifactsBefore",
+        "sourceRecoveredRows",
+        "expectedMissingParsedArtifactsReductionAfterSeparateMaterialization",
+        "expectedMissingParsedArtifactsAfterSeparateMaterialization"
+      ],
+      "properties": {
+        "missingParsedArtifactsBefore": { "type": "integer", "minimum": 0 },
+        "sourceRecoveredRows": { "type": "integer", "minimum": 0 },
+        "expectedMissingParsedArtifactsReductionAfterSeparateMaterialization": { "type": "integer", "minimum": 0 },
+        "expectedMissingParsedArtifactsAfterSeparateMaterialization": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "nextRecommendedTranche": {
+      "type": "object",
+      "required": ["name", "candidateCount", "paperIds", "rationale"],
+      "properties": {
+        "name": { "type": "string" },
+        "candidateCount": { "type": "integer", "minimum": 0 },
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "rationale": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": { "$ref": "#/$defs/mutationPolicy" },
+    "mutationCounters": { "$ref": "#/$defs/mutationCounters" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sourceArtifact": {
+      "type": "object",
+      "required": ["kind", "exists", "isFile", "sizeBytes", "path"],
+      "properties": {
+        "kind": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "isFile": { "type": "boolean" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "path": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "recoveryItem": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "sourceUrl",
+        "sourceUrlResolution",
+        "sourceUrlProbeAttempted",
+        "sourceUrlProbeResult",
+        "sourceUrlPresence",
+        "targetSourceArtifact",
+        "previousSourceArtifact",
+        "downloadAttempted",
+        "downloadPerformed",
+        "sourceRegistrationMutationAttempted",
+        "sourceRegistrationMutationPerformed",
+        "vaultWriteAttempted",
+        "databaseMutationAttempted",
+        "databaseMutationPerformed",
+        "downloadResult",
+        "status",
+        "reason",
+        "action"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "sourceUrl": { "type": "string" },
+        "sourceUrlResolution": {
+          "type": "object",
+          "required": ["method", "sourceId", "confidence", "reason"],
+          "properties": {
+            "method": { "type": "string" },
+            "sourceId": { "type": "string" },
+            "confidence": { "type": "string" },
+            "reason": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "sourceUrlProbeAttempted": { "type": "boolean" },
+        "sourceUrlProbeResult": { "type": "object", "additionalProperties": true },
+        "sourceUrlPresence": { "type": "string" },
+        "targetSourceArtifact": { "$ref": "#/$defs/sourceArtifact" },
+        "previousSourceArtifact": { "$ref": "#/$defs/sourceArtifact" },
+        "downloadAttempted": { "type": "boolean" },
+        "downloadPerformed": { "type": "boolean" },
+        "sourceRegistrationMutationAttempted": { "type": "boolean" },
+        "sourceRegistrationMutationPerformed": { "type": "boolean" },
+        "vaultWriteAttempted": { "const": false },
+        "databaseMutationAttempted": { "type": "boolean" },
+        "databaseMutationPerformed": { "type": "boolean" },
+        "downloadResult": { "type": "object", "additionalProperties": true },
+        "status": {
+          "type": "string",
+          "enum": ["planned", "recovered", "blocked", "failed", "skipped_existing_registered"]
+        },
+        "reason": { "type": "string" },
+        "action": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": {
+      "type": "object",
+      "required": [
+        "applyRequested",
+        "applyPerformed",
+        "sourceUrlProbe",
+        "sourceDownload",
+        "sourcePathRewrite",
+        "sourceRegistrationMutation",
+        "parsedArtifactWrite",
+        "parserRouting",
+        "strictEvidence",
+        "citationEvidence",
+        "runtimeEvidence",
+        "sourceSpanCreated",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "vaultWrite",
+        "answerIntegration",
+        "manualBlockerResolution"
+      ],
+      "properties": {
+        "applyRequested": { "type": "boolean" },
+        "applyPerformed": { "type": "boolean" },
+        "sourceUrlProbe": { "type": "boolean" },
+        "sourceDownload": { "type": "boolean" },
+        "sourcePathRewrite": { "type": "boolean" },
+        "sourceRegistrationMutation": { "type": "boolean" },
+        "parsedArtifactWrite": { "const": false },
+        "parserRouting": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationEvidence": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "databaseMutation": { "type": "boolean" },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "vaultWrite": { "const": false },
+        "answerIntegration": { "const": false },
+        "manualBlockerResolution": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationCounters": {
+      "type": "object",
+      "required": [
+        "parsedArtifactWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationEvidenceRows",
+        "runtimeEvidenceRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reembedRows",
+        "vaultReadRows",
+        "vaultWriteRows",
+        "answerIntegrationRows",
+        "parserRoutingRows",
+        "manualBlockerResolutionRows",
+        "sourceDownloadRows",
+        "sourcePathRewriteRows",
+        "sourceRegistrationMutationRows"
+      ],
+      "properties": {
+        "parsedArtifactWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "type": "integer", "minimum": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "sourceDownloadRows": { "type": "integer", "minimum": 0 },
+        "sourcePathRewriteRows": { "type": "integer", "minimum": 0 },
+        "sourceRegistrationMutationRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

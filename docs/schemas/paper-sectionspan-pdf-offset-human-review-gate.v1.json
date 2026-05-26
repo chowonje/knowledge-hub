@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.sectionspan-pdf-offset-human-review-gate.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "gateRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.sectionspan-pdf-offset-human-review-gate.v1" },
+    "status": { "type": "string", "enum": ["review_required", "review_recorded", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "sectionspanPdfOffsetRecoveryReviewPackReport",
+        "sectionspanPdfOffsetRecoveryReviewPackSchema",
+        "reviewDecisionsReport",
+        "reviewDecisionApprovedCount",
+        "reviewDecisionRejectedCount"
+      ],
+      "properties": {
+        "sectionspanPdfOffsetRecoveryReviewPackReport": { "type": "string" },
+        "sectionspanPdfOffsetRecoveryReviewPackSchema": { "type": "string" },
+        "reviewDecisionsReport": { "type": "string" },
+        "reviewDecisionApprovedCount": { "type": "integer", "minimum": 0 },
+        "reviewDecisionRejectedCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputReviewCards",
+        "gateRows",
+        "pendingHumanReviewRows",
+        "approvedForLaterPromotionDesignRows",
+        "rejectedRows",
+        "heldOutRows",
+        "pageAgreementRows",
+        "sourceHashAgreementRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "unsafeUpstreamFlagCount",
+        "byPaper",
+        "bySectionType",
+        "byHumanReviewStatus"
+      ],
+      "properties": {
+        "inputReviewCards": { "type": "integer", "minimum": 0 },
+        "gateRows": { "type": "integer", "minimum": 0 },
+        "pendingHumanReviewRows": { "type": "integer", "minimum": 0 },
+        "approvedForLaterPromotionDesignRows": { "type": "integer", "minimum": 0 },
+        "rejectedRows": { "type": "integer", "minimum": 0 },
+        "heldOutRows": { "type": "integer", "minimum": 0 },
+        "pageAgreementRows": { "type": "integer", "minimum": 0 },
+        "sourceHashAgreementRows": { "type": "integer", "minimum": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byPaper": { "type": "object" },
+        "bySectionType": { "type": "object" },
+        "byHumanReviewStatus": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "humanReviewGateReady",
+        "humanReviewComplete",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "humanReviewGateReady": { "type": "boolean" },
+        "humanReviewComplete": { "type": "boolean" },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "human_review_required_before_any_promotion",
+            "human_review_recorded_non_strict",
+            "blocked"
+          ]
+        },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "humanReviewGateOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "humanReviewGateOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "gateRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "gate_row_id",
+          "source_review_card_id",
+          "source_sectionspan_candidate_id",
+          "paper_id",
+          "candidate_text",
+          "section_type",
+          "section_level",
+          "canonical_span",
+          "original_pdf_span",
+          "page_agreement",
+          "source_hash_agreement",
+          "upstream_review_status",
+          "human_review_status",
+          "review_decision_scope",
+          "evidence_tier",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "gate_row_id": { "type": "string" },
+          "source_review_card_id": { "type": "string" },
+          "source_sectionspan_candidate_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "section_type": { "type": "string" },
+          "section_level": { "type": "integer", "minimum": 0 },
+          "canonical_span": { "type": "object" },
+          "original_pdf_span": { "type": "object" },
+          "page_agreement": { "type": "boolean" },
+          "source_hash_agreement": { "type": "boolean" },
+          "upstream_review_status": { "type": "string" },
+          "human_review_status": {
+            "type": "string",
+            "enum": [
+              "pending_human_review",
+              "approved_for_later_promotion_design",
+              "rejected_keep_candidate_only",
+              "held_out_upstream_blocked"
+            ]
+          },
+          "review_decision_scope": { "type": "string" },
+          "evidence_tier": { "const": "sectionspan_pdf_offset_human_review_gate_only" },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/prepared-source-record.v1.json",
+  "title": "knowledge-hub.prepared-source-record.v1",
+  "description": "Common Processing / Preparation output contract. It pins canonical source identity, source-content hash, prepared text, segment locators, processor diagnostics, quality gates, and stale state before indexing or evidence assembly.",
+  "type": "object",
+  "required": [
+    "schema",
+    "record_id",
+    "source_id",
+    "source_type",
+    "canonical_uri",
+    "source_content_hash",
+    "prepared",
+    "processing",
+    "quality",
+    "lifecycle",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.prepared-source-record.v1"
+    },
+    "record_id": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "source_id": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "source_type": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "canonical_uri": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "source_content_hash": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "ledger_id": {
+      "type": "string"
+    },
+    "raw_ref": {
+      "type": "string"
+    },
+    "storage_ref": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "prepared": {
+      "$ref": "#/$defs/prepared"
+    },
+    "processing": {
+      "$ref": "#/$defs/processing"
+    },
+    "quality": {
+      "$ref": "#/$defs/quality"
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/lifecycle"
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "#/$defs/timestamp"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "published_at": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "source_name": {
+          "type": "string"
+        },
+        "source_vendor": {
+          "type": "string"
+        },
+        "source_channel": {
+          "type": "string"
+        },
+        "source_item_id": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": ["classification", "external_allowed"],
+      "properties": {
+        "classification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "external_allowed": {
+          "type": "boolean"
+        },
+        "redaction_required": {
+          "type": "boolean"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "prepared": {
+      "type": "object",
+      "required": ["text", "text_hash", "language", "segments"],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "text_hash": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "language": {
+          "type": "string"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/segment"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "segment": {
+      "type": "object",
+      "required": ["segment_id", "text", "char_start", "char_end", "locator"],
+      "properties": {
+        "segment_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "text": {
+          "type": "string"
+        },
+        "char_start": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "char_end": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "locator": {
+          "$ref": "#/$defs/locator"
+        }
+      },
+      "additionalProperties": true
+    },
+    "locator": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "section": {
+          "type": "string"
+        },
+        "heading_path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp_start_sec": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "timestamp_end_sec": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "url_fragment": {
+          "type": "string"
+        },
+        "source_ref": {
+          "type": "string"
+        },
+        "content_kind": {
+          "type": "string"
+        },
+        "artifact_kind": {
+          "type": "string"
+        },
+        "table_id": {
+          "type": "string"
+        },
+        "table_caption": {
+          "type": "string"
+        },
+        "figure_id": {
+          "type": "string"
+        },
+        "figure_caption": {
+          "type": "string"
+        },
+        "image_crop_path": {
+          "type": "string"
+        },
+        "image_crop_hash": {
+          "type": "string"
+        },
+        "artifact_quality": {
+          "type": "string"
+        },
+        "artifact_extraction_method": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "processing": {
+      "type": "object",
+      "required": [
+        "processor",
+        "extraction_mode",
+        "fallback_used",
+        "fallback_chain",
+        "diagnostics"
+      ],
+      "properties": {
+        "processor": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "processor_version": {
+          "type": "string"
+        },
+        "parser": {
+          "type": "string"
+        },
+        "extraction_mode": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "fallback_used": {
+          "type": "boolean"
+        },
+        "fallback_chain": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "diagnostics": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "quality": {
+      "type": "object",
+      "required": ["passed", "score", "flags", "reasons"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "score": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["stale"],
+      "properties": {
+        "stale": {
+          "type": "boolean"
+        },
+        "stale_reason": {
+          "type": ["string", "null"]
+        },
+        "invalidated_at": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

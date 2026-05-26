@@ -290,3 +290,41 @@ def test_parser_runtime_status_blocks_mineru_when_runtime_dependencies_are_broke
     assert payload["available"] is False
     assert payload["status"] == "blocked"
     assert "transformers=5.3.0" in payload["detail"]
+
+
+def test_parser_runtime_status_blocks_mineru_when_fastapi_starlette_are_incompatible(monkeypatch):
+    monkeypatch.setattr("knowledge_hub.application.runtime_diagnostics.shutil.which", lambda name: "/tmp/mineru" if name == "mineru" else None)
+    versions = {
+        "mineru": "3.0.1",
+        "fastapi": "0.115.12",
+        "starlette": "1.0.0",
+    }
+    monkeypatch.setattr(
+        "knowledge_hub.application.runtime_diagnostics.importlib.metadata.version",
+        lambda name: versions.get(name, ""),
+    )
+    monkeypatch.setattr(
+        "knowledge_hub.application.runtime_diagnostics.importlib.metadata.distribution",
+        lambda name: SimpleNamespace(requires=["starlette<0.47.0,>=0.40.0"]) if name == "fastapi" else SimpleNamespace(requires=[]),
+    )
+    monkeypatch.setattr(
+        "knowledge_hub.application.runtime_diagnostics._mineru_transformers_dependency_status",
+        lambda: {
+            "available": True,
+            "status": "ok",
+            "reason": "",
+            "detail": "transformers ok",
+            "fixCommand": "",
+        },
+    )
+
+    payload = parser_runtime_status("mineru")
+
+    assert payload["available"] is False
+    assert payload["status"] == "blocked"
+    assert payload["reason"] == "fastapi_starlette_incompatible"
+    assert payload["mineruVersion"] == "3.0.1"
+    assert payload["fastapiVersion"] == "0.115.12"
+    assert payload["starletteVersion"] == "1.0.0"
+    assert payload["expectedStarletteRange"] == "<0.47.0,>=0.40.0"
+    assert "requires starlette<0.47.0,>=0.40.0" in payload["detail"]

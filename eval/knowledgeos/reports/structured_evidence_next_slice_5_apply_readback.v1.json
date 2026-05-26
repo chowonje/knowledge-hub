@@ -1,0 +1,4523 @@
+{
+  "schema": "knowledge-hub.paper.structured-evidence-next-slice-apply-readback.v1",
+  "generatedAt": "2026-05-21T07:29:04Z",
+  "runId": "structured-evidence-next-slice-20260521",
+  "apply": true,
+  "status": "ready",
+  "scopeNote": "Apply/readback tranche for the next Structured Evidence slice. Only section_text_offset greenfield rows are generated; table/equation/runtime/citation-grade work remains closed.",
+  "inputs": {
+    "corpusManifest": "eval/knowledgeos/fixtures/corpus_manifest.json",
+    "candidateReport": "eval/knowledgeos/reports/structured_evidence_next_slice_candidate_report.v1.json",
+    "candidateReportSchema": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1",
+    "papersDirRef": "papers_dir"
+  },
+  "candidateReportSnapshot": {
+    "candidateReport": "eval/knowledgeos/reports/structured_evidence_next_slice_candidate_report.v1.json",
+    "candidateReportSchema": "knowledge-hub.paper.structured-evidence-next-slice-candidate-report.v1",
+    "counts": {
+      "manifestRows": 300,
+      "strictCoveredRows": 90,
+      "readbackCandidateRows": 90,
+      "selectedGreenfieldRows": 30,
+      "greenfieldEligibleRows": 210
+    },
+    "readbackSourceIds": [
+      "1312.5602",
+      "1406.2661",
+      "1409.3215",
+      "1502.03167",
+      "1512.03385",
+      "1706.03762",
+      "1707.06347",
+      "1810.04805",
+      "2005.11401",
+      "2005.14165",
+      "2006.11239",
+      "2007.01282",
+      "2010.11929",
+      "2201.11903",
+      "2310.11511",
+      "2312.00752",
+      "2404.16130",
+      "2410.05779",
+      "2501.06322",
+      "2501.12948",
+      "2502.05151",
+      "2503.10970",
+      "2503.21460",
+      "2504.19413",
+      "2505.10468",
+      "2601.01828",
+      "2601.03236",
+      "2601.04720",
+      "2601.09668",
+      "2601.11077",
+      "2601.12542",
+      "2601.23086",
+      "2602.00103",
+      "2602.00185",
+      "2602.01237",
+      "2602.01655",
+      "2602.01853",
+      "2602.02007",
+      "2602.02262",
+      "2602.02905",
+      "2602.03117",
+      "2602.03442",
+      "2602.10715",
+      "2602.10975",
+      "2602.11964",
+      "2602.11988",
+      "2602.12670",
+      "2602.15112",
+      "2602.16313",
+      "2602.16698",
+      "2602.18297",
+      "2602.20021",
+      "2602.22769",
+      "2603.07379",
+      "alexnet-2012",
+      "1207.0580",
+      "1301.3781",
+      "1310.4546",
+      "1311.2524",
+      "1406.1078",
+      "1409.1556",
+      "1410.5401",
+      "1505.04597",
+      "1506.01497",
+      "1506.02640",
+      "1708.07747",
+      "2403.14403",
+      "2407.02485",
+      "2410.11414",
+      "2601.10744",
+      "2601.21666",
+      "2602.16624",
+      "2602.16662",
+      "2602.16669",
+      "2602.16671",
+      "2602.16678",
+      "2602.16682",
+      "2602.16683",
+      "2602.16687",
+      "2602.16689",
+      "2602.16699",
+      "2602.16700",
+      "2602.16701",
+      "2602.16702",
+      "2602.16703",
+      "2602.16704",
+      "2602.16705",
+      "2308.08155",
+      "2309.15217",
+      "2312.10997"
+    ],
+    "greenfieldSourceIds": [
+      "2602.16707",
+      "2602.16708",
+      "2602.16711",
+      "2602.16712",
+      "2602.18304",
+      "2602.18346",
+      "2602.18357",
+      "2602.18397",
+      "2602.18415",
+      "2602.22953",
+      "2603.05414",
+      "2603.05706",
+      "2603.14473",
+      "2603.15798",
+      "2603.16659",
+      "2603.17216",
+      "2603.18000",
+      "2603.18002",
+      "2603.18003",
+      "2603.18004",
+      "2603.23749",
+      "2604.08545",
+      "2604.08546",
+      "2604.08548",
+      "2604.11407",
+      "2604.13346",
+      "2604.15270",
+      "2604.15706",
+      "2604.17761",
+      "2604.18164"
+    ]
+  },
+  "selection": {
+    "readbackSourceIds": [
+      "1312.5602",
+      "1406.2661",
+      "1409.3215",
+      "1502.03167",
+      "1512.03385",
+      "1706.03762",
+      "1707.06347",
+      "1810.04805",
+      "2005.11401",
+      "2005.14165",
+      "2006.11239",
+      "2007.01282",
+      "2010.11929",
+      "2201.11903",
+      "2310.11511",
+      "2312.00752",
+      "2404.16130",
+      "2410.05779",
+      "2501.06322",
+      "2501.12948",
+      "2502.05151",
+      "2503.10970",
+      "2503.21460",
+      "2504.19413",
+      "2505.10468",
+      "2601.01828",
+      "2601.03236",
+      "2601.04720",
+      "2601.09668",
+      "2601.11077",
+      "2601.12542",
+      "2601.23086",
+      "2602.00103",
+      "2602.00185",
+      "2602.01237",
+      "2602.01655",
+      "2602.01853",
+      "2602.02007",
+      "2602.02262",
+      "2602.02905",
+      "2602.03117",
+      "2602.03442",
+      "2602.10715",
+      "2602.10975",
+      "2602.11964",
+      "2602.11988",
+      "2602.12670",
+      "2602.15112",
+      "2602.16313",
+      "2602.16698",
+      "2602.18297",
+      "2602.20021",
+      "2602.22769",
+      "2603.07379",
+      "alexnet-2012",
+      "1207.0580",
+      "1301.3781",
+      "1310.4546",
+      "1311.2524",
+      "1406.1078",
+      "1409.1556",
+      "1410.5401",
+      "1505.04597",
+      "1506.01497",
+      "1506.02640",
+      "1708.07747",
+      "2403.14403",
+      "2407.02485",
+      "2410.11414",
+      "2601.10744",
+      "2601.21666",
+      "2602.16624",
+      "2602.16662",
+      "2602.16669",
+      "2602.16671",
+      "2602.16678",
+      "2602.16682",
+      "2602.16683",
+      "2602.16687",
+      "2602.16689",
+      "2602.16699",
+      "2602.16700",
+      "2602.16701",
+      "2602.16702",
+      "2602.16703",
+      "2602.16704",
+      "2602.16705",
+      "2308.08155",
+      "2309.15217",
+      "2312.10997"
+    ],
+    "greenfieldSourceIds": [
+      "2602.16707",
+      "2602.16708",
+      "2602.16711",
+      "2602.16712",
+      "2602.18304",
+      "2602.18346",
+      "2602.18357",
+      "2602.18397",
+      "2602.18415",
+      "2602.22953",
+      "2603.05414",
+      "2603.05706",
+      "2603.14473",
+      "2603.15798",
+      "2603.16659",
+      "2603.17216",
+      "2603.18000",
+      "2603.18002",
+      "2603.18003",
+      "2603.18004",
+      "2603.23749",
+      "2604.08545",
+      "2604.08546",
+      "2604.08548",
+      "2604.11407",
+      "2604.13346",
+      "2604.15270",
+      "2604.15706",
+      "2604.17761",
+      "2604.18164"
+    ],
+    "greenfieldSelectionPolicy": "first N selectedGreenfieldCandidates from the schema-backed next-slice report"
+  },
+  "policy": {
+    "runtimeAnswerIntegration": false,
+    "complexQaEval": false,
+    "manifestMutation": false,
+    "tableEquationParser": false,
+    "citationGradePromotion": false,
+    "runtimeEvidencePromotion": false,
+    "externalDownload": false,
+    "vaultScan": false,
+    "databaseMutation": false,
+    "indexMutation": false,
+    "sourceContentHashAuthority": "corpus_manifest.expectedSourceContentHash"
+  },
+  "deferredEvidenceTypes": [
+    "table_cell_numeric",
+    "equation_citation",
+    "appendix_table_lookup"
+  ],
+  "counts": {
+    "readbackRows": 90,
+    "greenfieldSelectedRows": 30,
+    "readbackPassRows": 90,
+    "generatedSourceSpanRecords": 30,
+    "generatedStrictEvidenceRecords": 30,
+    "appliedGreenfieldRows": 30,
+    "greenfieldGeneratedRows": 30,
+    "postApplyReadbackPassRows": 30,
+    "readbackBlockedRows": 0,
+    "greenfieldBlockedRows": 0,
+    "baselineStrictCoveredRows": 90,
+    "strictCoveredRowsAfterLocalApply": 120,
+    "manifestRows": 300
+  },
+  "readbackRows": [
+    {
+      "sourceId": "1312.5602",
+      "artifactId": "paper_1312_5602",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:8db04120cace173151c77e0faa6f3eaa4207009da66b9417597dc70bfee56d9c",
+      "parsedArtifactLocator": "papers_dir/parsed/1312.5602/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1406.2661",
+      "artifactId": "paper_1406_2661",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:ff5819e3a7b713c3bd3107b7de3d51fe0a347aa5d8444f0efdcf2345ef0a8b63",
+      "parsedArtifactLocator": "papers_dir/parsed/1406.2661/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1409.3215",
+      "artifactId": "paper_1409_3215",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:5c74e1db863e2d61b869c9b0603494b34c41fb05db1a4fa7f9a83d5a42b7350f",
+      "parsedArtifactLocator": "papers_dir/parsed/1409.3215/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1502.03167",
+      "artifactId": "paper_1502_03167",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:bdc69e0b568f41d8d3181cc9077a461f58fcdd1c70c9f49efe60a05ee6109655",
+      "parsedArtifactLocator": "papers_dir/parsed/1502.03167/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1512.03385",
+      "artifactId": "paper_1512_03385",
+      "mode": "greenfield_section",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "parsedArtifactLocator": "papers_dir/parsed/1512.03385/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1706.03762",
+      "artifactId": "paper_1706_03762",
+      "mode": "pilot_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+      "parsedArtifactLocator": "papers_dir/parsed/1706.03762/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 24,
+        "strictEvidenceCount": 23,
+        "sectionStrictEvidenceCount": 19,
+        "figureStrictEvidenceCount": 4,
+        "figureArtifactCount": 5
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 24,
+        "sourceSpanRecordsPass": 24,
+        "strictEvidenceRecordsChecked": 23,
+        "strictEvidenceRecordsPass": 23,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1707.06347",
+      "artifactId": "paper_1707_06347",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:e78feadadbdbb0b601b3c2bcc81404722cd431a489b307545f9b7bea1e8c4f5b",
+      "parsedArtifactLocator": "papers_dir/parsed/1707.06347/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1810.04805",
+      "artifactId": "paper_1810_04805",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:5692a5514787a8c6727b4ff3b726a3385798bc68e12138d1d4af83947e2acf6e",
+      "parsedArtifactLocator": "papers_dir/parsed/1810.04805/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2005.11401",
+      "artifactId": "paper_2005_11401",
+      "mode": "greenfield_section",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:23e3249e9a1e75418d82efecab0ea8c4d033b89c93742f63208d47ce01f21233",
+      "parsedArtifactLocator": "papers_dir/parsed/2005.11401/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2005.14165",
+      "artifactId": "paper_2005_14165",
+      "mode": "pilot_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:97fd272f1fdfc18677462d0292f5fbf26ca86b4d1b485c2dba03269b643a0e83",
+      "parsedArtifactLocator": "papers_dir/parsed/2005.14165/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 62,
+        "strictEvidenceCount": 60,
+        "sectionStrictEvidenceCount": 12,
+        "figureStrictEvidenceCount": 48,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 62,
+        "sourceSpanRecordsPass": 62,
+        "strictEvidenceRecordsChecked": 60,
+        "strictEvidenceRecordsPass": 60,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2006.11239",
+      "artifactId": "paper_2006_11239",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:aee5e07a802e8dfd2a386374c94fd61d1d056cb7e1e0fec4f28e8120ff5d8505",
+      "parsedArtifactLocator": "papers_dir/parsed/2006.11239/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2007.01282",
+      "artifactId": "paper_2007_01282",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:f1ee7e927c3fb31beb2146f8c205692a91b40dadd65d80e025c6686e4d430953",
+      "parsedArtifactLocator": "papers_dir/parsed/2007.01282/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2010.11929",
+      "artifactId": "paper_2010_11929",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:8ce7b83971a14508ca711a27c875c9b6914c4f6767cf3150fb1ca6c07aa056d6",
+      "parsedArtifactLocator": "papers_dir/parsed/2010.11929/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2201.11903",
+      "artifactId": "paper_2201_11903",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:7d9f878c23b460e4566aa4ec9201b1abfb3b8faefb2b1356e411cb90fef72a12",
+      "parsedArtifactLocator": "papers_dir/parsed/2201.11903/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2310.11511",
+      "artifactId": "paper_2310_11511",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:d9eaa1398abac0df67a9d0933a5bf8b6d9d83d2e72da2a486073cd842dd52978",
+      "parsedArtifactLocator": "papers_dir/parsed/2310.11511/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2312.00752",
+      "artifactId": "paper_2312_00752",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:adf70ed1803c85b1899dec3e21f3af0b124411439e8654b840ea65f7b9f52b2e",
+      "parsedArtifactLocator": "papers_dir/parsed/2312.00752/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2404.16130",
+      "artifactId": "paper_2404_16130",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:730f1a9f38d16689900969a3eeeb1b31e45eda1dcc1f37a043afa90aff76c867",
+      "parsedArtifactLocator": "papers_dir/parsed/2404.16130/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2410.05779",
+      "artifactId": "paper_2410_05779",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:bd72eebf611df1366b251c16ce4eac7aac699e519783c586feb2c5c43899347a",
+      "parsedArtifactLocator": "papers_dir/parsed/2410.05779/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2501.06322",
+      "artifactId": "paper_2501_06322",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:badaf8bb47535df96252be38c5a5b81d979478b860ed67c2c4ac0ebaa4483ae5",
+      "parsedArtifactLocator": "papers_dir/parsed/2501.06322/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2501.12948",
+      "artifactId": "paper_2501_12948",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:b191b0a365a64b4ab2791d117069ed17a2933d03554a662ced58b37df52018f4",
+      "parsedArtifactLocator": "papers_dir/parsed/2501.12948/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2502.05151",
+      "artifactId": "paper_2502_05151",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:954a331aec4c6b9fc5901f517d0ac5a23760cc3a7f1237f053afcffb4b0cd8c6",
+      "parsedArtifactLocator": "papers_dir/parsed/2502.05151/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2503.10970",
+      "artifactId": "paper_2503_10970",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:a5e092675098f212c88d43aaafefc0370ef572eec477ec117486937c0ee0f77f",
+      "parsedArtifactLocator": "papers_dir/parsed/2503.10970/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2503.21460",
+      "artifactId": "paper_2503_21460",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:f3fb80781228b11acf8e9e579e01e399be538677ff645411ced5f779f5980d08",
+      "parsedArtifactLocator": "papers_dir/parsed/2503.21460/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2504.19413",
+      "artifactId": "paper_2504_19413",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:bec870b657aa73405275a6d8fe27bcd4271799e028bc62986ab9c4cd27a3712d",
+      "parsedArtifactLocator": "papers_dir/parsed/2504.19413/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2505.10468",
+      "artifactId": "paper_2505_10468",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:70a0c89f937f35af4e6af06dff86be7121f67882130d787bdf6cc0ff9730bba7",
+      "parsedArtifactLocator": "papers_dir/parsed/2505.10468/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.01828",
+      "artifactId": "paper_2601_01828",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:84b1ad2f1b4ee14553ff731cc77aca028eb01fed143806a2c4d55bad3ed9a0db",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.01828/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.03236",
+      "artifactId": "paper_2601_03236",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:c5899aa2bd4c686cef22ae38d3f59eca8ed8ff8804f7568708f6af59bde3739f",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.03236/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.04720",
+      "artifactId": "paper_2601_04720",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:d7cab1b67d4777abc1c85a28b73004e27ad556f5932bb960fb2a8d9d80398b85",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.04720/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.09668",
+      "artifactId": "paper_2601_09668",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:5c5dd52f86f5d9f81753235b82a5d8a9a0f83c6be01b19abf49fe34a275f6c38",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.09668/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.11077",
+      "artifactId": "paper_2601_11077",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:58710164975ad5646dedb6c5bdc0b31bb428a0ad6a7d692c5c69bd29b88a5da0",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.11077/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.12542",
+      "artifactId": "paper_2601_12542",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:4180a76ae805e6b72c1c5d5bbaded126d97e138e9cd8dc3b350553df9cd05e05",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.12542/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.23086",
+      "artifactId": "paper_2601_23086",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:132784b0920adb21201f71fbc074eb027f4326049a2aaaba3a63f83b2ff78035",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.23086/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.00103",
+      "artifactId": "paper_2602_00103",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:67e3a07b208b6106773b62afd635e81b70f61fa581295c381dface5d91ebdaaf",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.00103/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.00185",
+      "artifactId": "paper_2602_00185",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:0338d0a26c6420fa72ac9113285e31690e7c2e792d76b8210f5dc6ae1186d18e",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.00185/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.01237",
+      "artifactId": "paper_2602_01237",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:df39574a8b19c7b2c0ebbdc736400ef329a250aadd107eedefcbca9c0b1844e1",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.01237/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.01655",
+      "artifactId": "paper_2602_01655",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:5ef6ac77b2a6a153798eba8380f009db1b92eba094b6f618d0f3def2a45cc527",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.01655/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.01853",
+      "artifactId": "paper_2602_01853",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:32dcd4da7780361d19c335a129a522bb3eaead9e837775e8e513234de27722cb",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.01853/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.02007",
+      "artifactId": "paper_2602_02007",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:63610642f97d890327c0335fe114c4e6c827ae01285e6b25d0df9d3aa04caa96",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.02007/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.02262",
+      "artifactId": "paper_2602_02262",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:82b460a9bd43fa0ae9b33cfbbe7c8ced2fb55a2a610ca7ecb0e4f2a0ad6f94cb",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.02262/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.02905",
+      "artifactId": "paper_2602_02905",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:118934c2fa48f564fca2aa77c78a6a1d64fec631c02ba257d6ce2912d4a0441f",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.02905/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.03117",
+      "artifactId": "paper_2602_03117",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:eae68071a5696eb78ea46a52396ddba4069dc3f4731aeba39d67bf75e8d52153",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.03117/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.03442",
+      "artifactId": "paper_2602_03442",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:b167650db7b6ba73f8f4462ce4147f7b826dfb700cca00ef8bfa226f8d02de60",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.03442/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.10715",
+      "artifactId": "paper_2602_10715",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:88b00f2a94d9250ca275aca885fbc73a3c6c412e48447d0cc4a99f906a98b6d0",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.10715/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.10975",
+      "artifactId": "paper_2602_10975",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:a676bd02a9c617fb608460f7ca5c96b75ac32645c924f9209c8f1a8960a6a6f6",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.10975/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.11964",
+      "artifactId": "paper_2602_11964",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:d777d8a33f9a646ac982aa845071775424c404759d208c14bdd9ea488a27ab67",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.11964/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.11988",
+      "artifactId": "paper_2602_11988",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:0b7038fe327dd06e3172cff64ce3f50d707c741c8284973232eac0724d2548ba",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.11988/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.12670",
+      "artifactId": "paper_2602_12670",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:2a0d831c7a584372d6fe4655d3faa4a7d590c2bc324eb434aea9f3ebc2711d4a",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.12670/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.15112",
+      "artifactId": "paper_2602_15112",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:ffbe8bf2b40fe45828b96d87f1b7e50e8d65e5f66d121ce926a6c839d14c0c1f",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.15112/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16313",
+      "artifactId": "paper_2602_16313",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:379c6eb30b30b2e6a4643ea34c2e9d714a68e7b8ff39860110b38ffeb950d76c",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16313/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16698",
+      "artifactId": "paper_2602_16698",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:f1fdbe10cf8ef5895b1ad60ccf156becc24d645ce8ea1a5c098bc66d2db93d63",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16698/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.18297",
+      "artifactId": "paper_2602_18297",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:c543bfc726897820de59fccb63ac071a3817c51aaa14700f6d246b34cd482467",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.18297/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.20021",
+      "artifactId": "paper_2602_20021",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:80dbb0539b8d1d3f656c224729d1efe8e2994b42c4397d6e853db5c4043e7c76",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.20021/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.22769",
+      "artifactId": "paper_2602_22769",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:62d3670a733f10e66d8eede66960e0060c35b2182942fb2a9a096eec7cf67e04",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.22769/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2603.07379",
+      "artifactId": "paper_2603_07379",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:8b0453f1044655dc0144fc1f3904d5e6d8b4efb3531e918affe0fbccc0e2d34a",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.07379/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "alexnet-2012",
+      "artifactId": "alexnet_krizhevsky_2012",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "parsedArtifactLocator": "papers_dir/parsed/alexnet-2012/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1207.0580",
+      "artifactId": "paper_1207_0580",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:6eae057a9faf4f671c3101e0745ed704460c6d3dec77243dfd3a9f2d2ab68970",
+      "parsedArtifactLocator": "papers_dir/parsed/1207.0580/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1301.3781",
+      "artifactId": "paper_1301_3781",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:a44d7e22d2005752271c9cc1929c6462d4c8270916b063977992a883e3a54362",
+      "parsedArtifactLocator": "papers_dir/parsed/1301.3781/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1310.4546",
+      "artifactId": "paper_1310_4546",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:b21848e7b9b6ba1191f8283892a72b5529205bfdeca462403bd69ab6c6f8c6d1",
+      "parsedArtifactLocator": "papers_dir/parsed/1310.4546/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1311.2524",
+      "artifactId": "paper_1311_2524",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:c68dc50b1f73e1641a592f777984fc360759e84b7fe65ac4f6e1377927f20b2e",
+      "parsedArtifactLocator": "papers_dir/parsed/1311.2524/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1406.1078",
+      "artifactId": "paper_1406_1078",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:6b144afadf0e721d9adbec8c20373a86b5d0224dfc22ba2254e03e7522d669ba",
+      "parsedArtifactLocator": "papers_dir/parsed/1406.1078/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1409.1556",
+      "artifactId": "paper_1409_1556",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:83728f9efc21081792902b4c17a4657022d1e4a92ec81655c2427f4ef0755e50",
+      "parsedArtifactLocator": "papers_dir/parsed/1409.1556/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1410.5401",
+      "artifactId": "paper_1410_5401",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:b8d2939cd7c76097f2cc2e5061188ca824ef8cad12de4500dfbd014b60dd16a9",
+      "parsedArtifactLocator": "papers_dir/parsed/1410.5401/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1505.04597",
+      "artifactId": "paper_1505_04597",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:a3172b2124f38e260dc2c7ed968d87c31bc94dbc19a42a7ab3dcbd7534319c44",
+      "parsedArtifactLocator": "papers_dir/parsed/1505.04597/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1506.01497",
+      "artifactId": "paper_1506_01497",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "parsedArtifactLocator": "papers_dir/parsed/1506.01497/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "1506.02640",
+      "artifactId": "paper_1506_02640",
+      "mode": "figure_caption_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:54bcd2dd05dc618849e8a94d8b88fe3eeb37f80e96e200600d38f1f733931678",
+      "parsedArtifactLocator": "papers_dir/parsed/1506.02640/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 16,
+        "strictEvidenceCount": 16,
+        "sectionStrictEvidenceCount": 14,
+        "figureStrictEvidenceCount": 2,
+        "figureArtifactCount": 7
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 16,
+        "sourceSpanRecordsPass": 16,
+        "strictEvidenceRecordsChecked": 16,
+        "strictEvidenceRecordsPass": 16,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": [],
+      "figureCaptionReadback": {
+        "figureArtifactCount": 7,
+        "figureStrictEvidenceCount": 2,
+        "sampleCaptionPresent": true
+      }
+    },
+    {
+      "sourceId": "1708.07747",
+      "artifactId": "paper_1708_07747",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:253b6ef70144cb56d13b4e67d3f8cafad42df78d5984265e0a6e4812ad1715ae",
+      "parsedArtifactLocator": "papers_dir/parsed/1708.07747/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2403.14403",
+      "artifactId": "paper_2403_14403",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:12d262c682626c26a98bdafc7ec5dc6af3fae8247d26d4f2c712b1599dafce62",
+      "parsedArtifactLocator": "papers_dir/parsed/2403.14403/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2407.02485",
+      "artifactId": "paper_2407_02485",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:4409f1314e13be7c1f65df33936078b54831c9ae4a5ddc61ffff4ab0a8ea17d3",
+      "parsedArtifactLocator": "papers_dir/parsed/2407.02485/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2410.11414",
+      "artifactId": "paper_2410_11414",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:c7bb549ba83862be91a9a1f4e28594ba6f5e0956aec629ae81c793329f919269",
+      "parsedArtifactLocator": "papers_dir/parsed/2410.11414/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.10744",
+      "artifactId": "paper_2601_10744",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:55ebac56e23b804fc61703eaf81daeb68b99c1ed4e875768b7105a524eb182f4",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.10744/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2601.21666",
+      "artifactId": "paper_2601_21666",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:a2d798b5166095b32ec36ccfd73f962744a6740efeea4080e89f5fb494fd0337",
+      "parsedArtifactLocator": "papers_dir/parsed/2601.21666/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16624",
+      "artifactId": "paper_2602_16624",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:0f714afa2aac1e783a17bcc323a0cb831c9e9e819129347caed85ec37ddb6216",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16624/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16662",
+      "artifactId": "paper_2602_16662",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:96107b947d9e7ae7b9cc3d018e0b5ab59aebd1b2be2402735591625fb3b30d60",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16662/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16669",
+      "artifactId": "paper_2602_16669",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:8e647ee986700d588d5f1d2cc1936e7228ba1ea29555fc280c522c85207fc28c",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16669/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16671",
+      "artifactId": "paper_2602_16671",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:0398fc24eb7da015d3253760873620b75985c4f78a1e2c92282594155d8692fc",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16671/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16678",
+      "artifactId": "paper_2602_16678",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:c77cc03e7541c1bcd74ec8a4ddda2297b8f56ce6e756adf72cb1e1273a360b28",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16678/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16682",
+      "artifactId": "paper_2602_16682",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:e8d11f09336d0156b6ac5a2c5faebfc78573fc038553adc77d9fa9ddf20cae17",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16682/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16683",
+      "artifactId": "paper_2602_16683",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:5bd04e3e0a60d99c5fe3ff11ffa6b68511c4fe579fa7a77e6425f217e9dff3e5",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16683/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16687",
+      "artifactId": "paper_2602_16687",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:44f0f4bda70ce8f445829d47eb3e37b1d6bde7cb51288b3c284eb9b207a6e5ed",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16687/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16689",
+      "artifactId": "paper_2602_16689",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:2bdbf2aa592b67602e78b6d1bb2b1c6cd0c56952bddbf12e05920f2f0fbda056",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16689/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16699",
+      "artifactId": "paper_2602_16699",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:1169305b7d9d7bfc0c379103742d8e841a39d66d4418d69821636025fdf5613f",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16699/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16700",
+      "artifactId": "paper_2602_16700",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:53bd507af1c2d45763303fac2aa1da428561ad682def5382df2c43923b6103be",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16700/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16701",
+      "artifactId": "paper_2602_16701",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:0c77835d299aba6e7c6b2fff23568a828ba211e62f67a301aa7b320bd2600955",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16701/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16702",
+      "artifactId": "paper_2602_16702",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:67144f6c8a6bb5667a20cfedb113b16a17a68d5c685ef1c8ee4810f858197e3a",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16702/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16703",
+      "artifactId": "paper_2602_16703",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:18df05b48257500a9aa04bec42aff2a242d5385df6fb590292f359234b5b7761",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16703/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16704",
+      "artifactId": "paper_2602_16704",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:3240b0ad2332dcfd3bade49f34354d2dad23b82b4783826735c26f86f9efc56d",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16704/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2602.16705",
+      "artifactId": "paper_2602_16705",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:0e38cc05069505a9571789d3d37d051e3b004f0727107124f955ab40e09efbc5",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16705/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2308.08155",
+      "artifactId": "paper_2308_08155",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "parsedArtifactLocator": "papers_dir/parsed/2308.08155/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2309.15217",
+      "artifactId": "paper_2309_15217",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:e1041580a2fecec215b203f5232d558cd6e2802af3d4f5f04fe8bff5080460f8",
+      "parsedArtifactLocator": "papers_dir/parsed/2309.15217/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    },
+    {
+      "sourceId": "2312.10997",
+      "artifactId": "paper_2312_10997",
+      "mode": "strict_evidence_readback",
+      "status": "pass",
+      "expectedSourceContentHash": "sha256:396a0fadeb4cd40f5c8ccc36b73a0815f6cb4d7f6bfa53b6c48c1f9aba7c7e02",
+      "parsedArtifactLocator": "papers_dir/parsed/2312.10997/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "sectionStrictEvidenceCount": 1,
+        "figureStrictEvidenceCount": 0,
+        "figureArtifactCount": 0
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0
+      },
+      "traceValidation": {
+        "sourceSpanRecordsChecked": 1,
+        "sourceSpanRecordsPass": 1,
+        "strictEvidenceRecordsChecked": 1,
+        "strictEvidenceRecordsPass": 1,
+        "allSourceSpanTracePass": true,
+        "allStrictEvidenceTracePass": true,
+        "citationGradeFalseMaintained": true,
+        "runtimeEvidenceFalseMaintained": true
+      },
+      "blockers": []
+    }
+  ],
+  "greenfieldRows": [
+    {
+      "sourceId": "2602.16707",
+      "artifactId": "paper_2602_16707",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:244c6a69cac1227c58ea3787219198c824bfbed03c00dc57e045d46abfea223c",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16707/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.16707:section:116c5b2f19d32ab9",
+        "strictEvidenceId": "strict-evidence:2602.16707:section:116c5b2f19d32ab9",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.16708",
+      "artifactId": "paper_2602_16708",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:3700a28b47d3866cf3994250349c1b5c755d145d072ed0b77a73c9b3ad2a2859",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16708/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.16708:section:4e869d208342ca87",
+        "strictEvidenceId": "strict-evidence:2602.16708:section:4e869d208342ca87",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.16711",
+      "artifactId": "paper_2602_16711",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:db2f6c364cd193658948d03fc957af1d29299abd2ceb42dceda67ca541a1b18d",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16711/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.16711:section:8a73e7c75c3d3add",
+        "strictEvidenceId": "strict-evidence:2602.16711:section:8a73e7c75c3d3add",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.16712",
+      "artifactId": "paper_2602_16712",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:c451df65b95c736bfa706d18b7c70102d8b2e2e70bda3b6254cdf8f1936f93ae",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.16712/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.16712:section:33aec52a3bd6d954",
+        "strictEvidenceId": "strict-evidence:2602.16712:section:33aec52a3bd6d954",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.18304",
+      "artifactId": "paper_2602_18304",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:f0397a42d67e80643dbe37491d0372b9a61c74aff892b624677c35a089e02f66",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.18304/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.18304:section:cf3037011ba8ab9d",
+        "strictEvidenceId": "strict-evidence:2602.18304:section:cf3037011ba8ab9d",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.18346",
+      "artifactId": "paper_2602_18346",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:77daea06d6fd30798df0780a69fa4bb10070b1375f31eba41377ec3d178ff5bd",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.18346/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.18346:section:fe89c05455cf873f",
+        "strictEvidenceId": "strict-evidence:2602.18346:section:fe89c05455cf873f",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.18357",
+      "artifactId": "paper_2602_18357",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:9d6bd7ae71f4f4352df659774b613dc39760f251b090ff9a754231c6611c710e",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.18357/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.18357:section:c8cfb3e840002f9c",
+        "strictEvidenceId": "strict-evidence:2602.18357:section:c8cfb3e840002f9c",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.18397",
+      "artifactId": "paper_2602_18397",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:b7e67a7f05fcd6e34e3f0c71c4d2b834d1715fe02673874c77efb608c8ba7c95",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.18397/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.18397:section:33a3c7051e405c15",
+        "strictEvidenceId": "strict-evidence:2602.18397:section:33a3c7051e405c15",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.18415",
+      "artifactId": "paper_2602_18415",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:2ceb6ee183c18b48a3f168ae1fc5dcb20cc681248c2c76d8fc82fd286bf47e9e",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.18415/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.18415:section:9bf251389e6fe553",
+        "strictEvidenceId": "strict-evidence:2602.18415:section:9bf251389e6fe553",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2602.22953",
+      "artifactId": "paper_2602_22953",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:19ccc5d746467da153ee19dcd554d4a7045c3924ff49fd7f105f52aa99826653",
+      "parsedArtifactLocator": "papers_dir/parsed/2602.22953/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2602.22953:section:89a06af6efcaeb3c",
+        "strictEvidenceId": "strict-evidence:2602.22953:section:89a06af6efcaeb3c",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.05414",
+      "artifactId": "paper_2603_05414",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:dd9cdc18ba9a8548bf7c474ef39a1ab24be2461da27d6841de1efb0247f793c3",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.05414/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.05414:section:006dd2d81355e942",
+        "strictEvidenceId": "strict-evidence:2603.05414:section:006dd2d81355e942",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.05706",
+      "artifactId": "paper_2603_05706",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:0739b5d4b8da2d1b9956216e7111ceaa1625d232ec137cc6cd3cf8658eaafb0f",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.05706/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.05706:section:21c63a2329b84b17",
+        "strictEvidenceId": "strict-evidence:2603.05706:section:21c63a2329b84b17",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.14473",
+      "artifactId": "paper_2603_14473",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:bcab0572e3685101dc2d70702a15a08fb7a45503567dd6fab573866649999732",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.14473/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.14473:section:303e0f100906fceb",
+        "strictEvidenceId": "strict-evidence:2603.14473:section:303e0f100906fceb",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.15798",
+      "artifactId": "paper_2603_15798",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:438f84f75b43e2c5a7581e7910e1193bbcfed941f59876c5b875b90b86baa52c",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.15798/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.15798:section:bff0d3ce3da66458",
+        "strictEvidenceId": "strict-evidence:2603.15798:section:bff0d3ce3da66458",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.16659",
+      "artifactId": "paper_2603_16659",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:de5e52f632ce8ff32d7d842ede6a22d03c49b18d4af5b820a49709b819a74915",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.16659/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.16659:section:ccdf188a8a4155c1",
+        "strictEvidenceId": "strict-evidence:2603.16659:section:ccdf188a8a4155c1",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.17216",
+      "artifactId": "paper_2603_17216",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:43f77cb4ed5a2de11a751a32ecc8a8e5534389936e37f55b75b72fde1d955520",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.17216/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.17216:section:3fe4bc803109ea44",
+        "strictEvidenceId": "strict-evidence:2603.17216:section:3fe4bc803109ea44",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.18000",
+      "artifactId": "paper_2603_18000",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:d007ce0c32e5fe63811416937a6d1c705ef619dee0198fffbaa96be463358348",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.18000/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.18000:section:0cff9bcf05b3d506",
+        "strictEvidenceId": "strict-evidence:2603.18000:section:0cff9bcf05b3d506",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.18002",
+      "artifactId": "paper_2603_18002",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:651c74586fe8467525d7794060377d0d605286cdfd11c20b9903a54e85312ca2",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.18002/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.18002:section:2c4211f813ac56f2",
+        "strictEvidenceId": "strict-evidence:2603.18002:section:2c4211f813ac56f2",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.18003",
+      "artifactId": "paper_2603_18003",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:6dfdc0975fade8fb96ac3f193d0fb82d61c9d9b23ca24444ae8a9d371a46d232",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.18003/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.18003:section:d7dd674727738123",
+        "strictEvidenceId": "strict-evidence:2603.18003:section:d7dd674727738123",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.18004",
+      "artifactId": "paper_2603_18004",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:2bed130cb7a20025c161dd371b17f37e9f32aedff34ce62a921ab95e6e90f7b6",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.18004/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.18004:section:6ac84acdc94da60f",
+        "strictEvidenceId": "strict-evidence:2603.18004:section:6ac84acdc94da60f",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2603.23749",
+      "artifactId": "paper_2603_23749",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:3f73933d1e1a5422bcfee1916994ae990baec19a8f0a0f6b198e653b91a670cc",
+      "parsedArtifactLocator": "papers_dir/parsed/2603.23749/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2603.23749:section:58d0adbd03c4cbf1",
+        "strictEvidenceId": "strict-evidence:2603.23749:section:58d0adbd03c4cbf1",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.08545",
+      "artifactId": "paper_2604_08545",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:bc95267217a5ae9280dd475b10eb603e1165311b1ac748ea04e7d6fb3416657b",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.08545/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.08545:section:e5ecab7b912baca6",
+        "strictEvidenceId": "strict-evidence:2604.08545:section:e5ecab7b912baca6",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.08546",
+      "artifactId": "paper_2604_08546",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:674d8b880476d9775edfcd47e5eb201ef2625c91b06d70e6bce6570c83fc616f",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.08546/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.08546:section:a7443a88865b631b",
+        "strictEvidenceId": "strict-evidence:2604.08546:section:a7443a88865b631b",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.08548",
+      "artifactId": "paper_2604_08548",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:e8dbd25f6afb1e13a50c5695beb60f12038adde006bb97a12e103de9550e3f15",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.08548/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.08548:section:392fed09e4a6c74f",
+        "strictEvidenceId": "strict-evidence:2604.08548:section:392fed09e4a6c74f",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.11407",
+      "artifactId": "paper_2604_11407",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:c959858483b6cf2aac40d7ff5c7971d681fac57bc43229ab8e0237928b9030e3",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.11407/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.11407:section:205dff8ed5bcecaf",
+        "strictEvidenceId": "strict-evidence:2604.11407:section:205dff8ed5bcecaf",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.13346",
+      "artifactId": "paper_2604_13346",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:d2e0347e8a8312c45a60753256e4b852bf5a319d0dc4ed37bdbc42c4396e5ba2",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.13346/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.13346:section:f8a7f3b9aef5c469",
+        "strictEvidenceId": "strict-evidence:2604.13346:section:f8a7f3b9aef5c469",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.15270",
+      "artifactId": "paper_2604_15270",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:e221f11b28e3bc94cc41cf26ea22645368b80faafefe0aff08dfc24431fd3d91",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.15270/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.15270:section:fd703c386b65a75d",
+        "strictEvidenceId": "strict-evidence:2604.15270:section:fd703c386b65a75d",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.15706",
+      "artifactId": "paper_2604_15706",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:b1af7e47bd004e4c405bfbbf3f7ffe3006a7b089a4b7b01a3f22cc74a2c698f0",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.15706/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.15706:section:945e1f4c83d96feb",
+        "strictEvidenceId": "strict-evidence:2604.15706:section:945e1f4c83d96feb",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.17761",
+      "artifactId": "paper_2604_17761",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:80a24efdd5d3b1d48f1d7c7b157f47b06df49923327ee8d948aa49fba5d570b7",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.17761/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.17761:section:42674cbdf6bab69a",
+        "strictEvidenceId": "strict-evidence:2604.17761:section:42674cbdf6bab69a",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    },
+    {
+      "sourceId": "2604.18164",
+      "artifactId": "paper_2604_18164",
+      "mode": "greenfield_section",
+      "status": "generated",
+      "expectedSourceContentHash": "sha256:323d13b41e52ff7c3ef1f1c48ab1655d1e164151eb513a7df1d11fa109575549",
+      "parsedArtifactLocator": "papers_dir/parsed/2604.18164/document.json",
+      "existingRecords": {
+        "sourceSpanCount": 0,
+        "strictEvidenceCount": 0,
+        "runIdExcluded": "structured-evidence-next-slice-20260521"
+      },
+      "generatedRecords": {
+        "sourceSpanCount": 1,
+        "strictEvidenceCount": 1,
+        "evidenceType": "section_text_offset",
+        "sourceSpanId": "source-span:2604.18164:section:b11b60323a774b94",
+        "strictEvidenceId": "strict-evidence:2604.18164:section:b11b60323a774b94",
+        "applied": true
+      },
+      "traceValidation": {
+        "sourceContentHashMatch": true,
+        "authorityTextOffset": true,
+        "runtimeEvidenceFalse": true,
+        "citationGradeFalse": true,
+        "hashRecomputePass": true,
+        "sourceSpanLinkage": true,
+        "schemaValid": true,
+        "pass": true,
+        "errors": [],
+        "sourceSpanTracePass": true
+      },
+      "blockers": [],
+      "postApplyReadback": {
+        "status": "pass",
+        "strictEvidenceCount": 1,
+        "sourceSpanCount": 1,
+        "traceValidation": {
+          "sourceSpanRecordsChecked": 1,
+          "sourceSpanRecordsPass": 1,
+          "strictEvidenceRecordsChecked": 1,
+          "strictEvidenceRecordsPass": 1,
+          "allSourceSpanTracePass": true,
+          "allStrictEvidenceTracePass": true,
+          "citationGradeFalseMaintained": true,
+          "runtimeEvidenceFalseMaintained": true
+        },
+        "blockers": []
+      }
+    }
+  ],
+  "schemaValidation": {
+    "ok": true,
+    "schemaFound": true,
+    "errors": []
+  }
+}

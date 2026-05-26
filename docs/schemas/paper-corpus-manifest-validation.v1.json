@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.corpus-manifest-validation.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "manifestRef",
+    "checks",
+    "counts",
+    "sourceCoverageStatus",
+    "parsedCoverageStatus",
+    "items",
+    "schemaViolations"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.corpus-manifest-validation.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "manifestRef": { "type": "string" },
+    "checks": {
+      "type": "object",
+      "required": [
+        "artifactsChecked",
+        "parsedArtifactsChecked",
+        "networkUsed",
+        "databaseMutation",
+        "indexMutation",
+        "vaultScan",
+        "sourceRegistrationMutation",
+        "parsedArtifactWrite",
+        "evidencePromotion"
+      ],
+      "properties": {
+        "artifactsChecked": { "type": "boolean" },
+        "parsedArtifactsChecked": { "type": "boolean" },
+        "networkUsed": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "evidencePromotion": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "manifestRows",
+        "sourceAvailableRows",
+        "sourceMissingRows",
+        "metadataOnlyRows",
+        "hashMissingRows",
+        "hashMismatchRows",
+        "sourceNotCheckedRows",
+        "parsedAvailableRows",
+        "parsedMissingRows",
+        "parsedSourceUnavailableRows",
+        "parsedNotCheckedRows",
+        "duplicateArtifactIdRows",
+        "duplicateSourceIdRows",
+        "blockerRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "manifestRows": { "type": "integer", "minimum": 0 },
+        "sourceAvailableRows": { "type": "integer", "minimum": 0 },
+        "sourceMissingRows": { "type": "integer", "minimum": 0 },
+        "metadataOnlyRows": { "type": "integer", "minimum": 0 },
+        "hashMissingRows": { "type": "integer", "minimum": 0 },
+        "hashMismatchRows": { "type": "integer", "minimum": 0 },
+        "sourceNotCheckedRows": { "type": "integer", "minimum": 0 },
+        "parsedAvailableRows": { "type": "integer", "minimum": 0 },
+        "parsedMissingRows": { "type": "integer", "minimum": 0 },
+        "parsedSourceUnavailableRows": { "type": "integer", "minimum": 0 },
+        "parsedNotCheckedRows": { "type": "integer", "minimum": 0 },
+        "duplicateArtifactIdRows": { "type": "integer", "minimum": 0 },
+        "duplicateSourceIdRows": { "type": "integer", "minimum": 0 },
+        "blockerRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "sourceCoverageStatus": { "type": "string" },
+    "parsedCoverageStatus": { "type": "string" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifactId",
+          "sourceIds",
+          "corpusTier",
+          "expectedFilename",
+          "expectedSourceContentHash",
+          "sourceArtifactStatus",
+          "parsedArtifactStatus",
+          "blockers",
+          "warnings"
+        ],
+        "properties": {
+          "artifactId": { "type": "string" },
+          "sourceIds": { "type": "array", "items": { "type": "string" } },
+          "corpusTier": { "type": "string" },
+          "expectedFilename": { "type": "string" },
+          "expectedSourceContentHash": { "type": "string" },
+          "expectedByteLength": {},
+          "provenanceUrl": { "type": "string" },
+          "sourceArtifactStatus": { "type": "string" },
+          "artifact": { "type": "object", "additionalProperties": true },
+          "parsedArtifactStatus": { "type": "string" },
+          "parsedArtifact": { "type": "object", "additionalProperties": true },
+          "blockers": { "type": "array", "items": { "type": "string" } },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "schemaViolations": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

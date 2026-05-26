@@ -51,6 +51,7 @@ class SQLiteDatabase:
             "learning_store",
             "learning_graph_store",
             "mcp_job_store",
+            "evidence_registry_store",
             "ko_note_store",
             "sync_conflict_store",
             "feature_store",

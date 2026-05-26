@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.evidence-registry.record.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "registryId",
+    "recordKind",
+    "payloadSchema",
+    "sourceRevisionHash",
+    "sourceRefs",
+    "lineage",
+    "authority",
+    "payload",
+    "payloadHash",
+    "tokenCount",
+    "expiresAt",
+    "stale",
+    "staleReason",
+    "deletionPolicy",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.evidence-registry.record.v1" },
+    "status": { "type": "string", "enum": ["ok", "stale", "insufficient_evidence", "failed"] },
+    "registryId": { "type": "string", "minLength": 1 },
+    "recordKind": { "type": "string", "enum": ["packet", "context", "trace"] },
+    "payloadSchema": { "type": "string" },
+    "sourceRevisionHash": { "type": "string" },
+    "sourceRefs": { "type": "array", "items": { "type": "object" } },
+    "lineage": {
+      "type": "object",
+      "required": ["sourceIds", "documentIds", "chunkIds", "claimIds", "evidenceSpanIds", "citationLabels"],
+      "properties": {
+        "sourceIds": { "type": "array", "items": { "type": "string" } },
+        "documentIds": { "type": "array", "items": { "type": "string" } },
+        "chunkIds": { "type": "array", "items": { "type": "string" } },
+        "claimIds": { "type": "array", "items": { "type": "string" } },
+        "evidenceSpanIds": { "type": "array", "items": { "type": "string" } },
+        "citationLabels": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "authority": {
+      "type": "object",
+      "required": ["role", "sourceOfTruth", "payloadIsSourceOfTruth", "embeddingIsSourceOfTruth", "requiresSourceRevisionMatch"],
+      "properties": {
+        "role": { "const": "derived_lookup_registry" },
+        "sourceOfTruth": { "type": "string" },
+        "payloadIsSourceOfTruth": { "const": false },
+        "embeddingIsSourceOfTruth": { "const": false },
+        "requiresSourceRevisionMatch": { "const": true },
+        "deletionPolicy": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "payload": { "type": "object" },
+    "payloadHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "tokenCount": { "type": "integer", "minimum": 0 },
+    "expiresAt": { "type": "string" },
+    "stale": { "type": "boolean" },
+    "staleReason": { "type": "string" },
+    "deletionPolicy": { "type": "string" },
+    "createdAt": { "type": "string" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": false
+}

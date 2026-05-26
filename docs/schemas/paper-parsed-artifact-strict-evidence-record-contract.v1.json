@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-strict-evidence-record-contract.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "contractPrinciples",
+    "normalizationHashContract",
+    "writeTargets",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-strict-evidence-record-contract.v1" },
+    "status": { "const": "ok" },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": ["designPacketReviewReportPath", "designPacketReviewSchema"],
+      "properties": {
+        "designPacketReviewReportPath": { "type": "string" },
+        "designPacketReviewSchema": { "type": "string" },
+        "designPacketReviewReadyRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "writeTargetContracts",
+        "strictEvidenceStoreContracts",
+        "strictEvidenceRecordSchemas",
+        "executorImplementedRows",
+        "strictEvidenceCreatedRows",
+        "citationGradeEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writeTargetContracts": { "const": 1 },
+        "strictEvidenceStoreContracts": { "const": 1 },
+        "strictEvidenceRecordSchemas": { "const": 1 },
+        "executorImplementedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "citationGradeEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "writeTargetContractsDefined",
+        "strictEvidenceStoreContractDefined",
+        "executorReady",
+        "runtimeMutationAllowed",
+        "strictEvidenceReady",
+        "citationReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "writeTargetContractsDefined": { "const": true },
+        "strictEvidenceStoreContractDefined": { "const": true },
+        "executorReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "citationReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "decision": { "const": "parsed_artifact_strict_evidence_record_contract_ready" },
+        "recommendedNextTranche": { "const": "parsed_artifact_strict_evidence_executor_dry_run" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "contractOnly",
+        "executorImplemented",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "contractOnly": { "const": true },
+        "executorImplemented": { "const": false },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "contractPrinciples": { "type": "array", "items": { "type": "string" } },
+    "normalizationHashContract": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "inputNotes": { "type": "array", "items": { "type": "string" } },
+    "writeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "plannedWriteTarget",
+          "contractReference",
+          "strictEvidenceRecordSchema",
+          "storeKind",
+          "storeRootTemplate",
+          "recordPathTemplate",
+          "runManifestPathTemplate",
+          "allowedArtifactTypes",
+          "requiredRecordFields",
+          "idempotencyKeyFields",
+          "writeSemantics",
+          "readbackChecks",
+          "rollbackStrategy",
+          "rollbackImplemented",
+          "normalizationHashContract",
+          "executorImplemented",
+          "runtimeUseAllowed",
+          "citationUseAllowed",
+          "parserRoutingAllowed",
+          "answerIntegrationAllowed",
+          "databaseMutationAllowed",
+          "sourceSpanMutationAllowed"
+        ],
+        "properties": {
+          "plannedWriteTarget": { "const": "parsed_artifact_strict_evidence_store" },
+          "contractReference": {
+            "const": "knowledge-hub.paper.parsed-artifact-strict-evidence-record-contract.v1"
+          },
+          "strictEvidenceRecordSchema": {
+            "const": "knowledge-hub.paper.parsed-artifact-strict-evidence-record.v1"
+          },
+          "storeKind": { "const": "local_papers_dir_jsonl_strict_evidence_store" },
+          "storeRootTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence"
+          },
+          "recordPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/strict_evidence/{paper_id}.jsonl"
+          },
+          "runManifestPathTemplate": {
+            "const": "{papers_dir}/structured_evidence/runs/{run_id}.json"
+          },
+          "allowedArtifactTypes": {
+            "type": "array",
+            "minItems": 2,
+            "items": { "type": "string", "enum": ["section", "figure"] }
+          },
+          "requiredRecordFields": { "type": "array", "items": { "type": "string" } },
+          "idempotencyKeyFields": { "type": "array", "items": { "type": "string" } },
+          "writeSemantics": {
+            "const": "explicit_apply_executor_appends_or_replaces_same_idempotency_key"
+          },
+          "readbackChecks": { "type": "array", "items": { "type": "string" } },
+          "rollbackStrategy": { "type": "string" },
+          "rollbackImplemented": { "const": false },
+          "normalizationHashContract": { "type": "object" },
+          "executorImplemented": { "const": false },
+          "runtimeUseAllowed": { "const": false },
+          "citationUseAllowed": { "const": false },
+          "parserRoutingAllowed": { "const": false },
+          "answerIntegrationAllowed": { "const": false },
+          "databaseMutationAllowed": { "const": false },
+          "sourceSpanMutationAllowed": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

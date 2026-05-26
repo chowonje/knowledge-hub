@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-source-blocker-report.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "baseline",
+    "sourceBlockerPool",
+    "sourceBlockerPaperIdsByStatus",
+    "sourceBlockers",
+    "eligibleExistingPdfUnexpected",
+    "nextRecommendedTranche",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-source-blocker-report.v1" },
+    "status": { "type": "string", "enum": ["blocked_source_only", "no_source_blockers"] },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": ["name", "maxSourcePdfBytes", "selectionRule", "nonScope"],
+      "properties": {
+        "name": { "type": "string" },
+        "maxSourcePdfBytes": { "type": "integer", "minimum": 0 },
+        "selectionRule": { "type": "string" },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "baseline": {
+      "type": "object",
+      "required": [
+        "scannedPapers",
+        "reportedPapers",
+        "degradedPapers",
+        "missingParsedArtifacts",
+        "source",
+        "inspectedCommandReport",
+        "sqliteHashBeforeCliInspection",
+        "sqliteHashAfterCliInspection",
+        "sqliteHashChangedAfterCliInspection"
+      ],
+      "properties": {
+        "scannedPapers": { "type": "integer", "minimum": 0 },
+        "reportedPapers": { "type": "integer", "minimum": 0 },
+        "degradedPapers": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "source": { "type": "string" },
+        "inspectedCommandReport": { "type": "object" },
+        "sqliteHashBeforeCliInspection": { "type": "string" },
+        "sqliteHashAfterCliInspection": { "type": "string" },
+        "sqliteHashChangedAfterCliInspection": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "sourceBlockerPool": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifacts",
+        "sourceBlockerRows",
+        "eligibleExistingPdfRows",
+        "sourceArtifactTaxonomy",
+        "blockerTaxonomy"
+      ],
+      "properties": {
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "sourceBlockerRows": { "type": "integer", "minimum": 0 },
+        "eligibleExistingPdfRows": { "type": "integer", "minimum": 0 },
+        "sourceArtifactTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "blockerTaxonomy": { "$ref": "#/$defs/taxonomy" }
+      },
+      "additionalProperties": true
+    },
+    "sourceBlockerPaperIdsByStatus": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["count", "paperIds", "recommendedAction"],
+        "properties": {
+          "count": { "type": "integer", "minimum": 0 },
+          "paperIds": { "type": "array", "items": { "type": "string" } },
+          "recommendedAction": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sourceBlockers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceBlocker" }
+    },
+    "eligibleExistingPdfUnexpected": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceBlocker" }
+    },
+    "nextRecommendedTranche": {
+      "type": "object",
+      "required": ["name", "candidateCount", "rationale", "recommendedFirstBucket"],
+      "properties": {
+        "name": { "type": "string" },
+        "candidateCount": { "type": "integer", "minimum": 0 },
+        "rationale": { "type": "string" },
+        "recommendedFirstBucket": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": {
+      "type": "object",
+      "required": [
+        "applyRequested",
+        "applyPerformed",
+        "sourceDownload",
+        "sourcePathRewrite",
+        "sourceRegistrationMutation",
+        "parsedArtifactWrite",
+        "parserRouting",
+        "strictEvidence",
+        "citationEvidence",
+        "runtimeEvidence",
+        "sourceSpanCreated",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "vaultWrite",
+        "answerIntegration",
+        "manualBlockerResolution"
+      ],
+      "properties": {
+        "applyRequested": { "const": false },
+        "applyPerformed": { "const": false },
+        "sourceDownload": { "const": false },
+        "sourcePathRewrite": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "parserRouting": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationEvidence": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "vaultWrite": { "const": false },
+        "answerIntegration": { "const": false },
+        "manualBlockerResolution": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationCounters": {
+      "type": "object",
+      "required": [
+        "parsedArtifactWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationEvidenceRows",
+        "runtimeEvidenceRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reembedRows",
+        "vaultReadRows",
+        "vaultWriteRows",
+        "answerIntegrationRows",
+        "parserRoutingRows",
+        "manualBlockerResolutionRows",
+        "sourceDownloadRows",
+        "sourcePathRewriteRows",
+        "sourceRegistrationMutationRows"
+      ],
+      "properties": {
+        "parsedArtifactWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sourceArtifact": {
+      "type": "object",
+      "required": ["kind", "exists", "isFile", "sizeBytes", "path"],
+      "properties": {
+        "kind": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "isFile": { "type": "boolean" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "path": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "sourceBlocker": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "degradationReasons",
+        "sourceArtifact",
+        "sourceStatus",
+        "recommendedAction",
+        "resolutionMode"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "degradationReasons": { "type": "array", "items": { "type": "string" } },
+        "sourceArtifact": { "$ref": "#/$defs/sourceArtifact" },
+        "sourceStatus": { "type": "string" },
+        "recommendedAction": { "type": "string" },
+        "resolutionMode": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

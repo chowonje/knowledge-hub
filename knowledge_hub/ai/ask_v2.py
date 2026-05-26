@@ -52,6 +52,7 @@ from knowledge_hub.infrastructure.persistence.stores.section_card_v1_store impor
 from knowledge_hub.core.models import SearchResult
 from knowledge_hub.papers.memory_adapter import paper_memory_card_to_section_cards
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
+from knowledge_hub.papers.source_text import extract_pdf_text_excerpt, source_hash_for_path
 from knowledge_hub.web.youtube_extractor import is_youtube_url
 
 
@@ -63,6 +64,8 @@ _CLAIM_HEAVY_QUERY_RE = re.compile(
     r"\b(compare|comparison|versus|vs|difference|benchmark|metric|evaluate|evaluation|performance|accuracy)\b|비교|차이|결과|평가|성능|지표",
     re.IGNORECASE,
 )
+_CHARS_LOCATOR_RE = re.compile(r"^chars:(\d+)-(\d+)$")
+_BLOCK_PREFIX_RE = re.compile(r"^\s*\[Block\s+\d+\]\s*", re.IGNORECASE)
 
 
 def _ask_v2_hard_gate_reason(
@@ -102,6 +105,82 @@ def _first_int_value(values: list[Any]) -> int | None:
         except (TypeError, ValueError):
             continue
     return None
+
+
+def _offsets_from_locator(locator: Any) -> tuple[int | None, int | None]:
+    match = _CHARS_LOCATOR_RE.fullmatch(str(locator or "").strip())
+    if not match:
+        return None, None
+    try:
+        start = int(match.group(1))
+        end = int(match.group(2))
+    except (TypeError, ValueError):
+        return None, None
+    return (start, end) if end > start >= 0 else (None, None)
+
+
+def _chars_locator(start: int | None, end: int | None) -> str:
+    if start is None or end is None or end <= start or start < 0:
+        return ""
+    return f"chars:{start}-{end}"
+
+
+def _find_excerpt_offsets(source_text: str, excerpt: str) -> tuple[int | None, int | None]:
+    source = str(source_text or "")
+    snippet = str(excerpt or "").strip()
+    if not source or not snippet:
+        return None, None
+    snippets = _clean_unique_values([snippet, _BLOCK_PREFIX_RE.sub("", snippet).strip()])
+    for candidate in snippets:
+        exact_index = source.find(candidate)
+        if exact_index >= 0:
+            return exact_index, exact_index + len(candidate)
+    for candidate in snippets:
+        tokens = [token for token in re.split(r"\s+", candidate) if token]
+        if not tokens:
+            continue
+        for token_offset in range(0, min(8, len(tokens))):
+            for token_limit in (80, 48, 28):
+                selected = tokens[token_offset : token_offset + token_limit]
+                if len(selected) < 4:
+                    continue
+                pattern = r"\s+".join(re.escape(token) for token in selected)
+                match = re.search(pattern, source, re.MULTILINE)
+                if match:
+                    return match.start(), match.end()
+                ordered_match = _find_ordered_token_window(source, selected)
+                if ordered_match != (None, None):
+                    return ordered_match
+    return None, None
+
+
+def _find_ordered_token_window(source: str, tokens: list[str]) -> tuple[int | None, int | None]:
+    selected = [
+        token
+        for token in list(tokens or [])
+        if len(token.strip(".,;:()[]{}")) >= 3 or token.startswith("\\")
+    ]
+    if len(selected) < 4:
+        return None, None
+    position = 0
+    start: int | None = None
+    end: int | None = None
+    for token in selected:
+        index = source.find(token, position)
+        if index < 0:
+            return None, None
+        if start is None:
+            start = index
+        end = index + len(token)
+        position = end
+    if start is None or end is None:
+        return None, None
+    window = end - start
+    # This fallback is for parser markup inserted between otherwise contiguous
+    # excerpt tokens. Keep it bounded so a few common words cannot span pages.
+    if window > max(800, len(" ".join(tokens)) * 5):
+        return None, None
+    return start, end
 
 
 def _selection_diagnostic_payload(card: dict[str, Any]) -> dict[str, Any]:
@@ -201,6 +280,9 @@ class AskV2Service:
         self.card_builders = CardV2BuilderRegistry(self.sqlite_db)
         self.card_selectors = AskV2CardSelectorRegistry(self, fallback_error=AskV2FallbackToLegacy)
         self._claim_card_builder: ClaimCardBuilder | None = None
+        self._document_memory_unit_cache: dict[str, dict[str, Any] | None] = {}
+        self._source_text_cache: dict[str, str] = {}
+        self._source_hash_cache: dict[str, str] = {}
         self.claim_alignment = ClaimCardAlignmentService()
         self.verifier = AskV2Verifier(self.sqlite_db)
 
@@ -1213,7 +1295,7 @@ class AskV2Service:
         anchors: list[dict[str, Any]] = []
         for item in claim_cards:
             for anchor in list(item.get("anchors") or []):
-                anchors.append(dict(anchor))
+                anchors.append(self._enrich_anchor_provenance(dict(anchor), fallback_source_hash=item.get("source_content_hash")))
         deduped: list[dict[str, Any]] = []
         seen: set[str] = set()
         for anchor in anchors:
@@ -1223,6 +1305,233 @@ class AskV2Service:
             seen.add(anchor_id)
             deduped.append(dict(anchor))
         return deduped
+
+    def _document_memory_unit(self, unit_id: Any) -> dict[str, Any]:
+        token = _clean_text(unit_id)
+        if not token:
+            return {}
+        if token not in self._document_memory_unit_cache:
+            getter = getattr(self.sqlite_db, "get_document_memory_unit", None)
+            if not callable(getter):
+                self._document_memory_unit_cache[token] = None
+            else:
+                try:
+                    unit = getter(token)
+                except Exception:
+                    unit = None
+                self._document_memory_unit_cache[token] = dict(unit or {}) if unit else None
+        return dict(self._document_memory_unit_cache.get(token) or {})
+
+    def _source_text_for_path(self, path_value: Any) -> str:
+        token = _clean_text(path_value)
+        if not token:
+            return ""
+        if token not in self._source_text_cache:
+            path = Path(token).expanduser()
+            try:
+                if not path.is_file():
+                    self._source_text_cache[token] = ""
+                elif path.suffix.casefold() == ".pdf":
+                    self._source_text_cache[token] = extract_pdf_text_excerpt(
+                        str(path),
+                        max_pages=12,
+                        max_chars=80_000,
+                    )
+                else:
+                    self._source_text_cache[token] = path.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                self._source_text_cache[token] = ""
+        return self._source_text_cache.get(token, "")
+
+    def _source_hash_for_path(self, path_value: Any) -> str:
+        token = _clean_text(path_value)
+        if not token:
+            return ""
+        if token not in self._source_hash_cache:
+            self._source_hash_cache[token] = source_hash_for_path(token)
+        return self._source_hash_cache.get(token, "")
+
+    @staticmethod
+    def _explicit_offset_locator(*payloads: dict[str, Any]) -> str:
+        for payload in payloads:
+            item = dict(payload or {})
+            locator = _clean_text(item.get("span_locator") or item.get("spanLocator") or item.get("locator"))
+            start, end = _offsets_from_locator(locator)
+            if start is not None and end is not None:
+                return _chars_locator(start, end)
+            start = _first_int_value(
+                [
+                    item.get("char_start"),
+                    item.get("charStart"),
+                    item.get("start_offset"),
+                    item.get("startOffset"),
+                    item.get("chunk_start"),
+                    item.get("chunkStart"),
+                ]
+            )
+            end = _first_int_value(
+                [
+                    item.get("char_end"),
+                    item.get("charEnd"),
+                    item.get("end_offset"),
+                    item.get("endOffset"),
+                    item.get("chunk_end"),
+                    item.get("chunkEnd"),
+                ]
+            )
+            locator = _chars_locator(start, end)
+            if locator:
+                return locator
+        return ""
+
+    def _resolved_offset_locator(self, *, anchor: dict[str, Any], unit: dict[str, Any]) -> str:
+        provenance = dict(unit.get("provenance") or {})
+        explicit = self._explicit_offset_locator(anchor, unit, provenance)
+        if explicit:
+            return explicit
+        source_text = self._source_text_for_path(provenance.get("file_path"))
+        if not source_text:
+            return ""
+        candidates = [
+            unit.get("source_excerpt"),
+            anchor.get("excerpt"),
+            anchor.get("quote"),
+            unit.get("contextual_summary"),
+            unit.get("document_thesis"),
+        ]
+        for candidate in candidates:
+            start, end = _find_excerpt_offsets(source_text, _clean_text(candidate))
+            locator = _chars_locator(start, end)
+            if locator:
+                return locator
+        return ""
+
+    def _enrich_anchor_provenance(
+        self,
+        anchor: dict[str, Any],
+        *,
+        card: dict[str, Any] | None = None,
+        fallback_source_hash: Any = "",
+    ) -> dict[str, Any]:
+        payload = dict(anchor or {})
+        card_payload = dict(card or {})
+        unit_id = _clean_text(payload.get("unit_id") or payload.get("unitId") or payload.get("chunk_id") or payload.get("chunkId"))
+        unit = self._document_memory_unit(unit_id)
+        provenance = dict(unit.get("provenance") or {})
+        if unit:
+            payload.setdefault("document_id", _clean_text(unit.get("document_id")))
+            payload.setdefault("documentId", _clean_text(unit.get("document_id")))
+            payload.setdefault("unit_id", _clean_text(unit.get("unit_id")))
+            payload.setdefault("unitId", _clean_text(unit.get("unit_id")))
+            payload.setdefault("chunk_id", _clean_text(unit.get("unit_id")))
+            payload.setdefault("chunkId", _clean_text(unit.get("unit_id")))
+            payload.setdefault("section_path", _clean_text(unit.get("section_path") or unit.get("title")))
+            payload.setdefault("sectionPath", _clean_text(unit.get("section_path") or unit.get("title")))
+            payload.setdefault("source_type", _clean_text(unit.get("source_type")))
+            payload.setdefault("sourceType", _clean_text(unit.get("source_type")))
+        source_hash = _clean_text(
+            payload.get("source_content_hash")
+            or payload.get("sourceContentHash")
+            or unit.get("source_content_hash")
+            or provenance.get("source_content_hash")
+            or card_payload.get("source_content_hash")
+            or card_payload.get("sourceContentHash")
+            or fallback_source_hash
+        )
+        if not source_hash:
+            source_hash = self._source_hash_for_path(provenance.get("file_path"))
+        if source_hash:
+            payload["source_content_hash"] = source_hash
+            payload["sourceContentHash"] = source_hash
+        offset_locator = self._resolved_offset_locator(anchor=payload, unit=unit) if unit else self._explicit_offset_locator(payload)
+        if offset_locator:
+            payload["span_locator"] = offset_locator
+            payload["spanLocator"] = offset_locator
+            start, end = _offsets_from_locator(offset_locator)
+            if start is not None and end is not None:
+                payload["char_start"] = start
+                payload["charStart"] = start
+                payload["char_end"] = end
+                payload["charEnd"] = end
+        return payload
+
+    def _claim_card_evidence_anchors(self, item: dict[str, Any], *, limit: int = 5) -> list[dict[str, Any]]:
+        anchors: list[dict[str, Any]] = []
+        source_id = _clean_text(item.get("source_id") or item.get("sourceId"))
+        document_id = _clean_text(item.get("document_id") or item.get("documentId"))
+        source_hash = _clean_text(item.get("source_content_hash") or item.get("sourceContentHash"))
+        source_kind = _clean_text(item.get("source_kind") or item.get("sourceKind"))
+        for index, anchor in enumerate(list(item.get("anchors") or [])[: max(1, int(limit))], start=1):
+            payload = self._enrich_anchor_provenance(dict(anchor or {}), fallback_source_hash=source_hash)
+            anchor_id = _clean_text(payload.get("anchor_id") or payload.get("anchorId"))
+            if not anchor_id:
+                continue
+            anchor_source_id = _clean_text(payload.get("paper_id") or payload.get("source_id") or payload.get("sourceId") or source_id)
+            anchor_document_id = _clean_text(payload.get("document_id") or payload.get("documentId") or document_id)
+            anchor_source_hash = _clean_text(
+                payload.get("source_content_hash")
+                or payload.get("sourceContentHash")
+                or source_hash
+            )
+            snippet_hash = _clean_text(
+                payload.get("snippet_hash")
+                or payload.get("snippetHash")
+                or payload.get("content_hash")
+                or payload.get("contentHash")
+            )
+            anchors.append(
+                {
+                    "anchorId": anchor_id,
+                    "anchor_id": anchor_id,
+                    "sourceId": anchor_source_id,
+                    "source_id": anchor_source_id,
+                    "sourceType": _clean_text(payload.get("source_type") or payload.get("sourceType") or source_kind),
+                    "documentId": anchor_document_id,
+                    "document_id": anchor_document_id,
+                    "chunkId": _clean_text(payload.get("chunk_id") or payload.get("chunkId") or payload.get("unit_id")),
+                    "chunk_id": _clean_text(payload.get("chunk_id") or payload.get("chunkId") or payload.get("unit_id")),
+                    "spanLocator": _clean_text(payload.get("span_locator") or payload.get("spanLocator") or payload.get("unit_id")),
+                    "span_locator": _clean_text(payload.get("span_locator") or payload.get("spanLocator") or payload.get("unit_id")),
+                    "charStart": payload.get("charStart") if payload.get("charStart") is not None else payload.get("char_start"),
+                    "char_start": payload.get("char_start") if payload.get("char_start") is not None else payload.get("charStart"),
+                    "charEnd": payload.get("charEnd") if payload.get("charEnd") is not None else payload.get("char_end"),
+                    "char_end": payload.get("char_end") if payload.get("char_end") is not None else payload.get("charEnd"),
+                    "sourceContentHash": anchor_source_hash,
+                    "source_content_hash": anchor_source_hash,
+                    "contentHash": snippet_hash,
+                    "content_hash": snippet_hash,
+                    "snippetHash": snippet_hash,
+                    "snippet_hash": snippet_hash,
+                    "citationLabel": f"S{index}",
+                    "citation_label": f"S{index}",
+                    "quote": str(payload.get("excerpt") or payload.get("quote") or "")[:500],
+                    "evidenceRole": _clean_text(payload.get("evidence_role") or payload.get("evidenceRole")),
+                    "sectionPath": _clean_text(payload.get("section_path") or payload.get("sectionPath")),
+                }
+            )
+        return anchors
+
+    def _paper_knowledge_slots(self, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        from knowledge_hub.papers.knowledge_slots import build_paper_knowledge_slots_payload
+
+        list_claim_refs = getattr(self.sqlite_db, "list_paper_card_claim_refs_v2", None)
+        list_anchors = getattr(self.sqlite_db, "list_evidence_anchors_v2", None)
+        if not callable(list_claim_refs) or not callable(list_anchors):
+            return []
+        payloads: list[dict[str, Any]] = []
+        for card in list(cards or []):
+            card_payload = dict(card or {})
+            paper_id = _clean_text(card_payload.get("paper_id") or card_payload.get("paperId"))
+            card_id = _clean_text(card_payload.get("card_id") or card_payload.get("cardId"))
+            if not paper_id or not card_id:
+                continue
+            claim_refs = list(list_claim_refs(card_id=card_id) or [])
+            anchors = [
+                self._enrich_anchor_provenance(dict(anchor or {}), card=card_payload)
+                for anchor in list(list_anchors(card_id=card_id) or [])
+            ]
+            payloads.append(build_paper_knowledge_slots_payload(card=card_payload, claim_refs=claim_refs, anchors=anchors))
+        return payloads
 
     def _anchors_for_inline_cards(self, *, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
         anchors: list[dict[str, Any]] = []
@@ -1284,7 +1593,7 @@ class AskV2Service:
                 elif route.source_kind == "vault":
                     payload.setdefault("file_path", _clean_text(payload.get("file_path") or card.get("file_path")))
                     payload.setdefault("note_id", _clean_text(payload.get("note_id") or card.get("note_id")))
-                anchors.append(payload)
+                anchors.append(self._enrich_anchor_provenance(payload, card=card))
         deduped: list[dict[str, Any]] = []
         seen: set[str] = set()
         for anchor in anchors:
@@ -1313,19 +1622,34 @@ class AskV2Service:
         results: list[SearchResult] = []
         for index, anchor in enumerate(anchors):
             card = by_card_id.get(_clean_text(anchor.get("card_id")), {})
+            anchor = self._enrich_anchor_provenance(dict(anchor), card=card)
             excerpt = _clean_text(anchor.get("excerpt"))
             if not excerpt:
                 continue
             score = max(0.01, min(0.99, _stable_score(anchor.get("score"))))
+            span_locator = _clean_text(anchor.get("span_locator") or anchor.get("spanLocator"))
+            source_hash = _clean_text(
+                anchor.get("source_content_hash")
+                or anchor.get("sourceContentHash")
+            )
             metadata = {
                 "title": _clean_text(anchor.get("title") or card.get("title")),
                 "source_type": "project" if route.source_kind == "project" else route.source_kind,
+                "anchor_id": _clean_text(anchor.get("anchor_id") or anchor.get("anchorId")),
+                "unit_id": _clean_text(anchor.get("unit_id") or anchor.get("unitId")),
+                "chunk_id": _clean_text(anchor.get("chunk_id") or anchor.get("chunkId") or anchor.get("unit_id") or anchor.get("unitId")),
+                "source_content_hash": source_hash,
+                "content_hash": source_hash,
+                "span_locator": span_locator,
+                "chunk_span": span_locator,
+                "char_start": anchor.get("char_start") if anchor.get("char_start") is not None else anchor.get("charStart"),
+                "char_end": anchor.get("char_end") if anchor.get("char_end") is not None else anchor.get("charEnd"),
                 "section_path": _clean_text(anchor.get("section_path")),
                 "unit_type": _clean_text(anchor.get("unit_type")),
                 "parent_id": _clean_text(anchor.get("unit_id") or anchor.get("document_id") or anchor.get("note_id") or anchor.get("anchor_id")),
                 "resolved_parent_id": _clean_text(anchor.get("unit_id") or anchor.get("document_id") or anchor.get("note_id") or anchor.get("anchor_id")),
                 "resolved_parent_label": _clean_text(anchor.get("section_path") or anchor.get("evidence_role")),
-                "resolved_parent_chunk_span": _clean_text(anchor.get("span_locator") or index),
+                "resolved_parent_chunk_span": span_locator or _clean_text(index),
                 "record_id": _clean_text(anchor.get("claim_id")),
             }
             if route.source_kind == "paper":
@@ -1923,6 +2247,8 @@ class AskV2Service:
                     "claimId": _clean_text(item.get("claim_id")),
                     "sourceKind": _clean_text(item.get("source_kind")),
                     "sourceId": _clean_text(item.get("source_id")),
+                    "documentId": _clean_text(item.get("document_id")),
+                    "sourceContentHash": _clean_text(item.get("source_content_hash")),
                     "claimType": _clean_text(item.get("claim_type")),
                     "status": _clean_text(item.get("status")),
                     "summaryText": _clean_text(item.get("summary_text")),
@@ -1947,6 +2273,7 @@ class AskV2Service:
                     "limitationText": _clean_text(item.get("limitation_text")),
                     "evidenceStrength": _clean_text(item.get("evidence_strength")),
                     "evidenceAnchorIds": list(item.get("evidence_anchor_ids") or []),
+                    "evidenceAnchors": self._claim_card_evidence_anchors(item),
                     "sectionPaths": list(item.get("section_paths") or []),
                     "anchorExcerpts": [
                         _clean_text(anchor.get("excerpt"))
@@ -1957,6 +2284,7 @@ class AskV2Service:
                 }
                 for item in selected_claim_cards
             ],
+            "paperKnowledgeSlots": self._paper_knowledge_slots(selected_cards) if route.source_kind == "paper" else [],
             "sectionCards": [
                 {
                     "sectionCardId": _clean_text(item.get("section_card_id")),

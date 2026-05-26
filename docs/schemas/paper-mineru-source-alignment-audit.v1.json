@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.mineru-source-alignment-audit.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "policy",
+    "strictBlockerSummary",
+    "papers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.mineru-source-alignment-audit.v1" },
+    "status": { "type": "string", "enum": ["ok", "degraded"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": ["inputRoot", "paperIds"],
+      "properties": {
+        "inputRoot": { "type": "string" },
+        "paperIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "paperCount",
+        "totalCandidates",
+        "alignableCandidates",
+        "alignedCandidates",
+        "pageRecoveredCandidates",
+        "sourceContentHashLinkedCandidates",
+        "strictRequirementCompleteCandidates",
+        "strictEligibleCandidates",
+        "citationGradeCandidates",
+        "alignmentSuccessRate",
+        "pageRecoveryRate",
+        "sourceContentHashLinkageRate"
+      ],
+      "properties": {
+        "paperCount": { "type": "integer", "minimum": 0 },
+        "totalCandidates": { "type": "integer", "minimum": 0 },
+        "alignableCandidates": { "type": "integer", "minimum": 0 },
+        "alignedCandidates": { "type": "integer", "minimum": 0 },
+        "pageRecoveredCandidates": { "type": "integer", "minimum": 0 },
+        "sourceContentHashLinkedCandidates": { "type": "integer", "minimum": 0 },
+        "strictRequirementCompleteCandidates": { "type": "integer", "minimum": 0 },
+        "strictEligibleCandidates": { "const": 0 },
+        "citationGradeCandidates": { "const": 0 },
+        "byType": { "type": "object" },
+        "byAlignmentStatus": { "type": "object" },
+        "byAlignmentMethod": { "type": "object" },
+        "byClassification": { "type": "object" },
+        "alignmentSuccessRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "pageRecoveryRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sourceContentHashLinkageRate": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "allOutputsNonStrict",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed"
+      ],
+      "properties": {
+        "allOutputsNonStrict": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "strictBlockerSummary": { "type": "object" },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paperId", "status", "input", "source", "counts", "strictBlockerSummary"],
+        "properties": {
+          "paperId": { "type": "string" },
+          "status": { "type": "string", "enum": ["ok", "degraded"] },
+          "input": { "type": "object" },
+          "source": {
+            "type": "object",
+            "required": ["sourceContentHashAvailable", "sourceContentHashSource", "pageBoundaryCount"],
+            "properties": {
+              "sourceContentHashAvailable": { "type": "boolean" },
+              "sourceContentHashSource": { "type": "string" },
+              "sourceContentHash": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "pageBoundaryCount": { "type": "integer", "minimum": 0 }
+            },
+            "additionalProperties": true
+          },
+          "counts": { "type": "object" },
+          "strictBlockerSummary": { "type": "object" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "candidate_type",
+          "source_parser",
+          "paper_id",
+          "candidate_text",
+          "alignment_status",
+          "alignment_method",
+          "chars_start",
+          "chars_end",
+          "page",
+          "sourceContentHash",
+          "confidence",
+          "classification",
+          "strict_eligible",
+          "strict_requirements_met",
+          "strict_blockers",
+          "non_strict_reason",
+          "evidence_tier",
+          "citation_grade"
+        ],
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "candidate_type": {
+            "type": "string",
+            "enum": [
+              "section_candidate",
+              "table_candidate",
+              "equation_candidate",
+              "figure_caption_candidate",
+              "reading_order_candidate"
+            ]
+          },
+          "source_parser": { "const": "mineru" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "alignment_status": { "type": "string", "enum": ["aligned", "ambiguous", "failed", "blocked"] },
+          "alignment_method": { "type": "string", "enum": ["exact", "normalized", "ordered_token", "none"] },
+          "alignment_reason": { "type": "string" },
+          "chars_start": { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+          "chars_end": { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+          "page": { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+          "sourceContentHash": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+          "sourceContentHashSource": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "raw_candidate_only",
+              "text_aligned_non_strict",
+              "source_span_aligned_non_strict",
+              "page_recovered_non_strict",
+              "potential_strict_candidate",
+              "blocked"
+            ]
+          },
+          "strict_eligible": { "const": false },
+          "strict_requirements_met": { "type": "boolean" },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } },
+          "evidence_tier": { "const": "source_alignment_candidate_only" },
+          "citation_grade": { "const": false },
+          "source_span_locator": { "type": "object" },
+          "mineruCandidate": { "type": "object" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

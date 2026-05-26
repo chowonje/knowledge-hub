@@ -11,6 +11,7 @@ See also:
 - `docs/maps/canonical-ownership-map.md`
 - `docs/maps/agent-execution-map.md`
 - `docs/maps/data-policy-flow-map.md`
+- `docs/adr/2026-05-15-evidence-registry-authority.md`
 - `docs/adr/2026-04-24-store-authority-inventory.md`
 - `docs/adr/2026-04-24-mixed-store-schema-prep.md`
 
@@ -36,6 +37,9 @@ See also:
 
 ### Persistence and context boundary
 - SQLite, vector collections, parser artifacts, and note/paper/web source records remain canonical local stores.
+- The Codex/MCP evidence-substrate contract is `SourceLedgerRecord -> PreparedSourceRecord -> RetrievalUnit -> EvidencePacket -> ResearchContext/ComparePacket -> AnswerTrace`. `SourceCard`, `ClaimCard`, `EvidenceLink`, and richer trace objects remain derivative/labs-first until they are backed by source-span evidence and eval gates.
+- The evidence registry is the only persisted URI lookup authority for `khub://packet/{id}` and `khub://context/{id}`. It stores derived packet/context/trace lookup records with payload hashes, source refs, source revision hashes, lineage, token count, expiry, and deletion-policy metadata. It does not replace source ledgers, normalized documents, chunks, or indexes as factual authority.
+- `khub index` is the retrieval-index builder: lexical index, vector index, and metadata index. It must not silently become the default builder for claim cards, evidence links, or answer traces; those stay separate derivative contracts unless explicitly promoted.
 - Store authority is explicit: source/audit stores can be canonical in their own domain, semantic cards/memory/graph/ontology projections are derivative unless they resolve back to source-backed spans, and operational queues/logs are not factual answer evidence.
 - Mixed semantic stores now use table-level authority plus row-level prep columns (`origin`, `contributor_hashes`, `supersedes`, `superseded_by`) so later lifecycle work does not confuse manual rows, aggregated projections, and epistemic review state.
 - Mixed derivative read paths now also enforce a first lifecycle boundary: stale `ontology_claims`, `ontology_relations`, legacy `kg_relations`, `learning_graph_*`, and derived `memory_relations` are excluded by default, while `origin='manual'` rows stay visible and mixed-store invalidation runs only for explicit source-document hash changes rather than every document-memory rebuild.
@@ -48,6 +52,8 @@ See also:
 
 ### Default vs labs boundary
 - Default surfaces stay retrieval-assistant-first: ingest, search, ask, task-context, health.
+- `khub inspect`, `khub compare`, and `khub trace` are thin public facades for evidence inspection and Codex handoff; they reuse existing stores and answer/evidence payloads rather than creating a second answer engine.
+- Registry writes are explicit facade options or application helper calls. Default CLI/MCP reads may resolve registry records, but they must not create packet/context records or call external providers.
 - Experimental capabilities ship under `khub labs ...` or profile-gated MCP surfaces first and are promoted only after explicit eval gates.
 - Root-level compatibility commands may still exist for direct invocation, but the default `khub --help` surface should prefer the representative core loop and hide personal/eval/maintenance-heavy commands unless they are explicitly promoted.
 

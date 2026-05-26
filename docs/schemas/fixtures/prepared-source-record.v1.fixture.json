@@ -1,0 +1,76 @@
+{
+  "schema": "knowledge-hub.prepared-source-record.v1",
+  "record_id": "prepared:web:example-video:20260504",
+  "source_id": "web:youtube:example-video",
+  "source_type": "youtube",
+  "canonical_uri": "https://www.youtube.com/watch?v=example",
+  "source_content_hash": "sha256:source-content-example",
+  "ledger_id": "src_yt_example",
+  "raw_ref": "web/archive/src_yt_example.normalized.json",
+  "storage_ref": "prepared_sources/youtube/prepared-web-example-video-20260504.json",
+  "title": "Example Video",
+  "metadata": {
+    "title": "Example Video",
+    "authors": ["Example Channel"],
+    "published_at": "2026-05-01",
+    "language": "en",
+    "domain": "youtube_knowledge",
+    "source_name": "YouTube",
+    "source_vendor": "youtube",
+    "source_channel": "Example Channel",
+    "source_item_id": "example",
+    "tags": ["demo"]
+  },
+  "policy": {
+    "classification": "P3",
+    "external_allowed": false,
+    "redaction_required": false,
+    "reasons": ["public_url", "local_transcript_processing"]
+  },
+  "prepared": {
+    "text": "This segment explains prepared source records for indexing.",
+    "text_hash": "sha256:prepared-text-example",
+    "language": "en",
+    "segments": [
+      {
+        "segment_id": "seg_0001",
+        "text": "This segment explains prepared source records for indexing.",
+        "char_start": 0,
+        "char_end": 58,
+        "locator": {
+          "section": "Transcript",
+          "timestamp_start_sec": 12.4,
+          "timestamp_end_sec": 18.9,
+          "source_ref": "youtube:example#t=12.4"
+        }
+      }
+    ]
+  },
+  "processing": {
+    "processor": "youtube_extractor",
+    "processor_version": "prepared-source-record-v1",
+    "parser": "caption",
+    "extraction_mode": "deterministic",
+    "fallback_used": false,
+    "fallback_chain": ["caption"],
+    "diagnostics": {
+      "transcript_source": "caption",
+      "segment_count": 1,
+      "text_length": 58
+    },
+    "warnings": [],
+    "errors": []
+  },
+  "quality": {
+    "passed": true,
+    "score": 0.92,
+    "flags": [],
+    "reasons": ["non_empty_text", "source_identity_present", "segment_locator_present"]
+  },
+  "lifecycle": {
+    "stale": false,
+    "stale_reason": null,
+    "invalidated_at": null
+  },
+  "created_at": "2026-05-04T00:00:00Z"
+}

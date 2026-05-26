@@ -41,3 +41,18 @@ def test_public_release_hygiene_flags_tracked_local_files_secret_literals_and_ab
     assert "tracked_dotenv" in kinds
     assert "openai_style_key" in kinds
     assert "absolute_user_path" in kinds
+
+
+def test_public_release_hygiene_flags_tracked_internal_process_records(tmp_path: Path):
+    payload = check_public_release_hygiene(
+        tmp_path,
+        tracked_files=[
+            "tasks/2026-05-17-public-cleanup.md",
+            "reviews/2026-05-17-public-cleanup-review.md",
+            "worklog/2026-05-17.md",
+        ],
+    )
+
+    assert payload["status"] == "failed"
+    assert payload["issueCount"] == 3
+    assert payload["issueCountsByKind"] == {"tracked_internal_process_record": 3}

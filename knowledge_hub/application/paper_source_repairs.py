@@ -5,6 +5,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from knowledge_hub.application.corpus_artifacts import (
+    find_corpus_entry_for_source,
+    inspect_corpus_artifact,
+    load_corpus_manifest,
+    public_corpus_artifact_diagnostic,
+)
 from knowledge_hub.document_memory import DocumentMemoryBuilder
 from knowledge_hub.papers.card_v2_builder import PaperCardV2Builder
 from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
@@ -98,6 +104,34 @@ def build_source_cleanup_rows_for_papers(
     return rows, missing_ids
 
 
+def _manifest_source_file_decision(decision: dict[str, str], *, config: Any, manifest: dict[str, Any]) -> dict[str, Any]:
+    paper_id = _clean_text(decision.get("paperId"))
+    entry = find_corpus_entry_for_source(paper_id, manifest)
+    if not entry:
+        return decision
+    if _clean_text(decision.get("oldPdfPath")) or _clean_text(decision.get("oldTextPath")):
+        return decision
+    artifact = inspect_corpus_artifact(entry, config=config)
+    status = _clean_text(artifact.get("status"))
+    if status != "ok":
+        return {
+            **decision,
+            "action": "attach_manifest_source_artifact",
+            "status": status or "missing_artifact",
+            "resolutionReason": _clean_text(artifact.get("reason")),
+            "artifact": artifact,
+        }
+    return {
+        **decision,
+        "action": "attach_manifest_source_artifact",
+        "status": "resolved",
+        "newPdfPath": _clean_text(artifact.get("_resolvedPath")),
+        "newTextPath": "",
+        "resolutionReason": "local corpus artifact matched the manifest",
+        "artifact": artifact,
+    }
+
+
 def run_source_cleanup_queue(
     *,
     sqlite_db,
@@ -141,7 +175,12 @@ def repair_paper_sources(
         paper_ids=paper_ids,
         default_parser=document_memory_parser,
     )
-    decisions = build_source_cleanup_plan(rows, sqlite_db=sqlite_db)
+    manifest = load_corpus_manifest()
+    cleanup_decisions = build_source_cleanup_plan(rows, sqlite_db=sqlite_db)
+    decisions = [
+        _manifest_source_file_decision(decision, config=config, manifest=manifest)
+        for decision in cleanup_decisions
+    ]
     counts = {"ok": 0, "blocked": 0, "failed": 0, "missing": len(missing_ids)}
     items: list[dict[str, Any]] = []
 
@@ -158,6 +197,7 @@ def repair_paper_sources(
             "oldTextPath": _clean_text(decision.get("oldTextPath")),
             "newPdfPath": _clean_text(decision.get("newPdfPath")),
             "newTextPath": _clean_text(decision.get("newTextPath")),
+            "artifact": public_corpus_artifact_diagnostic(dict(decision.get("artifact") or {})),
             "sourceApplied": False,
             "sourceChanged": False,
             "rebuildApplied": False,
@@ -167,8 +207,10 @@ def repair_paper_sources(
         decision_status = item["decisionStatus"]
         if action in {"exclude_until_manual_fix", "manual_review_required"} or (
             action == "relink_to_canonical" and decision_status != "resolved"
+        ) or (
+            action == "attach_manifest_source_artifact" and decision_status != "resolved"
         ):
-            item["repairStatus"] = "blocked"
+            item["repairStatus"] = decision_status if action == "attach_manifest_source_artifact" else "blocked"
             counts["blocked"] += 1
             items.append(item)
             continue
@@ -183,6 +225,19 @@ def repair_paper_sources(
                 summary = apply_source_cleanup_plan(sqlite_db=sqlite_db, decisions=[decision])
                 item["sourceApplied"] = bool(summary.get("applied"))
                 item["sourceChanged"] = bool(summary.get("applied"))
+            elif action == "attach_manifest_source_artifact":
+                existing = sqlite_db.get_paper(paper_id)
+                if not existing:
+                    item["repairStatus"] = "missing"
+                    counts["missing"] += 1
+                    items.append(item)
+                    continue
+                payload = dict(existing)
+                payload["pdf_path"] = item["newPdfPath"]
+                payload["text_path"] = item["newTextPath"]
+                sqlite_db.upsert_paper(payload)
+                item["sourceApplied"] = True
+                item["sourceChanged"] = True
             elif action == "keep_current_source":
                 item["sourceApplied"] = True
                 item["sourceChanged"] = False
@@ -194,7 +249,7 @@ def repair_paper_sources(
                     allow_external=allow_external,
                     llm_mode=llm_mode,
                 )
-                memory_row = dict(memory_builder.build_and_store(paper_id=paper_id) or {})
+                memory_row = dict(memory_builder.build_and_store(paper_id=paper_id, materialize_card=False) or {})
                 document_rows = list(
                     DocumentMemoryBuilder(sqlite_db, config=config).build_and_store_paper(
                         paper_id=paper_id,

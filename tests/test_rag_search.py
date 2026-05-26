@@ -8,6 +8,7 @@ import pytest
 
 from knowledge_hub.application.rag_reports import build_rag_ops_report
 from knowledge_hub.ai.rag import RAGSearcher
+from knowledge_hub.ai.rag_support import build_claim_native_context
 from knowledge_hub.ai.retrieval_fit import normalize_source_type
 from knowledge_hub.core.config import Config
 from knowledge_hub.core.models import SearchResult
@@ -1975,7 +1976,7 @@ def test_generate_answer_includes_claim_adjudication_in_payload_and_context(monk
     assert "summary=supported" in (llm.last_context or "")
 
 
-def test_claim_consensus_keeps_single_paper_lookup_claims_advisory_in_answer_verification(monkeypatch):
+def test_claim_consensus_for_weak_single_paper_lookup_forces_caution(monkeypatch):
     llm = FakeLLM()
     records = [
         {
@@ -2030,13 +2031,50 @@ def test_claim_consensus_keeps_single_paper_lookup_claims_advisory_in_answer_ver
     answer = searcher.generate_answer("What does this paper report on MMLU?", top_k=1, retrieval_mode="hybrid")
 
     assert captured["verification"]["claimWeakCount"] == 1
-    assert captured["verification"]["claimConsensusMode"] == "advisory"
-    assert captured["verification"]["needsCaution"] is False
-    assert captured["verification"]["status"] == "verified"
+    assert captured["verification"]["claimConsensusMode"] == "strict"
+    assert captured["verification"]["needsCaution"] is True
+    assert captured["verification"]["status"] == "caution"
     assert answer["answerVerification"]["claimWeakCount"] == 1
-    assert answer["answerVerification"]["claimConsensusMode"] == "advisory"
-    assert answer["answerVerification"]["needsCaution"] is False
-    assert answer["answerVerification"]["status"] == "verified"
+    assert answer["answerVerification"]["claimConsensusMode"] == "strict"
+    assert answer["answerVerification"]["needsCaution"] is True
+    assert answer["answerVerification"]["status"] == "caution"
+
+
+def test_claim_native_context_keeps_weak_claims_out_of_strict_verified_section():
+    context = build_claim_native_context(
+        claim_cards=[
+            {
+                "claimCardId": "claim-supported",
+                "summaryText": "Supported MMLU result.",
+                "sourceKind": "paper",
+                "sourceId": "paper:a",
+                "status": "supported",
+                "trustLevel": "high",
+                "anchorExcerpts": ["MMLU result is supported."],
+            },
+            {
+                "claimCardId": "claim-weak",
+                "summaryText": "Unsupported MMLU 99.9 result.",
+                "sourceKind": "paper",
+                "sourceId": "paper:a",
+                "status": "supported",
+                "trustLevel": "high",
+                "anchorExcerpts": ["The excerpt mentions MMLU but no score."],
+            },
+        ],
+        claim_alignment=[],
+        claim_verification=[
+            {"claimCardId": "claim-supported", "status": "supported"},
+            {"claimCardId": "claim-weak", "status": "weakly_supported"},
+        ],
+    )
+
+    strict_section = context.split("=== Non-Strict Claim Diagnostics ===", 1)[0]
+    diagnostic_section = context.split("=== Non-Strict Claim Diagnostics ===", 1)[1]
+    assert "=== Strict Verified Claims ===" in context
+    assert "Supported MMLU result." in strict_section
+    assert "Unsupported MMLU 99.9 result." not in strict_section
+    assert "Unsupported MMLU 99.9 result." in diagnostic_section
 
 
 def test_search_prefers_vector_db_fts_when_available():
@@ -2724,7 +2762,9 @@ def test_generate_answer_rewrites_when_conflict_language_missing(monkeypatch):
     assert result["answerRewrite"]["finalAnswerSource"] == "conservative_fallback"
     assert result["initialAnswerVerification"]["conflictMentioned"] is False
     assert result["answerVerification"]["conflictMentioned"] is True
-    assert result["answerVerification"]["needsCaution"] is False
+    assert result["answerVerification"]["claimWeakCount"] == 1
+    assert result["answerVerification"]["needsCaution"] is True
+    assert result["answerVerification"]["status"] == "caution"
     assert any(
         "answer rewrite skipped: rejected belief conflict requires conservative fallback" in warning
         or "answer rewrite skipped: caution requires conservative fallback" in warning

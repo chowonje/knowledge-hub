@@ -32,6 +32,10 @@ pip install -e ".[ollama]"
 khub doctor
 khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
+khub inspect corpus --json
+khub compare "MCP tools and resources contract" --json
+khub trace "Transformer의 핵심 아이디어는?" --source paper --json
+khub trace --from-json ./ask-result.json --save-registry --json
 ```
 
 실제 코퍼스를 넣고 representative result를 확인하려면 최소 1개 source ingest 후 indexing을 먼저 수행하세요.
@@ -61,6 +65,7 @@ The default surface is limited to:
 - local ingestion and indexing
 - grounded search and ask
 - evidence review
+- evidence-substrate inspection, comparison, and trace facades
 - read-only task-context assembly
 - policy / approval / provenance
 
@@ -82,9 +87,10 @@ The default `khub --help` surface now favors the representative core loop. Opera
 
 - **Grounded retrieval** - vault, paper, web에서 evidence를 찾아 질의응답
 - **Task context assembly** - repo context까지 읽기 전용으로 묶어 Codex-style assistance 지원
+- **Evidence registry** - 명시적으로 저장한 packet/context/trace lookup record를 `khub://packet/{id}`와 `khub://context/{id}`로 다시 확인
 - **Paper ingestion** - Semantic Scholar + arXiv 기반 검색, 다운로드, 요약, 인덱싱
 - **Obsidian 연결** - vault를 canonical memory로 유지하고 결과를 writeback
-- **Notebook workbench bridge** - Open Notebook에 topic bundle export
+- **Labs workbench helpers** - local-only notebook/workbench search/chat helpers stay behind labs MCP profiles
 - **MCP 서버** - 기본 product surface는 retrieval-assistant-first, 고급 기능은 labs profile로 노출
 
 ## Extended Setup and Product Flow
@@ -128,7 +134,7 @@ khub status
 khub discover "large language model agent" -n 3
 
 # 5. 수집 결과 확인
-khub paper list
+khub papers list
 
 # 6. 인덱싱
 khub index
@@ -140,12 +146,17 @@ khub search "attention mechanism"
 khub ask "Transformer의 핵심 아이디어는?"
 
 # 9. paper reading surface
-khub paper summary --paper-id 2501.06322
-khub paper evidence --paper-id 2501.06322
-khub paper memory --paper-id 2501.06322
-khub paper related --paper-id 2501.06322
+khub papers summary --paper-id 2501.06322
+khub papers evidence --paper-id 2501.06322
+khub papers memory --paper-id 2501.06322
+khub papers related --paper-id 2501.06322
+```
 
-# 10. Codex-style read-only task context
+### Advanced / Codex handoff
+
+`khub agent context` is a directly invokable hidden/advanced CLI path, not part of the default top-level help. The default MCP-side equivalent is `build_task_context`.
+
+```bash
 khub agent context "how should I refactor the RAG flow?" --repo-path .
 ```
 
@@ -167,7 +178,7 @@ khub labs ops --help
 khub labs crawl youtube-ingest --url "https://youtu.be/<video-id>" --topic "agents"
 ```
 
-MCP에서도 labs 도구는 기본적으로 숨겨지며, 필요하면 profile을 명시합니다.
+MCP에서도 labs/build/agentic/ingest-heavy 도구는 기본적으로 숨겨지며, 필요하면 profile을 명시합니다. Default profile은 read/retrieval/context and paper lookup 중심입니다.
 
 ```bash
 export KHUB_MCP_PROFILE=default  # default | labs | all
@@ -491,30 +502,35 @@ khub discover "AI agent" --judge --json
 
 `paper judge`는 기본 retrieval 코어가 아니라, 논문 discovery 입력단에서만 쓰는 선택형 필터입니다. 공식 opt-in은 호출별 `--judge`와 MCP `discover_and_ingest(judge_enabled=true)`뿐이며, 전역 config로 기본 on/off를 바꾸는 제품 계약은 현재 두지 않습니다. `allow_external=false`가 기본이고, 외부 judge가 허용되지 않거나 LLM judge를 쓸 수 없으면 rule-only fallback으로만 동작합니다.
 
-judge를 켜서 discovery를 실행하면 keep/skip 판단이 로컬 `~/.khub/paper_judge_events.jsonl`에 자동 기록됩니다. 사람이 나중에 판단을 뒤집고 싶으면 `khub paper feedback <paper_id> --label keep|skip`으로 수동 피드백을 남겨 future calibration 데이터로 사용할 수 있습니다.
+judge를 켜서 discovery를 실행하면 keep/skip 판단이 로컬 `~/.khub/paper_judge_events.jsonl`에 자동 기록됩니다. 사람이 나중에 판단을 뒤집고 싶으면 hidden operator path인 `khub paper feedback <paper_id> --label keep|skip`으로 수동 피드백을 남겨 future calibration 데이터로 사용할 수 있습니다.
 
-### `khub paper` - paper reading and maintenance
+### `khub papers` - paper reading surface
 
 ```bash
 # user-facing reading surface
-khub paper summary --paper-id 2401.12345
-khub paper evidence --paper-id 2401.12345
-khub paper memory --paper-id 2401.12345
-khub paper related --paper-id 2401.12345
+khub papers summary --paper-id 2401.12345
+khub papers evidence --paper-id 2401.12345
+khub papers memory --paper-id 2401.12345
+khub papers related --paper-id 2401.12345
 
-# maintenance / ingestion helpers
-khub paper list
-khub paper info 2401.12345
-khub paper download 2401.12345
-khub paper translate 2401.12345
-khub paper summarize 2401.12345
-khub paper summarize-all --bad-only
-khub paper sync-keywords
-khub paper build-concepts
-khub paper normalize-concepts
+# public ingestion/materialization helpers
+khub papers list
+khub papers info 2401.12345
+khub papers download 2401.12345
+khub papers translate 2401.12345
+khub papers summarize 2401.12345
 ```
 
-`summary|evidence|memory|related`는 현재 promoted reading surface입니다. `summarize`와 `summarize-all`은 artifact 생성/갱신 쪽 maintenance surface입니다.
+`summary|evidence|memory|related`는 현재 promoted reading surface입니다. `khub paper`는 hidden compatibility alias이며, feedback/sync/concept/repair/batch remediation commands는 operator-only로 직접 실행 가능합니다.
+
+Paper source artifacts for live compare and repair-source are manifest-backed
+local corpus files. PDFs/full text stay outside git, while
+`eval/knowledgeos/fixtures/corpus_manifest.json` records expected filenames,
+hashes, byte lengths, provenance URLs, and corpus tiers. Hidden
+`khub paper corpus-bootstrap` can plan missing local corpus artifacts and can
+download selected artifacts only with explicit `--apply --allow-network`; it
+verifies hashes before writing to `papers_dir` and does not attach rows,
+rebuild derivatives, or run in eval/CI by default.
 
 ### `khub explore` - 학술 탐색
 
@@ -649,8 +665,8 @@ khub labs crawl pending reject --id 13
 
 주의:
 - 기본 MCP surface는 retrieval-assistant-first product surface에 맞춰 노출됩니다.
-- learning / advanced crawl / operator 도구는 기본 discovery에 항상 나타나는 surface가 아닙니다.
-- 비핵심 도구는 `KHUB_MCP_PROFILE=labs` 또는 `KHUB_MCP_PROFILE=all`일 때만 노출되는 것으로 문서화합니다.
+- learning / advanced crawl / operator 도구는 default profile에서 discovery되거나 직접 호출되지 않습니다.
+- 비핵심 도구는 `KHUB_MCP_PROFILE=labs` 또는 `KHUB_MCP_PROFILE=all`일 때만 노출/호출되는 것으로 문서화합니다.
 
 Cursor 예시 설정:
 
@@ -663,10 +679,21 @@ Cursor 예시 설정:
 }
 ```
 
-대표 MCP 도구 묶음:
-- retrieval / answer: `search_knowledge`, `ask_knowledge`, `build_task_context`, `run_agentic_query`
-- paper / ingest: `discover_and_ingest`, `get_paper_detail`, `paper_lookup_and_summarize`, `run_paper_ingest_flow`
-- crawl / ko-note / ops: `crawl_web_ingest`, `crawl_pending_*`, `run_learning_pipeline`, `ops_report` 계열
+Default MCP profile:
+- retrieval / answer / context: `search_knowledge`, `ask_knowledge`, `build_task_context`
+- paper lookup / read helpers: `search_papers`, `get_paper_detail`, `paper_lookup_and_summarize`, citation/reference helpers, and paper-memory read helpers
+
+Labs/all MCP profiles:
+- agentic / heavy ingest: `run_agentic_query`, `discover_and_ingest`, `run_paper_ingest_flow`
+- crawl / learning / ops: `crawl_web_ingest`, `crawl_pending_*`, `run_learning_pipeline`, `rag_report`, `ops_action_*`
+- build/job/workbench helpers: paper build/index tools, `mcp_job_*`, and local `notebook_workbench_*`
+
+MCP resources:
+- `khub://corpus/status`, `khub://corpus/contract`
+
+MCP resource templates:
+- `khub://source/{source_id}`, `khub://chunk/{chunk_id}`
+- `khub://packet/{packet_id}`, `khub://context/{context_pack_id}` for explicitly persisted registry records
 
 비동기 호출 규칙:
 - 장시간 작업은 보통 `queued|running|ok|blocked|failed` 상태를 반환합니다.
@@ -682,14 +709,14 @@ Cursor 예시 설정:
 | 명령 | LLM 필요 | 임베딩 필요 | Obsidian 필요 | API 키 |
 |---|---|---|---|---|
 | `khub discover` | O (번역/요약) | O (인덱싱) | 선택 | 프로바이더에 따라 |
-| `khub paper list/info` | - | - | - | - |
-| `khub paper translate` | O | - | - | 프로바이더에 따라 |
-| `khub paper summarize` | O | - | - | 프로바이더에 따라 |
+| `khub papers list/info` | - | - | - | - |
+| `khub papers translate` | O | - | - | 프로바이더에 따라 |
+| `khub papers summarize` | O | - | - | 프로바이더에 따라 |
 | `khub index` | - | O | 선택(개념 노트) | 프로바이더에 따라 |
 | `khub search/ask` | O (ask만) | O | - | 프로바이더에 따라 |
 | `khub explore *` | - | - | - | - (Semantic Scholar 무료) |
-| `khub paper sync-keywords` | O | - | O | 프로바이더에 따라 |
-| `khub paper build-concepts` | O | - | O | 프로바이더에 따라 |
+| `khub paper sync-keywords` (hidden operator) | O | - | O | 프로바이더에 따라 |
+| `khub paper build-concepts` (hidden operator) | O | - | O | 프로바이더에 따라 |
 | `khub status` | - | - | - | - |
 
 ## Troubleshooting

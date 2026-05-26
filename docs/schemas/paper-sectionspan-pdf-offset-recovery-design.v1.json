@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.sectionspan-pdf-offset-recovery-design.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "designPrinciples",
+    "warnings",
+    "recoveryPlanRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.sectionspan-pdf-offset-recovery-design.v1" },
+    "status": { "type": "string", "enum": ["design_ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "sectionspanSourceAuthorityOptionsReport",
+        "sectionspanStrictPromotionDesignReport",
+        "sectionspanSourceAuthorityOptionsSchema",
+        "sectionspanStrictPromotionDesignSchema"
+      ],
+      "properties": {
+        "sectionspanSourceAuthorityOptionsReport": { "type": "string" },
+        "sectionspanStrictPromotionDesignReport": { "type": "string" },
+        "sectionspanSourceAuthorityOptionsSchema": { "type": "string" },
+        "sectionspanStrictPromotionDesignSchema": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputDesignRows",
+        "recoveryPlanRows",
+        "plannedRows",
+        "executedRows",
+        "originalPdfOffsetRecoveredRows",
+        "strictPromotionReadyRows",
+        "runtimePromotionAllowedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "recommendedRecoveryOptionPresent",
+        "schemaViolationCount",
+        "unsafeUpstreamFlagCount",
+        "bySectionType",
+        "byPaper",
+        "byRecoveryStatus"
+      ],
+      "properties": {
+        "inputDesignRows": { "type": "integer", "minimum": 0 },
+        "recoveryPlanRows": { "type": "integer", "minimum": 0 },
+        "plannedRows": { "type": "integer", "minimum": 0 },
+        "executedRows": { "const": 0 },
+        "originalPdfOffsetRecoveredRows": { "const": 0 },
+        "strictPromotionReadyRows": { "const": 0 },
+        "runtimePromotionAllowedRows": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "recommendedRecoveryOptionPresent": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "bySectionType": { "type": "object" },
+        "byPaper": { "type": "object" },
+        "byRecoveryStatus": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "pdfOffsetRecoveryDesignReady",
+        "pdfOffsetRecoveryImplemented",
+        "originalPdfOffsetRecovered",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "pdfOffsetRecoveryDesignReady": { "type": "boolean" },
+        "pdfOffsetRecoveryImplemented": { "const": false },
+        "originalPdfOffsetRecovered": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": { "type": "string", "enum": ["pdf_offset_recovery_design_ready_not_executed", "blocked"] },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "authorityDecisionMade",
+        "pdfOffsetRecoveryImplemented",
+        "originalPdfOffsetRecovered",
+        "strictPromotionImplemented",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "authorityDecisionMade": { "const": false },
+        "pdfOffsetRecoveryImplemented": { "const": false },
+        "originalPdfOffsetRecovered": { "const": false },
+        "strictPromotionImplemented": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "designPrinciples": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "recoveryPlanRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "recovery_plan_id",
+          "source_design_id",
+          "source_review_card_id",
+          "source_sectionspan_candidate_id",
+          "paper_id",
+          "candidate_text",
+          "section_label",
+          "section_title",
+          "section_type",
+          "section_level",
+          "canonical_span",
+          "current_authority_status",
+          "recovery_status",
+          "recovery_strategy",
+          "required_inputs",
+          "matching_requirements",
+          "stop_conditions",
+          "planned_output_contract",
+          "evidence_tier",
+          "original_pdf_offset_recovered",
+          "strict_promotion_ready",
+          "runtime_promotion_allowed",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "recovery_plan_id": { "type": "string" },
+          "source_design_id": { "type": "string" },
+          "source_review_card_id": { "type": "string" },
+          "source_sectionspan_candidate_id": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "candidate_text": { "type": "string" },
+          "section_label": { "type": "string" },
+          "section_title": { "type": "string" },
+          "section_type": {
+            "type": "string",
+            "enum": ["numbered_section", "abstract", "backmatter", "named_section"]
+          },
+          "section_level": { "type": "integer", "minimum": 0 },
+          "canonical_span": { "type": "object" },
+          "current_authority_status": { "type": "object" },
+          "recovery_status": { "const": "planned_not_executed" },
+          "recovery_strategy": { "type": "string" },
+          "required_inputs": { "type": "array", "items": { "type": "string" } },
+          "matching_requirements": { "type": "array", "items": { "type": "string" } },
+          "stop_conditions": { "type": "array", "items": { "type": "string" } },
+          "planned_output_contract": { "type": "object" },
+          "evidence_tier": { "const": "sectionspan_pdf_offset_recovery_design_only" },
+          "original_pdf_offset_recovered": { "const": false },
+          "strict_promotion_ready": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

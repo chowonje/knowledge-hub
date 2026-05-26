@@ -1530,6 +1530,7 @@ def crawl_pending_reject(ctx, pending_id, as_json):
 @click.option("--limit", type=int, default=0, show_default=True, help="처리 상한(0=전체)")
 @click.option("--workers", type=int, default=1, show_default=True, help="병렬 워커 수(현재 각 워커는 별도 프로세스)")
 @click.option("--include-unrated", is_flag=True, default=False, help="quality 메타가 없는 기존 노트도 포함")
+@click.option("--prepared-metadata-only", is_flag=True, default=False, help="임베딩 없이 prepared-source metadata만 기존 web 벡터에 backfill")
 @click.option(
     "--shard-index",
     type=int,
@@ -1552,6 +1553,7 @@ def crawl_reindex_approved(
     limit,
     workers,
     include_unrated,
+    prepared_metadata_only,
     shard_index,
     shard_total,
     as_json,
@@ -1577,6 +1579,7 @@ def crawl_reindex_approved(
             include_unrated=bool(include_unrated),
             shard_index=shard_index_n,
             shard_total=shard_total_n,
+            prepared_metadata_only=bool(prepared_metadata_only),
         )
     else:
         worker_results: list[dict[str, Any]] = []
@@ -1592,6 +1595,7 @@ def crawl_reindex_approved(
                 topic=topic_safe,
                 limit=cmd_base_limit,
                 include_unrated=bool(include_unrated),
+                prepared_metadata_only=bool(prepared_metadata_only),
             )
             process = subprocess.Popen(
                 cmd,
@@ -1628,6 +1632,9 @@ def crawl_reindex_approved(
             "scanned": sum(int(item.get("scanned", 0)) for item in worker_results),
             "selected": sum(int(item.get("selected", 0)) for item in worker_results),
             "indexedChunks": sum(int(item.get("indexedChunks", 0)) for item in worker_results),
+            "preparedMetadataOnly": bool(prepared_metadata_only),
+            "preparedRecordsCreated": sum(int(item.get("preparedRecordsCreated", 0)) for item in worker_results),
+            "vectorMetadataUpdated": sum(int(item.get("vectorMetadataUpdated", 0)) for item in worker_results),
             "includeUnrated": bool(include_unrated),
             "shardIndex": 0,
             "shardTotal": workers_n,

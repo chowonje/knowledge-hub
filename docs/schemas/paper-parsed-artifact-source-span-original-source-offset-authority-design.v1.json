@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-source-span-original-source-offset-authority-design.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "input", "counts", "gate", "policy", "warnings", "rows"],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-source-span-original-source-offset-authority-design.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "policyGateReportPath",
+        "policyGateSchema",
+        "papersDir",
+        "parsedRoot",
+        "sectionspanCandidateReportPath",
+        "figureCaptionCandidateReportPath",
+        "requestedPaperIds"
+      ],
+      "properties": {
+        "policyGateReportPath": { "type": "string" },
+        "policyGateSchema": { "type": "string" },
+        "papersDir": { "type": "string" },
+        "parsedRoot": { "type": "string" },
+        "sectionspanCandidateReportPath": { "type": "string" },
+        "figureCaptionCandidateReportPath": { "type": "string" },
+        "requestedPaperIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "targetRows",
+        "offsetAuthorityDesignCandidateOnlyRows",
+        "blockedMissingSourceHashRows",
+        "blockedMissingSourceFileRows",
+        "blockedMissingLocatorContextRows",
+        "blockedMissingTextSurfaceRows",
+        "blockedSourceTextUnavailableRows",
+        "blockedNonUniqueTextMatchRows",
+        "blockedRequiresManualOrLaterExtractorReviewRows",
+        "blockedHashBasisUnavailableRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byDesignStatus",
+        "byRecommendedAction"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "targetRows": { "type": "integer", "minimum": 0 },
+        "offsetAuthorityDesignCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingSourceHashRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingSourceFileRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingLocatorContextRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingTextSurfaceRows": { "type": "integer", "minimum": 0 },
+        "blockedSourceTextUnavailableRows": { "type": "integer", "minimum": 0 },
+        "blockedNonUniqueTextMatchRows": { "type": "integer", "minimum": 0 },
+        "blockedRequiresManualOrLaterExtractorReviewRows": { "type": "integer", "minimum": 0 },
+        "blockedHashBasisUnavailableRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byArtifactType": { "type": "object" },
+        "byDesignStatus": { "type": "object" },
+        "byRecommendedAction": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "offsetAuthorityDesignComplete",
+        "readyForStrictEvidenceDesignReview",
+        "strictEvidenceCreated",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimeMutationAllowed",
+        "schemaViolations",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "offsetAuthorityDesignComplete": { "type": "boolean" },
+        "readyForStrictEvidenceDesignReview": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "strictEligibleMutation",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "design_row_id",
+          "policy_gate_row_id",
+          "sourceSpanId",
+          "paper_id",
+          "artifact_type",
+          "design_status",
+          "design_blockers",
+          "recommended_action"
+        ],
+        "properties": {
+          "design_row_id": { "type": "string" },
+          "policy_gate_row_id": { "type": "string" },
+          "sourceSpanId": { "type": "string" },
+          "candidateRecordId": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "artifact_type": { "type": "string" },
+          "source_candidate_id": { "type": "string" },
+          "sourceContentHash": { "type": "string" },
+          "source_file": { "type": "string" },
+          "text_surface": { "type": "string" },
+          "locator": { "type": "object" },
+          "design_status": { "type": "string" },
+          "design_blockers": { "type": "array", "items": { "type": "string" } },
+          "proposed_chars": { "type": "object" },
+          "source_resolution": { "type": "object" },
+          "recommended_action": { "type": "string" },
+          "strictEligible": { "const": false },
+          "strictEvidenceCreated": { "const": false },
+          "runtimeEvidenceCreated": { "const": false },
+          "sourceSpanUpdatedRows": { "const": 0 }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

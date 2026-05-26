@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-review.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "sampleBlockers",
+    "readyDesignRows",
+    "ambiguousDisambiguationRows",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-source-span-strict-evidence-design-review.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "offsetAuthorityDesignReportPath",
+        "offsetAuthorityDesignSchema",
+        "requestedPaperIds"
+      ],
+      "properties": {
+        "offsetAuthorityDesignReportPath": { "type": "string" },
+        "offsetAuthorityDesignSchema": { "type": "string" },
+        "requestedPaperIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRows",
+        "readyForStrictEvidenceDesignReviewRows",
+        "blockedNonUniqueTextMatchRows",
+        "blockedMissingExpectedSubstringHashRows",
+        "blockedMissingCharsBasisRows",
+        "blockedMissingCharsOffsetsRows",
+        "blockedRequiresManualOrLaterExtractorReviewRows",
+        "blockedUnsupportedArtifactTypeRows",
+        "sourceSpanUpdatedRows",
+        "strictEvidenceCreatedRows",
+        "citationGradeEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "schemaViolationCount",
+        "byPaperId",
+        "byArtifactType",
+        "byReviewStatus",
+        "byRecommendedAction"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "readyForStrictEvidenceDesignReviewRows": { "type": "integer", "minimum": 0 },
+        "blockedNonUniqueTextMatchRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingExpectedSubstringHashRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingCharsBasisRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingCharsOffsetsRows": { "type": "integer", "minimum": 0 },
+        "blockedRequiresManualOrLaterExtractorReviewRows": { "type": "integer", "minimum": 0 },
+        "blockedUnsupportedArtifactTypeRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "citationGradeEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byPaperId": { "type": "object" },
+        "byArtifactType": { "type": "object" },
+        "byReviewStatus": { "type": "object" },
+        "byRecommendedAction": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "designReviewPacketReady",
+        "disambiguationQueuePresent",
+        "strictEvidenceCreated",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimeMutationAllowed",
+        "schemaViolations",
+        "decision",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "designReviewPacketReady": { "type": "boolean" },
+        "disambiguationQueuePresent": { "type": "boolean" },
+        "strictEvidenceCreated": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "decision": { "type": "string" },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "strictEligibleMutation",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "sampleBlockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["blocker", "count"],
+        "properties": {
+          "blocker": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "readyDesignRows": { "type": "array", "items": { "type": "object" } },
+    "ambiguousDisambiguationRows": { "type": "array", "items": { "type": "object" } },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "review_row_id",
+          "design_row_id",
+          "paper_id",
+          "artifact_type",
+          "review_status",
+          "review_blockers",
+          "recommended_action"
+        ],
+        "properties": {
+          "review_row_id": { "type": "string" },
+          "design_row_id": { "type": "string" },
+          "policy_gate_row_id": { "type": "string" },
+          "sourceSpanId": { "type": "string" },
+          "candidateRecordId": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "artifact_type": { "type": "string" },
+          "source_candidate_id": { "type": "string" },
+          "sourceContentHash": { "type": "string" },
+          "text_surface": { "type": "string" },
+          "design_status": { "type": "string" },
+          "review_status": { "type": "string" },
+          "review_blockers": { "type": "array", "items": { "type": "string" } },
+          "proposed_chars": { "type": "object" },
+          "recommended_action": { "type": "string" },
+          "readyForStrictEvidenceDesignReview": { "type": "boolean" },
+          "disambiguationRequired": { "type": "boolean" },
+          "strictEligible": { "const": false },
+          "strictEvidenceCreated": { "const": false },
+          "runtimeEvidence": { "const": false },
+          "sourceSpanUpdatedRows": { "const": 0 }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.complex-qa-supplied-strict-evidence-synthetic-grading-fixture-runner.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "runner",
+    "inputs",
+    "counts",
+    "policy",
+    "warnings",
+    "semanticViolations",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.complex-qa-supplied-strict-evidence-synthetic-grading-fixture-runner.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "runner": {
+      "type": "object",
+      "required": ["name", "version", "mode", "purpose", "nextRecommendedTranche"],
+      "properties": {
+        "name": { "const": "complex-qa-supplied-strict-evidence-synthetic-grading-fixture-runner" },
+        "version": { "type": "string" },
+        "mode": { "const": "report_only_synthetic_fixture_runner" },
+        "purpose": { "type": "string" },
+        "nextRecommendedTranche": {
+          "const": "complex QA supplied strict-evidence grader baseline runner"
+        }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "graderDesignReport",
+        "graderDesignReportSchema",
+        "graderDesignStatus",
+        "graderDesignRows",
+        "graderDesignReadyForFutureGradingRows"
+      ],
+      "properties": {
+        "graderDesignReport": { "type": "string" },
+        "graderDesignReportSchema": {
+          "const": "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-grader-design.v1"
+        },
+        "graderDesignStatus": { "type": "string", "enum": ["ok", "blocked", ""] },
+        "graderDesignRows": { "type": "integer", "minimum": 0 },
+        "graderDesignReadyForFutureGradingRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "designRows",
+        "rubricDesignRows",
+        "fixtureRows",
+        "syntheticGoodFixtureRows",
+        "negativeFixtureRows",
+        "expectedPassRows",
+        "expectedFailRows",
+        "expectedBlockedRows",
+        "actualPassRows",
+        "actualFailRows",
+        "actualBlockedRows",
+        "expectationMatchedRows",
+        "expectationMismatchRows",
+        "suppliedAnswerRows",
+        "suppliedCitationRows",
+        "syntheticStrictEvidenceRefRows",
+        "readyForRealAnswerQualityComparisonRows",
+        "deterministicFixtureVerdictRows",
+        "answerGeneratedRows",
+        "answerQualityScoreComputedRows",
+        "scoreComputedRows",
+        "llmCallRows",
+        "judgeModelCallRows",
+        "answerPathInvokedRows",
+        "searchIndexQueriedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "vaultScanRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "reindexOrReembedRows",
+        "schemaViolationCount",
+        "expectationMatchRate",
+        "byQuestionCategory",
+        "byAnswerabilityExpectation",
+        "byFixtureKind",
+        "byExpectedFixtureVerdict",
+        "byActualFixtureVerdict"
+      ],
+      "properties": {
+        "designRows": { "type": "integer", "minimum": 0 },
+        "rubricDesignRows": { "type": "integer", "minimum": 0 },
+        "fixtureRows": { "type": "integer", "minimum": 0 },
+        "syntheticGoodFixtureRows": { "type": "integer", "minimum": 0 },
+        "negativeFixtureRows": { "type": "integer", "minimum": 0 },
+        "expectedPassRows": { "type": "integer", "minimum": 0 },
+        "expectedFailRows": { "type": "integer", "minimum": 0 },
+        "expectedBlockedRows": { "type": "integer", "minimum": 0 },
+        "actualPassRows": { "type": "integer", "minimum": 0 },
+        "actualFailRows": { "type": "integer", "minimum": 0 },
+        "actualBlockedRows": { "type": "integer", "minimum": 0 },
+        "expectationMatchedRows": { "type": "integer", "minimum": 0 },
+        "expectationMismatchRows": { "const": 0 },
+        "suppliedAnswerRows": { "type": "integer", "minimum": 0 },
+        "suppliedCitationRows": { "type": "integer", "minimum": 0 },
+        "syntheticStrictEvidenceRefRows": { "type": "integer", "minimum": 0 },
+        "readyForRealAnswerQualityComparisonRows": { "type": "integer", "minimum": 0 },
+        "deterministicFixtureVerdictRows": { "type": "integer", "minimum": 0 },
+        "answerGeneratedRows": { "const": 0 },
+        "answerQualityScoreComputedRows": { "const": 0 },
+        "scoreComputedRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "searchIndexQueriedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "expectationMatchRate": { "const": 1.0 },
+        "byQuestionCategory": { "type": "object" },
+        "byAnswerabilityExpectation": { "type": "object" },
+        "byFixtureKind": { "type": "object" },
+        "byExpectedFixtureVerdict": { "type": "object" },
+        "byActualFixtureVerdict": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "syntheticFixtureOnly",
+        "suppliedAnswerOnly",
+        "syntheticStrictEvidenceRefsOnly",
+        "strictEvidenceReadOnly",
+        "deterministicFixtureVerdictRun",
+        "questionExecutionRun",
+        "answerGenerationRun",
+        "answerQualityScoringRun",
+        "scoreComputed",
+        "llmCalls",
+        "judgeModelCalls",
+        "answerPathChanged",
+        "answerPathInvoked",
+        "searchIndexQueried",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "runtimeEvidenceCreated",
+        "citationEvidenceCreated",
+        "strictEvidenceCreated",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "syntheticFixtureOnly": { "const": true },
+        "suppliedAnswerOnly": { "const": true },
+        "syntheticStrictEvidenceRefsOnly": { "const": true },
+        "strictEvidenceReadOnly": { "const": true },
+        "deterministicFixtureVerdictRun": { "const": true },
+        "questionExecutionRun": { "const": false },
+        "answerGenerationRun": { "const": false },
+        "answerQualityScoringRun": { "const": false },
+        "scoreComputed": { "const": false },
+        "llmCalls": { "const": false },
+        "judgeModelCalls": { "const": false },
+        "answerPathChanged": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "searchIndexQueried": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "semanticViolations": {
+      "type": "array",
+      "maxItems": 0,
+      "items": { "type": "string" }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "fixtureId",
+          "questionId",
+          "paperIds",
+          "questionCategory",
+          "expectedEvidenceType",
+          "answerabilityExpectation",
+          "sourceDesignExpectation",
+          "readyForAnswerQualityComparison",
+          "readyForSyntheticFixtureComparison",
+          "fixtureKind",
+          "fixturePurpose",
+          "requiredGraderInputs",
+          "categorySpecificChecks",
+          "hardFailRules",
+          "syntheticStrictEvidenceRefs",
+          "suppliedAnswer",
+          "suppliedCitations",
+          "triggeredHardFailRules",
+          "expectedFixtureVerdict",
+          "actualFixtureVerdict",
+          "verdictMatched",
+          "graderChecksApplied",
+          "failureReasons",
+          "riskNotes",
+          "answerGenerated",
+          "answerQualityScoreComputed",
+          "scoreComputed",
+          "llmCall",
+          "judgeModelCall",
+          "answerPathInvoked",
+          "searchIndexQueried",
+          "databaseMutation",
+          "indexMutation",
+          "reindexOrReembed",
+          "vaultScan",
+          "runtimeEvidenceCreated",
+          "citationEvidenceCreated",
+          "strictEvidenceCreated"
+        ],
+        "properties": {
+          "fixtureId": { "type": "string", "minLength": 1 },
+          "questionId": { "type": "string", "minLength": 1 },
+          "paperIds": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "questionCategory": {
+            "type": "string",
+            "enum": [
+              "table_numeric_qa",
+              "equation_citation_qa",
+              "figure_caption_qa",
+              "method_comparison_qa",
+              "limitation_qa",
+              "appendix_table_lookup_qa"
+            ]
+          },
+          "expectedEvidenceType": {
+            "type": "string",
+            "enum": [
+              "table_cell_numeric",
+              "equation_source_span",
+              "figure_caption_source_span",
+              "cross_paper_method_spans",
+              "limitation_section_span",
+              "appendix_table_cell"
+            ]
+          },
+          "answerabilityExpectation": {
+            "type": "string",
+            "enum": [
+              "answerable",
+              "expected_no_answer",
+              "blocked_until_structured_evidence"
+            ]
+          },
+          "sourceDesignExpectation": {
+            "type": "string",
+            "enum": [
+              "not_run_expected_no_answer",
+              "blocked_missing_strict_evidence",
+              "eligible_for_future_grading"
+            ]
+          },
+          "readyForAnswerQualityComparison": { "type": "boolean" },
+          "readyForSyntheticFixtureComparison": { "type": "boolean" },
+          "fixtureKind": {
+            "type": "string",
+            "enum": [
+              "synthetic_good_strict_evidence_answer",
+              "synthetic_unsupported_claim",
+              "synthetic_missing_citation",
+              "synthetic_missing_strict_evidence",
+              "synthetic_expected_no_answer_answered"
+            ]
+          },
+          "fixturePurpose": { "type": "string", "minLength": 1 },
+          "requiredGraderInputs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "categorySpecificChecks": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "hardFailRules": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "syntheticStrictEvidenceRefs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "suppliedAnswer": { "type": "string" },
+          "suppliedCitations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["claimId", "evidenceRef", "citationRole"],
+              "properties": {
+                "claimId": { "type": "string", "minLength": 1 },
+                "evidenceRef": { "type": "string", "minLength": 1 },
+                "citationRole": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": true
+            }
+          },
+          "triggeredHardFailRules": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "expectedFixtureVerdict": { "type": "string", "enum": ["pass", "fail", "blocked"] },
+          "actualFixtureVerdict": { "type": "string", "enum": ["pass", "fail", "blocked"] },
+          "verdictMatched": { "const": true },
+          "graderChecksApplied": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "failureReasons": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "riskNotes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "answerGenerated": { "const": false },
+          "answerQualityScoreComputed": { "const": false },
+          "scoreComputed": { "const": false },
+          "llmCall": { "const": false },
+          "judgeModelCall": { "const": false },
+          "answerPathInvoked": { "const": false },
+          "searchIndexQueried": { "const": false },
+          "databaseMutation": { "const": false },
+          "indexMutation": { "const": false },
+          "reindexOrReembed": { "const": false },
+          "vaultScan": { "const": false },
+          "runtimeEvidenceCreated": { "const": false },
+          "citationEvidenceCreated": { "const": false },
+          "strictEvidenceCreated": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    },
+    "reportPaths": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

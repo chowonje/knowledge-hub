@@ -9,6 +9,7 @@ from knowledge_hub.ai.paper_query_plan import (
     build_rule_query_plan,
     classify_paper_family,
 )
+from knowledge_hub.domain.ai_papers.lookup import extract_compare_title_candidates
 
 
 class DummySQLite:
@@ -345,6 +346,42 @@ class RepresentativeFilterSQLite(DummySQLite):
         return []
 
 
+class AmbiguousShortAliasLookupSQLite(DummySQLite):
+    def search_papers(self, query, limit=5):
+        _ = limit
+        token = str(query or "").strip()
+        rows = {
+            "CNN": {"paper_id": "local-cnn-alias", "title": "CNN"},
+            "RAG": {"paper_id": "local-rag-alias", "title": "RAG"},
+            "GPT": {"paper_id": "local-gpt-alias", "title": "GPT"},
+        }
+        row = rows.get(token)
+        return [row] if row else []
+
+    def search_paper_cards_v2(self, query, limit=5):
+        _ = limit
+        token = str(query or "").strip()
+        rows = {
+            "ImageNet Classification with Deep Convolutional Neural Networks": {
+                "paper_id": "alexnet-2012",
+                "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+                "search_text": "alexnet cnn imagenet deep convolutional neural networks",
+            },
+            "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks": {
+                "paper_id": "2005.11401",
+                "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+                "search_text": "rag retrieval augmented generation knowledge intensive nlp tasks",
+            },
+            "Language Models are Few-Shot Learners": {
+                "paper_id": "2005.14165",
+                "title": "Language Models are Few-Shot Learners",
+                "search_text": "gpt gpt-3 few-shot language models",
+            },
+        }
+        row = rows.get(token)
+        return [row] if row else []
+
+
 class PrefixTitleSQLite(DummySQLite):
     def search_papers(self, query, limit=20):
         _ = limit
@@ -653,6 +690,36 @@ def test_build_rule_based_query_frame_strips_method_suffix_for_explicit_lookup_t
     assert frame["expanded_terms"][0] == "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
 
 
+def test_build_rule_based_query_frame_does_not_treat_ambiguous_short_lookup_aliases_as_exact_sources():
+    sqlite_db = AmbiguousShortAliasLookupSQLite()
+
+    cnn = build_rule_based_query_frame(
+        "CNN 논문 요약해줘",
+        source_type="paper",
+        sqlite_db=sqlite_db,
+    ).to_dict()
+    rag = build_rule_based_query_frame(
+        "RAG 논문 요약해줘",
+        source_type="paper",
+        sqlite_db=sqlite_db,
+    ).to_dict()
+    gpt = build_rule_based_query_frame(
+        "GPT 논문 요약해줘",
+        source_type="paper",
+        sqlite_db=sqlite_db,
+    ).to_dict()
+
+    assert cnn["family"] == PAPER_FAMILY_LOOKUP
+    assert rag["family"] == PAPER_FAMILY_LOOKUP
+    assert gpt["family"] == PAPER_FAMILY_LOOKUP
+    assert cnn["resolved_source_ids"] == []
+    assert rag["resolved_source_ids"] == []
+    assert gpt["resolved_source_ids"] == []
+    assert "ImageNet Classification with Deep Convolutional Neural Networks" in cnn["expanded_terms"]
+    assert "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" in rag["expanded_terms"]
+    assert "Language Models are Few-Shot Learners" in gpt["expanded_terms"]
+
+
 def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_gpt_and_ppo():
     bert_gpt = build_rule_based_query_frame(
         "BERT와 GPT 계열의 차이를 논문 기준으로 비교해줘",
@@ -685,6 +752,32 @@ def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_rag_and_fid(
     assert "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering" in frame["expanded_terms"]
     assert "2005.11401" in frame["resolved_source_ids"]
     assert "2007.01282" in frame["resolved_source_ids"]
+
+
+def test_build_rule_based_query_frame_targets_graphrag_lightrag_before_generic_rag():
+    frame = build_rule_based_query_frame(
+        "GraphRAG와 LightRAG가 global question을 처리하는 방식 차이를 설명해줘",
+        source_type="paper",
+        sqlite_db=RepresentativeFilterSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["2404.16130", "2410.05779"]
+    assert "From Local to Global: A Graph RAG Approach to Query-Focused Summarization" in frame["expanded_terms"]
+    assert "LightRAG: Simple and Fast Retrieval-Augmented Generation" in frame["expanded_terms"]
+
+
+def test_build_rule_based_query_frame_targets_resnet_vit_pair_from_aliases():
+    frame = build_rule_based_query_frame(
+        "ResNet과 Vision Transformer를 이미지 인식 방식 차이로 비교해줘",
+        source_type="paper",
+        sqlite_db=RepresentativeFilterSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["1512.03385", "2010.11929"]
+    assert "Deep Residual Learning for Image Recognition" in frame["expanded_terms"]
+    assert "An Image is Worth 16x16 Words" in frame["expanded_terms"]
 
 
 def test_build_rule_based_query_frame_adds_compare_rescue_forms_for_gan_and_diffusion():
@@ -725,6 +818,40 @@ def test_build_rule_based_query_frame_resolves_long_title_compare_pairs():
     assert frame["family"] == PAPER_FAMILY_COMPARE
     assert "2005.11401" in frame["resolved_source_ids"]
     assert "2310.11511" in frame["resolved_source_ids"]
+
+
+def test_build_rule_based_query_frame_resolves_short_self_rag_compare_before_generic_rag_survey():
+    frame = build_rule_based_query_frame(
+        "RAG와 Self-RAG를 논문 기준으로 비교해줘",
+        source_type="paper",
+        sqlite_db=RepresentativeFilterSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["2005.11401", "2310.11511"]
+    assert "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" in frame["expanded_terms"]
+    assert "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection" in frame["expanded_terms"]
+
+
+def test_build_rule_based_query_frame_resolves_seq2seq_attention_compare_titles():
+    frame = build_rule_based_query_frame(
+        "Sequence to Sequence Learning과 Attention Is All You Need를 sequence modeling 관점에서 비교해줘",
+        source_type="paper",
+        sqlite_db=LocalTitleLookupSQLite(),
+    ).to_dict()
+
+    assert frame["family"] == PAPER_FAMILY_COMPARE
+    assert frame["resolved_source_ids"][:2] == ["1409.3215", "1706.03762"]
+    assert frame["expanded_terms"][0] == "Sequence to Sequence Learning"
+    assert frame["expanded_terms"][1] == "Attention Is All You Need"
+
+
+def test_extract_compare_title_candidates_keeps_title_internal_sequence_modeling():
+    candidates = extract_compare_title_candidates(
+        "Mamba: Linear-Time Sequence Modeling with Selective State Spaces와 Transformer를 비교해줘"
+    )
+
+    assert "Mamba: Linear-Time Sequence Modeling with Selective State Spaces" in candidates
 
 
 def test_build_rule_based_query_frame_adds_discover_rescue_terms_for_state_space_models():

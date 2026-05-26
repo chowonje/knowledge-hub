@@ -60,7 +60,7 @@ def test_answer_quality_gate_catches_unexpected_signal_citation():
     result = module.evaluate_answer_quality_case(case)
 
     assert result["status"] == "fail"
-    assert "coverage_status:none!=complete" in result["errors"]
+    assert "coverage_status:insufficient!=complete" in result["errors"]
     assert "citation_count:0!=1" in result["errors"]
 
 

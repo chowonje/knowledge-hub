@@ -109,6 +109,7 @@ class OllamaEmbedder(BaseEmbedder):
         self.base_url = base_url
         self.timeout = float(timeout)
         self._client = None
+        self._last_status: dict = {"retries": 0, "failures": []}
 
     @property
     def client(self):
@@ -129,13 +130,26 @@ class OllamaEmbedder(BaseEmbedder):
     def embed_batch(self, texts: List[str], show_progress: bool = False) -> List[Optional[List[float]]]:
         from tqdm import tqdm
         results = []
+        failures: list[dict] = []
         iterator = tqdm(texts, desc="임베딩 생성 중") if show_progress else texts
-        for text in iterator:
+        for index, text in enumerate(iterator):
             try:
                 results.append(self.embed_text(text))
-            except Exception:
+            except Exception as error:
+                failures.append(
+                    {
+                        "stage": "embed_batch",
+                        "errorCode": type(error).__name__,
+                        "message": str(error),
+                        "itemIndex": index,
+                    }
+                )
                 results.append(None)
+        self._last_status = {"retries": 0, "failures": failures}
         return results
+
+    def get_last_status(self) -> dict:
+        return dict(self._last_status)
 
     @classmethod
     def provider_info(cls) -> ProviderInfo:

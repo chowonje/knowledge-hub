@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.corpus-manifest-expansion-tranche-plan.v1",
+  "title": "Corpus Manifest Expansion Tranche Plan",
+  "type": "object",
+  "required": [
+    "schema",
+    "generated_at",
+    "scope_note",
+    "tranche",
+    "inputs",
+    "checks",
+    "counts",
+    "status",
+    "blockers",
+    "proposed_manifest_entries",
+    "rows"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.corpus-manifest-expansion-tranche-plan.v1"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "scope_note": {
+      "type": "string"
+    },
+    "status": {
+      "enum": ["ready", "applied", "blocked"]
+    },
+    "tranche": {
+      "type": "object",
+      "required": [
+        "name",
+        "manifest_rows_before",
+        "manifest_rows_after_if_applied",
+        "planned_additions",
+        "selection_policy"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "manifest_rows_before": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "manifest_rows_after_if_applied": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "planned_additions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selection_policy": {
+          "type": "string"
+        }
+      }
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "checks": {
+      "type": "object",
+      "required": [
+        "manifest_mutation",
+        "network_used",
+        "vault_scan",
+        "source_bytes_reverified_locally",
+        "source_missing_excluded",
+        "ambiguous_excluded",
+        "papers_dir_ref_only"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "manifest_mutation": {
+          "type": "boolean"
+        },
+        "network_used": {
+          "type": "boolean"
+        },
+        "vault_scan": {
+          "type": "boolean"
+        },
+        "source_bytes_reverified_locally": {
+          "type": "boolean"
+        },
+        "source_missing_excluded": {
+          "type": "boolean"
+        },
+        "ambiguous_excluded": {
+          "type": "boolean"
+        },
+        "papers_dir_ref_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "selected_rows",
+        "ready_rows",
+        "blocked_rows",
+        "already_in_manifest_skipped_rows",
+        "proposed_manifest_entries"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "selected_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ready_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocked_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "already_in_manifest_skipped_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "proposed_manifest_entries": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "blockers": {
+      "type": "array"
+    },
+    "proposed_manifest_entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifactId",
+          "sourceIds",
+          "expectedFilename",
+          "expectedSourceContentHash",
+          "byteLength",
+          "provenanceUrl",
+          "license",
+          "corpusTier"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "order",
+          "source_id",
+          "status",
+          "corpus_location_ref",
+          "observed_sha256",
+          "byte_length",
+          "resolver_status",
+          "proposed_manifest_entry",
+          "blockers"
+        ],
+        "additionalProperties": true
+      }
+    }
+  }
+}

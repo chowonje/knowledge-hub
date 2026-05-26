@@ -250,9 +250,9 @@
     },
     "expected": {
       "status": "pass",
-      "coverage_status": "none",
+      "coverage_status": "insufficient",
       "min_coverage_ratio": 0.0,
-      "abstain": false,
+      "abstain": true,
       "citation_count": 0,
       "retrieval_signal_count": 1,
       "verification_verdict": "fail"

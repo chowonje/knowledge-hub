@@ -30,6 +30,10 @@ def tool_allowed_for_profile(tool_name: str, profile: str | None = None) -> bool
     return True
 
 
+def build_tool_name_set(profile: str | None = None) -> set[str]:
+    return {tool.name for tool in build_tools(profile=profile)}
+
+
 def build_tools(profile: str | None = None) -> list[Tool]:
     tools = [
         Tool(

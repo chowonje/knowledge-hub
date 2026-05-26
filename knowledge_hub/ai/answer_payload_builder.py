@@ -165,6 +165,7 @@ class AnswerPayloadBuilder:
             query_frame=query_frame,
             claim_cards=list(v2.get("claimCards") or []),
             claim_alignment=dict(v2.get("claimAlignment") or {}),
+            paper_knowledge_slots=list(v2.get("paperKnowledgeSlots") or []),
             evidence_policy=evidence_policy,
             comparison_verification=dict(v2.get("comparisonVerification") or {}),
         )

@@ -131,6 +131,25 @@ live retrieval-span eval 운영 규칙:
 - A/B 결과는 `sourceHitAtKRate`, `sourceHitWithinMinRankRate`, `termOverlapPassRate`, `failedCaseCount` delta로 `promote_candidate | hold | do_not_promote`를 낸다.
 - 이 command는 active Chroma/vector runtime에 접근하므로 다른 MCP 서버나 장기 실행 search process가 vector store를 잡고 있으면 lock에 걸릴 수 있다. CI가 아니라 로컬 operator 판단용으로만 사용한다.
 
+live compare quality eval 운영 규칙:
+- 목적은 실제 장기 로컬 DB에서 `khub compare`가 compare packet, source coverage, dimension labels, supporting spans, trace citations를 납득 가능하게 만드는지 operator가 확인하는 것이다.
+- canonical command:
+  - `python eval/knowledgeos/scripts/check_live_compare_quality_eval.py --cases eval/knowledgeos/queries/live_compare_quality_eval_cases.local.json --out-json eval/knowledgeos/runs/reports/live_compare_quality_latest.json --out-md eval/knowledgeos/runs/reports/live_compare_quality_latest.md --fail-on-insufficient --json`
+- `live_compare_quality_eval_cases.local.json`은 개인 장기 corpus의 source id/path를 담을 수 있으므로 git ignore 대상이다. 시작점은 `templates/live_compare_quality_eval_cases.template.json`을 복사해서 채운다.
+- 이 gate는 live DB와 현재 compare runtime에 의존하므로 required PR CI에는 넣지 않는다. CI는 fake payload 기반 `tests/test_live_compare_quality_eval.py`로 evaluator contract만 검증한다.
+- 통과 기준은 기본적으로 compare packet 존재, answerable/no-answer 기대 결과 분리, 기대 source coverage, expected-answerable strict source coverage, dimension term coverage, supporting span coverage, strict span coverage, trace citation coverage, non-evidence supporting span leak 없음이다.
+- live paper cases can declare `corpusRequirements` that reference `eval/knowledgeos/fixtures/corpus_manifest.json` by `artifactId`. The manifest stores source ids, expected local filenames, source-content hashes, byte length, provenance URL, license note, and `corpusTier`; it does not store PDFs or source text.
+- Use `khub paper corpus-manifest-validate --json` to verify manifest source linkage and hash equality before treating local corpus coverage as available. The validator reports parsed artifact presence separately, so `source_missing` and `parsed_missing` remain distinct failure modes.
+- When the ignored operator-local case file omits `corpusRequirements`, the live compare CLI derives them from `expected_source_ids` and the repo-controlled corpus manifest. Expected source ids that cannot be mapped to a manifest entry are reported as `missingCorpusRequirements` and fail the gate; they are not treated as green or as strict evidence failures.
+- `corpusTier=repo_fixture` means the file should be present in git-backed fixtures referenced by `fixturePath` relative to the manifest location; missing coverage is a repo defect. `corpusTier=local_corpus` means the artifact must exist in the operator's configured `papers_dir` for that case to run; missing or hash-mismatched artifacts are reported as skipped corpus coverage rather than strict-evidence failures. `corpusTier=optional_local_corpus` is for observation-only local rows and does not block the case from running when absent.
+- Corpus diagnostics use safe path refs such as `papers_dir/<filename>` or `repo_fixture/<relative-path>` in durable JSON/Markdown reports; personal absolute paths are not part of the eval report contract.
+- live compare reports `declaredCaseCount`, `evaluableCaseCount`, `coveragePct`, `skippedForMissingCorpus`, `skippedForHashMismatch`, `derivedCorpusRequirementCount`, and `missingCorpusRequirementCount` next to the existing safety metrics. A headline such as `15/15` is complete only when the report also shows full corpus coverage and zero missing corpus requirements.
+- The default live compare gate requires full declared corpus coverage (`--min-corpus-coverage-rate 1.0`). Required `local_corpus` skips are still reported as skipped rows rather than strict-evidence failures, but the overall gate fails unless the caller explicitly lowers that threshold for an exploratory run.
+- `expected_source_ids`는 arXiv id, canonical source id, paper title, 또는 명확한 filename slug를 쓸 수 있다. Evaluator는 payload의 source/citation metadata가 같은 source임을 강하게 뒷받침할 때만 alias coverage로 인정하고, 그 외에는 `unresolved_expected_source_alias`와 coverage gap으로 남긴다.
+- `expected_answerable=true` case는 `expected_min_strict_span_count`와 `expected_min_strict_source_coverage`를 만족해야 한다. retrieved source fallback span은 observability에는 쓰지만 answerable 승격 근거로 보지 않는다.
+- wide corpus 운영에서는 `failureCategoryCounts`와 `provenanceDiagnosticCounts`를 함께 본다. 대표 taxonomy는 `strict_span_gap`, `strict_source_coverage_gap`, `expected_source_coverage_gap`, `dimension_gap`, `locator_only_anchor`, `fallback_only`, `trace_without_strict_spans`, `unresolved_expected_source_alias`, `non_evidence_leak`이다. 이 taxonomy는 실패 지점을 찾기 위한 operator diagnostic이며 새 answer/compare engine이 아니다.
+- command는 기본적으로 `khub compare --json --no-allow-external` 경로를 사용하며 registry write를 하지 않는다.
+
 answer-quality / compare-packet contract gate 운영 규칙:
 - answer-quality gate는 current AnswerContract가 citation coverage, abstain, verification verdict, retrievalSignals 분리를 계속 지키는지 deterministic fixture로 확인한다.
 - canonical command:

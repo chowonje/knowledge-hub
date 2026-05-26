@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.corpus-source-artifact-inventory.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "manifestRef",
+    "papersDirConfigured",
+    "checks",
+    "counts",
+    "manifestValidationStatus",
+    "items",
+    "schemaViolations"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.corpus-source-artifact-inventory.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "manifestRef": { "type": "string" },
+    "papersDirConfigured": { "type": "boolean" },
+    "scanError": { "type": "string" },
+    "checks": {
+      "type": "object",
+      "required": [
+        "networkUsed",
+        "databaseMutation",
+        "indexMutation",
+        "vaultScan",
+        "manifestMutation",
+        "sourceRegistrationMutation",
+        "parsedArtifactWrite",
+        "derivativeSubdirsExcluded",
+        "scanRoots"
+      ],
+      "properties": {
+        "networkUsed": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "manifestMutation": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "derivativeSubdirsExcluded": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "scanRoots": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inventoryRows",
+        "alreadyRegisteredRows",
+        "unregisteredAvailableRows",
+        "hashMismatchRegisteredRows",
+        "ambiguousRows",
+        "manifestRows",
+        "manifestSourceAvailableRows",
+        "manifestSourceMissingRows",
+        "manifestHashMissingRows",
+        "manifestHashMismatchRows",
+        "manifestMetadataOnlyRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "inventoryRows": { "type": "integer", "minimum": 0 },
+        "alreadyRegisteredRows": { "type": "integer", "minimum": 0 },
+        "unregisteredAvailableRows": { "type": "integer", "minimum": 0 },
+        "hashMismatchRegisteredRows": { "type": "integer", "minimum": 0 },
+        "ambiguousRows": { "type": "integer", "minimum": 0 },
+        "manifestRows": { "type": "integer", "minimum": 0 },
+        "manifestSourceAvailableRows": { "type": "integer", "minimum": 0 },
+        "manifestSourceMissingRows": { "type": "integer", "minimum": 0 },
+        "manifestHashMissingRows": { "type": "integer", "minimum": 0 },
+        "manifestHashMismatchRows": { "type": "integer", "minimum": 0 },
+        "manifestMetadataOnlyRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "manifestValidationStatus": { "type": "string" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sourceId",
+          "inferredArtifactId",
+          "filename",
+          "corpusLocationRef",
+          "sourceType",
+          "byteLength",
+          "sha256",
+          "manifestRegistered",
+          "registrationStatus",
+          "warnings"
+        ],
+        "properties": {
+          "sourceId": { "type": "string" },
+          "inferredArtifactId": { "type": "string" },
+          "filename": { "type": "string" },
+          "corpusLocationRef": { "type": "string" },
+          "sourceType": { "type": "string", "enum": ["pdf", "text", "unknown"] },
+          "byteLength": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "provenanceUrl": { "type": "string" },
+          "manifestRegistered": { "type": "boolean" },
+          "registrationStatus": {
+            "type": "string",
+            "enum": [
+              "already_registered",
+              "unregistered_available",
+              "hash_mismatch_registered",
+              "ambiguous"
+            ]
+          },
+          "manifestArtifactId": { "type": "string" },
+          "warnings": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "schemaViolations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

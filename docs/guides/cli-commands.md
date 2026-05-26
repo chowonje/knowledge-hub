@@ -11,6 +11,7 @@
 
 ```bash
 khub --help
+khub help advanced
 khub labs --help
 khub <command> --help
 khub <command> <subcommand> --help
@@ -19,49 +20,83 @@ khub <command> <subcommand> --help
 예:
 
 ```bash
-khub paper --help
+khub papers --help
 khub discover --help
 khub labs crawl --help
 khub labs paper --help
 ```
 
-## 매일 자주 쓰는 커맨드
+## 매일 자주 쓰는 public default 커맨드
 
 ```bash
 khub doctor
 khub status
-khub dinger ingest --paper "주제"
-khub dinger ask "질문"
-khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
 khub search "주제"
 khub ask "질문"
-khub agent context "작업 목표" --repo-path .
+khub inspect corpus --json
+khub compare "비교 질문" --json
+khub trace "질문" --source paper --json
 khub discover "주제" -n 5 --judge
-khub paper list
-khub paper board-export --json
+khub papers list
+khub papers extraction-report --json
+khub papers board-export --json
 khub index
 ```
+
+## Hidden/labs/operator 메모
+
+아래 command들은 default top-level product promise가 아니라 직접 실행 가능한 hidden compatibility 또는 labs/operator surface입니다.
+
+```bash
+khub dinger ingest --paper "주제"
+khub dinger ask "질문"
+khub paper layout-parser-pilot --paper-id 1706.03762 --parser pymupdf --json
+khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
+khub agent context "작업 목표" --repo-path .
+```
+
+## Evidence-substrate facades
+
+Codex/MCP handoff를 위한 얇은 public facade입니다. 새 답변 엔진을 만들지 않고 기존 검색/ask/evidence payload를 재사용합니다.
+
+```bash
+khub inspect corpus --json
+khub inspect index --json
+khub inspect source <source-id> --json
+khub inspect chunk <chunk-id> --json
+khub compare "MCP server design에서 tools와 resources를 어떻게 나눌까?" --json
+khub trace "Transformer의 핵심 아이디어는?" --source paper --json
+khub trace --from-json ./ask-result.json --json
+khub trace --from-json ./ask-result.json --save-registry --json
+khub inspect packet <packet-id> --json
+khub inspect context <context-pack-id> --json
+```
+
+계약:
+- `khub index`는 lexical + vector + metadata retrieval index를 만든다.
+- claim cards, evidence links, answer traces는 기본 index 결과가 아니라 별도 derivative/evidence contract다.
+- embedding은 source of truth가 아니라 검색용 파생 artifact다.
+- current repo/diff/task snippet은 기본적으로 ephemeral context이며, 명시적 승격 없이 persistent source store에 넣지 않는다.
+- `--save-registry`는 명시적으로 요청한 경우에만 packet/trace lookup record를 SQLite registry에 저장한다.
+- `khub://packet/{id}`와 `khub://context/{id}`는 registry record가 있으면 해석되고, 없으면 안정적인 `not_found`를 반환한다.
+- registry record는 source refs, source revision hash, lineage, token count, expiry, deletion policy를 가진 lookup projection이며 원본/source of truth가 아니다.
 
 ## 기본 Top-Level Help
 
 ```text
-khub agent
 khub ask
-khub config
-khub crawl
+khub compare
 khub discover
 khub doctor
-khub explore
-khub health
+khub help
 khub index
-khub init
+khub inspect
 khub labs
-khub mcp
-khub paper
+khub papers
 khub search
 khub setup
 khub status
-khub vault
+khub trace
 ```
 
 기본 `khub --help`는 representative core loop를 우선 노출합니다. 아래 command들은 여전히 직접 실행 가능하지만 default top-level help에서는 숨겨져 있습니다.
@@ -69,16 +104,54 @@ khub vault
 ## Direct But Hidden Top-Level
 
 ```text
+khub agent
+khub config
+khub crawl
 khub dinger
 khub eval
+khub explore
+khub health
+khub init
 khub math-memory
+khub mcp
 khub os
+khub paper
 khub paper-memory
+khub provider
+khub vault
 khub vector-compare
 khub vector-restore
+khub vector-source-metadata
 ```
 
 `khub eval`은 hidden compatibility alias이고, canonical eval surface는 `khub labs eval`입니다.
+`khub paper`는 hidden compatibility alias이고, canonical public paper surface는 `khub papers`입니다.
+
+## Advanced Inventory
+
+`khub help advanced`는 default help에서 숨긴 operator/compatibility command inventory를 보여줍니다.
+
+정책:
+- `discover`는 public default source lifecycle에 남긴다.
+- `papers`는 public paper namespace이고 maintenance/remediation subcommands는 help에서 숨긴다.
+- `labs`는 callable하지만 default product promise가 아니다.
+- hidden/operator command는 compatibility를 위해 직접 실행 가능하다.
+
+Advanced/root hidden 예:
+
+```text
+khub init
+khub config
+khub provider
+khub health
+khub mcp
+khub agent
+khub crawl
+khub explore
+khub vault
+khub paper
+khub eval
+```
 
 ## 기본 Surface
 
@@ -131,6 +204,34 @@ khub labs foundry discover --feature daily_coach --json
 khub labs foundry discover-validate --input discover.json --json
 khub labs foundry conflict-list --json
 ```
+
+### `khub papers extraction-report`
+
+```bash
+khub papers extraction-report --json
+khub papers extraction-report --paper-id 1706.03762 --json
+khub papers extraction-report --degraded-only --limit 50 --json
+```
+
+용도:
+- 기존 `papers/parsed/<paper_id>/manifest.json` / `document.json`만 읽어 paper parse 구조 품질을 점검한다.
+- parser, page/text coverage, OCR 적용 여부, column probe, table/figure/equation signal, degraded reason을 `knowledge-hub.paper.extraction-report.v1` payload로 반환한다.
+- parsed artifact가 없으면 실패하지 않고 `parsed_artifact_missing` degraded diagnostic으로 보고한다.
+- 이 command는 parser 실행, source repair, indexing, embedding, SQLite mutation을 하지 않는다.
+
+### `khub paper layout-parser-pilot` (hidden operator)
+
+```bash
+khub paper layout-parser-pilot --paper-id 1706.03762 --json
+khub paper layout-parser-pilot --paper-id 1706.03762 --parser opendataloader --run --timeout-seconds 60 --output-dir ~/.khub/reports/layout-parser-pilot/manual --json
+```
+
+용도:
+- 명시한 paper allowlist에 대해 PyMuPDF / OpenDataLoader / MinerU 후보를 비교한다.
+- 기본값은 plan-only이며, `--run`을 줘도 parser output은 configured `papers_dir/parsed`가 아니라 지정한 isolated report root 아래에만 쓴다.
+- `--timeout-seconds`로 parser별 제한 시간을 걸 수 있고, timeout은 green이 아니라 `timeout` status로 남긴다.
+- parser install 누락, source PDF 누락, parser failure를 schema-backed result에 남긴다.
+- 이 command는 SQLite mutation, reindex, reembed, global parser routing, source acquisition, strict evidence policy 변경을 하지 않는다.
 
 ### `khub ask`
 
@@ -513,70 +614,93 @@ khub mcp
 
 용도:
 - MCP 서버 실행
+- hidden top-level command로 직접 실행 가능하지만 default `khub --help`에는 표시하지 않는다
 
-### `khub paper`
+MCP tool discovery and calls:
+- default profile: read/retrieval/context and paper lookup tools only (`search_knowledge`, `ask_knowledge`, `build_task_context`, paper search/detail/citation/reference helpers, paper-memory read helpers)
+- labs/all profile: learning, crawl ingest, agentic execution, paper build/index, async job, ops, ontology, conflict/merge, transform, and workbench tools
+- default profile rejects direct calls to known labs/operator tool names; set `KHUB_MCP_PROFILE=labs|all` before launching the server when those tools are intended
+
+```bash
+KHUB_MCP_PROFILE=default khub mcp
+KHUB_MCP_PROFILE=labs khub mcp
+```
+
+### `khub papers`
 
 ```text
-khub paper add
-khub paper board-export
-khub paper build-concepts
-khub paper download
-khub paper embed
-khub paper embed-all
-khub paper evidence
-khub paper feedback
-khub paper info
-khub paper import-csv
-khub paper list
-khub paper memory
-khub paper normalize-concepts
-khub paper related
-khub paper resummary-vault
-khub paper review
-khub paper review-card
-khub paper review-card-apply
-khub paper review-card-apply-batch
-khub paper review-card-plan
-khub paper review-card-export
-khub paper summary
-khub paper summarize
-khub paper summarize-all
-khub paper sync-keywords
-khub paper translate
-khub paper translate-all
+khub papers add
+khub papers board-export
+khub papers download
+khub papers embed
+khub papers evidence
+khub papers extraction-report
+khub papers info
+khub papers import-csv
+khub papers list
+khub papers memory
+khub papers related
+khub papers summary
+khub papers summarize
+khub papers translate
 ```
 
 용도:
 - 개별 논문 관리
 - 번역/요약/임베딩
+- 기존 parsed artifact 기반 extraction diagnostics/report
 - 사용자용 읽기 surface (`summary`, `evidence`, `memory`, `related`)
 - Obsidian `KnowledgeOS Papers`용 read-only board payload export (`board-export`)
-- keyword/concept writeback
-- judge calibration feedback 기록
-- 빈약한 board/memory 카드 수동 품질 피드백 기록
+- keyword/concept writeback, judge calibration, repair/remediation command는 hidden operator path로 직접 실행 가능하지만 public help에서는 숨긴다.
 
 예:
 
 ```bash
-khub paper list
-khub paper board-export --json
-khub paper info 2401.12345
-khub paper summary --paper-id 2401.12345
-khub paper evidence --paper-id 2401.12345
-khub paper memory --paper-id 2401.12345
-khub paper related --paper-id 2401.12345
-khub paper download 2401.12345
-khub paper summarize 2401.12345
-khub paper translate 2401.12345
-khub paper embed 2401.12345
-khub paper import-csv --csv ./ai_papers_curated.csv --min-priority 5 --limit 10
-khub paper feedback 2401.12345 --label keep --reason "내 주제와 강하게 맞음"
-khub paper review-card 2401.12345 --issue empty_method --issue empty_evidence --note "보드 카드가 너무 얕음"
+khub papers list
+khub papers board-export --json
+khub papers info 2401.12345
+khub papers summary --paper-id 2401.12345
+khub papers evidence --paper-id 2401.12345
+khub papers memory --paper-id 2401.12345
+khub papers related --paper-id 2401.12345
+khub papers download 2401.12345
+khub papers summarize 2401.12345
+khub papers translate 2401.12345
+khub papers embed 2401.12345
+khub papers import-csv --csv ./ai_papers_curated.csv --min-priority 5 --limit 10
+```
+
+Hidden operator examples:
+
+```bash
 khub paper review-card-plan 2401.12345
 khub paper review-card-apply 2401.12345 --allow-external --provider openai --model gpt-5-nano
-khub paper review-card-apply-batch --issue empty_method --json
-khub paper review-card-export --issue empty_method --output ./paper_ids.txt
+khub paper corpus-bootstrap --artifact-id alexnet_krizhevsky_2012 --dry-run --json
+khub paper corpus-bootstrap --artifact-id alexnet_krizhevsky_2012 --apply --allow-network --json
+khub paper corpus-manifest-validate --json
+khub paper corpus-source-artifact-inventory --json
+khub paper repair-source --paper-id 2401.12345 --dry-run --json
 ```
+
+`corpus-bootstrap` is explicit opt-in acquisition for manifest-backed local
+paper corpus files. Dry-run is the default. Network download requires both
+`--apply` and `--allow-network`, promotes a file into `papers_dir` only after
+manifest hash and byte-length verification, skips `repo_fixture` entries, and
+does not run `repair-source`, rebuild derivatives, or write SQLite rows.
+
+`corpus-manifest-validate` is a report-only manifest/source-health check. It
+verifies `artifactId` / `sourceIds` / `expectedSourceContentHash` linkage,
+checks local artifact hashes when configured, and reports parsed artifact
+presence separately from source availability. It performs no network, DB/index
+mutation, vault scan, source registration write, parsed artifact write, or
+evidence promotion.
+
+`corpus-source-artifact-inventory` is a report-only local source inventory for
+manifest expansion planning. It scans configured `papers_dir` PDF/text source
+files, computes SHA-256 and byte length, compares against the public corpus
+manifest, and classifies rows as `already_registered` or `unregistered_available`.
+It does not modify the manifest, download sources, scan vault content, or emit
+absolute local paths in public output.
 
 ### `khub paper-memory`
 
@@ -924,11 +1048,13 @@ khub ask "질문"
 khub agent context "작업 목표" --repo-path .
 ```
 
+`agent`는 직접 실행 가능한 advanced workflow이며 default top-level help에서는 숨깁니다.
+
 ### 3. 논문 수집
 
 ```bash
 khub discover "주제" -n 5 --judge
-khub paper list
+khub papers list
 ```
 
 ### 4. 인덱싱
@@ -938,14 +1064,14 @@ khub index
 khub index --vault-all --vault-clear
 ```
 
-### 5. judge calibration
+### 5. judge calibration (hidden operator)
 
 ```bash
 khub paper feedback <paper_id> --label keep --reason "..."
 khub paper feedback <paper_id> --label skip --reason "..."
 ```
 
-### 6. card quality triage
+### 6. card quality triage (hidden operator)
 
 ```bash
 khub paper review-card <paper_id> --issue empty_method --issue empty_evidence --note "..."

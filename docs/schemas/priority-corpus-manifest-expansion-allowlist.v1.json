@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.priority-corpus-manifest-expansion-allowlist.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "generated_at",
+    "scope_note",
+    "source_report",
+    "counts",
+    "first_tranche_size_target",
+    "allowlist",
+    "first_tranche_recommendation"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.priority-corpus-manifest-expansion-allowlist.v1" },
+    "generated_at": { "type": "string" },
+    "scope_note": { "type": "string" },
+    "source_report": { "type": "string" },
+    "counts": {
+      "type": "object",
+      "required": [
+        "allowlist_rows",
+        "first_tranche_recommended_rows",
+        "by_candidate_tier",
+        "already_in_manifest_excluded"
+      ],
+      "properties": {
+        "allowlist_rows": { "type": "integer", "minimum": 0 },
+        "first_tranche_recommended_rows": { "type": "integer", "minimum": 0 },
+        "by_candidate_tier": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "already_in_manifest_excluded": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "first_tranche_size_target": { "type": "string" },
+    "allowlist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "candidate_tier",
+          "join_method",
+          "observed_sha256",
+          "byte_length",
+          "canonical_filename",
+          "corpus_location_ref",
+          "parsed_status"
+        ],
+        "properties": {
+          "source_id": { "type": "string", "minLength": 1 },
+          "title": { "type": ["string", "null"] },
+          "year": { "type": ["integer", "null"] },
+          "candidate_tier": { "type": "string" },
+          "join_method": { "type": "string" },
+          "observed_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "byte_length": { "type": "integer", "minimum": 0 },
+          "canonical_filename": { "type": "string" },
+          "corpus_location_ref": { "type": "string" },
+          "provenance_url": { "type": ["string", "null"] },
+          "parsed_status": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "first_tranche_recommendation": { "type": "array" }
+  },
+  "additionalProperties": true
+}

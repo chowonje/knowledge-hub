@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.extraction-report.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "request", "counts", "papers", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.extraction-report.v1" },
+    "status": { "type": "string" },
+    "generatedAt": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": ["paperIds", "limit", "degradedOnly"],
+      "properties": {
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "limit": { "type": "integer", "minimum": 0 },
+        "degradedOnly": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": ["scannedPapers", "reportedPapers", "degradedPapers", "missingParsedArtifacts"],
+      "properties": {
+        "scannedPapers": { "type": "integer", "minimum": 0 },
+        "reportedPapers": { "type": "integer", "minimum": 0 },
+        "degradedPapers": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paperId", "paperTitle", "artifactPaths", "diagnostic", "warnings"],
+        "properties": {
+          "paperId": { "type": "string" },
+          "paperTitle": { "type": "string" },
+          "artifactPaths": { "type": "object" },
+          "diagnostic": {
+            "type": "object",
+            "required": [
+              "parser",
+              "pageCount",
+              "pagesWithText",
+              "textLayerDetected",
+              "ocrAttempted",
+              "ocrApplied",
+              "columnCountDetected",
+              "tablesDetected",
+              "figuresDetected",
+              "equationsDetected",
+              "extractionDegraded",
+              "degradationReasons"
+            ],
+            "properties": {
+              "parser": { "type": "string" },
+              "pageCount": { "type": "integer", "minimum": 0 },
+              "pagesWithText": { "type": "integer", "minimum": 0 },
+              "textLayerDetected": { "type": "boolean" },
+              "ocrAttempted": { "type": "boolean" },
+              "ocrApplied": { "type": "boolean" },
+              "columnCountDetected": { "type": "integer", "minimum": 0 },
+              "tablesDetected": { "type": "integer", "minimum": 0 },
+              "figuresDetected": { "type": "integer", "minimum": 0 },
+              "equationsDetected": { "type": "integer", "minimum": 0 },
+              "extractionDegraded": { "type": "boolean" },
+              "degradationReasons": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": true
+          },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

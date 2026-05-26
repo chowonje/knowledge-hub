@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.strict-evidence-pilot-tranche-completion-gate.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "input",
+    "counts",
+    "blockedLaterGates",
+    "noMutationPolicyMatrix",
+    "gate",
+    "policy",
+    "warnings",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.strict-evidence-pilot-tranche-completion-gate.v1"
+    },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "input": {
+      "type": "object",
+      "required": [
+        "manifestReadbackReportPath",
+        "manifestReadbackReportSchema",
+        "manifestReadbackReportStatus",
+        "requestedPaperIds",
+        "expectedPolicyCandidateRows"
+      ],
+      "properties": {
+        "manifestReadbackReportPath": { "type": "string" },
+        "manifestReadbackReportSchema": { "type": "string" },
+        "manifestReadbackReportStatus": { "type": "string" },
+        "requestedPaperIds": { "type": "array", "items": { "type": "string" } },
+        "sectionRunManifestPath": { "type": "string" },
+        "figureCaptionRunManifestPath": { "type": "string" },
+        "expectedPolicyCandidateRows": { "type": "integer", "minimum": 0 },
+        "expectedSectionValidatedRows": { "type": "integer", "minimum": 0 },
+        "expectedFigureCaptionValidatedRows": { "type": "integer", "minimum": 0 },
+        "expectedStrictEvidenceStoreRows": { "type": "integer", "minimum": 0 },
+        "expectedSourceSpanStoreRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputPolicyCandidateRows",
+        "validatedPilotRows",
+        "sectionValidatedRows",
+        "figureCaptionValidatedRows",
+        "completionCandidateOnlyRows",
+        "blockedManifestReadbackNotValidatedRows",
+        "blockedMissingPolicyCandidateRows",
+        "blockedUnexpectedManifestRows",
+        "blockedDuplicateStrictEvidenceIdRows",
+        "blockedStoreRowCountChangedRows",
+        "blockedRuntimeOrCitationFlagViolationRows",
+        "blockedInputSchemaViolationRows",
+        "strictEvidenceStoreRows",
+        "sourceSpanStoreRows",
+        "strictEvidenceWriteRows",
+        "strictEvidenceCreatedRows",
+        "citationGradeEvidenceCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "parserRoutingChangedRows",
+        "answerIntegrationChangedRows",
+        "databaseMutationRows",
+        "canonicalParsedArtifactWriteRows",
+        "sourceSpanUpdatedRows",
+        "manifestWriteRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byCompletionStatus",
+        "byRecommendedAction"
+      ],
+      "properties": {
+        "inputPolicyCandidateRows": { "type": "integer", "minimum": 0 },
+        "validatedPilotRows": { "type": "integer", "minimum": 0 },
+        "sectionValidatedRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionValidatedRows": { "type": "integer", "minimum": 0 },
+        "completionCandidateOnlyRows": { "type": "integer", "minimum": 0 },
+        "blockedManifestReadbackNotValidatedRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingPolicyCandidateRows": { "type": "integer", "minimum": 0 },
+        "blockedUnexpectedManifestRows": { "type": "integer", "minimum": 0 },
+        "blockedDuplicateStrictEvidenceIdRows": { "type": "integer", "minimum": 0 },
+        "blockedStoreRowCountChangedRows": { "type": "integer", "minimum": 0 },
+        "blockedRuntimeOrCitationFlagViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "strictEvidenceStoreRows": { "type": "integer", "minimum": 0 },
+        "sourceSpanStoreRows": { "type": "integer", "minimum": 0 },
+        "strictEvidenceWriteRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "citationGradeEvidenceCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "answerIntegrationChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "sourceSpanUpdatedRows": { "const": 0 },
+        "manifestWriteRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byArtifactType": { "type": "object" },
+        "byCompletionStatus": { "type": "object" },
+        "byRecommendedAction": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "blockedLaterGates": {
+      "type": "object",
+      "required": [
+        "citationGradeEvidence",
+        "runtimeEvidence",
+        "parserRouting",
+        "answerIntegration",
+        "strictEligibleMutation"
+      ],
+      "properties": {
+        "citationGradeEvidence": { "type": "object" },
+        "runtimeEvidence": { "type": "object" },
+        "parserRouting": { "type": "object" },
+        "answerIntegration": { "type": "object" },
+        "strictEligibleMutation": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "noMutationPolicyMatrix": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "completionGateOnly",
+        "manifestWrite",
+        "strictEvidenceStoreWrite",
+        "sourceSpanStoreWrite",
+        "strictEvidenceCreated",
+        "strictEligibleMutation",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "completionGateOnly": { "const": true },
+        "manifestWrite": { "const": false },
+        "strictEvidenceStoreWrite": { "const": false },
+        "sourceSpanStoreWrite": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "strictEligibleMutation": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "pilotTrancheCompletionGateReady",
+        "completionDecision",
+        "strictEligibleMutationAllowed",
+        "strictEvidenceStoreWriteAllowed",
+        "sourceSpanStoreWriteAllowed",
+        "runManifestWriteAllowed",
+        "strictEvidenceCreated",
+        "citationReady",
+        "runtimeEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimeMutationAllowed",
+        "schemaViolations",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "pilotTrancheCompletionGateReady": { "type": "boolean" },
+        "completionDecision": { "type": "string" },
+        "strictEligibleMutationAllowed": { "const": false },
+        "strictEvidenceStoreWriteAllowed": { "const": false },
+        "sourceSpanStoreWriteAllowed": { "const": false },
+        "runManifestWriteAllowed": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationReady": { "const": false },
+        "runtimeEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimeMutationAllowed": { "const": false },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": ["reportOnly", "completionGateOnly"],
+      "properties": {
+        "reportOnly": { "const": true },
+        "completionGateOnly": { "const": true }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "completion_row_id",
+          "strictEvidenceId",
+          "paper_id",
+          "artifact_type",
+          "completion_status",
+          "completion_blockers",
+          "recommended_action"
+        ],
+        "properties": {
+          "completion_row_id": { "type": "string" },
+          "readback_row_id": { "type": "string" },
+          "policy_gate_row_id": { "type": "string" },
+          "strictEvidenceId": { "type": "string" },
+          "sourceSpanId": { "type": "string" },
+          "candidateRecordId": { "type": "string" },
+          "paper_id": { "type": "string" },
+          "artifact_type": { "type": "string", "enum": ["section", "figure"] },
+          "manifestType": { "type": "string" },
+          "readback_status": { "type": "string" },
+          "completion_status": { "type": "string" },
+          "completion_blockers": { "type": "array", "items": { "type": "string" } },
+          "pilotTrancheCompleteCandidateOnly": { "type": "boolean" },
+          "strictEligible": { "const": false },
+          "strictEvidenceCreated": { "const": false },
+          "citationGrade": { "const": false },
+          "runtimeEvidence": { "const": false },
+          "parserRoutingChanged": { "const": false },
+          "answerIntegrationChanged": { "const": false },
+          "databaseMutation": { "const": false },
+          "recommended_action": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

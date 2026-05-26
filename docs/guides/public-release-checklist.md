@@ -93,6 +93,7 @@ Review and exclude these categories before pushing:
   - `tasks/*`
   - `worklog/*`
   - `reviews/*`
+- repo-root `tasks/*`, `worklog/*`, and `reviews/*` are guarded by `scripts/check_public_release_hygiene.py`; curated public artifacts are allowed only when they have a documented source-of-truth role and pass the rest of the hygiene gate.
 - vault-derived private content or copied Obsidian pages
 
 ### 3. Run a secrets check
@@ -107,7 +108,7 @@ rg -n --hidden -g '!node_modules' -g '!.git' '(OPENAI_API_KEY|ANTHROPIC_API_KEY|
 
 Interpretation:
 
-- `check_public_release_hygiene.py` is the repo-local gate for tracked local files, literal high-confidence secrets, generated eval runs, and absolute user-path leaks
+- `check_public_release_hygiene.py` is the repo-local gate for tracked local files, tracked internal process records, literal high-confidence secrets, generated eval runs, and absolute user-path leaks
 - environment variable names in docs/examples are fine
 - real token values are not
 - backup configs deserve a second look even if they only contain `${ENV_VAR}` placeholders

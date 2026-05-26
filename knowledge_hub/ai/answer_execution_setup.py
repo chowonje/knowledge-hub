@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from knowledge_hub.ai.answer_policy_support import claim_consensus_requires_strict_merge
+
 
 @dataclass(frozen=True)
 class AnswerExecutionSetupDeps:
@@ -72,6 +74,11 @@ class AnswerExecutionSetup:
                     evidence_packet=evidence_packet,
                     claim_context=claim_context,
                 )
+        if (
+            claim_consensus_merge_mode == "advisory"
+            and claim_consensus_requires_strict_merge(claim_consensus)
+        ):
+            claim_consensus_merge_mode = "strict"
         safe_context, external_policy, original_classification = deps.evaluate_policy_fn(
             context=answer_context,
             allow_external=allow_external,

@@ -1,0 +1,424 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-source-recovery-feasibility.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "report",
+    "baseline",
+    "sourceBlockerSnapshot",
+    "localScanSummary",
+    "sourceMissingRecoverySummary",
+    "oversizedPolicySummary",
+    "textSourcePolicySummary",
+    "sourceMissingRows",
+    "pathRepairCandidatePaperIds",
+    "reacquisitionCandidatePaperIdsByStatus",
+    "localPresencePaperIdsByStatus",
+    "oversizedPolicyRows",
+    "oversizedPolicyPaperIdsByStatus",
+    "textSourcePolicyRows",
+    "textSourcePolicyPaperIdsByDecision",
+    "expectedCoverageChangeIfApplied",
+    "nextRecommendedTranche",
+    "mutationPolicy",
+    "mutationCounters",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-source-recovery-feasibility.v1" },
+    "status": { "const": "planned_report_only" },
+    "generatedAt": { "type": "string" },
+    "report": {
+      "type": "object",
+      "required": [
+        "name",
+        "maxSourcePdfBytes",
+        "selectionRule",
+        "localScanRoot",
+        "localScanExtensions",
+        "externalLookupAttempted",
+        "sourceDownloadAttempted",
+        "nonScope"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "maxSourcePdfBytes": { "type": "integer", "minimum": 0 },
+        "selectionRule": { "type": "string" },
+        "localScanRoot": { "const": "papers_dir" },
+        "localScanExtensions": { "type": "array", "items": { "type": "string" } },
+        "externalLookupAttempted": { "const": false },
+        "sourceDownloadAttempted": { "const": false },
+        "nonScope": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "baseline": {
+      "type": "object",
+      "required": ["scannedPapers", "missingParsedArtifacts"],
+      "properties": {
+        "scannedPapers": { "type": "integer", "minimum": 0 },
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "sourceBlockerSnapshot": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifacts",
+        "sourceBlockerRows",
+        "eligibleExistingPdfRows",
+        "sourceArtifactTaxonomy",
+        "blockerTaxonomy"
+      ],
+      "properties": {
+        "missingParsedArtifacts": { "type": "integer", "minimum": 0 },
+        "sourceBlockerRows": { "type": "integer", "minimum": 0 },
+        "eligibleExistingPdfRows": { "type": "integer", "minimum": 0 },
+        "sourceArtifactTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "blockerTaxonomy": { "$ref": "#/$defs/taxonomy" }
+      },
+      "additionalProperties": true
+    },
+    "localScanSummary": {
+      "type": "object",
+      "required": [
+        "pdfFilesScanned",
+        "pathRepairCandidateRows",
+        "noLocalPdfCandidateRows",
+        "localPresenceTaxonomy"
+      ],
+      "properties": {
+        "pdfFilesScanned": { "type": "integer", "minimum": 0 },
+        "pathRepairCandidateRows": { "type": "integer", "minimum": 0 },
+        "noLocalPdfCandidateRows": { "type": "integer", "minimum": 0 },
+        "localPresenceTaxonomy": { "$ref": "#/$defs/taxonomy" }
+      },
+      "additionalProperties": true
+    },
+    "sourceMissingRecoverySummary": {
+      "type": "object",
+      "required": [
+        "sourcePdfMissingRows",
+        "identifierReacquisitionCandidateRows",
+        "manualLookupRequiredRows",
+        "reacquisitionTaxonomy"
+      ],
+      "properties": {
+        "sourcePdfMissingRows": { "type": "integer", "minimum": 0 },
+        "identifierReacquisitionCandidateRows": { "type": "integer", "minimum": 0 },
+        "manualLookupRequiredRows": { "type": "integer", "minimum": 0 },
+        "reacquisitionTaxonomy": { "$ref": "#/$defs/taxonomy" }
+      },
+      "additionalProperties": true
+    },
+    "oversizedPolicySummary": {
+      "type": "object",
+      "required": ["sourcePdfOversizedRows", "oversizedPolicyTaxonomy", "policyRecommendation"],
+      "properties": {
+        "sourcePdfOversizedRows": { "type": "integer", "minimum": 0 },
+        "oversizedPolicyTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "policyRecommendation": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "textSourcePolicySummary": {
+      "type": "object",
+      "required": ["textSourceUnsupportedRows", "decisionTaxonomy", "decisionRecommendation"],
+      "properties": {
+        "textSourceUnsupportedRows": { "type": "integer", "minimum": 0 },
+        "decisionTaxonomy": { "$ref": "#/$defs/taxonomy" },
+        "decisionRecommendation": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "sourceMissingRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceMissingRow" }
+    },
+    "pathRepairCandidatePaperIds": { "type": "array", "items": { "type": "string" } },
+    "reacquisitionCandidatePaperIdsByStatus": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/idsByStatus" }
+    },
+    "localPresencePaperIdsByStatus": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/idsByStatus" }
+    },
+    "oversizedPolicyRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/oversizedPolicyRow" }
+    },
+    "oversizedPolicyPaperIdsByStatus": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/idsByStatus" }
+    },
+    "textSourcePolicyRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/textSourcePolicyRow" }
+    },
+    "textSourcePolicyPaperIdsByDecision": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/idsByStatus" }
+    },
+    "expectedCoverageChangeIfApplied": {
+      "type": "object",
+      "required": [
+        "missingParsedArtifactsBefore",
+        "expectedImmediateMissingParsedArtifactsReduction",
+        "expectedMissingParsedArtifactsAfterImmediateApply",
+        "potentialRowsUnlockedAfterPathRepairOnly",
+        "potentialRowsRequiringSourceReacquisition",
+        "oversizedRowsRequiringSeparatePolicy",
+        "textSourceRowsRequiringSeparateContractDecision"
+      ],
+      "properties": {
+        "missingParsedArtifactsBefore": { "type": "integer", "minimum": 0 },
+        "expectedImmediateMissingParsedArtifactsReduction": { "const": 0 },
+        "expectedMissingParsedArtifactsAfterImmediateApply": { "type": "integer", "minimum": 0 },
+        "potentialRowsUnlockedAfterPathRepairOnly": { "type": "integer", "minimum": 0 },
+        "potentialRowsRequiringSourceReacquisition": { "type": "integer", "minimum": 0 },
+        "oversizedRowsRequiringSeparatePolicy": { "type": "integer", "minimum": 0 },
+        "textSourceRowsRequiringSeparateContractDecision": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "nextRecommendedTranche": {
+      "type": "object",
+      "required": ["name", "candidateCount", "paperIds", "rationale"],
+      "properties": {
+        "name": { "type": "string" },
+        "candidateCount": { "type": "integer", "minimum": 0 },
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "rationale": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": { "$ref": "#/$defs/mutationPolicy" },
+    "mutationCounters": { "$ref": "#/$defs/mutationCounters" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "idsByStatus": {
+      "type": "object",
+      "required": ["count", "paperIds"],
+      "properties": {
+        "count": { "type": "integer", "minimum": 0 },
+        "paperIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "sourceArtifact": {
+      "type": "object",
+      "required": ["kind", "exists", "isFile", "sizeBytes", "path"],
+      "properties": {
+        "kind": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "isFile": { "type": "boolean" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "path": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "localPdfCandidate": {
+      "type": "object",
+      "required": ["path", "fileName", "sizeBytes", "matchType"],
+      "properties": {
+        "path": { "type": "string" },
+        "fileName": { "type": "string" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "matchType": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "sourceMissingRow": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "degradationReasons",
+        "sourceArtifact",
+        "resolutionPlanStatus",
+        "localPdfCandidates",
+        "localPdfCandidateCount",
+        "localPresenceStatus",
+        "reacquisitionStatus",
+        "reacquisitionHint",
+        "downloadAttempted",
+        "externalLookupAttempted",
+        "sourceRegistrationMutationAttempted",
+        "recommendedAction"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "degradationReasons": { "type": "array", "items": { "type": "string" } },
+        "sourceArtifact": { "$ref": "#/$defs/sourceArtifact" },
+        "resolutionPlanStatus": { "type": "string" },
+        "localPdfCandidates": { "type": "array", "items": { "$ref": "#/$defs/localPdfCandidate" } },
+        "localPdfCandidateCount": { "type": "integer", "minimum": 0 },
+        "localPresenceStatus": { "type": "string" },
+        "reacquisitionStatus": { "type": "string" },
+        "reacquisitionHint": { "type": "string" },
+        "downloadAttempted": { "const": false },
+        "externalLookupAttempted": { "const": false },
+        "sourceRegistrationMutationAttempted": { "const": false },
+        "recommendedAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "oversizedPolicyRow": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "sourceArtifact",
+        "sizeBytes",
+        "maxSourcePdfBytes",
+        "oversizedPolicyStatus",
+        "policyRecommendation",
+        "applyReadyNow",
+        "parserRoutingChangeAllowed",
+        "recommendedAction"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "sourceArtifact": { "$ref": "#/$defs/sourceArtifact" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "maxSourcePdfBytes": { "type": "integer", "minimum": 0 },
+        "oversizedPolicyStatus": { "type": "string" },
+        "policyRecommendation": { "type": "string" },
+        "applyReadyNow": { "const": false },
+        "parserRoutingChangeAllowed": { "const": false },
+        "recommendedAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "textSourcePolicyRow": {
+      "type": "object",
+      "required": [
+        "paperId",
+        "paperTitle",
+        "sourceArtifact",
+        "textSourceExists",
+        "decisionRecommendation",
+        "futurePolicyOption",
+        "applyReadyNow",
+        "parserRoutingChangeAllowed",
+        "recommendedAction"
+      ],
+      "properties": {
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "sourceArtifact": { "$ref": "#/$defs/sourceArtifact" },
+        "textSourceExists": { "type": "boolean" },
+        "decisionRecommendation": { "type": "string" },
+        "futurePolicyOption": { "type": "string" },
+        "applyReadyNow": { "const": false },
+        "parserRoutingChangeAllowed": { "const": false },
+        "recommendedAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "mutationPolicy": {
+      "type": "object",
+      "required": [
+        "applyRequested",
+        "applyPerformed",
+        "sourceDownload",
+        "sourcePathRewrite",
+        "sourceRegistrationMutation",
+        "parsedArtifactWrite",
+        "parserRouting",
+        "strictEvidence",
+        "citationEvidence",
+        "runtimeEvidence",
+        "sourceSpanCreated",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "vaultWrite",
+        "answerIntegration",
+        "manualBlockerResolution"
+      ],
+      "properties": {
+        "applyRequested": { "const": false },
+        "applyPerformed": { "const": false },
+        "sourceDownload": { "const": false },
+        "sourcePathRewrite": { "const": false },
+        "sourceRegistrationMutation": { "const": false },
+        "parsedArtifactWrite": { "const": false },
+        "parserRouting": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationEvidence": { "const": false },
+        "runtimeEvidence": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "vaultWrite": { "const": false },
+        "answerIntegration": { "const": false },
+        "manualBlockerResolution": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "mutationCounters": {
+      "type": "object",
+      "required": [
+        "parsedArtifactWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationEvidenceRows",
+        "runtimeEvidenceRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reembedRows",
+        "vaultReadRows",
+        "vaultWriteRows",
+        "answerIntegrationRows",
+        "parserRoutingRows",
+        "manualBlockerResolutionRows",
+        "sourceDownloadRows",
+        "sourcePathRewriteRows",
+        "sourceRegistrationMutationRows"
+      ],
+      "properties": {
+        "parsedArtifactWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reembedRows": { "const": 0 },
+        "vaultReadRows": { "const": 0 },
+        "vaultWriteRows": { "const": 0 },
+        "answerIntegrationRows": { "const": 0 },
+        "parserRoutingRows": { "const": 0 },
+        "manualBlockerResolutionRows": { "const": 0 },
+        "sourceDownloadRows": { "const": 0 },
+        "sourcePathRewriteRows": { "const": 0 },
+        "sourceRegistrationMutationRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

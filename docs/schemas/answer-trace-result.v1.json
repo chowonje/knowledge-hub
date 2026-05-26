@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.answer-trace.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "question", "answerId", "evidencePacketId", "citations", "sources", "evidenceSpans", "lineage", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.answer-trace.result.v1" },
+    "status": { "type": "string" },
+    "question": { "type": "string" },
+    "answerId": { "type": "string" },
+    "evidencePacketId": { "type": "string" },
+    "answer": { "type": "string" },
+    "citations": { "type": "array", "items": { "type": "object" } },
+    "sources": { "type": "array", "items": { "type": "object" } },
+    "evidenceSpans": { "type": "array", "items": { "type": "object" } },
+    "lineage": {
+      "type": "object",
+      "required": ["sourceIds", "documentIds", "chunkIds", "claimIds", "evidenceSpanIds", "citationLabels"],
+      "properties": {
+        "sourceIds": { "type": "array", "items": { "type": "string" } },
+        "documentIds": { "type": "array", "items": { "type": "string" } },
+        "chunkIds": { "type": "array", "items": { "type": "string" } },
+        "claimIds": { "type": "array", "items": { "type": "string" } },
+        "evidenceSpanIds": { "type": "array", "items": { "type": "string" } },
+        "citationLabels": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "gaps": { "type": "array", "items": { "type": "object" } },
+    "comparePacket": { "type": "object" },
+    "registry": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "nextSuggestedActions": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

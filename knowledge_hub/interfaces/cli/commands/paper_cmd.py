@@ -14,6 +14,8 @@ khub paper - 논문 개별 관리 명령어
   khub paper review-card-apply   안전한 remediation action 실행
   khub paper review-card-export  audit/rebuild 대상 paper id export
   khub paper canon-quality-audit AI canon 9편 전용 deterministic quality audit
+  khub paper materialize-parsed parsed artifact dry-run/apply backfill
+  khub paper layout-parser-pilot isolated parser comparison report
   khub paper repair-source       known source contamination relink + artifact rebuild
   khub paper repair-source-queue paper source repair action queue 적재
 
@@ -35,6 +37,7 @@ from typing import Any
 import click
 from pathlib import Path
 from rich.console import Console
+from rich.table import Table
 
 from knowledge_hub.application.paper_source_freshness import audit_paper_source_freshness
 from knowledge_hub.application.paper_source_repairs import queue_paper_source_repairs, repair_paper_sources
@@ -97,6 +100,25 @@ from knowledge_hub.papers.canon_quality_audit import (
     remediation_needs_summary_rebuild as _canon_needs_summary_rebuild,
     write_canon_audit_outputs as _write_canon_audit_outputs,
 )
+from knowledge_hub.papers.corpus_bootstrap import bootstrap_corpus_artifacts
+from knowledge_hub.papers.corpus_manifest_validation import validate_corpus_manifest
+from knowledge_hub.papers.corpus_source_artifact_inventory import (
+    build_corpus_source_artifact_inventory,
+    render_corpus_source_artifact_inventory_markdown,
+)
+from knowledge_hub.papers.extraction_diagnostics import (
+    EXTRACTION_REPORT_SCHEMA_ID,
+    build_extraction_report,
+)
+from knowledge_hub.papers.layout_parser_pilot import (
+    LAYOUT_PARSER_PILOT_SCHEMA_ID,
+    SUPPORTED_LAYOUT_PILOT_PARSERS,
+    run_layout_parser_pilot,
+)
+from knowledge_hub.papers.parsed_materialization import (
+    PARSED_MATERIALIZATION_SCHEMA_ID,
+    materialize_parsed_artifacts,
+)
 from knowledge_hub.papers.source_guard import review_downloaded_source, stage_source_guard
 from knowledge_hub.papers.memory_runtime import build_paper_memory_builder
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
@@ -141,9 +163,9 @@ def _validate_cli_payload(config, payload: dict[str, Any], schema_id: str) -> No
         raise click.ClickException(f"schema validation failed for {schema_id}: {problems}")
 
 
-@click.group("paper")
+@click.group("papers")
 def paper_group():
-    """논문 관리 (add/import-csv/download/translate/summarize/summary/evidence/memory/related/embed/list/info)"""
+    """논문 public surface (add/import-csv/list/info/summary/evidence/memory/related/extraction-report)"""
     pass
 
 
@@ -152,6 +174,156 @@ paper_group.add_command(paper_public_evidence)
 paper_group.add_command(paper_public_memory)
 paper_group.add_command(paper_public_related)
 paper_group.add_command(paper_board_export)
+
+
+@paper_group.command("extraction-report")
+@click.option("--paper-id", "paper_ids", multiple=True, help="Report one paper id; repeat to inspect multiple papers.")
+@click.option("--limit", default=0, type=int, show_default=True, help="Maximum registered papers to inspect; 0 means all.")
+@click.option("--degraded-only", is_flag=True, default=False, help="Only include papers with degraded extraction diagnostics.")
+@click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
+@click.pass_context
+def paper_extraction_report(ctx, paper_ids, limit, degraded_only, as_json):
+    """Report structural quality of existing parsed paper artifacts."""
+
+    khub = ctx.obj["khub"]
+    config = khub.config
+    sqlite_db = _sqlite_db(config, khub=khub)
+    payload = build_extraction_report(
+        sqlite_db=sqlite_db,
+        papers_dir=config.papers_dir,
+        paper_ids=list(paper_ids or []),
+        limit=max(0, int(limit or 0)),
+        degraded_only=bool(degraded_only),
+    )
+    _validate_cli_payload(config, payload, EXTRACTION_REPORT_SCHEMA_ID)
+    if as_json:
+        console.print_json(data=payload)
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        "[bold]Paper extraction diagnostics[/bold] "
+        f"reported={counts.get('reportedPapers', 0)} degraded={counts.get('degradedPapers', 0)} "
+        f"missingParsedArtifacts={counts.get('missingParsedArtifacts', 0)}"
+    )
+    table = Table()
+    table.add_column("Paper", style="cyan", max_width=18)
+    table.add_column("Parser", max_width=16)
+    table.add_column("Pages", justify="right", width=7)
+    table.add_column("Columns", justify="right", width=7)
+    table.add_column("Tables", justify="right", width=7)
+    table.add_column("Status", width=10)
+    table.add_column("Reasons", max_width=60)
+    for item in list(payload.get("papers") or []):
+        diagnostic = dict(item.get("diagnostic") or {})
+        reasons = ", ".join(str(reason) for reason in list(diagnostic.get("degradationReasons") or [])) or "-"
+        table.add_row(
+            str(item.get("paperId") or ""),
+            str(diagnostic.get("parser") or ""),
+            str(diagnostic.get("pageCount") or 0),
+            str(diagnostic.get("columnCountDetected") or 0),
+            str(diagnostic.get("tablesDetected") or 0),
+            "degraded" if diagnostic.get("extractionDegraded") else "ok",
+            reasons,
+        )
+    console.print(table)
+
+
+@paper_group.command("materialize-parsed", hidden=True)
+@click.option("--paper-id", "paper_ids", multiple=True, help="Materialize one registered paper id; repeat to inspect multiple papers.")
+@click.option("--parser", "parser", default="pymupdf", show_default=True, type=click.Choice(["pymupdf"]), help="Local parser used for parsed artifacts.")
+@click.option("--apply/--dry-run", default=False, show_default=True, help="Write parsed artifacts; default is dry-run.")
+@click.option("--overwrite/--no-overwrite", default=False, show_default=True, help="Refresh existing parsed artifacts.")
+@click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
+@click.pass_context
+def paper_materialize_parsed(ctx, paper_ids, parser, apply, overwrite, as_json):
+    """Materialize parsed artifacts from existing local paper PDFs."""
+
+    targets = [str(item).strip() for item in list(paper_ids or []) if str(item).strip()]
+    if not targets:
+        raise click.ClickException("at least one --paper-id is required")
+    khub = ctx.obj["khub"]
+    payload = materialize_parsed_artifacts(
+        sqlite_db=_sqlite_db(khub.config, khub=khub),
+        papers_dir=khub.config.papers_dir,
+        paper_ids=targets,
+        parser=str(parser or "pymupdf"),
+        apply=bool(apply),
+        overwrite=bool(overwrite),
+    )
+    _validate_cli_payload(khub.config, payload, PARSED_MATERIALIZATION_SCHEMA_ID)
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper parsed materialization[/bold] status={payload.get('status')} "
+        f"planned={counts.get('planned', 0)} materialized={counts.get('materialized', 0)} "
+        f"blocked={counts.get('blocked', 0)} failed={counts.get('failed', 0)} "
+        f"skipped_existing={counts.get('skippedExisting', 0)}"
+    )
+    if not apply:
+        console.print("[dim]dry-run only; pass --apply to write parsed artifacts[/dim]")
+    for item in list(payload.get("items") or [])[:20]:
+        console.print(
+            f"- {item.get('paperId')} status={item.get('status')} "
+            f"reason={item.get('reason') or '-'} action={item.get('action') or '-'}"
+        )
+
+
+@paper_group.command("layout-parser-pilot", hidden=True)
+@click.option("--paper-id", "paper_ids", multiple=True, help="Compare one registered paper id; repeat for a bounded pilot set.")
+@click.option(
+    "--parser",
+    "parsers",
+    multiple=True,
+    type=click.Choice(SUPPORTED_LAYOUT_PILOT_PARSERS),
+    help="Parser candidate to compare; repeat to restrict the pilot. Defaults to all supported candidates.",
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(file_okay=False, dir_okay=True, path_type=Path),
+    default=None,
+    help="Isolated report/artifact output root. Defaults under ~/.khub/reports/layout-parser-pilot/.",
+)
+@click.option("--run/--plan", default=False, show_default=True, help="Run parsers into isolated output root; default plans only.")
+@click.option("--timeout-seconds", default=0, type=int, show_default=True, help="Per-parser run timeout for isolated pilot execution; 0 disables timeout.")
+@click.option("--json", "as_json", is_flag=True, default=False, help="Emit schema-backed JSON.")
+@click.pass_context
+def paper_layout_parser_pilot(ctx, paper_ids, parsers, output_dir, run, timeout_seconds, as_json):
+    """Compare parser candidates in an isolated report-only pilot."""
+
+    khub = ctx.obj["khub"]
+    payload = run_layout_parser_pilot(
+        sqlite_db=_sqlite_db(khub.config, khub=khub),
+        papers_dir=khub.config.papers_dir,
+        paper_ids=list(paper_ids or []),
+        parsers=list(parsers or []),
+        output_dir=output_dir,
+        run=bool(run),
+        timeout_seconds=max(0, int(timeout_seconds or 0)),
+    )
+    _validate_cli_payload(khub.config, payload, LAYOUT_PARSER_PILOT_SCHEMA_ID)
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper layout parser pilot[/bold] status={payload.get('status')} "
+        f"planned={counts.get('planned', 0)} ok={counts.get('ok', 0)} "
+        f"blocked={counts.get('blocked', 0)} failed={counts.get('failed', 0)} "
+        f"timeout={counts.get('timeout', 0)}"
+    )
+    if not run:
+        console.print("[dim]plan only; pass --run to write isolated parser outputs[/dim]")
+    for paper in list(payload.get("papers") or [])[:10]:
+        parser_summary = ", ".join(
+            f"{item.get('parser')}:{item.get('status')}/{item.get('reason')}"
+            for item in list(paper.get("parsers") or [])
+        )
+        console.print(f"- {paper.get('paperId')} {parser_summary}")
 
 
 def _paper_card_feedback_context(*, khub, paper_id: str) -> dict[str, Any]:
@@ -623,7 +795,7 @@ def _execute_canon_quality_remediation(
     return payload
 
 
-@paper_group.command("feedback")
+@paper_group.command("feedback", hidden=True)
 @click.argument("paper_id")
 @click.option("--label", type=click.Choice(["keep", "skip"]), required=True, help="수동 판단 라벨")
 @click.option("--reason", default="", help="판단 이유")
@@ -672,7 +844,7 @@ def paper_feedback(ctx, paper_id, label, reason, topic, title, source, as_json):
         console.print(f"[dim]{payload['reason']}[/dim]")
 
 
-@paper_group.command("review-card")
+@paper_group.command("review-card", hidden=True)
 @click.argument("paper_id")
 @click.option(
     "--issue",
@@ -744,7 +916,7 @@ def paper_review_card(ctx, paper_id, issues, note, title, source, as_json):
         )
 
 
-@paper_group.command("review-card-export")
+@paper_group.command("review-card-export", hidden=True)
 @click.option(
     "--issue",
     "issues",
@@ -799,7 +971,7 @@ def paper_review_card_export(ctx, issues, limit, output_path, as_json):
         )
 
 
-@paper_group.command("review-card-plan")
+@paper_group.command("review-card-plan", hidden=True)
 @click.argument("paper_id")
 @click.option(
     "--issue",
@@ -837,7 +1009,7 @@ def paper_review_card_plan(ctx, paper_id, issues, from_log, as_json):
         )
 
 
-@paper_group.command("review-card-apply")
+@paper_group.command("review-card-apply", hidden=True)
 @click.argument("paper_id")
 @click.option(
     "--issue",
@@ -919,7 +1091,7 @@ def paper_review_card_apply(ctx, paper_id, issues, from_log, provider, model, al
         console.print(f"- failed {action.get('code')}: {action.get('error')}")
 
 
-@paper_group.command("review-card-apply-batch")
+@paper_group.command("review-card-apply-batch", hidden=True)
 @click.option("--paper-id", "paper_ids", multiple=True, help="대상 paper id (여러 번 사용 가능)")
 @click.option(
     "--paper-id-file",
@@ -1070,7 +1242,7 @@ def paper_review_card_apply_batch(
         )
 
 
-@paper_group.command("canon-quality-audit")
+@paper_group.command("canon-quality-audit", hidden=True)
 @click.option(
     "--manifest",
     "manifest_path",
@@ -1191,7 +1363,204 @@ def paper_canon_quality_audit(ctx, manifest_path, output_dir, apply, provider, m
         )
 
 
-@paper_group.command("repair-source")
+@paper_group.command("corpus-bootstrap", hidden=True)
+@click.option("--artifact-id", "artifact_ids", multiple=True, help="대상 corpus artifact id (여러 번 사용 가능)")
+@click.option("--source-id", "source_ids", multiple=True, help="대상 manifest source id (여러 번 사용 가능)")
+@click.option("--all", "all_artifacts", is_flag=True, help="manifest의 모든 corpus artifact를 검사")
+@click.option(
+    "--manifest",
+    "manifest_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="corpus manifest 경로",
+)
+@click.option(
+    "--papers-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="config의 papers_dir 대신 사용할 local corpus root",
+)
+@click.option("--apply/--dry-run", default=False, show_default=True, help="missing artifact를 실제 다운로드")
+@click.option("--allow-network/--no-allow-network", default=False, show_default=True, help="명시적 네트워크 획득 허용")
+@click.option("--timeout", default=60.0, show_default=True, type=float, help="다운로드 요청 timeout 초")
+@click.option("--json/--no-json", "as_json", default=False, show_default=True, help="결과를 JSON으로 출력")
+@click.pass_context
+def paper_corpus_bootstrap(
+    ctx,
+    artifact_ids,
+    source_ids,
+    all_artifacts,
+    manifest_path,
+    papers_dir,
+    apply,
+    allow_network,
+    timeout,
+    as_json,
+):
+    """manifest-backed local paper corpus artifacts를 명시적으로 bootstrap."""
+    if not all_artifacts and not list(artifact_ids or []) and not list(source_ids or []):
+        raise click.ClickException("select artifacts with --artifact-id, --source-id, or --all")
+    khub = ctx.obj["khub"]
+    payload = bootstrap_corpus_artifacts(
+        config=khub.config,
+        manifest_path=manifest_path,
+        papers_dir=papers_dir,
+        artifact_ids=list(artifact_ids or []),
+        source_ids=list(source_ids or []),
+        all_artifacts=bool(all_artifacts),
+        apply=bool(apply),
+        allow_network=bool(allow_network),
+        timeout=max(1.0, float(timeout)),
+    )
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        if payload.get("status") != "ok":
+            ctx.exit(1)
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper corpus bootstrap[/bold] status={payload.get('status')} "
+        f"selected={payload.get('selectedCount', 0)} downloaded={counts.get('downloaded', 0)} "
+        f"already_present={counts.get('alreadyPresent', 0)} blocked={counts.get('blocked', 0)}"
+    )
+    if not apply:
+        console.print("[dim]dry-run only; pass --apply --allow-network to acquire missing artifacts[/dim]")
+    for item in list(payload.get("items") or [])[:10]:
+        console.print(
+            f"- {item.get('artifactId')} status={item.get('status')} "
+            f"target={item.get('targetPath') or '-'} reason={item.get('reason') or '-'}"
+        )
+    for error in list(payload.get("selectionErrors") or [])[:10]:
+        console.print(
+            f"- selector {error.get('selectorType')}={error.get('selector')} "
+            f"status={error.get('status')} reason={error.get('reason')}"
+        )
+    if payload.get("status") != "ok":
+        raise click.ClickException("paper corpus bootstrap blocked")
+
+
+@paper_group.command("corpus-manifest-validate", hidden=True)
+@click.option(
+    "--manifest",
+    "manifest_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="corpus manifest 경로",
+)
+@click.option(
+    "--papers-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="config의 papers_dir 대신 사용할 local corpus root",
+)
+@click.option(
+    "--check-artifacts/--no-check-artifacts",
+    default=True,
+    show_default=True,
+    help="source artifact 존재/hash 검사",
+)
+@click.option(
+    "--check-parsed/--no-check-parsed",
+    default=True,
+    show_default=True,
+    help="parsed artifact manifest 존재를 별도 집계",
+)
+@click.option("--json/--no-json", "as_json", default=False, show_default=True, help="결과를 JSON으로 출력")
+@click.pass_context
+def paper_corpus_manifest_validate(
+    ctx,
+    manifest_path,
+    papers_dir,
+    check_artifacts,
+    check_parsed,
+    as_json,
+):
+    """manifest-backed source/artifact/hash linkage를 report-only로 검증."""
+    khub = ctx.obj["khub"]
+    payload = validate_corpus_manifest(
+        config=khub.config,
+        manifest_path=manifest_path,
+        papers_dir=papers_dir,
+        check_artifacts=bool(check_artifacts),
+        check_parsed=bool(check_parsed),
+    )
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        if payload.get("status") != "ok":
+            ctx.exit(1)
+        return
+
+    counts = dict(payload.get("counts") or {})
+    console.print(
+        f"[bold]paper corpus manifest validation[/bold] status={payload.get('status')} "
+        f"rows={counts.get('manifestRows', 0)} source_available={counts.get('sourceAvailableRows', 0)} "
+        f"source_missing={counts.get('sourceMissingRows', 0)} hash_mismatch={counts.get('hashMismatchRows', 0)} "
+        f"parsed_missing={counts.get('parsedMissingRows', 0)}"
+    )
+    for item in [row for row in list(payload.get("items") or []) if row.get("blockers")][:10]:
+        console.print(
+            f"- {item.get('artifactId')} source={item.get('sourceArtifactStatus')} "
+            f"parsed={item.get('parsedArtifactStatus')} blockers={','.join(item.get('blockers') or [])}"
+        )
+    if payload.get("status") != "ok":
+        raise click.ClickException("paper corpus manifest validation blocked")
+
+
+@paper_group.command("corpus-source-artifact-inventory", hidden=True)
+@click.option(
+    "--manifest",
+    "manifest_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="corpus manifest 경로",
+)
+@click.option(
+    "--papers-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="config의 papers_dir 대신 사용할 local corpus root",
+)
+@click.option("--json/--no-json", "as_json", default=False, show_default=True, help="결과를 JSON으로 출력")
+@click.option(
+    "--markdown/--no-markdown",
+    default=False,
+    show_default=True,
+    help="JSON과 함께 Markdown inventory 요약을 출력",
+)
+@click.pass_context
+def paper_corpus_source_artifact_inventory(
+    ctx,
+    manifest_path,
+    papers_dir,
+    as_json,
+    markdown,
+):
+    """configured local papers_dir의 PDF/text source inventory를 report-only로 생성."""
+    khub = ctx.obj["khub"]
+    payload = build_corpus_source_artifact_inventory(
+        config=khub.config,
+        manifest_path=manifest_path,
+        papers_dir=papers_dir,
+    )
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        counts = dict(payload.get("counts") or {})
+        console.print(
+            f"[bold]paper corpus source artifact inventory[/bold] status={payload.get('status')} "
+            f"rows={counts.get('inventoryRows', 0)} registered={counts.get('alreadyRegisteredRows', 0)} "
+            f"unregistered_available={counts.get('unregisteredAvailableRows', 0)} "
+            f"manifest_source_missing={counts.get('manifestSourceMissingRows', 0)} "
+            f"manifest_hash_mismatch={counts.get('manifestHashMismatchRows', 0)}"
+        )
+    if markdown:
+        click.echo(render_corpus_source_artifact_inventory_markdown(payload))
+    if payload.get("status") != "ok":
+        ctx.exit(1)
+
+
+@paper_group.command("repair-source", hidden=True)
 @click.option("--paper-id", "paper_ids", multiple=True, help="대상 paper id (여러 번 사용 가능)")
 @click.option(
     "--paper-id-file",
@@ -1257,7 +1626,7 @@ def paper_repair_source(ctx, paper_ids, paper_id_file, document_memory_parser, r
         )
 
 
-@paper_group.command("repair-source-queue")
+@paper_group.command("repair-source-queue", hidden=True)
 @click.option("--paper-id", "paper_ids", multiple=True, help="대상 paper id (여러 번 사용 가능)")
 @click.option(
     "--paper-id-file",
@@ -1617,7 +1986,7 @@ def paper_summarize(ctx, arxiv_id, provider, model, quick, allow_external, llm_m
     )
 
 
-@paper_group.command("review")
+@paper_group.command("review", hidden=True)
 @click.option("--bad-only", is_flag=True, help="품질이 나쁜 요약만 표시 (점수 50 미만)")
 @click.option("--threshold", "-t", default=50, help="나쁜 요약 기준 점수 (기본: 50)")
 @click.option("--field", "-f", default=None, help="분야 필터")
@@ -1675,7 +2044,7 @@ def paper_embed(ctx, arxiv_id):
 # ─────────────────────────────────────────────
 # paper translate-all
 # ─────────────────────────────────────────────
-@paper_group.command("translate-all")
+@paper_group.command("translate-all", hidden=True)
 @click.option("--limit", "-n", default=0, help="최대 번역 수 (0=전체)")
 @click.option("--field", "-f", default=None, help="분야 필터")
 @click.option("--provider", "-p", default=None, help="번역 프로바이더")
@@ -1698,7 +2067,7 @@ def paper_translate_all(ctx, limit, field, provider, model):
 # ─────────────────────────────────────────────
 # paper summarize-all
 # ─────────────────────────────────────────────
-@paper_group.command("summarize-all")
+@paper_group.command("summarize-all", hidden=True)
 @click.option("--limit", "-n", default=0, help="최대 요약 수 (0=전체)")
 @click.option("--field", "-f", default=None, help="분야 필터")
 @click.option("--quick", is_flag=True, help="간단 요약 (구조화 분석 대신 3-5문장)")
@@ -1776,7 +2145,7 @@ def paper_summarize_all(
 # ─────────────────────────────────────────────
 # paper embed-all
 # ─────────────────────────────────────────────
-@paper_group.command("embed-all")
+@paper_group.command("embed-all", hidden=True)
 @click.option("--all", "index_all", is_flag=True, help="이미 인덱싱된 논문도 재인덱싱")
 @click.pass_context
 def paper_embed_all(ctx, index_all):
@@ -1797,7 +2166,7 @@ def paper_embed_all(ctx, index_all):
 # ─────────────────────────────────────────────
 # paper sync-keywords
 # ─────────────────────────────────────────────
-@paper_group.command("sync-keywords")
+@paper_group.command("sync-keywords", hidden=True)
 @click.option("--force", is_flag=True, help="이미 키워드가 있는 논문도 재추출")
 @click.option("--limit", "-n", default=0, help="최대 처리 수 (0=전체)")
 @click.option("--claims/--no-claims", default=True, show_default=True, help="키워드와 함께 claim 추출/저장")
@@ -1846,7 +2215,7 @@ def paper_sync_keywords(ctx, force, limit, claims, allow_external, llm_mode):
 # ─────────────────────────────────────────────
 # paper build-concepts
 # ─────────────────────────────────────────────
-@paper_group.command("build-concepts")
+@paper_group.command("build-concepts", hidden=True)
 @click.option("--force", is_flag=True, help="기존 개념 노트도 재생성")
 @click.pass_context
 def paper_build_concepts(ctx, force):
@@ -1870,7 +2239,7 @@ def paper_build_concepts(ctx, force):
 # ─────────────────────────────────────────────
 # paper normalize-concepts
 # ─────────────────────────────────────────────
-@paper_group.command("normalize-concepts")
+@paper_group.command("normalize-concepts", hidden=True)
 @click.option("--dry-run", is_flag=True, help="변경 없이 탐지 결과만 표시")
 @click.option("--provider", default=None, help="개념 정규화용 LLM provider override")
 @click.option("--model", default=None, help="개념 정규화용 LLM model override")
@@ -1916,7 +2285,7 @@ def paper_info(ctx, arxiv_id):
 # ─────────────────────────────────────────────
 # paper resummary-vault
 # ─────────────────────────────────────────────
-@paper_group.command("resummary-vault")
+@paper_group.command("resummary-vault", hidden=True)
 @click.option("--bad-only", is_flag=True, default=True, help="부실한 요약만 재요약 (기본값)")
 @click.option("--all", "resummary_all", is_flag=True, help="모든 노트 재요약")
 @click.option("--threshold", "-t", default=60, help="재요약 기준 점수 (기본: 60)")

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-materialization.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "request", "counts", "items", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-materialization.result.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked", "partial", "failed"] },
+    "generatedAt": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": ["paperIds", "parser", "apply", "overwrite"],
+      "properties": {
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "parser": { "type": "string" },
+        "apply": { "type": "boolean" },
+        "overwrite": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": ["planned", "materialized", "blocked", "failed", "skippedExisting"],
+      "properties": {
+        "planned": { "type": "integer", "minimum": 0 },
+        "materialized": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skippedExisting": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "paperId",
+          "paperTitle",
+          "parser",
+          "status",
+          "action",
+          "reason",
+          "sourceArtifact",
+          "parsedArtifacts",
+          "writes"
+        ],
+        "properties": {
+          "paperId": { "type": "string" },
+          "paperTitle": { "type": "string" },
+          "parser": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["planned", "materialized", "blocked", "failed", "skipped_existing"]
+          },
+          "action": { "type": "string" },
+          "reason": { "type": "string" },
+          "sourceArtifact": {
+            "type": "object",
+            "required": ["kind", "exists", "path"],
+            "properties": {
+              "kind": { "type": "string" },
+              "exists": { "type": "boolean" },
+              "path": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "parsedArtifacts": {
+            "type": "object",
+            "required": ["paths", "before", "after"],
+            "properties": {
+              "paths": { "type": "object" },
+              "before": { "type": "object" },
+              "after": { "type": "object" }
+            },
+            "additionalProperties": true
+          },
+          "writes": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

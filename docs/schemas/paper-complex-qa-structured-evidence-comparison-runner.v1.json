@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.complex-qa-structured-evidence-comparison-runner.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "runner",
+    "inputs",
+    "counts",
+    "policy",
+    "warnings",
+    "semanticViolations",
+    "rows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.complex-qa-structured-evidence-comparison-runner.v1" },
+    "status": { "type": "string", "enum": ["ok", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "runner": {
+      "type": "object",
+      "required": ["name", "version", "mode", "purpose", "nextRecommendedTranche"],
+      "properties": {
+        "name": { "const": "complex-qa-structured-evidence-comparison-runner" },
+        "version": { "type": "string" },
+        "mode": { "const": "report_only_structured_evidence_gate" },
+        "purpose": { "type": "string" },
+        "nextRecommendedTranche": { "const": "complex QA strict-evidence supplied answer-quality dry-run" }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "seedPackReport",
+        "seedPackSchema",
+        "abstainBaselineReport",
+        "abstainBaselineSchema",
+        "structuredEvidenceReport",
+        "structuredEvidenceReportSchema",
+        "structuredEvidenceInputMode",
+        "seedPackQuestionRows",
+        "seedPackPaperRows",
+        "abstainBaselineQuestionRows"
+      ],
+      "properties": {
+        "seedPackReport": { "type": "string" },
+        "seedPackSchema": { "const": "knowledge-hub.paper.complex-qa-seed-pack.v1" },
+        "abstainBaselineReport": { "type": "string" },
+        "abstainBaselineSchema": { "const": "knowledge-hub.paper.complex-qa-abstain-baseline-runner.v1" },
+        "structuredEvidenceReport": { "type": "string" },
+        "structuredEvidenceReportSchema": { "type": "string" },
+        "structuredEvidenceInputMode": {
+          "type": "string",
+          "enum": [
+            "absent_all_strict_evidence_unavailable",
+            "report_supplied_contract_probe"
+          ]
+        },
+        "seedPackQuestionRows": { "type": "integer", "minimum": 0 },
+        "seedPackPaperRows": { "type": "integer", "minimum": 0 },
+        "abstainBaselineQuestionRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "paperRows",
+        "questionRows",
+        "abstainBaselineRows",
+        "structuredEvidenceAvailabilityRows",
+        "expectedNoAnswerRows",
+        "blockedUntilStructuredEvidenceRows",
+        "answerableRows",
+        "strictEvidenceAvailableRows",
+        "evidenceContractSatisfiedRows",
+        "stableExpectedNoAnswerRows",
+        "stillBlockedMissingStrictEvidenceRows",
+        "candidateAnswerableWithStructuredEvidenceRows",
+        "answerableSeedBlockedMissingStrictEvidenceRows",
+        "readyForAnswerQualityComparisonRows",
+        "baselineAbstainPassRows",
+        "answerGeneratedRows",
+        "llmCallRows",
+        "answerPathInvokedRows",
+        "unsafeAnsweredRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "vaultScanRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "reindexOrReembedRows",
+        "schemaViolationCount",
+        "readyForAnswerQualityComparisonRate",
+        "unsafeAnswerRate",
+        "byQuestionCategory",
+        "byAnswerabilityExpectation",
+        "byComparisonVerdict",
+        "byExpectedEvidenceType"
+      ],
+      "properties": {
+        "paperRows": { "type": "integer", "minimum": 0 },
+        "questionRows": { "type": "integer", "minimum": 0 },
+        "abstainBaselineRows": { "type": "integer", "minimum": 0 },
+        "structuredEvidenceAvailabilityRows": { "type": "integer", "minimum": 0 },
+        "expectedNoAnswerRows": { "type": "integer", "minimum": 0 },
+        "blockedUntilStructuredEvidenceRows": { "type": "integer", "minimum": 0 },
+        "answerableRows": { "type": "integer", "minimum": 0 },
+        "strictEvidenceAvailableRows": { "type": "integer", "minimum": 0 },
+        "evidenceContractSatisfiedRows": { "type": "integer", "minimum": 0 },
+        "stableExpectedNoAnswerRows": { "type": "integer", "minimum": 0 },
+        "stillBlockedMissingStrictEvidenceRows": { "type": "integer", "minimum": 0 },
+        "candidateAnswerableWithStructuredEvidenceRows": { "type": "integer", "minimum": 0 },
+        "answerableSeedBlockedMissingStrictEvidenceRows": { "type": "integer", "minimum": 0 },
+        "readyForAnswerQualityComparisonRows": { "type": "integer", "minimum": 0 },
+        "baselineAbstainPassRows": { "type": "integer", "minimum": 0 },
+        "answerGeneratedRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "unsafeAnsweredRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "readyForAnswerQualityComparisonRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "unsafeAnswerRate": { "const": 0 },
+        "byQuestionCategory": { "type": "object" },
+        "byAnswerabilityExpectation": { "type": "object" },
+        "byComparisonVerdict": { "type": "object" },
+        "byExpectedEvidenceType": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "comparisonOnly",
+        "strictEvidenceReadOnly",
+        "questionExecutionRun",
+        "answerGenerationRun",
+        "llmCalls",
+        "answerPathChanged",
+        "answerPathInvoked",
+        "searchIndexQueried",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "vaultScan",
+        "runtimeEvidenceCreated",
+        "citationEvidenceCreated",
+        "strictEvidenceCreated",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "comparisonOnly": { "const": true },
+        "strictEvidenceReadOnly": { "const": true },
+        "questionExecutionRun": { "const": false },
+        "answerGenerationRun": { "const": false },
+        "llmCalls": { "const": false },
+        "answerPathChanged": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "searchIndexQueried": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "vaultScan": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "semanticViolations": {
+      "type": "array",
+      "maxItems": 0,
+      "items": { "type": "string" }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "questionId",
+          "paperIds",
+          "questionCategory",
+          "expectedEvidenceType",
+          "answerabilityExpectation",
+          "baselineVerdict",
+          "baselineExpectedBehavior",
+          "strictEvidenceAvailable",
+          "evidenceContractSatisfied",
+          "structuredEvidenceRefs",
+          "comparisonVerdict",
+          "expectedGatedBehavior",
+          "readyForAnswerQualityComparison",
+          "answerGenerated",
+          "unsafeAnswered",
+          "llmCall",
+          "answerPathInvoked",
+          "strictMissingBlockers",
+          "requiredEvidenceContract",
+          "riskNotes"
+        ],
+        "properties": {
+          "questionId": { "type": "string", "minLength": 1 },
+          "paperIds": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "questionCategory": {
+            "type": "string",
+            "enum": [
+              "table_numeric_qa",
+              "equation_citation_qa",
+              "figure_caption_qa",
+              "method_comparison_qa",
+              "limitation_qa",
+              "appendix_table_lookup_qa"
+            ]
+          },
+          "expectedEvidenceType": {
+            "type": "string",
+            "enum": [
+              "table_cell_numeric",
+              "equation_source_span",
+              "figure_caption_source_span",
+              "cross_paper_method_spans",
+              "limitation_section_span",
+              "appendix_table_cell"
+            ]
+          },
+          "answerabilityExpectation": {
+            "type": "string",
+            "enum": [
+              "answerable",
+              "expected_no_answer",
+              "blocked_until_structured_evidence"
+            ]
+          },
+          "baselineVerdict": {
+            "type": "string",
+            "enum": [
+              "pass_expected_no_answer",
+              "pass_blocked_until_structured_evidence",
+              "blocked_answerable_without_strict_evidence",
+              "schema_violation_unknown_answerability"
+            ]
+          },
+          "baselineExpectedBehavior": {
+            "type": "string",
+            "enum": [
+              "no_answer",
+              "abstain_until_strict_structured_evidence",
+              "requires_future_strict_evidence_check",
+              "blocked_schema_violation"
+            ]
+          },
+          "strictEvidenceAvailable": { "type": "boolean" },
+          "evidenceContractSatisfied": { "type": "boolean" },
+          "structuredEvidenceRefs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "comparisonVerdict": {
+            "type": "string",
+            "enum": [
+              "stable_expected_no_answer",
+              "still_blocked_missing_strict_structured_evidence",
+              "candidate_answerable_with_strict_structured_evidence",
+              "answerable_seed_blocked_missing_strict_evidence",
+              "schema_violation_unknown_answerability"
+            ]
+          },
+          "expectedGatedBehavior": {
+            "type": "string",
+            "enum": [
+              "no_answer_expected_even_with_structured_evidence",
+              "structured_evidence_gated_answer_candidate",
+              "abstain_until_strict_structured_evidence",
+              "blocked_missing_strict_structured_evidence",
+              "blocked_schema_violation"
+            ]
+          },
+          "readyForAnswerQualityComparison": { "type": "boolean" },
+          "answerGenerated": { "const": false },
+          "unsafeAnswered": { "const": false },
+          "llmCall": { "const": false },
+          "answerPathInvoked": { "const": false },
+          "strictMissingBlockers": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "requiredEvidenceContract": { "type": "object" },
+          "riskNotes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "reportPaths": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

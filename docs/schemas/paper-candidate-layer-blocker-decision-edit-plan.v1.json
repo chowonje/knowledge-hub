@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.candidate-layer-blocker-decision-edit-plan.v1",
+  "title": "Candidate Layer Blocker Decision Edit Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputs",
+    "counts",
+    "gate",
+    "policy",
+    "warnings",
+    "editRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.candidate-layer-blocker-decision-edit-plan.v1" },
+    "status": { "type": "string", "enum": ["edit_plan_ready", "no_edit_rows", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateLayerBlockerNonbindingDecisionRecommendationsReport",
+        "candidateLayerBlockerNonbindingDecisionRecommendationsSchema",
+        "candidateLayerBlockerDecisionsFile",
+        "candidateLayerBlockerDecisionRows"
+      ],
+      "properties": {
+        "candidateLayerBlockerNonbindingDecisionRecommendationsReport": { "type": "string" },
+        "candidateLayerBlockerNonbindingDecisionRecommendationsSchema": { "type": "string" },
+        "candidateLayerBlockerDecisionsFile": { "type": "string" },
+        "candidateLayerBlockerDecisionRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "editRows",
+        "readyForManualEditRows",
+        "blockedMissingDecisionFileRows",
+        "blockedRecommendationNotAllowedRows",
+        "manualEditRequiredRows",
+        "noEditRequiredRows",
+        "currentNeedsReviewRows",
+        "currentNonNeedsReviewRows",
+        "proposedAcceptTechnicalOpenRows",
+        "proposedAcceptPolicyGuardrailRows",
+        "proposedNeedsReviewRows",
+        "decisionRowsModified",
+        "acceptedHumanDecisionRows",
+        "operatorApprovedRows",
+        "strictEligibleRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "unsafeUpstreamFlagCount",
+        "byEditStatus",
+        "byCurrentDecision",
+        "byRecommendedDecision",
+        "byBucket",
+        "byLayer"
+      ],
+      "properties": {
+        "editRows": { "type": "integer", "minimum": 0 },
+        "readyForManualEditRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingDecisionFileRows": { "type": "integer", "minimum": 0 },
+        "blockedRecommendationNotAllowedRows": { "type": "integer", "minimum": 0 },
+        "manualEditRequiredRows": { "type": "integer", "minimum": 0 },
+        "noEditRequiredRows": { "type": "integer", "minimum": 0 },
+        "currentNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "currentNonNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "proposedAcceptTechnicalOpenRows": { "type": "integer", "minimum": 0 },
+        "proposedAcceptPolicyGuardrailRows": { "type": "integer", "minimum": 0 },
+        "proposedNeedsReviewRows": { "type": "integer", "minimum": 0 },
+        "decisionRowsModified": { "const": 0 },
+        "acceptedHumanDecisionRows": { "const": 0 },
+        "operatorApprovedRows": { "const": 0 },
+        "strictEligibleRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "unsafeUpstreamFlagCount": { "type": "integer", "minimum": 0 },
+        "byEditStatus": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byCurrentDecision": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byRecommendedDecision": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byBucket": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byLayer": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "editPlanReady",
+        "manualDecisionFileEditRequired",
+        "decisionFileModified",
+        "decisionsRecorded",
+        "strictEvidenceReady",
+        "parserRoutingReady",
+        "answerIntegrationReady",
+        "runtimePromotionAllowed",
+        "decision",
+        "unsafeUpstreamFlags",
+        "recommendedNextTranche"
+      ],
+      "properties": {
+        "editPlanReady": { "type": "boolean" },
+        "manualDecisionFileEditRequired": { "type": "boolean" },
+        "decisionFileModified": { "const": false },
+        "decisionsRecorded": { "const": false },
+        "strictEvidenceReady": { "const": false },
+        "parserRoutingReady": { "const": false },
+        "answerIntegrationReady": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "decision": {
+          "type": "string",
+          "enum": ["manual_edit_still_required", "no_manual_edits_required", "no_candidate_layer_blocker_recommendations", "blocked"]
+        },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "recommendedNextTranche": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "decisionEditPlanOnly",
+        "strictEvidenceCreated",
+        "runtimePromotionAllowed",
+        "parserRoutingChanged",
+        "canonicalParsedArtifactsWritten",
+        "databaseMutation",
+        "reindexOrReembed",
+        "answerIntegrationChanged"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "decisionEditPlanOnly": { "const": true },
+        "strictEvidenceCreated": { "const": false },
+        "runtimePromotionAllowed": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "databaseMutation": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "answerIntegrationChanged": { "const": false }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "editRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "edit_row_id",
+          "source_recommendation_row_id",
+          "source_input_row_id",
+          "source_decision_row_id",
+          "source_review_card_id",
+          "source_backlog_id",
+          "blocker",
+          "priority",
+          "review_bucket",
+          "affected_layers",
+          "current_decision",
+          "recommended_decision",
+          "recommendation_rationale",
+          "recommendation_confidence",
+          "allowed_decisions",
+          "edit_status",
+          "manual_edit_required",
+          "reviewer_required",
+          "notes_required",
+          "reviewer_present",
+          "notes_present",
+          "accepted_as_human_decision",
+          "decision_file_modified",
+          "decision_file_patch_hint",
+          "evidence_tier",
+          "report_only",
+          "strict_eligible",
+          "citation_grade",
+          "runtime_evidence",
+          "runtime_promotion_allowed",
+          "strict_blockers",
+          "non_strict_reason"
+        ],
+        "properties": {
+          "edit_row_id": { "type": "string" },
+          "source_recommendation_row_id": { "type": "string" },
+          "source_input_row_id": { "type": "string" },
+          "source_decision_row_id": { "type": "string" },
+          "source_review_card_id": { "type": "string" },
+          "source_backlog_id": { "type": "string" },
+          "blocker": { "type": "string" },
+          "priority": { "type": "string" },
+          "review_bucket": { "type": "string" },
+          "affected_layers": { "type": "array", "items": { "type": "string" } },
+          "current_decision": { "type": "string" },
+          "recommended_decision": { "type": "string" },
+          "recommendation_rationale": { "type": "string" },
+          "recommendation_confidence": { "type": "string" },
+          "allowed_decisions": { "type": "array", "items": { "type": "string" } },
+          "edit_status": {
+            "type": "string",
+            "enum": [
+              "ready_for_manual_edit",
+              "blocked_missing_decision_file_row",
+              "blocked_recommendation_not_allowed"
+            ]
+          },
+          "manual_edit_required": { "type": "boolean" },
+          "reviewer_required": { "type": "boolean" },
+          "notes_required": { "type": "boolean" },
+          "reviewer_present": { "type": "boolean" },
+          "notes_present": { "type": "boolean" },
+          "accepted_as_human_decision": { "const": false },
+          "decision_file_modified": { "const": false },
+          "decision_file_patch_hint": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_decision_row_id", "decision", "reviewer", "notes"],
+            "properties": {
+              "source_decision_row_id": { "type": "string" },
+              "decision": { "type": "string" },
+              "reviewer": { "type": "string" },
+              "notes": { "type": "string" }
+            }
+          },
+          "evidence_tier": { "const": "candidate_layer_blocker_decision_edit_plan_only" },
+          "report_only": { "const": true },
+          "strict_eligible": { "const": false },
+          "citation_grade": { "const": false },
+          "runtime_evidence": { "const": false },
+          "runtime_promotion_allowed": { "const": false },
+          "strict_blockers": { "type": "array", "items": { "type": "string" } },
+          "non_strict_reason": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
