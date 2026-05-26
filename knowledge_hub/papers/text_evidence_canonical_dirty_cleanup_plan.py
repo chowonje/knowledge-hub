@@ -157,6 +157,7 @@ def build_text_evidence_canonical_dirty_cleanup_plan_report(
     action_counts = dict(sorted(Counter(row["cleanupAction"] for row in rows).items()))
     manual_plan_rows = sum(1 for row in rows if row["cleanupAction"] == "manual_cleanup_plan_required")
     dirty_rows = sum(row["dirtyRows"] for row in rows)
+    cleanup_needed = dirty_rows > 0
 
     report: dict[str, Any] = {
         "schema": TEXT_EVIDENCE_CANONICAL_DIRTY_CLEANUP_PLAN_SCHEMA_ID,
@@ -190,7 +191,11 @@ def build_text_evidence_canonical_dirty_cleanup_plan_report(
         "sequenceCounts": sequence_counts,
         "actionCounts": action_counts,
         "rows": rows,
-        "nextAction": "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout",
+        "nextAction": (
+            "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout"
+            if cleanup_needed
+            else "canonical_checkout_clean_no_cleanup_required"
+        ),
         "mutationCounters": {
             "canonicalParsedArtifactWriteRows": 0,
             "databaseMutationRows": 0,
@@ -210,7 +215,11 @@ def build_text_evidence_canonical_dirty_cleanup_plan_report(
         "reportHash": "",
         "warnings": [
             "This cleanup plan performs no cleanup and no destructive operation.",
-            "Physical cleanup requires explicit approval and a snapshot/checkpoint first.",
+            (
+                "Physical cleanup requires explicit approval and a snapshot/checkpoint first."
+                if cleanup_needed
+                else "Canonical dirty cleanup is not required because no dirty rows remain."
+            ),
         ],
         "schemaErrors": [],
     }

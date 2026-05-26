@@ -1,24 +1,22 @@
 # Text Evidence RC Convergence
 
 - status: `ready_for_integration_review`
-- publicRcReady: `False`
+- publicRcReady: `True`
 - phaseRows: `9`
 - readyPhaseRows: `9`
 - blockedPhaseRows: `0`
-- publicRcBlockerRows: `2`
+- publicRcBlockerRows: `0`
 - privatePathLeakRows: `0`
-- reportHash: `sha256:a4607ea9777b4a33df88cf0dd73377bca020aef2807a97cd4fa7d6364968e206`
+- reportHash: `sha256:41b32ab37da43af8748e2bfcd9f3c23641a3f7a5082373641dd4a15f8a56ed80`
 - textOnlyScopeReady: `True`
 - externalActionPreflightReady: `True`
 - pr149CloseRequestStatus: `ready_for_user_decision`
-- pr149CloseReceiptStatus: `pending_close_execution`
+- pr149CloseReceiptStatus: `closed_verified`
 
 ## Blockers
 
 | blockerId | severity | reason |
 |---|---|---|
-| `canonical_checkout_dirty` | `hold` | canonical dirty snapshot dry-run fingerprint is ready; physical cleanup still awaits PR #149 closure and approval |
-| `pr_149_conflicting_or_draft` | `hold` | PR #149 preflight is ready for explicit close approval |
 
 ## Phase Reports
 

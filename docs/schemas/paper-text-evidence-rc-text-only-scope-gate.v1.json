@@ -108,6 +108,7 @@
     "publicRcReady": { "type": "boolean" },
     "decision": {
       "enum": [
+        "text_only_scope_ready_for_public_rc_review",
         "text_only_scope_ready_pending_rc_convergence_actions",
         "text_only_scope_blocked"
       ]

@@ -222,7 +222,7 @@
     "phaseRows": { "type": "integer", "minimum": 0 },
     "readyPhaseRows": { "type": "integer", "minimum": 0 },
     "blockedPhaseRows": { "type": "integer", "minimum": 0 },
-    "publicRcReady": { "const": false },
+    "publicRcReady": { "type": "boolean" },
     "publicRcBlockerRows": { "type": "integer", "minimum": 0 },
     "blockers": {
       "type": "array",

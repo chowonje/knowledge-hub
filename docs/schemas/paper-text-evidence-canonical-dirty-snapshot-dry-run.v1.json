@@ -92,7 +92,12 @@
         "capturesFileContent": { "const": false }
       }
     },
-    "nextAction": { "const": "close_pr149_without_merge_before_writing_cleanup_snapshot" },
+    "nextAction": {
+      "enum": [
+        "close_pr149_without_merge_before_writing_cleanup_snapshot",
+        "canonical_checkout_clean_no_snapshot_required"
+      ]
+    },
     "mutationCounters": {
       "type": "object",
       "additionalProperties": false,

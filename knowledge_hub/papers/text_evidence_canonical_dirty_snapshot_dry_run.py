@@ -107,6 +107,7 @@ def build_text_evidence_canonical_dirty_snapshot_dry_run_report(
     status_lines = _status_lines(canonical_repo)
     bucket_summary = _bucket_summary_from_status(status_lines)
     canonical_available = canonical_repo is not None and canonical_repo.exists()
+    dirty_rows = len(status_lines)
 
     report: dict[str, Any] = {
         "schema": TEXT_EVIDENCE_CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_SCHEMA_ID,
@@ -131,9 +132,9 @@ def build_text_evidence_canonical_dirty_snapshot_dry_run_report(
             "repoRef": "canonical_product_checkout",
             "branch": _git_text(canonical_repo, "rev-parse", "--abbrev-ref", "HEAD") if canonical_available else "",
             "head": _git_text(canonical_repo, "rev-parse", "--short", "HEAD") if canonical_available else "",
-            "dirtyRows": len(status_lines),
+            "dirtyRows": dirty_rows,
         },
-        "dirtyRows": len(status_lines),
+        "dirtyRows": dirty_rows,
         "trackedDirtyRows": int(bucket_summary["trackedDirtyRows"]),
         "untrackedRows": int(bucket_summary["untrackedRows"]),
         "statusFingerprint": _status_fingerprint(status_lines),
@@ -144,7 +145,11 @@ def build_text_evidence_canonical_dirty_snapshot_dry_run_report(
             "requiresPr149ResolvedFirst": True,
             "capturesFileContent": False,
         },
-        "nextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot",
+        "nextAction": (
+            "close_pr149_without_merge_before_writing_cleanup_snapshot"
+            if dirty_rows
+            else "canonical_checkout_clean_no_snapshot_required"
+        ),
         "mutationCounters": {
             "snapshotWriteRows": 0,
             "canonicalCleanupRows": 0,
@@ -166,7 +171,11 @@ def build_text_evidence_canonical_dirty_snapshot_dry_run_report(
         "reportHash": "",
         "warnings": [
             "This dry-run records only a git-status fingerprint, not file contents.",
-            "No snapshot file is written outside the report and no cleanup is executed.",
+            (
+                "No snapshot file is written outside the report and no cleanup is executed."
+                if dirty_rows
+                else "Canonical checkout is clean; no dirty cleanup snapshot is required."
+            ),
         ],
         "schemaErrors": [],
     }

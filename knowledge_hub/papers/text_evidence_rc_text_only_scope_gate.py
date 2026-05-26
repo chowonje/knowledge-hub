@@ -205,6 +205,7 @@ def build_text_evidence_rc_text_only_scope_gate(
     text_hold_rows = len(phase_reports) - text_ready_rows
     deferred_items = _deferred_items()
     public_rc_ready = bool(convergence.get("publicRcReady")) and not blockers
+    text_only_ready = text_hold_rows == 0
 
     report: dict[str, Any] = {
         "schema": TEXT_EVIDENCE_RC_TEXT_ONLY_SCOPE_GATE_SCHEMA_ID,
@@ -244,11 +245,13 @@ def build_text_evidence_rc_text_only_scope_gate(
         "textHoldRows": text_hold_rows,
         "deferredRows": len(deferred_items),
         "blockerRows": len(blockers),
-        "textOnlyRcReady": text_hold_rows == 0,
+        "textOnlyRcReady": text_only_ready,
         "publicRcReady": public_rc_ready,
         "decision": (
-            "text_only_scope_ready_pending_rc_convergence_actions"
-            if text_hold_rows == 0
+            "text_only_scope_ready_for_public_rc_review"
+            if public_rc_ready
+            else "text_only_scope_ready_pending_rc_convergence_actions"
+            if text_only_ready
             else "text_only_scope_blocked"
         ),
         "phaseReports": phase_reports,
@@ -273,7 +276,11 @@ def build_text_evidence_rc_text_only_scope_gate(
         "reportHash": "",
         "warnings": [
             "Visual/layout/image/format evidence remains deferred to later branch work.",
-            "This report does not close PR #149 and does not edit the canonical dirty checkout.",
+            (
+                "Public RC convergence blockers are clear for the current text-only scope."
+                if public_rc_ready
+                else "This report does not close PR #149 and does not edit the canonical dirty checkout."
+            ),
         ],
         "schemaErrors": [],
     }

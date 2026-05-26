@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-05-04
+Last updated: 2026-05-26
 
 ## What this project is
 
@@ -85,6 +85,10 @@ The same convergence board now also consumes a read-only external action preflig
 The PR #149 close decision is now represented by a separate approval request packet. `eval/knowledgeos/scripts/build_text_evidence_rc_pr149_close_approval_request.py` records the exact recommended decision (`approve_close_without_merge`), the sanitized close comment, and the command preview, while keeping the execution status `not_executed`. The convergence board now surfaces this request so the next action is a user decision, not an implicit PR mutation.
 
 The post-approval PR #149 readback is also represented by a read-only receipt gate. `eval/knowledgeos/scripts/build_text_evidence_rc_pr149_close_receipt.py` currently reports `pending_close_execution` because PR #149 is still open; after explicit approval and close execution, the same gate is the expected proof that PR #149 is closed without merge before canonical dirty cleanup proceeds.
+
+The approved RC convergence actions have now been executed. PR #149 was closed without merge, the receipt gate reports `closed_verified`, and the convergence board treats a closed PR as non-blocking even if GitHub still reports the draft/conflicting mergeability metadata from its final open state. The canonical dirty checkout was cleaned by archiving the dirty state into a reversible git stash named `text-evidence-rc canonical dirty archive 2026-05-26`; regenerated canonical inventory/snapshot reports now show `dirtyRows=0`.
+
+With those two public-RC blockers cleared, `eval/knowledgeos/scripts/build_text_evidence_rc_convergence_report.py` now computes `publicRcReady=true` when all text-evidence phases are ready, the text-only scope gate is ready, PR #149 is closed, and the canonical checkout is clean. The visual/layout/image/VLM branch remains deferred outside the v0.1 text-evidence mainline.
 
 Current success criteria for that loop:
 

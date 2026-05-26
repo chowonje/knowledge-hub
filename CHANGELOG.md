@@ -10,6 +10,7 @@
 
 ### Changed
 
+- Completed the approved v0.1 text-evidence RC convergence actions: PR #149 is closed without merge, the canonical dirty checkout state is archived in a reversible git stash before cleanup, the canonical checkout now reports zero dirty rows, and the convergence board can mark `publicRcReady=true` when PR and canonical-dirty blockers are both clear.
 - Tightened the default MCP profile for the v0.1 public/operator boundary. Default MCP listing and direct calls now keep learning, agentic, crawl/ingest, paper build/index, and paper ingest tools behind `KHUB_MCP_PROFILE=labs|all`, while the compact read/search/ask surface remains available.
 - Sanitized local workstation and vault-internal path strings in governance docs, an eval task note, and the RAG vNext rerank shadow query fixture.
 - Added a focused provider-surface tranche for public-preview setup. `khub provider` now exposes recommendation, custom OpenAI-compatible provider registration, role assignment, environment-key references, profile setup, and provider diagnostics; config-defined custom providers are visible to the registry, doctor, and runtime diagnostics without changing ask-v2, search/MCP runtime, or the add facade.
@@ -53,6 +54,7 @@
 
 ### Added
 
+- Added regression coverage for the post-close PR #149 receipt and convergence board semantics, including the rule that a closed PR #149 is not a public-RC blocker even if its last mergeability fields still report draft/conflicting metadata.
 - Added a read-only PR #149 close receipt gate for the v0.1 text-evidence RC line and wired it into the convergence board. The receipt remains `pending_close_execution` while PR #149 is still open, verifies no merge occurred, and becomes the post-approval proof point before canonical dirty cleanup can proceed.
 - Added a report-only PR #149 close approval request for the v0.1 text-evidence RC line and wired it into the convergence board. The request records the exact recommended decision, sanitized close comment, and command preview while leaving PR mutation, canonical cleanup, merge/cherry-pick, vault scan, DB/index mutation, strict-evidence promotion, and runtime answer-visible exposure at zero.
 - Added a report-only external action preflight for the v0.1 text-evidence RC blockers and wired it into the convergence board. The preflight confirms that PR #149 is still open/draft/conflicting and that the canonical dirty checkout's `git status --short` fingerprint still matches the snapshot dry-run before asking for explicit close approval; it performs no PR mutation, canonical checkout edit, destructive cleanup, file-content read, vault scan, DB/index mutation, or reindex/reembed.

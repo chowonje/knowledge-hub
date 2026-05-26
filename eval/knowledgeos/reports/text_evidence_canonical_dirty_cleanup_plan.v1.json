@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-canonical-dirty-cleanup-plan.v1",
   "status": "ready",
-  "generatedAt": "2026-05-26T07:48:21Z",
+  "generatedAt": "2026-05-26T08:56:57Z",
   "scope": {
     "writes": "report_only",
     "canonicalCheckoutEdited": false,
@@ -18,8 +18,8 @@
   },
   "bucketDecisionReportRef": "text_evidence_canonical_dirty_bucket_decision.v1.json",
   "bucketDecisionStatus": "ready",
-  "dirtyRows": 168,
-  "planRows": 11,
+  "dirtyRows": 0,
+  "planRows": 0,
   "manualPlanRows": 0,
   "executionPolicy": {
     "requiresExplicitApproval": true,
@@ -27,139 +27,10 @@
     "requiresSnapshotBeforeCleanup": true,
     "allowsDirectTextRcMerge": false
   },
-  "sequenceCounts": {
-    "clean_replay_candidate": 3,
-    "held_side_track": 3,
-    "owning_feature_review": 1,
-    "post_rc_candidate_review": 1,
-    "public_rc_exclusion": 1,
-    "public_surface_review": 1,
-    "record_reconciliation": 1
-  },
-  "actionCounts": {
-    "archive_or_discard_after_text_rc_branch_review": 1,
-    "archive_research_objects_side_stack": 1,
-    "compare_then_discard_or_clean_replay": 1,
-    "hold_for_parser_branch_or_archive": 1,
-    "hold_or_discard_shadow_experiment": 1,
-    "map_to_owning_feature_then_archive_or_discard": 1,
-    "move_to_workspace_records_or_delete_from_product_checkout": 1,
-    "preserve_for_later_clean_replay_then_clear_canonical_dirty": 3,
-    "selective_record_reconciliation_then_discard_remainder": 1
-  },
-  "rows": [
-    {
-      "bucket": "answer_runtime_or_query_stack",
-      "dirtyRows": 23,
-      "priorDecision": "exclude_from_text_rc_review_after_rc_candidate",
-      "publicRcAction": "do_not_replay_now",
-      "cleanupAction": "archive_or_discard_after_text_rc_branch_review",
-      "sequenceGroup": "post_rc_candidate_review",
-      "approvalRequired": "yes",
-      "reason": "answer runtime changes are excluded from text RC and should not remain as canonical dirty state"
-    },
-    {
-      "bucket": "cli_mcp_public_surface_stack",
-      "dirtyRows": 21,
-      "priorDecision": "exclude_from_text_rc_compare_with_public_operator_cleanup",
-      "publicRcAction": "do_not_replay_now",
-      "cleanupAction": "compare_then_discard_or_clean_replay",
-      "sequenceGroup": "public_surface_review",
-      "approvalRequired": "yes",
-      "reason": "CLI/MCP changes need comparison against the public operator cleanup before any replay"
-    },
-    {
-      "bucket": "docs_governance_stack",
-      "dirtyRows": 11,
-      "priorDecision": "exclude_from_text_rc_record_sync_only",
-      "publicRcAction": "review_records_only",
-      "cleanupAction": "selective_record_reconciliation_then_discard_remainder",
-      "sequenceGroup": "record_reconciliation",
-      "approvalRequired": "yes",
-      "reason": "docs changes may contain useful records, but dirty docs cannot be copied wholesale into the RC"
-    },
-    {
-      "bucket": "eval_or_test_support_stack",
-      "dirtyRows": 36,
-      "priorDecision": "exclude_from_text_rc_map_to_owning_feature",
-      "publicRcAction": "do_not_replay_now",
-      "cleanupAction": "map_to_owning_feature_then_archive_or_discard",
-      "sequenceGroup": "owning_feature_review",
-      "approvalRequired": "yes",
-      "reason": "eval/test files should move only with the feature stack they verify"
-    },
-    {
-      "bucket": "evidence_spine_or_source_contract_stack",
-      "dirtyRows": 29,
-      "priorDecision": "exclude_from_text_rc_clean_replay_candidate",
-      "publicRcAction": "defer_to_clean_replay",
-      "cleanupAction": "preserve_for_later_clean_replay_then_clear_canonical_dirty",
-      "sequenceGroup": "clean_replay_candidate",
-      "approvalRequired": "yes",
-      "reason": "evidence/source contract changes are valuable but too broad for direct text RC inclusion"
-    },
-    {
-      "bucket": "infrastructure_or_core_stack",
-      "dirtyRows": 11,
-      "priorDecision": "exclude_from_text_rc_clean_replay_candidate",
-      "publicRcAction": "defer_to_clean_replay",
-      "cleanupAction": "preserve_for_later_clean_replay_then_clear_canonical_dirty",
-      "sequenceGroup": "clean_replay_candidate",
-      "approvalRequired": "yes",
-      "reason": "core infrastructure changes need isolated replay and broad verification"
-    },
-    {
-      "bucket": "parser_artifact_side_stack",
-      "dirtyRows": 6,
-      "priorDecision": "hold_outside_text_rc_parser_track",
-      "publicRcAction": "hold",
-      "cleanupAction": "hold_for_parser_branch_or_archive",
-      "sequenceGroup": "held_side_track",
-      "approvalRequired": "yes",
-      "reason": "parser/artifact work is deferred from the text RC line"
-    },
-    {
-      "bucket": "provider_hint_side_stack",
-      "dirtyRows": 8,
-      "priorDecision": "hold_outside_text_rc_provider_hint_track",
-      "publicRcAction": "hold",
-      "cleanupAction": "hold_or_discard_shadow_experiment",
-      "sequenceGroup": "held_side_track",
-      "approvalRequired": "yes",
-      "reason": "provider hint shadow work is not needed for the current RC"
-    },
-    {
-      "bucket": "research_objects_side_stack",
-      "dirtyRows": 12,
-      "priorDecision": "hold_outside_text_rc_research_objects_track",
-      "publicRcAction": "hold",
-      "cleanupAction": "archive_research_objects_side_stack",
-      "sequenceGroup": "held_side_track",
-      "approvalRequired": "yes",
-      "reason": "research-object graph planning is outside the current text RC"
-    },
-    {
-      "bucket": "source_ingest_or_library_stack",
-      "dirtyRows": 7,
-      "priorDecision": "exclude_from_text_rc_clean_replay_candidate",
-      "publicRcAction": "defer_to_clean_replay",
-      "cleanupAction": "preserve_for_later_clean_replay_then_clear_canonical_dirty",
-      "sequenceGroup": "clean_replay_candidate",
-      "approvalRequired": "yes",
-      "reason": "source ingest/library changes need storage-focused replay checks"
-    },
-    {
-      "bucket": "workspace_process_record",
-      "dirtyRows": 4,
-      "priorDecision": "drop_or_move_out_of_product_checkout",
-      "publicRcAction": "exclude_from_public_rc",
-      "cleanupAction": "move_to_workspace_records_or_delete_from_product_checkout",
-      "sequenceGroup": "public_rc_exclusion",
-      "approvalRequired": "yes",
-      "reason": "local process records are not product behavior and should not ship in the public RC"
-    }
-  ],
-  "nextAction": "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout",
+  "sequenceCounts": {},
+  "actionCounts": {},
+  "rows": [],
+  "nextAction": "canonical_checkout_clean_no_cleanup_required",
   "mutationCounters": {
     "canonicalParsedArtifactWriteRows": 0,
     "databaseMutationRows": 0,
@@ -176,10 +47,10 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:776317d6f5a3a7e160400b53d4d02408c1f0c1a34a4a3454ff7a1b167be1b7f1",
+  "reportHash": "sha256:9653d1d49ffc658e67c39560425b057e3176cb0a370246377fad5fb789bbd3d1",
   "warnings": [
     "This cleanup plan performs no cleanup and no destructive operation.",
-    "Physical cleanup requires explicit approval and a snapshot/checkpoint first."
+    "Canonical dirty cleanup is not required because no dirty rows remain."
   ],
   "schemaErrors": []
 }

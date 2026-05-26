@@ -245,7 +245,7 @@ def _pr_149_state(*, include_pr_state: bool, repo: Path) -> dict[str, Any]:
             "--repo",
             "chowonje/knowledge-hub",
             "--json",
-            "number,title,headRefName,baseRefName,isDraft,mergeable,mergeStateStatus,headRefOid,url,updatedAt",
+            "number,state,title,headRefName,baseRefName,isDraft,mergeable,mergeStateStatus,headRefOid,url,updatedAt",
         ],
         cwd=repo,
         timeout=10,
@@ -256,13 +256,15 @@ def _pr_149_state(*, include_pr_state: bool, repo: Path) -> dict[str, Any]:
         data = json.loads(output)
     except Exception:
         return {"available": False, "number": 149, "state": "parse_failed"}
+    state = _clean_text(data.get("state") or "UNKNOWN")
     mergeable = _clean_text(data.get("mergeable"))
     merge_state = _clean_text(data.get("mergeStateStatus"))
     is_draft = bool(data.get("isDraft"))
-    blocked = is_draft or mergeable != "MERGEABLE" or merge_state != "CLEAN"
+    blocked = state == "OPEN" and (is_draft or mergeable != "MERGEABLE" or merge_state != "CLEAN")
     return {
         "available": True,
         "number": int(data.get("number") or 149),
+        "state": state,
         "title": _clean_text(data.get("title")),
         "headRefName": _clean_text(data.get("headRefName")),
         "headRefOid": _clean_text(data.get("headRefOid")),
@@ -273,7 +275,11 @@ def _pr_149_state(*, include_pr_state: bool, repo: Path) -> dict[str, Any]:
         "updatedAt": _clean_text(data.get("updatedAt")),
         "url": _clean_text(data.get("url")),
         "blocked": blocked,
-        "decision": "recut_or_abandon_before_rc" if blocked else "eligible_for_merge_review",
+        "decision": (
+            "recut_or_abandon_before_rc"
+            if blocked
+            else "closed_without_merge" if state == "CLOSED" else "eligible_for_merge_review"
+        ),
     }
 
 
@@ -614,6 +620,8 @@ def build_text_evidence_rc_convergence_report(
         for row in phase_rows
         if row["ancestorOfHead"] and row["reportStatus"] in {"ready", "accepted"} and row["privatePathLeakRows"] == 0
     )
+    text_only_ready = bool(text_only_scope_gate.get("available") and text_only_scope_gate.get("textOnlyRcReady"))
+    public_rc_ready = bool(ready_phase_rows == len(phase_rows) and text_only_ready and not blocker_rows)
     report: dict[str, Any] = {
         "schema": TEXT_EVIDENCE_RC_CONVERGENCE_SCHEMA_ID,
         "status": "ready_for_integration_review" if ready_phase_rows == len(phase_rows) else "blocked",
@@ -638,7 +646,7 @@ def build_text_evidence_rc_convergence_report(
         "phaseRows": len(phase_rows),
         "readyPhaseRows": ready_phase_rows,
         "blockedPhaseRows": len(phase_rows) - ready_phase_rows,
-        "publicRcReady": False,
+        "publicRcReady": public_rc_ready,
         "publicRcBlockerRows": len(blocker_rows),
         "blockers": blocker_rows,
         "mergeQueue": [
@@ -674,33 +682,47 @@ def build_text_evidence_rc_convergence_report(
         "schemaViolationCount": 0,
         "privatePathLeakRows": 0,
         "reportHash": "",
-        "nextAction": _clean_text(
-            text_only_scope_gate.get("nextAction")
-            if text_only_scope_gate.get("available") and not text_only_scope_gate.get("textOnlyRcReady")
-            else ""
-        )
-        or _clean_text(
-            pr149_close_request.get("nextAction")
-            if pr149_close_request.get("available") and not pr149_close_receipt.get("executionVerified")
-            else ""
-        )
-        or _clean_text(
-            pr149_close_receipt.get("nextAction")
-            or external_action_preflight.get("nextAction")
-            or canonical_dirty_snapshot.get("nextAction")
-            or external_action_approval.get("nextAction")
-            or canonical_dirty_cleanup_plan.get("nextAction")
-            or canonical_dirty_bucket_decision.get("nextAction")
-            or canonical_dirty_inventory.get("nextAction")
-            or pr149_disposition.get("nextAction")
-            or "resolve_canonical_dirty_checkout_and_pr149_before_public_rc"
+        "nextAction": (
+            "ready_for_public_rc_review"
+            if public_rc_ready
+            else _clean_text(
+                text_only_scope_gate.get("nextAction")
+                if text_only_scope_gate.get("available") and not text_only_scope_gate.get("textOnlyRcReady")
+                else ""
+            )
+            or _clean_text(
+                pr149_close_request.get("nextAction")
+                if pr149_close_request.get("available") and not pr149_close_receipt.get("executionVerified")
+                else ""
+            )
+            or _clean_text(
+                pr149_close_receipt.get("nextAction")
+                or external_action_preflight.get("nextAction")
+                or canonical_dirty_snapshot.get("nextAction")
+                or external_action_approval.get("nextAction")
+                or canonical_dirty_cleanup_plan.get("nextAction")
+                or canonical_dirty_bucket_decision.get("nextAction")
+                or canonical_dirty_inventory.get("nextAction")
+                or "resolve_canonical_dirty_checkout_and_pr149_before_public_rc"
+            )
         ),
         "warnings": [
-            "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
+            (
+                "publicRcReady is true for the current text-evidence RC convergence board"
+                if public_rc_ready
+                else
+                "publicRcReady remains false while canonical checkout is dirty"
+                if _clean_text(pr_149.get("state")) == "CLOSED"
+                else "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft"
+            ),
             "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
             "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
             "pr149CloseApprovalRequest records the exact close request but does not execute it",
-            "pr149CloseReceipt remains pending until PR #149 is actually closed",
+            (
+                "pr149CloseReceipt verifies PR #149 is closed without merge"
+                if pr149_close_receipt.get("executionVerified")
+                else "pr149CloseReceipt remains pending until PR #149 is actually closed"
+            ),
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
         ],
         "schemaErrors": [],

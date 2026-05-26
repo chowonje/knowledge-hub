@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T08:39:26Z",
+  "generatedAt": "2026-05-26T08:57:25Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,14 +14,14 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "220ea82",
-    "dirtyCount": 0
+    "head": "ab8ef67",
+    "dirtyCount": 26
   },
   "canonicalCheckout": {
     "available": true,
     "branch": "codex/public-repo-cleanup-20260504",
     "head": "66873de",
-    "dirtyCount": 168,
+    "dirtyCount": 0,
     "dirtyInventoryReportRef": "text_evidence_canonical_dirty_inventory.v1.json",
     "dirtyInventoryStatus": "ready",
     "dirtyInventoryUnknownRows": 0,
@@ -33,20 +33,21 @@
     "dirtyBucketNextAction": "clean_or_archive_canonical_dirty_checkout_after_external_pr149_resolution",
     "dirtyCleanupPlanReportRef": "text_evidence_canonical_dirty_cleanup_plan.v1.json",
     "dirtyCleanupPlanStatus": "ready",
-    "dirtyCleanupPlanRows": 11,
+    "dirtyCleanupPlanRows": 0,
     "dirtyCleanupManualPlanRows": 0,
     "dirtyCleanupRequiresExplicitApproval": true,
     "dirtyCleanupRequiresPr149ResolvedFirst": true,
-    "dirtyCleanupNextAction": "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout",
+    "dirtyCleanupNextAction": "canonical_checkout_clean_no_cleanup_required",
     "dirtySnapshotDryRunReportRef": "text_evidence_canonical_dirty_snapshot_dry_run.v1.json",
     "dirtySnapshotDryRunStatus": "ready",
-    "dirtySnapshotDirtyRows": 168,
-    "dirtySnapshotStatusFingerprint": "sha256:4a76393a8a30a254e4fe619a849aacb455c44ed4c95524b564d170976cc705d9",
-    "dirtySnapshotNextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot"
+    "dirtySnapshotDirtyRows": 0,
+    "dirtySnapshotStatusFingerprint": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "dirtySnapshotNextAction": "canonical_checkout_clean_no_snapshot_required"
   },
   "pullRequest149": {
     "available": true,
     "number": 149,
+    "state": "CLOSED",
     "title": "Add complex QA real strict evidence availability bridge audit",
     "headRefName": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
     "headRefOid": "0d3eec1ce814a6e843a2473937fe7a36b445a38a",
@@ -54,10 +55,10 @@
     "isDraft": true,
     "mergeable": "CONFLICTING",
     "mergeStateStatus": "DIRTY",
-    "updatedAt": "2026-05-20T10:15:57Z",
+    "updatedAt": "2026-05-26T08:48:26Z",
     "url": "https://github.com/chowonje/knowledge-hub/pull/149",
-    "blocked": true,
-    "decision": "recut_or_abandon_before_rc",
+    "blocked": false,
+    "decision": "closed_without_merge",
     "dispositionReportRef": "text_evidence_pr149_disposition.v1.json",
     "dispositionStatus": "ready",
     "dispositionDecision": "abandon_current_pr_before_public_rc",
@@ -71,14 +72,14 @@
     "available": true,
     "reportRef": "text_evidence_rc_text_only_scope_gate.v1.json",
     "status": "ready",
-    "decision": "text_only_scope_ready_pending_rc_convergence_actions",
+    "decision": "text_only_scope_ready_for_public_rc_review",
     "textOnlyRcReady": true,
-    "publicRcReady": false,
+    "publicRcReady": true,
     "textReadyRows": 6,
     "textHoldRows": 0,
     "deferredRows": 6,
-    "blockerRows": 2,
-    "nextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot",
+    "blockerRows": 0,
+    "nextAction": "ready_for_public_rc_review",
     "privatePathLeakRows": 0
   },
   "externalActionPreflight": {
@@ -106,35 +107,24 @@
   "pr149CloseReceipt": {
     "available": true,
     "reportRef": "text_evidence_rc_pr149_close_receipt.v1.json",
-    "status": "pending_close_execution",
-    "executionVerified": false,
+    "status": "closed_verified",
+    "executionVerified": true,
     "mergePerformed": false,
-    "blockerRows": 1,
-    "nextAction": "await_user_yes_to_close_pr149_without_merge",
+    "blockerRows": 0,
+    "nextAction": "proceed_to_canonical_dirty_cleanup_snapshot",
     "privatePathLeakRows": 0
   },
   "phaseRows": 9,
   "readyPhaseRows": 9,
   "blockedPhaseRows": 0,
-  "publicRcReady": false,
-  "publicRcBlockerRows": 2,
-  "blockers": [
-    {
-      "blockerId": "canonical_checkout_dirty",
-      "severity": "hold",
-      "reason": "canonical dirty snapshot dry-run fingerprint is ready; physical cleanup still awaits PR #149 closure and approval"
-    },
-    {
-      "blockerId": "pr_149_conflicting_or_draft",
-      "severity": "hold",
-      "reason": "PR #149 preflight is ready for explicit close approval"
-    }
-  ],
+  "publicRcReady": true,
+  "publicRcBlockerRows": 0,
+  "blockers": [],
   "mergeQueue": [
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "220ea82",
+      "head": "ab8ef67",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -317,14 +307,14 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:a4607ea9777b4a33df88cf0dd73377bca020aef2807a97cd4fa7d6364968e206",
-  "nextAction": "await_user_yes_to_close_pr149_without_merge",
+  "reportHash": "sha256:41b32ab37da43af8748e2bfcd9f3c23641a3f7a5082373641dd4a15f8a56ed80",
+  "nextAction": "ready_for_public_rc_review",
   "warnings": [
-    "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
+    "publicRcReady is true for the current text-evidence RC convergence board",
     "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
     "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
     "pr149CloseApprovalRequest records the exact close request but does not execute it",
-    "pr149CloseReceipt remains pending until PR #149 is actually closed",
+    "pr149CloseReceipt verifies PR #149 is closed without merge",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"
   ],
   "schemaErrors": []

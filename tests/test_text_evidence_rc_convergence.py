@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from knowledge_hub.core.schema_validator import validate_payload
+from knowledge_hub.papers import text_evidence_rc_convergence as convergence
 from knowledge_hub.papers.text_evidence_rc_convergence import (
     TEXT_EVIDENCE_RC_CONVERGENCE_SCHEMA_ID,
     build_text_evidence_rc_convergence_report,
@@ -170,3 +171,57 @@ def test_writer_keeps_report_sanitized(tmp_path: Path) -> None:
     assert "/" + "Users" + "/" not in combined
     assert "/" + "Volumes" + "/" not in combined
     assert "Mobile " + "Documents" not in combined
+
+
+def test_closed_pr149_is_not_public_rc_blocker(tmp_path: Path, monkeypatch) -> None:
+    reports = {
+        "figure_caption_artifact_vertical_slice.v1.json": "knowledge-hub.paper.figure-caption-artifact-vertical-slice-report.v1",
+        "figure_caption_text_qa_readback.v1.json": "knowledge-hub.paper.figure-caption-text-qa-readback-report.v1",
+        "text_section_paragraph_span_artifacts.v1.json": "knowledge-hub.paper.text-section-paragraph-span-artifacts-report.v1",
+        "text_table_caption_candidate_artifacts.v1.json": "knowledge-hub.paper.text-table-caption-candidate-artifacts-report.v1",
+        "text_equation_locator_context_artifacts.v1.json": "knowledge-hub.paper.text-equation-locator-context-artifacts-report.v1",
+        "text_complex_qa_eval_alignment.v1.json": "knowledge-hub.paper.text-complex-qa-eval-alignment-report.v1",
+        "source_alias_normalization.v1.json": "knowledge-hub.paper.source-alias-normalization-report.v1",
+    }
+    for name, schema in reports.items():
+        _write_report(tmp_path, name, _minimal_report(schema))
+
+    def fake_run_text(args, *, cwd=None, timeout=8):
+        if args[:3] == ["gh", "pr", "view"]:
+            return json.dumps(
+                {
+                    "number": 149,
+                    "state": "CLOSED",
+                    "title": "Add complex QA real strict evidence availability bridge audit",
+                    "headRefName": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
+                    "headRefOid": "0d3eec1",
+                    "baseRefName": "main",
+                    "isDraft": True,
+                    "mergeable": "CONFLICTING",
+                    "mergeStateStatus": "DIRTY",
+                    "updatedAt": "2026-05-26T00:00:00Z",
+                    "url": "https://github.com/chowonje/knowledge-hub/pull/149",
+                }
+            )
+        if args[-2:] == ["--abbrev-ref", "HEAD"]:
+            return "codex/test"
+        if args[-2:] == ["--short", "HEAD"]:
+            return "abc1234"
+        return ""
+
+    monkeypatch.setattr(convergence, "_run_text", fake_run_text)
+    monkeypatch.setattr(convergence, "_git_is_ancestor", lambda repo, ancestor, ref="HEAD": True)
+
+    report = build_text_evidence_rc_convergence_report(
+        project_root=tmp_path,
+        canonical_repo=None,
+        reports_root=tmp_path / "eval" / "knowledgeos" / "reports",
+        include_pr_state=True,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert report["pullRequest149"]["state"] == "CLOSED"
+    assert report["pullRequest149"]["blocked"] is False
+    assert report["pullRequest149"]["decision"] == "closed_without_merge"
+    assert {row["blockerId"] for row in report["blockers"]} == set()
+    assert validate_payload(report, TEXT_EVIDENCE_RC_CONVERGENCE_SCHEMA_ID, strict=True).ok

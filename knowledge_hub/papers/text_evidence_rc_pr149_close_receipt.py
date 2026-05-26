@@ -212,7 +212,11 @@ def build_text_evidence_rc_pr149_close_receipt(
         "reportHash": "",
         "warnings": [
             "This receipt check is read-only and does not close PR #149.",
-            "Until PR #149 is closed, canonical dirty cleanup must remain pending.",
+            (
+                "PR #149 is closed; canonical dirty cleanup can proceed under the approved cleanup plan."
+                if close_verified
+                else "Until PR #149 is closed, canonical dirty cleanup must remain pending."
+            ),
         ],
         "schemaErrors": [],
     }

@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-canonical-dirty-snapshot-dry-run.v1",
   "status": "ready",
-  "generatedAt": "2026-05-26T08:01:08Z",
+  "generatedAt": "2026-05-26T08:57:03Z",
   "scope": {
     "writes": "report_only",
     "snapshotWritten": false,
@@ -21,12 +21,12 @@
     "repoRef": "canonical_product_checkout",
     "branch": "codex/public-repo-cleanup-20260504",
     "head": "66873de",
-    "dirtyRows": 168
+    "dirtyRows": 0
   },
-  "dirtyRows": 168,
-  "trackedDirtyRows": 79,
-  "untrackedRows": 89,
-  "statusFingerprint": "sha256:4a76393a8a30a254e4fe619a849aacb455c44ed4c95524b564d170976cc705d9",
+  "dirtyRows": 0,
+  "trackedDirtyRows": 0,
+  "untrackedRows": 0,
+  "statusFingerprint": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
   "snapshotPlan": {
     "snapshotMode": "status_fingerprint_only",
     "snapshotTargetRef": "operator_selected_location_after_approval",
@@ -34,7 +34,7 @@
     "requiresPr149ResolvedFirst": true,
     "capturesFileContent": false
   },
-  "nextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot",
+  "nextAction": "canonical_checkout_clean_no_snapshot_required",
   "mutationCounters": {
     "snapshotWriteRows": 0,
     "canonicalCleanupRows": 0,
@@ -53,10 +53,10 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:4ff1ec1ccb249c37a020ff4094e0c17ea94ff61347622cc4c4c4480fb61e6e68",
+  "reportHash": "sha256:75281159d302d83fb76cd5e2f174ea497289d7cb5d6ddd8556c9bddb6639fc59",
   "warnings": [
     "This dry-run records only a git-status fingerprint, not file contents.",
-    "No snapshot file is written outside the report and no cleanup is executed."
+    "Canonical checkout is clean; no dirty cleanup snapshot is required."
   ],
   "schemaErrors": []
 }
