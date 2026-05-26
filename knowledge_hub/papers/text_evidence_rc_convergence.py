@@ -355,7 +355,7 @@ def build_text_evidence_rc_convergence_report(
         "schemaViolationCount": 0,
         "privatePathLeakRows": 0,
         "reportHash": "",
-        "nextAction": "run_release_smoke_and_public_hygiene_on_clean_candidate_after_integration_review",
+        "nextAction": "resolve_canonical_dirty_checkout_and_pr149_before_public_rc",
         "warnings": [
             "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
