@@ -62,6 +62,8 @@ The sixth roadmap tranche, `source_alias_normalization`, now has a report-only s
 
 The seventh roadmap tranche, `public_operator_surface_cleanup`, now narrows the default MCP profile. Learning, agentic, crawl/ingest, paper build/index, and paper ingest tools require `KHUB_MCP_PROFILE=labs|all` both in tool listing and direct invocation; default MCP keeps the compact read/search/ask-oriented surface. This closes the default MCP public-surface blocker without changing default CLI routing or moving labs/operator implementations.
 
+The eighth roadmap tranche, `rc_hygiene_and_convergence`, now has a report-only convergence board. `eval/knowledgeos/scripts/build_text_evidence_rc_convergence_report.py` reads the checked-in text-evidence reports and current git/PR state, verifies that the stacked text-evidence phases are included in the candidate branch, records dirty canonical checkout and PR #149 as public-RC holds, and leaves merge/cherry-pick/worktree deletion/public RC creation out of scope until integration review.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-evidence-rc-convergence-report.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "currentStack",
+    "canonicalCheckout",
+    "pullRequest149",
+    "phaseRows",
+    "readyPhaseRows",
+    "blockedPhaseRows",
+    "publicRcReady",
+    "publicRcBlockerRows",
+    "blockers",
+    "mergeQueue",
+    "phaseReports",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "reportHash",
+    "nextAction",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1" },
+    "status": { "enum": ["ready_for_integration_review", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "mergePerformed",
+        "cherryPickPerformed",
+        "worktreeDeletionPerformed",
+        "canonicalCheckoutEdited",
+        "visualLayoutBranchDeferred",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "mergePerformed": { "const": false },
+        "cherryPickPerformed": { "const": false },
+        "worktreeDeletionPerformed": { "const": false },
+        "canonicalCheckoutEdited": { "const": false },
+        "visualLayoutBranchDeferred": { "const": true },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "currentStack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch", "head", "dirtyCount"],
+      "properties": {
+        "branch": { "type": "string" },
+        "head": { "type": "string" },
+        "dirtyCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "canonicalCheckout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available", "branch", "head", "dirtyCount"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "branch": { "type": "string" },
+        "head": { "type": "string" },
+        "dirtyCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pullRequest149": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["available", "number"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "number": { "const": 149 },
+        "blocked": { "type": "boolean" }
+      }
+    },
+    "phaseRows": { "type": "integer", "minimum": 0 },
+    "readyPhaseRows": { "type": "integer", "minimum": 0 },
+    "blockedPhaseRows": { "type": "integer", "minimum": 0 },
+    "publicRcReady": { "const": false },
+    "publicRcBlockerRows": { "type": "integer", "minimum": 0 },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["blockerId", "severity", "reason"],
+        "properties": {
+          "blockerId": { "type": "string", "minLength": 1 },
+          "severity": { "enum": ["hold", "block"] },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "mergeQueue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["order", "branch", "head", "decision"],
+        "properties": {
+          "order": { "type": "integer", "minimum": 1 },
+          "branch": { "type": "string" },
+          "head": { "type": "string" },
+          "decision": { "type": "string" }
+        }
+      }
+    },
+    "phaseReports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "phase",
+          "role",
+          "branch",
+          "commit",
+          "reportRef",
+          "reportSchema",
+          "reportStatus",
+          "keyCounts",
+          "ancestorOfHead",
+          "mergeDisposition",
+          "mutationCountersClean",
+          "privatePathLeakRows"
+        ],
+        "properties": {
+          "phase": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 },
+          "branch": { "type": "string", "minLength": 1 },
+          "commit": { "type": "string", "minLength": 1 },
+          "reportRef": { "type": "string" },
+          "reportSchema": { "type": "string" },
+          "reportStatus": { "type": "string" },
+          "keyCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "minimum": 0 }
+          },
+          "ancestorOfHead": { "type": "boolean" },
+          "mergeDisposition": { "type": "string" },
+          "mutationCountersClean": { "type": "boolean" },
+          "privatePathLeakRows": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "reportHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "nextAction": { "type": "string", "minLength": 1 },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}
