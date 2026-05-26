@@ -35,12 +35,17 @@ VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID = (
 VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1"
 )
+VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID = (
+    "knowledge-hub.paper.visual-annotation-expansion-operator-handoff.v1"
+)
 VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-captured-row.v1"
 )
 
 DEFAULT_MANUAL_RUN_PACKET_ID = "visual_annotation_expansion_manual_run_packet_002"
+DEFAULT_OPERATOR_HANDOFF_ID = "visual_annotation_expansion_operator_handoff_002"
 READY_RUN_DECISION = "ready_for_manual_web_vlm_expansion_run"
+READY_HANDOFF_DECISION = "ready_for_operator_web_vlm_run"
 READY_VALIDATION_DECISION = "ready_for_visual_retrieval_hint_candidate_store_expansion_design"
 NEXT_AFTER_RUN_TRANCHE = "visual_annotation_expansion_manual_output_capture"
 NEXT_AFTER_VALIDATION_TRANCHE = "visual_retrieval_hint_candidate_store_expansion_design"
@@ -126,6 +131,31 @@ def _scope(*, manual_rows: int = 0) -> dict[str, Any]:
         "modelCalls": False,
         "webModelCalls": False,
         "manualWebModelOutputRows": int(manual_rows),
+        "vectorIndexing": False,
+        "strictEvidencePromotionRows": 0,
+        "runtimeAnswerVisibleExposureRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "answerabilityGateBypassRows": 0,
+        "cropWriteRows": 0,
+        "pageImageWriteRows": 0,
+        "wholeImageWriteRows": 0,
+        "wholeImageGptRows": 0,
+        "candidateStoreMutationRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+    }
+
+
+def _handoff_scope() -> dict[str, Any]:
+    return {
+        "writes": "report_only",
+        "apiCalls": False,
+        "modelCalls": False,
+        "webModelCalls": False,
+        "manualOperatorWebModelRunRequired": True,
         "vectorIndexing": False,
         "strictEvidencePromotionRows": 0,
         "runtimeAnswerVisibleExposureRows": 0,
@@ -301,6 +331,112 @@ def build_visual_annotation_expansion_manual_run_packet(
         or attachment_pack.get("status") != "ready"
         or not packet_rows
         or missing_attachment_rows
+        or private_path_leak_rows
+    ):
+        report["status"] = "blocked"
+        report["decision"] = "blocked"
+    return report
+
+
+def _flatten_packet_rows(manual_run_packet: dict[str, Any]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for batch in list(manual_run_packet.get("batches") or []):
+        if not isinstance(batch, dict):
+            continue
+        for row in list(batch.get("rows") or []):
+            if isinstance(row, dict):
+                merged = dict(row)
+                merged["batchId"] = normalize_text(batch.get("batchId"))
+                merged["batchNumber"] = int(batch.get("batchNumber") or 0)
+                rows.append(merged)
+    return rows
+
+
+def build_visual_annotation_expansion_operator_handoff(
+    manual_run_packet: dict[str, Any],
+    *,
+    handoff_id: str = DEFAULT_OPERATOR_HANDOFF_ID,
+    source_manual_run_packet_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_manual_run_packet_002.v1.json",
+    expected_output_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    validation_command: str = (
+        "PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py"
+    ),
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    packet_rows = _flatten_packet_rows(manual_run_packet)
+    template_rows = [
+        {
+            "batchId": normalize_text(row.get("batchId")),
+            "batchNumber": int(row.get("batchNumber") or 0),
+            "sourceCandidateId": normalize_text(row.get("sourceCandidateId")),
+            "paperId": normalize_text(row.get("paperId")),
+            "candidateType": normalize_text(row.get("candidateType")),
+            "page": int(row.get("page") or 0),
+            "attachmentRef": normalize_text(row.get("attachmentRef")),
+            "fillRequired": [
+                "visualObservationStatus",
+                "derivedTextForRetrieval",
+                "visibleText",
+                "retrievalKeywords",
+                "uncertainty",
+                "limitations",
+            ],
+            "outputRowSkeleton": dict(row.get("expectedOutputSkeleton") or {}),
+        }
+        for row in packet_rows
+    ]
+    private_path_leak_rows = 1 if _contains_private_path(template_rows) else 0
+    counts = {
+        "packetRows": len(packet_rows),
+        "templateRows": len(template_rows),
+        "batchRows": len({int(row.get("batchNumber") or 0) for row in template_rows}),
+        "privatePathLeakRows": int(private_path_leak_rows),
+        "schemaViolationCount": 0,
+    }
+    report: dict[str, Any] = {
+        "schema": VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID,
+        "status": "ready",
+        "generatedAt": generated_at or utc_now_iso(),
+        "decision": READY_HANDOFF_DECISION,
+        "nextRecommendedTranche": NEXT_AFTER_RUN_TRANCHE,
+        "handoffId": handoff_id,
+        "sourceManualRunPacket": {
+            "schema": normalize_text(manual_run_packet.get("schema")),
+            "status": normalize_text(manual_run_packet.get("status")),
+            "reportRef": normalize_text(source_manual_run_packet_ref),
+            "packetRows": len(packet_rows),
+        },
+        "scope": _handoff_scope(),
+        "operatorSteps": [
+            "Open each batch in the manual run packet.",
+            "Upload only the listed context-crop PNG attachments for that batch.",
+            "Paste the batch prompt and row metadata into web GPT/Pro.",
+            "Ask for JSON only with schema knowledge-hub.paper.visual-annotation-web-output.v1.",
+            f"Combine the returned rows into {expected_output_ref}.",
+            f"Run validation with: {validation_command}",
+        ],
+        "expectedOutputRef": expected_output_ref,
+        "validationCommand": validation_command,
+        "outputContract": {
+            "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+            "allowedUse": "retrieval_hint_only",
+            "strictEvidence": False,
+            "citationGrade": False,
+            "answerableWithoutTextEvidence": False,
+        },
+        "counts": counts,
+        "templateRows": template_rows,
+        "warnings": [
+            "This handoff is not web/VLM output and must not be validated as completed output.",
+            "The operator must replace every FILL_IN placeholder with observations from attached context crops.",
+            "Do not upload whole pages or whole images for this gate.",
+            "Do not treat derivedTextForRetrieval as strict, citation-grade, or answer-visible evidence.",
+        ],
+    }
+    if (
+        manual_run_packet.get("schema") != VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID
+        or manual_run_packet.get("status") != "ready"
+        or not packet_rows
         or private_path_leak_rows
     ):
         report["status"] = "blocked"
@@ -589,6 +725,71 @@ def render_markdown_manual_run_packet(report: dict[str, Any]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def render_markdown_operator_handoff(report: dict[str, Any]) -> str:
+    counts = dict(report.get("counts") or {})
+    scope = dict(report.get("scope") or {})
+    source = dict(report.get("sourceManualRunPacket") or {})
+    lines = [
+        "# Visual Annotation Expansion Operator Handoff 002",
+        "",
+        f"- schema: `{report.get('schema')}`",
+        f"- status: `{report.get('status')}`",
+        f"- decision: `{report.get('decision')}`",
+        f"- generatedAt: `{report.get('generatedAt')}`",
+        f"- handoffId: `{report.get('handoffId')}`",
+        f"- sourceManualRunPacket: `{source.get('reportRef')}`",
+        f"- expectedOutputRef: `{report.get('expectedOutputRef')}`",
+        f"- validationCommand: `{report.get('validationCommand')}`",
+        f"- templateRows: `{counts.get('templateRows')}`",
+        f"- batchRows: `{counts.get('batchRows')}`",
+        f"- privatePathLeakRows: `{counts.get('privatePathLeakRows')}`",
+        "",
+        "## Mutation Guarantees",
+        "",
+        f"- writes: `{scope.get('writes')}`",
+        f"- apiCalls: `{scope.get('apiCalls')}`",
+        f"- modelCalls: `{scope.get('modelCalls')}`",
+        f"- webModelCalls: `{scope.get('webModelCalls')}`",
+        f"- manualOperatorWebModelRunRequired: `{scope.get('manualOperatorWebModelRunRequired')}`",
+        f"- vectorIndexing: `{scope.get('vectorIndexing')}`",
+        f"- strictEvidencePromotionRows: `{scope.get('strictEvidencePromotionRows')}`",
+        f"- runtimeAnswerVisibleExposureRows: `{scope.get('runtimeAnswerVisibleExposureRows')}`",
+        f"- candidateStoreMutationRows: `{scope.get('candidateStoreMutationRows')}`",
+        f"- wholeImageGptRows: `{scope.get('wholeImageGptRows')}`",
+        "",
+        "## Operator Steps",
+        "",
+    ]
+    for index, step in enumerate(report.get("operatorSteps") or [], start=1):
+        lines.append(f"{index}. {step}")
+    lines.extend(
+        [
+            "",
+            "## Template Rows",
+            "",
+            "| # | batch | paperId | type | page | sourceCandidateId | attachmentRef |",
+            "|---:|---:|---|---|---:|---|---|",
+        ]
+    )
+    for index, row in enumerate(report.get("templateRows", []), start=1):
+        lines.append(
+            "| {index} | {batch} | {paperId} | {candidateType} | {page} | `{candidateId}` | `{attachment}` |".format(
+                index=index,
+                batch=row.get("batchNumber"),
+                paperId=row.get("paperId"),
+                candidateType=row.get("candidateType"),
+                page=row.get("page"),
+                candidateId=row.get("sourceCandidateId"),
+                attachment=row.get("attachmentRef"),
+            )
+        )
+    if report.get("warnings"):
+        lines.extend(["", "## Warnings", ""])
+        for warning in report.get("warnings", []):
+            lines.append(f"- `{warning}`")
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def render_markdown_validation(report: dict[str, Any]) -> str:
     counts = dict(report.get("counts") or {})
     scope = dict(report.get("scope") or {})
@@ -672,6 +873,19 @@ def write_visual_annotation_expansion_manual_run_packet(
     return {"json": str(report_json), "markdown": str(report_md)}
 
 
+def write_visual_annotation_expansion_operator_handoff(
+    report: dict[str, Any],
+    *,
+    report_json: Path,
+    report_md: Path,
+) -> dict[str, str]:
+    report_json.parent.mkdir(parents=True, exist_ok=True)
+    report_md.parent.mkdir(parents=True, exist_ok=True)
+    report_json.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_md.write_text(render_markdown_operator_handoff(report), encoding="utf-8")
+    return {"json": str(report_json), "markdown": str(report_md)}
+
+
 def write_visual_annotation_expansion_web_output_validation(
     report: dict[str, Any],
     *,
@@ -690,16 +904,21 @@ __all__ = [
     "NEXT_AFTER_RUN_TRANCHE",
     "NEXT_AFTER_VALIDATION_TRANCHE",
     "READY_RUN_DECISION",
+    "READY_HANDOFF_DECISION",
     "READY_VALIDATION_DECISION",
     "VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID",
+    "VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID",
     "build_visual_annotation_expansion_manual_run_packet",
+    "build_visual_annotation_expansion_operator_handoff",
     "build_visual_annotation_expansion_web_output_validation",
     "load_json",
     "render_markdown_manual_run_packet",
+    "render_markdown_operator_handoff",
     "render_markdown_validation",
     "sanitized_report_ref",
     "write_visual_annotation_expansion_manual_run_packet",
+    "write_visual_annotation_expansion_operator_handoff",
     "write_visual_annotation_expansion_web_output_validation",
 ]

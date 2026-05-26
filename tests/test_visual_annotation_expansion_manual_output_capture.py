@@ -10,11 +10,14 @@ from knowledge_hub.papers.visual_annotation_expansion_attachment_pack import (
 )
 from knowledge_hub.papers.visual_annotation_expansion_manual_output_capture import (
     VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID,
+    VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID,
     VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
     build_visual_annotation_expansion_manual_run_packet,
+    build_visual_annotation_expansion_operator_handoff,
     build_visual_annotation_expansion_web_output_validation,
     write_visual_annotation_expansion_manual_run_packet,
+    write_visual_annotation_expansion_operator_handoff,
     write_visual_annotation_expansion_web_output_validation,
 )
 from knowledge_hub.papers.visual_annotation_expansion_pack_design import (
@@ -139,6 +142,52 @@ def test_manual_run_packet_batches_attachment_refs_and_preserves_no_model_contra
     assert validation.ok, validation.errors
 
 
+def test_operator_handoff_preserves_template_only_policy_and_validation_command() -> None:
+    packet = build_visual_annotation_expansion_manual_run_packet(
+        _expansion_pack(),
+        _attachment_pack(),
+        batch_size=2,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    handoff = build_visual_annotation_expansion_operator_handoff(
+        packet,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert handoff["schema"] == VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID
+    assert handoff["status"] == "ready"
+    assert handoff["decision"] == "ready_for_operator_web_vlm_run"
+    assert handoff["nextRecommendedTranche"] == "visual_annotation_expansion_manual_output_capture"
+    assert handoff["expectedOutputRef"] == (
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json"
+    )
+    assert handoff["counts"]["packetRows"] == 3
+    assert handoff["counts"]["templateRows"] == 3
+    assert handoff["counts"]["batchRows"] == 2
+    assert handoff["counts"]["privatePathLeakRows"] == 0
+    assert handoff["scope"]["writes"] == "report_only"
+    assert handoff["scope"]["apiCalls"] is False
+    assert handoff["scope"]["modelCalls"] is False
+    assert handoff["scope"]["webModelCalls"] is False
+    assert handoff["scope"]["manualOperatorWebModelRunRequired"] is True
+    assert handoff["scope"]["vectorIndexing"] is False
+    assert handoff["scope"]["strictEvidencePromotionRows"] == 0
+    assert handoff["scope"]["runtimeAnswerVisibleExposureRows"] == 0
+    assert handoff["scope"]["candidateStoreMutationRows"] == 0
+    assert handoff["scope"]["wholeImageGptRows"] == 0
+    assert "validate_visual_annotation_expansion_web_output.py" in handoff["validationCommand"]
+    assert "FILL_IN" in handoff["templateRows"][0]["outputRowSkeleton"]["derivedTextForRetrieval"]
+    assert handoff["outputContract"]["allowedUse"] == "retrieval_hint_only"
+
+    validation = validate_payload(
+        handoff,
+        VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+
 def test_expansion_web_output_validation_ready_and_no_mutation_contract() -> None:
     output = _output()
     report = build_visual_annotation_expansion_web_output_validation(
@@ -257,6 +306,8 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
     )
     packet_json = tmp_path / "packet.json"
     packet_md = tmp_path / "packet.md"
+    handoff_json = tmp_path / "handoff.json"
+    handoff_md = tmp_path / "handoff.md"
     validation_json = tmp_path / "validation.json"
     validation_md = tmp_path / "validation.md"
 
@@ -264,6 +315,18 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         packet,
         report_json=packet_json,
         report_md=packet_md,
+    )
+    handoff = build_visual_annotation_expansion_operator_handoff(
+        packet,
+        source_manual_run_packet_ref=(
+            "eval/knowledgeos/reports/visual_annotation_expansion_manual_run_packet_002.v1.json"
+        ),
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    write_visual_annotation_expansion_operator_handoff(
+        handoff,
+        report_json=handoff_json,
+        report_md=handoff_md,
     )
     write_visual_annotation_expansion_web_output_validation(
         validation_report,
@@ -274,6 +337,8 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
     combined = (
         packet_json.read_text(encoding="utf-8")
         + packet_md.read_text(encoding="utf-8")
+        + handoff_json.read_text(encoding="utf-8")
+        + handoff_md.read_text(encoding="utf-8")
         + validation_json.read_text(encoding="utf-8")
         + validation_md.read_text(encoding="utf-8")
     )
