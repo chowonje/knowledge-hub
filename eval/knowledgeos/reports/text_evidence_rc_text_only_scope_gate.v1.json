@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-text-only-scope-gate.v1",
   "status": "ready",
-  "generatedAt": "2026-05-26T08:57:18Z",
+  "generatedAt": "2026-05-26T09:00:16Z",
   "scope": {
     "writes": "report_only",
     "scopePolicy": "text_evidence_v0_1_rc_only",
@@ -208,7 +208,7 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:9dc545b6ca265c1fea0c3bdedc70bf6e49250a8be201f3d8b75741b908ff2859",
+  "reportHash": "sha256:8610b76bd5fdec3c9061ca757aead0a015adf1f145a44eb63302e066a603dbfd",
   "warnings": [
     "Visual/layout/image/format evidence remains deferred to later branch work.",
     "Public RC convergence blockers are clear for the current text-only scope."
