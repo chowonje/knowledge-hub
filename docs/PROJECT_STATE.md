@@ -70,6 +70,8 @@ The canonical dirty checkout follow-up now has a report-only inventory. `eval/kn
 
 The canonical dirty bucket decision is now recorded too. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_bucket_decision.py` consumes the inventory and fixes the RC policy: no canonical dirty bucket is approved for direct merge into the text-evidence RC. Evidence/source contract, core/infrastructure, and source-ingest/library buckets are clean-replay candidates; answer runtime, eval/test, and CLI/MCP public-surface buckets stay out until owning-feature comparison; parser, provider-hint, and research-object buckets remain held outside the text RC; local workspace process records are excluded from the public RC. Physical cleanup still remains pending because the canonical checkout was intentionally not edited.
 
+The cleanup/archive sequence is also fixed as a report-only plan. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_cleanup_plan.py` assigns all dirty buckets to cleanup sequences and records the execution policy: explicit approval is required, PR #149 should be resolved first, a snapshot/checkpoint is required before cleanup, and no dirty bucket may be directly merged into the text RC. This is still a no-mutation gate; destructive cleanup and canonical checkout edits remain zero.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

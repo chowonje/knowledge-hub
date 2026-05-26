@@ -82,7 +82,14 @@
         "dirtyBucketDecisionStatus": { "type": "string" },
         "dirtyBucketDecision": { "type": "string" },
         "dirtyBucketDirectIncludeRows": { "type": "integer", "minimum": 0 },
-        "dirtyBucketNextAction": { "type": "string" }
+        "dirtyBucketNextAction": { "type": "string" },
+        "dirtyCleanupPlanReportRef": { "type": "string" },
+        "dirtyCleanupPlanStatus": { "type": "string" },
+        "dirtyCleanupPlanRows": { "type": "integer", "minimum": 0 },
+        "dirtyCleanupManualPlanRows": { "type": "integer", "minimum": 0 },
+        "dirtyCleanupRequiresExplicitApproval": { "type": "boolean" },
+        "dirtyCleanupRequiresPr149ResolvedFirst": { "type": "boolean" },
+        "dirtyCleanupNextAction": { "type": "string" }
       }
     },
     "pullRequest149": {

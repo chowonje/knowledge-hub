@@ -15,6 +15,7 @@ TEXT_EVIDENCE_RC_CONVERGENCE_SCHEMA_ID = "knowledge-hub.paper.text-evidence-rc-c
 PR149_DISPOSITION_REPORT_REF = "text_evidence_pr149_disposition.v1.json"
 CANONICAL_DIRTY_INVENTORY_REPORT_REF = "text_evidence_canonical_dirty_inventory.v1.json"
 CANONICAL_DIRTY_BUCKET_DECISION_REPORT_REF = "text_evidence_canonical_dirty_bucket_decision.v1.json"
+CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF = "text_evidence_canonical_dirty_cleanup_plan.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -321,6 +322,24 @@ def _canonical_dirty_bucket_decision_state(reports_root: Path) -> dict[str, Any]
     }
 
 
+def _canonical_dirty_cleanup_plan_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF)
+    if not payload:
+        return {"available": False}
+    policy = dict(payload.get("executionPolicy") or {})
+    return {
+        "available": True,
+        "reportRef": CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "planRows": int(payload.get("planRows") or 0),
+        "manualPlanRows": int(payload.get("manualPlanRows") or 0),
+        "requiresExplicitApproval": bool(policy.get("requiresExplicitApproval")),
+        "requiresPr149ResolvedFirst": bool(policy.get("requiresPr149ResolvedFirst")),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -348,6 +367,7 @@ def build_text_evidence_rc_convergence_report(
     pr149_disposition = _pr149_disposition_state(reports_root)
     canonical_dirty_inventory = _canonical_dirty_inventory_state(reports_root)
     canonical_dirty_bucket_decision = _canonical_dirty_bucket_decision_state(reports_root)
+    canonical_dirty_cleanup_plan = _canonical_dirty_cleanup_plan_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -359,6 +379,18 @@ def build_text_evidence_rc_convergence_report(
         canonical["dirtyBucketDecision"] = _clean_text(canonical_dirty_bucket_decision.get("decision"))
         canonical["dirtyBucketDirectIncludeRows"] = int(canonical_dirty_bucket_decision.get("directIncludeRows") or 0)
         canonical["dirtyBucketNextAction"] = _clean_text(canonical_dirty_bucket_decision.get("nextAction"))
+    if canonical_dirty_cleanup_plan.get("available"):
+        canonical["dirtyCleanupPlanReportRef"] = _clean_text(canonical_dirty_cleanup_plan.get("reportRef"))
+        canonical["dirtyCleanupPlanStatus"] = _clean_text(canonical_dirty_cleanup_plan.get("status"))
+        canonical["dirtyCleanupPlanRows"] = int(canonical_dirty_cleanup_plan.get("planRows") or 0)
+        canonical["dirtyCleanupManualPlanRows"] = int(canonical_dirty_cleanup_plan.get("manualPlanRows") or 0)
+        canonical["dirtyCleanupRequiresExplicitApproval"] = bool(
+            canonical_dirty_cleanup_plan.get("requiresExplicitApproval")
+        )
+        canonical["dirtyCleanupRequiresPr149ResolvedFirst"] = bool(
+            canonical_dirty_cleanup_plan.get("requiresPr149ResolvedFirst")
+        )
+        canonical["dirtyCleanupNextAction"] = _clean_text(canonical_dirty_cleanup_plan.get("nextAction"))
     if pr149_disposition.get("available"):
         pr_149["dispositionReportRef"] = _clean_text(pr149_disposition.get("reportRef"))
         pr_149["dispositionStatus"] = _clean_text(pr149_disposition.get("status"))
@@ -366,6 +398,10 @@ def build_text_evidence_rc_convergence_report(
         pr_149["dispositionNextAction"] = _clean_text(pr149_disposition.get("nextAction"))
     if not canonical.get("dirtyCount"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "canonical_checkout_dirty"]
+    elif canonical_dirty_cleanup_plan.get("status") == "ready":
+        for row in blocker_rows:
+            if row["blockerId"] == "canonical_checkout_dirty":
+                row["reason"] = "canonical dirty cleanup plan is ready; execution awaits explicit approval and PR #149 resolution"
     elif canonical_dirty_bucket_decision.get("decision") == "do_not_merge_canonical_dirty_checkout_into_text_rc":
         for row in blocker_rows:
             if row["blockerId"] == "canonical_checkout_dirty":
@@ -443,7 +479,8 @@ def build_text_evidence_rc_convergence_report(
         "privatePathLeakRows": 0,
         "reportHash": "",
         "nextAction": _clean_text(
-            canonical_dirty_bucket_decision.get("nextAction")
+            canonical_dirty_cleanup_plan.get("nextAction")
+            or canonical_dirty_bucket_decision.get("nextAction")
             or canonical_dirty_inventory.get("nextAction")
             or pr149_disposition.get("nextAction")
             or "resolve_canonical_dirty_checkout_and_pr149_before_public_rc"
