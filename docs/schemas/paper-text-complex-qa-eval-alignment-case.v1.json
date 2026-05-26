@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-complex-qa-eval-alignment-case.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "caseId",
+    "category",
+    "paperId",
+    "question",
+    "questionHash",
+    "requiredEvidenceTypes",
+    "disposition",
+    "answerabilityExpectation",
+    "textEvidenceMode",
+    "matchedEvidenceRows",
+    "matchedEvidence",
+    "missingContracts",
+    "blockerReason",
+    "strictEvidencePromotionRows",
+    "runtimeAnswerVisibleExposureRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-complex-qa-eval-alignment-case.v1" },
+    "caseId": { "type": "string", "minLength": 1 },
+    "category": {
+      "enum": [
+        "figure_caption_qa",
+        "table_numeric_qa",
+        "equation_citation_qa",
+        "method_comparison_qa",
+        "limitation_qa"
+      ]
+    },
+    "paperId": { "type": "string", "minLength": 1 },
+    "question": { "type": "string", "minLength": 1 },
+    "questionHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "requiredEvidenceTypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "disposition": {
+      "enum": ["text_answerable", "candidate_only", "visual_unsupported", "no_answer"]
+    },
+    "answerabilityExpectation": {
+      "enum": ["answerable", "candidate_only", "unsupported", "no_answer"]
+    },
+    "textEvidenceMode": { "type": "string", "minLength": 1 },
+    "matchedEvidenceRows": { "type": "integer", "minimum": 0 },
+    "matchedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidenceType",
+          "locatorKind",
+          "artifactId",
+          "paperId",
+          "sourceContentHash",
+          "page",
+          "bbox",
+          "textHash",
+          "strictEvidence",
+          "answerVisible"
+        ],
+        "properties": {
+          "evidenceType": { "type": "string", "minLength": 1 },
+          "locatorKind": { "type": "string", "minLength": 1 },
+          "artifactId": { "type": "string" },
+          "paperId": { "type": "string", "minLength": 1 },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "page": { "type": "integer", "minimum": 0 },
+          "bbox": { "type": "array", "items": { "type": "number" } },
+          "textHash": { "type": "string" },
+          "strictEvidence": { "const": false },
+          "answerVisible": { "const": false },
+          "label": { "type": "string" }
+        }
+      }
+    },
+    "missingContracts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "blockerReason": { "type": "string" },
+    "strictEvidencePromotionRows": { "const": 0 },
+    "runtimeAnswerVisibleExposureRows": { "const": 0 }
+  }
+}

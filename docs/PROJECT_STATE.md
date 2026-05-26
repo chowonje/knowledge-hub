@@ -56,6 +56,8 @@ The third roadmap tranche, `text_table_caption_candidate_artifacts`, now has rep
 
 The fourth roadmap tranche, `text_equation_locator_context_artifacts`, now has report-only equation locator/context candidates. `eval/knowledgeos/scripts/build_text_equation_locator_context_artifacts.py` reads the same local AI-paper PDF set and emits schema-backed equation-like candidates with source-content hash, page/bbox, candidate char offsets, optional equation labels, equation/context text hashes, extraction method, confidence, and blocker reasons. This is locator/context only: it does not attempt complete LaTeX reconstruction, write canonical parsed artifacts, mutate DB/index state, reindex/reembed, scan the vault, download external content, promote strict evidence, or expose runtime answer-visible payloads.
 
+The fifth roadmap tranche, `text_complex_qa_eval_alignment`, now has a report-only alignment layer. `eval/knowledgeos/scripts/build_text_complex_qa_eval_alignment.py` consumes the caption QA readback, SectionSpan/ParagraphSpan candidates, table-text candidates, and equation locator/context candidates, then classifies complex QA rows as `text_answerable`, `candidate_only`, `visual_unsupported`, or `no_answer`. The generated alignment report keeps table numeric and equation citation rows candidate-only when table-cell identity or LaTeX/strict equation contracts are missing, and keeps visual/layout questions explicitly unsupported in the text-evidence v0.1 scope.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-complex-qa-eval-alignment-report.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "inputReportStatuses",
+    "scope",
+    "caseRows",
+    "textAnswerableRows",
+    "candidateOnlyRows",
+    "visualUnsupportedRows",
+    "noAnswerRows",
+    "categoryCounts",
+    "rows",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-complex-qa-eval-alignment-report.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "inputReportStatuses": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "alignmentPolicy",
+        "visualLayoutBranchDeferred",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "alignmentPolicy": { "const": "text_evidence_v0_1" },
+        "visualLayoutBranchDeferred": { "const": true },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 }
+      }
+    },
+    "caseRows": { "type": "integer", "minimum": 0 },
+    "textAnswerableRows": { "type": "integer", "minimum": 0 },
+    "candidateOnlyRows": { "type": "integer", "minimum": 0 },
+    "visualUnsupportedRows": { "type": "integer", "minimum": 0 },
+    "noAnswerRows": { "type": "integer", "minimum": 0 },
+    "categoryCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "figure_caption_qa",
+        "table_numeric_qa",
+        "equation_citation_qa",
+        "method_comparison_qa",
+        "limitation_qa"
+      ],
+      "properties": {
+        "figure_caption_qa": { "type": "integer", "minimum": 0 },
+        "table_numeric_qa": { "type": "integer", "minimum": 0 },
+        "equation_citation_qa": { "type": "integer", "minimum": 0 },
+        "method_comparison_qa": { "type": "integer", "minimum": 0 },
+        "limitation_qa": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema",
+          "caseId",
+          "category",
+          "paperId",
+          "question",
+          "questionHash",
+          "requiredEvidenceTypes",
+          "disposition",
+          "answerabilityExpectation",
+          "matchedEvidenceRows",
+          "matchedEvidence",
+          "missingContracts",
+          "blockerReason",
+          "strictEvidencePromotionRows",
+          "runtimeAnswerVisibleExposureRows"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.text-complex-qa-eval-alignment-case.v1" },
+          "caseId": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "paperId": { "type": "string", "minLength": 1 },
+          "question": { "type": "string", "minLength": 1 },
+          "questionHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "requiredEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+          "disposition": { "enum": ["text_answerable", "candidate_only", "visual_unsupported", "no_answer"] },
+          "answerabilityExpectation": { "enum": ["answerable", "candidate_only", "unsupported", "no_answer"] },
+          "textEvidenceMode": { "type": "string" },
+          "matchedEvidenceRows": { "type": "integer", "minimum": 0 },
+          "matchedEvidence": { "type": "array" },
+          "missingContracts": { "type": "array", "items": { "type": "string" } },
+          "blockerReason": { "type": "string" },
+          "strictEvidencePromotionRows": { "const": 0 },
+          "runtimeAnswerVisibleExposureRows": { "const": 0 }
+        }
+      }
+    },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}
