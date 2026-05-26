@@ -1,0 +1,482 @@
+{
+  "schema": "knowledge-hub.paper.source-alias-normalization-report.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T06:59:53Z",
+  "scope": {
+    "writes": "report_only",
+    "aliasPolicy": "source_alias_normalization_text_v0_1",
+    "runtimeWiringChanged": false,
+    "visualLayoutBranchDeferred": true,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0
+  },
+  "caseRows": 10,
+  "shortAliasCaseRows": 9,
+  "blockedShortAliasRows": 1,
+  "conceptOnlyRows": 2,
+  "discoverOnlyRows": 2,
+  "contextualAliasResolvedRows": 3,
+  "explicitIdResolvedRows": 1,
+  "explicitTitleContextRows": 1,
+  "unsafeDirectAliasRows": 0,
+  "expectationFailureRows": 0,
+  "rows": [
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "rag-concept-only",
+      "query": "RAG란?",
+      "queryHash": "sha256:c50a6d8bbeb6c9a2b768a0dac376d0ff600dadca88189651a759f22172064221",
+      "shortAlias": "RAG",
+      "shortAliasPresent": true,
+      "description": "bare RAG should not resolve to one source paper",
+      "family": "paper_discover",
+      "disposition": "discover_only",
+      "expectedDisposition": "discover_only",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "shortlist_only",
+      "directShortAliasResolutionAllowed": false,
+      "contextSignals": [
+        "discover_family"
+      ],
+      "contextTerms": [],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_discover",
+        "entities": [
+          "RAG"
+        ],
+        "expandedTerms": [
+          "RAG",
+          "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "Retrieval-Augmented Generation"
+        ],
+        "resolvedPaperIds": [],
+        "answerMode": "paper_shortlist_summary"
+      },
+      "queryPlanResolvedPaperIdRows": 0,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "short_alias_discovery_not_single_source_scope",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "rag-discover-only",
+      "query": "RAG 관련 논문 찾아줘",
+      "queryHash": "sha256:5ceeeefc1430721e396d2d412e2c670c52c1c6e170fc77218541053e55e58749",
+      "shortAlias": "RAG",
+      "shortAliasPresent": true,
+      "description": "discover intent can shortlist papers without treating the alias as citation-grade source scope",
+      "family": "paper_discover",
+      "disposition": "discover_only",
+      "expectedDisposition": "discover_only",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "shortlist_only",
+      "directShortAliasResolutionAllowed": false,
+      "contextSignals": [
+        "discover_family"
+      ],
+      "contextTerms": [],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_discover",
+        "entities": [
+          "RAG",
+          "관련"
+        ],
+        "expandedTerms": [
+          "RAG",
+          "관련",
+          "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "Retrieval-Augmented Generation"
+        ],
+        "resolvedPaperIds": [],
+        "answerMode": "paper_shortlist_summary"
+      },
+      "queryPlanResolvedPaperIdRows": 0,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "short_alias_discovery_not_single_source_scope",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "rag-self-rag-contextual-compare",
+      "query": "RAG와 Self-RAG를 비교해줘",
+      "queryHash": "sha256:b7c4b749d86522cc45dae8e53e5da1d6011d64f0166335ceee97c2fa9fcc898c",
+      "shortAlias": "RAG",
+      "shortAliasPresent": true,
+      "description": "compare context can use RAG only as one side of an explicit pair",
+      "family": "paper_compare",
+      "disposition": "contextual_alias_resolved",
+      "expectedDisposition": "contextual_alias_resolved",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "contextual_resolution_only",
+      "directShortAliasResolutionAllowed": true,
+      "contextSignals": [
+        "compare_family",
+        "paired_context_term"
+      ],
+      "contextTerms": [
+        "Self-RAG"
+      ],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_compare",
+        "entities": [
+          "RAG",
+          "Self-RAG"
+        ],
+        "expandedTerms": [
+          "RAG",
+          "Self-RAG",
+          "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "Retrieval-Augmented Generation"
+        ],
+        "resolvedPaperIds": [
+          "2005.11401"
+        ],
+        "answerMode": "paper_comparison"
+      },
+      "queryPlanResolvedPaperIdRows": 1,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "gpt-bert-contextual-compare",
+      "query": "BERT와 GPT 계열의 차이를 논문 기준으로 비교해줘",
+      "queryHash": "sha256:e3864cb4870ef0ebd5083f37565f6f229ac9f251935f8461f1614cee00de6df9",
+      "shortAlias": "GPT",
+      "shortAliasPresent": true,
+      "description": "GPT may resolve only inside a bounded BERT/GPT compare frame",
+      "family": "paper_compare",
+      "disposition": "contextual_alias_resolved",
+      "expectedDisposition": "contextual_alias_resolved",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "contextual_resolution_only",
+      "directShortAliasResolutionAllowed": true,
+      "contextSignals": [
+        "compare_family",
+        "paired_context_term"
+      ],
+      "contextTerms": [
+        "BERT"
+      ],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_compare",
+        "entities": [
+          "BERT",
+          "GPT"
+        ],
+        "expandedTerms": [
+          "BERT",
+          "GPT",
+          "Language Models are Few-Shot Learners",
+          "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"
+        ],
+        "resolvedPaperIds": [
+          "1810.04805"
+        ],
+        "answerMode": "paper_comparison"
+      },
+      "queryPlanResolvedPaperIdRows": 1,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "cnn-concept-representative-only",
+      "query": "CNN을 쉽게 설명해줘",
+      "queryHash": "sha256:546564fadb4fb2712ea7f13e9a714d9ed66546b3e594469cc857d964a4d82919",
+      "shortAlias": "CNN",
+      "shortAliasPresent": true,
+      "description": "CNN explainer can use representative candidates but not direct alias scope",
+      "family": "concept_explainer",
+      "disposition": "concept_only",
+      "expectedDisposition": "concept_only",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "representative_candidates_only",
+      "directShortAliasResolutionAllowed": false,
+      "contextSignals": [
+        "concept_explainer_family"
+      ],
+      "contextTerms": [],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "concept_explainer",
+        "entities": [
+          "CNN"
+        ],
+        "expandedTerms": [
+          "ImageNet Classification with Deep Convolutional Neural Networks",
+          "Deep Convolutional Neural Networks",
+          "Convolutional Neural Networks",
+          "CNN"
+        ],
+        "resolvedPaperIds": [
+          "alexnet-2012"
+        ],
+        "answerMode": "representative_paper_explainer_beginner"
+      },
+      "queryPlanResolvedPaperIdRows": 1,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "short_alias_requires_explicit_source_context",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "cnn-vit-contextual-compare",
+      "query": "CNN vs ViT 비교해줘",
+      "queryHash": "sha256:32cc1d624addd31ad4ffdd2249f408cbd891115fe6b70eb53c1e79dc56967cb9",
+      "shortAlias": "CNN",
+      "shortAliasPresent": true,
+      "description": "CNN can resolve inside an explicit CNN/ViT compare frame",
+      "family": "paper_compare",
+      "disposition": "contextual_alias_resolved",
+      "expectedDisposition": "contextual_alias_resolved",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "contextual_resolution_only",
+      "directShortAliasResolutionAllowed": true,
+      "contextSignals": [
+        "compare_family",
+        "paired_context_term"
+      ],
+      "contextTerms": [
+        "ViT"
+      ],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_compare",
+        "entities": [
+          "CNN",
+          "ViT"
+        ],
+        "expandedTerms": [
+          "CNN",
+          "ViT",
+          "ImageNet Classification with Deep Convolutional Neural Networks",
+          "An Image is Worth 16x16 Words",
+          "Deep Convolutional Neural Networks",
+          "Vision Transformer"
+        ],
+        "resolvedPaperIds": [
+          "alexnet-2012",
+          "2010.11929"
+        ],
+        "answerMode": "paper_comparison"
+      },
+      "queryPlanResolvedPaperIdRows": 2,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "vlm-concept-only",
+      "query": "VLM을 설명해줘",
+      "queryHash": "sha256:8ec695227927f588e9022b6946b4e44c0f5402b2707b5996608d5bd3836034f3",
+      "shortAlias": "VLM",
+      "shortAliasPresent": true,
+      "description": "VLM is concept-only without a named source or explicit title",
+      "family": "concept_explainer",
+      "disposition": "concept_only",
+      "expectedDisposition": "concept_only",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "representative_candidates_only",
+      "directShortAliasResolutionAllowed": false,
+      "contextSignals": [
+        "concept_explainer_family"
+      ],
+      "contextTerms": [],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "concept_explainer",
+        "entities": [
+          "VLM"
+        ],
+        "expandedTerms": [
+          "VLM"
+        ],
+        "resolvedPaperIds": [],
+        "answerMode": "representative_paper_explainer"
+      },
+      "queryPlanResolvedPaperIdRows": 0,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "short_alias_requires_explicit_source_context",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "rag-explicit-title-context",
+      "query": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks 논문 요약해줘",
+      "queryHash": "sha256:fd8d9fd713caa95783240fa46065c2fa8f72d589af564a09f610b7a718c6a29d",
+      "shortAlias": "RAG",
+      "shortAliasPresent": false,
+      "description": "full paper title context can scope source lookup even if RAG is the common short alias",
+      "family": "paper_lookup",
+      "disposition": "explicit_title_context",
+      "expectedDisposition": "explicit_title_context",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "explicit_source_resolution_allowed",
+      "directShortAliasResolutionAllowed": true,
+      "contextSignals": [
+        "explicit_paper_title"
+      ],
+      "contextTerms": [
+        "Retrieval-Augmented",
+        "Generation",
+        "for",
+        "Knowledge-Intensive"
+      ],
+      "explicitPaperId": "",
+      "explicitTitle": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "queryPlan": {
+        "family": "paper_lookup",
+        "entities": [
+          "Retrieval-Augmented",
+          "Generation",
+          "for",
+          "Knowledge-Intensive",
+          "NLP",
+          "Tasks"
+        ],
+        "expandedTerms": [
+          "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "Retrieval-Augmented",
+          "Generation",
+          "for"
+        ],
+        "resolvedPaperIds": [],
+        "answerMode": "paper_scoped_answer"
+      },
+      "queryPlanResolvedPaperIdRows": 0,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "rag-explicit-id-resolved",
+      "query": "2005.11401 논문 요약해줘",
+      "queryHash": "sha256:794c6aba51f31979b7882cb0b81929fbe42068b245fbe28d2b2f57dd4b502d98",
+      "shortAlias": "RAG",
+      "shortAliasPresent": true,
+      "description": "arXiv id is explicit source context, independent of short alias expansion",
+      "family": "paper_lookup",
+      "disposition": "explicit_id_resolved",
+      "expectedDisposition": "explicit_id_resolved",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "explicit_source_resolution_allowed",
+      "directShortAliasResolutionAllowed": true,
+      "contextSignals": [
+        "explicit_paper_id"
+      ],
+      "contextTerms": [
+        "2005.11401"
+      ],
+      "explicitPaperId": "2005.11401",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_lookup",
+        "entities": [
+          "2005.11401"
+        ],
+        "expandedTerms": [
+          "2005 11401",
+          "2005.11401"
+        ],
+        "resolvedPaperIds": [
+          "2005.11401"
+        ],
+        "answerMode": "paper_scoped_answer"
+      },
+      "queryPlanResolvedPaperIdRows": 1,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    },
+    {
+      "schema": "knowledge-hub.paper.source-alias-normalization-case.v1",
+      "caseId": "gpt-bare-lookup-blocked",
+      "query": "GPT 논문 요약해줘",
+      "queryHash": "sha256:8aa4774babd783c94bee33f870b32608daacd04cf1962c8c615851061a2a99ad",
+      "shortAlias": "GPT",
+      "shortAliasPresent": true,
+      "description": "bare short alias plus lookup wording is not enough for direct source resolution",
+      "family": "paper_lookup",
+      "disposition": "blocked_short_alias_no_context",
+      "expectedDisposition": "blocked_short_alias_no_context",
+      "expectationMet": true,
+      "sourceResolutionPolicy": "no_direct_source_resolution",
+      "directShortAliasResolutionAllowed": false,
+      "contextSignals": [
+        "lookup_family_without_explicit_source_context"
+      ],
+      "contextTerms": [],
+      "explicitPaperId": "",
+      "explicitTitle": "",
+      "queryPlan": {
+        "family": "paper_lookup",
+        "entities": [
+          "GPT"
+        ],
+        "expandedTerms": [
+          "GPT",
+          "Language Models are Few-Shot Learners"
+        ],
+        "resolvedPaperIds": [],
+        "answerMode": "paper_scoped_answer"
+      },
+      "queryPlanResolvedPaperIdRows": 0,
+      "unsafeDirectAliasResolution": false,
+      "blockerReason": "short_alias_lookup_requires_explicit_id_or_title",
+      "runtimeWiringChangedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0
+    }
+  ],
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "runtimeWiringChangedRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "warnings": [
+    "report classifies short-alias source scope policy only; it does not change ask-v2 runtime selection"
+  ],
+  "schemaErrors": []
+}
