@@ -1,0 +1,99 @@
+{
+  "schema": "knowledge-hub.paper.text-evidence-pr149-disposition.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T07:26:59Z",
+  "scope": {
+    "writes": "report_only",
+    "pullRequestMutationPerformed": false,
+    "mergePerformed": false,
+    "cherryPickPerformed": false,
+    "canonicalCheckoutEdited": false,
+    "textOnlyRcScope": true,
+    "visualLayoutBranchDeferred": true,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "currentStack": {
+    "branch": "codex/rc-hygiene-and-convergence-20260526",
+    "head": "ba9bc40",
+    "dirtyCount": 6
+  },
+  "pullRequest": {
+    "number": 149,
+    "title": "Add complex QA real strict evidence availability bridge audit",
+    "headRefName": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
+    "headRefOid": "0d3eec1ce814a6e843a2473937fe7a36b445a38a",
+    "baseRefName": "main",
+    "isDraft": true,
+    "mergeable": "CONFLICTING",
+    "mergeStateStatus": "DIRTY",
+    "updatedAt": "2026-05-20T10:15:57Z",
+    "url": "https://github.com/chowonje/knowledge-hub/pull/149",
+    "fileRows": 6,
+    "files": [
+      "CHANGELOG.md",
+      "docs/PROJECT_STATE.md",
+      "docs/schemas/paper-complex-qa-real-strict-evidence-availability-bridge-audit.v1.json",
+      "knowledge_hub/core/schema_validator.py",
+      "knowledge_hub/papers/complex_qa_real_strict_evidence_availability_bridge_audit.py",
+      "tests/test_complex_qa_real_strict_evidence_availability_bridge_audit.py"
+    ]
+  },
+  "dependencyFindings": [
+    {
+      "module": "knowledge_hub.papers.complex_qa_structured_evidence_comparison_runner",
+      "path": "knowledge_hub/papers/complex_qa_structured_evidence_comparison_runner.py",
+      "presentInCurrentStack": false,
+      "disposition": "missing_from_text_evidence_stack"
+    },
+    {
+      "module": "knowledge_hub.papers.complex_qa_supplied_strict_evidence_grader_baseline_runner",
+      "path": "knowledge_hub/papers/complex_qa_supplied_strict_evidence_grader_baseline_runner.py",
+      "presentInCurrentStack": false,
+      "disposition": "missing_from_text_evidence_stack"
+    }
+  ],
+  "textAlignmentFinding": {
+    "reportRef": "text_complex_qa_eval_alignment.v1.json",
+    "present": true,
+    "schema": "knowledge-hub.paper.text-complex-qa-eval-alignment-report.v1",
+    "status": "ready",
+    "caseRows": 10,
+    "textAnswerableRows": 3,
+    "visualUnsupportedRows": 2,
+    "disposition": "v0_1_text_evidence_alignment_source"
+  },
+  "decision": {
+    "decision": "abandon_current_pr_before_public_rc",
+    "mergeRecommended": false,
+    "recutRecommendedForV01": false,
+    "laterSideTrackAllowed": true,
+    "reason": "PR #149 is draft/conflicting and depends on older complex strict-evidence side-stack modules that are not present in the v0.1 text-evidence stack.",
+    "conceptDisposition": "preserve_as_later_strict_evidence_side_track_only"
+  },
+  "publicRcImpact": "remove_from_public_rc_merge_queue_after_operator_closes_or_marks_abandoned",
+  "nextAction": "operator_close_or_abandon_pr149_without_merging_after_approval",
+  "prFileRows": 6,
+  "missingDependencyRows": 2,
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "pullRequestMutationRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "reportHash": "sha256:842e9fa967766fb2c53517a1b94533c1c57c269739668a91514d00fed9a22092",
+  "warnings": [
+    "This report does not close, merge, or edit PR #149.",
+    "The broader strict-evidence bridge concept is retained for a later side-track only."
+  ],
+  "schemaErrors": []
+}

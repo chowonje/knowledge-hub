@@ -7,14 +7,14 @@
 - blockedPhaseRows: `0`
 - publicRcBlockerRows: `2`
 - privatePathLeakRows: `0`
-- reportHash: `sha256:31ece23370922f4b4695623b8ab24f7d90fdb58af81c158e9757e5ec572eab64`
+- reportHash: `sha256:54a75c6994b680335038261067879e7be9cd675dbca5b37656b2da7bf6a4e029`
 
 ## Blockers
 
 | blockerId | severity | reason |
 |---|---|---|
 | `canonical_checkout_dirty` | `hold` | canonical checkout is dirty and remains evidence-only |
-| `pr_149_conflicting_or_draft` | `hold` | open strict-evidence audit PR is not clean/mergeable |
+| `pr_149_conflicting_or_draft` | `hold` | PR #149 has an abandon-before-RC disposition; external PR closure remains pending |
 
 ## Phase Reports
 
@@ -35,4 +35,4 @@
 | order | branch | decision |
 |---:|---|---|
 | `1` | `codex/rc-hygiene-and-convergence-20260526` | `review_as_single_stacked_text_evidence_candidate` |
-| `2` | `codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520` | `recut_or_abandon_before_rc` |
+| `2` | `codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520` | `abandon_current_pr_before_public_rc` |

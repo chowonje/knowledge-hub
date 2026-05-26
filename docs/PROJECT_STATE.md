@@ -64,6 +64,8 @@ The seventh roadmap tranche, `public_operator_surface_cleanup`, now narrows the 
 
 The eighth roadmap tranche, `rc_hygiene_and_convergence`, now has a report-only convergence board. `eval/knowledgeos/scripts/build_text_evidence_rc_convergence_report.py` reads the checked-in text-evidence reports and current git/PR state, verifies that the stacked text-evidence phases are included in the candidate branch, records dirty canonical checkout and PR #149 as public-RC holds, and leaves merge/cherry-pick/worktree deletion/public RC creation out of scope until integration review.
 
+The PR #149 convergence follow-up now has a report-only disposition record. `eval/knowledgeos/scripts/build_text_evidence_pr149_disposition_report.py` records that the draft/conflicting `complex-qa-real-strict-evidence-availability-bridge-audit` PR should be abandoned before public RC because its required complex strict-evidence side-stack modules are not present in the v0.1 text-evidence stack. The broader strict-evidence bridge idea is preserved for a later side-track, but the text-only RC line does not merge, recut, cherry-pick, or close that PR automatically.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

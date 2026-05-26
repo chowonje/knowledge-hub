@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-evidence-pr149-disposition.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "currentStack",
+    "pullRequest",
+    "dependencyFindings",
+    "textAlignmentFinding",
+    "decision",
+    "publicRcImpact",
+    "nextAction",
+    "prFileRows",
+    "missingDependencyRows",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "reportHash",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-evidence-pr149-disposition.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "pullRequestMutationPerformed",
+        "mergePerformed",
+        "cherryPickPerformed",
+        "canonicalCheckoutEdited",
+        "textOnlyRcScope",
+        "visualLayoutBranchDeferred",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "pullRequestMutationPerformed": { "const": false },
+        "mergePerformed": { "const": false },
+        "cherryPickPerformed": { "const": false },
+        "canonicalCheckoutEdited": { "const": false },
+        "textOnlyRcScope": { "const": true },
+        "visualLayoutBranchDeferred": { "const": true },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "currentStack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch", "head", "dirtyCount"],
+      "properties": {
+        "branch": { "type": "string" },
+        "head": { "type": "string" },
+        "dirtyCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pullRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "title",
+        "headRefName",
+        "headRefOid",
+        "baseRefName",
+        "isDraft",
+        "mergeable",
+        "mergeStateStatus",
+        "updatedAt",
+        "url",
+        "fileRows",
+        "files"
+      ],
+      "properties": {
+        "number": { "const": 149 },
+        "title": { "type": "string" },
+        "headRefName": { "type": "string" },
+        "headRefOid": { "type": "string" },
+        "baseRefName": { "type": "string" },
+        "isDraft": { "type": "boolean" },
+        "mergeable": { "type": "string" },
+        "mergeStateStatus": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "url": { "type": "string" },
+        "fileRows": { "type": "integer", "minimum": 0 },
+        "files": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dependencyFindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["module", "path", "presentInCurrentStack", "disposition"],
+        "properties": {
+          "module": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "minLength": 1 },
+          "presentInCurrentStack": { "type": "boolean" },
+          "disposition": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "textAlignmentFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportRef",
+        "present",
+        "schema",
+        "status",
+        "caseRows",
+        "textAnswerableRows",
+        "visualUnsupportedRows",
+        "disposition"
+      ],
+      "properties": {
+        "reportRef": { "type": "string" },
+        "present": { "type": "boolean" },
+        "schema": { "type": "string" },
+        "status": { "type": "string" },
+        "caseRows": { "type": "integer", "minimum": 0 },
+        "textAnswerableRows": { "type": "integer", "minimum": 0 },
+        "visualUnsupportedRows": { "type": "integer", "minimum": 0 },
+        "disposition": { "type": "string" }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "mergeRecommended",
+        "recutRecommendedForV01",
+        "laterSideTrackAllowed",
+        "reason",
+        "conceptDisposition"
+      ],
+      "properties": {
+        "decision": { "const": "abandon_current_pr_before_public_rc" },
+        "mergeRecommended": { "const": false },
+        "recutRecommendedForV01": { "const": false },
+        "laterSideTrackAllowed": { "const": true },
+        "reason": { "type": "string", "minLength": 1 },
+        "conceptDisposition": { "const": "preserve_as_later_strict_evidence_side_track_only" }
+      }
+    },
+    "publicRcImpact": { "type": "string", "minLength": 1 },
+    "nextAction": { "type": "string", "minLength": 1 },
+    "prFileRows": { "type": "integer", "minimum": 0 },
+    "missingDependencyRows": { "type": "integer", "minimum": 0 },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "pullRequestMutationRows",
+        "mergeRows",
+        "cherryPickRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "pullRequestMutationRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "reportHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}

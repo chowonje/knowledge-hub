@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T07:18:25Z",
+  "generatedAt": "2026-05-26T07:27:12Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "ff2b0e1",
-    "dirtyCount": 1
+    "head": "ba9bc40",
+    "dirtyCount": 8
   },
   "canonicalCheckout": {
     "available": true,
@@ -36,7 +36,11 @@
     "updatedAt": "2026-05-20T10:15:57Z",
     "url": "https://github.com/chowonje/knowledge-hub/pull/149",
     "blocked": true,
-    "decision": "recut_or_abandon_before_rc"
+    "decision": "recut_or_abandon_before_rc",
+    "dispositionReportRef": "text_evidence_pr149_disposition.v1.json",
+    "dispositionStatus": "ready",
+    "dispositionDecision": "abandon_current_pr_before_public_rc",
+    "dispositionNextAction": "operator_close_or_abandon_pr149_without_merging_after_approval"
   },
   "phaseRows": 9,
   "readyPhaseRows": 9,
@@ -52,21 +56,21 @@
     {
       "blockerId": "pr_149_conflicting_or_draft",
       "severity": "hold",
-      "reason": "open strict-evidence audit PR is not clean/mergeable"
+      "reason": "PR #149 has an abandon-before-RC disposition; external PR closure remains pending"
     }
   ],
   "mergeQueue": [
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "ff2b0e1",
+      "head": "ba9bc40",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
       "order": 2,
       "branch": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
       "head": "0d3eec1ce814a6e843a2473937fe7a36b445a38a",
-      "decision": "recut_or_abandon_before_rc"
+      "decision": "abandon_current_pr_before_public_rc"
     }
   ],
   "phaseReports": [
@@ -242,8 +246,8 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:31ece23370922f4b4695623b8ab24f7d90fdb58af81c158e9757e5ec572eab64",
-  "nextAction": "resolve_canonical_dirty_checkout_and_pr149_before_public_rc",
+  "reportHash": "sha256:54a75c6994b680335038261067879e7be9cd675dbca5b37656b2da7bf6a4e029",
+  "nextAction": "operator_close_or_abandon_pr149_without_merging_after_approval",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"

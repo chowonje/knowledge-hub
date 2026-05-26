@@ -50,6 +50,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.source-alias-normalization-case.v1": "paper-source-alias-normalization-case.v1.json",
     "knowledge-hub.paper.source-alias-normalization-report.v1": "paper-source-alias-normalization-report.v1.json",
     "knowledge-hub.paper.text-evidence-rc-convergence-report.v1": "paper-text-evidence-rc-convergence-report.v1.json",
+    "knowledge-hub.paper.text-evidence-pr149-disposition.v1": "paper-text-evidence-pr149-disposition.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
     "knowledge-hub.paper-memory.card.result.v1": "paper-memory-card-result.v1.json",

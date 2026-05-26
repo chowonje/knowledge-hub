@@ -12,6 +12,7 @@ from typing import Any, Sequence
 from knowledge_hub.papers.figure_caption_artifact_vertical_slice import utc_now_iso
 
 TEXT_EVIDENCE_RC_CONVERGENCE_SCHEMA_ID = "knowledge-hub.paper.text-evidence-rc-convergence-report.v1"
+PR149_DISPOSITION_REPORT_REF = "text_evidence_pr149_disposition.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -267,6 +268,24 @@ def _pr_149_state(*, include_pr_state: bool, repo: Path) -> dict[str, Any]:
     }
 
 
+def _pr149_disposition_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / PR149_DISPOSITION_REPORT_REF)
+    if not payload:
+        return {"available": False}
+    decision = dict(payload.get("decision") or {})
+    return {
+        "available": True,
+        "reportRef": PR149_DISPOSITION_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "decision": _clean_text(decision.get("decision")),
+        "mergeRecommended": bool(decision.get("mergeRecommended")),
+        "recutRecommendedForV01": bool(decision.get("recutRecommendedForV01")),
+        "laterSideTrackAllowed": bool(decision.get("laterSideTrackAllowed")),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -291,10 +310,20 @@ def build_text_evidence_rc_convergence_report(
     ]
     canonical = _canonical_state(canonical_repo)
     pr_149 = _pr_149_state(include_pr_state=include_pr_state, repo=project_root)
+    pr149_disposition = _pr149_disposition_state(reports_root)
+    if pr149_disposition.get("available"):
+        pr_149["dispositionReportRef"] = _clean_text(pr149_disposition.get("reportRef"))
+        pr_149["dispositionStatus"] = _clean_text(pr149_disposition.get("status"))
+        pr_149["dispositionDecision"] = _clean_text(pr149_disposition.get("decision"))
+        pr_149["dispositionNextAction"] = _clean_text(pr149_disposition.get("nextAction"))
     if not canonical.get("dirtyCount"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "canonical_checkout_dirty"]
     if not pr_149.get("blocked"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "pr_149_conflicting_or_draft"]
+    elif pr149_disposition.get("decision") == "abandon_current_pr_before_public_rc":
+        for row in blocker_rows:
+            if row["blockerId"] == "pr_149_conflicting_or_draft":
+                row["reason"] = "PR #149 has an abandon-before-RC disposition; external PR closure remains pending"
 
     ready_phase_rows = sum(
         1
@@ -335,7 +364,9 @@ def build_text_evidence_rc_convergence_report(
                 "order": 2,
                 "branch": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
                 "head": _clean_text(pr_149.get("headRefOid")),
-                "decision": _clean_text(pr_149.get("decision") or "hold_until_pr_state_checked"),
+                "decision": _clean_text(
+                    pr_149.get("dispositionDecision") or pr_149.get("decision") or "hold_until_pr_state_checked"
+                ),
             },
         ],
         "phaseReports": phase_rows,
@@ -355,7 +386,9 @@ def build_text_evidence_rc_convergence_report(
         "schemaViolationCount": 0,
         "privatePathLeakRows": 0,
         "reportHash": "",
-        "nextAction": "resolve_canonical_dirty_checkout_and_pr149_before_public_rc",
+        "nextAction": _clean_text(
+            pr149_disposition.get("nextAction") or "resolve_canonical_dirty_checkout_and_pr149_before_public_rc"
+        ),
         "warnings": [
             "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
