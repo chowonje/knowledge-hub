@@ -13,6 +13,7 @@ from knowledge_hub.papers.figure_caption_artifact_vertical_slice import utc_now_
 
 TEXT_EVIDENCE_RC_CONVERGENCE_SCHEMA_ID = "knowledge-hub.paper.text-evidence-rc-convergence-report.v1"
 PR149_DISPOSITION_REPORT_REF = "text_evidence_pr149_disposition.v1.json"
+CANONICAL_DIRTY_INVENTORY_REPORT_REF = "text_evidence_canonical_dirty_inventory.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -286,6 +287,21 @@ def _pr149_disposition_state(reports_root: Path) -> dict[str, Any]:
     }
 
 
+def _canonical_dirty_inventory_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / CANONICAL_DIRTY_INVENTORY_REPORT_REF)
+    if not payload:
+        return {"available": False}
+    return {
+        "available": True,
+        "reportRef": CANONICAL_DIRTY_INVENTORY_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "dirtyRows": int(payload.get("dirtyRows") or 0),
+        "unknownRows": int(payload.get("unknownRows") or 0),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -311,6 +327,12 @@ def build_text_evidence_rc_convergence_report(
     canonical = _canonical_state(canonical_repo)
     pr_149 = _pr_149_state(include_pr_state=include_pr_state, repo=project_root)
     pr149_disposition = _pr149_disposition_state(reports_root)
+    canonical_dirty_inventory = _canonical_dirty_inventory_state(reports_root)
+    if canonical_dirty_inventory.get("available"):
+        canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
+        canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
+        canonical["dirtyInventoryUnknownRows"] = int(canonical_dirty_inventory.get("unknownRows") or 0)
+        canonical["dirtyInventoryNextAction"] = _clean_text(canonical_dirty_inventory.get("nextAction"))
     if pr149_disposition.get("available"):
         pr_149["dispositionReportRef"] = _clean_text(pr149_disposition.get("reportRef"))
         pr_149["dispositionStatus"] = _clean_text(pr149_disposition.get("status"))
@@ -318,6 +340,10 @@ def build_text_evidence_rc_convergence_report(
         pr_149["dispositionNextAction"] = _clean_text(pr149_disposition.get("nextAction"))
     if not canonical.get("dirtyCount"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "canonical_checkout_dirty"]
+    elif canonical_dirty_inventory.get("available"):
+        for row in blocker_rows:
+            if row["blockerId"] == "canonical_checkout_dirty":
+                row["reason"] = "canonical checkout dirty inventory is available; bucket-level keep/drop/replay decision remains pending"
     if not pr_149.get("blocked"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "pr_149_conflicting_or_draft"]
     elif pr149_disposition.get("decision") == "abandon_current_pr_before_public_rc":
@@ -387,7 +413,9 @@ def build_text_evidence_rc_convergence_report(
         "privatePathLeakRows": 0,
         "reportHash": "",
         "nextAction": _clean_text(
-            pr149_disposition.get("nextAction") or "resolve_canonical_dirty_checkout_and_pr149_before_public_rc"
+            canonical_dirty_inventory.get("nextAction")
+            or pr149_disposition.get("nextAction")
+            or "resolve_canonical_dirty_checkout_and_pr149_before_public_rc"
         ),
         "warnings": [
             "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-evidence-canonical-dirty-inventory.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "canonicalCheckout",
+    "dirtyRows",
+    "trackedDirtyRows",
+    "untrackedRows",
+    "unknownRows",
+    "bucketCounts",
+    "dispositionCounts",
+    "rows",
+    "nextAction",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "reportHash",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-evidence-canonical-dirty-inventory.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "canonicalCheckoutEdited",
+        "fileContentReadRows",
+        "vaultScanRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "canonicalCheckoutEdited": { "const": false },
+        "fileContentReadRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 }
+      }
+    },
+    "canonicalCheckout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available", "repoRef", "branch", "head", "dirtyRows"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "repoRef": { "const": "canonical_product_checkout" },
+        "branch": { "type": "string" },
+        "head": { "type": "string" },
+        "dirtyRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "dirtyRows": { "type": "integer", "minimum": 0 },
+    "trackedDirtyRows": { "type": "integer", "minimum": 0 },
+    "untrackedRows": { "type": "integer", "minimum": 0 },
+    "unknownRows": { "type": "integer", "minimum": 0 },
+    "bucketCounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "dispositionCounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["statusCode", "path", "pathKind", "bucket", "rcDisposition", "reason"],
+        "properties": {
+          "statusCode": { "type": "string", "minLength": 2 },
+          "path": { "type": "string", "minLength": 1 },
+          "pathKind": { "enum": ["tracked_dirty", "untracked", "unknown"] },
+          "bucket": { "type": "string", "minLength": 1 },
+          "rcDisposition": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "nextAction": { "type": "string", "minLength": 1 },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "reportHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}

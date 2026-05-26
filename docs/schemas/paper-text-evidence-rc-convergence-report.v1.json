@@ -73,7 +73,11 @@
         "available": { "type": "boolean" },
         "branch": { "type": "string" },
         "head": { "type": "string" },
-        "dirtyCount": { "type": "integer", "minimum": 0 }
+        "dirtyCount": { "type": "integer", "minimum": 0 },
+        "dirtyInventoryReportRef": { "type": "string" },
+        "dirtyInventoryStatus": { "type": "string" },
+        "dirtyInventoryUnknownRows": { "type": "integer", "minimum": 0 },
+        "dirtyInventoryNextAction": { "type": "string" }
       }
     },
     "pullRequest149": {

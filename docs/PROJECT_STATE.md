@@ -66,6 +66,8 @@ The eighth roadmap tranche, `rc_hygiene_and_convergence`, now has a report-only 
 
 The PR #149 convergence follow-up now has a report-only disposition record. `eval/knowledgeos/scripts/build_text_evidence_pr149_disposition_report.py` records that the draft/conflicting `complex-qa-real-strict-evidence-availability-bridge-audit` PR should be abandoned before public RC because its required complex strict-evidence side-stack modules are not present in the v0.1 text-evidence stack. The broader strict-evidence bridge idea is preserved for a later side-track, but the text-only RC line does not merge, recut, cherry-pick, or close that PR automatically.
 
+The canonical dirty checkout follow-up now has a report-only inventory. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_inventory.py` reads `git status --short` from the canonical product checkout and classifies repo-relative dirty rows into convergence buckets such as answer runtime/query, CLI/MCP public surface, evidence/source contract, parser artifact, provider hint, research objects, source-ingest/library, docs/governance, eval/test, and workspace process records. The current inventory has zero unknown rows and keeps the checkout read-only; the next RC action is bucket-level keep/drop/clean-replay decisioning before any public RC cut.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.
