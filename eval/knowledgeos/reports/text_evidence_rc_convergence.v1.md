@@ -7,13 +7,13 @@
 - blockedPhaseRows: `0`
 - publicRcBlockerRows: `2`
 - privatePathLeakRows: `0`
-- reportHash: `sha256:4d09678b48eef5660da43444e15b62fe74134605cb7b4c26e3164e7314f1771c`
+- reportHash: `sha256:e39bbd9bf5cd3cde48c41a4d04d04fb6ac08a6924df9376dd453f01753727557`
 
 ## Blockers
 
 | blockerId | severity | reason |
 |---|---|---|
-| `canonical_checkout_dirty` | `hold` | canonical checkout dirty inventory is available; bucket-level keep/drop/replay decision remains pending |
+| `canonical_checkout_dirty` | `hold` | canonical dirty buckets are decided for exclusion/hold/replay; physical cleanup remains pending |
 | `pr_149_conflicting_or_draft` | `hold` | PR #149 has an abandon-before-RC disposition; external PR closure remains pending |
 
 ## Phase Reports

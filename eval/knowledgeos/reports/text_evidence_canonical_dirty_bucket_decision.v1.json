@@ -1,0 +1,149 @@
+{
+  "schema": "knowledge-hub.paper.text-evidence-canonical-dirty-bucket-decision.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T07:41:27Z",
+  "scope": {
+    "writes": "report_only",
+    "canonicalCheckoutEdited": false,
+    "fileContentReadRows": 0,
+    "vaultScanRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0
+  },
+  "inventoryReportRef": "text_evidence_canonical_dirty_inventory.v1.json",
+  "inventoryStatus": "ready",
+  "dirtyRows": 168,
+  "bucketRows": 11,
+  "directIncludeRows": 0,
+  "blockRows": 0,
+  "unknownBucketRows": 0,
+  "publicRcDecision": {
+    "decision": "do_not_merge_canonical_dirty_checkout_into_text_rc",
+    "reason": "all canonical dirty buckets are either excluded, held, or deferred to separate clean replay tracks",
+    "requiresCanonicalCleanupBeforeRc": true
+  },
+  "actionCounts": {
+    "defer_to_clean_replay": 3,
+    "do_not_replay_now": 3,
+    "exclude_from_public_rc": 1,
+    "hold": 3,
+    "review_records_only": 1
+  },
+  "buckets": [
+    {
+      "bucket": "answer_runtime_or_query_stack",
+      "dirtyRows": 23,
+      "decision": "exclude_from_text_rc_review_after_rc_candidate",
+      "publicRcAction": "do_not_replay_now",
+      "followUpTrack": "answer_runtime_replay",
+      "reason": "answer/runtime/query deltas are broader than the report-only text-evidence RC line"
+    },
+    {
+      "bucket": "cli_mcp_public_surface_stack",
+      "dirtyRows": 21,
+      "decision": "exclude_from_text_rc_compare_with_public_operator_cleanup",
+      "publicRcAction": "do_not_replay_now",
+      "followUpTrack": "public_surface_replay_review",
+      "reason": "CLI/MCP deltas overlap the already-cleaned public/operator surface and need explicit comparison first"
+    },
+    {
+      "bucket": "docs_governance_stack",
+      "dirtyRows": 11,
+      "decision": "exclude_from_text_rc_record_sync_only",
+      "publicRcAction": "review_records_only",
+      "followUpTrack": "docs_record_reconciliation",
+      "reason": "dirty docs should not be copied into RC without reconciling them against the current stacked branch"
+    },
+    {
+      "bucket": "eval_or_test_support_stack",
+      "dirtyRows": 36,
+      "decision": "exclude_from_text_rc_map_to_owning_feature",
+      "publicRcAction": "do_not_replay_now",
+      "followUpTrack": "owning_feature_eval_replay",
+      "reason": "eval/test deltas must follow the owning clean feature branch rather than land as a mixed bucket"
+    },
+    {
+      "bucket": "evidence_spine_or_source_contract_stack",
+      "dirtyRows": 29,
+      "decision": "exclude_from_text_rc_clean_replay_candidate",
+      "publicRcAction": "defer_to_clean_replay",
+      "followUpTrack": "evidence_spine_clean_replay",
+      "reason": "evidence/source contract deltas have broad answer-contract impact and require a separate clean replay"
+    },
+    {
+      "bucket": "infrastructure_or_core_stack",
+      "dirtyRows": 11,
+      "decision": "exclude_from_text_rc_clean_replay_candidate",
+      "publicRcAction": "defer_to_clean_replay",
+      "followUpTrack": "core_infrastructure_clean_replay",
+      "reason": "core/infrastructure deltas have cross-cutting blast radius and need separate verification"
+    },
+    {
+      "bucket": "parser_artifact_side_stack",
+      "dirtyRows": 6,
+      "decision": "hold_outside_text_rc_parser_track",
+      "publicRcAction": "hold",
+      "followUpTrack": "parser_artifact_repair",
+      "reason": "parser/artifact repair is deferred from the text-only RC convergence line"
+    },
+    {
+      "bucket": "provider_hint_side_stack",
+      "dirtyRows": 8,
+      "decision": "hold_outside_text_rc_provider_hint_track",
+      "publicRcAction": "hold",
+      "followUpTrack": "provider_hint_shadow",
+      "reason": "provider hint shadow work was explicitly identified as non-essential for the current RC"
+    },
+    {
+      "bucket": "research_objects_side_stack",
+      "dirtyRows": 12,
+      "decision": "hold_outside_text_rc_research_objects_track",
+      "publicRcAction": "hold",
+      "followUpTrack": "research_objects",
+      "reason": "research-object graph planning is outside the current text-evidence RC scope"
+    },
+    {
+      "bucket": "source_ingest_or_library_stack",
+      "dirtyRows": 7,
+      "decision": "exclude_from_text_rc_clean_replay_candidate",
+      "publicRcAction": "defer_to_clean_replay",
+      "followUpTrack": "source_ingest_library_clean_replay",
+      "reason": "source ingest/library/vault-link deltas need a clean replay and focused storage checks"
+    },
+    {
+      "bucket": "workspace_process_record",
+      "dirtyRows": 4,
+      "decision": "drop_or_move_out_of_product_checkout",
+      "publicRcAction": "exclude_from_public_rc",
+      "followUpTrack": "workspace_record_cleanup",
+      "reason": "local process records are not product behavior and should not be tracked in the product RC"
+    }
+  ],
+  "nextAction": "clean_or_archive_canonical_dirty_checkout_after_external_pr149_resolution",
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "reportHash": "sha256:9ce0b5ae5d2e86bb4980b70d04bfd838813ad282cf364d6673a12941039c6b32",
+  "warnings": [
+    "This decision does not edit or clean the canonical checkout.",
+    "No canonical dirty bucket is approved for direct inclusion in the text-evidence RC branch."
+  ],
+  "schemaErrors": []
+}

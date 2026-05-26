@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-evidence-canonical-dirty-bucket-decision.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "inventoryReportRef",
+    "inventoryStatus",
+    "dirtyRows",
+    "bucketRows",
+    "directIncludeRows",
+    "blockRows",
+    "unknownBucketRows",
+    "publicRcDecision",
+    "actionCounts",
+    "buckets",
+    "nextAction",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "reportHash",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-evidence-canonical-dirty-bucket-decision.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "canonicalCheckoutEdited",
+        "fileContentReadRows",
+        "vaultScanRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "canonicalCheckoutEdited": { "const": false },
+        "fileContentReadRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 }
+      }
+    },
+    "inventoryReportRef": { "const": "text_evidence_canonical_dirty_inventory.v1.json" },
+    "inventoryStatus": { "type": "string" },
+    "dirtyRows": { "type": "integer", "minimum": 0 },
+    "bucketRows": { "type": "integer", "minimum": 0 },
+    "directIncludeRows": { "const": 0 },
+    "blockRows": { "const": 0 },
+    "unknownBucketRows": { "const": 0 },
+    "publicRcDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "reason", "requiresCanonicalCleanupBeforeRc"],
+      "properties": {
+        "decision": { "const": "do_not_merge_canonical_dirty_checkout_into_text_rc" },
+        "reason": { "type": "string", "minLength": 1 },
+        "requiresCanonicalCleanupBeforeRc": { "const": true }
+      }
+    },
+    "actionCounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "buckets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["bucket", "dirtyRows", "decision", "publicRcAction", "followUpTrack", "reason"],
+        "properties": {
+          "bucket": { "type": "string", "minLength": 1 },
+          "dirtyRows": { "type": "integer", "minimum": 0 },
+          "decision": { "type": "string", "minLength": 1 },
+          "publicRcAction": { "type": "string", "minLength": 1 },
+          "followUpTrack": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "nextAction": { "type": "string", "minLength": 1 },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "mergeRows",
+        "cherryPickRows",
+        "worktreeDeletionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "cherryPickRows": { "const": 0 },
+        "worktreeDeletionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "reportHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}

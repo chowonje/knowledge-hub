@@ -77,7 +77,12 @@
         "dirtyInventoryReportRef": { "type": "string" },
         "dirtyInventoryStatus": { "type": "string" },
         "dirtyInventoryUnknownRows": { "type": "integer", "minimum": 0 },
-        "dirtyInventoryNextAction": { "type": "string" }
+        "dirtyInventoryNextAction": { "type": "string" },
+        "dirtyBucketDecisionReportRef": { "type": "string" },
+        "dirtyBucketDecisionStatus": { "type": "string" },
+        "dirtyBucketDecision": { "type": "string" },
+        "dirtyBucketDirectIncludeRows": { "type": "integer", "minimum": 0 },
+        "dirtyBucketNextAction": { "type": "string" }
       }
     },
     "pullRequest149": {

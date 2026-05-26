@@ -68,6 +68,8 @@ The PR #149 convergence follow-up now has a report-only disposition record. `eva
 
 The canonical dirty checkout follow-up now has a report-only inventory. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_inventory.py` reads `git status --short` from the canonical product checkout and classifies repo-relative dirty rows into convergence buckets such as answer runtime/query, CLI/MCP public surface, evidence/source contract, parser artifact, provider hint, research objects, source-ingest/library, docs/governance, eval/test, and workspace process records. The current inventory has zero unknown rows and keeps the checkout read-only; the next RC action is bucket-level keep/drop/clean-replay decisioning before any public RC cut.
 
+The canonical dirty bucket decision is now recorded too. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_bucket_decision.py` consumes the inventory and fixes the RC policy: no canonical dirty bucket is approved for direct merge into the text-evidence RC. Evidence/source contract, core/infrastructure, and source-ingest/library buckets are clean-replay candidates; answer runtime, eval/test, and CLI/MCP public-surface buckets stay out until owning-feature comparison; parser, provider-hint, and research-object buckets remain held outside the text RC; local workspace process records are excluded from the public RC. Physical cleanup still remains pending because the canonical checkout was intentionally not edited.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.
