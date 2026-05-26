@@ -84,6 +84,8 @@ The same convergence board now also consumes a read-only external action preflig
 
 The PR #149 close decision is now represented by a separate approval request packet. `eval/knowledgeos/scripts/build_text_evidence_rc_pr149_close_approval_request.py` records the exact recommended decision (`approve_close_without_merge`), the sanitized close comment, and the command preview, while keeping the execution status `not_executed`. The convergence board now surfaces this request so the next action is a user decision, not an implicit PR mutation.
 
+The post-approval PR #149 readback is also represented by a read-only receipt gate. `eval/knowledgeos/scripts/build_text_evidence_rc_pr149_close_receipt.py` currently reports `pending_close_execution` because PR #149 is still open; after explicit approval and close execution, the same gate is the expected proof that PR #149 is closed without merge before canonical dirty cleanup proceeds.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

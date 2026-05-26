@@ -7,10 +7,11 @@
 - blockedPhaseRows: `0`
 - publicRcBlockerRows: `2`
 - privatePathLeakRows: `0`
-- reportHash: `sha256:b8ba71b7c3a5faf005cef1f6430516ad415d7ef0722da98bf0926bb04becd966`
+- reportHash: `sha256:922d580623fda7c8ce8a1afc293006f898fc8969640edb5bd1d1b2df676572f4`
 - textOnlyScopeReady: `True`
 - externalActionPreflightReady: `True`
 - pr149CloseRequestStatus: `ready_for_user_decision`
+- pr149CloseReceiptStatus: `pending_close_execution`
 
 ## Blockers
 

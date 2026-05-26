@@ -53,6 +53,7 @@
 
 ### Added
 
+- Added a read-only PR #149 close receipt gate for the v0.1 text-evidence RC line and wired it into the convergence board. The receipt remains `pending_close_execution` while PR #149 is still open, verifies no merge occurred, and becomes the post-approval proof point before canonical dirty cleanup can proceed.
 - Added a report-only PR #149 close approval request for the v0.1 text-evidence RC line and wired it into the convergence board. The request records the exact recommended decision, sanitized close comment, and command preview while leaving PR mutation, canonical cleanup, merge/cherry-pick, vault scan, DB/index mutation, strict-evidence promotion, and runtime answer-visible exposure at zero.
 - Added a report-only external action preflight for the v0.1 text-evidence RC blockers and wired it into the convergence board. The preflight confirms that PR #149 is still open/draft/conflicting and that the canonical dirty checkout's `git status --short` fingerprint still matches the snapshot dry-run before asking for explicit close approval; it performs no PR mutation, canonical checkout edit, destructive cleanup, file-content read, vault scan, DB/index mutation, or reindex/reembed.
 - Wired the text-only scope gate into the report-only v0.1 RC convergence board. The convergence report now carries `textOnlyScopeGate` status separately from `publicRcReady`, so text-scope readiness can be green while PR #149 and canonical dirty cleanup still block a public RC.

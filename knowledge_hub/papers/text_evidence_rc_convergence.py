@@ -21,6 +21,7 @@ CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF = "text_evidence_canonical_dirty_sna
 TEXT_ONLY_SCOPE_GATE_REPORT_REF = "text_evidence_rc_text_only_scope_gate.v1.json"
 EXTERNAL_ACTION_PREFLIGHT_REPORT_REF = "text_evidence_rc_external_action_preflight.v1.json"
 PR149_CLOSE_APPROVAL_REQUEST_REPORT_REF = "text_evidence_rc_pr149_close_approval_request.v1.json"
+PR149_CLOSE_RECEIPT_REPORT_REF = "text_evidence_rc_pr149_close_receipt.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -468,6 +469,32 @@ def _pr149_close_approval_request_state(reports_root: Path) -> dict[str, Any]:
     }
 
 
+def _pr149_close_receipt_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / PR149_CLOSE_RECEIPT_REPORT_REF)
+    if not payload:
+        return {
+            "available": False,
+            "reportRef": "",
+            "status": "",
+            "executionVerified": False,
+            "mergePerformed": False,
+            "blockerRows": 0,
+            "nextAction": "",
+            "privatePathLeakRows": 0,
+        }
+    receipt = dict(payload.get("receipt") or {})
+    return {
+        "available": True,
+        "reportRef": PR149_CLOSE_RECEIPT_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "executionVerified": bool(receipt.get("executionVerified")),
+        "mergePerformed": bool(receipt.get("mergePerformed")),
+        "blockerRows": int(payload.get("blockerRows") or 0),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -501,6 +528,7 @@ def build_text_evidence_rc_convergence_report(
     text_only_scope_gate = _text_only_scope_gate_state(reports_root)
     external_action_preflight = _external_action_preflight_state(reports_root)
     pr149_close_request = _pr149_close_approval_request_state(reports_root)
+    pr149_close_receipt = _pr149_close_receipt_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -606,6 +634,7 @@ def build_text_evidence_rc_convergence_report(
         "textOnlyScopeGate": text_only_scope_gate,
         "externalActionPreflight": external_action_preflight,
         "pr149CloseApprovalRequest": pr149_close_request,
+        "pr149CloseReceipt": pr149_close_receipt,
         "phaseRows": len(phase_rows),
         "readyPhaseRows": ready_phase_rows,
         "blockedPhaseRows": len(phase_rows) - ready_phase_rows,
@@ -652,6 +681,11 @@ def build_text_evidence_rc_convergence_report(
         )
         or _clean_text(
             pr149_close_request.get("nextAction")
+            if pr149_close_request.get("available") and not pr149_close_receipt.get("executionVerified")
+            else ""
+        )
+        or _clean_text(
+            pr149_close_receipt.get("nextAction")
             or external_action_preflight.get("nextAction")
             or canonical_dirty_snapshot.get("nextAction")
             or external_action_approval.get("nextAction")
@@ -666,6 +700,7 @@ def build_text_evidence_rc_convergence_report(
             "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
             "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
             "pr149CloseApprovalRequest records the exact close request but does not execute it",
+            "pr149CloseReceipt remains pending until PR #149 is actually closed",
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
         ],
         "schemaErrors": [],
@@ -694,6 +729,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
         f"- textOnlyScopeReady: `{dict(report.get('textOnlyScopeGate') or {}).get('textOnlyRcReady')}`",
         f"- externalActionPreflightReady: `{dict(report.get('externalActionPreflight') or {}).get('readyForUserApproval')}`",
         f"- pr149CloseRequestStatus: `{dict(report.get('pr149CloseApprovalRequest') or {}).get('status')}`",
+        f"- pr149CloseReceiptStatus: `{dict(report.get('pr149CloseReceipt') or {}).get('status')}`",
         "",
         "## Blockers",
         "",

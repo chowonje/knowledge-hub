@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T08:32:03Z",
+  "generatedAt": "2026-05-26T08:37:47Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "97ee32c",
-    "dirtyCount": 0
+    "head": "9eecffa",
+    "dirtyCount": 12
   },
   "canonicalCheckout": {
     "available": true,
@@ -103,6 +103,16 @@
     "nextAction": "await_user_yes_to_close_pr149_without_merge",
     "privatePathLeakRows": 0
   },
+  "pr149CloseReceipt": {
+    "available": true,
+    "reportRef": "text_evidence_rc_pr149_close_receipt.v1.json",
+    "status": "pending_close_execution",
+    "executionVerified": false,
+    "mergePerformed": false,
+    "blockerRows": 1,
+    "nextAction": "await_user_yes_to_close_pr149_without_merge",
+    "privatePathLeakRows": 0
+  },
   "phaseRows": 9,
   "readyPhaseRows": 9,
   "blockedPhaseRows": 0,
@@ -124,7 +134,7 @@
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "97ee32c",
+      "head": "9eecffa",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -307,13 +317,14 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:b8ba71b7c3a5faf005cef1f6430516ad415d7ef0722da98bf0926bb04becd966",
+  "reportHash": "sha256:922d580623fda7c8ce8a1afc293006f898fc8969640edb5bd1d1b2df676572f4",
   "nextAction": "await_user_yes_to_close_pr149_without_merge",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
     "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
     "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
     "pr149CloseApprovalRequest records the exact close request but does not execute it",
+    "pr149CloseReceipt remains pending until PR #149 is actually closed",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"
   ],
   "schemaErrors": []

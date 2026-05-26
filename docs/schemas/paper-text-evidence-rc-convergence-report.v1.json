@@ -14,6 +14,7 @@
     "textOnlyScopeGate",
     "externalActionPreflight",
     "pr149CloseApprovalRequest",
+    "pr149CloseReceipt",
     "phaseRows",
     "readyPhaseRows",
     "blockedPhaseRows",
@@ -189,6 +190,30 @@
         "safeToExecuteAfterApproval": { "type": "boolean" },
         "executionStatus": { "type": "string" },
         "recommendedDecision": { "type": "string" },
+        "blockerRows": { "type": "integer", "minimum": 0 },
+        "nextAction": { "type": "string" },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pr149CloseReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available",
+        "reportRef",
+        "status",
+        "executionVerified",
+        "mergePerformed",
+        "blockerRows",
+        "nextAction",
+        "privatePathLeakRows"
+      ],
+      "properties": {
+        "available": { "type": "boolean" },
+        "reportRef": { "type": "string" },
+        "status": { "type": "string" },
+        "executionVerified": { "type": "boolean" },
+        "mergePerformed": { "type": "boolean" },
         "blockerRows": { "type": "integer", "minimum": 0 },
         "nextAction": { "type": "string" },
         "privatePathLeakRows": { "type": "integer", "minimum": 0 }
