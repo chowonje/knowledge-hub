@@ -3,17 +3,17 @@
 - schema: `knowledge-hub.paper.visual-annotation-expansion-web-batch-output-collector.v1`
 - status: `blocked`
 - decision: `blocked_missing_or_invalid_batch_outputs`
-- generatedAt: `2026-05-26T14:39:50Z`
+- generatedAt: `2026-05-26T15:10:46Z`
 - collectorId: `visual_annotation_expansion_web_batch_output_collector_002`
 - sourceWebRunBundle: `eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002.v1.json`
 - targetOutputRef: `eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json`
 - validationCommand: `PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py`
 - expectedBatchRows: `3`
-- presentBatchRows: `0`
-- missingBatchRows: `3`
-- validBatchRows: `0`
-- collectedOutputRows: `0`
-- blockedRows: `3`
+- presentBatchRows: `1`
+- missingBatchRows: `2`
+- validBatchRows: `1`
+- collectedOutputRows: `8`
+- blockedRows: `2`
 
 ## Mutation Guarantees
 
@@ -21,7 +21,7 @@
 - apiCalls: `False`
 - modelCalls: `False`
 - webModelCalls: `False`
-- manualWebModelOutputRows: `0`
+- manualWebModelOutputRows: `8`
 - combinedOutputWriteRows: `0`
 - vectorIndexing: `False`
 - strictEvidencePromotionRows: `0`
@@ -34,7 +34,7 @@
 |---:|---|---|---:|---:|---|---|
 | 1 | `False` | `blocked` | 8 | 0 | `eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_01_web_output.manual.json` | missing_batch_output_file |
 | 2 | `False` | `blocked` | 8 | 0 | `eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_02_web_output.manual.json` | missing_batch_output_file |
-| 3 | `False` | `blocked` | 8 | 0 | `eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_03_web_output.manual.json` | missing_batch_output_file |
+| 3 | `True` | `ready` | 8 | 8 | `eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_03_web_output.manual.json` | - |
 
 ## Operator Instructions
 

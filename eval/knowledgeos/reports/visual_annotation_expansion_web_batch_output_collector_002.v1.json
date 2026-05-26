@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.visual-annotation-expansion-web-batch-output-collector.v1",
   "status": "blocked",
-  "generatedAt": "2026-05-26T14:39:50Z",
+  "generatedAt": "2026-05-26T15:10:46Z",
   "decision": "blocked_missing_or_invalid_batch_outputs",
   "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
   "collectorId": "visual_annotation_expansion_web_batch_output_collector_002",
@@ -26,7 +26,7 @@
     "modelCalls": false,
     "webModelCalls": false,
     "manualOperatorWebModelRunRequired": true,
-    "manualWebModelOutputRows": 0,
+    "manualWebModelOutputRows": 8,
     "combinedOutputWriteRows": 0,
     "vectorIndexing": false,
     "strictEvidencePromotionRows": 0,
@@ -46,13 +46,13 @@
   },
   "counts": {
     "expectedBatchRows": 3,
-    "presentBatchRows": 0,
-    "missingBatchRows": 3,
-    "validBatchRows": 0,
-    "invalidBatchRows": 3,
+    "presentBatchRows": 1,
+    "missingBatchRows": 2,
+    "validBatchRows": 1,
+    "invalidBatchRows": 2,
     "expectedOutputRows": 24,
-    "collectedOutputRows": 0,
-    "matchedOutputRows": 0,
+    "collectedOutputRows": 8,
+    "matchedOutputRows": 8,
     "missingSourceCandidateIdRows": 0,
     "extraSourceCandidateIdRows": 0,
     "duplicateSourceCandidateIdRows": 0,
@@ -61,7 +61,7 @@
     "privatePathLeakRows": 0,
     "schemaViolationCount": 0,
     "combinedOutputWriteRows": 0,
-    "blockedRows": 3
+    "blockedRows": 2
   },
   "batchOutputRowsDetail": [
     {
@@ -136,10 +136,10 @@
       "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_03",
       "batchNumber": 3,
       "outputRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_03_web_output.manual.json",
-      "present": false,
+      "present": true,
       "expectedRows": 8,
-      "outputRows": 0,
-      "matchedRows": 0,
+      "outputRows": 8,
+      "matchedRows": 8,
       "missingRows": 0,
       "extraRows": 0,
       "duplicateRows": 0,
@@ -147,10 +147,8 @@
       "policyViolationRows": 0,
       "privatePathLeakRows": 0,
       "schemaViolationCount": 0,
-      "validationStatus": "blocked",
-      "blockerReasons": [
-        "missing_batch_output_file"
-      ],
+      "validationStatus": "ready",
+      "blockerReasons": [],
       "expectedSourceCandidateIds": [
         "visual-layout:clip-2021:table_region:7:74d3127c812d1e9b",
         "visual-layout:mae-2021:table_region:5:09cee49d2841b6a3",
