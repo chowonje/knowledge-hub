@@ -41,6 +41,12 @@ VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID = (
 VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-web-output-template.v1"
 )
+VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID = (
+    "knowledge-hub.paper.visual-annotation-expansion-web-run-bundle.v1"
+)
+VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID = (
+    "knowledge-hub.paper.visual-annotation-expansion-web-run-batch-template.v1"
+)
 VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-captured-row.v1"
 )
@@ -48,9 +54,11 @@ VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID = (
 DEFAULT_MANUAL_RUN_PACKET_ID = "visual_annotation_expansion_manual_run_packet_002"
 DEFAULT_OPERATOR_HANDOFF_ID = "visual_annotation_expansion_operator_handoff_002"
 DEFAULT_WEB_OUTPUT_TEMPLATE_ID = "visual_annotation_expansion_web_output_template_002"
+DEFAULT_WEB_RUN_BUNDLE_ID = "visual_annotation_expansion_web_run_bundle_002"
 READY_RUN_DECISION = "ready_for_manual_web_vlm_expansion_run"
 READY_HANDOFF_DECISION = "ready_for_operator_web_vlm_run"
 READY_TEMPLATE_DECISION = "ready_for_manual_web_output_fill"
+READY_BUNDLE_DECISION = "ready_for_operator_web_batch_run"
 READY_VALIDATION_DECISION = "ready_for_visual_retrieval_hint_candidate_store_expansion_design"
 NEXT_AFTER_RUN_TRANCHE = "visual_annotation_expansion_manual_output_capture"
 NEXT_AFTER_VALIDATION_TRANCHE = "visual_retrieval_hint_candidate_store_expansion_design"
@@ -187,6 +195,35 @@ def _template_scope() -> dict[str, Any]:
         "webModelCalls": False,
         "manualOperatorWebModelRunRequired": True,
         "templateOnly": True,
+        "completedWebOutputRows": 0,
+        "manualWebModelOutputRows": 0,
+        "vectorIndexing": False,
+        "strictEvidencePromotionRows": 0,
+        "runtimeAnswerVisibleExposureRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "answerabilityGateBypassRows": 0,
+        "cropWriteRows": 0,
+        "pageImageWriteRows": 0,
+        "wholeImageWriteRows": 0,
+        "wholeImageGptRows": 0,
+        "candidateStoreMutationRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+    }
+
+
+def _bundle_scope(*, batch_rows: int = 0, bundle_artifact_rows: int = 0) -> dict[str, Any]:
+    return {
+        "writes": "report_only",
+        "apiCalls": False,
+        "modelCalls": False,
+        "webModelCalls": False,
+        "manualOperatorWebModelRunRequired": True,
+        "operatorBatchPromptRows": int(batch_rows),
+        "bundleArtifactRows": int(bundle_artifact_rows),
         "completedWebOutputRows": 0,
         "manualWebModelOutputRows": 0,
         "vectorIndexing": False,
@@ -561,6 +598,196 @@ def build_visual_annotation_expansion_web_output_template(
         operator_handoff.get("schema") != VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID
         or operator_handoff.get("status") != "ready"
         or not source_rows
+        or private_path_leak_rows
+    ):
+        report["status"] = "blocked"
+        report["decision"] = "blocked"
+    return report
+
+
+def _batch_file_stem(batch_number: int) -> str:
+    return f"batch_{int(batch_number):02d}"
+
+
+def _web_run_bundle_rows(web_output_template: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        row for row in list(web_output_template.get("templateRows") or []) if isinstance(row, dict)
+    ]
+
+
+def _final_output_skeleton(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+        "rows": [dict(row.get("targetRowTemplate") or {}) for row in rows],
+    }
+
+
+def build_visual_annotation_expansion_web_run_batch_template(
+    batch_bundle: dict[str, Any],
+) -> dict[str, Any]:
+    rows = [row for row in list(batch_bundle.get("rows") or []) if isinstance(row, dict)]
+    return {
+        "schema": VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID,
+        "batchId": normalize_text(batch_bundle.get("batchId")),
+        "batchNumber": int(batch_bundle.get("batchNumber") or 0),
+        "targetOutputSchema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+        "attachmentRefs": list(batch_bundle.get("attachmentRefs") or []),
+        "rows": [dict(row.get("targetRowTemplate") or {}) for row in rows],
+        "warnings": [
+            "This is a fill template, not completed web/VLM output.",
+            "Replace every FILL_IN placeholder before creating the final manual output file.",
+            "Keep strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false.",
+        ],
+    }
+
+
+def render_markdown_web_run_batch_prompt(batch_bundle: dict[str, Any]) -> str:
+    rows = [row for row in list(batch_bundle.get("rows") or []) if isinstance(row, dict)]
+    skeleton = _final_output_skeleton(rows)
+    lines = [
+        f"# Visual Annotation Expansion Batch {int(batch_bundle.get('batchNumber') or 0):02d}",
+        "",
+        "Use only the attached context-crop PNG files listed below. Do not use whole pages, whole images, or outside sources.",
+        "Return JSON only with top-level schema `knowledge-hub.paper.visual-annotation-web-output.v1` and a `rows` array.",
+        "Every row must keep `strictEvidence=false`, `citationGrade=false`, and `answerableWithoutTextEvidence=false`.",
+        "`derivedTextForRetrieval` is a retrieval hint only; it is not evidence and not answer-visible text.",
+        "",
+        "## Attachments To Upload",
+        "",
+    ]
+    for attachment_ref in list(batch_bundle.get("attachmentRefs") or []):
+        lines.append(f"- `{attachment_ref}`")
+    lines.extend(
+        [
+            "",
+            "## Rows To Fill",
+            "",
+            "| # | paperId | type | page | sourceCandidateId | attachmentRef |",
+            "|---:|---|---|---:|---|---|",
+        ]
+    )
+    for index, row in enumerate(rows, start=1):
+        lines.append(
+            "| {index} | {paperId} | {candidateType} | {page} | `{candidateId}` | `{attachment}` |".format(
+                index=index,
+                paperId=row.get("paperId"),
+                candidateType=row.get("candidateType"),
+                page=row.get("page"),
+                candidateId=row.get("sourceCandidateId"),
+                attachment=row.get("attachmentRef"),
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "## JSON Shape To Return",
+            "",
+            "```json",
+            json.dumps(skeleton, ensure_ascii=False, indent=2),
+            "```",
+        ]
+    )
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def build_visual_annotation_expansion_web_run_bundle(
+    web_output_template: dict[str, Any],
+    *,
+    bundle_id: str = DEFAULT_WEB_RUN_BUNDLE_ID,
+    source_web_output_template_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_output_template_002.v1.json",
+    bundle_dir_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002",
+    target_output_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    validation_command: str = (
+        "PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py"
+    ),
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    template_rows = _web_run_bundle_rows(web_output_template)
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    for row in template_rows:
+        grouped.setdefault(int(row.get("batchNumber") or 0), []).append(row)
+
+    batch_bundles: list[dict[str, Any]] = []
+    for batch_number in sorted(grouped):
+        rows = grouped[batch_number]
+        stem = _batch_file_stem(batch_number)
+        batch_id = normalize_text(rows[0].get("batchId")) if rows else f"{bundle_id}_{stem}"
+        attachment_refs = [normalize_text(row.get("attachmentRef")) for row in rows]
+        batch_bundles.append(
+            {
+                "batchId": batch_id,
+                "batchNumber": batch_number,
+                "rowCount": len(rows),
+                "promptRef": f"{bundle_dir_ref}/{stem}_prompt.md",
+                "fillTemplateRef": f"{bundle_dir_ref}/{stem}_fill_template.v1.json",
+                "attachmentRefs": attachment_refs,
+                "rows": rows,
+            }
+        )
+
+    placeholder_rows = sum(
+        1 for row in template_rows if "FILL_IN" in json.dumps(row, ensure_ascii=False)
+    )
+    private_path_leak_rows = 1 if _contains_private_path(batch_bundles) else 0
+    bundle_artifact_rows = len(batch_bundles) * 2
+    counts = {
+        "sourceTemplateRows": len(template_rows),
+        "batchRows": len(batch_bundles),
+        "operatorPromptRows": len(batch_bundles),
+        "fillTemplateRows": len(batch_bundles),
+        "bundleArtifactRows": bundle_artifact_rows,
+        "attachmentRefRows": sum(len(batch.get("attachmentRefs") or []) for batch in batch_bundles),
+        "placeholderRows": int(placeholder_rows),
+        "completedWebOutputRows": 0,
+        "privatePathLeakRows": int(private_path_leak_rows),
+        "schemaViolationCount": 0,
+    }
+    report: dict[str, Any] = {
+        "schema": VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID,
+        "status": "ready",
+        "generatedAt": generated_at or utc_now_iso(),
+        "decision": READY_BUNDLE_DECISION,
+        "nextRecommendedTranche": NEXT_AFTER_RUN_TRANCHE,
+        "bundleId": bundle_id,
+        "sourceWebOutputTemplate": {
+            "schema": normalize_text(web_output_template.get("schema")),
+            "status": normalize_text(web_output_template.get("status")),
+            "reportRef": normalize_text(source_web_output_template_ref),
+            "outputTemplateRows": len(template_rows),
+        },
+        "targetOutput": {
+            "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+            "reportRef": normalize_text(target_output_ref),
+            "validationCommand": validation_command,
+            "allowedUse": "retrieval_hint_only",
+            "strictEvidence": False,
+            "citationGrade": False,
+            "answerableWithoutTextEvidence": False,
+        },
+        "scope": _bundle_scope(
+            batch_rows=len(batch_bundles),
+            bundle_artifact_rows=bundle_artifact_rows,
+        ),
+        "counts": counts,
+        "batchBundles": batch_bundles,
+        "operatorInstructions": [
+            "Run one batch at a time in web GPT/Pro.",
+            "For each batch, upload only the attachment refs listed in that batch prompt.",
+            "Paste the batch prompt and use the batch fill template only as a shape guide.",
+            "After all batches return JSON rows, combine the rows into the target output file.",
+            f"Validate the combined file with: {validation_command}",
+        ],
+        "warnings": [
+            "This bundle is not web/VLM output and contains placeholder text.",
+            "Batch fill templates use a batch-template schema, not the completed web-output schema.",
+            "Do not upload whole pages or whole images for this gate.",
+            "Do not treat derivedTextForRetrieval as strict, citation-grade, or answer-visible evidence.",
+        ],
+    }
+    if (
+        web_output_template.get("schema") != VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID
+        or web_output_template.get("status") != "ready"
+        or not template_rows
         or private_path_leak_rows
     ):
         report["status"] = "blocked"
@@ -982,6 +1209,66 @@ def render_markdown_web_output_template(report: dict[str, Any]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def render_markdown_web_run_bundle(report: dict[str, Any]) -> str:
+    counts = dict(report.get("counts") or {})
+    scope = dict(report.get("scope") or {})
+    target = dict(report.get("targetOutput") or {})
+    source = dict(report.get("sourceWebOutputTemplate") or {})
+    lines = [
+        "# Visual Annotation Expansion Web Run Bundle 002",
+        "",
+        f"- schema: `{report.get('schema')}`",
+        f"- status: `{report.get('status')}`",
+        f"- decision: `{report.get('decision')}`",
+        f"- generatedAt: `{report.get('generatedAt')}`",
+        f"- bundleId: `{report.get('bundleId')}`",
+        f"- sourceWebOutputTemplate: `{source.get('reportRef')}`",
+        f"- targetOutputRef: `{target.get('reportRef')}`",
+        f"- validationCommand: `{target.get('validationCommand')}`",
+        f"- sourceTemplateRows: `{counts.get('sourceTemplateRows')}`",
+        f"- batchRows: `{counts.get('batchRows')}`",
+        f"- bundleArtifactRows: `{counts.get('bundleArtifactRows')}`",
+        f"- completedWebOutputRows: `{counts.get('completedWebOutputRows')}`",
+        f"- privatePathLeakRows: `{counts.get('privatePathLeakRows')}`",
+        "",
+        "## Mutation Guarantees",
+        "",
+        f"- writes: `{scope.get('writes')}`",
+        f"- apiCalls: `{scope.get('apiCalls')}`",
+        f"- modelCalls: `{scope.get('modelCalls')}`",
+        f"- webModelCalls: `{scope.get('webModelCalls')}`",
+        f"- operatorBatchPromptRows: `{scope.get('operatorBatchPromptRows')}`",
+        f"- completedWebOutputRows: `{scope.get('completedWebOutputRows')}`",
+        f"- vectorIndexing: `{scope.get('vectorIndexing')}`",
+        f"- strictEvidencePromotionRows: `{scope.get('strictEvidencePromotionRows')}`",
+        f"- runtimeAnswerVisibleExposureRows: `{scope.get('runtimeAnswerVisibleExposureRows')}`",
+        f"- candidateStoreMutationRows: `{scope.get('candidateStoreMutationRows')}`",
+        f"- wholeImageGptRows: `{scope.get('wholeImageGptRows')}`",
+        "",
+        "## Batch Bundles",
+        "",
+        "| batch | rows | promptRef | fillTemplateRef |",
+        "|---:|---:|---|---|",
+    ]
+    for batch in report.get("batchBundles", []):
+        lines.append(
+            "| {batch} | {rows} | `{prompt}` | `{template}` |".format(
+                batch=batch.get("batchNumber"),
+                rows=batch.get("rowCount"),
+                prompt=batch.get("promptRef"),
+                template=batch.get("fillTemplateRef"),
+            )
+        )
+    lines.extend(["", "## Operator Instructions", ""])
+    for index, instruction in enumerate(report.get("operatorInstructions") or [], start=1):
+        lines.append(f"{index}. {instruction}")
+    if report.get("warnings"):
+        lines.extend(["", "## Warnings", ""])
+        for warning in report.get("warnings", []):
+            lines.append(f"- `{warning}`")
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def render_markdown_validation(report: dict[str, Any]) -> str:
     counts = dict(report.get("counts") or {})
     scope = dict(report.get("scope") or {})
@@ -1091,6 +1378,33 @@ def write_visual_annotation_expansion_web_output_template(
     return {"json": str(report_json), "markdown": str(report_md)}
 
 
+def write_visual_annotation_expansion_web_run_bundle(
+    report: dict[str, Any],
+    *,
+    report_json: Path,
+    report_md: Path,
+    bundle_dir: Path,
+) -> dict[str, Any]:
+    report_json.parent.mkdir(parents=True, exist_ok=True)
+    report_md.parent.mkdir(parents=True, exist_ok=True)
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    batch_paths = []
+    for batch in report.get("batchBundles", []):
+        stem = _batch_file_stem(int(batch.get("batchNumber") or 0))
+        prompt_path = bundle_dir / f"{stem}_prompt.md"
+        template_path = bundle_dir / f"{stem}_fill_template.v1.json"
+        prompt_path.write_text(render_markdown_web_run_batch_prompt(batch), encoding="utf-8")
+        batch_template = build_visual_annotation_expansion_web_run_batch_template(batch)
+        template_path.write_text(
+            json.dumps(batch_template, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        batch_paths.append({"prompt": str(prompt_path), "fillTemplate": str(template_path)})
+    report_json.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_md.write_text(render_markdown_web_run_bundle(report), encoding="utf-8")
+    return {"json": str(report_json), "markdown": str(report_md), "batchFiles": batch_paths}
+
+
 def write_visual_annotation_expansion_web_output_validation(
     report: dict[str, Any],
     *,
@@ -1111,24 +1425,32 @@ __all__ = [
     "READY_RUN_DECISION",
     "READY_HANDOFF_DECISION",
     "READY_TEMPLATE_DECISION",
+    "READY_BUNDLE_DECISION",
     "READY_VALIDATION_DECISION",
     "VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID",
+    "VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID",
+    "VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID",
     "build_visual_annotation_expansion_manual_run_packet",
     "build_visual_annotation_expansion_operator_handoff",
+    "build_visual_annotation_expansion_web_run_batch_template",
+    "build_visual_annotation_expansion_web_run_bundle",
     "build_visual_annotation_expansion_web_output_template",
     "build_visual_annotation_expansion_web_output_validation",
     "load_json",
     "render_markdown_manual_run_packet",
     "render_markdown_operator_handoff",
+    "render_markdown_web_run_batch_prompt",
+    "render_markdown_web_run_bundle",
     "render_markdown_web_output_template",
     "render_markdown_validation",
     "sanitized_report_ref",
     "write_visual_annotation_expansion_manual_run_packet",
     "write_visual_annotation_expansion_operator_handoff",
+    "write_visual_annotation_expansion_web_run_bundle",
     "write_visual_annotation_expansion_web_output_template",
     "write_visual_annotation_expansion_web_output_validation",
 ]

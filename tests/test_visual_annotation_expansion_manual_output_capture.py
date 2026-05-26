@@ -11,15 +11,21 @@ from knowledge_hub.papers.visual_annotation_expansion_attachment_pack import (
 from knowledge_hub.papers.visual_annotation_expansion_manual_output_capture import (
     VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID,
+    VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID,
+    VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID,
     VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
     build_visual_annotation_expansion_manual_run_packet,
     build_visual_annotation_expansion_operator_handoff,
+    build_visual_annotation_expansion_web_run_batch_template,
+    build_visual_annotation_expansion_web_run_bundle,
     build_visual_annotation_expansion_web_output_template,
     build_visual_annotation_expansion_web_output_validation,
+    render_markdown_web_run_batch_prompt,
     write_visual_annotation_expansion_manual_run_packet,
     write_visual_annotation_expansion_operator_handoff,
+    write_visual_annotation_expansion_web_run_bundle,
     write_visual_annotation_expansion_web_output_template,
     write_visual_annotation_expansion_web_output_validation,
 )
@@ -248,6 +254,85 @@ def test_web_output_template_is_fill_only_and_not_completed_output() -> None:
     assert not target_output_validation.ok
 
 
+def test_web_run_bundle_splits_batches_without_completed_output() -> None:
+    packet = build_visual_annotation_expansion_manual_run_packet(
+        _expansion_pack(),
+        _attachment_pack(),
+        batch_size=2,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    handoff = build_visual_annotation_expansion_operator_handoff(
+        packet,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    template = build_visual_annotation_expansion_web_output_template(
+        handoff,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    bundle = build_visual_annotation_expansion_web_run_bundle(
+        template,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert bundle["schema"] == VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID
+    assert bundle["status"] == "ready"
+    assert bundle["decision"] == "ready_for_operator_web_batch_run"
+    assert bundle["nextRecommendedTranche"] == "visual_annotation_expansion_manual_output_capture"
+    assert bundle["targetOutput"]["reportRef"] == (
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json"
+    )
+    assert bundle["counts"]["sourceTemplateRows"] == 3
+    assert bundle["counts"]["batchRows"] == 2
+    assert bundle["counts"]["operatorPromptRows"] == 2
+    assert bundle["counts"]["fillTemplateRows"] == 2
+    assert bundle["counts"]["bundleArtifactRows"] == 4
+    assert bundle["counts"]["attachmentRefRows"] == 3
+    assert bundle["counts"]["placeholderRows"] == 3
+    assert bundle["counts"]["completedWebOutputRows"] == 0
+    assert bundle["counts"]["privatePathLeakRows"] == 0
+    assert bundle["scope"]["modelCalls"] is False
+    assert bundle["scope"]["webModelCalls"] is False
+    assert bundle["scope"]["manualWebModelOutputRows"] == 0
+    assert bundle["scope"]["vectorIndexing"] is False
+    assert bundle["scope"]["strictEvidencePromotionRows"] == 0
+    assert bundle["scope"]["candidateStoreMutationRows"] == 0
+    assert bundle["batchBundles"][0]["promptRef"].endswith("batch_01_prompt.md")
+    assert bundle["batchBundles"][0]["fillTemplateRef"].endswith(
+        "batch_01_fill_template.v1.json"
+    )
+
+    bundle_validation = validate_payload(
+        bundle,
+        VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID,
+        strict=True,
+    )
+    assert bundle_validation.ok, bundle_validation.errors
+
+    batch_template = build_visual_annotation_expansion_web_run_batch_template(
+        bundle["batchBundles"][0]
+    )
+    assert batch_template["schema"] == VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID
+    assert batch_template["targetOutputSchema"] == VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID
+    assert "FILL_IN" in batch_template["rows"][0]["derivedTextForRetrieval"]
+    batch_validation = validate_payload(
+        batch_template,
+        VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID,
+        strict=True,
+    )
+    assert batch_validation.ok, batch_validation.errors
+    assert not validate_payload(
+        batch_template,
+        VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+        strict=True,
+    ).ok
+
+    prompt = render_markdown_web_run_batch_prompt(bundle["batchBundles"][0])
+    assert "Attachments To Upload" in prompt
+    assert "knowledge-hub.paper.visual-annotation-web-output.v1" in prompt
+    assert "strictEvidence=false" in prompt
+
+
 def test_expansion_web_output_validation_ready_and_no_mutation_contract() -> None:
     output = _output()
     report = build_visual_annotation_expansion_web_output_validation(
@@ -370,6 +455,9 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
     handoff_md = tmp_path / "handoff.md"
     template_json = tmp_path / "template.json"
     template_md = tmp_path / "template.md"
+    bundle_json = tmp_path / "bundle.json"
+    bundle_md = tmp_path / "bundle.md"
+    bundle_dir = tmp_path / "bundle"
     validation_json = tmp_path / "validation.json"
     validation_md = tmp_path / "validation.md"
 
@@ -402,6 +490,19 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         report_json=template_json,
         report_md=template_md,
     )
+    bundle = build_visual_annotation_expansion_web_run_bundle(
+        template,
+        source_web_output_template_ref=(
+            "eval/knowledgeos/reports/visual_annotation_expansion_web_output_template_002.v1.json"
+        ),
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    bundle_paths = write_visual_annotation_expansion_web_run_bundle(
+        bundle,
+        report_json=bundle_json,
+        report_md=bundle_md,
+        bundle_dir=bundle_dir,
+    )
     write_visual_annotation_expansion_web_output_validation(
         validation_report,
         report_json=validation_json,
@@ -415,9 +516,14 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         + handoff_md.read_text(encoding="utf-8")
         + template_json.read_text(encoding="utf-8")
         + template_md.read_text(encoding="utf-8")
+        + bundle_json.read_text(encoding="utf-8")
+        + bundle_md.read_text(encoding="utf-8")
         + validation_json.read_text(encoding="utf-8")
         + validation_md.read_text(encoding="utf-8")
     )
+    for batch_path in bundle_paths["batchFiles"]:
+        combined += Path(batch_path["prompt"]).read_text(encoding="utf-8")
+        combined += Path(batch_path["fillTemplate"]).read_text(encoding="utf-8")
     parsed = json.loads(validation_json.read_text(encoding="utf-8"))
     assert parsed["sourceOutput"]["reportRef"].startswith("eval/knowledgeos/reports/")
     assert parsed["capturedRowsDetail"][0]["paperRef"] == "papers_dir/sample.pdf"

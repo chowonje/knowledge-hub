@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-annotation-expansion-web-run-batch-template.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "batchId",
+    "batchNumber",
+    "targetOutputSchema",
+    "attachmentRefs",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-web-run-batch-template.v1" },
+    "batchId": { "type": "string", "minLength": 1 },
+    "batchNumber": { "type": "integer", "minimum": 1 },
+    "targetOutputSchema": { "const": "knowledge-hub.paper.visual-annotation-web-output.v1" },
+    "attachmentRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ],
+        "properties": {
+          "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+          "visualObservationStatus": {
+            "enum": ["image_attached", "image_not_attached", "unclear"]
+          },
+          "derivedTextForRetrieval": { "type": "string", "pattern": "FILL_IN" },
+          "visibleText": { "type": "string", "pattern": "FILL_IN" },
+          "retrievalKeywords": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "uncertainty": { "type": "string", "pattern": "FILL_IN" },
+          "limitations": { "type": "string", "minLength": 1 },
+          "strictEvidence": { "const": false },
+          "citationGrade": { "const": false },
+          "answerableWithoutTextEvidence": { "const": false }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
