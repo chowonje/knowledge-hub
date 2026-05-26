@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-annotation-web-output-validation.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceOutput",
+    "sourceWebPack",
+    "sourceAttachmentPack",
+    "scope",
+    "policy",
+    "counts",
+    "capturedRowsDetail",
+    "violations",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.visual-annotation-web-output-validation.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": ["ready_for_retrieval_hint_candidate_store_design", "blocked"]
+    },
+    "nextRecommendedTranche": {
+      "const": "visual_retrieval_hint_candidate_store_design"
+    },
+    "sourceOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "reportRef", "rows"],
+      "properties": {
+        "schema": { "type": "string" },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "rows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sourceWebPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "packRows"],
+      "properties": {
+        "schema": { "type": "string" },
+        "status": { "type": "string" },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "packRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sourceAttachmentPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "attachmentRows"],
+      "properties": {
+        "schema": { "type": "string" },
+        "status": { "type": "string" },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "attachmentRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "manualWebModelOutputRows",
+        "vectorIndexing",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "cropWriteRows",
+        "pageImageWriteRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "manualWebModelOutputRows": { "type": "integer", "minimum": 0 },
+        "vectorIndexing": { "const": false },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "cropWriteRows": { "const": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedUse",
+        "targetDerivedTextField",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "storagePlan"
+      ],
+      "properties": {
+        "allowedUse": { "const": "retrieval_hint_only" },
+        "targetDerivedTextField": { "const": "derivedTextForRetrieval" },
+        "strictEvidence": { "const": false },
+        "citationGrade": { "const": false },
+        "answerableWithoutTextEvidence": { "const": false },
+        "storagePlan": { "const": "candidate_report_only_no_index_write" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourcePackRows",
+        "attachmentRows",
+        "outputRows",
+        "matchedRows",
+        "missingRows",
+        "extraRows",
+        "duplicateRows",
+        "policyViolationRows",
+        "emptyDerivedTextRows",
+        "keywordEmptyRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "blockedRows"
+      ],
+      "properties": {
+        "sourcePackRows": { "type": "integer", "minimum": 0 },
+        "attachmentRows": { "type": "integer", "minimum": 0 },
+        "outputRows": { "type": "integer", "minimum": 0 },
+        "matchedRows": { "type": "integer", "minimum": 0 },
+        "missingRows": { "type": "integer", "minimum": 0 },
+        "extraRows": { "type": "integer", "minimum": 0 },
+        "duplicateRows": { "type": "integer", "minimum": 0 },
+        "policyViolationRows": { "type": "integer", "minimum": 0 },
+        "emptyDerivedTextRows": { "type": "integer", "minimum": 0 },
+        "keywordEmptyRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "capturedRowsDetail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "sourceCandidateId",
+          "paperId",
+          "paperRef",
+          "sourceContentHash",
+          "page",
+          "bbox",
+          "candidateType",
+          "attachmentRef",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "retrievalHintPlan",
+          "provenance",
+          "validation"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.visual-annotation-captured-row.v1" },
+          "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "page": { "type": "integer", "minimum": 1 },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "candidateType": {
+            "enum": [
+              "figure_caption_region",
+              "table_region",
+              "equation_region",
+              "layout_region",
+              "image_region"
+            ]
+          },
+          "attachmentRef": { "type": "string" },
+          "visualObservationStatus": {
+            "enum": ["image_attached", "image_not_attached", "unclear"]
+          },
+          "derivedTextForRetrieval": { "type": "string" },
+          "visibleText": { "type": "string" },
+          "retrievalKeywords": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "uncertainty": { "type": "string" },
+          "limitations": { "type": "string" },
+          "retrievalHintPlan": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "targetDerivedTextField",
+              "allowedUse",
+              "strictEvidence",
+              "citationGrade",
+              "answerableWithoutTextEvidence"
+            ],
+            "properties": {
+              "targetDerivedTextField": { "const": "derivedTextForRetrieval" },
+              "allowedUse": { "const": "retrieval_hint_only" },
+              "strictEvidence": { "const": false },
+              "citationGrade": { "const": false },
+              "answerableWithoutTextEvidence": { "const": false }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceWebPackSchema",
+              "sourceAttachmentPackSchema",
+              "sourceCandidateId",
+              "sourceContentHash",
+              "page",
+              "bbox",
+              "extractionMethod"
+            ],
+            "properties": {
+              "sourceWebPackSchema": { "const": "knowledge-hub.paper.visual-annotation-web-pack.v1" },
+              "sourceAttachmentPackSchema": { "const": "knowledge-hub.paper.visual-annotation-attachment-pack.v1" },
+              "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+              "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "page": { "type": "integer", "minimum": 1 },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "number" }
+              },
+              "extractionMethod": { "const": "manual_web_vlm_output_capture_v1" }
+            }
+          },
+          "validation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "matchedSourcePackRow",
+              "matchedAttachmentRow",
+              "policyCompliant",
+              "violationReasons"
+            ],
+            "properties": {
+              "matchedSourcePackRow": { "type": "boolean" },
+              "matchedAttachmentRow": { "type": "boolean" },
+              "policyCompliant": { "type": "boolean" },
+              "violationReasons": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceCandidateId", "kind", "message"],
+        "properties": {
+          "sourceCandidateId": { "type": "string" },
+          "kind": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}

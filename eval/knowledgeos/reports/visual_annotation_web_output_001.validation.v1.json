@@ -1,0 +1,1165 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output-validation.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T13:10:34Z",
+  "decision": "ready_for_retrieval_hint_candidate_store_design",
+  "nextRecommendedTranche": "visual_retrieval_hint_candidate_store_design",
+  "sourceOutput": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_web_output_001.manual.json",
+    "rows": 18
+  },
+  "sourceWebPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_web_pack_001.v1.json",
+    "packRows": 18
+  },
+  "sourceAttachmentPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001.v1.json",
+    "attachmentRows": 18
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualWebModelOutputRows": 18,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "policy": {
+    "allowedUse": "retrieval_hint_only",
+    "targetDerivedTextField": "derivedTextForRetrieval",
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false,
+    "storagePlan": "candidate_report_only_no_index_write"
+  },
+  "counts": {
+    "sourcePackRows": 18,
+    "attachmentRows": 18,
+    "outputRows": 18,
+    "matchedRows": 18,
+    "missingRows": 0,
+    "extraRows": 0,
+    "duplicateRows": 0,
+    "policyViolationRows": 0,
+    "emptyDerivedTextRows": 0,
+    "keywordEmptyRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0,
+    "blockedRows": 0
+  },
+  "capturedRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:3:5e4d346d4c7b2c53",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 3,
+      "bbox": [
+        333.92,
+        272.94,
+        504.0,
+        403.21
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/01-alexnet-2012-p3-figure_caption_region-ecd99be999.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 3 Figure 1 caption area with a training-error plot for CIFAR-10 comparing ReLU and tanh networks; axes show epochs and training error rate, with solid and dashed curves.",
+      "visibleText": "Visible fragments include: Figure 1, training error rate, Epochs, ReLUs, solid line, tanh neurons, dashed line, CIFAR-10, no regularization.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "Figure 1",
+        "ReLU nonlinearity",
+        "CIFAR-10",
+        "training error",
+        "epochs",
+        "solid line",
+        "dashed line",
+        "tanh neurons",
+        "four-layer convolutional network"
+      ],
+      "uncertainty": "Low. The attachment row and crop content match the page-3 figure-caption candidate; some surrounding text is cut off at the crop edges.",
+      "limitations": "Retrieval hint only, not evidence. The crop shows a partial page region, so the full caption and adjacent prose are incomplete.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:3:5e4d346d4c7b2c53",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 3,
+        "bbox": [
+          333.92,
+          272.94,
+          504.0,
+          403.21
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:f9d505b3e6aabed6",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 4,
+      "bbox": [
+        211.09,
+        185.62,
+        262.24,
+        199.82
+      ],
+      "candidateType": "equation_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/02-alexnet-2012-p4-equation_region-0eb9465eea.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 4 local response normalization equation region, showing b^i_{x,y} defined from a^i_{x,y} with a denominator containing k, alpha, a summation over adjacent kernel maps, and beta.",
+      "visibleText": "Visible fragments include: ReLUs, local normalization scheme, a^i_{x,y}, b^i_{x,y}, k + alpha, sum, adjacent kernel maps, validation set.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "page 4",
+        "equation",
+        "local response normalization",
+        "LRN",
+        "response-normalized activity",
+        "b_i_xy",
+        "a_i_xy",
+        "kernel maps",
+        "k alpha beta",
+        "ReLU"
+      ],
+      "uncertainty": "Medium. The equation is visible but the crop cuts off parts of the formula and surrounding paragraph.",
+      "limitations": "Retrieval hint only, not evidence. The formula is partially cropped, so exact transcription should be taken from text evidence rather than this annotation.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:f9d505b3e6aabed6",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 4,
+        "bbox": [
+          211.09,
+          185.62,
+          262.24,
+          199.82
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:79cf21420d190e08",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 4,
+      "bbox": [
+        297.63,
+        185.62,
+        386.33,
+        209.08
+      ],
+      "candidateType": "equation_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/03-alexnet-2012-p4-equation_region-d56b6c29af.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 4 continuation of the local response normalization formula with summation bounds min(N-1, i+n/2) and max(0, i-n/2), squared activations, and exponent beta.",
+      "visibleText": "Visible fragments include: min(N-1, i+n/2), j=max(0, i-n/2), (a^j_{x,y})^2, beta, adjacent kernel maps, k=2, n=5, alpha=10^-4.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "page 4",
+        "local normalization",
+        "summation bounds",
+        "min N",
+        "max j",
+        "squared activation",
+        "beta exponent",
+        "kernel maps",
+        "LRN hyperparameters"
+      ],
+      "uncertainty": "Medium. The summation and exponent are visible, but the left side of the equation and some surrounding prose are truncated.",
+      "limitations": "Retrieval hint only, not evidence. The crop gives a partial visual view and should not be used as a complete equation transcription.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:79cf21420d190e08",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 4,
+        "bbox": [
+          297.63,
+          185.62,
+          386.33,
+          209.08
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:5:03c450b40ade0263",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 5,
+      "bbox": [
+        108.0,
+        216.17,
+        504.0,
+        269.73
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/04-alexnet-2012-p5-figure_caption_region-baf84f3a74.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 5 Figure 2 CNN architecture diagram and caption, showing a split two-GPU convolutional network with input image dimensions, convolution and max-pooling stages, dense layers, and 1000-class output.",
+      "visibleText": "Visible fragments include: Figure 2, architecture of our CNN, two GPUs, 224, stride of 4, Max pooling, dense, 2048, 1000, 253,440-186,624-64,896.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "Figure 2",
+        "CNN architecture",
+        "two GPUs",
+        "GPU split",
+        "convolutional layers",
+        "max pooling",
+        "dense layers",
+        "224 input",
+        "1000 output",
+        "network diagram"
+      ],
+      "uncertainty": "Low. The architecture diagram and caption are clearly visible; small layer labels may be hard to read.",
+      "limitations": "Retrieval hint only, not evidence. Fine-grained architecture values may be incomplete or visually ambiguous in the crop.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:5:03c450b40ade0263",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 5,
+        "bbox": [
+          108.0,
+          216.17,
+          504.0,
+          269.73
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:6:f8996246c800f4f1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 6,
+      "bbox": [
+        348.09,
+        501.02,
+        504.0,
+        565.54
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/05-alexnet-2012-p6-figure_caption_region-7ed515b1e7.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 6 Figure 3 caption area with a grid of first-layer convolutional filters and nearby dropout discussion; the filter montage is described as 96 learned 11x11x3 kernels split across two GPUs.",
+      "visibleText": "Visible fragments include: Figure 3, 96 convolutional kernels, 11x11x3, first convolutional layer, 224x224x3 input images, top 48, bottom 48, GPU 1, GPU 2.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "Figure 3",
+        "convolutional kernels",
+        "first layer filters",
+        "11x11x3",
+        "224x224x3",
+        "GPU 1",
+        "GPU 2",
+        "filter grid",
+        "dropout"
+      ],
+      "uncertainty": "Low. The crop clearly contains the filter-grid figure and its caption, though some surrounding body text is clipped.",
+      "limitations": "Retrieval hint only, not evidence. Individual filter appearances are visual only and not suitable for precise quantitative claims.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:6:f8996246c800f4f1",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 6,
+        "bbox": [
+          348.09,
+          501.02,
+          504.0,
+          565.54
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:6:81ead85a04bce51a",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 6,
+      "bbox": [
+        108.0,
+        84.27,
+        504.0,
+        119.0
+      ],
+      "candidateType": "equation_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/06-alexnet-2012-p6-equation_region-11fb4e7d5b.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 6 RGB pixel PCA color augmentation equation region, showing an added quantity using eigenvectors p1,p2,p3 and random-scaled eigenvalues alpha1 lambda1, alpha2 lambda2, alpha3 lambda3, followed by a Dropout section heading.",
+      "visibleText": "Visible fragments include: RGB image pixel Ixy, [p1, p2, p3][alpha1 lambda1, alpha2 lambda2, alpha3 lambda3]^T, eigenvector, eigenvalue, covariance matrix, Gaussian, 4.2 Dropout.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "page 6",
+        "PCA color augmentation",
+        "RGB pixel",
+        "eigenvectors",
+        "eigenvalues",
+        "alpha lambda",
+        "Gaussian random variable",
+        "image augmentation",
+        "Dropout heading"
+      ],
+      "uncertainty": "Low. The centered matrix-style expression and relevant paragraph are visible; some mathematical superscripts are small.",
+      "limitations": "Retrieval hint only, not evidence. Use source text for exact formula notation and surrounding explanation.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:6:81ead85a04bce51a",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 6,
+        "bbox": [
+          108.0,
+          84.27,
+          504.0,
+          119.0
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:0777b7d11b932456",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 7,
+      "bbox": [
+        250.56,
+        511.36,
+        504.0,
+        553.96
+      ],
+      "candidateType": "table_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/07-alexnet-2012-p7-table_region-48cfaeb9c3.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 7 Table 2 region comparing ILSVRC-2012 validation and test error rates for SIFT+FVs and CNN ensembles, with columns for Top-1 validation, Top-5 validation, and Top-5 test.",
+      "visibleText": "Visible fragments include: Table 2, Model, Top-1 (val), Top-5 (val), Top-5 (test), SIFT + FVs, 1 CNN, 5 CNNs, 1 CNN*, 7 CNNs*, 26.2%, 40.7%, 15.3%.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "Table 2",
+        "ILSVRC-2012",
+        "validation error",
+        "test error",
+        "Top-1 val",
+        "Top-5 val",
+        "Top-5 test",
+        "SIFT FVs",
+        "CNN ensemble",
+        "pre-trained"
+      ],
+      "uncertainty": "Low. The target table and caption are visible; surrounding paragraphs are only partially included.",
+      "limitations": "Retrieval hint only, not evidence. Numeric entries are listed only as visible retrieval cues and should not be treated as verified table data.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:0777b7d11b932456",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 7,
+        "bbox": [
+          250.56,
+          511.36,
+          504.0,
+          553.96
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:b9f742e1da360378",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 7,
+      "bbox": [
+        341.64,
+        290.39,
+        504.0,
+        322.03
+      ],
+      "candidateType": "table_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/08-alexnet-2012-p7-table_region-51e96969b4.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 7 Table 1 region comparing ILSVRC-2010 test-set results, with rows for sparse coding, SIFT+FVs, and CNN and columns Top-1 and Top-5; the lower part of the crop also shows the next table beginning.",
+      "visibleText": "Visible fragments include: Table 1, Comparison of results on ILSVRC-2010 test set, Model, Top-1, Top-5, Sparse coding, SIFT + FVs, CNN, 47.1%, 25.7%, 17.0%.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "Table 1",
+        "ILSVRC-2010",
+        "test set",
+        "Top-1",
+        "Top-5",
+        "Sparse coding",
+        "SIFT FVs",
+        "CNN",
+        "classification results"
+      ],
+      "uncertainty": "Low. The table and caption are visible, but the crop contains neighboring content from the following table as well.",
+      "limitations": "Retrieval hint only, not evidence. Table numbers and percentages are visual cues only; use textual evidence for exact values.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:b9f742e1da360378",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 7,
+        "bbox": [
+          341.64,
+          290.39,
+          504.0,
+          322.03
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:8:889b5135e8e9ab9e",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 8,
+      "bbox": [
+        108.0,
+        244.05,
+        504.0,
+        297.6
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/09-alexnet-2012-p8-figure_caption_region-e3f030c188.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet page 8 Figure 4 image montage and caption, with a left panel of ILSVRC-2010 test images plus top-label bar lists and a right panel of test images matched to visually similar training images.",
+      "visibleText": "Visible fragments include: Figure 4, Left, Right, ILSVRC-2010 test images, top 5, red bar, feature vectors, Euclidean distance, mite, container ship, motor scooter, leopard, grille, mushroom, cherry, Madagascar cat.",
+      "retrievalKeywords": [
+        "AlexNet",
+        "Figure 4",
+        "ILSVRC-2010",
+        "test images",
+        "top five labels",
+        "red bar",
+        "nearest training images",
+        "feature vectors",
+        "image montage",
+        "qualitative predictions",
+        "leopard",
+        "elephants",
+        "pumpkins"
+      ],
+      "uncertainty": "Low. The figure montage and caption are visible; some small label text in the image grid is difficult to read.",
+      "limitations": "Retrieval hint only, not evidence. The crop supports visual discovery of the figure but not exact label probabilities or scientific conclusions.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:8:889b5135e8e9ab9e",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 8,
+        "bbox": [
+          108.0,
+          244.05,
+          504.0,
+          297.6
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:1:aba2bf94ef1625a2",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 1,
+      "bbox": [
+        308.86,
+        304.89,
+        545.11,
+        346.73
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/10-resnet-2015-p1-figure_caption_region-088b3fb4a6.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 1 Figure 1 caption area with two small CIFAR-10 plots, one for training error and one for test error, comparing 20-layer and 56-layer plain networks.",
+      "visibleText": "Visible fragments include: Deep Residual Learning for Image Recognition, Figure 1, training error, test error, CIFAR-10, 20-layer, 56-layer, plain networks, ImageNet, Fig. 4.",
+      "retrievalKeywords": [
+        "ResNet",
+        "Figure 1",
+        "CIFAR-10",
+        "training error",
+        "test error",
+        "20-layer",
+        "56-layer",
+        "plain networks",
+        "degradation problem",
+        "ImageNet Fig. 4"
+      ],
+      "uncertainty": "Low. The figure and caption region are visible, though the title and author area are partially cut off at the left edge.",
+      "limitations": "Retrieval hint only, not evidence. Plot curves are small and should not be used for precise reading of error values.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:1:aba2bf94ef1625a2",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 1,
+        "bbox": [
+          308.86,
+          304.89,
+          545.11,
+          346.73
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:2:9687efdba9452012",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 2,
+      "bbox": [
+        86.62,
+        158.15,
+        249.86,
+        167.12
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/11-resnet-2015-p2-figure_caption_region-189f3fcaf7.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 2 Figure 2 residual-learning building-block diagram, showing input x, two weight layers with ReLU between them, an identity shortcut arc, an addition node, F(x)+x, and final ReLU.",
+      "visibleText": "Visible fragments include: x, weight layer, relu, weight layer, F(x), identity, F(x)+x, relu, Figure 2, Residual learning: a building block.",
+      "retrievalKeywords": [
+        "ResNet",
+        "Figure 2",
+        "residual learning",
+        "building block",
+        "identity shortcut",
+        "weight layer",
+        "ReLU",
+        "addition node",
+        "F(x)+x",
+        "skip connection"
+      ],
+      "uncertainty": "Low. The diagram labels and caption are clearly visible.",
+      "limitations": "Retrieval hint only, not evidence. The annotation describes the visible diagram layout and does not establish model behavior.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:2:9687efdba9452012",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 2,
+        "bbox": [
+          86.62,
+          158.15,
+          249.86,
+          167.12
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:0e80570b407b6793",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 3,
+      "bbox": [
+        123.47,
+        626.46,
+        286.36,
+        643.81
+      ],
+      "candidateType": "equation_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/12-resnet-2015-p3-equation_region-7ca87b4ec2.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 3 section 3.2 equation area under Identity Mapping by Shortcuts, showing the residual block definition y = F(x, {Wi}) + x and nearby explanation of x, y, and F(x,{Wi}).",
+      "visibleText": "Visible fragments include: 3.2 Identity Mapping by Shortcuts, residual learning, Fig. 2, y = F(x, {Wi}) + x, (1), input and output vectors, residual mapping.",
+      "retrievalKeywords": [
+        "ResNet",
+        "Identity Mapping by Shortcuts",
+        "equation 1",
+        "y equals F plus x",
+        "residual mapping",
+        "x and y",
+        "Wi",
+        "building block",
+        "shortcut connection",
+        "page 3"
+      ],
+      "uncertainty": "Low. The equation and section heading are readable; the crop includes neighboring page text at the right edge.",
+      "limitations": "Retrieval hint only, not evidence. Use source text for exact notation and explanatory claims.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:0e80570b407b6793",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 3,
+        "bbox": [
+          123.47,
+          626.46,
+          286.36,
+          643.81
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:69248b1db8c80503",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 3,
+      "bbox": [
+        375.38,
+        264.43,
+        545.11,
+        281.78
+      ],
+      "candidateType": "equation_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/13-resnet-2015-p3-equation_region-08dbaccfe9.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 3 equation region discussing shortcut connections and dimension matching, with a visible projection-shortcut formula y = F(x, {Wi}) + W_s x labeled as equation (2).",
+      "visibleText": "Visible fragments include: shortcut connections, same number of parameters, dimensions of x and F, linear projection W_s, y = F(x, {Wi}) + W_s x, (2), identity mapping.",
+      "retrievalKeywords": [
+        "ResNet",
+        "equation 2",
+        "projection shortcut",
+        "W_s x",
+        "dimension matching",
+        "shortcut connections",
+        "identity mapping",
+        "residual function",
+        "same parameters",
+        "page 3"
+      ],
+      "uncertainty": "Low. The projection formula is clear; body text around it is partially cropped.",
+      "limitations": "Retrieval hint only, not evidence. The crop is suitable for locating the equation but not for full contextual interpretation.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:69248b1db8c80503",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 3,
+        "bbox": [
+          375.38,
+          264.43,
+          545.11,
+          281.78
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:7068ad040e2d0243",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 3,
+      "bbox": [
+        50.11,
+        648.82,
+        286.37,
+        701.8
+      ],
+      "candidateType": "equation_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/14-resnet-2015-p3-equation_region-1c10f6a61b.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 3 lower-left equation crop showing the same residual mapping equation y = F(x, {Wi}) + x, its equation number, surrounding definitions of x and y, and a footnote line near the page bottom.",
+      "visibleText": "Visible fragments include: 3.2 Identity Mapping by Shortcuts, y = F(x, {Wi}) + x, (1), Here x and y, residual mapping, W2 sigma(W1x), open question, page number 3.",
+      "retrievalKeywords": [
+        "ResNet",
+        "equation 1",
+        "residual mapping",
+        "Identity Mapping by Shortcuts",
+        "x and y",
+        "W2 sigma W1x",
+        "footnote",
+        "page 3",
+        "shortcut",
+        "building block"
+      ],
+      "uncertainty": "Low. The equation and nearby definitions are visible; some text on the right column is cut off.",
+      "limitations": "Retrieval hint only, not evidence. This crop overlaps with another equation-region candidate and should be used only for retrieval matching.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:7068ad040e2d0243",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 3,
+        "bbox": [
+          50.11,
+          648.82,
+          286.37,
+          701.8
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:4:0b3754b79959d64e",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 4,
+      "bbox": [
+        50.11,
+        632.83,
+        286.37,
+        696.68
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/15-resnet-2015-p4-figure_caption_region-4ba6c7fcef.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 4 Figure 3 caption and architecture schematic, comparing VGG-19, a 34-layer plain network, and a 34-layer residual network, with stacked convolution blocks and curved shortcut arrows.",
+      "visibleText": "Visible fragments include: Figure 3, Example network architectures for ImageNet, VGG-19, plain network, 34 parameter layers, residual network, dotted shortcuts, Table 1, output size: 7, output size: 1, fc 1000.",
+      "retrievalKeywords": [
+        "ResNet",
+        "Figure 3",
+        "ImageNet architectures",
+        "VGG-19",
+        "34-layer plain",
+        "34-layer residual",
+        "shortcut arrows",
+        "dotted shortcuts",
+        "convolution blocks",
+        "FLOPs",
+        "fc 1000"
+      ],
+      "uncertainty": "Low. The figure columns and caption are visible, though fine text inside individual boxes is small.",
+      "limitations": "Retrieval hint only, not evidence. The crop should not be used to infer exact layer counts or architecture details without text evidence.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:4:0b3754b79959d64e",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 4,
+        "bbox": [
+          50.11,
+          632.83,
+          286.37,
+          696.68
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:5:666c24606607fbbf",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "bbox": [
+        50.11,
+        392.29,
+        545.12,
+        423.26
+      ],
+      "candidateType": "figure_caption_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/16-resnet-2015-p5-figure_caption_region-11e2f07238.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 5 Figure 4 caption area with two ImageNet training plots, showing plain 18/34-layer networks on the left and ResNet 18/34-layer networks on the right, with error percent versus iteration.",
+      "visibleText": "Visible fragments include: Figure 4, Training on ImageNet, thin curves, training error, bold curves, validation error, plain networks, ResNets, 18 and 34 layers, error (%), iter. (1e4).",
+      "retrievalKeywords": [
+        "ResNet",
+        "Figure 4",
+        "ImageNet training",
+        "plain-18",
+        "plain-34",
+        "ResNet-18",
+        "ResNet-34",
+        "validation error",
+        "training error",
+        "center crops",
+        "iteration curves"
+      ],
+      "uncertainty": "Low. The plots and caption are clearly present; the crop also includes parts of Table 1 and Table 2.",
+      "limitations": "Retrieval hint only, not evidence. Numeric plot readings are approximate visually and should not be used as proof.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:5:666c24606607fbbf",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 5,
+        "bbox": [
+          50.11,
+          392.29,
+          545.12,
+          423.26
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:749ede3c6c93e4fa",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "bbox": [
+        50.11,
+        224.67,
+        545.11,
+        244.6
+      ],
+      "candidateType": "table_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/17-resnet-2015-p5-table_region-eb72c89d44.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 5 Table 1 architecture region for ImageNet, showing rows such as conv3_x, conv4_x, conv5_x, average pooling, 1000-d fully connected softmax, and FLOPs, with block specifications in brackets.",
+      "visibleText": "Visible fragments include: Table 1, Architectures for ImageNet, conv3_x, conv4_x, conv5_x, average pool, 1000-d fc, softmax, FLOPs, 1.8x10^9, 3.6x10^9, 7.6x10^9, stride of 2.",
+      "retrievalKeywords": [
+        "ResNet",
+        "Table 1",
+        "ImageNet architectures",
+        "conv3_x",
+        "conv4_x",
+        "conv5_x",
+        "building blocks",
+        "FLOPs",
+        "average pool",
+        "1000-d fc",
+        "softmax",
+        "stride 2"
+      ],
+      "uncertainty": "Medium. The table is visible but dense, and small bracketed layer specifications are hard to transcribe fully.",
+      "limitations": "Retrieval hint only, not evidence. Detailed architecture cells and FLOPs should be verified from text or table extraction.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:749ede3c6c93e4fa",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 5,
+        "bbox": [
+          50.11,
+          224.67,
+          545.11,
+          244.6
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-captured-row.v1",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:6f67c711d387611a",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "bbox": [
+        50.11,
+        485.61,
+        286.36,
+        516.49
+      ],
+      "candidateType": "table_region",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/18-resnet-2015-p5-table_region-1f17bfd7d0.png",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 5 Table 2 region reporting Top-1 error for ImageNet validation with columns plain and ResNet and rows for 18 layers and 34 layers; nearby text discusses training procedures and plain-net training error.",
+      "visibleText": "Visible fragments include: Table 2, Top-1 error, 10-crop testing, ImageNet validation, plain, ResNet, 18 layers, 34 layers, 27.94, 27.88, 28.54, 25.03.",
+      "retrievalKeywords": [
+        "ResNet",
+        "Table 2",
+        "Top-1 error",
+        "ImageNet validation",
+        "10-crop testing",
+        "plain",
+        "ResNet",
+        "18 layers",
+        "34 layers",
+        "training procedures",
+        "no extra parameter"
+      ],
+      "uncertainty": "Low. The small table and caption are readable; surrounding prose is only partially included.",
+      "limitations": "Retrieval hint only, not evidence. Visible numeric entries are retrieval cues and should not be cited as verified evidence from this annotation.",
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceAttachmentPackSchema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:6f67c711d387611a",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 5,
+        "bbox": [
+          50.11,
+          485.61,
+          286.36,
+          516.49
+        ],
+        "extractionMethod": "manual_web_vlm_output_capture_v1"
+      },
+      "validation": {
+        "matchedSourcePackRow": true,
+        "matchedAttachmentRow": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    }
+  ],
+  "violations": [],
+  "warnings": [
+    "derivedTextForRetrieval is accepted only as a retrieval hint candidate.",
+    "No visual annotation row is promoted to strict evidence or citation-grade evidence.",
+    "The next tranche must design a candidate store before any vectorization decision."
+  ]
+}
