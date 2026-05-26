@@ -43,6 +43,8 @@ The representative default loop is:
 
 `discover -> index -> search/ask -> evidence review`
 
+The current research-paper evidence slice is intentionally narrower and more concrete than the broader RC board. `eval/knowledgeos/scripts/build_figure_caption_artifact_vertical_slice.py` reads a small local AI-paper PDF set, extracts report-only FigureCaptionArtifact candidates from PyMuPDF text blocks, and records source-content hash, page, bbox, figure label, caption text hash, extraction method, confidence, and blocker reasons without overwriting canonical parsed artifacts. The matching QA readback path answers only when that candidate provenance is present and returns no-answer for missing captions; it does not promote strict evidence, mutate DB/index state, reindex/reembed, scan the vault, download external content, or expose runtime answer-visible payloads.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

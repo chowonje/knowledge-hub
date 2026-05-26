@@ -1,0 +1,1136 @@
+{
+  "schema": "knowledge-hub.paper.figure-caption-artifact-vertical-slice-report.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T05:42:14Z",
+  "scope": {
+    "paperRows": 4,
+    "paperRefs": [
+      "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf"
+    ],
+    "writes": "report_only",
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "paperDiagnostics": [
+    {
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "pageCount": 9,
+      "captionCandidateRows": 4
+    },
+    {
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "pageCount": 12,
+      "captionCandidateRows": 7
+    },
+    {
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "pageCount": 48,
+      "captionCandidateRows": 22
+    },
+    {
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "pageCount": 14,
+      "captionCandidateRows": 10
+    }
+  ],
+  "candidateArtifactRows": 43,
+  "candidateArtifacts": [
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "figure-caption:alexnet-2012:figure-1:b20df6a95de3",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 3,
+      "bbox": [
+        333.92,
+        272.94,
+        504.0,
+        403.21
+      ],
+      "figureLabel": "Figure 1",
+      "captionText": "A four-layer convolutional neural network with ReLUs (solid line) reaches a 25% training error rate on CIFAR-10 six times faster than an equivalent network with tanh neurons (dashed line). The learning rates for each net- work were chosen independently to make train- ing as fast as possible. No regularization of any kind was employed. The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consis- tently learn several times faster than equivalents with saturating neurons.",
+      "captionTextHash": "sha256:a66eb6da9d97ed5496dbc74b6fc37f7f1c663469eb97c23e06559ed04c1d7193",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "figure-caption:alexnet-2012:figure-2:9c09470a283c",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 5,
+      "bbox": [
+        108.0,
+        216.17,
+        504.0,
+        269.73
+      ],
+      "figureLabel": "Figure 2",
+      "captionText": "An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the ﬁgure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers. The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 253,440–186,624–64,896–64,896–43,264– 4096–4096–1000.",
+      "captionTextHash": "sha256:c379f227c3529c95f98b71718754c46bcb2ec5cd6f5d45e8d3b949565504e67d",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "figure-caption:alexnet-2012:figure-3:05c746658bec",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 6,
+      "bbox": [
+        348.09,
+        501.02,
+        504.0,
+        565.54
+      ],
+      "figureLabel": "Figure 3",
+      "captionText": "96 convolutional kernels of size 11×11×3 learned by the ﬁrst convolutional layer on the 224×224×3 input images. The top 48 kernels were learned on GPU 1 while the bottom 48 kernels were learned on GPU 2. See Section 6.1 for details.",
+      "captionTextHash": "sha256:effca6fd91a3c7d913fb94e8a39eabaf26ddb6033aae48f5b0b9f791e104aee7",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "figure-caption:alexnet-2012:figure-4:146bf4c6cf0b",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 8,
+      "bbox": [
+        108.0,
+        244.05,
+        504.0,
+        297.6
+      ],
+      "figureLabel": "Figure 4",
+      "captionText": "(Left) Eight ILSVRC-2010 test images and the ﬁve labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5). (Right) Five ILSVRC-2010 test images in the ﬁrst column. The remaining columns show the six training images that produce feature vectors in the last hidden layer with the smallest Euclidean distance from the feature vector for the test image.",
+      "captionTextHash": "sha256:ffc60985278d6c1b2e14f4b973b50caae5c3a0f1eddf061266af86aa13224740",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-1:f31484a5e903",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 1,
+      "bbox": [
+        308.86,
+        304.89,
+        545.11,
+        346.73
+      ],
+      "figureLabel": "Figure 1",
+      "captionText": "Training error (left) and test error (right) on CIFAR-10 with 20-layer and 56-layer “plain” networks. The deeper network has higher training error, and thus test error. Similar phenomena on ImageNet is presented in Fig. 4.",
+      "captionTextHash": "sha256:f91980cdd196b3d911a7ce2b4fce6732fbe706e7cd815604c96ca2b1a6c6b383",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 25
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-2:0785a1992ffa",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 2,
+      "bbox": [
+        86.62,
+        158.15,
+        249.86,
+        167.12
+      ],
+      "figureLabel": "Figure 2",
+      "captionText": "Residual learning: a building block.",
+      "captionTextHash": "sha256:e8ca719992b5132057d5952696321f9a260223d899d85b601a9874dd134bde57",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 7
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-3:8a5dc5bfca6e",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 4,
+      "bbox": [
+        50.11,
+        632.83,
+        286.37,
+        696.68
+      ],
+      "figureLabel": "Figure 3",
+      "captionText": "Example network architectures for ImageNet. Left: the VGG-19 model [41] (19.6 billion FLOPs) as a reference. Mid- dle: a plain network with 34 parameter layers (3.6 billion FLOPs). Right: a residual network with 34 parameter layers (3.6 billion FLOPs). The dotted shortcuts increase dimensions. Table 1 shows more details and other variants.",
+      "captionTextHash": "sha256:4bd6c25069db4cd8ec35835856c3ad1d0219fb5242e48d4b6b242d1b3431a5ea",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 107
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-4:716737e3a91f",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "bbox": [
+        50.11,
+        392.29,
+        545.12,
+        423.26
+      ],
+      "figureLabel": "Figure 4",
+      "captionText": "Training on ImageNet. Thin curves denote training error, and bold curves denote validation error of the center crops. Left: plain networks of 18 and 34 layers. Right: ResNets of 18 and 34 layers. In this plot, the residual networks have no extra parameter compared to their plain counterparts.",
+      "captionTextHash": "sha256:1cfc39091d1e41a1f44f1533f67d3a642ef73d54d461bba0cc8ef478b3a9293a",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 95
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-5:c972e1158586",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        308.86,
+        156.78,
+        545.11,
+        187.99
+      ],
+      "figureLabel": "Figure 5",
+      "captionText": "A deeper residual function F for ImageNet. Left: a building block (on 56×56 feature maps) as in Fig. 3 for ResNet- 34. Right: a “bottleneck” building block for ResNet-50/101/152.",
+      "captionTextHash": "sha256:b0093c98185ae4f6d97dd802a71e3f5a1f5c0f058541a23fc2b9ea2f08607d89",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 30
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-6:14f66e4350ed",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 8,
+      "bbox": [
+        50.11,
+        172.49,
+        545.11,
+        192.5
+      ],
+      "figureLabel": "Figure 6",
+      "captionText": "Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers.",
+      "captionTextHash": "sha256:3dd7c1148b8e704b1b7f319ca32dfc5e7463887ce49af2aa05d352d32710cefa",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 28
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "figure-caption:resnet-2015:figure-7:e3787d710ba6",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 8,
+      "bbox": [
+        50.11,
+        328.32,
+        286.37,
+        370.16
+      ],
+      "figureLabel": "Figure 7",
+      "captionText": "Standard deviations (std) of layer responses on CIFAR- 10. The responses are the outputs of each 3×3 layer, after BN and before nonlinearity. Top: the layers are shown in their original order. Bottom: the responses are ranked in descending order.",
+      "captionTextHash": "sha256:238480a02948f1035b90f57937d419b8b2a969fdfc78002116e4bb89f7ef8ae1",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 45
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-1:0e772c4e8c0f",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 2,
+      "bbox": [
+        54.94,
+        253.37,
+        541.44,
+        295.21
+      ],
+      "figureLabel": "Figure 1",
+      "captionText": "Summary of our approach. While standard image models jointly train an image feature extractor and a linear classiﬁer to predict some label, CLIP jointly trains an image encoder and a text encoder to predict the correct pairings of a batch of (image, text) training examples. At test time the learned text encoder synthesizes a zero-shot linear classiﬁer by embedding the names or descriptions of the target dataset’s classes.",
+      "captionTextHash": "sha256:045e07341678359a2260ae7e11accbc8944199b75fe8c5a317af6c36d8f8cb77",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 47
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-2:e29c564b7125",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 3,
+      "bbox": [
+        54.94,
+        233.18,
+        290.57,
+        318.94
+      ],
+      "figureLabel": "Figure 2",
+      "captionText": "CLIP is much more efﬁcient at zero-shot transfer than our image caption baseline. Although highly expressive, we found that transformer-based language models are relatively weak at zero-shot ImageNet classiﬁcation. Here, we see that it learns 3x slower than a baseline which predicts a bag-of-words (BoW) encoding of the text (Joulin et al., 2016). Swapping the prediction objective for the contrastive objective of CLIP further improves efﬁciency another 4x.",
+      "captionTextHash": "sha256:5cedb0b181da801302d8b266fc708e6d33028aebc3e68f512105495ea2804311",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 14
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-3:e67e29bf338a",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        54.94,
+        297.61,
+        290.93,
+        317.57
+      ],
+      "figureLabel": "Figure 3",
+      "captionText": "Numpy-like pseudocode for the core of an implementa- tion of CLIP.",
+      "captionTextHash": "sha256:9b7712d3e9e7b6ea15e4bc178fdda60e880aab59b0d896597bbbe254fc58f055",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-4:d37328050062",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 7,
+      "bbox": [
+        306.25,
+        308.38,
+        542.93,
+        383.18
+      ],
+      "figureLabel": "Figure 4",
+      "captionText": "Prompt engineering and ensembling improve zero- shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classiﬁcation performance by almost 5 points on average across 36 datasets. This improvement is similar to the gain from using 4 times more compute with the baseline zero-shot method but is “free” when amortized over many predictions.",
+      "captionTextHash": "sha256:3d25215aaed7627e3193603a20da4cf54259df93b701a95efdc441874542e346",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 25
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-5:de7b05dcc2bb",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 8,
+      "bbox": [
+        306.94,
+        343.75,
+        542.93,
+        385.68
+      ],
+      "figureLabel": "Figure 5",
+      "captionText": "Zero-shot CLIP is competitive with a fully super- vised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classiﬁer outperforms a fully supervised linear classiﬁer ﬁtted on ResNet-50 features on 16 datasets, including ImageNet.",
+      "captionTextHash": "sha256:b33ab134b7ee8456c0dab6af8b2591eb8841725160861d2150b9fb6ca01ccc81",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 34
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-6:682539d8cc24",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 9,
+      "bbox": [
+        54.94,
+        305.7,
+        291.01,
+        391.46
+      ],
+      "figureLabel": "Figure 6",
+      "captionText": "Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classiﬁer trained on the same feature space and nearly matches the best results of a 16-shot linear classiﬁer across publicly available models. For both BiT-M and SimCLRv2, the best performing model is highlighted. Light gray lines are other models in the eval suite. The 20 datasets with at least 16 examples per class were used in this analysis.",
+      "captionTextHash": "sha256:82882eedf173165637d15f7b526c6249145d509dcd4747a85ccbecaff111b95c",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 18
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-7:a27ff6339a5a",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        54.94,
+        280.45,
+        290.93,
+        377.17
+      ],
+      "figureLabel": "Figure 7",
+      "captionText": "The data efﬁciency of zero-shot transfer varies widely. Calculating the number of labeled examples per class a linear classiﬁer on the same CLIP feature space requires to match the performance of the zero-shot classiﬁer contextualizes the ef- fectiveness of zero-shot transfer. Values are estimated based on log-linear interpolation of 1, 2, 4, 8, 16-shot and fully supervised results. Performance varies widely from still underperforming a one-shot classiﬁer on two datasets to matching an estimated 184 labeled examples per class.",
+      "captionTextHash": "sha256:3168a07a7a5b2e74f6a3b7aee944bd536e68cf68e13fed212194120ab20e6c58",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 35
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-8:02d77ab023cb",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        306.94,
+        284.11,
+        541.64,
+        347.95
+      ],
+      "figureLabel": "Figure 8",
+      "captionText": "Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does zero-shot performance approach linear probe performance (≤3 point difference).",
+      "captionTextHash": "sha256:751498b4cf3b67a15b3be6b88410e31ec58982cccf951f8797362335636502ea",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 77
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-9:c012a15d979d",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 11,
+      "bbox": [
+        54.94,
+        232.99,
+        290.93,
+        307.8
+      ],
+      "figureLabel": "Figure 9",
+      "captionText": "Zero-shot CLIP performance scales smoothly as a function of model compute. Across 39 evals on 36 different datasets, average zero-shot error is well modeled by a log-log lin- ear trend across a 44x range of compute spanning 5 different CLIP models. Lightly shaded lines are performance on individual evals, showing that performance is much more varied despite the smooth overall trend.",
+      "captionTextHash": "sha256:aaea33b94893f27aa402f9b1f831eb1298f370410dc25a81d9f6f3f60f7f387c",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 12
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-10:8b2d41046be6",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 12,
+      "bbox": [
+        54.94,
+        387.17,
+        543.01,
+        451.01
+      ],
+      "figureLabel": "Figure 10",
+      "captionText": "Linear probe performance of CLIP models in comparison with state-of-the-art computer vision models, including EfﬁcientNet (Tan & Le, 2019; Xie et al., 2020), MoCo (Chen et al., 2020d), Instagram-pretrained ResNeXt models (Mahajan et al., 2018; Touvron et al., 2019), BiT (Kolesnikov et al., 2019), ViT (Dosovitskiy et al., 2020), SimCLRv2 (Chen et al., 2020c), BYOL (Grill et al., 2020), and the original ResNet models (He et al., 2016b). (Left) Scores are averaged over 12 datasets studied by Kornblith et al. (2019). (Right) Scores are averaged over 27 datasets that contain a wider variety of distributions. Dotted lines indicate models ﬁne-tuned or evaluated on images at a higher-resolution than pre-training. See Table 10 for individual scores and Figure 20 for plots for each dataset.",
+      "captionTextHash": "sha256:3ec2e7591826da99368445be7060db8d3713611c6df60e467c1db6638a76ce69",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 20
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-11:815248bb13a5",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 13,
+      "bbox": [
+        54.94,
+        340.62,
+        289.59,
+        382.54
+      ],
+      "figureLabel": "Figure 11",
+      "captionText": "CLIP’s features outperform the features of the best ImageNet model on a wide variety of datasets. Fitting a linear classiﬁer on CLIP’s features outperforms using the Noisy Student EfﬁcientNet-L2 on 21 out of 27 datasets.",
+      "captionTextHash": "sha256:09397a4fb2217216b3242396b13cce924d7d3b781f9a933981045cdb24d48101",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 29
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-12:62d7bc1aef10",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 14,
+      "bbox": [
+        54.94,
+        384.5,
+        541.59,
+        415.47
+      ],
+      "figureLabel": "Figure 12",
+      "captionText": "CLIP’s features are more robust to task shift when compared to models pre-trained on ImageNet. For both dataset splits, the transfer scores of linear probes trained on the representations of CLIP models are higher than other models with similar ImageNet performance. This suggests that the representations of models trained on ImageNet are somewhat overﬁt to their task.",
+      "captionTextHash": "sha256:6eabcfe7b42b50eca8301d325fc5b2be9a2e5d09f8a9f8a6a89fa38ff584232b",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 22
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-13:0826718ca01a",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 15,
+      "bbox": [
+        54.94,
+        265.77,
+        543.01,
+        329.61
+      ],
+      "figureLabel": "Figure 13",
+      "captionText": "Zero-shot CLIP is much more robust to distribution shift than standard ImageNet models. (Left) An ideal robust model (dashed line) performs equally well on the ImageNet distribution and on other natural image distributions. Zero-shot CLIP models shrink this “robustness gap” by up to 75%. Linear ﬁts on logit transformed values are shown with bootstrap estimated 95% conﬁdence intervals. (Right) Visualizing distribution shift for bananas, a class shared across 5 of the 7 natural distribution shift datasets. The performance of the best zero-shot CLIP model, ViT-L/14@336px, is compared with a model that has the same performance on the ImageNet validation set, ResNet-101.",
+      "captionTextHash": "sha256:fa6b0a112bad7962293cb2f7c90478140438f5fd052665102321ee7928b50d27",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 43
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-14:07c5ec008a51",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 16,
+      "bbox": [
+        54.94,
+        318.29,
+        543.01,
+        393.09
+      ],
+      "figureLabel": "Figure 14",
+      "captionText": "While supervised adaptation to ImageNet increases ImageNet accuracy by 9.2%, it slightly reduces average robustness. (Left) Customizing zero-shot CLIP to each dataset improves robustness compared to using a single static zero-shot ImageNet classiﬁer and pooling predictions across similar classes as in Taori et al. (2020). CLIP models adapted to ImageNet have similar effective robustness as the best prior ImageNet models. (Right) Details of per dataset changes in accuracy for the two robustness interventions. Adapting to ImageNet increases accuracy on ImageNetV2 noticeably but trades off accuracy on several other distributions. Dataset speciﬁc zero-shot classiﬁers can improve accuracy by a large amount but are limited to only a few datasets that include classes which don’t perfectly align with ImageNet categories.",
+      "captionTextHash": "sha256:4d5735bdad59e489b0e99f0a3fddb2dfc30f2cc54f2e41e14d69bc1d9346c31c",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 38
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-15:429bf1223c28",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 17,
+      "bbox": [
+        54.94,
+        307.67,
+        289.45,
+        382.48
+      ],
+      "figureLabel": "Figure 15",
+      "captionText": "Few-shot CLIP also increases effective robustness compared to existing ImageNet models but is less robust than zero-shot CLIP. Minimizing the amount of ImageNet training data used for adaption increases effective robustness at the cost of decreasing relative robustness. 16-shot logistic regression CLIP matches zero-shot CLIP on ImageNet, as previously reported in Figure 7, but is less robust.",
+      "captionTextHash": "sha256:3241d45beb3dbde98c55c0c4b488016e72360b09f298479924e370e80b7016a8",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 25
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-16:cdecb43c817b",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 18,
+      "bbox": [
+        54.94,
+        300.97,
+        290.93,
+        331.85
+      ],
+      "figureLabel": "Figure 16",
+      "captionText": "The hardest problems for CLIP also tend to be the hard- est problems for humans. Here we rank image categories by difﬁ- culty for CLIP as measured as probability of the correct label.",
+      "captionTextHash": "sha256:f3df1c53563606b9aa4251039958305929b51c9346dd739269b9f48ed7b60659",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 45
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-17:74d607b955f4",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 19,
+      "bbox": [
+        54.94,
+        252.48,
+        543.01,
+        316.33
+      ],
+      "figureLabel": "Figure 17",
+      "captionText": "Few statistically signiﬁcant improvements in accuracy due to detected data overlap. (Left) While several datasets have up to ±20% apparent differences in zero-shot accuracy on detected overlapping vs clean examples only 5 datasets out of 35 total have 99.5% Clopper-Pearson conﬁdence intervals that exclude a 0% accuracy difference. 2 of these datasets do worse on overlapping data. (Right) Since the percentage of detected overlapping examples is almost always in the single digits, the overall test accuracy gain due to overlap is much smaller with the largest estimated increase being only 0.6% on Birdsnap. Similarly, for only 6 datasets are the accuracy improvements statistically signiﬁcant when calculated using a one-sided binomial test.",
+      "captionTextHash": "sha256:16b3069132c181ae2093c3955b9f0f51727307e6728f0cc03b3aeedc1fd830c2",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 29
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-18:ad99654d2571",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 24,
+      "bbox": [
+        54.94,
+        305.8,
+        541.44,
+        347.68
+      ],
+      "figureLabel": "Figure 18",
+      "captionText": "CLIP performance on Member of Congress images when given the combined returned label set for the images from Google Cloud Vision, Amazon Rekognition and Microsoft Azure Computer Vision. The 20 most gendered labels for men and women were identiﬁed with χ2 tests with the threshold at 0.5%. Labels are sorted by absolute frequencies. Bars denote the percentage of images for a certain label by gender.",
+      "captionTextHash": "sha256:dead8c978abb1162dad27f9d3b0e68fa9ba23d3d260f8f09b327a2b105e00b3e",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 29
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-19:28704f855546",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 38,
+      "bbox": [
+        181.2,
+        278.97,
+        415.69,
+        287.94
+      ],
+      "figureLabel": "Figure 19",
+      "captionText": "Two example images from the Rendered SST2 dataset",
+      "captionTextHash": "sha256:1e971eac0c7a967f6f50706d69e48ee3886729c4af8ef76145c124fe9f1903c4",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-20:1dc15cc59fc7",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 41,
+      "bbox": [
+        115.36,
+        700.83,
+        481.53,
+        709.8
+      ],
+      "figureLabel": "Figure 20",
+      "captionText": "Linear probe performance plotted for each of the 27 datasets, using the data from Table 10.",
+      "captionTextHash": "sha256:6f1431f2d223886566086a2596f9d5e46b15df9f8954fae7591ea7a081e7f311",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 256
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-21:b5be06529f57",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 42,
+      "bbox": [
+        54.94,
+        676.87,
+        541.44,
+        718.78
+      ],
+      "figureLabel": "Figure 21",
+      "captionText": "Visualization of predictions from 36 CLIP zero-shot classiﬁers. All examples are random with the exception of reselecting Hateful Memes to avoid offensive content. The predicted probability of the top 5 classes is shown along with the text used to represent the class. When more than one template is used, the ﬁrst template is shown. The ground truth label is colored green while an incorrect prediction is colored orange.",
+      "captionTextHash": "sha256:d8dda6a17e09301723e183653c971a60f80bacc1a24603592f06743fd94cf9d6",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 316
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "figure-caption:clip-2021:figure-22:8c76a8c33b3d",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 43,
+      "bbox": [
+        139.74,
+        668.44,
+        457.14,
+        677.41
+      ],
+      "figureLabel": "Figure 22",
+      "captionText": "CLIP’s zero-shot performance compared to linear-probe ResNet performance",
+      "captionTextHash": "sha256:32bb6fca2876618d370d11c135ab29fb0cd7961524e76713a37462f35750d22e",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 231
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-1:0c27ffac8247",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "bbox": [
+        308.86,
+        341.41,
+        545.12,
+        427.17
+      ],
+      "figureLabel": "Figure 1",
+      "captionText": "Our MAE architecture. During pre-training, a large random subset of image patches (e.g., 75%) is masked out. The encoder is applied to the small subset of visible patches. Mask tokens are introduced after the encoder, and the full set of en- coded patches and mask tokens is processed by a small decoder that reconstructs the original image in pixels. After pre-training, the decoder is discarded and the encoder is applied to uncorrupted images (full sets of patches) for recognition tasks.",
+      "captionTextHash": "sha256:ad91e28ed6bf6352a9b610dfa6c1816db89921a7dc4284bb19d9f9faca937fa5",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 13
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-2:bb38727809e6",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 2,
+      "bbox": [
+        50.11,
+        238.0,
+        544.61,
+        248.73
+      ],
+      "figureLabel": "Figure 2",
+      "captionText": "Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction†",
+      "captionTextHash": "sha256:dd2168efe9a6a746120f1319a79e574c04d0e0e33a0ef05de22c772f2c5c81c1",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-3:a1f3f4392d73",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 2,
+      "bbox": [
+        50.11,
+        377.22,
+        545.11,
+        397.14
+      ],
+      "figureLabel": "Figure 3",
+      "captionText": "Example results on COCO validation images, using an MAE trained on ImageNet (the same model weights as in Figure 2). Observe the reconstructions on the two right-most examples, which, although different from the ground truth, are semantically plausible.",
+      "captionTextHash": "sha256:b5e179400469fd37d7e5ab632658d6ba79b946853d4741d3c9df80eaf37ee35f",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-4:d77c8d1cca8d",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 3,
+      "bbox": [
+        50.11,
+        258.97,
+        286.36,
+        300.98
+      ],
+      "figureLabel": "Figure 4",
+      "captionText": "Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize.",
+      "captionTextHash": "sha256:94f171bd914ec9047e9137c1d5957850f4d1afe3bf959213a7b1ca4b01a4838a",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-5:15b49198d6b2",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 4,
+      "bbox": [
+        308.86,
+        194.17,
+        545.12,
+        225.14
+      ],
+      "figureLabel": "Figure 5",
+      "captionText": "Masking ratio. A high masking ratio (75%) works well for both ﬁne-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper.",
+      "captionTextHash": "sha256:a1fda548ab974447547559c577fdbef51e43e6508c0c6d9ad6ab3246cbbd739b",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 21
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-6:6da2a9109af4",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 6,
+      "bbox": [
+        50.11,
+        170.46,
+        286.36,
+        245.26
+      ],
+      "figureLabel": "Figure 6",
+      "captionText": "Mask sampling strategies determine the pretext task difﬁculty, inﬂuencing reconstruction quality and representations (Table 1f). Here each output is from an MAE trained with the spec- iﬁed masking strategy. Left: random sampling (our default). Mid- dle: block-wise sampling [2] that removes large random blocks. Right: grid-wise sampling that keeps one of every four patches. Images are from the validation set.",
+      "captionTextHash": "sha256:977b333e670f0be1833f174f6f548fff03815cb4f2ed64f7eb2ae979433331cc",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-7:5134c853e7c4",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 6,
+      "bbox": [
+        308.86,
+        216.16,
+        545.11,
+        247.13
+      ],
+      "figureLabel": "Figure 7",
+      "captionText": "Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training sched- ule. The model is ViT-L with the default setting in Table 1.",
+      "captionTextHash": "sha256:e792c20176fd029fb0e34560699cca81981882696343ac1f8b1a378075416cdf",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 21
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-9:8c1af7deeb93",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 7,
+      "bbox": [
+        308.86,
+        177.3,
+        545.11,
+        230.18
+      ],
+      "figureLabel": "Figure 9",
+      "captionText": "Partial ﬁne-tuning results of ViT-L w.r.t. the number of ﬁne-tuned Transformer blocks under the default settings from Table 1. Tuning 0 blocks is linear probing; 24 is full ﬁne-tuning. Our MAE representations are less linearly separable, but are con- sistently better than MoCo v3 if one or more blocks are tuned.",
+      "captionTextHash": "sha256:72dae16eda5f50f424cdcafbbbe9ddca8bab24eabad2ed874425b4b32d981655",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 28
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-10:83e5944d22c1",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 13,
+      "bbox": [
+        50.11,
+        704.76,
+        545.11,
+        724.85
+      ],
+      "figureLabel": "Figure 10",
+      "captionText": "Uncurated random samples on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 75%.",
+      "captionTextHash": "sha256:650b92a95fed6e7e7522df745b209f58311af37239982e0586a472be1efd2b05",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "figure-caption:mae-2021:figure-11:61a3e53a8668",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 14,
+      "bbox": [
+        50.11,
+        704.84,
+        545.11,
+        724.85
+      ],
+      "figureLabel": "Figure 11",
+      "captionText": "Uncurated random samples on COCO validation images, using an MAE trained on ImageNet. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 75%.",
+      "captionTextHash": "sha256:52a4a9a77547483486dfc9029cbea8718d6348b7856464306b530589c32f3459",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0
+      }
+    }
+  ],
+  "blockerRows": 0,
+  "blockers": [],
+  "qaReadbackRows": 2,
+  "answerableQaRows": 1,
+  "noAnswerQaRows": 1,
+  "qaReadback": [
+    {
+      "paperId": "alexnet-2012",
+      "question": "이 논문의 Figure 1은 무엇을 보여주는가?",
+      "requestedFigureLabel": "Figure 1",
+      "answerabilityStatus": "answerable",
+      "blockerReason": "",
+      "candidateAnswerPacket": {
+        "packetType": "figure_caption_candidate_answer_packet.v1",
+        "answerVisible": false,
+        "strictEvidence": false,
+        "answer": "Figure 1 shows: A four-layer convolutional neural network with ReLUs (solid line) reaches a 25% training error rate on CIFAR-10 six times faster than an equivalent network with tanh neurons (dashed line). The learning rates for each net- work were chosen independently to make train- ing as fast as possible. No regularization of any kind was employed. The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consis- tently learn several times faster than equivalents with saturating neurons.",
+        "evidence": {
+          "artifactId": "figure-caption:alexnet-2012:figure-1:b20df6a95de3",
+          "paperId": "alexnet-2012",
+          "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+          "page": 3,
+          "bbox": [
+            333.92,
+            272.94,
+            504.0,
+            403.21
+          ],
+          "figureLabel": "Figure 1",
+          "captionTextHash": "sha256:a66eb6da9d97ed5496dbc74b6fc37f7f1c663469eb97c23e06559ed04c1d7193",
+          "extractionMethod": "pymupdf_text_block_regex_v1"
+        }
+      }
+    },
+    {
+      "paperId": "alexnet-2012",
+      "question": "이 논문의 Figure 99은 무엇을 보여주는가?",
+      "requestedFigureLabel": "Figure 99",
+      "answerabilityStatus": "no_answer",
+      "blockerReason": "figure_caption_not_found",
+      "candidateAnswerPacket": null
+    }
+  ],
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerVisiblePromotionRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "answerabilityGateBypassRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "warnings": [],
+  "schemaErrors": []
+}

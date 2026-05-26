@@ -35,6 +35,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.public.memory.v1": "paper-public-memory-result.v1.json",
     "knowledge-hub.paper.public.related.v1": "paper-public-related-result.v1.json",
     "knowledge-hub.paper.canon-quality-audit.result.v1": "paper-canon-quality-audit-result.v1.json",
+    "knowledge-hub.paper.figure-caption-artifact-candidate.v1": "paper-figure-caption-artifact-candidate.v1.json",
+    "knowledge-hub.paper.figure-caption-artifact-vertical-slice-report.v1": "paper-figure-caption-artifact-vertical-slice-report.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
     "knowledge-hub.paper-memory.card.result.v1": "paper-memory-card-result.v1.json",

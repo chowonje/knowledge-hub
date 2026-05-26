@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-figure-caption-artifact-candidate.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "paperId",
+    "paperRef",
+    "artifactId",
+    "sourceContentHash",
+    "page",
+    "bbox",
+    "figureLabel",
+    "captionText",
+    "captionTextHash",
+    "extractionMethod",
+    "confidence",
+    "blockerReason",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.figure-caption-artifact-candidate.v1" },
+    "paperId": { "type": "string", "minLength": 1 },
+    "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+    "artifactId": { "type": "string", "pattern": "^figure-caption:" },
+    "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "page": { "type": "integer", "minimum": 1 },
+    "bbox": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "type": "number" }
+    },
+    "figureLabel": { "type": "string", "pattern": "^Figure [0-9]+[A-Za-z]?$" },
+    "captionText": { "type": "string", "minLength": 1 },
+    "captionTextHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "extractionMethod": { "const": "pymupdf_text_block_regex_v1" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "blockerReason": { "type": "string" },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "blockIndex"],
+      "properties": {
+        "source": { "const": "pymupdf_block" },
+        "blockIndex": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
