@@ -1,0 +1,78 @@
+{
+  "schema": "knowledge-hub.paper.text-evidence-rc-external-action-preflight.v1",
+  "status": "ready_for_user_approval",
+  "generatedAt": "2026-05-26T08:22:23Z",
+  "scope": {
+    "writes": "report_only",
+    "pullRequestMutationPerformed": false,
+    "canonicalCheckoutEdited": false,
+    "fileContentReadRows": 0,
+    "destructiveCleanupRows": 0,
+    "vaultScanRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0
+  },
+  "inputReports": {
+    "approvalPacketReportRef": "text_evidence_rc_external_action_approval_packet.v1.json",
+    "approvalPacketStatus": "ready",
+    "approvalPacketPendingRows": 2,
+    "approvalPacketExecutedRows": 0,
+    "snapshotDryRunReportRef": "text_evidence_canonical_dirty_snapshot_dry_run.v1.json",
+    "snapshotDryRunStatus": "ready",
+    "snapshotDirtyRows": 168,
+    "snapshotStatusFingerprint": "sha256:4a76393a8a30a254e4fe619a849aacb455c44ed4c95524b564d170976cc705d9"
+  },
+  "canonicalCheckout": {
+    "available": true,
+    "repoRef": "canonical_product_checkout",
+    "branch": "codex/public-repo-cleanup-20260504",
+    "head": "66873de",
+    "dirtyRows": 168,
+    "statusFingerprint": "sha256:4a76393a8a30a254e4fe619a849aacb455c44ed4c95524b564d170976cc705d9",
+    "snapshotFingerprintMatches": true,
+    "dirtyRowsMatchSnapshot": true
+  },
+  "pullRequest149": {
+    "available": true,
+    "state": "OPEN",
+    "isDraft": true,
+    "mergeable": "CONFLICTING",
+    "mergeStateStatus": "DIRTY",
+    "headRefName": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
+    "baseRefName": "main",
+    "expectedHoldState": true
+  },
+  "readyForUserApproval": true,
+  "blockerRows": 0,
+  "blockers": [],
+  "nextAction": "request_explicit_user_approval_to_close_pr149_without_merge",
+  "mutationCounters": {
+    "externalPrMutationRows": 0,
+    "canonicalCleanupRows": 0,
+    "destructiveCleanupRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "reportHash": "sha256:69adbe8a9b1796a4b6c0067cd3bc560265571d983588970e77ecb85edc128877",
+  "warnings": [
+    "This preflight does not close PR #149 and does not clean the canonical checkout.",
+    "The canonical checkout check reads git status only; it does not read dirty file contents."
+  ],
+  "schemaErrors": []
+}

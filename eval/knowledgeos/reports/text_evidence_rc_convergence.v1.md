@@ -7,15 +7,16 @@
 - blockedPhaseRows: `0`
 - publicRcBlockerRows: `2`
 - privatePathLeakRows: `0`
-- reportHash: `sha256:3d36f1e526430cd185334e2922cfd691e70347fac700657e4bc507de1e67adec`
+- reportHash: `sha256:86e5958df10a5aa84b868d4accaeea64f9cd5611ee54981d248c6e589ed5089c`
 - textOnlyScopeReady: `True`
+- externalActionPreflightReady: `True`
 
 ## Blockers
 
 | blockerId | severity | reason |
 |---|---|---|
 | `canonical_checkout_dirty` | `hold` | canonical dirty snapshot dry-run fingerprint is ready; physical cleanup still awaits PR #149 closure and approval |
-| `pr_149_conflicting_or_draft` | `hold` | PR #149 approval packet is ready; external close awaits explicit approval |
+| `pr_149_conflicting_or_draft` | `hold` | PR #149 preflight is ready for explicit close approval |
 
 ## Phase Reports
 

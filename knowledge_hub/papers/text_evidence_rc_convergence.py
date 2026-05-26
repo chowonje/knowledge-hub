@@ -19,6 +19,7 @@ CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF = "text_evidence_canonical_dirty_cleanup
 EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF = "text_evidence_rc_external_action_approval_packet.v1.json"
 CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF = "text_evidence_canonical_dirty_snapshot_dry_run.v1.json"
 TEXT_ONLY_SCOPE_GATE_REPORT_REF = "text_evidence_rc_text_only_scope_gate.v1.json"
+EXTERNAL_ACTION_PREFLIGHT_REPORT_REF = "text_evidence_rc_external_action_preflight.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -409,6 +410,35 @@ def _text_only_scope_gate_state(reports_root: Path) -> dict[str, Any]:
     }
 
 
+def _external_action_preflight_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / EXTERNAL_ACTION_PREFLIGHT_REPORT_REF)
+    if not payload:
+        return {
+            "available": False,
+            "reportRef": "",
+            "status": "",
+            "readyForUserApproval": False,
+            "canonicalFingerprintMatches": False,
+            "pr149ExpectedHoldState": False,
+            "blockerRows": 0,
+            "nextAction": "",
+            "privatePathLeakRows": 0,
+        }
+    canonical = dict(payload.get("canonicalCheckout") or {})
+    pr149 = dict(payload.get("pullRequest149") or {})
+    return {
+        "available": True,
+        "reportRef": EXTERNAL_ACTION_PREFLIGHT_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "readyForUserApproval": bool(payload.get("readyForUserApproval")),
+        "canonicalFingerprintMatches": bool(canonical.get("snapshotFingerprintMatches")),
+        "pr149ExpectedHoldState": bool(pr149.get("expectedHoldState")),
+        "blockerRows": int(payload.get("blockerRows") or 0),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -440,6 +470,7 @@ def build_text_evidence_rc_convergence_report(
     external_action_approval = _external_action_approval_packet_state(reports_root)
     canonical_dirty_snapshot = _canonical_dirty_snapshot_dry_run_state(reports_root)
     text_only_scope_gate = _text_only_scope_gate_state(reports_root)
+    external_action_preflight = _external_action_preflight_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -502,7 +533,11 @@ def build_text_evidence_rc_convergence_report(
     elif external_action_approval.get("status") == "ready":
         for row in blocker_rows:
             if row["blockerId"] == "pr_149_conflicting_or_draft":
-                row["reason"] = "PR #149 approval packet is ready; external close awaits explicit approval"
+                row["reason"] = (
+                    "PR #149 preflight is ready for explicit close approval"
+                    if external_action_preflight.get("readyForUserApproval")
+                    else "PR #149 approval packet is ready; external close awaits explicit approval"
+                )
     elif pr149_disposition.get("decision") == "abandon_current_pr_before_public_rc":
         for row in blocker_rows:
             if row["blockerId"] == "pr_149_conflicting_or_draft":
@@ -539,6 +574,7 @@ def build_text_evidence_rc_convergence_report(
         "canonicalCheckout": canonical,
         "pullRequest149": pr_149,
         "textOnlyScopeGate": text_only_scope_gate,
+        "externalActionPreflight": external_action_preflight,
         "phaseRows": len(phase_rows),
         "readyPhaseRows": ready_phase_rows,
         "blockedPhaseRows": len(phase_rows) - ready_phase_rows,
@@ -584,7 +620,8 @@ def build_text_evidence_rc_convergence_report(
             else ""
         )
         or _clean_text(
-            canonical_dirty_snapshot.get("nextAction")
+            external_action_preflight.get("nextAction")
+            or canonical_dirty_snapshot.get("nextAction")
             or external_action_approval.get("nextAction")
             or canonical_dirty_cleanup_plan.get("nextAction")
             or canonical_dirty_bucket_decision.get("nextAction")
@@ -595,6 +632,7 @@ def build_text_evidence_rc_convergence_report(
         "warnings": [
             "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
             "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
+            "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
         ],
         "schemaErrors": [],
@@ -621,6 +659,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
         f"- privatePathLeakRows: `{report.get('privatePathLeakRows')}`",
         f"- reportHash: `{report.get('reportHash')}`",
         f"- textOnlyScopeReady: `{dict(report.get('textOnlyScopeGate') or {}).get('textOnlyRcReady')}`",
+        f"- externalActionPreflightReady: `{dict(report.get('externalActionPreflight') or {}).get('readyForUserApproval')}`",
         "",
         "## Blockers",
         "",

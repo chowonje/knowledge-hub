@@ -59,6 +59,7 @@ def test_convergence_report_records_rc_hold_without_mutation(tmp_path: Path) -> 
     assert report["phaseRows"] == 9
     assert report["publicRcReady"] is False
     assert report["textOnlyScopeGate"]["available"] is False
+    assert report["externalActionPreflight"]["available"] is False
     assert report["scope"]["mergePerformed"] is False
     assert report["scope"]["canonicalCheckoutEdited"] is False
     assert report["mutationCounters"]["vaultScanRows"] == 0
@@ -94,6 +95,17 @@ def test_writer_keeps_report_sanitized(tmp_path: Path) -> None:
             "textReadyRows": 0,
             "textHoldRows": 0,
             "deferredRows": 0,
+            "blockerRows": 0,
+            "nextAction": "",
+            "privatePathLeakRows": 0,
+        },
+        "externalActionPreflight": {
+            "available": False,
+            "reportRef": "",
+            "status": "",
+            "readyForUserApproval": False,
+            "canonicalFingerprintMatches": False,
+            "pr149ExpectedHoldState": False,
             "blockerRows": 0,
             "nextAction": "",
             "privatePathLeakRows": 0,

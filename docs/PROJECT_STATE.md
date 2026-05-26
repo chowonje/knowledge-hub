@@ -80,6 +80,8 @@ The text-evidence RC line now also has a text-only scope gate. `eval/knowledgeos
 
 The RC convergence board now consumes that text-only scope gate directly. `eval/knowledgeos/scripts/build_text_evidence_rc_convergence_report.py` includes a `textOnlyScopeGate` section so reviewers can distinguish `textOnlyRcReady=true` from `publicRcReady=false`: the text roadmap is scoped and ready for integration review, but public RC remains held until PR #149 is closed without merge and the canonical dirty checkout is cleaned or archived under explicit approval.
 
+The same convergence board now also consumes a read-only external action preflight. `eval/knowledgeos/scripts/build_text_evidence_rc_external_action_preflight.py` confirms, before requesting approval, that PR #149 is still open/draft/conflicting and that the canonical checkout's status-only fingerprint still matches the snapshot dry-run. The current preflight is `ready_for_user_approval`, but it still performs no PR mutation, canonical checkout edit, destructive cleanup, dirty file-content read, vault scan, DB/index mutation, merge/cherry-pick, or reindex/reembed.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

@@ -12,6 +12,7 @@
     "canonicalCheckout",
     "pullRequest149",
     "textOnlyScopeGate",
+    "externalActionPreflight",
     "phaseRows",
     "readyPhaseRows",
     "blockedPhaseRows",
@@ -135,6 +136,32 @@
         "textReadyRows": { "type": "integer", "minimum": 0 },
         "textHoldRows": { "type": "integer", "minimum": 0 },
         "deferredRows": { "type": "integer", "minimum": 0 },
+        "blockerRows": { "type": "integer", "minimum": 0 },
+        "nextAction": { "type": "string" },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "externalActionPreflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available",
+        "reportRef",
+        "status",
+        "readyForUserApproval",
+        "canonicalFingerprintMatches",
+        "pr149ExpectedHoldState",
+        "blockerRows",
+        "nextAction",
+        "privatePathLeakRows"
+      ],
+      "properties": {
+        "available": { "type": "boolean" },
+        "reportRef": { "type": "string" },
+        "status": { "type": "string" },
+        "readyForUserApproval": { "type": "boolean" },
+        "canonicalFingerprintMatches": { "type": "boolean" },
+        "pr149ExpectedHoldState": { "type": "boolean" },
         "blockerRows": { "type": "integer", "minimum": 0 },
         "nextAction": { "type": "string" },
         "privatePathLeakRows": { "type": "integer", "minimum": 0 }
