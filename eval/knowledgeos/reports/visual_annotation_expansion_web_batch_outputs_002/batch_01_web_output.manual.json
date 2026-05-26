@@ -1,0 +1,166 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2616032b2a9d352d",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped CLIP Figure 1 panels for creating a dataset classifier from text labels and using it for zero-shot prediction; label list flows into the prompt template “A photo of a {object}.” and an image of a dog flows into an Image Encoder.",
+      "visibleText": "Visible fragments include: “(2) Create dataset classifier from labe”; “plane”; “car”; “dog”; “bird”; “A photo of a {object}.”; “(3) Use for zero-shot prediction”; “Image Encoder”; fragments of caption/body text including “jointly train an image feature extra”, “predict the correct pairings”, and “zero-shot linear classifier”.",
+      "retrievalKeywords": [
+        "CLIP Figure 1",
+        "Create dataset classifier from labels",
+        "A photo of a {object}",
+        "zero-shot prediction",
+        "Image Encoder",
+        "plane car dog bird"
+      ],
+      "uncertainty": "The crop is truncated on both sides, so the full heading, adjacent encoders, and most surrounding caption text are not visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:image_region:1:258a60cc216d8130",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped MAE architecture figure showing a masked input image grid, a column of visible patches, an encoder block, and blue latent/output tokens; title/author area and Figure 1 caption are partially visible.",
+      "visibleText": "Visible fragments include: “...nghao Li”; “Piotr Dollá...”; “†project lead”; “...ch (FAIR)”; “input”; “encoder”; “...gure 1.”; “Our MAE architectu...”; “...dom subset of image patches”.",
+      "retrievalKeywords": [
+        "MAE architecture",
+        "masked input patches",
+        "encoder",
+        "input",
+        "Figure 1",
+        "visible patches"
+      ],
+      "uncertainty": "The crop cuts off the title, author list, right side of the architecture diagram, and most of the caption, so only partial text can be read.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:alexnet-2012:image_region:6:508eb98021de0fd7",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped AlexNet Figure 3 showing a grid of 96 first-layer convolutional kernels, mostly edge/color filters, with caption describing 11×11×3 kernels learned from 224×224×3 inputs and split across GPU 1 and GPU 2.",
+      "visibleText": "Visible fragments include: “Without dropout, our network ex-”; “...oubles the number of iterations required to converge.”; “Figure 3: 96 convolutional kernels of size 11×11×3 learned by the first convolutional layer on the 224×224×3 input images. The top 48 kernels were learned on GPU 1 while the bottom 48 kernels were learned on GPU 2. See Section 6.1 for details.”",
+      "retrievalKeywords": [
+        "AlexNet Figure 3",
+        "96 convolutional kernels",
+        "11×11×3",
+        "first convolutional layer",
+        "224×224×3 input images",
+        "GPU 1 GPU 2",
+        "dropout"
+      ],
+      "uncertainty": "Some neighboring paragraph and equation text is cropped at the page edges; the caption under the kernel grid is clear.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2642c8db8bd29d0a",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped CLIP Figure 1 contrastive pre-training panel showing stacked text prompts, a stacked dog image, and arrows into partially visible Text Encoder and Image Encoder blocks.",
+      "visibleText": "Visible fragments include: “(1) Contrastive pre-training”; “Pepper the aussie pup”; “Text Enco...” or “Text Encoder” partially cropped; “Image Enco...” or “Image Encoder” partially cropped; “Figure 1. Summary of ou...”; “some label, CLIP jointly...”; “examples. At test time th...”; “target dataset’s classes.”",
+      "retrievalKeywords": [
+        "CLIP Figure 1",
+        "contrastive pre-training",
+        "Pepper the aussie pup",
+        "Text Encoder",
+        "Image Encoder",
+        "image text pairs"
+      ],
+      "uncertainty": "The right side of both encoder blocks and the caption are cropped, so only the left/central portion of the figure is visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:image_region:1:40b27e8b4073d98f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped MAE Figure 1 architecture close-up showing a masked image patch grid labeled input, selected visible image patches, a gray encoder block, and a vertical stack of blue tokens.",
+      "visibleText": "Visible fragments include: “...nghao Li”; “Piotr Dollá...”; “†project lead”; “...ch (FAIR)”; “input”; “encoder”; “...ure 1.”; “Our MAE architectu...”; “...dom subset of image patches”; “...coder is applied to the small”.",
+      "retrievalKeywords": [
+        "MAE Figure 1",
+        "Our MAE architecture",
+        "masked image patches",
+        "input",
+        "encoder",
+        "visible patches",
+        "blue tokens"
+      ],
+      "uncertainty": "This is a narrow crop; the complete paper title, full author affiliations, decoder side of the diagram, and full caption are outside the visible region.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:alexnet-2012:image_region:8:219e7594a10f3a3f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped AlexNet Figure 4 showing ILSVRC-2010 test images with top-5 prediction bar charts on the left and a partial nearest-neighbor/training-image panel on the right; visible classes include mite, container ship, motor scooter, leopard, grille, mushroom, cherry, and Madagascar cat.",
+      "visibleText": "Visible fragments include: “mite”; “container ship”; “motor scooter”; “leopard”; “grille”; “mushroom”; “cherry”; “Madagascar cat”; prediction labels such as “black widow”, “cockroach”, “tick”, “starfish”, “lifeboat”, “amphibian”, “fireboat”, “drilling platform”, “go-kart”, “moped”, “bumper car”, “golfcart”, “jaguar”, “cheetah”, “snow leopard”, “Egyptian cat”, “convertible”, “pickup”, “beach wagon”, “fire engine”, “agaric”, “jelly fungus”, “gill fungus”, “dead-man's-fingers”, “dalmatian”, “grape”, “elderberry”, “currant”, “squirrel monkey”, “spider monkey”, “titi”, “indri”, and “howler monkey”; caption fragments include “Figure 4: (Left) Eight ILSVRC-2010 test images and the five...”, “The correct label is written under each image...”, “with a red bar...”, “(Right) Five ILSV...”, and “smallest Euclidean distance from the feature vector...”.",
+      "retrievalKeywords": [
+        "AlexNet Figure 4",
+        "ILSVRC-2010 test images",
+        "top-5 predictions",
+        "red bar",
+        "nearest training images",
+        "Euclidean distance",
+        "mite container ship motor scooter leopard",
+        "grille mushroom cherry Madagascar cat"
+      ],
+      "uncertainty": "The right-hand image panel and the end of each caption line are truncated; a few tiny prediction labels are low-resolution and may be imperfectly transcribed.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:image_region:15:1da1f1cf8ce81bd5",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped CLIP appendix/section figure under “Language Supervision” showing dataset-example grids for banana-like images across rows with partially visible dataset names and a heading about distribution shift.",
+      "visibleText": "Visible fragments include: “Language Supervision”; “Dataset Example”; partially cropped row-label fragments including “...geNet”, “...NetV2”, “...Net-R”, “...ctNet”, “...geNet Sketch”, and “...Net-A”; bottom fragments include “distribution shift than standard Im...” and “distribution and on other natural imag...”.",
+      "retrievalKeywords": [
+        "Language Supervision",
+        "Dataset Example",
+        "distribution shift",
+        "ImageNet",
+        "ImageNetV2",
+        "ImageNet-R",
+        "ObjectNet",
+        "ImageNet Sketch",
+        "ImageNet-A",
+        "banana examples"
+      ],
+      "uncertainty": "The left and right sides of the table are cropped; full dataset names are partly inferred from visible fragments and should be treated as retrieval hints, not evidence.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:image_region:2:0b66280633a636cc",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Cropped MAE reconstruction examples showing rows of original/masked/reconstructed images including a bird, butterfly, horn player, coffee cups, bears, harbor scene, escalator, church, horse rider, people, street scene, and cow; caption mentions masked image, MAE reconstruction, 96 patches, and appendix examples.",
+      "visibleText": "Visible fragments include: “masked image (left), our MAE reconstruction†”; “96 patches. More examples are in the appendix.”; “One can simply overlay the output with the visible”; “demonstrate the method’s behavior.”",
+      "retrievalKeywords": [
+        "MAE reconstruction examples",
+        "masked image",
+        "MAE reconstruction",
+        "96 patches",
+        "appendix examples",
+        "visible patches",
+        "bird butterfly coffee cups bears church"
+      ],
+      "uncertainty": "The crop omits the leftmost/rightmost parts of the figure and cuts off the beginning of some caption lines; object descriptions are visual retrieval hints only.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}
