@@ -47,6 +47,9 @@ VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID = (
 VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-web-run-batch-template.v1"
 )
+VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID = (
+    "knowledge-hub.paper.visual-annotation-expansion-web-batch-output-collector.v1"
+)
 VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-captured-row.v1"
 )
@@ -55,11 +58,14 @@ DEFAULT_MANUAL_RUN_PACKET_ID = "visual_annotation_expansion_manual_run_packet_00
 DEFAULT_OPERATOR_HANDOFF_ID = "visual_annotation_expansion_operator_handoff_002"
 DEFAULT_WEB_OUTPUT_TEMPLATE_ID = "visual_annotation_expansion_web_output_template_002"
 DEFAULT_WEB_RUN_BUNDLE_ID = "visual_annotation_expansion_web_run_bundle_002"
+DEFAULT_WEB_BATCH_OUTPUT_COLLECTOR_ID = "visual_annotation_expansion_web_batch_output_collector_002"
 READY_RUN_DECISION = "ready_for_manual_web_vlm_expansion_run"
 READY_HANDOFF_DECISION = "ready_for_operator_web_vlm_run"
 READY_TEMPLATE_DECISION = "ready_for_manual_web_output_fill"
 READY_BUNDLE_DECISION = "ready_for_operator_web_batch_run"
+READY_BATCH_OUTPUT_COLLECTOR_DECISION = "ready_for_combined_manual_output_validation"
 READY_VALIDATION_DECISION = "ready_for_visual_retrieval_hint_candidate_store_expansion_design"
+BLOCKED_BATCH_OUTPUT_COLLECTOR_DECISION = "blocked_missing_or_invalid_batch_outputs"
 NEXT_AFTER_RUN_TRANCHE = "visual_annotation_expansion_manual_output_capture"
 NEXT_AFTER_VALIDATION_TRANCHE = "visual_retrieval_hint_candidate_store_expansion_design"
 
@@ -226,6 +232,33 @@ def _bundle_scope(*, batch_rows: int = 0, bundle_artifact_rows: int = 0) -> dict
         "bundleArtifactRows": int(bundle_artifact_rows),
         "completedWebOutputRows": 0,
         "manualWebModelOutputRows": 0,
+        "vectorIndexing": False,
+        "strictEvidencePromotionRows": 0,
+        "runtimeAnswerVisibleExposureRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "answerabilityGateBypassRows": 0,
+        "cropWriteRows": 0,
+        "pageImageWriteRows": 0,
+        "wholeImageWriteRows": 0,
+        "wholeImageGptRows": 0,
+        "candidateStoreMutationRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+    }
+
+
+def _batch_output_collector_scope(*, manual_rows: int = 0) -> dict[str, Any]:
+    return {
+        "writes": "report_only",
+        "apiCalls": False,
+        "modelCalls": False,
+        "webModelCalls": False,
+        "manualOperatorWebModelRunRequired": True,
+        "manualWebModelOutputRows": int(manual_rows),
+        "combinedOutputWriteRows": 0,
         "vectorIndexing": False,
         "strictEvidencePromotionRows": 0,
         "runtimeAnswerVisibleExposureRows": 0,
@@ -795,6 +828,201 @@ def build_visual_annotation_expansion_web_run_bundle(
     return report
 
 
+def _batch_output_ref(batch_output_dir_ref: str, batch_number: int) -> str:
+    return f"{batch_output_dir_ref}/{_batch_file_stem(batch_number)}_web_output.manual.json"
+
+
+def _batch_output_status_row(
+    *,
+    batch: dict[str, Any],
+    output_ref: str,
+    output: dict[str, Any] | None,
+) -> dict[str, Any]:
+    expected_rows = [row for row in list(batch.get("rows") or []) if isinstance(row, dict)]
+    expected_ids = [normalize_text(row.get("sourceCandidateId")) for row in expected_rows]
+    expected_id_set = {candidate_id for candidate_id in expected_ids if candidate_id}
+    present = isinstance(output, dict)
+    output_rows = _output_rows(output or {}) if present else []
+    output_ids = [normalize_text(row.get("sourceCandidateId")) for row in output_rows]
+    output_id_set = {candidate_id for candidate_id in output_ids if candidate_id}
+    duplicate_ids = _duplicate_ids(output_rows)
+    missing_ids = sorted(expected_id_set - output_id_set) if present else []
+    extra_ids = sorted(output_id_set - expected_id_set) if present else []
+    schema_errors = _schema_errors(output or {}, VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID) if present else []
+    placeholder_ids = [
+        normalize_text(row.get("sourceCandidateId"))
+        for row in output_rows
+        if "FILL_IN" in json.dumps(row, ensure_ascii=False)
+    ]
+    policy_violation_ids = [
+        normalize_text(row.get("sourceCandidateId"))
+        for row in output_rows
+        if _policy_violations(row)
+    ]
+    private_path_leak_rows = 1 if present and _contains_private_path(output) else 0
+    matched_ids = sorted(expected_id_set & output_id_set)
+    blocker_reasons: list[str] = []
+    if not present:
+        blocker_reasons.append("missing_batch_output_file")
+    if schema_errors:
+        blocker_reasons.append("schema_violation")
+    if missing_ids:
+        blocker_reasons.append("missing_source_candidate_id")
+    if extra_ids:
+        blocker_reasons.append("extra_source_candidate_id")
+    if duplicate_ids:
+        blocker_reasons.append("duplicate_source_candidate_id")
+    if placeholder_ids:
+        blocker_reasons.append("placeholder_text_present")
+    if policy_violation_ids:
+        blocker_reasons.append("policy_violation")
+    if private_path_leak_rows:
+        blocker_reasons.append("private_path_leak")
+    validation_status = "ready" if present and not blocker_reasons else "blocked"
+    return {
+        "batchId": normalize_text(batch.get("batchId")),
+        "batchNumber": int(batch.get("batchNumber") or 0),
+        "outputRef": output_ref,
+        "present": bool(present),
+        "expectedRows": len(expected_rows),
+        "outputRows": len(output_rows),
+        "matchedRows": len(matched_ids),
+        "missingRows": len(missing_ids),
+        "extraRows": len(extra_ids),
+        "duplicateRows": len(duplicate_ids),
+        "placeholderRows": len(placeholder_ids),
+        "policyViolationRows": len(set(policy_violation_ids)),
+        "privatePathLeakRows": int(private_path_leak_rows),
+        "schemaViolationCount": len(schema_errors),
+        "validationStatus": validation_status,
+        "blockerReasons": blocker_reasons,
+        "expectedSourceCandidateIds": expected_ids,
+        "missingSourceCandidateIds": missing_ids,
+        "extraSourceCandidateIds": extra_ids,
+        "duplicateSourceCandidateIds": duplicate_ids,
+        "placeholderSourceCandidateIds": sorted(set(candidate_id for candidate_id in placeholder_ids if candidate_id)),
+    }
+
+
+def build_visual_annotation_expansion_web_batch_output_collector(
+    web_run_bundle: dict[str, Any],
+    batch_outputs: dict[str, dict[str, Any]] | None = None,
+    *,
+    collector_id: str = DEFAULT_WEB_BATCH_OUTPUT_COLLECTOR_ID,
+    source_web_run_bundle_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002.v1.json",
+    batch_output_dir_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002",
+    target_output_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    validation_command: str = (
+        "PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py"
+    ),
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    batch_outputs = dict(batch_outputs or {})
+    batch_bundles = [
+        batch for batch in list(web_run_bundle.get("batchBundles") or []) if isinstance(batch, dict)
+    ]
+    status_rows: list[dict[str, Any]] = []
+    collected_rows = 0
+    for batch in batch_bundles:
+        batch_number = int(batch.get("batchNumber") or 0)
+        output_ref = _batch_output_ref(batch_output_dir_ref, batch_number)
+        output = batch_outputs.get(output_ref)
+        status_row = _batch_output_status_row(
+            batch=batch,
+            output_ref=output_ref,
+            output=output,
+        )
+        status_rows.append(status_row)
+        if output:
+            collected_rows += len(_output_rows(output))
+
+    expected_output_rows = sum(int(batch.get("rowCount") or 0) for batch in batch_bundles)
+    counts = {
+        "expectedBatchRows": len(batch_bundles),
+        "presentBatchRows": sum(1 for row in status_rows if row["present"]),
+        "missingBatchRows": sum(1 for row in status_rows if not row["present"]),
+        "validBatchRows": sum(1 for row in status_rows if row["validationStatus"] == "ready"),
+        "invalidBatchRows": sum(1 for row in status_rows if row["validationStatus"] != "ready"),
+        "expectedOutputRows": int(expected_output_rows),
+        "collectedOutputRows": int(collected_rows),
+        "matchedOutputRows": sum(int(row.get("matchedRows") or 0) for row in status_rows),
+        "missingSourceCandidateIdRows": sum(int(row.get("missingRows") or 0) for row in status_rows),
+        "extraSourceCandidateIdRows": sum(int(row.get("extraRows") or 0) for row in status_rows),
+        "duplicateSourceCandidateIdRows": sum(int(row.get("duplicateRows") or 0) for row in status_rows),
+        "placeholderRows": sum(int(row.get("placeholderRows") or 0) for row in status_rows),
+        "policyViolationRows": sum(int(row.get("policyViolationRows") or 0) for row in status_rows),
+        "privatePathLeakRows": sum(int(row.get("privatePathLeakRows") or 0) for row in status_rows),
+        "schemaViolationCount": sum(int(row.get("schemaViolationCount") or 0) for row in status_rows),
+        "combinedOutputWriteRows": 0,
+    }
+    counts["blockedRows"] = int(counts["invalidBatchRows"])
+    report: dict[str, Any] = {
+        "schema": VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID,
+        "status": "ready",
+        "generatedAt": generated_at or utc_now_iso(),
+        "decision": READY_BATCH_OUTPUT_COLLECTOR_DECISION,
+        "nextRecommendedTranche": NEXT_AFTER_RUN_TRANCHE,
+        "collectorId": collector_id,
+        "sourceWebRunBundle": {
+            "schema": normalize_text(web_run_bundle.get("schema")),
+            "status": normalize_text(web_run_bundle.get("status")),
+            "reportRef": normalize_text(source_web_run_bundle_ref),
+            "batchRows": len(batch_bundles),
+        },
+        "targetOutput": {
+            "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+            "reportRef": normalize_text(target_output_ref),
+            "validationCommand": validation_command,
+            "allowedUse": "retrieval_hint_only",
+            "strictEvidence": False,
+            "citationGrade": False,
+            "answerableWithoutTextEvidence": False,
+        },
+        "scope": _batch_output_collector_scope(manual_rows=collected_rows),
+        "counts": counts,
+        "batchOutputRowsDetail": status_rows,
+        "operatorInstructions": [
+            "Paste each web GPT/Pro batch result into the matching batch output file.",
+            f"Expected files live under {batch_output_dir_ref}.",
+            f"After all batch outputs are valid, combine their rows into {target_output_ref}.",
+            f"Then run validation with: {validation_command}",
+        ],
+        "warnings": [
+            "This collector report is not a completed web/VLM output.",
+            "Batch fill-template files must not be used as batch outputs.",
+            "Rows containing FILL_IN placeholders remain blocked.",
+            "Do not treat derivedTextForRetrieval as strict, citation-grade, or answer-visible evidence.",
+        ],
+    }
+    if (
+        web_run_bundle.get("schema") != VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID
+        or web_run_bundle.get("status") != "ready"
+        or not batch_bundles
+        or counts["blockedRows"]
+        or counts["matchedOutputRows"] != counts["expectedOutputRows"]
+    ):
+        report["status"] = "blocked"
+        report["decision"] = BLOCKED_BATCH_OUTPUT_COLLECTOR_DECISION
+    return report
+
+
+def combine_visual_annotation_expansion_web_batch_outputs(
+    web_run_bundle: dict[str, Any],
+    batch_outputs: dict[str, dict[str, Any]],
+    *,
+    batch_output_dir_ref: str = "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002",
+) -> dict[str, Any]:
+    combined_rows: list[dict[str, Any]] = []
+    for batch in sorted(
+        [batch for batch in list(web_run_bundle.get("batchBundles") or []) if isinstance(batch, dict)],
+        key=lambda item: int(item.get("batchNumber") or 0),
+    ):
+        output_ref = _batch_output_ref(batch_output_dir_ref, int(batch.get("batchNumber") or 0))
+        output = batch_outputs.get(output_ref) or {}
+        combined_rows.extend(_output_rows(output))
+    return {"schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID, "rows": combined_rows}
+
+
 def _captured_row(
     *,
     source_row: dict[str, Any],
@@ -1269,6 +1497,70 @@ def render_markdown_web_run_bundle(report: dict[str, Any]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def render_markdown_web_batch_output_collector(report: dict[str, Any]) -> str:
+    counts = dict(report.get("counts") or {})
+    scope = dict(report.get("scope") or {})
+    target = dict(report.get("targetOutput") or {})
+    source = dict(report.get("sourceWebRunBundle") or {})
+    lines = [
+        "# Visual Annotation Expansion Web Batch Output Collector 002",
+        "",
+        f"- schema: `{report.get('schema')}`",
+        f"- status: `{report.get('status')}`",
+        f"- decision: `{report.get('decision')}`",
+        f"- generatedAt: `{report.get('generatedAt')}`",
+        f"- collectorId: `{report.get('collectorId')}`",
+        f"- sourceWebRunBundle: `{source.get('reportRef')}`",
+        f"- targetOutputRef: `{target.get('reportRef')}`",
+        f"- validationCommand: `{target.get('validationCommand')}`",
+        f"- expectedBatchRows: `{counts.get('expectedBatchRows')}`",
+        f"- presentBatchRows: `{counts.get('presentBatchRows')}`",
+        f"- missingBatchRows: `{counts.get('missingBatchRows')}`",
+        f"- validBatchRows: `{counts.get('validBatchRows')}`",
+        f"- collectedOutputRows: `{counts.get('collectedOutputRows')}`",
+        f"- blockedRows: `{counts.get('blockedRows')}`",
+        "",
+        "## Mutation Guarantees",
+        "",
+        f"- writes: `{scope.get('writes')}`",
+        f"- apiCalls: `{scope.get('apiCalls')}`",
+        f"- modelCalls: `{scope.get('modelCalls')}`",
+        f"- webModelCalls: `{scope.get('webModelCalls')}`",
+        f"- manualWebModelOutputRows: `{scope.get('manualWebModelOutputRows')}`",
+        f"- combinedOutputWriteRows: `{scope.get('combinedOutputWriteRows')}`",
+        f"- vectorIndexing: `{scope.get('vectorIndexing')}`",
+        f"- strictEvidencePromotionRows: `{scope.get('strictEvidencePromotionRows')}`",
+        f"- runtimeAnswerVisibleExposureRows: `{scope.get('runtimeAnswerVisibleExposureRows')}`",
+        f"- candidateStoreMutationRows: `{scope.get('candidateStoreMutationRows')}`",
+        "",
+        "## Expected Batch Outputs",
+        "",
+        "| batch | present | status | expected | output | outputRef | blockers |",
+        "|---:|---|---|---:|---:|---|---|",
+    ]
+    for row in report.get("batchOutputRowsDetail", []):
+        blockers = ", ".join(list(row.get("blockerReasons") or []))
+        lines.append(
+            "| {batch} | `{present}` | `{status}` | {expected} | {output} | `{outputRef}` | {blockers} |".format(
+                batch=row.get("batchNumber"),
+                present=row.get("present"),
+                status=row.get("validationStatus"),
+                expected=row.get("expectedRows"),
+                output=row.get("outputRows"),
+                outputRef=row.get("outputRef"),
+                blockers=blockers or "-",
+            )
+        )
+    lines.extend(["", "## Operator Instructions", ""])
+    for index, instruction in enumerate(report.get("operatorInstructions") or [], start=1):
+        lines.append(f"{index}. {instruction}")
+    if report.get("warnings"):
+        lines.extend(["", "## Warnings", ""])
+        for warning in report.get("warnings", []):
+            lines.append(f"- `{warning}`")
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def render_markdown_validation(report: dict[str, Any]) -> str:
     counts = dict(report.get("counts") or {})
     scope = dict(report.get("scope") or {})
@@ -1405,6 +1697,19 @@ def write_visual_annotation_expansion_web_run_bundle(
     return {"json": str(report_json), "markdown": str(report_md), "batchFiles": batch_paths}
 
 
+def write_visual_annotation_expansion_web_batch_output_collector(
+    report: dict[str, Any],
+    *,
+    report_json: Path,
+    report_md: Path,
+) -> dict[str, str]:
+    report_json.parent.mkdir(parents=True, exist_ok=True)
+    report_md.parent.mkdir(parents=True, exist_ok=True)
+    report_json.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_md.write_text(render_markdown_web_batch_output_collector(report), encoding="utf-8")
+    return {"json": str(report_json), "markdown": str(report_md)}
+
+
 def write_visual_annotation_expansion_web_output_validation(
     report: dict[str, Any],
     *,
@@ -1426,23 +1731,29 @@ __all__ = [
     "READY_HANDOFF_DECISION",
     "READY_TEMPLATE_DECISION",
     "READY_BUNDLE_DECISION",
+    "READY_BATCH_OUTPUT_COLLECTOR_DECISION",
     "READY_VALIDATION_DECISION",
+    "BLOCKED_BATCH_OUTPUT_COLLECTOR_DECISION",
     "VISUAL_ANNOTATION_EXPANSION_CAPTURED_ROW_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID",
+    "VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID",
     "VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_VALIDATION_SCHEMA_ID",
     "build_visual_annotation_expansion_manual_run_packet",
     "build_visual_annotation_expansion_operator_handoff",
+    "build_visual_annotation_expansion_web_batch_output_collector",
     "build_visual_annotation_expansion_web_run_batch_template",
     "build_visual_annotation_expansion_web_run_bundle",
     "build_visual_annotation_expansion_web_output_template",
     "build_visual_annotation_expansion_web_output_validation",
+    "combine_visual_annotation_expansion_web_batch_outputs",
     "load_json",
     "render_markdown_manual_run_packet",
     "render_markdown_operator_handoff",
+    "render_markdown_web_batch_output_collector",
     "render_markdown_web_run_batch_prompt",
     "render_markdown_web_run_bundle",
     "render_markdown_web_output_template",
@@ -1450,6 +1761,7 @@ __all__ = [
     "sanitized_report_ref",
     "write_visual_annotation_expansion_manual_run_packet",
     "write_visual_annotation_expansion_operator_handoff",
+    "write_visual_annotation_expansion_web_batch_output_collector",
     "write_visual_annotation_expansion_web_run_bundle",
     "write_visual_annotation_expansion_web_output_template",
     "write_visual_annotation_expansion_web_output_validation",

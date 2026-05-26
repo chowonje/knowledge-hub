@@ -11,6 +11,7 @@ from knowledge_hub.papers.visual_annotation_expansion_attachment_pack import (
 from knowledge_hub.papers.visual_annotation_expansion_manual_output_capture import (
     VISUAL_ANNOTATION_EXPANSION_MANUAL_RUN_PACKET_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_OPERATOR_HANDOFF_SCHEMA_ID,
+    VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BATCH_TEMPLATE_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_RUN_BUNDLE_SCHEMA_ID,
     VISUAL_ANNOTATION_EXPANSION_WEB_OUTPUT_TEMPLATE_SCHEMA_ID,
@@ -18,11 +19,14 @@ from knowledge_hub.papers.visual_annotation_expansion_manual_output_capture impo
     VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
     build_visual_annotation_expansion_manual_run_packet,
     build_visual_annotation_expansion_operator_handoff,
+    build_visual_annotation_expansion_web_batch_output_collector,
     build_visual_annotation_expansion_web_run_batch_template,
     build_visual_annotation_expansion_web_run_bundle,
     build_visual_annotation_expansion_web_output_template,
     build_visual_annotation_expansion_web_output_validation,
+    combine_visual_annotation_expansion_web_batch_outputs,
     render_markdown_web_run_batch_prompt,
+    write_visual_annotation_expansion_web_batch_output_collector,
     write_visual_annotation_expansion_manual_run_packet,
     write_visual_annotation_expansion_operator_handoff,
     write_visual_annotation_expansion_web_run_bundle,
@@ -111,6 +115,27 @@ def _output() -> dict[str, object]:
         "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
         "rows": [_output_row(candidate_id) for candidate_id in _source_ids()],
     }
+
+
+def _bundle() -> dict[str, object]:
+    packet = build_visual_annotation_expansion_manual_run_packet(
+        _expansion_pack(),
+        _attachment_pack(),
+        batch_size=2,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    handoff = build_visual_annotation_expansion_operator_handoff(
+        packet,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    template = build_visual_annotation_expansion_web_output_template(
+        handoff,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    return build_visual_annotation_expansion_web_run_bundle(
+        template,
+        generated_at="2026-05-26T00:00:00Z",
+    )
 
 
 def test_manual_run_packet_batches_attachment_refs_and_preserves_no_model_contract() -> None:
@@ -333,6 +358,127 @@ def test_web_run_bundle_splits_batches_without_completed_output() -> None:
     assert "strictEvidence=false" in prompt
 
 
+def test_web_batch_output_collector_blocks_missing_batch_outputs() -> None:
+    bundle = _bundle()
+
+    report = build_visual_annotation_expansion_web_batch_output_collector(
+        bundle,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert report["schema"] == VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID
+    assert report["status"] == "blocked"
+    assert report["decision"] == "blocked_missing_or_invalid_batch_outputs"
+    assert report["counts"]["expectedBatchRows"] == 2
+    assert report["counts"]["presentBatchRows"] == 0
+    assert report["counts"]["missingBatchRows"] == 2
+    assert report["counts"]["expectedOutputRows"] == 3
+    assert report["counts"]["collectedOutputRows"] == 0
+    assert report["counts"]["blockedRows"] >= 2
+    assert report["scope"]["writes"] == "report_only"
+    assert report["scope"]["modelCalls"] is False
+    assert report["scope"]["webModelCalls"] is False
+    assert report["scope"]["combinedOutputWriteRows"] == 0
+    assert report["scope"]["vectorIndexing"] is False
+    assert report["batchOutputRowsDetail"][0]["outputRef"].endswith(
+        "batch_01_web_output.manual.json"
+    )
+    assert report["batchOutputRowsDetail"][0]["blockerReasons"] == ["missing_batch_output_file"]
+
+    validation = validate_payload(
+        report,
+        VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+
+def test_web_batch_output_collector_accepts_valid_batches_and_combines_rows() -> None:
+    bundle = _bundle()
+    first_batch_ids = [
+        row["sourceCandidateId"] for row in bundle["batchBundles"][0]["rows"]
+    ]
+    second_batch_ids = [
+        row["sourceCandidateId"] for row in bundle["batchBundles"][1]["rows"]
+    ]
+    outputs = {
+        (
+            "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/"
+            "batch_01_web_output.manual.json"
+        ): {
+            "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+            "rows": [_output_row(candidate_id) for candidate_id in first_batch_ids],
+        },
+        (
+            "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/"
+            "batch_02_web_output.manual.json"
+        ): {
+            "schema": VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+            "rows": [_output_row(candidate_id) for candidate_id in second_batch_ids],
+        },
+    }
+
+    report = build_visual_annotation_expansion_web_batch_output_collector(
+        bundle,
+        outputs,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert report["status"] == "ready"
+    assert report["decision"] == "ready_for_combined_manual_output_validation"
+    assert report["counts"]["presentBatchRows"] == 2
+    assert report["counts"]["missingBatchRows"] == 0
+    assert report["counts"]["validBatchRows"] == 2
+    assert report["counts"]["expectedOutputRows"] == 3
+    assert report["counts"]["matchedOutputRows"] == 3
+    assert report["counts"]["placeholderRows"] == 0
+    assert report["counts"]["policyViolationRows"] == 0
+    assert report["counts"]["blockedRows"] == 0
+
+    validation = validate_payload(
+        report,
+        VISUAL_ANNOTATION_EXPANSION_WEB_BATCH_OUTPUT_COLLECTOR_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+    combined = combine_visual_annotation_expansion_web_batch_outputs(bundle, outputs)
+    assert combined["schema"] == VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID
+    assert [row["sourceCandidateId"] for row in combined["rows"]] == first_batch_ids + second_batch_ids
+    combined_validation = validate_payload(
+        combined,
+        VISUAL_ANNOTATION_WEB_OUTPUT_SCHEMA_ID,
+        strict=True,
+    )
+    assert combined_validation.ok, combined_validation.errors
+
+
+def test_web_batch_output_collector_rejects_template_placeholders_as_output() -> None:
+    bundle = _bundle()
+    template_output = build_visual_annotation_expansion_web_run_batch_template(
+        bundle["batchBundles"][0]
+    )
+    outputs = {
+        (
+            "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/"
+            "batch_01_web_output.manual.json"
+        ): template_output
+    }
+
+    report = build_visual_annotation_expansion_web_batch_output_collector(
+        bundle,
+        outputs,
+        generated_at="2026-05-26T00:00:00Z",
+    )
+
+    assert report["status"] == "blocked"
+    assert report["counts"]["presentBatchRows"] == 1
+    assert report["counts"]["schemaViolationCount"] >= 1
+    assert report["counts"]["placeholderRows"] == 2
+    assert "schema_violation" in report["batchOutputRowsDetail"][0]["blockerReasons"]
+    assert "placeholder_text_present" in report["batchOutputRowsDetail"][0]["blockerReasons"]
+
+
 def test_expansion_web_output_validation_ready_and_no_mutation_contract() -> None:
     output = _output()
     report = build_visual_annotation_expansion_web_output_validation(
@@ -458,6 +604,8 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
     bundle_json = tmp_path / "bundle.json"
     bundle_md = tmp_path / "bundle.md"
     bundle_dir = tmp_path / "bundle"
+    collector_json = tmp_path / "collector.json"
+    collector_md = tmp_path / "collector.md"
     validation_json = tmp_path / "validation.json"
     validation_md = tmp_path / "validation.md"
 
@@ -503,6 +651,18 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         report_md=bundle_md,
         bundle_dir=bundle_dir,
     )
+    collector = build_visual_annotation_expansion_web_batch_output_collector(
+        bundle,
+        source_web_run_bundle_ref=(
+            "eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002.v1.json"
+        ),
+        generated_at="2026-05-26T00:00:00Z",
+    )
+    write_visual_annotation_expansion_web_batch_output_collector(
+        collector,
+        report_json=collector_json,
+        report_md=collector_md,
+    )
     write_visual_annotation_expansion_web_output_validation(
         validation_report,
         report_json=validation_json,
@@ -518,6 +678,8 @@ def test_writers_output_sanitized_refs(tmp_path: Path) -> None:
         + template_md.read_text(encoding="utf-8")
         + bundle_json.read_text(encoding="utf-8")
         + bundle_md.read_text(encoding="utf-8")
+        + collector_json.read_text(encoding="utf-8")
+        + collector_md.read_text(encoding="utf-8")
         + validation_json.read_text(encoding="utf-8")
         + validation_md.read_text(encoding="utf-8")
     )

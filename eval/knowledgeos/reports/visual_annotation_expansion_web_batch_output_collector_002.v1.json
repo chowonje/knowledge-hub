@@ -1,0 +1,182 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-web-batch-output-collector.v1",
+  "status": "blocked",
+  "generatedAt": "2026-05-26T14:39:50Z",
+  "decision": "blocked_missing_or_invalid_batch_outputs",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "collectorId": "visual_annotation_expansion_web_batch_output_collector_002",
+  "sourceWebRunBundle": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-web-run-bundle.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002.v1.json",
+    "batchRows": 3
+  },
+  "targetOutput": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    "validationCommand": "PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py",
+    "allowedUse": "retrieval_hint_only",
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualOperatorWebModelRunRequired": true,
+    "manualWebModelOutputRows": 0,
+    "combinedOutputWriteRows": 0,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "counts": {
+    "expectedBatchRows": 3,
+    "presentBatchRows": 0,
+    "missingBatchRows": 3,
+    "validBatchRows": 0,
+    "invalidBatchRows": 3,
+    "expectedOutputRows": 24,
+    "collectedOutputRows": 0,
+    "matchedOutputRows": 0,
+    "missingSourceCandidateIdRows": 0,
+    "extraSourceCandidateIdRows": 0,
+    "duplicateSourceCandidateIdRows": 0,
+    "placeholderRows": 0,
+    "policyViolationRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0,
+    "combinedOutputWriteRows": 0,
+    "blockedRows": 3
+  },
+  "batchOutputRowsDetail": [
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_01",
+      "batchNumber": 1,
+      "outputRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_01_web_output.manual.json",
+      "present": false,
+      "expectedRows": 8,
+      "outputRows": 0,
+      "matchedRows": 0,
+      "missingRows": 0,
+      "extraRows": 0,
+      "duplicateRows": 0,
+      "placeholderRows": 0,
+      "policyViolationRows": 0,
+      "privatePathLeakRows": 0,
+      "schemaViolationCount": 0,
+      "validationStatus": "blocked",
+      "blockerReasons": [
+        "missing_batch_output_file"
+      ],
+      "expectedSourceCandidateIds": [
+        "visual-layout:clip-2021:image_region:2:2616032b2a9d352d",
+        "visual-layout:mae-2021:image_region:1:258a60cc216d8130",
+        "visual-layout:alexnet-2012:image_region:6:508eb98021de0fd7",
+        "visual-layout:clip-2021:image_region:2:2642c8db8bd29d0a",
+        "visual-layout:mae-2021:image_region:1:40b27e8b4073d98f",
+        "visual-layout:alexnet-2012:image_region:8:219e7594a10f3a3f",
+        "visual-layout:clip-2021:image_region:15:1da1f1cf8ce81bd5",
+        "visual-layout:mae-2021:image_region:2:0b66280633a636cc"
+      ],
+      "missingSourceCandidateIds": [],
+      "extraSourceCandidateIds": [],
+      "duplicateSourceCandidateIds": [],
+      "placeholderSourceCandidateIds": []
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_02",
+      "batchNumber": 2,
+      "outputRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_02_web_output.manual.json",
+      "present": false,
+      "expectedRows": 8,
+      "outputRows": 0,
+      "matchedRows": 0,
+      "missingRows": 0,
+      "extraRows": 0,
+      "duplicateRows": 0,
+      "placeholderRows": 0,
+      "policyViolationRows": 0,
+      "privatePathLeakRows": 0,
+      "schemaViolationCount": 0,
+      "validationStatus": "blocked",
+      "blockerReasons": [
+        "missing_batch_output_file"
+      ],
+      "expectedSourceCandidateIds": [
+        "visual-layout:clip-2021:figure_caption_region:2:b354160446b3a89c",
+        "visual-layout:mae-2021:figure_caption_region:1:f3477cc8ce7ec8b1",
+        "visual-layout:resnet-2015:figure_caption_region:6:6b3dd4d05dc69888",
+        "visual-layout:clip-2021:figure_caption_region:3:fd2db71adcd98ec4",
+        "visual-layout:mae-2021:figure_caption_region:2:460a5652014c6369",
+        "visual-layout:resnet-2015:figure_caption_region:8:5cf998f6a7a3739f",
+        "visual-layout:clip-2021:figure_caption_region:5:87777b9ff7911bbe",
+        "visual-layout:mae-2021:figure_caption_region:2:b35cefa766216e3f"
+      ],
+      "missingSourceCandidateIds": [],
+      "extraSourceCandidateIds": [],
+      "duplicateSourceCandidateIds": [],
+      "placeholderSourceCandidateIds": []
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_03",
+      "batchNumber": 3,
+      "outputRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_03_web_output.manual.json",
+      "present": false,
+      "expectedRows": 8,
+      "outputRows": 0,
+      "matchedRows": 0,
+      "missingRows": 0,
+      "extraRows": 0,
+      "duplicateRows": 0,
+      "placeholderRows": 0,
+      "policyViolationRows": 0,
+      "privatePathLeakRows": 0,
+      "schemaViolationCount": 0,
+      "validationStatus": "blocked",
+      "blockerReasons": [
+        "missing_batch_output_file"
+      ],
+      "expectedSourceCandidateIds": [
+        "visual-layout:clip-2021:table_region:7:74d3127c812d1e9b",
+        "visual-layout:mae-2021:table_region:5:09cee49d2841b6a3",
+        "visual-layout:resnet-2015:table_region:6:8b15bd4cbaa96ede",
+        "visual-layout:clip-2021:table_region:17:21f8887ab432c389",
+        "visual-layout:mae-2021:table_region:5:1179c62488dbb733",
+        "visual-layout:clip-2021:equation_region:1:dd31b4b813b73af2",
+        "visual-layout:clip-2021:equation_region:5:1c4738912cb4bdf9",
+        "visual-layout:clip-2021:equation_region:5:1fa7893d5e5d7b10"
+      ],
+      "missingSourceCandidateIds": [],
+      "extraSourceCandidateIds": [],
+      "duplicateSourceCandidateIds": [],
+      "placeholderSourceCandidateIds": []
+    }
+  ],
+  "operatorInstructions": [
+    "Paste each web GPT/Pro batch result into the matching batch output file.",
+    "Expected files live under eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002.",
+    "After all batch outputs are valid, combine their rows into eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json.",
+    "Then run validation with: PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py"
+  ],
+  "warnings": [
+    "This collector report is not a completed web/VLM output.",
+    "Batch fill-template files must not be used as batch outputs.",
+    "Rows containing FILL_IN placeholders remain blocked.",
+    "Do not treat derivedTextForRetrieval as strict, citation-grade, or answer-visible evidence."
+  ]
+}

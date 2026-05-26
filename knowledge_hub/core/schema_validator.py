@@ -174,6 +174,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.visual-annotation-expansion-web-output-template.v1": "paper-visual-annotation-expansion-web-output-template.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-web-run-bundle.v1": "paper-visual-annotation-expansion-web-run-bundle.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-web-run-batch-template.v1": "paper-visual-annotation-expansion-web-run-batch-template.v1.json",
+    "knowledge-hub.paper.visual-annotation-expansion-web-batch-output-collector.v1": "paper-visual-annotation-expansion-web-batch-output-collector.v1.json",
     "knowledge-hub.paper.complex-qa-abstain-baseline-runner.v1": "paper-complex-qa-abstain-baseline-runner.v1.json",
     "knowledge-hub.paper.complex-qa-structured-evidence-comparison-runner.v1": "paper-complex-qa-structured-evidence-comparison-runner.v1.json",
     "knowledge-hub.paper.complex-qa-strict-evidence-answer-quality-dry-run.v1": "paper-complex-qa-strict-evidence-answer-quality-dry-run.v1.json",
