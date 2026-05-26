@@ -43,6 +43,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.text-section-paragraph-span-artifacts-report.v1": "paper-text-section-paragraph-span-artifacts-report.v1.json",
     "knowledge-hub.paper.table-text-artifact-candidate.v1": "paper-table-text-artifact-candidate.v1.json",
     "knowledge-hub.paper.text-table-caption-candidate-artifacts-report.v1": "paper-text-table-caption-candidate-artifacts-report.v1.json",
+    "knowledge-hub.paper.equation-context-artifact-candidate.v1": "paper-equation-locator-context-candidate.v1.json",
+    "knowledge-hub.paper.text-equation-locator-context-artifacts-report.v1": "paper-text-equation-locator-context-artifacts-report.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
     "knowledge-hub.paper-memory.card.result.v1": "paper-memory-card-result.v1.json",

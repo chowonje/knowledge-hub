@@ -1,0 +1,442 @@
+{
+  "schema": "knowledge-hub.paper.text-equation-locator-context-artifacts-report.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T06:37:41Z",
+  "scope": {
+    "paperRows": 4,
+    "paperRefs": [
+      "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf"
+    ],
+    "writes": "report_only",
+    "canonicalParsedArtifactWriteRows": 0,
+    "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+    "latexGuarantee": "none_v0_1_locator_only"
+  },
+  "paperDiagnostics": [
+    {
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "candidateRows": 3,
+      "labeledEquationRows": 0,
+      "equationLikeRows": 3,
+      "contextRows": 2,
+      "pageCount": 9
+    },
+    {
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "candidateRows": 2,
+      "labeledEquationRows": 2,
+      "equationLikeRows": 0,
+      "contextRows": 2,
+      "pageCount": 12
+    },
+    {
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "candidateRows": 4,
+      "labeledEquationRows": 0,
+      "equationLikeRows": 4,
+      "contextRows": 4,
+      "pageCount": 48
+    },
+    {
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "candidateRows": 0,
+      "labeledEquationRows": 0,
+      "equationLikeRows": 0,
+      "contextRows": 0,
+      "pageCount": 14
+    }
+  ],
+  "candidateRows": 9,
+  "labeledEquationRows": 2,
+  "equationLikeRows": 7,
+  "contextRows": 8,
+  "candidates": [
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "equation-context:alexnet-2012:unlabeled:4:0a8931a3052e",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 12230,
+      "equationCharEnd": 12254,
+      "contextCharStart": 0,
+      "contextCharEnd": 0,
+      "page": 4,
+      "equationBbox": [
+        297.63,
+        185.62,
+        386.33,
+        209.08
+      ],
+      "contextBbox": [],
+      "equationLabel": "",
+      "equationText": "j=max(0,i−n/2) (aj x,y)2",
+      "equationTextHash": "sha256:6c9d86966a63d7187f6e454269751accdf9a3752603b29512e8cc88a04847290",
+      "contextText": "",
+      "contextTextHash": "",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 7,
+        "nearbyContextBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "equation-context:alexnet-2012:unlabeled:6:b86d56cf6a74",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 22267,
+      "equationCharEnd": 22308,
+      "contextCharStart": 21665,
+      "contextCharEnd": 22021,
+      "page": 6,
+      "equationBbox": [
+        112.2,
+        540.52,
+        302.7,
+        565.9
+      ],
+      "contextBbox": [
+        108.0,
+        465.84,
+        338.14,
+        541.55
+      ],
+      "equationLabel": "",
+      "equationText": "vi+1 := 0.9 · vi −0.0005 · ϵ · wi −ϵ · ∂L",
+      "equationTextHash": "sha256:6e4ad214e1a0734ae52018ebf55205d9b396b6ea29ca9095b64408f4ec037bf7",
+      "contextText": "We trained our models using stochastic gradient descent with a batch size of 128 examples, momentum of 0.9, and weight decay of 0.0005. We found that this small amount of weight decay was important for the model to learn. In other words, weight decay here is not merely a regularizer: it reduces the model’s training error. The update rule for weight w was",
+      "contextTextHash": "sha256:fa49a78cb07739b8de0efd19c6df66040cfd8afdf4cbe1c16796cb437b0ac67a",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 9,
+        "nearbyContextBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "equation-context:alexnet-2012:unlabeled:6:efb84aa1e3a2",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 22318,
+      "equationCharEnd": 22338,
+      "contextCharStart": 22340,
+      "contextCharEnd": 22438,
+      "page": 6,
+      "equationBbox": [
+        109.89,
+        566.87,
+        333.58,
+        586.78
+      ],
+      "contextBbox": [
+        108.0,
+        591.82,
+        477.55,
+        610.35
+      ],
+      "equationLabel": "",
+      "equationText": "Di wi+1 := wi + vi+1",
+      "equationTextHash": "sha256:530c68a99401c51ae2d89217c7e72d986776cb7bba3a133fd7699f47f05b0054",
+      "contextText": "where i is the iteration index, v is the momentum variable, ϵ is the learning rate, and D ∂L ∂w wi",
+      "contextTextHash": "sha256:a2dbf86f7818ddb7f89efb3f0e3e2b0a5c14ea62c16fcd5e316f7352c765235a",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 13,
+        "nearbyContextBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "equation-context:resnet-2015:equation-2:3:8d2af1aa1352",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 12730,
+      "equationCharEnd": 12755,
+      "contextCharStart": 10783,
+      "contextCharEnd": 13573,
+      "page": 3,
+      "equationBbox": [
+        375.38,
+        264.43,
+        545.11,
+        281.78
+      ],
+      "contextBbox": [
+        50.11,
+        147.49,
+        545.11,
+        552.34
+      ],
+      "equationLabel": "Equation 2",
+      "equationText": "y = F(x, {Wi}) + Wsx. (2)",
+      "equationTextHash": "sha256:5a9b3b55081e3b74ea8f672235930a279db9b9bdd7910539c3ca3b4d7ae0d580",
+      "contextText": "Let us consider H(x) as an underlying mapping to be ﬁt by a few stacked layers (not necessarily the entire net), with x denoting the inputs to the ﬁrst of these layers. If one hypothesizes that multiple nonlinear layers can asymptoti- cally approximate complicated functions2, then it is equiv- alent to hypothesize that they can asymptotically approxi- mate the residual functions, i.e., H(x) −x (assuming that the input and output are of the same dimensions). So rather than expect stacked layers to approximate H(x), we explicitly let these layers approximate a residual function F(x) := H(x) −x. The original function thus becomes F(x)+x. Although both forms should be able to asymptot- ically approximate the desired functions (as hypothesized), the ease of learning might be different. This reformulation is motivated by the counterintuitive phenomena about the degradation problem (Fig. 1, left). As we discussed in the introduction, if the added layers can be constructed as identity mappings, a deeper model should have training error no greater than its shallower counter- part. The degradation problem suggests that the solvers might have difﬁculties in approximating identity mappings by multiple nonlinear layers. With the residual learning re- formulation, if identity mappings are optimal, the solvers may simply drive the weights of the multiple nonlinear lay- ers toward zero to approach identity mappings. In real cases, it is unlikely that identity mappings are op- timal, but our reformulation may help to precondition the problem. If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to ﬁnd the perturbations with reference to an identity mapping, than to learn the function as a new one. We show by experiments (Fig. 7) that the learned residual functions in general have small responses, suggesting that identity map- pings provide reasonable preconditioning.\nWe can also use a square matrix Ws in Eqn.(1). But we will show by experiments that the identity mapping is sufﬁcient for addressing the degradation problem and is economical, and thus Ws is only used when matching dimensions. The form of the residual function F is ﬂexible. Exper- iments in this paper involve a function F that has two or three layers (Fig. 5), while more layers are possible. But if F has only a single layer, Eqn.(1) is similar to a linear layer: y = W1x + x, for which we have not observed advantages. We also note that although the above notations are about fully-connected layers for simplicity, they are applicable to convolutional layers. The function F(x, {Wi}) can repre- sent multiple convolutional layers. The element-wise addi- tion is performed on two feature maps, channel by channel.",
+      "contextTextHash": "sha256:a071812b9387540d175bbfe38be39cf1460ec959f3221e31e0d3114ce68c0cdf",
+      "locatorGrade": "labeled_equation_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 5,
+        "nearbyContextBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "equation-context:resnet-2015:equation-1:3:5580b7806851",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 14864,
+      "equationCharEnd": 14887,
+      "contextCharStart": 14706,
+      "contextCharEnd": 15177,
+      "page": 3,
+      "equationBbox": [
+        123.47,
+        626.46,
+        286.36,
+        643.81
+      ],
+      "contextBbox": [
+        50.11,
+        580.66,
+        286.37,
+        712.93
+      ],
+      "equationLabel": "Equation 1",
+      "equationText": "y = F(x, {Wi}) + x. (1)",
+      "equationTextHash": "sha256:94158c954c080a7753a90841bfca4f072bee736b61cf7e3ccec8ac8c3b659737",
+      "contextText": "We adopt residual learning to every few stacked layers. A building block is shown in Fig. 2. Formally, in this paper we consider a building block deﬁned as:\nHere x and y are the input and output vectors of the lay- ers considered. The function F(x, {Wi}) represents the residual mapping to be learned. For the example in Fig. 2 that has two layers, F = W2σ(W1x) in which σ denotes",
+      "contextTextHash": "sha256:1f3b7db891ee2d6c99446a858c2529468f6f8803371dd37f844769678f40a074",
+      "locatorGrade": "labeled_equation_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 12,
+        "nearbyContextBlockCount": 3
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "equation-context:clip-2021:unlabeled:5:c5f1d3634072",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 21358,
+      "equationCharEnd": 21473,
+      "contextCharStart": 20528,
+      "contextCharEnd": 21356,
+      "page": 5,
+      "equationBbox": [
+        55.85,
+        138.05,
+        286.01,
+        166.23
+      ],
+      "contextBbox": [
+        55.85,
+        65.71,
+        543.09,
+        175.07
+      ],
+      "equationLabel": "",
+      "equationText": "# extract feature representations of each modality I_f = image_encoder(I) #[n, d_i] T_f = text_encoder(T) #[n, d_t]",
+      "equationTextHash": "sha256:4277a8d14ce70ff8b3060840c3fb74db14cc175121720bc2d13e79bb8b54433f",
+      "contextText": "# image_encoder - ResNet or Vision Transformer # text_encoder - CBOW or Text Transformer # I[n, h, w, c] - minibatch of aligned images # T[n, l] - minibatch of aligned texts # W_i[d_i, d_e] - learned proj of image to embed # W_t[d_t, d_e] - learned proj of text to embed # t - learned temperature parameter\none dimension of the model. While Tan & Le (2019) tune the ratio of compute allocated to each dimension for their EfﬁcientNet architecture, we use a simple baseline of allo- cating additional compute equally to increasing the width, depth, and resolution of the model. For the text encoder, we only scale the width of the model to be proportional to the calculated increase in width of the ResNet and do not scale the depth at all, as we found CLIP’s performance to be less sensitive to the capacity of the text encoder.",
+      "contextTextHash": "sha256:cac38069c67c95213061e38ba9f3b5aabc06d8d1f874673ba3fa6a14158151a8",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 3,
+        "nearbyContextBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "equation-context:clip-2021:unlabeled:5:d358ebff34f2",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 21475,
+      "equationCharEnd": 21602,
+      "contextCharStart": 20836,
+      "contextCharEnd": 23785,
+      "page": 5,
+      "equationBbox": [
+        55.85,
+        174.21,
+        258.39,
+        202.4
+      ],
+      "contextBbox": [
+        306.97,
+        69.4,
+        543.18,
+        661.2
+      ],
+      "equationLabel": "",
+      "equationText": "# joint multimodal embedding [n, d_e] I_e = l2_normalize(np.dot(I_f, W_i), axis=1) T_e = l2_normalize(np.dot(T_f, W_t), axis=1)",
+      "equationTextHash": "sha256:6941b7577d22041416b92963a90db16509a406e61052b511ce282e91fa27b7a1",
+      "contextText": "one dimension of the model. While Tan & Le (2019) tune the ratio of compute allocated to each dimension for their EfﬁcientNet architecture, we use a simple baseline of allo- cating additional compute equally to increasing the width, depth, and resolution of the model. For the text encoder, we only scale the width of the model to be proportional to the calculated increase in width of the ResNet and do not scale the depth at all, as we found CLIP’s performance to be less sensitive to the capacity of the text encoder.\nWe train a series of 5 ResNets and 3 Vision Transformers. For the ResNets we train a ResNet-50, a ResNet-101, and then 3 more which follow EfﬁcientNet-style model scaling and use approximately 4x, 16x, and 64x the compute of a ResNet-50. They are denoted as RN50x4, RN50x16, and RN50x64 respectively. For the Vision Transformers we train a ViT-B/32, a ViT-B/16, and a ViT-L/14. We train all models for 32 epochs. We use the Adam optimizer (Kingma & Ba, 2014) with decoupled weight decay regularization (Loshchilov & Hutter, 2017) applied to all weights that are not gains or biases, and decay the learning rate using a cosine schedule (Loshchilov & Hutter, 2016). Initial hyper- parameters were set using a combination of grid searches, random search, and manual tuning on the baseline ResNet- 50 model when trained for 1 epoch. Hyper-parameters were then adapted heuristically for larger models due to compu- tational constraints. The learnable temperature parameter τ was initialized to the equivalent of 0.07 from (Wu et al., 2018) and clipped to prevent scaling the logits by more than 100 which we found necessary to prevent training in- stability. We use a very large minibatch size of 32,768. Mixed-precision (Micikevicius et al., 2017) was used to ac- celerate training and save memory. To save additional mem- ory, gradient checkpointing (Griewank & Walther, 2000; Chen et al., 2016), half-precision Adam statistics (Dhariwal et al., 2020), and half-precision stochastically rounded text encoder weights were used. The calculation of embedding similarities was also sharded with individual GPUs comput- ing only the subset of the pairwise similarities necessary for their local batch of embeddings. The largest ResNet model, RN50x64, took 18 days to train on 592 V100 GPUs while the largest Vision Transformer took 12 days on 256 V100 GPUs. For the ViT-L/14 we also pre-train at a higher 336 pixel resolution for one additional epoch to boost perfor- mance similar to FixRes (Touvron et al., 2019). We denote this model as ViT-L/14@336px. Unless otherwise speciﬁed, all results reported in this paper as “CLIP” use this model which we found to perform best.",
+      "contextTextHash": "sha256:476ffc471059a5a66809914b468502c101d2aba5445b8553540cfa017b159f09",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 4,
+        "nearbyContextBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "equation-context:clip-2021:unlabeled:5:2a6a069d5cb5",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 23787,
+      "equationCharEnd": 23871,
+      "contextCharStart": 21619,
+      "contextCharEnd": 23785,
+      "page": 5,
+      "equationBbox": [
+        55.85,
+        210.38,
+        258.39,
+        229.53
+      ],
+      "contextBbox": [
+        306.97,
+        208.82,
+        543.18,
+        661.2
+      ],
+      "equationLabel": "",
+      "equationText": "# scaled pairwise cosine similarities [n, n] logits = np.dot(I_e, T_e.T) * np.exp(t)",
+      "equationTextHash": "sha256:287800eb6cf95963cd5c141063af01df6217de187ddd01d8f0872661d6c988c4",
+      "contextText": "We train a series of 5 ResNets and 3 Vision Transformers. For the ResNets we train a ResNet-50, a ResNet-101, and then 3 more which follow EfﬁcientNet-style model scaling and use approximately 4x, 16x, and 64x the compute of a ResNet-50. They are denoted as RN50x4, RN50x16, and RN50x64 respectively. For the Vision Transformers we train a ViT-B/32, a ViT-B/16, and a ViT-L/14. We train all models for 32 epochs. We use the Adam optimizer (Kingma & Ba, 2014) with decoupled weight decay regularization (Loshchilov & Hutter, 2017) applied to all weights that are not gains or biases, and decay the learning rate using a cosine schedule (Loshchilov & Hutter, 2016). Initial hyper- parameters were set using a combination of grid searches, random search, and manual tuning on the baseline ResNet- 50 model when trained for 1 epoch. Hyper-parameters were then adapted heuristically for larger models due to compu- tational constraints. The learnable temperature parameter τ was initialized to the equivalent of 0.07 from (Wu et al., 2018) and clipped to prevent scaling the logits by more than 100 which we found necessary to prevent training in- stability. We use a very large minibatch size of 32,768. Mixed-precision (Micikevicius et al., 2017) was used to ac- celerate training and save memory. To save additional mem- ory, gradient checkpointing (Griewank & Walther, 2000; Chen et al., 2016), half-precision Adam statistics (Dhariwal et al., 2020), and half-precision stochastically rounded text encoder weights were used. The calculation of embedding similarities was also sharded with individual GPUs comput- ing only the subset of the pairwise similarities necessary for their local batch of embeddings. The largest ResNet model, RN50x64, took 18 days to train on 592 V100 GPUs while the largest Vision Transformer took 12 days on 256 V100 GPUs. For the ViT-L/14 we also pre-train at a higher 336 pixel resolution for one additional epoch to boost perfor- mance similar to FixRes (Touvron et al., 2019). We denote this model as ViT-L/14@336px. Unless otherwise speciﬁed, all results reported in this paper as “CLIP” use this model which we found to perform best.",
+      "contextTextHash": "sha256:afe1e9531030d8ef88067c30e0f077dc13b217ae9d5cceedf95efcb344b58161",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 7,
+        "nearbyContextBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.equation-context-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "equation-context:clip-2021:unlabeled:5:6da225727a46",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "equationCharStart": 23873,
+      "equationCharEnd": 24051,
+      "contextCharStart": 21619,
+      "contextCharEnd": 24520,
+      "page": 5,
+      "equationBbox": [
+        55.85,
+        237.51,
+        290.61,
+        283.78
+      ],
+      "contextBbox": [
+        55.11,
+        208.82,
+        543.18,
+        661.2
+      ],
+      "equationLabel": "",
+      "equationText": "# symmetric loss function labels = np.arange(n) loss_i = cross_entropy_loss(logits, labels, axis=0) loss_t = cross_entropy_loss(logits, labels, axis=1) loss = (loss_i + loss_t)/2",
+      "equationTextHash": "sha256:35767712d480058f314917c41b8a708ae25ae1eb69b4d6779c2466692d3de71b",
+      "contextText": "We train a series of 5 ResNets and 3 Vision Transformers. For the ResNets we train a ResNet-50, a ResNet-101, and then 3 more which follow EfﬁcientNet-style model scaling and use approximately 4x, 16x, and 64x the compute of a ResNet-50. They are denoted as RN50x4, RN50x16, and RN50x64 respectively. For the Vision Transformers we train a ViT-B/32, a ViT-B/16, and a ViT-L/14. We train all models for 32 epochs. We use the Adam optimizer (Kingma & Ba, 2014) with decoupled weight decay regularization (Loshchilov & Hutter, 2017) applied to all weights that are not gains or biases, and decay the learning rate using a cosine schedule (Loshchilov & Hutter, 2016). Initial hyper- parameters were set using a combination of grid searches, random search, and manual tuning on the baseline ResNet- 50 model when trained for 1 epoch. Hyper-parameters were then adapted heuristically for larger models due to compu- tational constraints. The learnable temperature parameter τ was initialized to the equivalent of 0.07 from (Wu et al., 2018) and clipped to prevent scaling the logits by more than 100 which we found necessary to prevent training in- stability. We use a very large minibatch size of 32,768. Mixed-precision (Micikevicius et al., 2017) was used to ac- celerate training and save memory. To save additional mem- ory, gradient checkpointing (Griewank & Walther, 2000; Chen et al., 2016), half-precision Adam statistics (Dhariwal et al., 2020), and half-precision stochastically rounded text encoder weights were used. The calculation of embedding similarities was also sharded with individual GPUs comput- ing only the subset of the pairwise similarities necessary for their local batch of embeddings. The largest ResNet model, RN50x64, took 18 days to train on 592 V100 GPUs while the largest Vision Transformer took 12 days on 256 V100 GPUs. For the ViT-L/14 we also pre-train at a higher 336 pixel resolution for one additional epoch to boost perfor- mance similar to FixRes (Touvron et al., 2019). We denote this model as ViT-L/14@336px. Unless otherwise speciﬁed, all results reported in this paper as “CLIP” use this model which we found to perform best.\nrepresentation of the image. For the second architecture, we experiment with the recently introduced Vision Transformer (ViT) (Dosovitskiy et al., 2020). We closely follow their implementation with only the minor modiﬁcation of adding an additional layer normalization to the combined patch and position embeddings before the transformer and use a slightly different initialization scheme.",
+      "contextTextHash": "sha256:39a4c0ccd0dbb168f43715f79bfdc3d4591cb2c4f3f1b2e82b90049db28c52af",
+      "locatorGrade": "equation_like_context",
+      "latexGuarantee": "none_v0_1_locator_only",
+      "extractionMethod": "pymupdf_equation_locator_context_candidate_v1",
+      "confidence": 0.66,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "equationBlockIndex": 8,
+        "nearbyContextBlockCount": 2
+      }
+    }
+  ],
+  "blockerRows": 1,
+  "blockers": [
+    {
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "blockerReason": "equation_locator_not_found",
+      "detail": ""
+    }
+  ],
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "warnings": [
+    "equation text and labels are candidate-grade locator/context signals; LaTeX reconstruction is not attempted in v0.1"
+  ],
+  "schemaErrors": []
+}

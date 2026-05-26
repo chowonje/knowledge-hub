@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-equation-locator-context-candidate.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "paperId",
+    "paperRef",
+    "artifactId",
+    "sourceContentHash",
+    "charBasis",
+    "equationCharStart",
+    "equationCharEnd",
+    "contextCharStart",
+    "contextCharEnd",
+    "page",
+    "equationBbox",
+    "contextBbox",
+    "equationLabel",
+    "equationText",
+    "equationTextHash",
+    "contextText",
+    "contextTextHash",
+    "locatorGrade",
+    "latexGuarantee",
+    "extractionMethod",
+    "confidence",
+    "blockerReason",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.equation-context-artifact-candidate.v1" },
+    "paperId": { "type": "string", "minLength": 1 },
+    "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+    "artifactId": { "type": "string", "pattern": "^equation-context:" },
+    "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "charBasis": { "const": "pymupdf_block_reading_order_normalized_text_v1" },
+    "equationCharStart": { "type": "integer", "minimum": 0 },
+    "equationCharEnd": { "type": "integer", "minimum": 1 },
+    "contextCharStart": { "type": "integer", "minimum": 0 },
+    "contextCharEnd": { "type": "integer", "minimum": 0 },
+    "page": { "type": "integer", "minimum": 1 },
+    "equationBbox": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "type": "number" }
+    },
+    "contextBbox": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "equationLabel": { "type": "string" },
+    "equationText": { "type": "string", "minLength": 1 },
+    "equationTextHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "contextText": { "type": "string" },
+    "contextTextHash": { "type": "string" },
+    "locatorGrade": { "enum": ["labeled_equation_context", "equation_like_context"] },
+    "latexGuarantee": { "const": "none_v0_1_locator_only" },
+    "extractionMethod": { "const": "pymupdf_equation_locator_context_candidate_v1" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "blockerReason": { "type": "string" },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "equationBlockIndex", "nearbyContextBlockCount"],
+      "properties": {
+        "source": { "const": "pymupdf_block" },
+        "equationBlockIndex": { "type": "integer", "minimum": 0 },
+        "nearbyContextBlockCount": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

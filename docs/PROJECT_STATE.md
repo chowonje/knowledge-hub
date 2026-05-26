@@ -54,6 +54,8 @@ The second roadmap tranche, `text_section_paragraph_span_artifacts`, now has rep
 
 The third roadmap tranche, `text_table_caption_candidate_artifacts`, now has report-only table caption and table-like text candidates. `eval/knowledgeos/scripts/build_text_table_caption_candidate_artifacts.py` reads the same local AI-paper PDF set and emits schema-backed candidates with source-content hash, caption page/bbox, candidate char offsets, caption text hash, optional adjacent table-like text bbox/hash, structure grade, and numeric-candidate flags. Row/column/cell structure remains candidate-grade and blocked from strict evidence until explicit provenance is available.
 
+The fourth roadmap tranche, `text_equation_locator_context_artifacts`, now has report-only equation locator/context candidates. `eval/knowledgeos/scripts/build_text_equation_locator_context_artifacts.py` reads the same local AI-paper PDF set and emits schema-backed equation-like candidates with source-content hash, page/bbox, candidate char offsets, optional equation labels, equation/context text hashes, extraction method, confidence, and blocker reasons. This is locator/context only: it does not attempt complete LaTeX reconstruction, write canonical parsed artifacts, mutate DB/index state, reindex/reembed, scan the vault, download external content, promote strict evidence, or expose runtime answer-visible payloads.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

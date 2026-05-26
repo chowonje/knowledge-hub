@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-equation-locator-context-artifacts-report.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "paperDiagnostics",
+    "candidateRows",
+    "labeledEquationRows",
+    "equationLikeRows",
+    "contextRows",
+    "candidates",
+    "blockerRows",
+    "blockers",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-equation-locator-context-artifacts-report.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paperRows",
+        "paperRefs",
+        "writes",
+        "canonicalParsedArtifactWriteRows",
+        "charBasis",
+        "latexGuarantee"
+      ],
+      "properties": {
+        "paperRows": { "type": "integer", "minimum": 0 },
+        "paperRefs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^papers_dir/[^/].*" }
+        },
+        "writes": { "const": "report_only" },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "charBasis": { "const": "pymupdf_block_reading_order_normalized_text_v1" },
+        "latexGuarantee": { "const": "none_v0_1_locator_only" }
+      }
+    },
+    "paperDiagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paperId",
+          "paperRef",
+          "candidateRows",
+          "labeledEquationRows",
+          "equationLikeRows",
+          "contextRows",
+          "pageCount"
+        ],
+        "properties": {
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "candidateRows": { "type": "integer", "minimum": 0 },
+          "labeledEquationRows": { "type": "integer", "minimum": 0 },
+          "equationLikeRows": { "type": "integer", "minimum": 0 },
+          "contextRows": { "type": "integer", "minimum": 0 },
+          "pageCount": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "candidateRows": { "type": "integer", "minimum": 0 },
+    "labeledEquationRows": { "type": "integer", "minimum": 0 },
+    "equationLikeRows": { "type": "integer", "minimum": 0 },
+    "contextRows": { "type": "integer", "minimum": 0 },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema",
+          "paperId",
+          "artifactId",
+          "sourceContentHash",
+          "page",
+          "equationBbox",
+          "equationTextHash",
+          "locatorGrade",
+          "latexGuarantee"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.equation-context-artifact-candidate.v1" },
+          "paperId": { "type": "string" },
+          "artifactId": { "type": "string", "pattern": "^equation-context:" },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "page": { "type": "integer", "minimum": 1 },
+          "equationBbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "equationTextHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "locatorGrade": { "enum": ["labeled_equation_context", "equation_like_context"] },
+          "latexGuarantee": { "const": "none_v0_1_locator_only" }
+        }
+      }
+    },
+    "blockerRows": { "type": "integer", "minimum": 0 },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["paperId", "paperRef", "blockerReason", "detail"],
+        "properties": {
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "blockerReason": { "type": "string", "minLength": 1 },
+          "detail": { "type": "string" }
+        }
+      }
+    },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}
