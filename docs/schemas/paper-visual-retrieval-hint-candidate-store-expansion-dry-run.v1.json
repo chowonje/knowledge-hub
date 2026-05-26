@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-retrieval-hint-candidate-store-expansion-dry-run.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceDesignReport",
+    "scope",
+    "dryRunPolicy",
+    "counts",
+    "dryRunRowsDetail",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-dry-run.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["ready_for_visual_retrieval_hint_candidate_store_expansion_review", "blocked"] },
+    "nextRecommendedTranche": { "const": "visual_retrieval_hint_candidate_store_expansion_review" },
+    "sourceDesignReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "candidateRows", "blockedRows"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-design.v1" },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "candidateRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "sourceDesignRows",
+        "plannedCandidateStoreRows",
+        "candidateStoreWriteRows",
+        "vectorIndexing",
+        "indexEligibleRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "cropWriteRows",
+        "pageImageWriteRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "sourceDesignRows": { "type": "integer", "minimum": 0 },
+        "plannedCandidateStoreRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "vectorIndexing": { "const": false },
+        "indexEligibleRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "cropWriteRows": { "const": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "dryRunPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plannedStoreRef",
+        "actualStoreWrite",
+        "jsonlWritePreviewOnly",
+        "applyRequiredForStoreMutation",
+        "idempotencyKeyFields",
+        "runtimeVisibilityAfterDryRun",
+        "indexingAfterDryRun",
+        "allowedUse"
+      ],
+      "properties": {
+        "plannedStoreRef": {
+          "const": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl"
+        },
+        "actualStoreWrite": { "const": false },
+        "jsonlWritePreviewOnly": { "const": true },
+        "applyRequiredForStoreMutation": { "const": true },
+        "idempotencyKeyFields": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "runtimeVisibilityAfterDryRun": { "const": "not_runtime_visible" },
+        "indexingAfterDryRun": { "const": "not_indexed" },
+        "allowedUse": { "const": "retrieval_hint_only" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceDesignRows",
+        "dryRunRows",
+        "plannedWriteRows",
+        "candidateStoreWriteRows",
+        "jsonlSerializableRows",
+        "duplicateHintCandidateIdRows",
+        "duplicateSourceCandidateIdRows",
+        "blockedRows",
+        "indexEligibleRows",
+        "runtimeVisibleRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourceDesignRows": { "type": "integer", "minimum": 0 },
+        "dryRunRows": { "type": "integer", "minimum": 0 },
+        "plannedWriteRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "jsonlSerializableRows": { "type": "integer", "minimum": 0 },
+        "duplicateHintCandidateIdRows": { "type": "integer", "minimum": 0 },
+        "duplicateSourceCandidateIdRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "indexEligibleRows": { "const": 0 },
+        "runtimeVisibleRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "answerableWithoutTextEvidenceRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "dryRunRowsDetail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "dryRunRowId",
+          "hintCandidateId",
+          "sourceCandidateId",
+          "paperId",
+          "paperRef",
+          "sourceContentHash",
+          "page",
+          "bbox",
+          "candidateType",
+          "plannedStoreRef",
+          "idempotencyKey",
+          "plannedJsonlRecordSha256",
+          "plannedJsonlRecordPreview",
+          "dryRunResult",
+          "provenance",
+          "blockerReason"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-dry-run-row.v1" },
+          "dryRunRowId": { "type": "string", "pattern": "^visual-retrieval-hint-dry-run:" },
+          "hintCandidateId": { "type": "string", "pattern": "^visual-retrieval-hint:" },
+          "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "page": { "type": "integer", "minimum": 1 },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "candidateType": {
+            "enum": [
+              "figure_caption_region",
+              "table_region",
+              "equation_region",
+              "layout_region",
+              "image_region"
+            ]
+          },
+          "plannedStoreRef": {
+            "const": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl"
+          },
+          "idempotencyKey": { "type": "string", "pattern": "^visual-retrieval-hint-idempotency:" },
+          "plannedJsonlRecordSha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "plannedJsonlRecordPreview": { "$ref": "#/$defs/candidateRecord" },
+          "dryRunResult": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "wouldWriteOnApply",
+              "actualStoreWrite",
+              "jsonlSerializable",
+              "policyCompliant",
+              "indexEligible",
+              "runtimeVisible",
+              "strictEvidence",
+              "citationGrade",
+              "answerableWithoutTextEvidence"
+            ],
+            "properties": {
+              "wouldWriteOnApply": { "type": "boolean" },
+              "actualStoreWrite": { "const": false },
+              "jsonlSerializable": { "type": "boolean" },
+              "policyCompliant": { "type": "boolean" },
+              "indexEligible": { "const": false },
+              "runtimeVisible": { "const": false },
+              "strictEvidence": { "const": false },
+              "citationGrade": { "const": false },
+              "answerableWithoutTextEvidence": { "const": false }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceDesignReportSchema",
+              "sourceDesignReportRef",
+              "sourceCandidateId",
+              "sourceContentHash",
+              "page",
+              "bbox",
+              "extractionMethod"
+            ],
+            "properties": {
+              "sourceDesignReportSchema": {
+                "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-design.v1"
+              },
+              "sourceDesignReportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+              "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+              "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "page": { "type": "integer", "minimum": 1 },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "number" }
+              },
+              "extractionMethod": { "const": "visual_retrieval_hint_candidate_store_expansion_dry_run_v1" }
+            }
+          },
+          "blockerReason": { "type": "string" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "candidateRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "paperId",
+        "paperRef",
+        "sourceContentHash",
+        "page",
+        "bbox",
+        "candidateType",
+        "sourceAttachmentRef",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations",
+        "policy",
+        "provenance"
+      ],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1" },
+        "hintCandidateId": { "type": "string", "pattern": "^visual-retrieval-hint:" },
+        "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+        "paperId": { "type": "string", "minLength": 1 },
+        "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+        "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "page": { "type": "integer", "minimum": 1 },
+        "bbox": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "type": "number" }
+        },
+        "candidateType": {
+          "enum": [
+            "figure_caption_region",
+            "table_region",
+            "equation_region",
+            "layout_region",
+            "image_region"
+          ]
+        },
+        "sourceAttachmentRef": { "type": "string" },
+        "derivedTextForRetrieval": { "type": "string", "minLength": 1 },
+        "visibleText": { "type": "string", "minLength": 1 },
+        "retrievalKeywords": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "uncertainty": { "type": "string", "minLength": 1 },
+        "limitations": { "type": "string", "minLength": 1 },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowedUse",
+            "targetDerivedTextField",
+            "strictEvidence",
+            "citationGrade",
+            "answerableWithoutTextEvidence",
+            "runtimeVisible",
+            "indexEligible",
+            "requiresFutureIndexEligibilityGate",
+            "answerabilityGateBypassAllowed"
+          ],
+          "properties": {
+            "allowedUse": { "const": "retrieval_hint_only" },
+            "targetDerivedTextField": { "const": "derivedTextForRetrieval" },
+            "strictEvidence": { "const": false },
+            "citationGrade": { "const": false },
+            "answerableWithoutTextEvidence": { "const": false },
+            "runtimeVisible": { "const": false },
+            "indexEligible": { "const": false },
+            "requiresFutureIndexEligibilityGate": { "const": true },
+            "answerabilityGateBypassAllowed": { "const": false }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["sourceCandidateId", "sourceContentHash", "page", "bbox"],
+          "properties": {
+            "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+            "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            "page": { "type": "integer", "minimum": 1 },
+            "bbox": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

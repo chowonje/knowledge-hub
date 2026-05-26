@@ -166,6 +166,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.visual-annotation-web-output-validation.v1": "paper-visual-annotation-web-output-validation.v1.json",
     "knowledge-hub.paper.visual-retrieval-hint-candidate-store-design.v1": "paper-visual-retrieval-hint-candidate-store-design.v1.json",
     "knowledge-hub.paper.visual-retrieval-hint-candidate-store-dry-run.v1": "paper-visual-retrieval-hint-candidate-store-dry-run.v1.json",
+    "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-design.v1": "paper-visual-retrieval-hint-candidate-store-expansion-design.v1.json",
+    "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-dry-run.v1": "paper-visual-retrieval-hint-candidate-store-expansion-dry-run.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
