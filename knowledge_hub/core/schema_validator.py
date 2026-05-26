@@ -39,6 +39,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.figure-caption-artifact-vertical-slice-report.v1": "paper-figure-caption-artifact-vertical-slice-report.v1.json",
     "knowledge-hub.paper.figure-caption-text-qa-readback.v1": "paper-figure-caption-text-qa-readback.v1.json",
     "knowledge-hub.paper.figure-caption-text-qa-readback-report.v1": "paper-figure-caption-text-qa-readback-report.v1.json",
+    "knowledge-hub.paper.text-span-artifact-candidate.v1": "paper-text-span-artifact-candidate.v1.json",
+    "knowledge-hub.paper.text-section-paragraph-span-artifacts-report.v1": "paper-text-section-paragraph-span-artifacts-report.v1.json",
     "knowledge-hub.paper.board-export.v1": "paper-board-export-result.v1.json",
     "knowledge-hub.paper-memory.build.result.v1": "paper-memory-build-result.v1.json",
     "knowledge-hub.paper-memory.card.result.v1": "paper-memory-card-result.v1.json",

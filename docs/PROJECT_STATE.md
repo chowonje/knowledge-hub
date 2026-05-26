@@ -50,6 +50,8 @@ The next planned v0.1 tranches are deliberately sequential: connect caption-text
 
 The first roadmap tranche, `text_figure_caption_qa_path`, now has an internal caption-text-only readback path. `eval/knowledgeos/scripts/run_figure_caption_text_qa_readback.py` consumes the FigureCaptionArtifact candidate report and emits schema-backed answer/no-answer rows: caption-grounded Figure N questions can return a candidate answer packet with page/bbox/sourceContentHash, missing figures return no-answer, and visual-inspection questions are blocked as `visual_reasoning_not_supported_in_text_evidence_v01`.
 
+The second roadmap tranche, `text_section_paragraph_span_artifacts`, now has report-only SectionSpan and ParagraphSpan candidates. `eval/knowledgeos/scripts/build_text_section_paragraph_span_artifacts.py` reads the same small local AI-paper PDF set through PyMuPDF text blocks and emits bounded candidates with source-content hash, page, bbox, text hash, and candidate char offsets over the normalized PyMuPDF block reading-order text. These offsets are not canonical parsed-artifact offsets and remain candidate provenance; the tranche does not write parsed artifacts, mutate DB/index state, reindex/reembed, scan the vault, download external content, promote strict evidence, or expose runtime answer-visible payloads.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

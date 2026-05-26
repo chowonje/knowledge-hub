@@ -1,0 +1,3579 @@
+{
+  "schema": "knowledge-hub.paper.text-section-paragraph-span-artifacts-report.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T06:06:38Z",
+  "scope": {
+    "paperRows": 4,
+    "paperRefs": [
+      "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf"
+    ],
+    "writes": "report_only",
+    "canonicalParsedArtifactWriteRows": 0,
+    "charBasis": "pymupdf_block_reading_order_normalized_text_v1"
+  },
+  "paperDiagnostics": [
+    {
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "textAssemblyHash": "sha256:06ca881cfe93e5952a78c0dc3d8354a6b8b95d7833dff7695123bfbe798c4e0f",
+      "assemblyCharCount": 33259,
+      "sectionSpanRows": 2,
+      "paragraphSpanRows": 24,
+      "pageCount": 9,
+      "candidateRows": 26
+    },
+    {
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "textAssemblyHash": "sha256:2569ffb9f9c54e5e67453ffa8a58fc2b27f74f57534a7e2d1e0af4b369d4ba9d",
+      "assemblyCharCount": 55291,
+      "sectionSpanRows": 6,
+      "paragraphSpanRows": 24,
+      "pageCount": 12,
+      "candidateRows": 30
+    },
+    {
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "textAssemblyHash": "sha256:d65fdabfa92fe5d44b16e139090c400a7b87e89f3f7005f0662220dd451c813b",
+      "assemblyCharCount": 209152,
+      "sectionSpanRows": 3,
+      "paragraphSpanRows": 24,
+      "pageCount": 48,
+      "candidateRows": 27
+    },
+    {
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "textAssemblyHash": "sha256:bb16b9f86fb5d05a01363ddc3f1f6602d4605508ce27618b7d83f9f22310db1c",
+      "assemblyCharCount": 55600,
+      "sectionSpanRows": 6,
+      "paragraphSpanRows": 24,
+      "pageCount": 14,
+      "candidateRows": 30
+    }
+  ],
+  "candidateRows": 113,
+  "sectionSpanRows": 17,
+  "paragraphSpanRows": 96,
+  "candidates": [
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "section-span:alexnet-2012:1:66b9463b530a",
+      "spanType": "section",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 245,
+      "charEnd": 253,
+      "page": 1,
+      "bbox": [
+        283.76,
+        249.3,
+        328.24,
+        261.25
+      ],
+      "text": "Abstract",
+      "textHash": "sha256:d21b4a64a2d8656a0fdf7ab2e89a49164ac504686cfa2a3d442e87c209286330",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 4,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:1:50cbdaee2e6d",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 255,
+      "charEnd": 1260,
+      "page": 1,
+      "bbox": [
+        143.87,
+        277.6,
+        468.14,
+        419.07
+      ],
+      "text": "We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 dif- ferent classes. On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0% which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, consists of ﬁve convolutional layers, some of which are followed by max-pooling layers, and three fully-connected layers with a ﬁnal 1000-way softmax. To make train- ing faster, we used non-saturating neurons and a very efﬁcient GPU implemen- tation of the convolution operation. To reduce overﬁtting in the fully-connected layers we employed a recently-developed regularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the second-best entry.",
+      "textHash": "sha256:298cf56feca772309a649ad536cb7bd184382649bb11d3a0e8af8877ed73a2dd",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 5,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:1:3c1f467fc261",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 1278,
+      "charEnd": 2535,
+      "page": 1,
+      "bbox": [
+        108.0,
+        475.23,
+        504.0,
+        616.7
+      ],
+      "text": "Current approaches to object recognition make essential use of machine learning methods. To im- prove their performance, we can collect larger datasets, learn more powerful models, and use bet- ter techniques for preventing overﬁtting. Until recently, datasets of labeled images were relatively small — on the order of tens of thousands of images (e.g., NORB [16], Caltech-101/256 [8, 9], and CIFAR-10/100 [12]). Simple recognition tasks can be solved quite well with datasets of this size, especially if they are augmented with label-preserving transformations. For example, the current- best error rate on the MNIST digit-recognition task (<0.3%) approaches human performance [4]. But objects in realistic settings exhibit considerable variability, so to learn to recognize them it is necessary to use much larger training sets. And indeed, the shortcomings of small image datasets have been widely recognized (e.g., Pinto et al. [21]), but it has only recently become possible to col- lect labeled datasets with millions of images. The new larger datasets include LabelMe [23], which consists of hundreds of thousands of fully-segmented images, and ImageNet [6], which consists of over 15 million labeled high-resolution images in over 22,000 categories.",
+      "textHash": "sha256:2818155994128fe93fbb5109b0ae84e554ed8d7d86b6c0edd56477bb873780c8",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 7,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:1:36832586a91e",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 2537,
+      "charEnd": 3469,
+      "page": 1,
+      "bbox": [
+        108.0,
+        623.68,
+        504.0,
+        732.27
+      ],
+      "text": "To learn about thousands of objects from millions of images, we need a model with a large learning capacity. However, the immense complexity of the object recognition task means that this prob- lem cannot be speciﬁed even by a dataset as large as ImageNet, so our model should also have lots of prior knowledge to compensate for all the data we don’t have. Convolutional neural networks (CNNs) constitute one such class of models [16, 11, 13, 18, 15, 22, 26]. Their capacity can be con- trolled by varying their depth and breadth, and they also make strong and mostly correct assumptions about the nature of images (namely, stationarity of statistics and locality of pixel dependencies). Thus, compared to standard feedforward neural networks with similarly-sized layers, CNNs have much fewer connections and parameters and so they are easier to train, while their theoretically-best performance is likely to be only slightly worse.",
+      "textHash": "sha256:399d67b0b43f5a363b70d673a671b6cd621847748d7630df9e76f77fea82858e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 8,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:f94725b1df71",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 3471,
+      "charEnd": 3955,
+      "page": 2,
+      "bbox": [
+        108.0,
+        84.27,
+        504.0,
+        138.07
+      ],
+      "text": "Despite the attractive qualities of CNNs, and despite the relative efﬁciency of their local architecture, they have still been prohibitively expensive to apply in large scale to high-resolution images. Luck- ily, current GPUs, paired with a highly-optimized implementation of 2D convolution, are powerful enough to facilitate the training of interestingly-large CNNs, and recent datasets such as ImageNet contain enough labeled examples to train such models without severe overﬁtting.",
+      "textHash": "sha256:d07308a7ea8dcad8f0249e7364ab891aa87e4d526a96540cd48ac220264de7f1",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:31803c2fb4e2",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 3957,
+      "charEnd": 5042,
+      "page": 2,
+      "bbox": [
+        108.0,
+        145.04,
+        504.0,
+        275.55
+      ],
+      "text": "The speciﬁc contributions of this paper are as follows: we trained one of the largest convolutional neural networks to date on the subsets of ImageNet used in the ILSVRC-2010 and ILSVRC-2012 competitions [2] and achieved by far the best results ever reported on these datasets. We wrote a highly-optimized GPU implementation of 2D convolution and all the other operations inherent in training convolutional neural networks, which we make available publicly1. Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 3. The size of our network made overﬁtting a signiﬁcant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overﬁtting, which are described in Section 4. Our ﬁnal network contains ﬁve convolutional and three fully-connected layers, and this depth seems to be important: we found that removing any convolutional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+      "textHash": "sha256:ccfa5fbb1673b5b091bb19e317b7d17c7904d663783e315f7ce845f9823bc628",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:cabc9afbd6a8",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 5044,
+      "charEnd": 5426,
+      "page": 2,
+      "bbox": [
+        108.0,
+        282.53,
+        504.0,
+        325.36
+      ],
+      "text": "In the end, the network’s size is limited mainly by the amount of memory available on current GPUs and by the amount of training time that we are willing to tolerate. Our network takes between ﬁve and six days to train on two GTX 580 3GB GPUs. All of our experiments suggest that our results can be improved simply by waiting for faster GPUs and bigger datasets to become available.",
+      "textHash": "sha256:64aaccec044a4d28b9b4d0764a71558465ab5aadd8092139648faf0fc89a498f",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:3f7b72257d68",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 5443,
+      "charEnd": 6044,
+      "page": 2,
+      "bbox": [
+        108.0,
+        371.93,
+        504.0,
+        447.65
+      ],
+      "text": "ImageNet is a dataset of over 15 million labeled high-resolution images belonging to roughly 22,000 categories. The images were collected from the web and labeled by human labelers using Ama- zon’s Mechanical Turk crowd-sourcing tool. Starting in 2010, as part of the Pascal Visual Object Challenge, an annual competition called the ImageNet Large-Scale Visual Recognition Challenge (ILSVRC) has been held. ILSVRC uses a subset of ImageNet with roughly 1000 images in each of 1000 categories. In all, there are roughly 1.2 million training images, 50,000 validation images, and 150,000 testing images.",
+      "textHash": "sha256:78ecd57989f7eb04a69004522a231b457420b6f1f9d6c982f02e2b72da824c32",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 4,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:e5f46850d374",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 6046,
+      "charEnd": 6610,
+      "page": 2,
+      "bbox": [
+        108.0,
+        454.62,
+        504.0,
+        519.38
+      ],
+      "text": "ILSVRC-2010 is the only version of ILSVRC for which the test set labels are available, so this is the version on which we performed most of our experiments. Since we also entered our model in the ILSVRC-2012 competition, in Section 6 we report our results on this version of the dataset as well, for which test set labels are unavailable. On ImageNet, it is customary to report two error rates: top-1 and top-5, where the top-5 error rate is the fraction of test images for which the correct label is not among the ﬁve labels considered most probable by the model.",
+      "textHash": "sha256:cab7d6a23597c359eea2d41684133a71414b878af5e49dcfbcc97349e3bdf852",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 5,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:b779ff771091",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 6612,
+      "charEnd": 7173,
+      "page": 2,
+      "bbox": [
+        108.0,
+        526.35,
+        504.0,
+        591.11
+      ],
+      "text": "ImageNet consists of variable-resolution images, while our system requires a constant input dimen- sionality. Therefore, we down-sampled the images to a ﬁxed resolution of 256 × 256. Given a rectangular image, we ﬁrst rescaled the image such that the shorter side was of length 256, and then cropped out the central 256×256 patch from the resulting image. We did not pre-process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels.",
+      "textHash": "sha256:0b0b8235676930d035984b83dc211c3bf43582ec59c9480572389db964178526",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:2:f12dd7403227",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 7195,
+      "charEnd": 7528,
+      "page": 2,
+      "bbox": [
+        108.0,
+        637.68,
+        504.0,
+        680.52
+      ],
+      "text": "The architecture of our network is summarized in Figure 2. It contains eight learned layers — ﬁve convolutional and three fully-connected. Below, we describe some of the novel or unusual features of our network’s architecture. Sections 3.1-3.4 are sorted according to our estimation of their importance, with the most important ﬁrst.",
+      "textHash": "sha256:e1555b360d5649382c6d30b3bb438963c47363fdb69c9682d98ea3b1f3c3ac37",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 8,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:3:d029bfc522a1",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 7594,
+      "charEnd": 8439,
+      "page": 3,
+      "bbox": [
+        108.0,
+        108.25,
+        323.96,
+        293.79
+      ],
+      "text": "The standard way to model a neuron’s output f as a function of its input x is with f(x) = tanh(x) or f(x) = (1 + e−x)−1. In terms of training time with gradient descent, these saturating nonlinearities are much slower than the non-saturating nonlinearity f(x) = max(0, x). Following Nair and Hinton [20], we refer to neurons with this nonlinearity as Rectiﬁed Linear Units (ReLUs). Deep convolutional neural net- works with ReLUs train several times faster than their equivalents with tanh units. This is demonstrated in Figure 1, which shows the number of iterations re- quired to reach 25% training error on the CIFAR-10 dataset for a particular four-layer convolutional net- work. This plot shows that we would not have been able to experiment with such large neural networks for this work if we had used traditional saturating neuron models.",
+      "textHash": "sha256:2c6c0adcdc937995373a1364658b4ad892fd8379fbdbe08b2f5938827f9316f7",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:3:1860a17fb951",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 8441,
+      "charEnd": 9039,
+      "page": 3,
+      "bbox": [
+        108.0,
+        300.76,
+        323.99,
+        420.31
+      ],
+      "text": "We are not the ﬁrst to consider alternatives to tradi- tional neuron models in CNNs. For example, Jarrett et al. [11] claim that the nonlinearity f(x) = |tanh(x)| works particularly well with their type of contrast nor- malization followed by local average pooling on the Caltech-101 dataset. However, on this dataset the pri- mary concern is preventing overﬁtting, so the effect they are observing is different from the accelerated ability to ﬁt the training set which we report when us- ing ReLUs. Faster learning has a great inﬂuence on the performance of large models trained on large datasets.",
+      "textHash": "sha256:67939b1a8aa63f25b0cc4c0ddf3c08d3825872664a1c35f2fae4cbe3fea5cba8",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 3,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:3:d505e2a2d956",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 9072,
+      "charEnd": 10120,
+      "page": 3,
+      "bbox": [
+        108.0,
+        468.8,
+        504.0,
+        588.35
+      ],
+      "text": "A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to ﬁt on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s memory directly, without going through host machine memory. The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one additional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU. Choosing the pattern of connectivity is a problem for cross-validation, but this allows us to precisely tune the amount of communication until it is an acceptable fraction of the amount of computation.",
+      "textHash": "sha256:cb4d9f28a91937457bb19c3e8d6f2fba96351e1bbb9dada2ba9b364378aec20a",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 5,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:3:29af5e180c96",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10122,
+      "charEnd": 10545,
+      "page": 3,
+      "bbox": [
+        108.0,
+        595.32,
+        504.0,
+        649.12
+      ],
+      "text": "The resultant architecture is somewhat similar to that of the “columnar” CNN employed by Cire¸san et al. [5], except that our columns are not independent (see Figure 2). This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net2.",
+      "textHash": "sha256:0ec4ff3ee3fec5253d20c60330a2ec3cb25f7a39f12eb3c9fb47b5c1ff734f12",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:3:d6703cbd3823",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10547,
+      "charEnd": 11093,
+      "page": 3,
+      "bbox": [
+        108.0,
+        671.71,
+        504.0,
+        732.03
+      ],
+      "text": "2The one-GPU net actually has the same number of kernels as the two-GPU net in the ﬁnal convolutional layer. This is because most of the net’s parameters are in the ﬁrst fully-connected layer, which takes the last convolutional layer as input. So to make the two nets have approximately the same number of parameters, we did not halve the size of the ﬁnal convolutional layer (nor the fully-conneced layers which follow). Therefore this comparison is biased in favor of the one-GPU net, since it is bigger than “half the size” of the two-GPU net.",
+      "textHash": "sha256:4f6c421c6caa6c66e6e26856e0e67c02c7e690577a707cd2834e2a9ad7a26627",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 7,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:c3b11f2590b8",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 11129,
+      "charEnd": 11638,
+      "page": 4,
+      "bbox": [
+        108.0,
+        104.79,
+        504.0,
+        171.63
+      ],
+      "text": "ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still ﬁnd that the following local normalization scheme aids generalization. Denoting by ai x,y the activity of a neuron computed by applying kernel i at position (x, y) and then applying the ReLU nonlinearity, the response-normalized activity bi x,y is given by the expression",
+      "textHash": "sha256:5fd62836cafda02da9001a75b365b61ceb67a636b90bef37928a67d69811426f",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:de73512762ea",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 11702,
+      "charEnd": 12394,
+      "page": 4,
+      "bbox": [
+        108.0,
+        213.26,
+        504.0,
+        289.21
+      ],
+      "text": "where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total number of kernels in the layer. The ordering of the kernel maps is of course arbitrary and determined before training begins. This sort of response normalization implements a form of lateral inhibition inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels. The constants k, n, α, and β are hyper-parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in certain layers (see Section 3.5).",
+      "textHash": "sha256:dc20b3a650d89510c0962c1045c81443c8fd62ef4755bc902a575616ba50dc57",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 10,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:f91d5bc6144e",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 12396,
+      "charEnd": 12877,
+      "page": 4,
+      "bbox": [
+        108.0,
+        296.18,
+        504.0,
+        349.98
+      ],
+      "text": "This scheme bears some resemblance to the local contrast normalization scheme of Jarrett et al. [11], but ours would be more correctly termed “brightness normalization”, since we do not subtract the mean activity. Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also veriﬁed the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization3.",
+      "textHash": "sha256:2075d536814571139b10ae6b5ed210b7aade5b346a1ada780abc16f427494008",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 11,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:d8e71817ae7c",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 12904,
+      "charEnd": 13823,
+      "page": 4,
+      "bbox": [
+        108.0,
+        385.14,
+        504.01,
+        493.73
+      ],
+      "text": "Pooling layers in CNNs summarize the outputs of neighboring groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., [17, 11, 4]). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit. If we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping pooling. This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non-overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling ﬁnd it slightly more difﬁcult to overﬁt.",
+      "textHash": "sha256:c687e21e57426a2c058a71b1391136906daea89fad0941b09fa43c36317143c9",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 13,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:e37621d2974f",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13851,
+      "charEnd": 14410,
+      "page": 4,
+      "bbox": [
+        108.0,
+        528.89,
+        504.0,
+        593.65
+      ],
+      "text": "Now we are ready to describe the overall architecture of our CNN. As depicted in Figure 2, the net contains eight layers with weights; the ﬁrst ﬁve are convolutional and the remaining three are fully- connected. The output of the last fully-connected layer is fed to a 1000-way softmax which produces a distribution over the 1000 class labels. Our network maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+      "textHash": "sha256:0f0a338db75bf715805e96436c0010f915de010a6d6c6a7a1ce7b07b9b781394",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 15,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:c8e463eaf021",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 14412,
+      "charEnd": 15095,
+      "page": 4,
+      "bbox": [
+        108.0,
+        600.62,
+        504.0,
+        676.34
+      ],
+      "text": "The kernels of the second, fourth, and ﬁfth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The kernels of the third convolutional layer are connected to all kernel maps in the second layer. The neurons in the fully- connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the ﬁrst and second convolutional layers. Max-pooling layers, of the kind described in Section 3.4, follow both response-normalization layers as well as the ﬁfth convolutional layer. The ReLU non-linearity is applied to the output of every convolutional and fully-connected layer.",
+      "textHash": "sha256:8133f2326e51ea68504639097022257f47784f57dbec96f87347156e8e8da6e7",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 16,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:88f60c983b3e",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 15097,
+      "charEnd": 15288,
+      "page": 4,
+      "bbox": [
+        108.0,
+        682.95,
+        504.0,
+        704.23
+      ],
+      "text": "The ﬁrst convolutional layer ﬁlters the 224×224×3 input image with 96 kernels of size 11×11×3 with a stride of 4 pixels (this is the distance between the receptive ﬁeld centers of neighboring",
+      "textHash": "sha256:eb315c6581c8749b793f28039884e3b81e60c1d373899ad7a065bca655055312",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 17,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:4:1f92c37e8820",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 15290,
+      "charEnd": 15473,
+      "page": 4,
+      "bbox": [
+        108.0,
+        711.56,
+        504.0,
+        732.03
+      ],
+      "text": "3We cannot describe this network in detail due to space constraints, but it is speciﬁed precisely by the code and parameter ﬁles provided here: http://code.google.com/p/cuda-convnet/.",
+      "textHash": "sha256:da0c1fa45e0f2cca1910ffce322115acdcc681933532fd4055b18df01738eab3",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 18,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "paragraph-span:alexnet-2012:5:5c6e754b4795",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 15475,
+      "charEnd": 16145,
+      "page": 5,
+      "bbox": [
+        108.0,
+        291.24,
+        504.0,
+        366.95
+      ],
+      "text": "neurons in a kernel map). The second convolutional layer takes as input the (response-normalized and pooled) output of the ﬁrst convolutional layer and ﬁlters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and ﬁfth convolutional layers are connected to one another without any intervening pooling or normalization layers. The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs of the second convolutional layer. The fourth convolutional layer has 384 kernels of size 3 × 3 × 192 , and the ﬁfth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully-connected layers have 4096 neurons each.",
+      "textHash": "sha256:e9cb97896d0c8544aba6c78679a402ac5104cd7c83edd4c3cbdde1213b2f738e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "section-span:alexnet-2012:9:79866ba5bbb1",
+      "spanType": "section",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 28510,
+      "charEnd": 28520,
+      "page": 9,
+      "bbox": [
+        108.0,
+        84.18,
+        154.29,
+        94.14
+      ],
+      "text": "References",
+      "textHash": "sha256:69824d3b0e70ca6aaa0da1613b65fd914c442bf1f7ad1bb22bcdfbdfe1a05e39",
+      "headingPath": [
+        "References"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:1:2831204de848",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 46,
+      "charEnd": 160,
+      "page": 1,
+      "bbox": [
+        136.39,
+        152.39,
+        458.83,
+        202.1
+      ],
+      "text": "Kaiming He Xiangyu Zhang Shaoqing Ren Jian Sun Microsoft Research {kahe, v-xiangz, v-shren, jiansun}@microsoft.com",
+      "textHash": "sha256:1a8f8e782e4aa008b5e6c24219ca1a0fee47bab3986d731c1dec18ec47463d40",
+      "headingPath": [],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "section-span:resnet-2015:1:16c319c83e6d",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 202,
+      "charEnd": 210,
+      "page": 1,
+      "bbox": [
+        145.99,
+        225.25,
+        190.48,
+        237.2
+      ],
+      "text": "Abstract",
+      "textHash": "sha256:d21b4a64a2d8656a0fdf7ab2e89a49164ac504686cfa2a3d442e87c209286330",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 5,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:1:398c6fe3d0bf",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 258,
+      "charEnd": 1561,
+      "page": 1,
+      "bbox": [
+        50.11,
+        246.05,
+        286.37,
+        519.45
+      ],
+      "text": "Deeper neural networks are more difﬁcult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learn- ing residual functions with reference to the layer inputs, in- stead of learning unreferenced functions. We provide com- prehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers—8× deeper than VGG nets [41] but still having lower complex- ity. An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classiﬁcation task. We also present analysis on CIFAR-10 with 100 and 1000 layers. The depth of representations is of central importance for many visual recognition tasks. Solely due to our ex- tremely deep representations, we obtain a 28% relative im- provement on the COCO object detection dataset. Deep residual nets are foundations of our submissions to ILSVRC & COCO 2015 competitions1, where we also won the 1st places on the tasks of ImageNet detection, ImageNet local- ization, COCO detection, and COCO segmentation.",
+      "textHash": "sha256:93f267803889cc28763e2873e771c1ac7273d7ff6714ede2c1375c7f5c0a01c3",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 11,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:1:705be285d07b",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 1653,
+      "charEnd": 3278,
+      "page": 1,
+      "bbox": [
+        308.86,
+        362.81,
+        545.12,
+        713.41
+      ],
+      "text": "greatly beneﬁted from very deep models. Driven by the signiﬁcance of depth, a question arises: Is learning better networks as easy as stacking more layers? An obstacle to answering this question was the notorious problem of vanishing/exploding gradients [1, 9], which hamper convergence from the beginning. This problem, however, has been largely addressed by normalized initial- ization [23, 9, 37, 13] and intermediate normalization layers [16], which enable networks with tens of layers to start con- verging for stochastic gradient descent (SGD) with back- propagation [22]. When deeper networks are able to start converging, a degradation problem has been exposed: with the network depth increasing, accuracy gets saturated (which might be unsurprising) and then degrades rapidly. Unexpectedly, such degradation is not caused by overﬁtting, and adding more layers to a suitably deep model leads to higher train- ing error, as reported in [11, 42] and thoroughly veriﬁed by our experiments. Fig. 1 shows a typical example. The degradation (of training accuracy) indicates that not all systems are similarly easy to optimize. Let us consider a shallower architecture and its deeper counterpart that adds more layers onto it. There exists a solution by construction to the deeper model: the added layers are identity mapping, and the other layers are copied from the learned shallower model. The existence of this constructed solution indicates that a deeper model should produce no higher training error than its shallower counterpart. But experiments show that our current solvers on hand are unable to ﬁnd solutions that",
+      "textHash": "sha256:da2f522d49b7980634a9aed0a2008cab5dbf4f8eaee9c68db19e9d4520669af3",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 24,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:1:cbfcfc2025a8",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 3297,
+      "charEnd": 3944,
+      "page": 1,
+      "bbox": [
+        50.11,
+        556.2,
+        286.37,
+        685.72
+      ],
+      "text": "Deep convolutional neural networks [22, 21] have led to a series of breakthroughs for image classiﬁcation [21, 50, 40]. Deep networks naturally integrate low/mid/high- level features [50] and classiﬁers in an end-to-end multi- layer fashion, and the “levels” of features can be enriched by the number of stacked layers (depth). Recent evidence [41, 44] reveals that network depth is of crucial importance, and the leading results [41, 44, 13, 16] on the challenging ImageNet dataset [36] all exploit “very deep” [41] models, with a depth of sixteen [41] to thirty [16]. Many other non- trivial visual recognition tasks [8, 12, 7, 32, 27] have also",
+      "textHash": "sha256:a71f50eee75da14382965e46791aa78c0163c32943f3ee91cfb59e9516424043",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 26,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:1:b580556f063e",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 3946,
+      "charEnd": 4047,
+      "page": 1,
+      "bbox": [
+        50.11,
+        695.68,
+        286.36,
+        712.83
+      ],
+      "text": "1http://image-net.org/challenges/LSVRC/2015/ and http://mscoco.org/dataset/#detections-challenge2015.",
+      "textHash": "sha256:bf2f99a6f9b43da398cb3681f77043c9a9e20d85efdca299b7841d0277f29aa5",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 27,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:2:afcabb13ec20",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 4049,
+      "charEnd": 4563,
+      "page": 2,
+      "bbox": [
+        308.86,
+        74.23,
+        545.11,
+        180.01
+      ],
+      "text": "ImageNet test set, and won the 1st place in the ILSVRC 2015 classiﬁcation competition. The extremely deep rep- resentations also have excellent generalization performance on other recognition tasks, and lead us to further win the 1st places on: ImageNet detection, ImageNet localization, COCO detection, and COCO segmentation in ILSVRC & COCO 2015 competitions. This strong evidence shows that the residual learning principle is generic, and we expect that it is applicable in other vision and non-vision problems.",
+      "textHash": "sha256:16d6450ad70f38f8df44867826e2354058ce6a436c842cac606060f436819793",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:2:f87feac2968c",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 4618,
+      "charEnd": 7059,
+      "page": 2,
+      "bbox": [
+        50.11,
+        182.15,
+        286.37,
+        713.41
+      ],
+      "text": "are comparably good or better than the constructed solution (or unable to do so in feasible time). In this paper, we address the degradation problem by introducing a deep residual learning framework. In- stead of hoping each few stacked layers directly ﬁt a desired underlying mapping, we explicitly let these lay- ers ﬁt a residual mapping. Formally, denoting the desired underlying mapping as H(x), we let the stacked nonlinear layers ﬁt another mapping of F(x) := H(x)−x. The orig- inal mapping is recast into F(x)+x. We hypothesize that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping. To the extreme, if an identity mapping were optimal, it would be easier to push the residual to zero than to ﬁt an identity mapping by a stack of nonlinear layers. The formulation of F(x)+x can be realized by feedfor- ward neural networks with “shortcut connections” (Fig. 2). Shortcut connections [2, 34, 49] are those skipping one or more layers. In our case, the shortcut connections simply perform identity mapping, and their outputs are added to the outputs of the stacked layers (Fig. 2). Identity short- cut connections add neither extra parameter nor computa- tional complexity. The entire network can still be trained end-to-end by SGD with backpropagation, and can be eas- ily implemented using common libraries (e.g., Caffe [19]) without modifying the solvers. We present comprehensive experiments on ImageNet [36] to show the degradation problem and evaluate our method. We show that: 1) Our extremely deep residual nets are easy to optimize, but the counterpart “plain” nets (that simply stack layers) exhibit higher training error when the depth increases; 2) Our deep residual nets can easily enjoy accuracy gains from greatly increased depth, producing re- sults substantially better than previous networks. Similar phenomena are also shown on the CIFAR-10 set [20], suggesting that the optimization difﬁculties and the effects of our method are not just akin to a particular dataset. We present successfully trained models on this dataset with over 100 layers, and explore models with over 1000 layers. On the ImageNet classiﬁcation dataset [36], we obtain excellent results by extremely deep residual nets. Our 152- layer residual net is the deepest network ever presented on ImageNet, while still having lower complexity than VGG nets [41]. Our ensemble has 3.57% top-5 error on the",
+      "textHash": "sha256:ba5037518dd878370857fa41e5462d6eba9a866a5cc2d2cc0f283dbf77b37a50",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 9,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:2:224aa23f9a69",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 7078,
+      "charEnd": 8226,
+      "page": 2,
+      "bbox": [
+        308.86,
+        216.44,
+        545.12,
+        454.55
+      ],
+      "text": "Residual Representations. In image recognition, VLAD [18] is a representation that encodes by the residual vectors with respect to a dictionary, and Fisher Vector [30] can be formulated as a probabilistic version [18] of VLAD. Both of them are powerful shallow representations for image re- trieval and classiﬁcation [4, 48]. For vector quantization, encoding residual vectors [17] is shown to be more effec- tive than encoding original vectors. In low-level vision and computer graphics, for solv- ing Partial Differential Equations (PDEs), the widely used Multigrid method [3] reformulates the system as subprob- lems at multiple scales, where each subproblem is respon- sible for the residual solution between a coarser and a ﬁner scale. An alternative to Multigrid is hierarchical basis pre- conditioning [45, 46], which relies on variables that repre- sent residual vectors between two scales. It has been shown [3, 45, 46] that these solvers converge much faster than stan- dard solvers that are unaware of the residual nature of the solutions. These methods suggest that a good reformulation or preconditioning can simplify the optimization.",
+      "textHash": "sha256:a6af59fea79827d7dda6f4185f79ff0b5c56a56682d583748bf1eae214cbad00",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 11,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:2:c2a72a47fcdc",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 8228,
+      "charEnd": 9445,
+      "page": 2,
+      "bbox": [
+        308.86,
+        463.34,
+        545.12,
+        713.41
+      ],
+      "text": "Shortcut Connections. Practices and theories that lead to shortcut connections [2, 34, 49] have been studied for a long time. An early practice of training multi-layer perceptrons (MLPs) is to add a linear layer connected from the network input to the output [34, 49]. In [44, 24], a few interme- diate layers are directly connected to auxiliary classiﬁers for addressing vanishing/exploding gradients. The papers of [39, 38, 31, 47] propose methods for centering layer re- sponses, gradients, and propagated errors, implemented by shortcut connections. In [44], an “inception” layer is com- posed of a shortcut branch and a few deeper branches. Concurrent with our work, “highway networks” [42, 43] present shortcut connections with gating functions [15]. These gates are data-dependent and have parameters, in contrast to our identity shortcuts that are parameter-free. When a gated shortcut is “closed” (approaching zero), the layers in highway networks represent non-residual func- tions. On the contrary, our formulation always learns residual functions; our identity shortcuts are never closed, and all information is always passed through, with addi- tional residual functions to be learned. In addition, high-",
+      "textHash": "sha256:9e4b6a4422f9ba2eac36b46f76c4c69044e66d52487c9d53736854bfc4600055",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 12,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:b932cf96f230",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 9447,
+      "charEnd": 9552,
+      "page": 3,
+      "bbox": [
+        50.11,
+        74.41,
+        286.37,
+        96.33
+      ],
+      "text": "way networks have not demonstrated accuracy gains with extremely increased depth (e.g., over 100 layers).",
+      "textHash": "sha256:ba62b5543f406983f7235524c8cd776a811845a0532d69e25180413e114aa8fc",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:1be5946ee273",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 9554,
+      "charEnd": 10409,
+      "page": 3,
+      "bbox": [
+        308.86,
+        74.41,
+        545.12,
+        252.23
+      ],
+      "text": "ReLU [29] and the biases are omitted for simplifying no- tations. The operation F + x is performed by a shortcut connection and element-wise addition. We adopt the sec- ond nonlinearity after the addition (i.e., σ(y), see Fig. 2). The shortcut connections in Eqn.(1) introduce neither ex- tra parameter nor computation complexity. This is not only attractive in practice but also important in our comparisons between plain and residual networks. We can fairly com- pare plain/residual networks that simultaneously have the same number of parameters, depth, width, and computa- tional cost (except for the negligible element-wise addition). The dimensions of x and F must be equal in Eqn.(1). If this is not the case (e.g., when changing the input/output channels), we can perform a linear projection Ws by the shortcut connections to match the dimensions:",
+      "textHash": "sha256:d7352664f845574baa0d21614da2158cec1f637f07637d8393663f9d62bf17ad",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:5ff9b912489c",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10462,
+      "charEnd": 12407,
+      "page": 3,
+      "bbox": [
+        50.11,
+        147.49,
+        286.37,
+        552.34
+      ],
+      "text": "Let us consider H(x) as an underlying mapping to be ﬁt by a few stacked layers (not necessarily the entire net), with x denoting the inputs to the ﬁrst of these layers. If one hypothesizes that multiple nonlinear layers can asymptoti- cally approximate complicated functions2, then it is equiv- alent to hypothesize that they can asymptotically approxi- mate the residual functions, i.e., H(x) −x (assuming that the input and output are of the same dimensions). So rather than expect stacked layers to approximate H(x), we explicitly let these layers approximate a residual function F(x) := H(x) −x. The original function thus becomes F(x)+x. Although both forms should be able to asymptot- ically approximate the desired functions (as hypothesized), the ease of learning might be different. This reformulation is motivated by the counterintuitive phenomena about the degradation problem (Fig. 1, left). As we discussed in the introduction, if the added layers can be constructed as identity mappings, a deeper model should have training error no greater than its shallower counter- part. The degradation problem suggests that the solvers might have difﬁculties in approximating identity mappings by multiple nonlinear layers. With the residual learning re- formulation, if identity mappings are optimal, the solvers may simply drive the weights of the multiple nonlinear lay- ers toward zero to approach identity mappings. In real cases, it is unlikely that identity mappings are op- timal, but our reformulation may help to precondition the problem. If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to ﬁnd the perturbations with reference to an identity mapping, than to learn the function as a new one. We show by experiments (Fig. 7) that the learned residual functions in general have small responses, suggesting that identity map- pings provide reasonable preconditioning.",
+      "textHash": "sha256:f16be58fe14c4b0e4d5c53320b1430b4071878d27b82603587a11bbbcca48891",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 4,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:10ad3f801313",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 12436,
+      "charEnd": 13252,
+      "page": 3,
+      "bbox": [
+        308.86,
+        286.84,
+        545.11,
+        452.93
+      ],
+      "text": "We can also use a square matrix Ws in Eqn.(1). But we will show by experiments that the identity mapping is sufﬁcient for addressing the degradation problem and is economical, and thus Ws is only used when matching dimensions. The form of the residual function F is ﬂexible. Exper- iments in this paper involve a function F that has two or three layers (Fig. 5), while more layers are possible. But if F has only a single layer, Eqn.(1) is similar to a linear layer: y = W1x + x, for which we have not observed advantages. We also note that although the above notations are about fully-connected layers for simplicity, they are applicable to convolutional layers. The function F(x, {Wi}) can repre- sent multiple convolutional layers. The element-wise addi- tion is performed on two feature maps, channel by channel.",
+      "textHash": "sha256:82a374b355cf05eec3e0d2dec84a504be65bc465d082965abf5474805af13cf1",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:5fa7ae017530",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13282,
+      "charEnd": 13454,
+      "page": 3,
+      "bbox": [
+        308.86,
+        481.79,
+        545.11,
+        515.66
+      ],
+      "text": "We have tested various plain/residual nets, and have ob- served consistent phenomena. To provide instances for dis- cussion, we describe two models for ImageNet as follows.",
+      "textHash": "sha256:9b2e9d36fa1d5663f8baec97d0f1f0fcb5455a833ce6dd51ae6547433dd763b0",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 8,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:ad850409d717",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13456,
+      "charEnd": 14347,
+      "page": 3,
+      "bbox": [
+        308.86,
+        523.78,
+        545.12,
+        713.41
+      ],
+      "text": "Plain Network. Our plain baselines (Fig. 3, middle) are mainly inspired by the philosophy of VGG nets [41] (Fig. 3, left). The convolutional layers mostly have 3×3 ﬁlters and follow two simple design rules: (i) for the same output feature map size, the layers have the same number of ﬁl- ters; and (ii) if the feature map size is halved, the num- ber of ﬁlters is doubled so as to preserve the time com- plexity per layer. We perform downsampling directly by convolutional layers that have a stride of 2. The network ends with a global average pooling layer and a 1000-way fully-connected layer with softmax. The total number of weighted layers is 34 in Fig. 3 (middle). It is worth noticing that our model has fewer ﬁlters and lower complexity than VGG nets [41] (Fig. 3, left). Our 34- layer baseline has 3.6 billion FLOPs (multiply-adds), which is only 18% of VGG-19 (19.6 billion FLOPs).",
+      "textHash": "sha256:f9d11d9f5ec7a5fdc3823d823d3b657074d00ac4f449ca9ab85d9977fe671fef",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 9,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:e7ab3ea475bb",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 14385,
+      "charEnd": 14541,
+      "page": 3,
+      "bbox": [
+        50.11,
+        580.66,
+        286.36,
+        614.53
+      ],
+      "text": "We adopt residual learning to every few stacked layers. A building block is shown in Fig. 2. Formally, in this paper we consider a building block deﬁned as:",
+      "textHash": "sha256:8608775d5a88b98b46f5cc8cca8eff14dd07a6331b61710b22ad05d62242d015",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 11,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:3:320146d806de",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 14568,
+      "charEnd": 14791,
+      "page": 3,
+      "bbox": [
+        50.11,
+        648.82,
+        286.37,
+        701.8
+      ],
+      "text": "Here x and y are the input and output vectors of the lay- ers considered. The function F(x, {Wi}) represents the residual mapping to be learned. For the example in Fig. 2 that has two layers, F = W2σ(W1x) in which σ denotes",
+      "textHash": "sha256:428b5147beacb07efb9a0ee9c0abc31e2f1dfcc26ea8cc73ac6d2b20a25ec2c5",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 13,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:4:94b3ce596aaa",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 14858,
+      "charEnd": 15607,
+      "page": 4,
+      "bbox": [
+        308.86,
+        74.32,
+        545.12,
+        227.83
+      ],
+      "text": "Residual Network. Based on the above plain network, we insert shortcut connections (Fig. 3, right) which turn the network into its counterpart residual version. The identity shortcuts (Eqn.(1)) can be directly used when the input and output are of the same dimensions (solid line shortcuts in Fig. 3). When the dimensions increase (dotted line shortcuts in Fig. 3), we consider two options: (A) The shortcut still performs identity mapping, with extra zero entries padded for increasing dimensions. This option introduces no extra parameter; (B) The projection shortcut in Eqn.(2) is used to match dimensions (done by 1×1 convolutions). For both options, when the shortcuts go across feature maps of two sizes, they are performed with a stride of 2.",
+      "textHash": "sha256:1199c540e0bdfbe83d2c54ecc5a88fa098a77b8d56cc801dcb31f8e8efcb9b8e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:4:f0c300c664ff",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 16093,
+      "charEnd": 17187,
+      "page": 4,
+      "bbox": [
+        308.86,
+        254.93,
+        545.12,
+        487.24
+      ],
+      "text": "Our implementation for ImageNet follows the practice in [21, 41]. The image is resized with its shorter side ran- domly sampled in [256, 480] for scale augmentation [41]. A 224×224 crop is randomly sampled from an image or its horizontal ﬂip, with the per-pixel mean subtracted [21]. The standard color augmentation in [21] is used. We adopt batch normalization (BN) [16] right after each convolution and before activation, following [16]. We initialize the weights as in [13] and train all plain/residual nets from scratch. We use SGD with a mini-batch size of 256. The learning rate starts from 0.1 and is divided by 10 when the error plateaus, and the models are trained for up to 60 × 104 iterations. We use a weight decay of 0.0001 and a momentum of 0.9. We do not use dropout [14], following the practice in [16]. In testing, for comparison studies we adopt the standard 10-crop testing [21]. For best results, we adopt the fully- convolutional form as in [41, 13], and average the scores at multiple scales (images are resized such that the shorter side is in {224, 256, 384, 480, 640}).",
+      "textHash": "sha256:db82f0578197c46731e93ec44c7b6a9dbb070ee1e7487fa03027591b4de8f3a7",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 35,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:4:146816634e66",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 18118,
+      "charEnd": 18456,
+      "page": 4,
+      "bbox": [
+        308.86,
+        530.09,
+        545.12,
+        599.83
+      ],
+      "text": "We evaluate our method on the ImageNet 2012 classiﬁ- cation dataset [36] that consists of 1000 classes. The models are trained on the 1.28 million training images, and evalu- ated on the 50k validation images. We also obtain a ﬁnal result on the 100k test images, reported by the test server. We evaluate both top-1 and top-5 error rates.",
+      "textHash": "sha256:05221cb1db6e82760afb771c3d204908a29d5e49247c4c17d8658fe8cb1185c5",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 96,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:4:197ac7834fa2",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 18614,
+      "charEnd": 19109,
+      "page": 4,
+      "bbox": [
+        308.86,
+        607.71,
+        545.12,
+        713.41
+      ],
+      "text": "Plain Networks. We ﬁrst evaluate 18-layer and 34-layer plain nets. The 34-layer plain net is in Fig. 3 (middle). The 18-layer plain net is of a similar form. See Table 1 for de- tailed architectures. The results in Table 2 show that the deeper 34-layer plain net has higher validation error than the shallower 18-layer plain net. To reveal the reasons, in Fig. 4 (left) we com- pare their training/validation errors during the training pro- cedure. We have observed the degradation problem - the",
+      "textHash": "sha256:4e8c6fbf93a0b35dbb673cee8eb3fbb94a1fae891ea2bb21718c304708f8bbac",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 112,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:5:b04948127ef2",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 19111,
+      "charEnd": 19212,
+      "page": 5,
+      "bbox": [
+        127.91,
+        73.33,
+        452.58,
+        93.23
+      ],
+      "text": "layer name output size 18-layer 34-layer 50-layer 101-layer 152-layer conv1 112×112 7×7, 64, stride 2",
+      "textHash": "sha256:d9a8850b2cfebb46263f84d9f602b3e4dff1bae4dbccf31139c06faeb6128c31",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:5:885e84adc489",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 19819,
+      "charEnd": 19902,
+      "page": 5,
+      "bbox": [
+        149.19,
+        202.76,
+        452.73,
+        222.77
+      ],
+      "text": "1×1 average pool, 1000-d fc, softmax FLOPs 1.8×109 3.6×109 3.8×109 7.6×109 11.3×109",
+      "textHash": "sha256:15d1799564346124e66a9dac09517dcef12c9d1b6d97c6cbd0c6ee30de78af1e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 69,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "paragraph-span:resnet-2015:5:d6f35934e66d",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 20074,
+      "charEnd": 20184,
+      "page": 5,
+      "bbox": [
+        308.86,
+        444.01,
+        545.11,
+        467.28
+      ],
+      "text": "reducing of the training error3. The reason for such opti- mization difﬁculties will be studied in the future.",
+      "textHash": "sha256:bd2e5001baf2ea14c0da151e049193a506fabce2b7a82255bf505e555b3d75c3",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 96,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "section-span:resnet-2015:6:ee9d22d00786",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 23607,
+      "charEnd": 23664,
+      "page": 6,
+      "bbox": [
+        67.1,
+        257.66,
+        269.37,
+        278.32
+      ],
+      "text": "method top-1 err. top-5 err. VGG [41] (ILSVRC’14) - 8.43†",
+      "textHash": "sha256:33e271f007966a45c4ffcf817fd01fbe1bc03823bb2abbf8f4fba1ce1dafe1ca",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 25,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "section-span:resnet-2015:6:74274d3089f2",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 23890,
+      "charEnd": 24057,
+      "page": 6,
+      "bbox": [
+        72.77,
+        427.93,
+        263.7,
+        510.42
+      ],
+      "text": "method top-5 err. (test) VGG [41] (ILSVRC’14) 7.32 GoogLeNet [44] (ILSVRC’14) 6.66 VGG [41] (v5) 6.8 PReLU-net [13] 4.94 BN-inception [16] 4.82 ResNet (ILSVRC’15) 3.57",
+      "textHash": "sha256:5ea905f86475388dff3101e3c605aad39bb9d5b9959362c0cb1bac644d95d791",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 28,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "section-span:resnet-2015:7:2c0b4663bd67",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 26859,
+      "charEnd": 27176,
+      "page": 7,
+      "bbox": [
+        316.37,
+        74.71,
+        537.61,
+        241.09
+      ],
+      "text": "method error (%) Maxout [10] 9.38 NIN [25] 8.81 DSN [24] 8.22 # layers # params FitNet [35] 19 2.5M 8.39 Highway [42, 43] 19 2.3M 7.54 (7.72±0.16) Highway [42, 43] 32 1.25M 8.80 ResNet 20 0.27M 8.75 ResNet 32 0.46M 7.51 ResNet 44 0.66M 7.17 ResNet 56 0.85M 6.97 ResNet 110 1.7M 6.43 (6.61±0.16) ResNet 1202 19.4M 7.93",
+      "textHash": "sha256:f659aff759e3276924fbd32f8add7b2f3e062edcbc2e26533c1cdccc582ea37e",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "section-span:resnet-2015:9:6ed77a73c90b",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 34574,
+      "charEnd": 34584,
+      "page": 9,
+      "bbox": [
+        50.11,
+        72.79,
+        105.66,
+        84.74
+      ],
+      "text": "References",
+      "textHash": "sha256:69824d3b0e70ca6aaa0da1613b65fd914c442bf1f7ad1bb22bcdfbdfe1a05e39",
+      "headingPath": [
+        "References"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "section-span:resnet-2015:12:968907b3d643",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 50155,
+      "charEnd": 50184,
+      "page": 12,
+      "bbox": [
+        365.78,
+        73.65,
+        530.53,
+        88.26
+      ],
+      "text": "method top-5 localization err",
+      "textHash": "sha256:9465039bb2e4af2f18dbe67bcfd3dfd9c2e4f46d654ac6ca55a53c0c0cd40db2",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:ce26a469f916",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 71,
+      "charEnd": 170,
+      "page": 1,
+      "bbox": [
+        70.15,
+        139.39,
+        525.59,
+        152.97
+      ],
+      "text": "Alec Radford * 1 Jong Wook Kim * 1 Chris Hallacy 1 Aditya Ramesh 1 Gabriel Goh 1 Sandhini Agarwal 1",
+      "textHash": "sha256:4b7b007583de6ae82afda9515c2d464fc0a2e177ff3b44d8ba71514609c4c0d2",
+      "headingPath": [],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:0de5ca1bc44a",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 172,
+      "charEnd": 269,
+      "page": 1,
+      "bbox": [
+        76.98,
+        151.34,
+        518.77,
+        164.92
+      ],
+      "text": "Girish Sastry 1 Amanda Askell 1 Pamela Mishkin 1 Jack Clark 1 Gretchen Krueger 1 Ilya Sutskever 1",
+      "textHash": "sha256:bc519d9471e024fa7b636f9a417b9f18f3c42c605c76e6eb43d2692149d52a60",
+      "headingPath": [],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "section-span:clip-2021:1:17a6c7ae964a",
+      "spanType": "section",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 271,
+      "charEnd": 279,
+      "page": 1,
+      "bbox": [
+        150.2,
+        188.02,
+        194.68,
+        199.97
+      ],
+      "text": "Abstract",
+      "textHash": "sha256:d21b4a64a2d8656a0fdf7ab2e89a49164ac504686cfa2a3d442e87c209286330",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 3,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:e60097f9d244",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 281,
+      "charEnd": 950,
+      "page": 1,
+      "bbox": [
+        307.08,
+        189.7,
+        543.1,
+        331.11
+      ],
+      "text": "Task-agnostic objectives such as autoregressive and masked language modeling have scaled across many orders of mag- nitude in compute, model capacity, and data, steadily im- proving capabilities. The development of “text-to-text” as a standardized input-output interface (McCann et al., 2018; Radford et al., 2019; Raffel et al., 2019) has enabled task- agnostic architectures to zero-shot transfer to downstream datasets removing the need for specialized output heads or dataset speciﬁc customization. Flagship systems like GPT-3 (Brown et al., 2020) are now competitive across many tasks with bespoke models while requiring little to no dataset speciﬁc training data.",
+      "textHash": "sha256:c10ddf89b783d131ec0750ec8c21a4a58c1ff6e4181789f46b25f66d3f598a99",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 4,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:52b674213ae2",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 952,
+      "charEnd": 2429,
+      "page": 1,
+      "bbox": [
+        74.9,
+        207.66,
+        271.26,
+        576.35
+      ],
+      "text": "State-of-the-art computer vision systems are trained to predict a ﬁxed set of predetermined object categories. This restricted form of super- vision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images is a promising alternative which leverages a much broader source of supervision. We demonstrate that the simple pre-training task of predicting which caption goes with which im- age is an efﬁcient and scalable way to learn SOTA image representations from scratch on a dataset of 400 million (image, text) pairs collected from the internet. After pre-training, natural language is used to reference learned visual concepts (or describe new ones) enabling zero-shot transfer of the model to downstream tasks. We study the performance of this approach by benchmark- ing on over 30 different existing computer vi- sion datasets, spanning tasks such as OCR, ac- tion recognition in videos, geo-localization, and many types of ﬁne-grained object classiﬁcation. The model transfers non-trivially to most tasks and is often competitive with a fully supervised baseline without the need for any dataset spe- ciﬁc training. For instance, we match the ac- curacy of the original ResNet-50 on ImageNet zero-shot without needing to use any of the 1.28 million training examples it was trained on. We release our code and pre-trained model weights at https://github.com/OpenAI/CLIP.",
+      "textHash": "sha256:f79ee73aa74b1973fdc7873b5a8ea39323e9bbd7a8cb6c911e0836c77d643cc5",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 5,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:9a4b7e6fc09e",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 2471,
+      "charEnd": 2978,
+      "page": 1,
+      "bbox": [
+        307.13,
+        339.03,
+        543.19,
+        444.68
+      ],
+      "text": "These results suggest that the aggregate supervision acces- sible to modern pre-training methods within web-scale col- lections of text surpasses that of high-quality crowd-labeled NLP datasets. However, in other ﬁelds such as computer vision it is still standard practice to pre-train models on crowd-labeled datasets such as ImageNet (Deng et al., 2009). Could scalable pre-training methods which learn directly from web text result in a similar breakthrough in computer vision? Prior work is encouraging.",
+      "textHash": "sha256:e5ce034d75a32a6fbde6743d12f13bfe107e25b77921029b8dc9a9cfe1d98e38",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 7,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:d5208594e3dc",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 2980,
+      "charEnd": 4259,
+      "page": 1,
+      "bbox": [
+        306.86,
+        452.57,
+        543.19,
+        713.7
+      ],
+      "text": "Over 20 years ago Mori et al. (1999) explored improving content based image retrieval by training a model to pre- dict the nouns and adjectives in text documents paired with images. Quattoni et al. (2007) demonstrated it was possi- ble to learn more data efﬁcient image representations via manifold learning in the weight space of classiﬁers trained to predict words in captions associated with images. Sri- vastava & Salakhutdinov (2012) explored deep represen- tation learning by training multimodal Deep Boltzmann Machines on top of low-level image and text tag features. Joulin et al. (2016) modernized this line of work and demon- strated that CNNs trained to predict words in image cap- tions learn useful image representations. They converted the title, description, and hashtag metadata of images in the YFCC100M dataset (Thomee et al., 2016) into a bag-of- words multi-label classiﬁcation task and showed that pre- training AlexNet (Krizhevsky et al., 2012) to predict these labels learned representations which preformed similarly to ImageNet-based pre-training on transfer tasks. Li et al. (2017) then extended this approach to predicting phrase n- grams in addition to individual words and demonstrated the ability of their system to zero-shot transfer to other image",
+      "textHash": "sha256:649fbf64c55267849bc0994b7828ec648fc31d1ce2b6d3c508ec846b7154da69",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 8,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:457a23221842",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 4298,
+      "charEnd": 4528,
+      "page": 1,
+      "bbox": [
+        55.44,
+        623.06,
+        291.18,
+        668.98
+      ],
+      "text": "Pre-training methods which learn directly from raw text have revolutionized NLP over the last few years (Dai & Le, 2015; Peters et al., 2018; Howard & Ruder, 2018; Rad- ford et al., 2018; Devlin et al., 2018; Raffel et al., 2019).",
+      "textHash": "sha256:583f8bd5cd662280aa810a376c151326c4fc3bad7651059c9fd2084cacd95b52",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 10,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:1:a448b399d360",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 4530,
+      "charEnd": 4638,
+      "page": 1,
+      "bbox": [
+        55.44,
+        676.83,
+        291.01,
+        697.3
+      ],
+      "text": "*Equal contribution 1OpenAI, San Francisco, CA 94110, USA. Correspondence to: <{alec, jongwook}@openai.com>.",
+      "textHash": "sha256:aa66d141f8313e325736ae827b80f76f3a972f040e77cefc8ef266c482d468fa",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 11,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:2:806cf37fa237",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 5118,
+      "charEnd": 5616,
+      "page": 2,
+      "bbox": [
+        55.08,
+        322.27,
+        291.1,
+        427.95
+      ],
+      "text": "classiﬁcation datasets by scoring target classes based on their dictionary of learned visual n-grams and predicting the one with the highest score. Adopting more recent architec- tures and pre-training approaches, VirTex (Desai & Johnson, 2020), ICMLM (Bulent Sariyildiz et al., 2020), and Con- VIRT (Zhang et al., 2020) have recently demonstrated the potential of transformer-based language modeling, masked language modeling, and contrastive objectives to learn im- age representations from text.",
+      "textHash": "sha256:149aaab161ec34ce5601aa730e7b69adf4217cea4aa3803a33c7ef00648bde9f",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 48,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:2:53587c12e6d4",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 5618,
+      "charEnd": 6061,
+      "page": 2,
+      "bbox": [
+        306.11,
+        322.42,
+        543.19,
+        416.0
+      ],
+      "text": "mises. Both works carefully design, and in the process limit, their supervision to 1000 and 18291 classes respectively. Natural language is able to express, and therefore supervise, a much wider set of visual concepts through its general- ity. Both approaches also use static softmax classiﬁers to perform prediction and lack a mechanism for dynamic out- puts. This severely curtails their ﬂexibility and limits their “zero-shot” capabilities.",
+      "textHash": "sha256:f35125384bdd7922a080126fa3f27cef9bac3c0b856d350db59a63333eb12679",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 49,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:2:acc001c16e10",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 6063,
+      "charEnd": 7480,
+      "page": 2,
+      "bbox": [
+        306.97,
+        424.0,
+        543.19,
+        708.91
+      ],
+      "text": "A crucial difference between these weakly supervised mod- els and recent explorations of learning image representations directly from natural language is scale. While Mahajan et al. (2018) and Kolesnikov et al. (2019) trained their models for accelerator years on millions to billions of images, VirTex, ICMLM, and ConVIRT trained for accelerator days on one to two hundred thousand images. In this work, we close this gap and study the behaviors of image classiﬁers trained with natural language supervision at large scale. Enabled by the large amounts of publicly available data of this form on the internet, we create a new dataset of 400 million (im- age, text) pairs and demonstrate that a simpliﬁed version of ConVIRT trained from scratch, which we call CLIP, for Con- trastive Language-Image Pre-training, is an efﬁcient method of learning from natural language supervision. We study the scalability of CLIP by training a series of eight models spanning almost 2 orders of magnitude of compute and ob- serve that transfer performance is a smoothly predictable function of compute (Hestness et al., 2017; Kaplan et al., 2020). We ﬁnd that CLIP, similar to the GPT family, learns to perform a wide set of tasks during pre-training including OCR, geo-localization, action recognition, and many others. We measure this by benchmarking the zero-shot transfer performance of CLIP on over 30 existing datasets and ﬁnd",
+      "textHash": "sha256:86123d4dab9e06121324e2b8b5c89d1c8eca6cb13952c6bfbc7ee020a970d9da",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 50,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:2:605efe814cd1",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 7482,
+      "charEnd": 8575,
+      "page": 2,
+      "bbox": [
+        54.97,
+        435.97,
+        291.19,
+        661.08
+      ],
+      "text": "While exciting as proofs of concept, using natural language supervision for image representation learning is still rare. This is likely because demonstrated performance on com- mon benchmarks is much lower than alternative approaches. For example, Li et al. (2017) reach only 11.5% accuracy on ImageNet in a zero-shot setting. This is well below the 88.4% accuracy of the current state of the art (Xie et al., 2020). It is even below the 50% accuracy of classic com- puter vision approaches (Deng et al., 2012). Instead, more narrowly scoped but well-targeted uses of weak supervision have improved performance. Mahajan et al. (2018) showed that predicting ImageNet-related hashtags on Instagram im- ages is an effective pre-training task. When ﬁne-tuned to ImageNet these pre-trained models increased accuracy by over 5% and improved the overall state of the art at the time. Kolesnikov et al. (2019) and Dosovitskiy et al. (2020) have also demonstrated large gains on a broader set of transfer benchmarks by pre-training models to predict the classes of the noisily labeled JFT-300M dataset.",
+      "textHash": "sha256:a4640c285a549dc9fca891cc876184c4b7eccbad9b20c29fa5de2b3f75758d6e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 51,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:2:de06e147f69f",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 8577,
+      "charEnd": 8806,
+      "page": 2,
+      "bbox": [
+        55.13,
+        668.97,
+        291.09,
+        714.9
+      ],
+      "text": "This line of work represents the current pragmatic middle ground between learning from a limited amount of super- vised “gold-labels” and learning from practically unlimited amounts of raw text. However, it is not without compro-",
+      "textHash": "sha256:6f8df89a946ee7691c0e7ae9ae52f6d18108d93f4274197bb0ae98f02f188787",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 52,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:b3f2f30bf531",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 8881,
+      "charEnd": 9179,
+      "page": 3,
+      "bbox": [
+        307.44,
+        69.22,
+        543.1,
+        139.21
+      ],
+      "text": "vision. Although early work wrestled with the complexity of natural language when using topic model and n-gram representations, improvements in deep contextual represen- tation learning suggest we now have the tools to effectively leverage this abundant source of supervision (McCann et al., 2017).",
+      "textHash": "sha256:446aea5d69042174cb9f8d7a392c3c330c6fedcc3830351425bdf072d040dc7a",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:9eb718e202ad",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 9239,
+      "charEnd": 10089,
+      "page": 3,
+      "bbox": [
+        307.19,
+        147.1,
+        541.79,
+        324.51
+      ],
+      "text": "Learning from natural language has several potential strengths over other training methods. It’s much easier to scale natural language supervision compared to standard crowd-sourced labeling for image classiﬁcation since it does not require annotations to be in a classic “machine learning compatible format” such as the canonical 1-of-N majority vote “gold label”. Instead, methods which work on natural language can learn passively from the supervision contained in the vast amount of text on the internet. Learning from natural language also has an important advantage over most unsupervised or self-supervised learning approaches in that it doesn’t “just” learn a representation but also connects that representation to language which enables ﬂexible zero-shot transfer. In the following subsections, we detail the speciﬁc approach we settled on.",
+      "textHash": "sha256:eb95617ccc9ac0c07f2b5c685b3bd2a10fccbc2a4072552b7e72ab491117db07",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 9,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:3c593d0dd711",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10091,
+      "charEnd": 10173,
+      "page": 3,
+      "bbox": [
+        177.2,
+        167.99,
+        275.01,
+        196.25
+      ],
+      "text": "Bag of Words Contrastive (CLIP) Bag of Words Prediction Transformer Language Model",
+      "textHash": "sha256:7b1d5a3a6b44271dbaa88b3a40db1897fe0e78d5578f4b2c6b4533576c7df01f",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 12,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:021b43d980f7",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10267,
+      "charEnd": 10870,
+      "page": 3,
+      "bbox": [
+        55.08,
+        347.94,
+        291.09,
+        477.53
+      ],
+      "text": "it can be competitive with prior task-speciﬁc supervised models. We also conﬁrm these ﬁndings with linear-probe representation learning analysis and show that CLIP out- performs the best publicly available ImageNet model while also being more computationally efﬁcient. We additionally ﬁnd that zero-shot CLIP models are much more robust than equivalent accuracy supervised ImageNet models which suggests that zero-shot evaluation of task-agnostic models is much more representative of a model’s capability. These re- sults have signiﬁcant policy and ethical implications, which we consider in Section 7.",
+      "textHash": "sha256:ae11942caabe1aec84bcb20313f4c9aa89e10c6092418f453cae6a3ff6f9f7f0",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 18,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:d8dd17dd04ed",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10872,
+      "charEnd": 11772,
+      "page": 3,
+      "bbox": [
+        306.86,
+        358.26,
+        543.09,
+        547.62
+      ],
+      "text": "Existing work has mainly used three datasets, MS-COCO (Lin et al., 2014), Visual Genome (Krishna et al., 2017), and YFCC100M (Thomee et al., 2016). While MS-COCO and Visual Genome are high quality crowd-labeled datasets, they are small by modern standards with approximately 100,000 training photos each. By comparison, other computer vision systems are trained on up to 3.5 billion Instagram photos (Mahajan et al., 2018). YFCC100M, at 100 million photos, is a possible alternative, but the metadata for each image is sparse and of varying quality. Many images use automati- cally generated ﬁlenames like 20160716 113957.JPG as “titles” or contain “descriptions” of camera exposure settings. After ﬁltering to keep only images with natural language titles and/or descriptions in English, the dataset shrunk by a factor of 6 to only 15 million photos. This is approximately the same size as ImageNet.",
+      "textHash": "sha256:adc52cc312269d8fd5a0e8eeb390468577ae1e3d694e24a12e2da0a0c168cb7e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 19,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:14b561a9dddc",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 11822,
+      "charEnd": 12427,
+      "page": 3,
+      "bbox": [
+        55.08,
+        534.08,
+        291.1,
+        663.67
+      ],
+      "text": "At the core of our approach is the idea of learning percep- tion from supervision contained in natural language. As discussed in the introduction, this is not at all a new idea, however terminology used to describe work in this space is varied, even seemingly contradictory, and stated motiva- tions are diverse. Zhang et al. (2020), Gomez et al. (2017), Joulin et al. (2016), and Desai & Johnson (2020) all intro- duce methods which learn visual representations from text paired with images but describe their approaches as unsuper- vised, self-supervised, weakly supervised, and supervised respectively.",
+      "textHash": "sha256:646c572526229e04901b3a2e035a38d747ecf680dcf80459aaac1d609192dcaf",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 22,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:900e97232355",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 12429,
+      "charEnd": 13090,
+      "page": 3,
+      "bbox": [
+        307.08,
+        555.57,
+        543.1,
+        685.13
+      ],
+      "text": "A major motivation for natural language supervision is the large quantities of data of this form available publicly on the internet. Since existing datasets do not adequately reﬂect this possibility, considering results only on them would un- derestimate the potential of this line of research. To address this, we constructed a new dataset of 400 million (image, text) pairs collected form a variety of publicly available sources on the Internet. To attempt to cover as broad a set of visual concepts as possible, we search for (image, text) pairs as part of the construction process whose text includes one of a set of 500,000 queries.1 We approximately class",
+      "textHash": "sha256:67ec3e397b6d7a06773ae73ea73e2fa763441a3fac03b9c39872e475374b3c79",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 23,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:00d5a9aba9cc",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13092,
+      "charEnd": 13332,
+      "page": 3,
+      "bbox": [
+        54.97,
+        671.71,
+        291.1,
+        717.45
+      ],
+      "text": "We emphasize that what is common across this line of work is not any of the details of the particular methods used but the appreciation of natural language as a training signal. All these approaches are learning from natural language super-",
+      "textHash": "sha256:50adb09a01a65242f0902bd91797818bed01103353a301279aae4a88f7a07f8f",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 24,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:3:b41ab43946c9",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13334,
+      "charEnd": 13465,
+      "page": 3,
+      "bbox": [
+        307.44,
+        693.37,
+        541.44,
+        713.82
+      ],
+      "text": "1The base query list is all words occurring at least 100 times in the English version of Wikipedia. This is augmented with bi-grams",
+      "textHash": "sha256:a2181b6819576cd8af7795af5dfb0669c85f82b5261b717a48ba30587353b62d",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 25,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:4:d05cf7e7f85a",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13540,
+      "charEnd": 13763,
+      "page": 4,
+      "bbox": [
+        55.08,
+        69.42,
+        290.11,
+        115.3
+      ],
+      "text": "balance the results by including up to 20,000 (image, text) pairs per query. The resulting dataset has a similar total word count as the WebText dataset used to train GPT-2. We refer to this dataset as WIT for WebImageText.",
+      "textHash": "sha256:0a18e36fb4c095023eb3c7366f72fe95efe167e43a8b42293a2f31464676e459",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "paragraph-span:clip-2021:4:5d84fce21734",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13765,
+      "charEnd": 14592,
+      "page": 4,
+      "bbox": [
+        307.11,
+        69.46,
+        543.18,
+        246.8
+      ],
+      "text": "multi-modal embedding space by jointly training an image encoder and text encoder to maximize the cosine similar- ity of the image and text embeddings of the N real pairs in the batch while minimizing the cosine similarity of the embeddings of the N 2 −N incorrect pairings. We opti- mize a symmetric cross entropy loss over these similarity scores. In Figure 3 we include pseudocode of the core of an implementation of CLIP. To our knowledge this batch con- struction technique and objective was ﬁrst introduced in the area of deep metric learning as the multi-class N-pair loss Sohn (2016), was popularized for contrastive representation learning by Oord et al. (2018) as the InfoNCE loss, and was recently adapted for contrastive (text, image) representation learning in the domain of medical imaging by Zhang et al. (2020).",
+      "textHash": "sha256:cbc269494a77ddbf090763084c4e6c05b383c94c38f06c09447f2ae7db362b00",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "section-span:clip-2021:13:77c84b57f46c",
+      "spanType": "section",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 58810,
+      "charEnd": 59684,
+      "page": 13,
+      "bbox": [
+        307.08,
+        481.91,
+        543.19,
+        659.26
+      ],
+      "text": "A ResNet-101 makes 5 times as many mistakes when eval- uated on these natural distribution shifts compared to the ImageNet validation set. Encouragingly however, Taori et al. (2020) ﬁnd that accuracy under distribution shift increases predictably with ImageNet accuracy and is well modeled as a linear function of logit-transformed accuracy. Taori et al. (2020) use this ﬁnding to propose that robustness analysis should distinguish between effective and relative robustness. Effective robustness measures improvements in accuracy under distribution shift above what is predicted by the documented relationship between in-distribution and out-of-distribution accuracy. Relative robustness captures any improvement in out-of-distribution accuracy. Taori et al. (2020) argue that robustness techniques should aim to im- prove both effective robustness and relative robustness.",
+      "textHash": "sha256:0563859dbe8d37e0a3a0d6426846087ef59a41ffdcde6a56e34735b2bcaef838",
+      "headingPath": [
+        "A ResNet-101 makes 5 times as many mistakes when eval-"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 36,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "section-span:clip-2021:27:159aadbe055b",
+      "spanType": "section",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 116502,
+      "charEnd": 116512,
+      "page": 27,
+      "bbox": [
+        307.44,
+        67.85,
+        362.98,
+        79.8
+      ],
+      "text": "References",
+      "textHash": "sha256:69824d3b0e70ca6aaa0da1613b65fd914c442bf1f7ad1bb22bcdfbdfe1a05e39",
+      "headingPath": [
+        "References"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "section-span:mae-2021:1:7ed15be35de9",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 203,
+      "charEnd": 211,
+      "page": 1,
+      "bbox": [
+        145.99,
+        203.22,
+        190.48,
+        215.17
+      ],
+      "text": "Abstract",
+      "textHash": "sha256:d21b4a64a2d8656a0fdf7ab2e89a49164ac504686cfa2a3d442e87c209286330",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 4,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:1:80dd7f177486",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 253,
+      "charEnd": 1378,
+      "page": 1,
+      "bbox": [
+        50.11,
+        228.78,
+        286.37,
+        465.89
+      ],
+      "text": "This paper shows that masked autoencoders (MAE) are scalable self-supervised learners for computer vision. Our MAE approach is simple: we mask random patches of the input image and reconstruct the missing pixels. It is based on two core designs. First, we develop an asymmetric encoder-decoder architecture, with an encoder that oper- ates only on the visible subset of patches (without mask to- kens), along with a lightweight decoder that reconstructs the original image from the latent representation and mask tokens. Second, we ﬁnd that masking a high proportion of the input image, e.g., 75%, yields a nontrivial and meaningful self-supervisory task. Coupling these two de- signs enables us to train large models efﬁciently and ef- fectively: we accelerate training (by 3× or more) and im- prove accuracy. Our scalable approach allows for learning high-capacity models that generalize well: e.g., a vanilla ViT-Huge model achieves the best accuracy (87.8%) among methods that use only ImageNet-1K data. Transfer per- formance in downstream tasks outperforms supervised pre- training and shows promising scaling behavior.",
+      "textHash": "sha256:be6632b6497d3be04bfd818ca44a2a8311b88c30575de5923d198a7dcd588f32",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:1:4039879cbd09",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 1394,
+      "charEnd": 2650,
+      "page": 1,
+      "bbox": [
+        308.86,
+        451.51,
+        545.12,
+        713.41
+      ],
+      "text": "in vision [59, 46] preceded BERT. However, despite signif- icant interest in this idea following the success of BERT, progress of autoencoding methods in vision lags behind NLP. We ask: what makes masked autoencoding different between vision and language? We attempt to answer this question from the following perspectives: (i) Until recently, architectures were different. In vision, convolutional networks [34] were dominant over the last decade [33]. Convolutions typically operate on regular grids and it is not straightforward to integrate ‘indicators’ such as mask tokens [14] or positional embeddings [57] into con- volutional networks. This architectural gap, however, has been addressed with the introduction of Vision Transform- ers (ViT) [16] and should no longer present an obstacle. (ii) Information density is different between language and vision. Languages are human-generated signals that are highly semantic and information-dense. When training a model to predict only a few missing words per sentence, this task appears to induce sophisticated language under- standing. Images, on the contrary, are natural signals with heavy spatial redundancy—e.g., a missing patch can be re- covered from neighboring patches with little high-level un-",
+      "textHash": "sha256:bf55e3d88b0269732c17041bca256c7d8e8fe1367b73e80e6e5c844817e2ae62",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 13,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:1:400620d57d74",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 2669,
+      "charEnd": 3607,
+      "page": 1,
+      "bbox": [
+        50.11,
+        511.74,
+        286.37,
+        713.41
+      ],
+      "text": "Deep learning has witnessed an explosion of archi- tectures of continuously growing capability and capacity [33, 25, 57]. Aided by the rapid gains in hardware, mod- els today can easily overﬁt one million images [13] and begin to demand hundreds of millions of—often publicly inaccessible—labeled images [16]. This appetite for data has been successfully addressed in natural language processing (NLP) by self-supervised pre- training. The solutions, based on autoregressive language modeling in GPT [47, 48, 4] and masked autoencoding in BERT [14], are conceptually simple: they remove a portion of the data and learn to predict the removed content. These methods now enable training of generalizable NLP models containing over one hundred billion parameters [4]. The idea of masked autoencoders, a form of more gen- eral denoising autoencoders [58], is natural and applicable in computer vision as well. Indeed, closely related research",
+      "textHash": "sha256:02794b1b9c25c47ee3d47f03ef76cd881716eaafab7930de7a2da464c42da8c4",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 15,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:2:cffb997cbc3f",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 3609,
+      "charEnd": 4038,
+      "page": 2,
+      "bbox": [
+        50.11,
+        250.72,
+        545.11,
+        281.22
+      ],
+      "text": "(middle), and the ground-truth (right). The masking ratio is 80%, leaving only 39 out of 196 patches. More examples are in the appendix. †As no loss is computed on visible patches, the model output on visible patches is qualitatively worse. One can simply overlay the output with the visible patches to improve visual quality. We intentionally opt not to do this, so we can more comprehensively demonstrate the method’s behavior.",
+      "textHash": "sha256:6b92d64f1b3d86d54ca089f9ac8a9c9f4c9931a0df9b3923a29c5dbbaef798b6",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:2:6b382db18d5c",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 4040,
+      "charEnd": 5476,
+      "page": 2,
+      "bbox": [
+        50.11,
+        414.93,
+        286.37,
+        713.41
+      ],
+      "text": "derstanding of parts, objects, and scenes. To overcome this difference and encourage learning useful features, we show that a simple strategy works well in computer vision: mask- ing a very high portion of random patches. This strategy largely reduces redundancy and creates a challenging self- supervisory task that requires holistic understanding beyond low-level image statistics. To get a qualitative sense of our reconstruction task, see Figures 2 – 4. (iii) The autoencoder’s decoder, which maps the latent representation back to the input, plays a different role be- tween reconstructing text and images. In vision, the decoder reconstructs pixels, hence its output is of a lower semantic level than common recognition tasks. This is in contrast to language, where the decoder predicts missing words that contain rich semantic information. While in BERT the de- coder can be trivial (an MLP) [14], we found that for im- ages, the decoder design plays a key role in determining the semantic level of the learned latent representations. Driven by this analysis, we present a simple, effective, and scalable form of a masked autoencoder (MAE) for visual representation learning. Our MAE masks random patches from the input image and reconstructs the missing patches in the pixel space. It has an asymmetric encoder- decoder design. Our encoder operates only on the visible subset of patches (without mask tokens), and our decoder is",
+      "textHash": "sha256:599fadbcd1e43c9a0338e3e4628ff8fd3aaa99387987af3d1e6b1de78e05de71",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 3,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:2:635ac1ef4f36",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 5478,
+      "charEnd": 6886,
+      "page": 2,
+      "bbox": [
+        308.86,
+        414.93,
+        545.12,
+        713.41
+      ],
+      "text": "lightweight and reconstructs the input from the latent rep- resentation along with mask tokens (Figure 1). Shifting the mask tokens to the small decoder in our asymmetric encoder-decoder results in a large reduction in computation. Under this design, a very high masking ratio (e.g., 75%) can achieve a win-win scenario: it optimizes accuracy while al- lowing the encoder to process only a small portion (e.g., 25%) of patches. This can reduce overall pre-training time by 3× or more and likewise reduce memory consumption, enabling us to easily scale our MAE to large models. Our MAE learns very high-capacity models that gen- eralize well. With MAE pre-training, we can train data- hungry models like ViT-Large/-Huge [16] on ImageNet-1K with improved generalization performance. With a vanilla ViT-Huge model, we achieve 87.8% accuracy when ﬁne- tuned on ImageNet-1K. This outperforms all previous re- sults that use only ImageNet-1K data. We also evaluate transfer learning on object detection, instance segmentation, and semantic segmentation. In these tasks, our pre-training achieves better results than its supervised pre-training coun- terparts, and more importantly, we observe signiﬁcant gains by scaling up models. These observations are aligned with those witnessed in self-supervised pre-training in NLP [14, 47, 48, 4] and we hope that they will enable our ﬁeld to explore a similar trajectory.",
+      "textHash": "sha256:43ef51ae294f596616999043e269ee257af6d051c4359d618928f311b18b37e0",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 4,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:36d2b4143e56",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 6888,
+      "charEnd": 7446,
+      "page": 3,
+      "bbox": [
+        308.86,
+        74.32,
+        545.12,
+        191.97
+      ],
+      "text": "Self-supervised learning approaches have seen signiﬁcant interest in computer vision, often focusing on different pre- text tasks for pre-training [15, 61, 42, 70, 45, 17]. Re- cently, contrastive learning [3, 22] has been popular, e.g., [62, 43, 23, 7], which models image similarity and dis- similarity (or only similarity [21, 8]) between two or more views. Contrastive and related methods strongly depend on data augmentation [7, 21, 8]. Autoencoding pursues a con- ceptually different direction, and it exhibits different behav- iors as we will present.",
+      "textHash": "sha256:dd275cde63129849c78d5dda9c3fa18e55ce48eea5427c7fc833c6be8b38b6de",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:ba9bd2dc8662",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 7461,
+      "charEnd": 8102,
+      "page": 3,
+      "bbox": [
+        308.86,
+        233.81,
+        545.12,
+        363.32
+      ],
+      "text": "Our masked autoencoder (MAE) is a simple autoencod- ing approach that reconstructs the original signal given its partial observation. Like all autoencoders, our approach has an encoder that maps the observed signal to a latent representation, and a decoder that reconstructs the origi- nal signal from the latent representation. Unlike classical autoencoders, we adopt an asymmetric design that allows the encoder to operate only on the partial, observed signal (without mask tokens) and a lightweight decoder that re- constructs the full signal from the latent representation and mask tokens. Figure 1 illustrates the idea, introduced next.",
+      "textHash": "sha256:38e489f5eb0caf1a726b41cb85e127b9ffcf3ad080b693793b9d6f408443bb1f",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:0895be5a7ed4",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 8158,
+      "charEnd": 8604,
+      "page": 3,
+      "bbox": [
+        50.11,
+        355.64,
+        286.37,
+        449.38
+      ],
+      "text": "Masked language modeling and its autoregressive coun- terparts, e.g., BERT [14] and GPT [47, 48, 4], are highly successful methods for pre-training in NLP. These methods hold out a portion of the input sequence and train models to predict the missing content. These methods have been shown to scale excellently [4] and a large abundance of ev- idence indicates that these pre-trained representations gen- eralize well to various downstream tasks.",
+      "textHash": "sha256:f064c50aa17218e96815a8aef920878744828143297dad0073c0204ca32c0740",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 6,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:307d9b6564dc",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 8606,
+      "charEnd": 9392,
+      "page": 3,
+      "bbox": [
+        308.86,
+        369.94,
+        545.12,
+        536.59
+      ],
+      "text": "Masking. Following ViT [16], we divide an image into reg- ular non-overlapping patches. Then we sample a subset of patches and mask (i.e., remove) the remaining ones. Our sampling strategy is straightforward: we sample random patches without replacement, following a uniform distribu- tion. We simply refer to this as “random sampling”. Random sampling with a high masking ratio (i.e., the ra- tio of removed patches) largely eliminates redundancy, thus creating a task that cannot be easily solved by extrapolation from visible neighboring patches (see Figures 2 – 4). The uniform distribution prevents a potential center bias (i.e., more masked patches near the image center). Finally, the highly sparse input creates an opportunity for designing an efﬁcient encoder, introduced next.",
+      "textHash": "sha256:01b4c010d8438129fbd93b15fba34045c329b19f3653f055c129649abeced5f4",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 7,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:8523d4318c62",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 9394,
+      "charEnd": 10029,
+      "page": 3,
+      "bbox": [
+        50.11,
+        457.76,
+        286.37,
+        587.37
+      ],
+      "text": "Autoencoding is a classical method for learning representa- tions. It has an encoder that maps an input to a latent repre- sentation and a decoder that reconstructs the input. For ex- ample, PCA and k-means are autoencoders [29]. Denoising autoencoders (DAE) [58] are a class of autoencoders that corrupt an input signal and learn to reconstruct the origi- nal, uncorrupted signal. A series of methods can be thought of as a generalized DAE under different corruptions, e.g., masking pixels [59, 46, 6] or removing color channels [70]. Our MAE is a form of denoising autoencoding, but different from the classical DAE in numerous ways.",
+      "textHash": "sha256:122d9dec7e056b1a93230c0f99577703ed71c23bf6296dd5c1904137cd67ff8e",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 8,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:1822a73079ad",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10031,
+      "charEnd": 10591,
+      "page": 3,
+      "bbox": [
+        308.86,
+        543.22,
+        545.12,
+        660.86
+      ],
+      "text": "MAE encoder. Our encoder is a ViT [16] but applied only on visible, unmasked patches. Just as in a standard ViT, our encoder embeds patches by a linear projection with added positional embeddings, and then processes the resulting set via a series of Transformer blocks. However, our encoder only operates on a small subset (e.g., 25%) of the full set. Masked patches are removed; no mask tokens are used. This allows us to train very large encoders with only a frac- tion of compute and memory. The full set is handled by a lightweight decoder, described next.",
+      "textHash": "sha256:914ff53919a253b48b754a6f8a16a5673db0278ff9dacd5fda988f352bf4dbff",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 9,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:92d22a432153",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 10593,
+      "charEnd": 11153,
+      "page": 3,
+      "bbox": [
+        50.11,
+        595.76,
+        286.37,
+        713.41
+      ],
+      "text": "Masked image encoding methods learn representations from images corrupted by masking. The pioneering work of [59] presents masking as a noise type in DAE. Context Encoder [46] inpaints large missing regions using convolu- tional networks. Motivated by the success in NLP, related recent methods [6, 16, 2] are based on Transformers [57]. iGPT [6] operates on sequences of pixels and predicts un- known pixels. The ViT paper [16] studies masked patch prediction for self-supervised learning. Most recently, BEiT [2] proposes to predict discrete tokens [44, 50].",
+      "textHash": "sha256:5309132ddb5d6d85444f105a4539ae7a266119841a8b7a0824b5a0647f4e93f1",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 10,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:3:8775a0eb7ac0",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 11155,
+      "charEnd": 11389,
+      "page": 3,
+      "bbox": [
+        308.86,
+        667.49,
+        545.11,
+        713.41
+      ],
+      "text": "MAE decoder. The input to the MAE decoder is the full set of tokens consisting of (i) encoded visible patches, and (ii) mask tokens. See Figure 1. Each mask token [14] is a shared, learned vector that indicates the presence of a miss-",
+      "textHash": "sha256:39d7f95b9347bcf258d8706eca5f2d5bb72b8b269e399ce3babd59bb2d259b00",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 11,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:d33cc123c332",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 11435,
+      "charEnd": 11663,
+      "page": 4,
+      "bbox": [
+        50.11,
+        74.41,
+        286.37,
+        120.24
+      ],
+      "text": "ing patch to be predicted. We add positional embeddings to all tokens in this full set; without this, mask tokens would have no information about their location in the image. The decoder has another series of Transformer blocks.",
+      "textHash": "sha256:1c4409078090780f0dd2b5f91b728c8601ef3aebfc3186e2a14aaf405e300ca2",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 3,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:3291ab6841e3",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 11731,
+      "charEnd": 12327,
+      "page": 4,
+      "bbox": [
+        50.11,
+        125.43,
+        286.37,
+        254.94
+      ],
+      "text": "The MAE decoder is only used during pre-training to perform the image reconstruction task (only the encoder is used to produce image representations for recognition). Therefore, the decoder architecture can be ﬂexibly designed in a manner that is independent of the encoder design. We experiment with very small decoders, narrower and shal- lower than the encoder. For example, our default decoder has <10% computation per token vs. the encoder. With this asymmetrical design, the full set of tokens are only pro- cessed by the lightweight decoder, which signiﬁcantly re- duces pre-training time.",
+      "textHash": "sha256:5253340ec4a3867777ad3e09324f7a8cf201b0b3e60a51b307de8b33d64d03aa",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 9,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:de256eafc6e7",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 12472,
+      "charEnd": 12760,
+      "page": 4,
+      "bbox": [
+        308.86,
+        259.71,
+        545.12,
+        317.5
+      ],
+      "text": "We do self-supervised pre-training on the ImageNet-1K (IN1K) [13] training set. Then we do supervised training to evaluate the representations with (i) end-to-end ﬁne-tuning or (ii) linear probing. We report top-1 validation accuracy of a single 224×224 crop. Details are in Appendix A.1.",
+      "textHash": "sha256:419d9856b925b95d9d11ae8b70bb1a88aaaa3fff23fa1b948734245f538f88fb",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 19,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:8d7cbcf55e21",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 12762,
+      "charEnd": 13344,
+      "page": 4,
+      "bbox": [
+        50.11,
+        263.59,
+        286.37,
+        381.24
+      ],
+      "text": "Reconstruction target. Our MAE reconstructs the input by predicting the pixel values for each masked patch. Each element in the decoder’s output is a vector of pixel values representing a patch. The last layer of the decoder is a lin- ear projection whose number of output channels equals the number of pixel values in a patch. The decoder’s output is reshaped to form a reconstructed image. Our loss function computes the mean squared error (MSE) between the recon- structed and original images in the pixel space. We compute the loss only on masked patches, similar to BERT [14].1",
+      "textHash": "sha256:abbf7d07c47b4ebdd8cf713626a418e52f15ab78b798f98a620123ebf9677e27",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 20,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:e77da2e44a35",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13346,
+      "charEnd": 13630,
+      "page": 4,
+      "bbox": [
+        308.86,
+        322.94,
+        545.12,
+        380.82
+      ],
+      "text": "Baseline: ViT-Large. We use ViT-Large (ViT-L/16) [16] as the backbone in our ablation study. ViT-L is very big (an order of magnitude bigger than ResNet-50 [25]) and tends to overﬁt. The following is a comparison between ViT-L trained from scratch vs. ﬁne-tuned from our baseline MAE:",
+      "textHash": "sha256:85ffc772ce4642326b25eafc27d5143d52dc4dc7192cee81734600369eafdc26",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 21,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:1c2e92c9a0af",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 13703,
+      "charEnd": 14036,
+      "page": 4,
+      "bbox": [
+        50.11,
+        386.43,
+        286.37,
+        456.17
+      ],
+      "text": "We also study a variant whose reconstruction target is the normalized pixel values of each masked patch. Specif- ically, we compute the mean and standard deviation of all pixels in a patch and use them to normalize this patch. Us- ing normalized pixels as the reconstruction target improves representation quality in our experiments.",
+      "textHash": "sha256:070304af1f9dffd04b01d094b71a980716425bd40131e767c326777085ab7038",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 23,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:4bec7d7b8dbe",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 14038,
+      "charEnd": 14383,
+      "page": 4,
+      "bbox": [
+        308.86,
+        411.23,
+        545.12,
+        481.14
+      ],
+      "text": "We note that it is nontrivial to train supervised ViT-L from scratch and a good recipe with strong regularization is needed (82.5%, see Appendix A.2). Even so, our MAE pre- training contributes a big improvement. Here ﬁne-tuning is only for 50 epochs (vs. 200 from scratch), implying that the ﬁne-tuning accuracy heavily depends on pre-training.",
+      "textHash": "sha256:bc5238cb61bdf764b9456c965031ab651d739f883545b28b326ccf1879e89a99",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 24,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:f590018d87be",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 14385,
+      "charEnd": 15295,
+      "page": 4,
+      "bbox": [
+        50.11,
+        464.82,
+        286.37,
+        654.2
+      ],
+      "text": "Simple implementation. Our MAE pre-training can be im- plemented efﬁciently, and importantly, does not require any specialized sparse operations. First we generate a token for every input patch (by linear projection with an added po- sitional embedding). Next we randomly shufﬂe the list of tokens and remove the last portion of the list, based on the masking ratio. This process produces a small subset of to- kens for the encoder and is equivalent to sampling patches without replacement. After encoding, we append a list of mask tokens to the list of encoded patches, and unshufﬂe this full list (inverting the random shufﬂe operation) to align all tokens with their targets. The decoder is applied to this full list (with positional embeddings added). As noted, no sparse operations are needed. This simple implementation introduces negligible overhead as the shufﬂing and unshuf- ﬂing operations are fast.",
+      "textHash": "sha256:e9d473834e9658aa59d49f6cab86419d33faff8369c977387c6bca3a0864543a",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 25,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:790afb315ec4",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 15319,
+      "charEnd": 15433,
+      "page": 4,
+      "bbox": [
+        308.86,
+        508.62,
+        545.11,
+        530.54
+      ],
+      "text": "We ablate our MAE using the default settings in Table 1 (see caption). Several intriguing properties are observed.",
+      "textHash": "sha256:6b678a38d91dc4e114cbde6a5a8e4622cdb33078d21da020da7b0ccebf845dee",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 27,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "paragraph-span:mae-2021:4:9503f77350fa",
+      "spanType": "paragraph",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 15435,
+      "charEnd": 16233,
+      "page": 4,
+      "bbox": [
+        308.86,
+        535.98,
+        545.12,
+        713.41
+      ],
+      "text": "Masking ratio. Figure 5 shows the inﬂuence of the mask- ing ratio. The optimal ratios are surprisingly high. The ra- tio of 75% is good for both linear probing and ﬁne-tuning. This behavior is in contrast with BERT [14], whose typical masking ratio is 15%. Our masking ratios are also much higher than those in related works [6, 16, 2] in computer vision (20% to 50%). The model infers missing patches to produce different, yet plausible, outputs (Figure 4). It makes sense of the gestalt of objects and scenes, which cannot be simply com- pleted by extending lines or textures. We hypothesize that this reasoning-like behavior is linked to the learning of use- ful representations. Figure 5 also shows that linear probing and ﬁne-tuning results follow different trends. For linear probing, the ac-",
+      "textHash": "sha256:f4dfc5218e1c112733bcaf17f6327eacadc20d9f082f594d78e1ba8c5deee337",
+      "headingPath": [
+        "Abstract"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.8,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 28,
+        "candidateRule": "paragraph_block"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "section-span:mae-2021:7:a3c0175f05e3",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 25042,
+      "charEnd": 25247,
+      "page": 7,
+      "bbox": [
+        53.43,
+        68.07,
+        282.55,
+        129.68
+      ],
+      "text": "method pre-train data ViT-B ViT-L ViT-H ViT-H448 scratch, our impl. - 82.3 82.6 83.1 - DINO [5] IN1K 82.8 - - - MoCo v3 [9] IN1K 83.2 84.1 - - BEiT [2] IN1K+DALLE 83.2 85.2 - - MAE IN1K 83.6 85.9 86.9 87.8",
+      "textHash": "sha256:7263df40b89ce357ac03ab2e038024898f942287ee291066d837cbb53d189aaa",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "section-span:mae-2021:8:8e7b26b7e8dc",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 29199,
+      "charEnd": 29388,
+      "page": 8,
+      "bbox": [
+        65.18,
+        67.91,
+        269.3,
+        117.02
+      ],
+      "text": "method pre-train data ViT-B ViT-L ViT-B ViT-L supervised IN1K w/ labels 47.9 49.3 42.9 43.9 MoCo v3 IN1K 47.9 49.3 42.7 44.0 BEiT IN1K+DALLE 49.8 53.3 44.4 47.1 MAE IN1K 50.3 53.3 44.9 47.2",
+      "textHash": "sha256:4f1089809ed1e7c9c9a73fb8c26710f5b2c8cae67d9105b852ea6383df4f6a80",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "section-span:mae-2021:8:b75f10f764af",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 29390,
+      "charEnd": 29527,
+      "page": 8,
+      "bbox": [
+        344.31,
+        67.93,
+        507.68,
+        117.05
+      ],
+      "text": "method pre-train data ViT-B ViT-L supervised IN1K w/ labels 47.4 49.9 MoCo v3 IN1K 47.3 49.1 BEiT IN1K+DALLE 47.1 53.3 MAE IN1K 48.1 53.6",
+      "textHash": "sha256:db240544935df6c9493485d4a8c1f7e7592b4736c783cb3a40210a36f39fe778",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 2,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "section-span:mae-2021:9:5a2fa34eb2e4",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 34807,
+      "charEnd": 34817,
+      "page": 9,
+      "bbox": [
+        50.11,
+        156.77,
+        105.66,
+        168.73
+      ],
+      "text": "References",
+      "textHash": "sha256:69824d3b0e70ca6aaa0da1613b65fd914c442bf1f7ad1bb22bcdfbdfe1a05e39",
+      "headingPath": [
+        "References"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 5,
+        "candidateRule": "section_heading"
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.text-span-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "section-span:mae-2021:12:6992537e1082",
+      "spanType": "section",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "charStart": 51205,
+      "charEnd": 51312,
+      "page": 12,
+      "bbox": [
+        351.45,
+        72.91,
+        500.04,
+        111.7
+      ],
+      "text": "method model params acc iGPT [6] iGPT-L 1362 M 69.0 iGPT [6] iGPT-XL 6801 M 72.0 BEiT [2] ViT-L 304 M 52.1†",
+      "textHash": "sha256:6a2e049327e64d59d78e214bff965ecbb19c0b4eabc513e18ed7a956018bffbc",
+      "headingPath": [
+        "method"
+      ],
+      "extractionMethod": "pymupdf_text_block_span_candidate_v1",
+      "confidence": 0.74,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 1,
+        "candidateRule": "section_heading"
+      }
+    }
+  ],
+  "blockerRows": 0,
+  "blockers": [],
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "warnings": [
+    "char offsets are candidate provenance over PyMuPDF block reading-order normalized text, not canonical parsed artifact offsets"
+  ],
+  "schemaErrors": []
+}
