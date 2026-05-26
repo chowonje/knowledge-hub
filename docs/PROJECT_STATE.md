@@ -38,12 +38,15 @@ The current product story is intentionally narrower than the full implementation
 - Primary user: a solo researcher or builder working against a local corpus.
 - Primary job: collect papers/web/vault notes locally, index them, ask grounded questions, and inspect the evidence trail before reusing the output.
 - Current non-goal for the default surface: multi-step research automation, deep synthesis, or broad operator workflows as the first product promise.
+- Current v0.1 research-paper scope: text-derived evidence artifacts first. Image understanding, visual chart/diagram reasoning, subfigure visual binding, full PDF formatting reconstruction, complete table-grid guarantees, complete equation LaTeX reconstruction, and VLM output as strict evidence are deferred to a separate visual/layout research branch. The durable scope decision and tranche order are recorded in `docs/adr/2026-05-26-text-evidence-v01-scope.md`.
 
 The representative default loop is:
 
 `discover -> index -> search/ask -> evidence review`
 
 The current research-paper evidence slice is intentionally narrower and more concrete than the broader RC board. `eval/knowledgeos/scripts/build_figure_caption_artifact_vertical_slice.py` reads a small local AI-paper PDF set, extracts report-only FigureCaptionArtifact candidates from PyMuPDF text blocks, and records source-content hash, page, bbox, figure label, caption text hash, extraction method, confidence, and blocker reasons without overwriting canonical parsed artifacts. The matching QA readback path answers only when that candidate provenance is present and returns no-answer for missing captions; it does not promote strict evidence, mutate DB/index state, reindex/reembed, scan the vault, download external content, or expose runtime answer-visible payloads.
+
+The next planned v0.1 tranches are deliberately sequential: connect caption-text FigureCaptionArtifact candidates to a product/internal paper-QA readback path, add SectionSpan/ParagraphSpan candidates, add table-caption/table-like text candidates, add equation locator plus surrounding-text candidates, re-scope complex-paper QA to text-answerable versus visual-unsupported cases, then handle source-alias normalization, public/operator surface cleanup, and final RC hygiene.
 
 Current success criteria for that loop:
 
