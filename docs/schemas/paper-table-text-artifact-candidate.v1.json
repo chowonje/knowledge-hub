@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-table-text-artifact-candidate.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "paperId",
+    "paperRef",
+    "artifactId",
+    "sourceContentHash",
+    "charBasis",
+    "captionCharStart",
+    "captionCharEnd",
+    "page",
+    "captionBbox",
+    "tableTextBbox",
+    "tableLabel",
+    "captionText",
+    "captionTextHash",
+    "tableText",
+    "tableTextHash",
+    "structureGrade",
+    "numericCandidate",
+    "extractionMethod",
+    "confidence",
+    "blockerReason",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.table-text-artifact-candidate.v1" },
+    "paperId": { "type": "string", "minLength": 1 },
+    "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+    "artifactId": { "type": "string", "pattern": "^table-text:" },
+    "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "charBasis": { "const": "pymupdf_block_reading_order_normalized_text_v1" },
+    "captionCharStart": { "type": "integer", "minimum": 0 },
+    "captionCharEnd": { "type": "integer", "minimum": 1 },
+    "page": { "type": "integer", "minimum": 1 },
+    "captionBbox": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "type": "number" }
+    },
+    "tableTextBbox": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "tableLabel": { "type": "string", "pattern": "^Table [0-9]+[A-Za-z]?$" },
+    "captionText": { "type": "string", "minLength": 1 },
+    "captionTextHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "tableText": { "type": "string" },
+    "tableTextHash": { "type": "string" },
+    "structureGrade": { "enum": ["caption_only", "table_like_text_candidate"] },
+    "numericCandidate": { "type": "boolean" },
+    "extractionMethod": { "const": "pymupdf_table_caption_text_candidate_v1" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "blockerReason": { "type": "string" },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "captionBlockIndex", "nearbyTableLikeBlockCount"],
+      "properties": {
+        "source": { "const": "pymupdf_block" },
+        "captionBlockIndex": { "type": "integer", "minimum": 0 },
+        "nearbyTableLikeBlockCount": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

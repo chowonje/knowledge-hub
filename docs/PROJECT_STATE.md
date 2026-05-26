@@ -52,6 +52,8 @@ The first roadmap tranche, `text_figure_caption_qa_path`, now has an internal ca
 
 The second roadmap tranche, `text_section_paragraph_span_artifacts`, now has report-only SectionSpan and ParagraphSpan candidates. `eval/knowledgeos/scripts/build_text_section_paragraph_span_artifacts.py` reads the same small local AI-paper PDF set through PyMuPDF text blocks and emits bounded candidates with source-content hash, page, bbox, text hash, and candidate char offsets over the normalized PyMuPDF block reading-order text. These offsets are not canonical parsed-artifact offsets and remain candidate provenance; the tranche does not write parsed artifacts, mutate DB/index state, reindex/reembed, scan the vault, download external content, promote strict evidence, or expose runtime answer-visible payloads.
 
+The third roadmap tranche, `text_table_caption_candidate_artifacts`, now has report-only table caption and table-like text candidates. `eval/knowledgeos/scripts/build_text_table_caption_candidate_artifacts.py` reads the same local AI-paper PDF set and emits schema-backed candidates with source-content hash, caption page/bbox, candidate char offsets, caption text hash, optional adjacent table-like text bbox/hash, structure grade, and numeric-candidate flags. Row/column/cell structure remains candidate-grade and blocked from strict evidence until explicit provenance is available.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.
