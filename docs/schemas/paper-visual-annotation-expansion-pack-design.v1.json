@@ -1,0 +1,363 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-annotation-expansion-pack-design.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "packId",
+    "sourceCandidateReport",
+    "sourceWebPack",
+    "sourceDryRunReport",
+    "scope",
+    "selectionPolicy",
+    "counts",
+    "packRowsDetail",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["ready_for_visual_annotation_expansion_attachment_pack", "blocked"] },
+    "nextRecommendedTranche": { "const": "visual_annotation_expansion_attachment_pack" },
+    "packId": { "type": "string", "minLength": 1 },
+    "sourceCandidateReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "candidateRows"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-layout-candidate-list-report.v1" },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "candidateRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sourceWebPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "packRows"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-annotation-web-pack.v1" },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "packRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sourceDryRunReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "dryRunRows"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-dry-run.v1" },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "dryRunRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "selectedExpansionRows",
+        "wholeImageGptRows",
+        "pageImageWriteRows",
+        "cropWriteRows",
+        "candidateStoreMutationRows",
+        "vectorIndexing",
+        "indexMutationRows",
+        "runtimeAnswerVisibleExposureRows",
+        "strictEvidencePromotionRows",
+        "databaseMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "selectedExpansionRows": { "type": "integer", "minimum": 0 },
+        "wholeImageGptRows": { "const": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "cropWriteRows": { "const": 0 },
+        "candidateStoreMutationRows": { "const": 0 },
+        "vectorIndexing": { "const": false },
+        "indexMutationRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "selectionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packUse",
+        "maxCandidateRows",
+        "typeQuotas",
+        "preferredPaperIds",
+        "excludedPreviousPackRows",
+        "maxPerPaperTypePage",
+        "wholeImagePolicy",
+        "attachmentPolicy",
+        "rationale"
+      ],
+      "properties": {
+        "packUse": { "const": "manual_web_vlm_retrieval_hint_expansion" },
+        "maxCandidateRows": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "typeQuotas": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["image_region", "figure_caption_region", "table_region", "equation_region"],
+          "properties": {
+            "image_region": { "type": "integer", "minimum": 0 },
+            "figure_caption_region": { "type": "integer", "minimum": 0 },
+            "table_region": { "type": "integer", "minimum": 0 },
+            "equation_region": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "preferredPaperIds": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "excludedPreviousPackRows": { "const": true },
+        "maxPerPaperTypePage": { "type": "integer", "minimum": 1 },
+        "wholeImagePolicy": { "const": "deferred_to_visual_full_image_annotation_pack_design" },
+        "attachmentPolicy": { "const": "context_crop_png_first_no_whole_image" },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceCandidateRows",
+        "previousAnnotatedRows",
+        "eligibleExpansionRows",
+        "selectedExpansionRows",
+        "selectedPaperRows",
+        "imageCandidateRows",
+        "figureCandidateRows",
+        "tableCandidateRows",
+        "equationCandidateRows",
+        "layoutCandidateRows",
+        "wholeImageRows",
+        "pageImageRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourceCandidateRows": { "type": "integer", "minimum": 0 },
+        "previousAnnotatedRows": { "type": "integer", "minimum": 0 },
+        "eligibleExpansionRows": { "type": "integer", "minimum": 0 },
+        "selectedExpansionRows": { "type": "integer", "minimum": 0 },
+        "selectedPaperRows": { "type": "integer", "minimum": 0 },
+        "imageCandidateRows": { "type": "integer", "minimum": 0 },
+        "figureCandidateRows": { "type": "integer", "minimum": 0 },
+        "tableCandidateRows": { "type": "integer", "minimum": 0 },
+        "equationCandidateRows": { "type": "integer", "minimum": 0 },
+        "layoutCandidateRows": { "const": 0 },
+        "wholeImageRows": { "const": 0 },
+        "pageImageRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "packRowsDetail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "packCandidateId",
+          "sourceCandidateId",
+          "paperId",
+          "paperRef",
+          "sourceContentHash",
+          "page",
+          "bbox",
+          "candidateType",
+          "priority",
+          "expansionReason",
+          "annotationTask",
+          "webInput",
+          "textContext",
+          "visualContext",
+          "retrievalHintPlan",
+          "expectedOutputContract",
+          "provenance",
+          "blockerReason"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1" },
+          "packCandidateId": { "type": "string", "pattern": "^visual-annotation-expansion-pack:" },
+          "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "page": { "type": "integer", "minimum": 1 },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "candidateType": {
+            "enum": ["image_region", "figure_caption_region", "table_region", "equation_region"]
+          },
+          "priority": { "type": "integer", "minimum": 1 },
+          "expansionReason": {
+            "enum": [
+              "first_image_region_probe_after_text_caption_batch",
+              "new_paper_visual_coverage",
+              "remaining_high_value_visual_candidate"
+            ]
+          },
+          "annotationTask": {
+            "enum": [
+              "describe_image_region_for_retrieval",
+              "describe_figure_caption_region_for_retrieval",
+              "describe_table_region_for_retrieval",
+              "describe_equation_region_for_retrieval"
+            ]
+          },
+          "webInput": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["copyPasteContext", "plannedAttachmentRef", "attachmentGuidance"],
+            "properties": {
+              "copyPasteContext": { "type": "string", "minLength": 1 },
+              "plannedAttachmentRef": { "type": "string", "pattern": "^papers_dir/visual_layout_planned_crops/" },
+              "attachmentGuidance": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "recommendedAttachmentKind",
+                  "wholeImageAllowedInThisPack",
+                  "pageImageAllowedInThisPack",
+                  "pageCropFallbackAllowed",
+                  "fullImageGateRequired"
+                ],
+                "properties": {
+                  "recommendedAttachmentKind": { "const": "context_crop_png" },
+                  "wholeImageAllowedInThisPack": { "const": false },
+                  "pageImageAllowedInThisPack": { "const": false },
+                  "pageCropFallbackAllowed": { "type": "boolean" },
+                  "fullImageGateRequired": { "type": "boolean" }
+                }
+              }
+            }
+          },
+          "textContext": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["nearbyText", "captionText", "headingPath"],
+            "properties": {
+              "nearbyText": { "type": "string" },
+              "captionText": { "type": "string" },
+              "headingPath": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "visualContext": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["cropRef", "imageHash", "pageImageRequired", "wholeImageAllowedInThisPack"],
+            "properties": {
+              "cropRef": { "type": "string", "pattern": "^papers_dir/visual_layout_planned_crops/" },
+              "imageHash": {
+                "anyOf": [
+                  { "const": "" },
+                  { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+                ]
+              },
+              "pageImageRequired": { "type": "boolean" },
+              "wholeImageAllowedInThisPack": { "const": false }
+            }
+          },
+          "retrievalHintPlan": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "targetDerivedTextField",
+              "allowedUse",
+              "strictEvidence",
+              "citationGrade",
+              "answerableWithoutTextEvidence"
+            ],
+            "properties": {
+              "targetDerivedTextField": { "const": "derivedTextForRetrieval" },
+              "allowedUse": { "const": "retrieval_hint_only" },
+              "strictEvidence": { "const": false },
+              "citationGrade": { "const": false },
+              "answerableWithoutTextEvidence": { "const": false }
+            }
+          },
+          "expectedOutputContract": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "schema",
+              "allowedUse",
+              "strictEvidence",
+              "citationGrade",
+              "answerableWithoutTextEvidence",
+              "requiredFields"
+            ],
+            "properties": {
+              "schema": { "const": "knowledge-hub.paper.visual-annotation-web-output-row.v1" },
+              "allowedUse": { "const": "retrieval_hint_only" },
+              "strictEvidence": { "const": false },
+              "citationGrade": { "const": false },
+              "answerableWithoutTextEvidence": { "const": false },
+              "requiredFields": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceReportSchema",
+              "sourceCandidateId",
+              "sourceContentHash",
+              "page",
+              "bbox",
+              "extractionMethod"
+            ],
+            "properties": {
+              "sourceReportSchema": { "const": "knowledge-hub.paper.visual-layout-candidate-list-report.v1" },
+              "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+              "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "page": { "type": "integer", "minimum": 1 },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "number" }
+              },
+              "extractionMethod": { "type": "string", "minLength": 1 }
+            }
+          },
+          "blockerReason": { "const": "" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
