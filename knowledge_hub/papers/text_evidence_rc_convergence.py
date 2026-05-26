@@ -17,6 +17,7 @@ CANONICAL_DIRTY_INVENTORY_REPORT_REF = "text_evidence_canonical_dirty_inventory.
 CANONICAL_DIRTY_BUCKET_DECISION_REPORT_REF = "text_evidence_canonical_dirty_bucket_decision.v1.json"
 CANONICAL_DIRTY_CLEANUP_PLAN_REPORT_REF = "text_evidence_canonical_dirty_cleanup_plan.v1.json"
 EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF = "text_evidence_rc_external_action_approval_packet.v1.json"
+CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF = "text_evidence_canonical_dirty_snapshot_dry_run.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -357,6 +358,23 @@ def _external_action_approval_packet_state(reports_root: Path) -> dict[str, Any]
     }
 
 
+def _canonical_dirty_snapshot_dry_run_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF)
+    if not payload:
+        return {"available": False}
+    return {
+        "available": True,
+        "reportRef": CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "dirtyRows": int(payload.get("dirtyRows") or 0),
+        "trackedDirtyRows": int(payload.get("trackedDirtyRows") or 0),
+        "untrackedRows": int(payload.get("untrackedRows") or 0),
+        "statusFingerprint": _clean_text(payload.get("statusFingerprint")),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -386,6 +404,7 @@ def build_text_evidence_rc_convergence_report(
     canonical_dirty_bucket_decision = _canonical_dirty_bucket_decision_state(reports_root)
     canonical_dirty_cleanup_plan = _canonical_dirty_cleanup_plan_state(reports_root)
     external_action_approval = _external_action_approval_packet_state(reports_root)
+    canonical_dirty_snapshot = _canonical_dirty_snapshot_dry_run_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -409,6 +428,12 @@ def build_text_evidence_rc_convergence_report(
             canonical_dirty_cleanup_plan.get("requiresPr149ResolvedFirst")
         )
         canonical["dirtyCleanupNextAction"] = _clean_text(canonical_dirty_cleanup_plan.get("nextAction"))
+    if canonical_dirty_snapshot.get("available"):
+        canonical["dirtySnapshotDryRunReportRef"] = _clean_text(canonical_dirty_snapshot.get("reportRef"))
+        canonical["dirtySnapshotDryRunStatus"] = _clean_text(canonical_dirty_snapshot.get("status"))
+        canonical["dirtySnapshotDirtyRows"] = int(canonical_dirty_snapshot.get("dirtyRows") or 0)
+        canonical["dirtySnapshotStatusFingerprint"] = _clean_text(canonical_dirty_snapshot.get("statusFingerprint"))
+        canonical["dirtySnapshotNextAction"] = _clean_text(canonical_dirty_snapshot.get("nextAction"))
     if pr149_disposition.get("available"):
         pr_149["dispositionReportRef"] = _clean_text(pr149_disposition.get("reportRef"))
         pr_149["dispositionStatus"] = _clean_text(pr149_disposition.get("status"))
@@ -421,6 +446,10 @@ def build_text_evidence_rc_convergence_report(
         pr_149["approvalPacketNextAction"] = _clean_text(external_action_approval.get("nextAction"))
     if not canonical.get("dirtyCount"):
         blocker_rows = [row for row in blocker_rows if row["blockerId"] != "canonical_checkout_dirty"]
+    elif canonical_dirty_snapshot.get("status") == "ready":
+        for row in blocker_rows:
+            if row["blockerId"] == "canonical_checkout_dirty":
+                row["reason"] = "canonical dirty snapshot dry-run fingerprint is ready; physical cleanup still awaits PR #149 closure and approval"
     elif canonical_dirty_cleanup_plan.get("status") == "ready":
         for row in blocker_rows:
             if row["blockerId"] == "canonical_checkout_dirty":
@@ -506,7 +535,8 @@ def build_text_evidence_rc_convergence_report(
         "privatePathLeakRows": 0,
         "reportHash": "",
         "nextAction": _clean_text(
-            external_action_approval.get("nextAction")
+            canonical_dirty_snapshot.get("nextAction")
+            or external_action_approval.get("nextAction")
             or canonical_dirty_cleanup_plan.get("nextAction")
             or canonical_dirty_bucket_decision.get("nextAction")
             or canonical_dirty_inventory.get("nextAction")

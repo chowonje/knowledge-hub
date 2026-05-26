@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T07:57:15Z",
+  "generatedAt": "2026-05-26T08:01:18Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "c989ab3",
-    "dirtyCount": 0
+    "head": "49c5717",
+    "dirtyCount": 9
   },
   "canonicalCheckout": {
     "available": true,
@@ -37,7 +37,12 @@
     "dirtyCleanupManualPlanRows": 0,
     "dirtyCleanupRequiresExplicitApproval": true,
     "dirtyCleanupRequiresPr149ResolvedFirst": true,
-    "dirtyCleanupNextAction": "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout"
+    "dirtyCleanupNextAction": "request_approval_to_close_pr149_then_snapshot_and_clean_canonical_checkout",
+    "dirtySnapshotDryRunReportRef": "text_evidence_canonical_dirty_snapshot_dry_run.v1.json",
+    "dirtySnapshotDryRunStatus": "ready",
+    "dirtySnapshotDirtyRows": 168,
+    "dirtySnapshotStatusFingerprint": "sha256:4a76393a8a30a254e4fe619a849aacb455c44ed4c95524b564d170976cc705d9",
+    "dirtySnapshotNextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot"
   },
   "pullRequest149": {
     "available": true,
@@ -71,7 +76,7 @@
     {
       "blockerId": "canonical_checkout_dirty",
       "severity": "hold",
-      "reason": "canonical dirty cleanup plan is ready; execution awaits explicit approval and PR #149 resolution"
+      "reason": "canonical dirty snapshot dry-run fingerprint is ready; physical cleanup still awaits PR #149 closure and approval"
     },
     {
       "blockerId": "pr_149_conflicting_or_draft",
@@ -83,7 +88,7 @@
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "c989ab3",
+      "head": "49c5717",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -266,8 +271,8 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:895e17efc2017c03edec2b3ec13418ce7a433120e470c56738a33c5ae0be9f1c",
-  "nextAction": "await_explicit_user_approval_to_close_pr149_without_merge",
+  "reportHash": "sha256:e279148b3de3967cd82f4bd66c821b8052b1a31a737798d96a081c25e64afa42",
+  "nextAction": "close_pr149_without_merge_before_writing_cleanup_snapshot",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"

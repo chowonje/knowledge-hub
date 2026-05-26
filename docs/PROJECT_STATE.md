@@ -74,6 +74,8 @@ The cleanup/archive sequence is also fixed as a report-only plan. `eval/knowledg
 
 The remaining external mutation boundary is now represented by `eval/knowledgeos/scripts/build_text_evidence_rc_external_action_approval_packet.py`. The approval packet has two pending actions and executes neither: close PR #149 without merge, then snapshot and clean/archive the canonical dirty checkout. This makes the next operator decision explicit while keeping PR mutation, canonical checkout edits, destructive cleanup, vault scan, DB/index mutation, merge, cherry-pick, and worktree deletion at zero until the user approves the action.
 
+The canonical dirty cleanup path now also has a snapshot dry-run. `eval/knowledgeos/scripts/build_text_evidence_canonical_dirty_snapshot_dry_run.py` records a status-only fingerprint of the canonical checkout before cleanup; it does not read file contents or write a real snapshot. The current fingerprint covers 168 dirty rows and is used only to detect drift before any later approved cleanup execution.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

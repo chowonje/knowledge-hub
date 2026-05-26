@@ -89,7 +89,12 @@
         "dirtyCleanupManualPlanRows": { "type": "integer", "minimum": 0 },
         "dirtyCleanupRequiresExplicitApproval": { "type": "boolean" },
         "dirtyCleanupRequiresPr149ResolvedFirst": { "type": "boolean" },
-        "dirtyCleanupNextAction": { "type": "string" }
+        "dirtyCleanupNextAction": { "type": "string" },
+        "dirtySnapshotDryRunReportRef": { "type": "string" },
+        "dirtySnapshotDryRunStatus": { "type": "string" },
+        "dirtySnapshotDirtyRows": { "type": "integer", "minimum": 0 },
+        "dirtySnapshotStatusFingerprint": { "type": "string" },
+        "dirtySnapshotNextAction": { "type": "string" }
       }
     },
     "pullRequest149": {
