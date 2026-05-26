@@ -93,16 +93,106 @@ def _machine_judgment(
     return "good", "family_and_mode_match"
 
 
-def _resolve_vault_source_path(vault_root: Path | None, source: dict[str, Any]) -> Path | None:
-    raw_path = _clean_text(source.get("file_path"))
-    if not raw_path:
-        return None
+_VAULT_SOURCE_PATH_KEYS = (
+    "file_path",
+    "filePath",
+    "path",
+    "relative_path",
+    "relativePath",
+    "source_path",
+    "sourcePath",
+    "vault_path",
+    "vaultPath",
+    "source_ref",
+    "sourceRef",
+    "source_id",
+    "sourceId",
+    "parent_id",
+    "parentId",
+    "document_id",
+    "documentId",
+    "note_id",
+    "noteId",
+)
+
+
+def _nested_dict(value: Any) -> dict[str, Any]:
+    return dict(value) if isinstance(value, dict) else {}
+
+
+def _strip_path_fragment(value: str) -> str:
+    token = _clean_text(value)
+    if "#" in token:
+        token = token.split("#", 1)[0].strip()
+    return token
+
+
+def _looks_like_vault_note_path(value: Any) -> bool:
+    token = _strip_path_fragment(str(value or ""))
+    if not token:
+        return False
+    if "://" in token:
+        return False
+    lowered = token.casefold()
+    if lowered.endswith((".md", ".markdown")):
+        return True
+    return "/" in token or "\\" in token
+
+
+def _vault_source_path_candidates(source: dict[str, Any]) -> list[str]:
+    payloads = [
+        source,
+        _nested_dict(source.get("metadata")),
+        _nested_dict(source.get("provenance")),
+        _nested_dict(source.get("source_trace")),
+        _nested_dict(source.get("sourceTrace")),
+        _nested_dict(source.get("locator")),
+    ]
+    candidates: list[str] = []
+    seen: set[str] = set()
+    for payload in payloads:
+        for key in _VAULT_SOURCE_PATH_KEYS:
+            token = _strip_path_fragment(_clean_text(payload.get(key)))
+            if not token or token in seen or not _looks_like_vault_note_path(token):
+                continue
+            seen.add(token)
+            candidates.append(token)
+    return candidates
+
+
+def _path_within_root(path: Path, root: Path | None) -> bool:
+    if root is None:
+        return True
+    try:
+        path.resolve().relative_to(root.resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def _existing_vault_path(vault_root: Path | None, raw_path: str) -> Path | None:
     path = Path(raw_path).expanduser()
-    if path.is_absolute():
-        return path
-    if vault_root is None:
-        return None
-    return (vault_root / raw_path).resolve()
+    candidate_paths = [path]
+    if not path.suffix and _looks_like_vault_note_path(raw_path):
+        candidate_paths.append(Path(f"{raw_path}.md").expanduser())
+
+    for candidate in candidate_paths:
+        if candidate.is_absolute() and candidate.exists() and _path_within_root(candidate, vault_root):
+            return candidate
+        if vault_root is None or candidate.is_absolute():
+            continue
+        resolved = (vault_root / candidate).resolve()
+        if resolved.exists() and _path_within_root(resolved, vault_root):
+            return resolved
+    return None
+
+
+def _resolve_vault_source_path(vault_root: Path | None, source: dict[str, Any]) -> Path | None:
+    for raw_path in _vault_source_path_candidates(source):
+        resolved = _existing_vault_path(vault_root, raw_path)
+        if resolved is not None:
+            return resolved
+    return None
 
 
 def _vault_stale_citation_stats(payload: dict[str, Any], *, vault_root: Path | None) -> tuple[int, int, str]:
