@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T07:55:36Z",
+  "generatedAt": "2026-05-26T07:57:15Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "7948f49",
-    "dirtyCount": 8
+    "head": "c989ab3",
+    "dirtyCount": 0
   },
   "canonicalCheckout": {
     "available": true,
@@ -83,7 +83,7 @@
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "7948f49",
+      "head": "c989ab3",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -266,7 +266,7 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:dc7c99f2d8d0b172637479d49535be1554d2051a77704ea0747b06aa9c651e14",
+  "reportHash": "sha256:895e17efc2017c03edec2b3ec13418ce7a433120e470c56738a33c5ae0be9f1c",
   "nextAction": "await_explicit_user_approval_to_close_pr149_without_merge",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
