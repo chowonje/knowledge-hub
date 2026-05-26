@@ -214,6 +214,28 @@ async def call_tool_impl(state: Any, name: str, arguments: Any) -> Sequence[Text
         "tool": name,
         "arguments": redact_payload(dict(arguments)),
     }
+    from knowledge_hub.mcp.tool_specs import build_tools, resolve_tool_profile, tool_allowed_for_profile
+
+    tool_profile = resolve_tool_profile()
+    known_tool_names = {tool.name for tool in build_tools(profile="all")}
+    if name in known_tool_names and not tool_allowed_for_profile(name, tool_profile):
+        return build_text_response(
+            _build_mcp_tool_response(
+                tool=name,
+                status=MCP_TOOL_STATUS_BLOCKED,
+                payload={
+                    "error": f"tool '{name}' requires labs or all MCP profile",
+                    "profile": tool_profile,
+                    "requiredProfile": "labs",
+                    "profileGate": True,
+                },
+                started_at=started_at,
+                finished_at=now_iso(),
+                request_echo=request_echo,
+                status_message="tool requires labs profile",
+            ),
+            compact=compact,
+        )
     initialize_fn = getattr(state, "initialize", None)
     if not callable(initialize_fn):
         initialize_fn = lambda: initialize(state)

@@ -9,6 +9,11 @@ import pytest
 from knowledge_hub.core.schema_validator import validate_payload
 
 
+@pytest.fixture(autouse=True)
+def _mcp_tests_use_labs_profile_by_default(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "labs")
+
+
 def _import_mcp_server():
     try:
         return importlib.import_module("knowledge_hub.interfaces.mcp.server")
@@ -1296,7 +1301,7 @@ def test_list_tools_contains_paper_lookup_and_summarize(monkeypatch):
     tools = asyncio.run(module.list_tools())
     names = {tool.name for tool in tools}
     assert "paper_lookup_and_summarize" in names
-    assert "build_paper_memory" in names
+    assert "build_paper_memory" not in names
     assert "get_paper_memory_card" in names
     assert "search_paper_memory" in names
 
@@ -1338,14 +1343,18 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "search_knowledge" in names
     assert "ask_knowledge" in names
     assert "build_task_context" in names
-    assert "run_agentic_query" in names
-    assert "learning_start_or_resume_topic" in names
-    assert "learning_get_session_state" in names
-    assert "learning_explain_topic" in names
-    assert "learning_checkpoint" in names
-    assert "crawl_web_ingest" in names
+    assert "run_agentic_query" not in names
+    assert "learning_start_or_resume_topic" not in names
+    assert "learning_get_session_state" not in names
+    assert "learning_explain_topic" not in names
+    assert "learning_checkpoint" not in names
+    assert "crawl_web_ingest" not in names
     assert "crawl_youtube_ingest" not in names
     assert "paper_lookup_and_summarize" in names
+    assert "build_paper_memory" not in names
+    assert "index_paper_keywords" not in names
+    assert "discover_and_ingest" not in names
+    assert "run_paper_ingest_flow" not in names
     assert "learn_map" not in names
     assert "belief_list" not in names
     assert "ontology_profile_list" not in names
@@ -1360,6 +1369,33 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "transform_run" not in names
     assert "ask_graph" not in names
     assert "notebook_workbench_chat" not in names
+
+
+def test_default_mcp_profile_blocks_labs_operator_direct_calls(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "default")
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    blocked_tools = [
+        "run_agentic_query",
+        "learning_start_or_resume_topic",
+        "crawl_web_ingest",
+        "index_paper_keywords",
+        "discover_and_ingest",
+        "run_paper_ingest_flow",
+        "build_paper_memory",
+    ]
+    for tool_name in blocked_tools:
+        result = _decode_response(
+            asyncio.run(
+                module.call_tool(
+                    tool_name,
+                    {"topic": "rag", "goal": "rag", "paper_id": "2501.00001"},
+                )
+            )
+        )
+        assert result["status"] == "blocked"
+        assert result["payload"]["requiredProfile"] == "labs"
 
 
 def test_list_tools_includes_labs_profile(monkeypatch):

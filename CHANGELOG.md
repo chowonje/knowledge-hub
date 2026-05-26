@@ -10,6 +10,7 @@
 
 ### Changed
 
+- Tightened the default MCP profile for the v0.1 public/operator boundary. Default MCP listing and direct calls now keep learning, agentic, crawl/ingest, paper build/index, and paper ingest tools behind `KHUB_MCP_PROFILE=labs|all`, while the compact read/search/ask surface remains available.
 - Sanitized local workstation and vault-internal path strings in governance docs, an eval task note, and the RAG vNext rerank shadow query fixture.
 - Added a focused provider-surface tranche for public-preview setup. `khub provider` now exposes recommendation, custom OpenAI-compatible provider registration, role assignment, environment-key references, profile setup, and provider diagnostics; config-defined custom providers are visible to the registry, doctor, and runtime diagnostics without changing ask-v2, search/MCP runtime, or the add facade.
 - Refined `AGENTS.md` with the KnowledgeOS symlink note, P0 default handling, product-owned CLI/eval guidance, surface-specific verification mapping, and a pre-commit checklist for product changes.

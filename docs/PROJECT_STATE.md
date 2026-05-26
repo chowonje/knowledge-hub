@@ -60,6 +60,8 @@ The fifth roadmap tranche, `text_complex_qa_eval_alignment`, now has a report-on
 
 The sixth roadmap tranche, `source_alias_normalization`, now has a report-only short-alias policy gate. `eval/knowledgeos/scripts/build_source_alias_normalization_report.py` classifies aliases such as `RAG`, `GPT`, `CNN`, and `VLM` as concept-only, discover-only, contextual compare, explicit-id, explicit-title, or blocked lookup cases so bare aliases cannot silently become direct source scope without explicit paper/query context. This tranche records the policy and regression rows only; it does not change ask-v2 runtime wiring, mutate DB/index state, promote strict evidence, or expose runtime answer-visible payloads.
 
+The seventh roadmap tranche, `public_operator_surface_cleanup`, now narrows the default MCP profile. Learning, agentic, crawl/ingest, paper build/index, and paper ingest tools require `KHUB_MCP_PROFILE=labs|all` both in tool listing and direct invocation; default MCP keeps the compact read/search/ask-oriented surface. This closes the default MCP public-surface blocker without changing default CLI routing or moving labs/operator implementations.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.
