@@ -20,6 +20,7 @@ EXTERNAL_ACTION_APPROVAL_PACKET_REPORT_REF = "text_evidence_rc_external_action_a
 CANONICAL_DIRTY_SNAPSHOT_DRY_RUN_REPORT_REF = "text_evidence_canonical_dirty_snapshot_dry_run.v1.json"
 TEXT_ONLY_SCOPE_GATE_REPORT_REF = "text_evidence_rc_text_only_scope_gate.v1.json"
 EXTERNAL_ACTION_PREFLIGHT_REPORT_REF = "text_evidence_rc_external_action_preflight.v1.json"
+PR149_CLOSE_APPROVAL_REQUEST_REPORT_REF = "text_evidence_rc_pr149_close_approval_request.v1.json"
 
 PRIVATE_PATH_TOKENS = (
     "/" + "Users" + "/",
@@ -439,6 +440,34 @@ def _external_action_preflight_state(reports_root: Path) -> dict[str, Any]:
     }
 
 
+def _pr149_close_approval_request_state(reports_root: Path) -> dict[str, Any]:
+    payload = _load_json(reports_root / PR149_CLOSE_APPROVAL_REQUEST_REPORT_REF)
+    if not payload:
+        return {
+            "available": False,
+            "reportRef": "",
+            "status": "",
+            "safeToExecuteAfterApproval": False,
+            "executionStatus": "",
+            "recommendedDecision": "",
+            "blockerRows": 0,
+            "nextAction": "",
+            "privatePathLeakRows": 0,
+        }
+    request = dict(payload.get("approvalRequest") or {})
+    return {
+        "available": True,
+        "reportRef": PR149_CLOSE_APPROVAL_REQUEST_REPORT_REF,
+        "status": _clean_text(payload.get("status")),
+        "safeToExecuteAfterApproval": bool(request.get("safeToExecuteAfterApproval")),
+        "executionStatus": _clean_text(request.get("executionStatus")),
+        "recommendedDecision": _clean_text(request.get("recommendedDecision")),
+        "blockerRows": int(payload.get("blockerRows") or 0),
+        "nextAction": _clean_text(payload.get("nextAction")),
+        "privatePathLeakRows": int(payload.get("privatePathLeakRows") or 0),
+    }
+
+
 def build_text_evidence_rc_convergence_report(
     *,
     project_root: Path,
@@ -471,6 +500,7 @@ def build_text_evidence_rc_convergence_report(
     canonical_dirty_snapshot = _canonical_dirty_snapshot_dry_run_state(reports_root)
     text_only_scope_gate = _text_only_scope_gate_state(reports_root)
     external_action_preflight = _external_action_preflight_state(reports_root)
+    pr149_close_request = _pr149_close_approval_request_state(reports_root)
     if canonical_dirty_inventory.get("available"):
         canonical["dirtyInventoryReportRef"] = _clean_text(canonical_dirty_inventory.get("reportRef"))
         canonical["dirtyInventoryStatus"] = _clean_text(canonical_dirty_inventory.get("status"))
@@ -575,6 +605,7 @@ def build_text_evidence_rc_convergence_report(
         "pullRequest149": pr_149,
         "textOnlyScopeGate": text_only_scope_gate,
         "externalActionPreflight": external_action_preflight,
+        "pr149CloseApprovalRequest": pr149_close_request,
         "phaseRows": len(phase_rows),
         "readyPhaseRows": ready_phase_rows,
         "blockedPhaseRows": len(phase_rows) - ready_phase_rows,
@@ -620,7 +651,8 @@ def build_text_evidence_rc_convergence_report(
             else ""
         )
         or _clean_text(
-            external_action_preflight.get("nextAction")
+            pr149_close_request.get("nextAction")
+            or external_action_preflight.get("nextAction")
             or canonical_dirty_snapshot.get("nextAction")
             or external_action_approval.get("nextAction")
             or canonical_dirty_cleanup_plan.get("nextAction")
@@ -633,6 +665,7 @@ def build_text_evidence_rc_convergence_report(
             "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
             "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
             "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
+            "pr149CloseApprovalRequest records the exact close request but does not execute it",
             "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline",
         ],
         "schemaErrors": [],
@@ -660,6 +693,7 @@ def render_markdown_report(report: dict[str, Any]) -> str:
         f"- reportHash: `{report.get('reportHash')}`",
         f"- textOnlyScopeReady: `{dict(report.get('textOnlyScopeGate') or {}).get('textOnlyRcReady')}`",
         f"- externalActionPreflightReady: `{dict(report.get('externalActionPreflight') or {}).get('readyForUserApproval')}`",
+        f"- pr149CloseRequestStatus: `{dict(report.get('pr149CloseApprovalRequest') or {}).get('status')}`",
         "",
         "## Blockers",
         "",

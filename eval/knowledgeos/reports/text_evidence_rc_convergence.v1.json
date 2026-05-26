@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-convergence-report.v1",
   "status": "ready_for_integration_review",
-  "generatedAt": "2026-05-26T08:25:30Z",
+  "generatedAt": "2026-05-26T08:30:42Z",
   "scope": {
     "writes": "report_only",
     "mergePerformed": false,
@@ -14,8 +14,8 @@
   },
   "currentStack": {
     "branch": "codex/rc-hygiene-and-convergence-20260526",
-    "head": "07fdb5b",
-    "dirtyCount": 0
+    "head": "3d1864c",
+    "dirtyCount": 12
   },
   "canonicalCheckout": {
     "available": true,
@@ -92,6 +92,17 @@
     "nextAction": "request_explicit_user_approval_to_close_pr149_without_merge",
     "privatePathLeakRows": 0
   },
+  "pr149CloseApprovalRequest": {
+    "available": true,
+    "reportRef": "text_evidence_rc_pr149_close_approval_request.v1.json",
+    "status": "ready_for_user_decision",
+    "safeToExecuteAfterApproval": true,
+    "executionStatus": "not_executed",
+    "recommendedDecision": "approve_close_without_merge",
+    "blockerRows": 0,
+    "nextAction": "await_user_yes_to_close_pr149_without_merge",
+    "privatePathLeakRows": 0
+  },
   "phaseRows": 9,
   "readyPhaseRows": 9,
   "blockedPhaseRows": 0,
@@ -113,7 +124,7 @@
     {
       "order": 1,
       "branch": "codex/rc-hygiene-and-convergence-20260526",
-      "head": "07fdb5b",
+      "head": "3d1864c",
       "decision": "review_as_single_stacked_text_evidence_candidate"
     },
     {
@@ -296,12 +307,13 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:8de8a79e0cb414f821ac68d483e4aa26c4b7f35de79579d236abc4a76a6a41b5",
-  "nextAction": "request_explicit_user_approval_to_close_pr149_without_merge",
+  "reportHash": "sha256:964fa6fb6b8f34599eecaa86b53366907ce2def718d870a03a10b6456aa65c4d",
+  "nextAction": "await_user_yes_to_close_pr149_without_merge",
   "warnings": [
     "publicRcReady remains false while canonical checkout is dirty or PR #149 is conflicting/draft",
     "textOnlyScopeGate records that text-only RC readiness is separate from public RC release readiness",
     "externalActionPreflight records read-only readiness for the explicit PR #149 close approval",
+    "pr149CloseApprovalRequest records the exact close request but does not execute it",
     "visual/layout/VLM work remains deferred outside the v0.1 text-evidence mainline"
   ],
   "schemaErrors": []

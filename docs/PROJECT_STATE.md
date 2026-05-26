@@ -82,6 +82,8 @@ The RC convergence board now consumes that text-only scope gate directly. `eval/
 
 The same convergence board now also consumes a read-only external action preflight. `eval/knowledgeos/scripts/build_text_evidence_rc_external_action_preflight.py` confirms, before requesting approval, that PR #149 is still open/draft/conflicting and that the canonical checkout's status-only fingerprint still matches the snapshot dry-run. The current preflight is `ready_for_user_approval`, but it still performs no PR mutation, canonical checkout edit, destructive cleanup, dirty file-content read, vault scan, DB/index mutation, merge/cherry-pick, or reindex/reembed.
 
+The PR #149 close decision is now represented by a separate approval request packet. `eval/knowledgeos/scripts/build_text_evidence_rc_pr149_close_approval_request.py` records the exact recommended decision (`approve_close_without_merge`), the sanitized close comment, and the command preview, while keeping the execution status `not_executed`. The convergence board now surfaces this request so the next action is a user decision, not an implicit PR mutation.
+
 Current success criteria for that loop:
 
 - `discover`: at least one source item lands in canonical local storage.

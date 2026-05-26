@@ -1,0 +1,71 @@
+{
+  "schema": "knowledge-hub.paper.text-evidence-rc-pr149-close-approval-request.v1",
+  "status": "ready_for_user_decision",
+  "generatedAt": "2026-05-26T08:29:26Z",
+  "scope": {
+    "writes": "report_only",
+    "pullRequestMutationPerformed": false,
+    "canonicalCheckoutEdited": false,
+    "destructiveCleanupRows": 0,
+    "vaultScanRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0
+  },
+  "inputReports": {
+    "externalActionPreflightReportRef": "text_evidence_rc_external_action_preflight.v1.json",
+    "externalActionPreflightStatus": "ready_for_user_approval",
+    "externalActionPreflightReady": true
+  },
+  "approvalRequest": {
+    "actionId": "close_pr149_without_merge",
+    "targetRef": "github_pr_149",
+    "requiresExplicitUserApproval": true,
+    "userDecisionRequired": true,
+    "executionStatus": "not_executed",
+    "recommendedDecision": "approve_close_without_merge",
+    "commandPreview": "gh pr close 149 --repo chowonje/knowledge-hub --comment <sanitized closeout>",
+    "closeComment": "Closing this draft without merge for the v0.1 text-evidence RC convergence path. The branch is preserved as later side-track material; the current RC uses the text-only evidence stack and keeps strict-evidence promotion out of scope.",
+    "safeToExecuteAfterApproval": true
+  },
+  "pullRequest149": {
+    "state": "OPEN",
+    "isDraft": true,
+    "mergeable": "CONFLICTING",
+    "mergeStateStatus": "DIRTY",
+    "headRefName": "codex/complex-qa-real-strict-evidence-availability-bridge-audit-20260520",
+    "baseRefName": "main",
+    "expectedHoldState": true
+  },
+  "blockerRows": 0,
+  "blockers": [],
+  "nextAction": "await_user_yes_to_close_pr149_without_merge",
+  "mutationCounters": {
+    "externalPrMutationRows": 0,
+    "canonicalCleanupRows": 0,
+    "destructiveCleanupRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "reportHash": "sha256:de2e6aa884e58c8b4b2cf628bb1f7958bcd614941342dc6439364ba7980b4a0a",
+  "warnings": [
+    "This packet is an approval request only; it does not close PR #149.",
+    "Closing PR #149 is an external mutation and must wait for explicit user approval."
+  ],
+  "schemaErrors": []
+}
