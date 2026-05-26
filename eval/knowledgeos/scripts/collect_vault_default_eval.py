@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import os
 import signal
 import time
 from contextlib import contextmanager, nullcontext
@@ -168,6 +169,57 @@ def _path_within_root(path: Path, root: Path | None) -> bool:
     except ValueError:
         return False
     return True
+
+
+def _dedupe_paths(paths: list[Path]) -> list[Path]:
+    deduped: list[Path] = []
+    seen: set[str] = set()
+    for path in paths:
+        key = str(path.expanduser())
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(path)
+    return deduped
+
+
+def _candidate_workspace_vault_roots(repo_root: Path) -> list[Path]:
+    parents = [repo_root, *repo_root.parents]
+    candidates: list[Path] = []
+    for parent in parents[:5]:
+        candidates.append(parent / "vault")
+        candidates.append(parent / "KnowledgeOS" / "vault")
+    return _dedupe_paths(candidates)
+
+
+def _first_existing_vault_root(*values: Any) -> Path | None:
+    for value in values:
+        token = _clean_text(value)
+        if not token:
+            continue
+        path = Path(token).expanduser().resolve()
+        if path.exists() and path.is_dir():
+            return path
+    return None
+
+
+def _resolve_vault_root(
+    *,
+    config_vault_path: Any,
+    explicit_vault_root: Any = "",
+    repo_root: Path | None = None,
+) -> Path | None:
+    configured = _first_existing_vault_root(
+        explicit_vault_root,
+        config_vault_path,
+        os.environ.get("KHUB_VAULT_ROOT", ""),
+        os.environ.get("KHUB_VAULT_PATH", ""),
+    )
+    if configured is not None:
+        return configured
+    if repo_root is None:
+        return None
+    return _first_existing_vault_root(*_candidate_workspace_vault_roots(repo_root))
 
 
 def _existing_vault_path(vault_root: Path | None, raw_path: str) -> Path | None:
@@ -374,6 +426,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Collect default vault-family eval rows.")
     parser.add_argument("--queries", default="eval/knowledgeos/queries/vault_default_eval_queries_v1.csv")
     parser.add_argument("--out", default="eval/knowledgeos/runs/vault_default_eval.csv")
+    parser.add_argument("--vault-root", default="", help="Optional vault root for stale-citation path checks.")
     parser.add_argument("--top-k", type=int, default=6)
     parser.add_argument("--mode", default="hybrid")
     parser.add_argument("--gate-mode", default="standard", choices=["standard", "stub_hard", "live_smoke"])
@@ -393,7 +446,12 @@ def main(argv: list[str] | None = None) -> int:
 
     app = AppContextFactory().build(require_search=True)
     searcher = app.searcher
-    vault_root = Path(str(getattr(app.config, "vault_path", "") or "")).expanduser().resolve() if getattr(app.config, "vault_path", "") else None
+    repo_root = Path(__file__).resolve().parents[3]
+    vault_root = _resolve_vault_root(
+        config_vault_path=getattr(app.config, "vault_path", ""),
+        explicit_vault_root=args.vault_root,
+        repo_root=repo_root,
+    )
     runtime_cm = _stubbed_answer_runtime(searcher) if stub_llm else nullcontext()
 
     rows: list[dict[str, str]] = []

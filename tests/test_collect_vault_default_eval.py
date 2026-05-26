@@ -86,6 +86,39 @@ def test_vault_stale_stats_rejects_absolute_path_outside_vault_root(tmp_path: Pa
     assert module._vault_stale_citation_stats(payload, vault_root=vault_root) == (1, 1, "1.000000")
 
 
+def test_resolve_vault_root_uses_explicit_root_first(tmp_path: Path):
+    module = _load_script()
+    explicit = tmp_path / "explicit-vault"
+    config = tmp_path / "config-vault"
+    explicit.mkdir()
+    config.mkdir()
+
+    resolved = module._resolve_vault_root(
+        explicit_vault_root=str(explicit),
+        config_vault_path=str(config),
+        repo_root=tmp_path / "repo",
+    )
+
+    assert resolved == explicit.resolve()
+
+
+def test_resolve_vault_root_falls_back_to_workspace_vault_symlink_shape(tmp_path: Path):
+    module = _load_script()
+    workspace = tmp_path / "KnowledgeOS"
+    repo_root = workspace / ".worktrees" / "knowledge-hub-fix"
+    vault = workspace / "vault"
+    repo_root.mkdir(parents=True)
+    vault.mkdir()
+
+    resolved = module._resolve_vault_root(
+        explicit_vault_root="",
+        config_vault_path="",
+        repo_root=repo_root,
+    )
+
+    assert resolved == vault.resolve()
+
+
 def test_vault_stale_stats_rejects_title_only_source_as_stale(tmp_path: Path):
     module = _load_script()
     payload = {
