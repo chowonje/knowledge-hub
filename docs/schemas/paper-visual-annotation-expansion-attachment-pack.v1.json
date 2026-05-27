@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-annotation-expansion-attachment-pack.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "attachmentPackId",
+    "sourceExpansionPack",
+    "assetRootRef",
+    "scope",
+    "attachmentPolicy",
+    "counts",
+    "attachmentRowsDetail",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["ready_for_manual_web_vlm_expansion_run", "blocked"] },
+    "nextRecommendedTranche": { "const": "visual_annotation_expansion_manual_output_capture" },
+    "attachmentPackId": { "type": "string", "minLength": 1 },
+    "sourceExpansionPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "packRows"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1" },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "packRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "assetRootRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "vectorIndexing",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "cropWriteRows",
+        "pageImageWriteRows",
+        "wholeImageWriteRows",
+        "wholeImageGptRows",
+        "candidateStoreMutationRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_and_attachment_files_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "vectorIndexing": { "const": false },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "cropWriteRows": { "type": "integer", "minimum": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "wholeImageWriteRows": { "const": 0 },
+        "wholeImageGptRows": { "const": 0 },
+        "candidateStoreMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "attachmentPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attachmentKind",
+        "renderSource",
+        "cropExpansionPolicy",
+        "pageImagePolicy",
+        "wholeImagePolicy",
+        "uploadGuidance",
+        "derivedTextUse"
+      ],
+      "properties": {
+        "attachmentKind": { "const": "context_crop_png" },
+        "renderSource": { "const": "already_local_pdf_only" },
+        "cropExpansionPolicy": { "const": "candidate_type_context_margin_v1" },
+        "pageImagePolicy": { "const": "not_written_in_expansion_pack_002" },
+        "wholeImagePolicy": { "const": "deferred_to_visual_full_image_annotation_pack_design" },
+        "uploadGuidance": { "type": "string", "minLength": 1 },
+        "derivedTextUse": { "const": "retrieval_hint_only" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourcePackRows",
+        "attachmentRows",
+        "cropAttachmentRows",
+        "pageAttachmentRows",
+        "wholeImageRows",
+        "imageCandidateRows",
+        "figureCandidateRows",
+        "tableCandidateRows",
+        "equationCandidateRows",
+        "layoutCandidateRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourcePackRows": { "type": "integer", "minimum": 0 },
+        "attachmentRows": { "type": "integer", "minimum": 0 },
+        "cropAttachmentRows": { "type": "integer", "minimum": 0 },
+        "pageAttachmentRows": { "const": 0 },
+        "wholeImageRows": { "const": 0 },
+        "imageCandidateRows": { "type": "integer", "minimum": 0 },
+        "figureCandidateRows": { "type": "integer", "minimum": 0 },
+        "tableCandidateRows": { "type": "integer", "minimum": 0 },
+        "equationCandidateRows": { "type": "integer", "minimum": 0 },
+        "layoutCandidateRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "attachmentRowsDetail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "sourcePackCandidateId",
+          "sourceCandidateId",
+          "paperId",
+          "paperRef",
+          "sourceContentHash",
+          "page",
+          "candidateType",
+          "attachmentKind",
+          "attachmentRef",
+          "attachmentSha256",
+          "attachmentBytes",
+          "pixelWidth",
+          "pixelHeight",
+          "sourceBbox",
+          "cropBbox",
+          "renderPolicy",
+          "provenance",
+          "retrievalHintUseOnly",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence",
+          "wholeImageAttachment",
+          "pageImageAttachment",
+          "fullImageEscalationStatus",
+          "blockerReason"
+        ],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1" },
+          "sourcePackCandidateId": { "type": "string", "pattern": "^visual-annotation-expansion-pack:" },
+          "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "page": { "type": "integer", "minimum": 1 },
+          "candidateType": {
+            "enum": [
+              "figure_caption_region",
+              "table_region",
+              "equation_region",
+              "layout_region",
+              "image_region"
+            ]
+          },
+          "attachmentKind": { "const": "context_crop_png" },
+          "attachmentRef": {
+            "type": "string",
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
+          },
+          "attachmentSha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "attachmentBytes": { "type": "integer", "minimum": 1 },
+          "pixelWidth": { "type": "integer", "minimum": 1 },
+          "pixelHeight": { "type": "integer", "minimum": 1 },
+          "sourceBbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "cropBbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "renderPolicy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["renderer", "zoom", "cropExpansionPolicy", "writeScope"],
+            "properties": {
+              "renderer": { "const": "pymupdf" },
+              "zoom": { "type": "number", "exclusiveMinimum": 0 },
+              "cropExpansionPolicy": { "const": "candidate_type_context_margin_v1" },
+              "writeScope": { "const": "eval_report_attachment_only" }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceExpansionPackSchema",
+              "sourceExpansionPackRowSchema",
+              "sourcePackCandidateId",
+              "sourceCandidateId",
+              "sourceContentHash",
+              "page",
+              "sourceBbox",
+              "cropBbox",
+              "renderMethod",
+              "attachmentSource"
+            ],
+            "properties": {
+              "sourceExpansionPackSchema": {
+                "const": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1"
+              },
+              "sourceExpansionPackRowSchema": {
+                "const": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1"
+              },
+              "sourcePackCandidateId": { "type": "string", "pattern": "^visual-annotation-expansion-pack:" },
+              "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+              "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "page": { "type": "integer", "minimum": 1 },
+              "sourceBbox": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "number" }
+              },
+              "cropBbox": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "number" }
+              },
+              "renderMethod": { "const": "pymupdf_context_crop_png_v1" },
+              "attachmentSource": { "const": "visual_annotation_expansion_pack_design_v1" }
+            }
+          },
+          "retrievalHintUseOnly": { "const": true },
+          "strictEvidence": { "const": false },
+          "citationGrade": { "const": false },
+          "answerableWithoutTextEvidence": { "const": false },
+          "wholeImageAttachment": { "const": false },
+          "pageImageAttachment": { "const": false },
+          "fullImageEscalationStatus": {
+            "enum": [
+              "deferred_to_full_image_gate",
+              "not_required_for_this_context_crop_gate"
+            ]
+          },
+          "blockerReason": { "const": "" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}

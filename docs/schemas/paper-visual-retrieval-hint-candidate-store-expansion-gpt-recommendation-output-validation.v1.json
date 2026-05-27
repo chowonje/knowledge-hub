@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-output-validation.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceRecommendationOutput",
+    "sourceGptReviewPack",
+    "scope",
+    "policy",
+    "counts",
+    "recommendationRowsDetail",
+    "violations",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-output-validation.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": ["ready_for_project_side_human_decision_synthesis", "blocked"]
+    },
+    "nextRecommendedTranche": { "const": "visual_annotation_expansion_pack_design_003" },
+    "sourceRecommendationOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "reportRef", "rows"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-recommendation-output.v1"
+        },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "rows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sourceGptReviewPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "packRows"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-review-pack.v1"
+        },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "packRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "manualOperatorWebModelRunCompletedExternally",
+        "manualGptRecommendationRows",
+        "finalHumanDecisionRows",
+        "candidateStoreWriteRows",
+        "vectorIndexing",
+        "indexEligibleRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "cropWriteRows",
+        "pageImageWriteRows",
+        "wholeImageWriteRows",
+        "wholeImageGptRows",
+        "candidateStoreMutationRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "manualOperatorWebModelRunCompletedExternally": { "const": true },
+        "manualGptRecommendationRows": { "type": "integer", "minimum": 0 },
+        "finalHumanDecisionRows": { "const": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "vectorIndexing": { "const": false },
+        "indexEligibleRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "cropWriteRows": { "const": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "wholeImageWriteRows": { "const": 0 },
+        "wholeImageGptRows": { "const": 0 },
+        "candidateStoreMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedUse",
+        "recommendationsAreFinalHumanDecisions",
+        "recommendationsCanAuthorizeApply",
+        "recommendationsCanWriteCandidateStore",
+        "projectSideGateOwnsFinalDecision",
+        "gptRole",
+        "allowedSuggestedDecisions",
+        "nextPracticalWork"
+      ],
+      "properties": {
+        "allowedUse": { "const": "recommendation_only" },
+        "recommendationsAreFinalHumanDecisions": { "const": false },
+        "recommendationsCanAuthorizeApply": { "const": false },
+        "recommendationsCanWriteCandidateStore": { "const": false },
+        "projectSideGateOwnsFinalDecision": { "const": true },
+        "gptRole": { "const": "advisory_image_layout_recommendation_only" },
+        "allowedSuggestedDecisions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/suggestedDecision" },
+          "minItems": 4
+        },
+        "nextPracticalWork": { "const": "visual_annotation_expansion_pack_design_003" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourcePackRows",
+        "outputRows",
+        "matchedRows",
+        "missingRows",
+        "extraRows",
+        "duplicateRows",
+        "approvedRecommendationRows",
+        "holdRecommendationRows",
+        "rejectRecommendationRows",
+        "recropRecommendationRows",
+        "policyViolationRows",
+        "placeholderRows",
+        "finalHumanDecisionRows",
+        "applyAllowedRows",
+        "candidateStoreWriteRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "runtimeVisibleRows",
+        "indexEligibleRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "blockedRows"
+      ],
+      "properties": {
+        "sourcePackRows": { "type": "integer", "minimum": 0 },
+        "outputRows": { "type": "integer", "minimum": 0 },
+        "matchedRows": { "type": "integer", "minimum": 0 },
+        "missingRows": { "type": "integer", "minimum": 0 },
+        "extraRows": { "type": "integer", "minimum": 0 },
+        "duplicateRows": { "type": "integer", "minimum": 0 },
+        "approvedRecommendationRows": { "type": "integer", "minimum": 0 },
+        "holdRecommendationRows": { "type": "integer", "minimum": 0 },
+        "rejectRecommendationRows": { "type": "integer", "minimum": 0 },
+        "recropRecommendationRows": { "type": "integer", "minimum": 0 },
+        "policyViolationRows": { "type": "integer", "minimum": 0 },
+        "placeholderRows": { "type": "integer", "minimum": 0 },
+        "finalHumanDecisionRows": { "type": "integer", "minimum": 0 },
+        "applyAllowedRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "type": "integer", "minimum": 0 },
+        "strictEvidenceRows": { "type": "integer", "minimum": 0 },
+        "citationGradeRows": { "type": "integer", "minimum": 0 },
+        "answerableWithoutTextEvidenceRows": { "type": "integer", "minimum": 0 },
+        "runtimeVisibleRows": { "type": "integer", "minimum": 0 },
+        "indexEligibleRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "recommendationRowsDetail": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recommendationValidationRow" }
+    },
+    "violations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/violation" }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "suggestedDecision": {
+      "enum": [
+        "approve_store_candidate_only",
+        "hold_pending_more_context",
+        "reject_visual_hint_candidate",
+        "request_recrop_or_reannotation"
+      ]
+    },
+    "bbox": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "recommendationValidationRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "sourceDecisionRowId",
+        "sourcePackDecisionRowId",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "paperId",
+        "paperRef",
+        "sourceContentHash",
+        "page",
+        "bbox",
+        "candidateType",
+        "suggestedDecision",
+        "recommendationRationale",
+        "risk",
+        "needsHumanCheck",
+        "policy",
+        "validation"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1"
+        },
+        "sourceDecisionRowId": {
+          "type": "string",
+          "pattern": "^visual-retrieval-hint-expansion-decision:"
+        },
+        "sourcePackDecisionRowId": {
+          "type": "string",
+          "pattern": "^visual-retrieval-hint-expansion-decision:"
+        },
+        "hintCandidateId": {
+          "type": "string",
+          "pattern": "^visual-retrieval-hint:"
+        },
+        "sourceCandidateId": {
+          "type": "string",
+          "pattern": "^visual-layout:"
+        },
+        "paperId": { "type": "string", "minLength": 1 },
+        "paperRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "sourceContentHash": { "type": "string", "minLength": 1 },
+        "page": { "type": "integer", "minimum": 0 },
+        "bbox": { "$ref": "#/$defs/bbox" },
+        "candidateType": { "type": "string", "minLength": 1 },
+        "suggestedDecision": { "$ref": "#/$defs/suggestedDecision" },
+        "recommendationRationale": { "type": "string", "minLength": 1 },
+        "risk": { "type": "string", "minLength": 1 },
+        "needsHumanCheck": { "const": true },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowedUse",
+            "finalHumanDecision",
+            "applyAllowed",
+            "candidateStoreWrite",
+            "strictEvidence",
+            "citationGrade",
+            "answerableWithoutTextEvidence",
+            "runtimeVisible",
+            "indexEligible"
+          ],
+          "properties": {
+            "allowedUse": { "const": "recommendation_only" },
+            "finalHumanDecision": { "const": false },
+            "applyAllowed": { "const": false },
+            "candidateStoreWrite": { "const": false },
+            "strictEvidence": { "const": false },
+            "citationGrade": { "const": false },
+            "answerableWithoutTextEvidence": { "const": false },
+            "runtimeVisible": { "const": false },
+            "indexEligible": { "const": false }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "matchedPackRow",
+            "matchedDecisionRowId",
+            "matchedSourceCandidateId",
+            "policyCompliant",
+            "violationReasons"
+          ],
+          "properties": {
+            "matchedPackRow": { "type": "boolean" },
+            "matchedDecisionRowId": { "type": "boolean" },
+            "matchedSourceCandidateId": { "type": "boolean" },
+            "policyCompliant": { "type": "boolean" },
+            "violationReasons": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "violation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hintCandidateId", "kind", "message"],
+      "properties": {
+        "hintCandidateId": { "type": "string" },
+        "kind": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

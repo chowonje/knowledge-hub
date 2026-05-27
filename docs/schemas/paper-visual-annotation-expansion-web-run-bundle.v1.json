@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-annotation-expansion-web-run-bundle.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "bundleId",
+    "sourceWebOutputTemplate",
+    "targetOutput",
+    "scope",
+    "counts",
+    "batchBundles",
+    "operatorInstructions",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-web-run-bundle.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["ready_for_operator_web_batch_run", "blocked"] },
+    "nextRecommendedTranche": { "const": "visual_annotation_expansion_manual_output_capture" },
+    "bundleId": { "type": "string", "minLength": 1 },
+    "sourceWebOutputTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "outputTemplateRows"],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-annotation-expansion-web-output-template.v1" },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "outputTemplateRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "targetOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "reportRef",
+        "validationCommand",
+        "allowedUse",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence"
+      ],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.visual-annotation-web-output.v1" },
+        "reportRef": {
+          "type": "string",
+          "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_output_[0-9]{3}\\.manual\\.json$"
+        },
+        "validationCommand": {
+          "type": "string",
+          "pattern": "^PYTHONPATH=\\. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output\\.py"
+        },
+        "allowedUse": { "const": "retrieval_hint_only" },
+        "strictEvidence": { "const": false },
+        "citationGrade": { "const": false },
+        "answerableWithoutTextEvidence": { "const": false }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "manualOperatorWebModelRunRequired",
+        "operatorBatchPromptRows",
+        "bundleArtifactRows",
+        "completedWebOutputRows",
+        "manualWebModelOutputRows",
+        "vectorIndexing",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "cropWriteRows",
+        "pageImageWriteRows",
+        "wholeImageWriteRows",
+        "wholeImageGptRows",
+        "candidateStoreMutationRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "manualOperatorWebModelRunRequired": { "const": true },
+        "operatorBatchPromptRows": { "type": "integer", "minimum": 0 },
+        "bundleArtifactRows": { "type": "integer", "minimum": 0 },
+        "completedWebOutputRows": { "const": 0 },
+        "manualWebModelOutputRows": { "const": 0 },
+        "vectorIndexing": { "const": false },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "cropWriteRows": { "const": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "wholeImageWriteRows": { "const": 0 },
+        "wholeImageGptRows": { "const": 0 },
+        "candidateStoreMutationRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceTemplateRows",
+        "batchRows",
+        "operatorPromptRows",
+        "fillTemplateRows",
+        "bundleArtifactRows",
+        "attachmentRefRows",
+        "placeholderRows",
+        "completedWebOutputRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourceTemplateRows": { "type": "integer", "minimum": 0 },
+        "batchRows": { "type": "integer", "minimum": 0 },
+        "operatorPromptRows": { "type": "integer", "minimum": 0 },
+        "fillTemplateRows": { "type": "integer", "minimum": 0 },
+        "bundleArtifactRows": { "type": "integer", "minimum": 0 },
+        "attachmentRefRows": { "type": "integer", "minimum": 0 },
+        "placeholderRows": { "type": "integer", "minimum": 0 },
+        "completedWebOutputRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "batchBundles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "batchId",
+          "batchNumber",
+          "rowCount",
+          "promptRef",
+          "fillTemplateRef",
+          "attachmentRefs",
+          "rows"
+        ],
+        "properties": {
+          "batchId": { "type": "string", "minLength": 1 },
+          "batchNumber": { "type": "integer", "minimum": 1 },
+          "rowCount": { "type": "integer", "minimum": 1 },
+          "promptRef": {
+            "type": "string",
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_[0-9]{3}/batch_[0-9]{2}_prompt\\.md$"
+          },
+          "fillTemplateRef": {
+            "type": "string",
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_[0-9]{3}/batch_[0-9]{2}_fill_template\\.v1\\.json$"
+          },
+          "attachmentRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "batchId",
+                "batchNumber",
+                "sourceCandidateId",
+                "paperId",
+                "candidateType",
+                "page",
+                "attachmentRef",
+                "fillRequired",
+                "targetRowTemplate"
+              ],
+              "properties": {
+                "batchId": { "type": "string", "minLength": 1 },
+                "batchNumber": { "type": "integer", "minimum": 1 },
+                "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+                "paperId": { "type": "string", "minLength": 1 },
+                "candidateType": {
+                  "enum": ["image_region", "figure_caption_region", "table_region", "equation_region", "layout_region"]
+                },
+                "page": { "type": "integer", "minimum": 1 },
+                "attachmentRef": {
+                  "type": "string",
+                  "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
+                },
+                "fillRequired": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string", "minLength": 1 }
+                },
+                "targetRowTemplate": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "sourceCandidateId",
+                    "visualObservationStatus",
+                    "derivedTextForRetrieval",
+                    "visibleText",
+                    "retrievalKeywords",
+                    "uncertainty",
+                    "limitations",
+                    "strictEvidence",
+                    "citationGrade",
+                    "answerableWithoutTextEvidence"
+                  ],
+                  "properties": {
+                    "sourceCandidateId": { "type": "string", "pattern": "^visual-layout:" },
+                    "visualObservationStatus": {
+                      "enum": ["image_attached", "image_not_attached", "unclear"]
+                    },
+                    "derivedTextForRetrieval": { "type": "string", "pattern": "FILL_IN" },
+                    "visibleText": { "type": "string", "pattern": "FILL_IN" },
+                    "retrievalKeywords": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "type": "string", "minLength": 1 }
+                    },
+                    "uncertainty": { "type": "string", "pattern": "FILL_IN" },
+                    "limitations": { "type": "string", "minLength": 1 },
+                    "strictEvidence": { "const": false },
+                    "citationGrade": { "const": false },
+                    "answerableWithoutTextEvidence": { "const": false }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "operatorInstructions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "warnings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
