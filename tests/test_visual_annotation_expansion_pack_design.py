@@ -291,6 +291,48 @@ def test_expansion_pack_003_style_selection_can_include_layout_without_images() 
     assert validation.ok, validation.errors
 
 
+def test_expansion_pack_004_style_selection_excludes_all_prior_hints() -> None:
+    source = copy.deepcopy(_candidate_report())
+    source["candidateRowsDetail"].extend(_layout_rows("clip-2021", row_count=4))
+    source["candidateRowsDetail"].extend(_layout_rows("mae-2021", row_count=4))
+    source["candidateRowsDetail"].extend(_layout_rows("resnet-2015", row_count=4))
+    prior_ids = [
+        str(row["candidateId"])
+        for row in source["candidateRowsDetail"]
+        if row["candidateType"] in {"table_region", "figure_caption_region", "equation_region"}
+    ][:12]
+
+    report = build_visual_annotation_expansion_pack_design(
+        source,
+        _web_pack(prior_ids[:4]),
+        _dry_run(prior_ids[4:]),
+        type_quotas={
+            "table_region": 2,
+            "figure_caption_region": 2,
+            "equation_region": 2,
+            "layout_region": 4,
+            "image_region": 0,
+        },
+        max_candidates=10,
+        generated_at="2026-05-27T00:00:00Z",
+    )
+
+    selected_ids = {row["sourceCandidateId"] for row in report["packRowsDetail"]}
+    assert report["status"] == "ready"
+    assert report["counts"]["previousAnnotatedRows"] == len(set(prior_ids))
+    assert report["counts"]["selectedExpansionRows"] == 10
+    assert report["counts"]["imageCandidateRows"] == 0
+    assert report["counts"]["layoutCandidateRows"] == 4
+    assert not selected_ids.intersection(prior_ids)
+
+    validation = validate_payload(
+        report,
+        VISUAL_ANNOTATION_EXPANSION_PACK_DESIGN_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+
 def test_expansion_pack_blocks_on_non_ready_source_report() -> None:
     source = _candidate_report()
     source["status"] = "blocked"
