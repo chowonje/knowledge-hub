@@ -183,6 +183,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.limited-visual-retrieval-hint-candidate-store-labs-vector-index-dry-run.v1": "paper-limited-visual-retrieval-hint-candidate-store-labs-vector-index-dry-run.v1.json",
     "knowledge-hub.paper.limited-visual-retrieval-hint-candidate-store-labs-vector-index-review.v1": "paper-limited-visual-retrieval-hint-candidate-store-labs-vector-index-review.v1.json",
     "knowledge-hub.paper.limited-visual-retrieval-hint-candidate-store-labs-vector-index-apply-executor-dry-run.v1": "paper-limited-visual-retrieval-hint-candidate-store-labs-vector-index-apply-executor-dry-run.v1.json",
+    "knowledge-hub.paper.limited-visual-retrieval-hint-candidate-store-labs-vector-index-apply-review.v1": "paper-limited-visual-retrieval-hint-candidate-store-labs-vector-index-apply-review.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
