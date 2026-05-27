@@ -1,0 +1,101 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: NewtonBench-style crop shows scientific-law benchmark domains and an agentic exploration workflow with experiment execution, code interpreter tool use, final law submission, robot agent icons, ENV blocks, and a visible hard-law formula fragment resembling F = G' (m1 + m2)^2 / r^3.",
+      "visibleText": "Visible fragments include Hard, F = G' (m1 + m2)^2 / r^3, Agentic Exploration, Run Experiment, Table Format, Code Interpreter Tool-use, Final Law Submission, ENV, Fourier's Law, Malus' Law, Heat Transfer, and caption fragments about experimentation with model system and agentic exploration settings.",
+      "retrievalKeywords": ["NewtonBench", "agentic exploration", "scientific law discovery", "code interpreter tool-use", "final law submission", "ENV", "Fourier's Law", "Malus' Law", "Heat Transfer"],
+      "uncertainty": "Several code snippets and left-side benchmark labels are too small or cropped to transcribe completely; the equation and workflow labels are only partially visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Emu3.5 crop shows multi-panel image/video editing or world-model examples, including a whiteboard-to-sticky-note edit, a third-person camera viewpoint change behind a character, and a physical manipulation sequence for opening a bottle and pouring water.",
+      "visibleText": "Visible fragments include Replace the white board text with Meeting at 2pm on a sticky note, Switch to a third-person camera hovering just behind the character, Step 2 hold the bottle with one hand and pour the water with the other, and a partial fragment about turning a cap counter-clockwise.",
+      "retrievalKeywords": ["Emu3.5", "native multimodal models", "world learners", "sticky note", "Meeting at 2pm", "third-person camera", "behind the character", "pour the water", "bottle manipulation"],
+      "uncertainty": "The crop cuts off parts of the surrounding grid and some captions; only the central and right-side examples are clearly legible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Faster R-CNN crop defines bounding-box regression parameterizations for predicted, anchor, and ground-truth boxes, including tx, ty, tw, th and starred target variants using center coordinates, widths, heights, and logarithmic scale ratios.",
+      "visibleText": "Visible fragments include For bounding box regression, parameterizations of the 4 coordinates, equation (2), tx = (x - xa) / wa, ty = (y - ya) / ha, tw = log(w / wa), th = log(h / ha), starred target variants, and text explaining x, y, w, h as center coordinate, width, and height for predicted, anchor, and ground-truth boxes.",
+      "retrievalKeywords": ["Faster R-CNN", "bounding box regression", "parameterizations", "anchor box", "ground-truth box", "predicted box", "t_x", "t_y", "t_w", "t_h", "Equation 2"],
+      "uncertainty": "The main equation is legible, but the right edge and top surrounding paragraphs are slightly cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AutoGen architecture/workflow diagram contrasts AutoGen agents and developer code, showing ConversableAgent, AssistantAgent, UserProxyAgent, GroupChatManager, agent customization settings, unified conversation interface functions, agent definition, custom reply registration, and conversation initiation.",
+      "visibleText": "Visible fragments include AutoGen Agents, Agent Customization, human_input_mode NEVER, code_execution_config False, DEFAULT_SYSTEM_MESSAGE, ConversableAgent, Unified Conversation Interface, send, receive, generate_reply, human_input_mode ALWAYS, AssistantAgent, UserProxyAgent, GroupChatManager, Developer Code, Register a Custom Reply Func, Define Agents, User Proxy A, Assistant B, Initiate Conversations.",
+      "retrievalKeywords": ["AutoGen", "ConversableAgent", "AssistantAgent", "UserProxyAgent", "GroupChatManager", "Agent Customization", "human_input_mode", "register_reply", "generate_reply", "multi-agent conversation"],
+      "uncertainty": "The diagram is horizontally cropped on the right and vertically cropped at the bottom; some code blocks and notes are only partially readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Arithmetic in the Wild crop describes DAS, a k-dimensional subspace, interchange intervention accuracy, patching hidden states, counterfactual prompts, and an equation replacing h_o with h_o plus an R-projected difference between counterfactual and original hidden states.",
+      "visibleText": "Visible fragments include train DAS on the months task, k-dimensional subspace, interchange intervention accuracy IIA, six months after October to two months after April, patch within the subspace spanned by R, equation h = h_o + R(R^T h_c - R^T h_o), counterfactual prompt, residual stream, attention or MLP sublayer, 1 <= k <= 16, DAS subspace, shared mechanism.",
+      "retrievalKeywords": ["Arithmetic in the Wild", "DAS", "base-10 addition", "cyclic concepts", "months task", "interchange intervention accuracy", "IIA", "counterfactual prompt", "hidden state patching", "DAS subspace"],
+      "uncertainty": "The left edge is cropped, so the beginnings of several sentences are missing; the central equation and most DAS-related terms are legible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Latent Diffusion Models first-page crop shows author and affiliation text plus a comparison table of image reconstruction examples with Input, ours, DALL-E, and VQGAN columns, PSNR and R-FID values, and sample images.",
+      "visibleText": "Visible fragments include Dominik Lorenz, Patrick Esser, Bjorn Ommer, Munich and IWR Heidelberg University, Runway ML, CompVis latent-diffusion, Input, ours f=4, DALL-E f=8, VQGAN f=16, PSNR 27.4, R-FID 0.58, PSNR 22.8, R-FID 32.01, PSNR 19.9, R-FID 4.98.",
+      "retrievalKeywords": ["latent diffusion", "CompVis", "Runway ML", "Dominik Lorenz", "Patrick Esser", "Bjorn Ommer", "DALL-E", "VQGAN", "PSNR", "R-FID"],
+      "uncertainty": "The far-left title and some surrounding abstract text are cropped; the comparison table headers and author area are visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Qwen-Image technical-report crop about text rendering shows simple-background rendering with predefined templates, compositional rendering in contextual scenes with a landscape image and Qwen-VL Captioner, and a partially visible structured-frame rendering section.",
+      "visibleText": "Visible fragments include Rendering in Simple Backgrounds, Pre-defined Templates, Template1, On a background_color background displaying word_color text word, Template2, The background is background_color and the word_color handwritten text is word, Compositional Rendering in Contextual Scenes, Qwen-VL Captioner, Complex Rendering in Structured Frames.",
+      "retrievalKeywords": ["Qwen-Image", "text rendering", "simple backgrounds", "pre-defined templates", "Template1", "Template2", "handwritten text", "contextual scenes", "Qwen-VL Captioner", "structured frames"],
+      "uncertainty": "The left edge and right output examples are cropped, and only portions of the Chinese prompt/output text are visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Imagen diffusion-model sampling crop shows denoising score matching, epsilon/x parameterization, DDIM update equations, variables z_t, z_s, lambda_t, alpha, sigma, estimated x_theta, forward-process mean, and a stochastic update rule controlled by gamma.",
+      "visibleText": "Visible fragments include denoising score matching, x_hat_theta, squared error loss on epsilon_theta, w(lambda_t), log p(z_t | c), z_1 drawn from N(0,I), DDIM, z_s update using alpha_s, sigma_s, z_t, alpha_t, x_hat_theta, q(z_s | z_t, x), stochastic update rule, gamma controls the stochasticity of the sampler, and Architecture Details.",
+      "retrievalKeywords": ["photorealistic text-to-image diffusion", "deep language understanding", "DDIM", "denoising score matching", "x parameterization", "z_s", "z_t", "lambda_t", "stochastic update rule", "sampler gamma"],
+      "uncertainty": "The crop cuts off the left and right sides of several equations, so formulas are only partially transcribed.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}
