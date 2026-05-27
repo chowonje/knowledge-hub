@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-visual-retrieval-hint-candidate-store-expansion-gpt-decision-review-pack.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "packId",
+    "sourceDecisionRecord",
+    "sourceReviewReport",
+    "targetRecommendationOutput",
+    "scope",
+    "counts",
+    "batchBundles",
+    "operatorInstructions",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-review-pack.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["ready_for_manual_gpt_decision_recommendation_run", "blocked"] },
+    "nextRecommendedTranche": {
+      "const": "visual_retrieval_hint_candidate_store_expansion_gpt_recommendation_output_capture"
+    },
+    "packId": { "type": "string", "minLength": 1 },
+    "sourceDecisionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "reportRef",
+        "decisionRows",
+        "humanDecisionRows",
+        "candidateStoreWriteRows"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-human-product-decision-record.v1"
+        },
+        "status": {
+          "enum": ["decision_record_template_ready", "decision_record_validated", "blocked"]
+        },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "decisionRows": { "type": "integer", "minimum": 0 },
+        "humanDecisionRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 }
+      }
+    },
+    "sourceReviewReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "reportRef", "reviewRows", "blockedRows"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-review.v1"
+        },
+        "status": { "enum": ["ready", "blocked"] },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "reviewRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "targetRecommendationOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "allowedUse",
+        "finalHumanDecision",
+        "applyAllowed",
+        "candidateStoreWrite",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "runtimeVisible",
+        "indexEligible"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-recommendation-output.v1"
+        },
+        "allowedUse": { "const": "recommendation_only" },
+        "finalHumanDecision": { "const": false },
+        "applyAllowed": { "const": false },
+        "candidateStoreWrite": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationGrade": { "const": false },
+        "answerableWithoutTextEvidence": { "const": false },
+        "runtimeVisible": { "const": false },
+        "indexEligible": { "const": false }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "manualOperatorWebModelRunRequired",
+        "operatorPromptRows",
+        "recommendationTemplateRows",
+        "bundleArtifactRows",
+        "completedGptRecommendationRows",
+        "finalHumanDecisionRows",
+        "candidateStoreWriteRows",
+        "vectorIndexing",
+        "indexEligibleRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "cropWriteRows",
+        "pageImageWriteRows",
+        "wholeImageWriteRows",
+        "wholeImageGptRows",
+        "canonicalParsedArtifactWriteRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_and_operator_prompt_files_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "manualOperatorWebModelRunRequired": { "const": true },
+        "operatorPromptRows": { "type": "integer", "minimum": 0 },
+        "recommendationTemplateRows": { "type": "integer", "minimum": 0 },
+        "bundleArtifactRows": { "type": "integer", "minimum": 0 },
+        "completedGptRecommendationRows": { "const": 0 },
+        "finalHumanDecisionRows": { "const": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "vectorIndexing": { "const": false },
+        "indexEligibleRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "cropWriteRows": { "const": 0 },
+        "pageImageWriteRows": { "const": 0 },
+        "wholeImageWriteRows": { "const": 0 },
+        "wholeImageGptRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceDecisionRows",
+        "sourceReviewRows",
+        "gptReviewRows",
+        "batchRows",
+        "operatorPromptRows",
+        "recommendationTemplateRows",
+        "bundleArtifactRows",
+        "completedGptRecommendationRows",
+        "finalHumanDecisionRows",
+        "applyDesignCandidateRows",
+        "candidateStoreWriteRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourceDecisionRows": { "type": "integer", "minimum": 0 },
+        "sourceReviewRows": { "type": "integer", "minimum": 0 },
+        "gptReviewRows": { "type": "integer", "minimum": 0 },
+        "batchRows": { "type": "integer", "minimum": 0 },
+        "operatorPromptRows": { "type": "integer", "minimum": 0 },
+        "recommendationTemplateRows": { "type": "integer", "minimum": 0 },
+        "bundleArtifactRows": { "type": "integer", "minimum": 0 },
+        "completedGptRecommendationRows": { "const": 0 },
+        "finalHumanDecisionRows": { "const": 0 },
+        "applyDesignCandidateRows": { "const": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "batchBundles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "batchId",
+          "batchNumber",
+          "rowCount",
+          "promptRef",
+          "recommendationTemplateRef",
+          "rows"
+        ],
+        "properties": {
+          "batchId": { "type": "string", "minLength": 1 },
+          "batchNumber": { "type": "integer", "minimum": 1 },
+          "rowCount": { "type": "integer", "minimum": 1 },
+          "promptRef": {
+            "type": "string",
+            "pattern": "^eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_[0-9]{2}_prompt\\.md$"
+          },
+          "recommendationTemplateRef": {
+            "type": "string",
+            "pattern": "^eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_[0-9]{2}_recommendation_template\\.v1\\.json$"
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/reviewRow" }
+          }
+        }
+      }
+    },
+    "operatorInstructions": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "reviewRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rowNumber",
+        "decisionRowId",
+        "sourceReviewRowId",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "paperId",
+        "paperRef",
+        "sourceContentHash",
+        "page",
+        "bbox",
+        "candidateType",
+        "currentDecision",
+        "derivedTextForRetrievalSnippet",
+        "visibleTextSnippet",
+        "retrievalKeywordCount",
+        "allowedSuggestedDecisions",
+        "gptOutputPolicy"
+      ],
+      "properties": {
+        "rowNumber": { "type": "integer", "minimum": 1 },
+        "decisionRowId": {
+          "type": "string",
+          "pattern": "^visual-retrieval-hint-expansion-decision:"
+        },
+        "sourceReviewRowId": {
+          "type": "string",
+          "pattern": "^visual-retrieval-hint-expansion-review:"
+        },
+        "hintCandidateId": {
+          "type": "string",
+          "pattern": "^visual-retrieval-hint:"
+        },
+        "sourceCandidateId": {
+          "type": "string",
+          "pattern": "^visual-layout:"
+        },
+        "paperId": { "type": "string", "minLength": 1 },
+        "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+        "sourceContentHash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "page": { "type": "integer", "minimum": 1 },
+        "bbox": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "type": "number" }
+        },
+        "candidateType": {
+          "enum": [
+            "figure_caption_region",
+            "table_region",
+            "equation_region",
+            "layout_region",
+            "image_region"
+          ]
+        },
+        "currentDecision": { "const": "hold_pending_human_product_review" },
+        "derivedTextForRetrievalSnippet": { "type": "string", "minLength": 1 },
+        "visibleTextSnippet": { "type": "string", "minLength": 1 },
+        "retrievalKeywordCount": { "type": "integer", "minimum": 0 },
+        "allowedSuggestedDecisions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "approve_store_candidate_only",
+              "hold_pending_more_context",
+              "reject_visual_hint_candidate",
+              "request_recrop_or_reannotation"
+            ]
+          }
+        },
+        "gptOutputPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "finalHumanDecision",
+            "applyAllowed",
+            "candidateStoreWrite",
+            "strictEvidence",
+            "citationGrade",
+            "answerableWithoutTextEvidence",
+            "runtimeVisible",
+            "indexEligible"
+          ],
+          "properties": {
+            "finalHumanDecision": { "const": false },
+            "applyAllowed": { "const": false },
+            "candidateStoreWrite": { "const": false },
+            "strictEvidence": { "const": false },
+            "citationGrade": { "const": false },
+            "answerableWithoutTextEvidence": { "const": false },
+            "runtimeVisible": { "const": false },
+            "indexEligible": { "const": false }
+          }
+        }
+      }
+    }
+  }
+}
