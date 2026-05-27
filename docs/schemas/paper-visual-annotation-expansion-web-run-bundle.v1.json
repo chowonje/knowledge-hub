@@ -52,7 +52,7 @@
         "schema": { "const": "knowledge-hub.paper.visual-annotation-web-output.v1" },
         "reportRef": {
           "type": "string",
-          "const": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json"
+          "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_output_[0-9]{3}\\.manual\\.json$"
         },
         "validationCommand": {
           "type": "string",
@@ -169,18 +169,18 @@
           "rowCount": { "type": "integer", "minimum": 1 },
           "promptRef": {
             "type": "string",
-            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002/batch_[0-9]{2}_prompt\\.md$"
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_[0-9]{3}/batch_[0-9]{2}_prompt\\.md$"
           },
           "fillTemplateRef": {
             "type": "string",
-            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_002/batch_[0-9]{2}_fill_template\\.v1\\.json$"
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_[0-9]{3}/batch_[0-9]{2}_fill_template\\.v1\\.json$"
           },
           "attachmentRefs": {
             "type": "array",
             "minItems": 1,
             "items": {
               "type": "string",
-              "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+              "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
             }
           },
           "rows": {
@@ -211,7 +211,7 @@
                 "page": { "type": "integer", "minimum": 1 },
                 "attachmentRef": {
                   "type": "string",
-                  "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+                  "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
                 },
                 "fillRequired": {
                   "type": "array",

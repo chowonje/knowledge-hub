@@ -93,7 +93,7 @@
     },
     "expectedOutputRef": {
       "type": "string",
-      "const": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json"
+      "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_output_[0-9]{3}\\.manual\\.json$"
     },
     "validationCommand": {
       "type": "string",
@@ -156,7 +156,7 @@
           "page": { "type": "integer", "minimum": 1 },
           "attachmentRef": {
             "type": "string",
-            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
           },
           "fillRequired": {
             "type": "array",

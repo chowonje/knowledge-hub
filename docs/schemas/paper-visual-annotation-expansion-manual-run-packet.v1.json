@@ -144,7 +144,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+              "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
             }
           },
           "rows": {
@@ -186,7 +186,7 @@
                 },
                 "attachmentRef": {
                   "type": "string",
-                  "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+                  "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
                 },
                 "copyPasteContext": { "type": "string" },
                 "expectedOutputSkeleton": {

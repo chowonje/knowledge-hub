@@ -53,7 +53,12 @@
       "additionalProperties": false,
       "required": ["schema", "status", "reportRef", "dryRunRows"],
       "properties": {
-        "schema": { "const": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-dry-run.v1" },
+        "schema": {
+          "enum": [
+            "knowledge-hub.paper.visual-retrieval-hint-candidate-store-dry-run.v1",
+            "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-dry-run.v1"
+          ]
+        },
         "status": { "enum": ["ready", "blocked"] },
         "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
         "dryRunRows": { "type": "integer", "minimum": 0 }
@@ -130,7 +135,8 @@
             "image_region": { "type": "integer", "minimum": 0 },
             "figure_caption_region": { "type": "integer", "minimum": 0 },
             "table_region": { "type": "integer", "minimum": 0 },
-            "equation_region": { "type": "integer", "minimum": 0 }
+            "equation_region": { "type": "integer", "minimum": 0 },
+            "layout_region": { "type": "integer", "minimum": 0 }
           }
         },
         "preferredPaperIds": { "type": "array", "items": { "type": "string", "minLength": 1 } },
@@ -171,7 +177,7 @@
         "figureCandidateRows": { "type": "integer", "minimum": 0 },
         "tableCandidateRows": { "type": "integer", "minimum": 0 },
         "equationCandidateRows": { "type": "integer", "minimum": 0 },
-        "layoutCandidateRows": { "const": 0 },
+        "layoutCandidateRows": { "type": "integer", "minimum": 0 },
         "wholeImageRows": { "const": 0 },
         "pageImageRows": { "const": 0 },
         "blockedRows": { "type": "integer", "minimum": 0 },
@@ -220,7 +226,7 @@
             "items": { "type": "number" }
           },
           "candidateType": {
-            "enum": ["image_region", "figure_caption_region", "table_region", "equation_region"]
+            "enum": ["image_region", "figure_caption_region", "table_region", "equation_region", "layout_region"]
           },
           "priority": { "type": "integer", "minimum": 1 },
           "expansionReason": {
@@ -235,7 +241,8 @@
               "describe_image_region_for_retrieval",
               "describe_figure_caption_region_for_retrieval",
               "describe_table_region_for_retrieval",
-              "describe_equation_region_for_retrieval"
+              "describe_equation_region_for_retrieval",
+              "describe_layout_region_for_retrieval"
             ]
           },
           "webInput": {

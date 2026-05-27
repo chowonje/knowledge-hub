@@ -97,6 +97,46 @@ def _image_rows(paper_id: str, *, page_count: int, images_per_page: int) -> list
     )
 
 
+def _layout_rows(paper_id: str, *, row_count: int) -> list[dict[str, object]]:
+    return [
+        {
+            "schema": "knowledge-hub.paper.visual-layout-candidate-row.v1",
+            "candidateId": f"visual-layout:{paper_id}:layout_region:{index}:aaaaaaaaaaaaaaaa",
+            "paperId": paper_id,
+            "paperRef": f"papers_dir/{paper_id}.pdf",
+            "sourceContentHash": _hash(),
+            "page": index,
+            "bbox": [16.0, 24.0, 260.0, 320.0],
+            "candidateType": "layout_region",
+            "textContext": {
+                "nearbyText": f"{paper_id} layout-heavy section {index}.",
+                "captionText": "",
+                "headingPath": ["Layout"],
+            },
+            "visualContext": {
+                "cropRef": f"papers_dir/visual_layout_planned_crops/{paper_id}/p{index}-layout.png",
+                "imageHash": "",
+                "pageImageRequired": True,
+            },
+            "retrievalHintPlan": {
+                "targetDerivedTextField": "derivedTextForRetrieval",
+                "allowedUse": "retrieval_hint_only",
+                "strictEvidence": False,
+                "citationGrade": False,
+                "answerableWithoutTextEvidence": False,
+            },
+            "provenance": {
+                "sourceContentHash": _hash(),
+                "page": index,
+                "bbox": [16.0, 24.0, 260.0, 320.0],
+                "extractionMethod": "test",
+            },
+            "blockerReason": "",
+        }
+        for index in range(1, row_count + 1)
+    ]
+
+
 def _candidate_report() -> dict[str, object]:
     rows = [
         *_image_rows("clip-2021", page_count=4, images_per_page=3),
@@ -201,6 +241,47 @@ def test_build_expansion_pack_validates_and_preserves_report_only_policy() -> No
     assert row["retrievalHintPlan"]["allowedUse"] == "retrieval_hint_only"
     assert row["retrievalHintPlan"]["strictEvidence"] is False
     assert row["expectedOutputContract"]["citationGrade"] is False
+
+    validation = validate_payload(
+        report,
+        VISUAL_ANNOTATION_EXPANSION_PACK_DESIGN_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+
+def test_expansion_pack_003_style_selection_can_include_layout_without_images() -> None:
+    source = copy.deepcopy(_candidate_report())
+    source["candidateRowsDetail"].extend(_layout_rows("clip-2021", row_count=4))
+
+    report = build_visual_annotation_expansion_pack_design(
+        source,
+        _web_pack(),
+        _dry_run(),
+        type_quotas={
+            "table_region": 3,
+            "figure_caption_region": 3,
+            "equation_region": 2,
+            "layout_region": 4,
+            "image_region": 0,
+        },
+        max_candidates=12,
+        generated_at="2026-05-27T00:00:00Z",
+    )
+
+    assert report["status"] == "ready"
+    assert report["counts"]["selectedExpansionRows"] == 12
+    assert report["counts"]["tableCandidateRows"] == 3
+    assert report["counts"]["figureCandidateRows"] == 3
+    assert report["counts"]["equationCandidateRows"] == 2
+    assert report["counts"]["layoutCandidateRows"] == 4
+    assert report["counts"]["imageCandidateRows"] == 0
+    assert {row["candidateType"] for row in report["packRowsDetail"]} == {
+        "table_region",
+        "figure_caption_region",
+        "equation_region",
+        "layout_region",
+    }
 
     validation = validate_payload(
         report,

@@ -41,6 +41,14 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--template-json", type=Path, default=DEFAULT_TEMPLATE_JSON_PATH)
     parser.add_argument("--template-md", type=Path, default=DEFAULT_TEMPLATE_MD_PATH)
     parser.add_argument("--template-id", default=DEFAULT_WEB_OUTPUT_TEMPLATE_ID)
+    parser.add_argument(
+        "--target-output-ref",
+        default="eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    )
+    parser.add_argument(
+        "--validation-command",
+        default="PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py",
+    )
     parser.add_argument("--json", action="store_true", help="Print template JSON to stdout.")
     parser.add_argument("--no-write", action="store_true", help="Build and validate without writing reports.")
     return parser.parse_args(argv)
@@ -54,6 +62,8 @@ def main(argv: list[str] | None = None) -> int:
         handoff,
         template_id=args.template_id,
         source_operator_handoff_ref=sanitized_report_ref(handoff_path, project_root=PROJECT_ROOT),
+        target_output_ref=args.target_output_ref,
+        validation_command=args.validation_command,
     )
     validation = validate_payload(
         report,

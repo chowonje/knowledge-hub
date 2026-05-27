@@ -32,6 +32,9 @@ VISUAL_ANNOTATION_EXPANSION_PACK_DESIGN_SCHEMA_ID = (
 VISUAL_ANNOTATION_EXPANSION_PACK_ROW_SCHEMA_ID = (
     "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1"
 )
+VISUAL_RETRIEVAL_HINT_CANDIDATE_STORE_EXPANSION_DRY_RUN_SCHEMA_ID = (
+    "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-dry-run.v1"
+)
 
 DEFAULT_EXPANSION_PACK_ID = "visual_annotation_expansion_pack_002"
 DEFAULT_MAX_CANDIDATES = 24
@@ -55,11 +58,11 @@ PRIVATE_PATH_TOKENS = (
 PRIVATE_PATH_RE = re.compile("|".join(re.escape(token) for token in PRIVATE_PATH_TOKENS), re.IGNORECASE)
 
 TYPE_PRIORITY = {
-    "image_region": 0,
+    "table_region": 0,
     "figure_caption_region": 1,
-    "table_region": 2,
-    "equation_region": 3,
-    "layout_region": 4,
+    "equation_region": 2,
+    "layout_region": 3,
+    "image_region": 4,
 }
 
 
@@ -412,8 +415,8 @@ def _selection_policy(type_quotas: dict[str, int], max_candidates: int) -> dict[
         "wholeImagePolicy": "deferred_to_visual_full_image_annotation_pack_design",
         "attachmentPolicy": "context_crop_png_first_no_whole_image",
         "rationale": (
-            "Expand beyond the first AlexNet/ResNet caption/table/equation calibration by probing "
-            "image regions and new CLIP/MAE visual candidates while keeping the batch small enough for manual web/VLM review."
+            "Expand beyond prior visual annotation batches by selecting a bounded, context-crop-first "
+            "set that favors tables, figure/caption regions, equations, and layout candidates before raw image regions."
         ),
     }
 
@@ -530,7 +533,11 @@ def build_visual_annotation_expansion_pack_design(
         or candidate_report.get("status") != "ready"
         or web_pack.get("schema") != VISUAL_ANNOTATION_WEB_PACK_SCHEMA_ID
         or web_pack.get("status") != "ready"
-        or dry_run_report.get("schema") != VISUAL_RETRIEVAL_HINT_CANDIDATE_STORE_DRY_RUN_SCHEMA_ID
+        or dry_run_report.get("schema")
+        not in {
+            VISUAL_RETRIEVAL_HINT_CANDIDATE_STORE_DRY_RUN_SCHEMA_ID,
+            VISUAL_RETRIEVAL_HINT_CANDIDATE_STORE_EXPANSION_DRY_RUN_SCHEMA_ID,
+        }
         or dry_run_report.get("status") != "ready"
         or not pack_rows
         or private_path_leak_rows

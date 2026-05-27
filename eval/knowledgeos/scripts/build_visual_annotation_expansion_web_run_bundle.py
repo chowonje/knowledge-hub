@@ -47,6 +47,14 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--bundle-md", type=Path, default=DEFAULT_BUNDLE_MD_PATH)
     parser.add_argument("--bundle-dir", type=Path, default=DEFAULT_BUNDLE_DIR)
     parser.add_argument("--bundle-id", default=DEFAULT_WEB_RUN_BUNDLE_ID)
+    parser.add_argument(
+        "--target-output-ref",
+        default="eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    )
+    parser.add_argument(
+        "--validation-command",
+        default="PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py",
+    )
     parser.add_argument("--json", action="store_true", help="Print bundle JSON to stdout.")
     parser.add_argument("--no-write", action="store_true", help="Build and validate without writing reports.")
     return parser.parse_args(argv)
@@ -62,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
         bundle_id=args.bundle_id,
         source_web_output_template_ref=sanitized_report_ref(template_path, project_root=PROJECT_ROOT),
         bundle_dir_ref=bundle_dir_ref,
+        target_output_ref=args.target_output_ref,
+        validation_command=args.validation_command,
     )
     validation = validate_payload(
         report,

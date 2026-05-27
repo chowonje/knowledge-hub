@@ -41,6 +41,14 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--handoff-json", type=Path, default=DEFAULT_HANDOFF_JSON_PATH)
     parser.add_argument("--handoff-md", type=Path, default=DEFAULT_HANDOFF_MD_PATH)
     parser.add_argument("--handoff-id", default=DEFAULT_OPERATOR_HANDOFF_ID)
+    parser.add_argument(
+        "--expected-output-ref",
+        default="eval/knowledgeos/reports/visual_annotation_expansion_web_output_002.manual.json",
+    )
+    parser.add_argument(
+        "--validation-command",
+        default="PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py",
+    )
     parser.add_argument("--json", action="store_true", help="Print handoff JSON to stdout.")
     parser.add_argument("--no-write", action="store_true", help="Build and validate without writing reports.")
     return parser.parse_args(argv)
@@ -54,6 +62,8 @@ def main(argv: list[str] | None = None) -> int:
         packet,
         handoff_id=args.handoff_id,
         source_manual_run_packet_ref=sanitized_report_ref(packet_path, project_root=PROJECT_ROOT),
+        expected_output_ref=args.expected_output_ref,
+        validation_command=args.validation_command,
     )
     validation = validate_payload(
         report,

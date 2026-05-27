@@ -133,7 +133,7 @@
         "figureCandidateRows": { "type": "integer", "minimum": 0 },
         "tableCandidateRows": { "type": "integer", "minimum": 0 },
         "equationCandidateRows": { "type": "integer", "minimum": 0 },
-        "layoutCandidateRows": { "const": 0 },
+        "layoutCandidateRows": { "type": "integer", "minimum": 0 },
         "blockedRows": { "type": "integer", "minimum": 0 },
         "privatePathLeakRows": { "const": 0 },
         "schemaViolationCount": { "const": 0 }
@@ -192,7 +192,7 @@
           "attachmentKind": { "const": "context_crop_png" },
           "attachmentRef": {
             "type": "string",
-            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/.+\\.png$"
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_[0-9]{3}/assets/.+\\.png$"
           },
           "attachmentSha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
           "attachmentBytes": { "type": "integer", "minimum": 1 },
