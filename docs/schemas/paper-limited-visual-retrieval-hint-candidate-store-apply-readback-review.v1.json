@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-limited-visual-retrieval-hint-candidate-store-apply-readback-review.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceApplyExecutorReport",
+    "input",
+    "scope",
+    "policy",
+    "counts",
+    "gate",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.limited-visual-retrieval-hint-candidate-store-apply-readback-review.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": [
+        "ready_for_limited_visual_retrieval_hint_candidate_store_labs_vector_index_dry_run",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": {
+      "const": "limited_visual_retrieval_hint_candidate_store_labs_vector_index_dry_run"
+    },
+    "sourceApplyExecutorReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "decision",
+        "reportRef",
+        "plannedApplyRows",
+        "appliedCandidateRecordRows",
+        "candidateStoreWriteRows",
+        "readbackValidatedRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.limited-visual-retrieval-hint-candidate-store-apply-executor.v1"
+        },
+        "status": { "enum": ["applied", "blocked", "ready"] },
+        "decision": {
+          "enum": [
+            "applied_limited_visual_retrieval_hint_candidate_store_apply",
+            "ready_for_limited_visual_retrieval_hint_candidate_store_apply",
+            "blocked"
+          ]
+        },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "plannedApplyRows": { "type": "integer", "minimum": 0 },
+        "appliedCandidateRecordRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "type": "integer", "minimum": 0 },
+        "readbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["papersDirRef", "candidateStoreRef"],
+      "properties": {
+        "papersDirRef": { "const": "papers_dir" },
+        "candidateStoreRef": {
+          "const": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "apiCalls",
+        "modelCalls",
+        "webModelCalls",
+        "expectedCandidateRows",
+        "candidateStoreWriteRows",
+        "vectorIndexing",
+        "indexEligibleRows",
+        "runtimeVisibleRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "answerabilityGateBypassRows",
+        "operationalSearchIndexQueryRows",
+        "answerGenerationRows"
+      ],
+      "properties": {
+        "writes": { "const": "report_only" },
+        "apiCalls": { "const": false },
+        "modelCalls": { "const": false },
+        "webModelCalls": { "const": false },
+        "expectedCandidateRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "vectorIndexing": { "const": false },
+        "indexEligibleRows": { "const": 0 },
+        "runtimeVisibleRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "answerabilityGateBypassRows": { "const": 0 },
+        "operationalSearchIndexQueryRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readbackReviewOnly",
+        "candidateStoreWrite",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "allowedUse",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "runtimeVisible",
+        "indexEligible"
+      ],
+      "properties": {
+        "readbackReviewOnly": { "const": true },
+        "candidateStoreWrite": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "allowedUse": { "const": "retrieval_hint_only" },
+        "strictEvidence": { "const": false },
+        "citationGrade": { "const": false },
+        "answerableWithoutTextEvidence": { "const": false },
+        "runtimeVisible": { "const": false },
+        "indexEligible": { "const": false }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceAppliedRows",
+        "expectedCandidateRows",
+        "storeRows",
+        "matchingStoreRows",
+        "unmatchedStoreRows",
+        "readbackValidatedRows",
+        "missingStoreRows",
+        "duplicateStoreRows",
+        "hashMismatchRows",
+        "policyViolationRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "indexEligibleRows",
+        "runtimeVisibleRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "byCandidateType",
+        "byReadbackStatus"
+      ],
+      "properties": {
+        "sourceAppliedRows": { "type": "integer", "minimum": 0 },
+        "expectedCandidateRows": { "type": "integer", "minimum": 0 },
+        "storeRows": { "type": "integer", "minimum": 0 },
+        "matchingStoreRows": { "type": "integer", "minimum": 0 },
+        "unmatchedStoreRows": { "type": "integer", "minimum": 0 },
+        "readbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "missingStoreRows": { "type": "integer", "minimum": 0 },
+        "duplicateStoreRows": { "type": "integer", "minimum": 0 },
+        "hashMismatchRows": { "type": "integer", "minimum": 0 },
+        "policyViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "indexEligibleRows": { "const": 0 },
+        "runtimeVisibleRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "answerableWithoutTextEvidenceRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byCandidateType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byReadbackStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readyForLabsVectorIndexDryRun",
+        "candidateStoreWriteAllowed",
+        "vectorIndexingAllowed",
+        "runtimeVisibilityAllowed",
+        "evidencePromotionAllowed",
+        "schemaViolations"
+      ],
+      "properties": {
+        "readyForLabsVectorIndexDryRun": { "type": "boolean" },
+        "candidateStoreWriteAllowed": { "const": false },
+        "vectorIndexingAllowed": { "const": false },
+        "runtimeVisibilityAllowed": { "const": false },
+        "evidencePromotionAllowed": { "const": false },
+        "schemaViolations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/readbackRow" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "readbackRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readbackReviewRowId",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "paperId",
+        "paperRef",
+        "sourceContentHash",
+        "page",
+        "bbox",
+        "candidateType",
+        "idempotencyKey",
+        "expectedRecordSha256",
+        "storedRecordSha256",
+        "matchingStoreRecordRows",
+        "readbackValidated",
+        "indexEligible",
+        "runtimeVisible",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "readbackStatus",
+        "readbackBlockers",
+        "checks"
+      ],
+      "properties": {
+        "readbackReviewRowId": { "type": "string", "minLength": 1 },
+        "hintCandidateId": { "type": "string", "minLength": 1 },
+        "sourceCandidateId": { "type": "string", "minLength": 1 },
+        "paperId": { "type": "string" },
+        "paperRef": { "type": "string" },
+        "sourceContentHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "page": { "type": "integer", "minimum": 0 },
+        "bbox": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "candidateType": { "type": "string", "minLength": 1 },
+        "idempotencyKey": { "type": "string", "minLength": 1 },
+        "expectedRecordSha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "storedRecordSha256": {
+          "type": "string",
+          "pattern": "^(|sha256:[a-f0-9]{64})$"
+        },
+        "matchingStoreRecordRows": { "type": "integer", "minimum": 0 },
+        "readbackValidated": { "type": "boolean" },
+        "indexEligible": { "const": false },
+        "runtimeVisible": { "const": false },
+        "strictEvidence": { "const": false },
+        "citationGrade": { "const": false },
+        "answerableWithoutTextEvidence": { "const": false },
+        "readbackStatus": {
+          "enum": [
+            "readback_validated_candidate_record",
+            "blocked_missing_store_record",
+            "blocked_duplicate_store_record",
+            "blocked_hash_mismatch",
+            "blocked_policy_violation"
+          ]
+        },
+        "readbackBlockers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
