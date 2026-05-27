@@ -112,6 +112,11 @@ STOPWORDS = {
     "with",
 }
 
+_RANK_INDEX_CACHE: dict[
+    int,
+    tuple[tuple[str, ...], dict[str, Counter[str]], dict[str, float]],
+] = {}
+
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -209,6 +214,28 @@ def _idf(documents: dict[str, str]) -> dict[str, float]:
     return {token: math.log((1 + total) / (1 + count)) + 1.0 for token, count in df.items()}
 
 
+def _rank_index(documents: dict[str, str]) -> tuple[dict[str, Counter[str]], dict[str, float]]:
+    keys = tuple(documents.keys())
+    cache_key = id(documents)
+    cached = _RANK_INDEX_CACHE.get(cache_key)
+    if cached and cached[0] == keys:
+        return cached[1], cached[2]
+    token_counts: dict[str, Counter[str]] = {}
+    df: Counter[str] = Counter()
+    for doc_id, text in documents.items():
+        counts = Counter(_tokens(text))
+        token_counts[doc_id] = counts
+        df.update(counts.keys())
+    total = max(len(documents), 1)
+    idf = {token: math.log((1 + total) / (1 + count)) + 1.0 for token, count in df.items()}
+    _RANK_INDEX_CACHE[cache_key] = (keys, token_counts, idf)
+    return token_counts, idf
+
+
+def clear_rank_index_cache() -> None:
+    _RANK_INDEX_CACHE.clear()
+
+
 def _rank_documents(
     *,
     documents: dict[str, str],
@@ -218,10 +245,9 @@ def _rank_documents(
     query_terms = _tokens(query)
     if not query_terms:
         return None, 0.0
-    idf = _idf(documents)
+    token_counts, idf = _rank_index(documents)
     scores: list[tuple[float, str]] = []
-    for doc_id, text in documents.items():
-        counts = Counter(_tokens(text))
+    for doc_id, counts in token_counts.items():
         score = 0.0
         for term in query_terms:
             if counts.get(term):
@@ -538,6 +564,7 @@ def build_visual_retrieval_hint_usefulness_eval(
     *,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
+    clear_rank_index_cache()
     layout_rows = [
         row for row in list(layout_candidate_report.get("candidateRowsDetail") or []) if isinstance(row, dict)
     ]
@@ -740,6 +767,7 @@ def write_visual_retrieval_hint_usefulness_eval(
 __all__ = [
     "VISUAL_RETRIEVAL_HINT_USEFULNESS_EVAL_SCHEMA_ID",
     "build_visual_retrieval_hint_usefulness_eval",
+    "clear_rank_index_cache",
     "load_json",
     "sanitized_report_ref",
     "write_visual_retrieval_hint_usefulness_eval",
