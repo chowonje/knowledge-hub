@@ -153,6 +153,21 @@ def test_build_hard_gate_argv_targets_source_quality_gate():
     assert argv[-1] == "--json"
 
 
+def test_build_daily_commands_routes_battery_output_to_runs_root():
+    module = _load_script()
+    parser = module._build_parser()
+    args = parser.parse_args([])
+    runs_root = Path("/tmp/source-quality-runs")
+
+    commands = module.build_daily_commands(args, repo_root=Path("/tmp/repo"), runs_root=runs_root)
+
+    battery_argv = commands[0][1]
+    assert "--run-dir" in battery_argv
+    run_dir = Path(battery_argv[battery_argv.index("--run-dir") + 1])
+    assert run_dir.parent == runs_root
+    assert run_dir.name.startswith("source_quality_battery_")
+
+
 def test_main_runs_commands_and_writeback(monkeypatch, tmp_path: Path, capsys):
     module = _load_script()
     repo_root = tmp_path / "repo"
@@ -199,6 +214,9 @@ def test_main_runs_commands_and_writeback(monkeypatch, tmp_path: Path, capsys):
     assert payload["detailObservationSummary"]["decision"] == "not_ready_for_detail_gate_review"
     assert payload["writeback"]["summary"]["applied"] is True
     assert any("run_source_quality_battery.py" in " ".join(call) for call in calls)
+    battery_call = next(call for call in calls if "run_source_quality_battery.py" in " ".join(call))
+    assert "--run-dir" in battery_call
+    assert Path(battery_call[battery_call.index("--run-dir") + 1]).parent == repo_root / "eval" / "knowledgeos" / "runs"
     assert any("report_source_quality_trend.py" in " ".join(call) for call in calls)
     assert any("report_legacy_runtime_readiness.py" in " ".join(call) for call in calls)
     assert any("report_source_quality_observation.py" in " ".join(call) for call in calls)

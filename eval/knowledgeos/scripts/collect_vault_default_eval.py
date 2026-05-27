@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import os
 import signal
 import time
 from contextlib import contextmanager, nullcontext
@@ -93,16 +94,157 @@ def _machine_judgment(
     return "good", "family_and_mode_match"
 
 
-def _resolve_vault_source_path(vault_root: Path | None, source: dict[str, Any]) -> Path | None:
-    raw_path = _clean_text(source.get("file_path"))
-    if not raw_path:
+_VAULT_SOURCE_PATH_KEYS = (
+    "file_path",
+    "filePath",
+    "path",
+    "relative_path",
+    "relativePath",
+    "source_path",
+    "sourcePath",
+    "vault_path",
+    "vaultPath",
+    "source_ref",
+    "sourceRef",
+    "source_id",
+    "sourceId",
+    "parent_id",
+    "parentId",
+    "document_id",
+    "documentId",
+    "note_id",
+    "noteId",
+)
+
+
+def _nested_dict(value: Any) -> dict[str, Any]:
+    return dict(value) if isinstance(value, dict) else {}
+
+
+def _strip_path_fragment(value: str) -> str:
+    token = _clean_text(value)
+    if "#" in token:
+        token = token.split("#", 1)[0].strip()
+    return token
+
+
+def _looks_like_vault_note_path(value: Any) -> bool:
+    token = _strip_path_fragment(str(value or ""))
+    if not token:
+        return False
+    if "://" in token:
+        return False
+    lowered = token.casefold()
+    if lowered.endswith((".md", ".markdown")):
+        return True
+    return "/" in token or "\\" in token
+
+
+def _vault_source_path_candidates(source: dict[str, Any]) -> list[str]:
+    payloads = [
+        source,
+        _nested_dict(source.get("metadata")),
+        _nested_dict(source.get("provenance")),
+        _nested_dict(source.get("source_trace")),
+        _nested_dict(source.get("sourceTrace")),
+        _nested_dict(source.get("locator")),
+    ]
+    candidates: list[str] = []
+    seen: set[str] = set()
+    for payload in payloads:
+        for key in _VAULT_SOURCE_PATH_KEYS:
+            token = _strip_path_fragment(_clean_text(payload.get(key)))
+            if not token or token in seen or not _looks_like_vault_note_path(token):
+                continue
+            seen.add(token)
+            candidates.append(token)
+    return candidates
+
+
+def _path_within_root(path: Path, root: Path | None) -> bool:
+    if root is None:
+        return True
+    try:
+        path.resolve().relative_to(root.resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def _dedupe_paths(paths: list[Path]) -> list[Path]:
+    deduped: list[Path] = []
+    seen: set[str] = set()
+    for path in paths:
+        key = str(path.expanduser())
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(path)
+    return deduped
+
+
+def _candidate_workspace_vault_roots(repo_root: Path) -> list[Path]:
+    parents = [repo_root, *repo_root.parents]
+    candidates: list[Path] = []
+    for parent in parents[:5]:
+        candidates.append(parent / "vault")
+        candidates.append(parent / "KnowledgeOS" / "vault")
+    return _dedupe_paths(candidates)
+
+
+def _first_existing_vault_root(*values: Any) -> Path | None:
+    for value in values:
+        token = _clean_text(value)
+        if not token:
+            continue
+        path = Path(token).expanduser().resolve()
+        if path.exists() and path.is_dir():
+            return path
+    return None
+
+
+def _resolve_vault_root(
+    *,
+    config_vault_path: Any,
+    explicit_vault_root: Any = "",
+    repo_root: Path | None = None,
+) -> Path | None:
+    configured = _first_existing_vault_root(
+        explicit_vault_root,
+        config_vault_path,
+        os.environ.get("KHUB_VAULT_ROOT", ""),
+        os.environ.get("KHUB_VAULT_PATH", ""),
+    )
+    if configured is not None:
+        return configured
+    if repo_root is None:
         return None
+    return _first_existing_vault_root(*_candidate_workspace_vault_roots(repo_root))
+
+
+def _existing_vault_path(vault_root: Path | None, raw_path: str) -> Path | None:
     path = Path(raw_path).expanduser()
-    if path.is_absolute():
-        return path
-    if vault_root is None:
-        return None
-    return (vault_root / raw_path).resolve()
+    candidate_paths = [path]
+    if not path.suffix and _looks_like_vault_note_path(raw_path):
+        candidate_paths.append(Path(f"{raw_path}.md").expanduser())
+
+    for candidate in candidate_paths:
+        if candidate.is_absolute() and candidate.exists() and _path_within_root(candidate, vault_root):
+            return candidate
+        if vault_root is None or candidate.is_absolute():
+            continue
+        resolved = (vault_root / candidate).resolve()
+        if resolved.exists() and _path_within_root(resolved, vault_root):
+            return resolved
+    return None
+
+
+def _resolve_vault_source_path(vault_root: Path | None, source: dict[str, Any]) -> Path | None:
+    for raw_path in _vault_source_path_candidates(source):
+        resolved = _existing_vault_path(vault_root, raw_path)
+        if resolved is not None:
+            return resolved
+    return None
 
 
 def _vault_stale_citation_stats(payload: dict[str, Any], *, vault_root: Path | None) -> tuple[int, int, str]:
@@ -284,6 +426,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Collect default vault-family eval rows.")
     parser.add_argument("--queries", default="eval/knowledgeos/queries/vault_default_eval_queries_v1.csv")
     parser.add_argument("--out", default="eval/knowledgeos/runs/vault_default_eval.csv")
+    parser.add_argument("--vault-root", default="", help="Optional vault root for stale-citation path checks.")
     parser.add_argument("--top-k", type=int, default=6)
     parser.add_argument("--mode", default="hybrid")
     parser.add_argument("--gate-mode", default="standard", choices=["standard", "stub_hard", "live_smoke"])
@@ -303,7 +446,12 @@ def main(argv: list[str] | None = None) -> int:
 
     app = AppContextFactory().build(require_search=True)
     searcher = app.searcher
-    vault_root = Path(str(getattr(app.config, "vault_path", "") or "")).expanduser().resolve() if getattr(app.config, "vault_path", "") else None
+    repo_root = Path(__file__).resolve().parents[3]
+    vault_root = _resolve_vault_root(
+        config_vault_path=getattr(app.config, "vault_path", ""),
+        explicit_vault_root=args.vault_root,
+        repo_root=repo_root,
+    )
     runtime_cm = _stubbed_answer_runtime(searcher) if stub_llm else nullcontext()
 
     rows: list[dict[str, str]] = []

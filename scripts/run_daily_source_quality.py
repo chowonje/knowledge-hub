@@ -253,6 +253,10 @@ def build_hard_gate_argv(*, repo_root: Path, runs_root: Path) -> list[str]:
     ]
 
 
+def _new_source_quality_battery_run_dir(runs_root: Path) -> Path:
+    return runs_root / f"source_quality_battery_{datetime.now(ZoneInfo('UTC')).strftime('%Y%m%d_%H%M%S')}"
+
+
 def _load_detail_observation_summary_if_exists(runs_root: Path) -> dict[str, Any] | None:
     path = runs_root / "reports" / DETAIL_OBSERVATION_REPORT_PATH.name
     if not path.exists():
@@ -264,6 +268,7 @@ def _load_detail_observation_summary_if_exists(runs_root: Path) -> dict[str, Any
 
 
 def build_daily_commands(args: argparse.Namespace, *, repo_root: Path, runs_root: Path) -> list[tuple[str, list[str]]]:
+    battery_run_dir = _new_source_quality_battery_run_dir(runs_root)
     return [
         (
             "battery",
@@ -272,6 +277,8 @@ def build_daily_commands(args: argparse.Namespace, *, repo_root: Path, runs_root
                 str(repo_root / "eval" / "knowledgeos" / "scripts" / "run_source_quality_battery.py"),
                 "--repo-root",
                 str(repo_root),
+                "--run-dir",
+                str(battery_run_dir),
                 "--gate-mode",
                 str(args.gate_mode),
                 "--mode",
