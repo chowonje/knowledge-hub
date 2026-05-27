@@ -1,0 +1,1053 @@
+{
+  "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-output-validation.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T02:34:21Z",
+  "decision": "ready_for_project_side_human_decision_synthesis",
+  "nextRecommendedTranche": "visual_annotation_expansion_pack_design_003",
+  "sourceRecommendationOutput": {
+    "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-recommendation-output.v1",
+    "reportRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_recommendation_output_001.manual.json",
+    "rows": 24
+  },
+  "sourceGptReviewPack": {
+    "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-review-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack.v1.json",
+    "packRows": 24
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualOperatorWebModelRunCompletedExternally": true,
+    "manualGptRecommendationRows": 24,
+    "finalHumanDecisionRows": 0,
+    "candidateStoreWriteRows": 0,
+    "vectorIndexing": false,
+    "indexEligibleRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "policy": {
+    "allowedUse": "recommendation_only",
+    "recommendationsAreFinalHumanDecisions": false,
+    "recommendationsCanAuthorizeApply": false,
+    "recommendationsCanWriteCandidateStore": false,
+    "projectSideGateOwnsFinalDecision": true,
+    "gptRole": "advisory_image_layout_recommendation_only",
+    "allowedSuggestedDecisions": [
+      "approve_store_candidate_only",
+      "hold_pending_more_context",
+      "reject_visual_hint_candidate",
+      "request_recrop_or_reannotation"
+    ],
+    "nextPracticalWork": "visual_annotation_expansion_pack_design_003"
+  },
+  "counts": {
+    "sourcePackRows": 24,
+    "outputRows": 24,
+    "matchedRows": 24,
+    "missingRows": 0,
+    "extraRows": 0,
+    "duplicateRows": 0,
+    "approvedRecommendationRows": 18,
+    "holdRecommendationRows": 5,
+    "rejectRecommendationRows": 0,
+    "recropRecommendationRows": 1,
+    "policyViolationRows": 0,
+    "placeholderRows": 0,
+    "finalHumanDecisionRows": 0,
+    "applyAllowedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeRows": 0,
+    "answerableWithoutTextEvidenceRows": 0,
+    "runtimeVisibleRows": 0,
+    "indexEligibleRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0,
+    "blockedRows": 0
+  },
+  "recommendationRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:6eb061dfeece81c4626f",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:6eb061dfeece81c4626f",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:image_region:2:e25902a7066b85fb",
+      "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2616032b2a9d352d",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 2,
+      "bbox": [
+        338.6,
+        184.18,
+        365.52,
+        211.1
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "Coherent CLIP Figure 1 retrieval hint with visible labels, prompt template, encoders, and zero-shot prediction context; clearly framed as non-evidence.",
+      "risk": "low: crop is partial but enough visible text supports useful retrieval-only indexing.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:df43a4bfbe69d6bcb4a1",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:df43a4bfbe69d6bcb4a1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:image_region:1:d54434235dc1f73e",
+      "sourceCandidateId": "visual-layout:mae-2021:image_region:1:258a60cc216d8130",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "bbox": [
+        368.22,
+        231.94,
+        378.9,
+        242.63
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "hold_pending_more_context",
+      "recommendationRationale": "Potentially useful MAE architecture hint, but author/title fragments and partial caption suggest the crop may mix metadata with figure content.",
+      "risk": "medium: useful visual context, but incomplete crop could reduce precision or confuse figure boundaries.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:b559f2041324d26c0de5",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:b559f2041324d26c0de5",
+      "hintCandidateId": "visual-retrieval-hint:alexnet-2012:image_region:6:6bc72fab3308cc56",
+      "sourceCandidateId": "visual-layout:alexnet-2012:image_region:6:508eb98021de0fd7",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 6,
+      "bbox": [
+        348.09,
+        426.97,
+        504.01,
+        487.66
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "Clear AlexNet Figure 3 hint describing first-layer convolutional kernels, kernel size, input size, and GPU split; useful for retrieval only.",
+      "risk": "low: surrounding body text is partial, but the figure/caption identification is coherent.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:5b4b81e34fa9b65bc885",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:5b4b81e34fa9b65bc885",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:image_region:2:0d674a922cfdab51",
+      "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2642c8db8bd29d0a",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 2,
+      "bbox": [
+        68.23,
+        178.57,
+        95.15,
+        205.5
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "Coherent CLIP contrastive pre-training panel with visible prompt/image examples and encoder labels; useful as a non-evidence retrieval hint.",
+      "risk": "low: encoder labels are partially cropped, but the panel content remains identifiable.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:690182582317bc8522c1",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:690182582317bc8522c1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:image_region:1:e3eb86ab7dd4815d",
+      "sourceCandidateId": "visual-layout:mae-2021:image_region:1:40b27e8b4073d98f",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "bbox": [
+        368.22,
+        243.65,
+        378.9,
+        254.33
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "MAE Figure 1 architecture close-up is coherent, with masked input, visible patches, encoder, and token stack; suitable for retrieval-only use.",
+      "risk": "low: some nearby author/caption fragments are cropped, but the core figure hint is clear.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:b81e3df56b0d667ab017",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:b81e3df56b0d667ab017",
+      "hintCandidateId": "visual-retrieval-hint:alexnet-2012:image_region:8:aebea8a49393b7e9",
+      "sourceCandidateId": "visual-layout:alexnet-2012:image_region:8:219e7594a10f3a3f",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 8,
+      "bbox": [
+        109.6,
+        81.87,
+        291.73,
+        230.68
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "hold_pending_more_context",
+      "recommendationRationale": "AlexNet Figure 4 hint has useful class and prediction labels, but it spans partial top-5 charts and a partial nearest-neighbor panel.",
+      "risk": "medium: crop may combine distinct figure subregions, so product review should confirm retrieval usefulness.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:15f9df5f512fed72e7ca",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:15f9df5f512fed72e7ca",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:image_region:15:b2eef0626d7910cf",
+      "sourceCandidateId": "visual-layout:clip-2021:image_region:15:1da1f1cf8ce81bd5",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 15,
+      "bbox": [
+        302.45,
+        137.31,
+        331.05,
+        165.91
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "hold_pending_more_context",
+      "recommendationRationale": "The language-supervision dataset grid may be useful, but dataset names and distribution-shift context are heavily cropped and incomplete.",
+      "risk": "medium: partial row labels could lead to ambiguous or noisy retrieval terms.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:c8d7d60056f58534cc8b",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:c8d7d60056f58534cc8b",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:image_region:2:47e41fe986d634ac",
+      "sourceCandidateId": "visual-layout:mae-2021:image_region:2:0b66280633a636cc",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 2,
+      "bbox": [
+        422.57,
+        194.42,
+        540.17,
+        233.62
+      ],
+      "candidateType": "image_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "MAE reconstruction examples are coherent, with visible masked/reconstruction context and many image categories useful for future retrieval.",
+      "risk": "low: image list is long and partially truncated, but the retrieval-only purpose is clear.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:c762f661957ea19c5690",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:c762f661957ea19c5690",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:2:791bd02c68004e94",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:2:b354160446b3a89c",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 2,
+      "bbox": [
+        54.94,
+        253.37,
+        541.44,
+        295.21
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "Complete and coherent CLIP Figure 1 summary/caption region with key panels, encoders, similarity matrix, and zero-shot flow.",
+      "risk": "low: rich visible text and figure labels make it useful while still explicitly non-evidence.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:0d7de4c618a6da6a92f4",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:0d7de4c618a6da6a92f4",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:1:7f1d38a62ebc3ebe",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:1:f3477cc8ce7ec8b1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "bbox": [
+        308.86,
+        341.41,
+        545.12,
+        427.17
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "Clear MAE Figure 1 caption-region hint covering masked patches, encoder, mask tokens, decoder, and reconstruction target.",
+      "risk": "low: figure and caption content are sufficiently visible and retrieval-oriented.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:13761eef7ec3fe530d98",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:13761eef7ec3fe530d98",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:figure_caption_region:6:beeb9fb9ad38518d",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:6:6b3dd4d05dc69888",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        308.86,
+        156.78,
+        545.11,
+        187.99
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "ResNet Figure 5 residual and bottleneck block comparison is coherent, with shortcut connections and layer dimensions visible.",
+      "risk": "low: visible labels and caption are enough for a useful non-evidence retrieval hint.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:5bd268b815e24a1a028c",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:5bd268b815e24a1a028c",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:3:7de4aa3a082925a4",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:3:fd2db71adcd98ec4",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 3,
+      "bbox": [
+        54.94,
+        233.18,
+        290.57,
+        318.94
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "CLIP Figure 2 chart is well described with axes, baselines, efficiency annotations, and zero-shot ImageNet accuracy context.",
+      "risk": "low: chart labels and keywords are strong for retrieval-only use.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:13cbdac7b3dead9257ee",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:13cbdac7b3dead9257ee",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:2:b1c1635f3ea9867d",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:460a5652014c6369",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 2,
+      "bbox": [
+        50.11,
+        238.0,
+        544.61,
+        248.73
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "MAE Figure 2 caption-region hint is coherent, with ImageNet validation triplets, masking ratio, and visible-patch count.",
+      "risk": "low: partial extra row does not undermine the main retrieval hint.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:beac111660267e9fccb6",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:beac111660267e9fccb6",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:figure_caption_region:8:5983f29673800b6b",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:5cf998f6a7a3739f",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 8,
+      "bbox": [
+        50.11,
+        328.32,
+        286.37,
+        370.16
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "hold_pending_more_context",
+      "recommendationRationale": "The crop contains useful ResNet CIFAR-10 and response-standard-deviation plots, but it appears to combine parts of Figures 6 and 7.",
+      "risk": "medium: mixed partial figures could make the hint less precise without product review.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:34698183e6ed4f83f286",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:34698183e6ed4f83f286",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:5:aa1447f2ba9526ae",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:5:87777b9ff7911bbe",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        54.94,
+        297.61,
+        290.93,
+        317.57
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "CLIP Figure 3 pseudocode is coherent, including encoders, projection, normalization, cosine similarities, and symmetric cross-entropy.",
+      "risk": "low: visible code comments provide strong retrieval terms while remaining non-evidence.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:70478a24097b4a06b2dd",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:70478a24097b4a06b2dd",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:2:eea2a43fb3574de9",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:b35cefa766216e3f",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 2,
+      "bbox": [
+        50.11,
+        377.22,
+        545.11,
+        397.14
+      ],
+      "candidateType": "figure_caption_region",
+      "suggestedDecision": "hold_pending_more_context",
+      "recommendationRationale": "Potentially useful MAE reconstruction hint, but the crop combines continuation of Figure 2 examples with Figure 3 COCO examples.",
+      "risk": "medium: mixed figure contexts may require review to avoid imprecise retrieval association.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:db120d08b4cac0dbd6db",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:db120d08b4cac0dbd6db",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:7:202c4c0be3960b79",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:7:74d3127c812d1e9b",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 7,
+      "bbox": [
+        54.89,
+        135.1,
+        290.93,
+        187.9
+      ],
+      "candidateType": "table_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "CLIP Table 1 hint is coherent, with columns, methods, scores, and zero-shot transfer comparison clearly visible.",
+      "risk": "low: table structure and values are legible enough for retrieval-only candidate storage.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:abfd5b806f9806ea46f1",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:abfd5b806f9806ea46f1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:5:626e13443e1ee40c",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:5:09cee49d2841b6a3",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 5,
+      "bbox": [
+        50.11,
+        238.89,
+        545.12,
+        269.86
+      ],
+      "candidateType": "table_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "MAE ablation table hint is useful, with visible reconstruction target, data augmentation, mask sampling subpanels and reported metrics.",
+      "risk": "low: although the table is partial, the visible subtables are coherent and retrieval-relevant.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:eb537adfee4af2e90637",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:eb537adfee4af2e90637",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:table_region:6:7adc39075ec4efe2",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:8b15bd4cbaa96ede",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        50.11,
+        518.06,
+        286.36,
+        538.07
+      ],
+      "candidateType": "table_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "ResNet Table 5 ensemble top-5 error comparison is coherent with visible methods and error rates.",
+      "risk": "low: values and table purpose are clear enough for retrieval-only use.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:cf9e699ce8bb3a923a6c",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:cf9e699ce8bb3a923a6c",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:17:0c93a8dbedbc0a03",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:17:21f8887ab432c389",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 17,
+      "bbox": [
+        306.89,
+        159.8,
+        543.01,
+        245.55
+      ],
+      "candidateType": "table_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "CLIP Oxford IIT Pets comparison table is coherent, with human, CLIP, and one-shot rows plus visible accuracy columns.",
+      "risk": "low: table semantics and key values are visible and useful for retrieval.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:1823d9c2e5740eb6bafd",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:1823d9c2e5740eb6bafd",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:5:eeae9d1ecf9c1122",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:5:1179c62488dbb733",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 5,
+      "bbox": [
+        308.86,
+        367.01,
+        545.11,
+        419.89
+      ],
+      "candidateType": "table_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "MAE Table 2 training-time comparison is coherent, with encoder, decoder depth, accuracy, hours, and speedup values visible.",
+      "risk": "low: table entries are clear and retrieval-relevant despite partial row truncation.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:807cba0239437c743ee9",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:807cba0239437c743ee9",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:1:1578f0d850ce7830",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:1:dd31b4b813b73af2",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 1,
+      "bbox": [
+        55.44,
+        676.83,
+        291.01,
+        697.3
+      ],
+      "candidateType": "equation_region",
+      "suggestedDecision": "request_recrop_or_reannotation",
+      "recommendationRationale": "Labeled as an equation region, but the visible content is an introduction heading, paragraph text, and author footnote rather than an equation.",
+      "risk": "high: likely annotation/type mismatch would make the visual retrieval hint misleading.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:01845f08da4cf9d4e8a2",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:01845f08da4cf9d4e8a2",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:5:a85a9e64dfa04951",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1c4738912cb4bdf9",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        55.85,
+        210.38,
+        258.39,
+        229.53
+      ],
+      "candidateType": "equation_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "Although typed as equation_region, the CLIP pseudocode crop is coherent and useful for retrieval of implementation details.",
+      "risk": "medium: region type may be imprecise, but the content itself is relevant and non-evidence.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-recommendation-validation-row.v1",
+      "sourceDecisionRowId": "visual-retrieval-hint-expansion-decision:b24230b3a36d5cd1fbf3",
+      "sourcePackDecisionRowId": "visual-retrieval-hint-expansion-decision:b24230b3a36d5cd1fbf3",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:5:2d6d39c3bbc50090",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1fa7893d5e5d7b10",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        55.85,
+        138.05,
+        286.01,
+        166.23
+      ],
+      "candidateType": "equation_region",
+      "suggestedDecision": "approve_store_candidate_only",
+      "recommendationRationale": "CLIP Figure 3 pseudocode definitions are coherent, with encoder definitions, minibatch shapes, projection matrices, and learned temperature.",
+      "risk": "medium: equation_region typing is loose, but the pseudocode is structured and useful as a retrieval hint.",
+      "needsHumanCheck": true,
+      "policy": {
+        "allowedUse": "recommendation_only",
+        "finalHumanDecision": false,
+        "applyAllowed": false,
+        "candidateStoreWrite": false,
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false
+      },
+      "validation": {
+        "matchedPackRow": true,
+        "matchedDecisionRowId": true,
+        "matchedSourceCandidateId": true,
+        "policyCompliant": true,
+        "violationReasons": []
+      }
+    }
+  ],
+  "violations": [],
+  "warnings": [
+    "GPT recommendations are advisory only and are not final human/product decisions.",
+    "This validation does not approve rows, write the candidate store, index vectors, or expose hints at runtime.",
+    "Project-side gates own storage, indexing, evidence, and answerability decisions.",
+    "The next practical work should return to image/layout annotation expansion, not another approval architecture gate."
+  ]
+}
