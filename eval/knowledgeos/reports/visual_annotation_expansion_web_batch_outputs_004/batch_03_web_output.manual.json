@@ -1,0 +1,185 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:15:36e881ed149ab580",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP robustness figure on natural distribution shifts, comparing Zero-Shot CLIP, Standard ImageNet training, existing robustness techniques, and an ideal robust model line; adjacent examples are labeled ImageNet, ImageNetV2, ImageNet-R, ObjectNet, and ImageNet Sketch.",
+      "visibleText": "Visible fragments include: Learning Transferable Visual Models From Natural Language Supervision; Average on 7 natural distribution shift datasets (top-1, %); Ideal robust model (y = x); Zero-Shot CLIP; Standard ImageNet training; Existing robustness techniques; ImageNet; ImageNetV2; ImageNet-R; ObjectNet; ImageNet Sketch; tick labels 30 through 100.",
+      "retrievalKeywords": [
+        "CLIP",
+        "natural distribution shift",
+        "Zero-Shot CLIP",
+        "standard ImageNet training",
+        "existing robustness techniques",
+        "ImageNetV2",
+        "ImageNet-R",
+        "ObjectNet",
+        "ImageNet Sketch"
+      ],
+      "uncertainty": "High confidence for visible labels; the crop cuts off the right side of the title/image grid and the bottom of the plot, so the full caption, x-axis label, and exact data values are not visible.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:16:ae86cff7e225293a",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP ImageNet adaptation/effective robustness figure with a scatterplot of accuracy on a class-subsampled ImageNet axis and bar charts showing changes from zero-shot ImageNet for ObjectNet, ImageNet-R, Youtube-BB, ImageNet Vid, ImageNet Sketch, ImageNet-A, ImageNetV2, and ImageNet.",
+      "visibleText": "Visible fragments include: Ideal robust model (y = x); Adaptive Zero-Shot CLIP; ImageNet Zero-Shot CLIP; Logistic Regression CLIP; Standard ImageNet training; Robustness intervention; Trained with more data; ObjectNet; ImageNet-R; -3.8; -4.7; Change from zero-shot Imag...; Adapt to c...; Youtube-BB; ImageNet Vid; ObjectNet; +2.3; ImageNet Sketch; ImageNet-R; ImageNet-A; ImageNetV2; ImageNet; 0; ...adaptation to ImageNet increases ImageNet accuracy by 9.2%...; Taori et al. (2020).",
+      "retrievalKeywords": [
+        "CLIP",
+        "ImageNet adaptation",
+        "effective robustness",
+        "zero-shot ImageNet",
+        "logistic regression CLIP",
+        "ObjectNet",
+        "ImageNet-R",
+        "Youtube-BB",
+        "ImageNet Vid"
+      ],
+      "uncertainty": "Moderate confidence for the visible legend and dataset labels; bar chart titles, some bar values, axis labels, and paragraph lines are truncated.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:17:65b08b3d7099f2e0",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP effective robustness figure comparing Few-Shot CLIP, Zero-Shot CLIP, Standard ImageNet training, robustness interventions, and models trained with more data; adjacent body text discusses Table 2, two-shot human comparison, and Figure 16.",
+      "visibleText": "Visible fragments include: 4 shot; Ideal robust model (y = x); Few-Shot CLIP (best model); Zero-Shot CLIP (best model); Standard ImageNet training; Robustness intervention; Trained with more data; class subsampled ImageNet (top-1, %); CLIP also increases effective robustness; ImageNet models but is less robust than; Table 2.; As in Parkhi...; Two-shot hum...; Figure 16; quality pre-...; shot learning; gap between; and human.",
+      "retrievalKeywords": [
+        "CLIP",
+        "effective robustness",
+        "Few-Shot CLIP",
+        "Zero-Shot CLIP",
+        "ImageNet models",
+        "robustness intervention",
+        "trained with more data",
+        "two-shot human",
+        "Figure 16"
+      ],
+      "uncertainty": "High confidence for the legend entries; right-column text, table title, plot title, and exact values are cut off or only partially visible.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:19:95c566a959a29f80",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 19 partial significance-coded scatter or plot with p-value legend; visible labeled points include Birdsnap and Country211 with a dashed horizontal reference line.",
+      "visibleText": "Visible fragments include: 19; Birdsnap; Country211; p < 1e-3; p < 0.05; p > 0.05; ...ars.",
+      "retrievalKeywords": [
+        "CLIP",
+        "Birdsnap",
+        "Country211",
+        "p-value",
+        "significance",
+        "p < 0.05",
+        "scatter plot"
+      ],
+      "uncertainty": "Low context confidence because the crop is very limited; axes, title, caption, and plotted metric are not visible.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:layout_region:16:0850e569d769717b",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 16 layout crop around ImageNet adaptation bar charts; orange and purple horizontal bars show change from zero-shot ImageNet for ObjectNet, ImageNet-R, Youtube-BB, ImageNet Vid, ImageNet Sketch, ImageNet-A, ImageNetV2, and ImageNet, with nearby text about ImageNet accuracy increasing by 9.2%.",
+      "visibleText": "Visible fragments include: -3.8; -4.7; ObjectNet; ImageNet-R; Change from zero-shot Imag...; Adapt to c...; Youtube-BB; ImageNet Vid; +8...; ObjectNet; +2.3; ImageNet Sketch; 0; ImageNet-R; 0; ImageNet-A; 0; ImageNetV2; 0; ImageNet; 0; ...ases ImageNet accuracy by 9.2%, it slig...; ...robustness compared to using a single sta...; (2020). CLIP models adapted to ImageNe...",
+      "retrievalKeywords": [
+        "CLIP",
+        "ImageNet adaptation",
+        "zero-shot ImageNet",
+        "ObjectNet",
+        "ImageNet-R",
+        "Youtube-BB",
+        "ImageNet Vid",
+        "ImageNet Sketch",
+        "ImageNet accuracy 9.2"
+      ],
+      "uncertainty": "Moderate confidence for visible dataset names and zero entries; the chart title, left plot, x-axis label endings, paragraph starts, and the +8 value are truncated.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:layout_region:12:c7e7678d2ec73caa",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE paper page 12 tables of linear probing results for masked encoding methods and ImageNet robustness or transfer benchmarks; compares iGPT, BEiT, and MAE ViT-B/ViT-L/ViT-H, plus IN-Corruption, IN-Adversarial, IN-Rendition, and IN-Sketch rows.",
+      "visibleText": "Visible fragments include: method; model; params; acc; iGPT [6] iGPT-L 1362 M 69.0; iGPT [6] iGPT-XL 6801 M 72.0; BEiT [2] ViT-L 304 M 52.1†; MAE ViT-B 86 M 68.0; MAE ViT-L 304 M 75.8; MAE ViT-H 632 M 76.6; Table 12. Linear probing results of masked encoding methods. Our fine-tuning results are in Table 3. †: our implementation.; dataset; ViT-B; ViT-L; ViT-H; ViT-H448; prev best; IN-Corruption↓ [27] 51.7 41.8 33.8 36.8 42.5 [32]; IN-Adversarial [28] 35.9 57.1 68.2 76.7 35.8 [41]; IN-Rendition [26] 48.3 59.9 64.4 66.5 48.7 [41]; IN-Sketch [60] 34.5 45.3 49.6 50.9 36.0 [41].",
+      "retrievalKeywords": [
+        "MAE",
+        "masked encoding methods",
+        "linear probing",
+        "iGPT",
+        "BEiT",
+        "ViT-B",
+        "ViT-L",
+        "ViT-H",
+        "IN-Corruption",
+        "IN-Adversarial",
+        "IN-Rendition",
+        "IN-Sketch"
+      ],
+      "uncertainty": "High confidence for visible table text and numbers; the lower table caption below the crop is not visible and subscript formatting such as ViT-H448 is flattened.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:e3b7474586959627",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Neural Networks paper header and abstract crop with visible author block for Ilya Sutskever at University of Toronto and abstract fragments about ImageNet LSVRC-2010, top-1/top-5 results, 60 million parameters, 650..., a final 1000-way layer, non-saturating neurons, and overfitting.",
+      "visibleText": "Visible fragments include: Neural Networks; Ilya Sutskever; University of Toronto; [ilya@cs.toronto.ca](mailto:ilya@cs.toronto.ca); Abstract; ...ep convolutional neural network to c...; ...in the ImageNet LSVRC-2010 co...; ...test data, we achieved top-1 and top-...; ...considerably better than the previou...; ...has 60 million parameters and 650...; ...layers, some of which are followed...; ...ted layers with a final 1000-way so...; ...non-saturating neurons and a very eff...; ...on operation. To reduce overfitting...",
+      "retrievalKeywords": [
+        "Neural Networks",
+        "Ilya Sutskever",
+        "University of Toronto",
+        "ImageNet LSVRC-2010",
+        "top-1",
+        "top-5",
+        "60 million parameters",
+        "1000-way",
+        "non-saturating neurons",
+        "overfitting"
+      ],
+      "uncertainty": "Moderate confidence for visible header and abstract fragments; the title beginning, coauthors, email line, and both sides of many abstract lines are cropped.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:layout_region:6:99aa935003a72db9",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet 2015 ImageNet validation error-rate tables; visible Table 3 10-crop testing rows for ResNet-34/50/101/152 and Table 4 single-model comparison with VGG, GoogLeNet, PReLU-net, BN-inception, and ResNet variants using top-1 and top-5 errors.",
+      "visibleText": "Visible fragments include: ResNet-34 A 25.03 7.76; ResNet-34 B 24.52 7.46; ResNet-34 C 24.19 7.40; ResNet-50 22.85 6.71; ResNet-101 21.75 6.05; ResNet-152 21.43 5.71; Table 3. Error rates (%, 10-crop testing) on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions.; method; top-1 err.; top-5 err.; VGG [41] (ILSVRC’14) - 8.43†; GoogLeNet [44] (ILSVRC’14) - 7.89; VGG [41] (v5) 24.4 7.1; PReLU-net [13] 21.59 5.71; BN-inception [16] 21.99 5.81; ResNet-34 B 21.84 5.71; ResNet-34 C 21.53 5.60; ResNet-50 20.74 5.25; ResNet-101 19.87 4.60; ResNet-152 19.38 4.49.",
+      "retrievalKeywords": [
+        "ResNet",
+        "ImageNet validation",
+        "error rates",
+        "10-crop testing",
+        "top-1 err",
+        "top-5 err",
+        "VGG",
+        "GoogLeNet",
+        "PReLU-net",
+        "BN-inception",
+        "ResNet-152"
+      ],
+      "uncertainty": "High confidence for visible rows and caption fragments; the top of the first table, bottom caption of the second table, and adjacent body text are cropped.",
+      "limitations": "Retrieval hint only, not evidence; crop is partial.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}
