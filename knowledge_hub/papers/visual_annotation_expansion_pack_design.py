@@ -404,14 +404,20 @@ def _scope(selected_rows: int) -> dict[str, Any]:
     }
 
 
-def _selection_policy(type_quotas: dict[str, int], max_candidates: int) -> dict[str, Any]:
+def _selection_policy(
+    type_quotas: dict[str, int],
+    max_candidates: int,
+    *,
+    preferred_paper_ids: Sequence[str],
+    max_per_paper_type_page: int,
+) -> dict[str, Any]:
     return {
         "packUse": "manual_web_vlm_retrieval_hint_expansion",
         "maxCandidateRows": int(max_candidates),
         "typeQuotas": type_quotas,
-        "preferredPaperIds": list(DEFAULT_PAPER_IDS),
+        "preferredPaperIds": list(preferred_paper_ids),
         "excludedPreviousPackRows": True,
-        "maxPerPaperTypePage": 2,
+        "maxPerPaperTypePage": int(max_per_paper_type_page),
         "wholeImagePolicy": "deferred_to_visual_full_image_annotation_pack_design",
         "attachmentPolicy": "context_crop_png_first_no_whole_image",
         "rationale": (
@@ -460,9 +466,12 @@ def build_visual_annotation_expansion_pack_design(
     source_dry_run_report_ref: str = "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_dry_run.v1.json",
     max_candidates: int = DEFAULT_MAX_CANDIDATES,
     type_quotas: dict[str, int] | None = None,
+    preferred_paper_ids: Sequence[str] | None = None,
+    max_per_paper_type_page: int = 2,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
     quotas = dict(type_quotas or DEFAULT_TYPE_QUOTAS)
+    preferred_ids = tuple(preferred_paper_ids or DEFAULT_PAPER_IDS)
     source_rows = [
         row for row in list(candidate_report.get("candidateRowsDetail") or []) if isinstance(row, dict)
     ]
@@ -471,14 +480,15 @@ def build_visual_annotation_expansion_pack_design(
         source_rows,
         previous_candidate_ids=previous_ids,
         included_types=set(quotas),
-        preferred_paper_ids=DEFAULT_PAPER_IDS,
+        preferred_paper_ids=preferred_ids,
     )
     selected = select_expansion_candidates(
         source_rows,
         previous_candidate_ids=previous_ids,
         max_candidates=max_candidates,
         type_quotas=quotas,
-        preferred_paper_ids=DEFAULT_PAPER_IDS,
+        preferred_paper_ids=preferred_ids,
+        max_per_paper_type_page=max_per_paper_type_page,
     )
     pack_rows = [
         _pack_row(pack_id=pack_id, source_row=row, priority=index + 1)
@@ -510,7 +520,12 @@ def build_visual_annotation_expansion_pack_design(
             "dryRunRows": len(list(dry_run_report.get("dryRunRowsDetail") or [])),
         },
         "scope": _scope(len(pack_rows)),
-        "selectionPolicy": _selection_policy(quotas, max_candidates),
+        "selectionPolicy": _selection_policy(
+            quotas,
+            max_candidates,
+            preferred_paper_ids=preferred_ids,
+            max_per_paper_type_page=max_per_paper_type_page,
+        ),
         "counts": {},
         "packRowsDetail": pack_rows,
         "warnings": [

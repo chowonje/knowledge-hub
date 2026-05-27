@@ -333,6 +333,41 @@ def test_expansion_pack_004_style_selection_excludes_all_prior_hints() -> None:
     assert validation.ok, validation.errors
 
 
+def test_expansion_pack_can_rank_corpus_preferred_papers() -> None:
+    source = copy.deepcopy(_candidate_report())
+    source["candidateRowsDetail"].extend(_block_rows("new-visual-paper", figure_rows=3, table_rows=3, equation_rows=2))
+
+    report = build_visual_annotation_expansion_pack_design(
+        source,
+        _web_pack(),
+        _dry_run(),
+        type_quotas={
+            "table_region": 2,
+            "figure_caption_region": 2,
+            "equation_region": 1,
+            "layout_region": 0,
+            "image_region": 0,
+        },
+        preferred_paper_ids=("new-visual-paper", "clip-2021", "mae-2021"),
+        max_candidates=5,
+        max_per_paper_type_page=1,
+        generated_at="2026-05-27T00:00:00Z",
+    )
+
+    assert report["status"] == "ready"
+    assert report["counts"]["selectedExpansionRows"] == 5
+    assert report["selectionPolicy"]["preferredPaperIds"][0] == "new-visual-paper"
+    assert report["packRowsDetail"][0]["paperId"] == "new-visual-paper"
+    assert report["counts"]["privatePathLeakRows"] == 0
+
+    validation = validate_payload(
+        report,
+        VISUAL_ANNOTATION_EXPANSION_PACK_DESIGN_SCHEMA_ID,
+        strict=True,
+    )
+    assert validation.ok, validation.errors
+
+
 def test_expansion_pack_blocks_on_non_ready_source_report() -> None:
     source = _candidate_report()
     source["status"] = "blocked"

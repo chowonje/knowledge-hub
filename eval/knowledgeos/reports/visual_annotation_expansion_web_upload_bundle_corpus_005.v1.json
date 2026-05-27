@@ -1,0 +1,156 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-web-upload-bundle.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T08:29:24Z",
+  "decision": "ready_for_operator_web_gpt_pro_upload",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "uploadBundleId": "visual_annotation_expansion_web_upload_bundle_corpus_005",
+  "sourceWebRunBundle": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-web-run-bundle.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_run_bundle_005.v1.json",
+    "batchRows": 5
+  },
+  "sourceAttachmentPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005.v1.json",
+    "attachmentRows": 40
+  },
+  "uploadRootRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005",
+  "scope": {
+    "writes": "upload_bundle_files_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualOperatorWebModelRunRequired": true,
+    "operatorPromptRows": 5,
+    "fillTemplateRows": 5,
+    "copiedAttachmentRows": 40,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "counts": {
+    "batchRows": 5,
+    "operatorPromptRows": 5,
+    "fillTemplateRows": 5,
+    "copiedAttachmentRows": 40,
+    "missingArtifactRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "batchRowsDetail": [
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "rowCount": 8,
+      "folderRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01",
+      "promptRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/batch_01_prompt.md",
+      "fillTemplateRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/batch_01_fill_template.v1.json",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/01-newtonbench-benchmarking-generalizable-sci-p2-table_region-43ba20bbd8.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/02-emu3.5-native-multimodal-models-are-world--p6-table_region-7e5ddeb596.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/03-faster-r-cnn-towards-real-time-object-dete-p6-table_region-bf4da7f980.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/04-autogen-enabling-next-gen-llm-applications-p15-table_region-bf53567890.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/05-arithmetic-in-the-wild-llama-uses-base-10--p8-table_region-96e7bcf8b6.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/06-high-resolution-image-synthesis-with-laten-p4-table_region-cdab6c275b.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/07-qwen-image-technical-report-p9-table_region-47a89c6847.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_01/08-photorealistic-text-to-image-diffusion-mod-p7-table_region-c8163ca912.png"
+      ],
+      "missingArtifactRows": 0
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "rowCount": 8,
+      "folderRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02",
+      "promptRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/batch_02_prompt.md",
+      "fillTemplateRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/batch_02_fill_template.v1.json",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/01-newtonbench-benchmarking-generalizable-sci-p4-figure_caption_region-92b8890073.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/02-emu3.5-native-multimodal-models-are-world--p1-figure_caption_region-4281f17d9e.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/03-faster-r-cnn-towards-real-time-object-dete-p2-figure_caption_region-053df2c84c.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/04-autogen-enabling-next-gen-llm-applications-p1-figure_caption_region-3db7901a05.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/05-arithmetic-in-the-wild-llama-uses-base-10--p2-figure_caption_region-9768341fe6.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/06-high-resolution-image-synthesis-with-laten-p1-figure_caption_region-bd010932c7.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/07-qwen-image-technical-report-p2-figure_caption_region-a2a6bdca9d.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_02/08-photorealistic-text-to-image-diffusion-mod-p2-figure_caption_region-16dc56c857.png"
+      ],
+      "missingArtifactRows": 0
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "rowCount": 8,
+      "folderRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03",
+      "promptRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/batch_03_prompt.md",
+      "fillTemplateRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/batch_03_fill_template.v1.json",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/01-newtonbench-benchmarking-generalizable-sci-p4-equation_region-803dd3f7db.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/02-emu3.5-native-multimodal-models-are-world--p2-equation_region-688127b9a1.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/03-faster-r-cnn-towards-real-time-object-dete-p5-equation_region-128a0a411f.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/04-autogen-enabling-next-gen-llm-applications-p4-equation_region-45200729f8.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/05-arithmetic-in-the-wild-llama-uses-base-10--p3-equation_region-f2208953da.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/06-high-resolution-image-synthesis-with-laten-p1-equation_region-0dc11401a8.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/07-qwen-image-technical-report-p14-equation_region-1e8a7149fc.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_03/08-photorealistic-text-to-image-diffusion-mod-p20-equation_region-2eb72e2516.png"
+      ],
+      "missingArtifactRows": 0
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "rowCount": 8,
+      "folderRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04",
+      "promptRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/batch_04_prompt.md",
+      "fillTemplateRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/batch_04_fill_template.v1.json",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/01-newtonbench-benchmarking-generalizable-sci-p1-layout_region-45ff0082a3.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/02-emu3.5-native-multimodal-models-are-world--p1-layout_region-03b6139e0d.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/03-faster-r-cnn-towards-real-time-object-dete-p1-layout_region-f15a56f92b.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/04-autogen-enabling-next-gen-llm-applications-p1-layout_region-c96ad0bb30.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/05-arithmetic-in-the-wild-llama-uses-base-10--p1-layout_region-9f959e82eb.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/06-high-resolution-image-synthesis-with-laten-p1-layout_region-47134ad1cd.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/07-qwen-image-technical-report-p6-layout_region-ed37c9f9cf.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_04/08-photorealistic-text-to-image-diffusion-mod-p1-layout_region-3d2326e603.png"
+      ],
+      "missingArtifactRows": 0
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "rowCount": 8,
+      "folderRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05",
+      "promptRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/batch_05_prompt.md",
+      "fillTemplateRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/batch_05_fill_template.v1.json",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/01-newtonbench-benchmarking-generalizable-sci-p4-image_region-04ae14ad97.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/02-emu3.5-native-multimodal-models-are-world--p1-image_region-03dc21098e.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/03-faster-r-cnn-towards-real-time-object-dete-p2-image_region-2ea5949dc6.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/04-autogen-enabling-next-gen-llm-applications-p1-image_region-0a83cc7b8c.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/05-arithmetic-in-the-wild-llama-uses-base-10--p1-image_region-0792bc4980.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/06-high-resolution-image-synthesis-with-laten-p1-image_region-2360b13807.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/07-qwen-image-technical-report-p1-image_region-50985e4339.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_web_upload_bundle_corpus_005/batch_05/08-photorealistic-text-to-image-diffusion-mod-p2-image_region-204aa4cc29.png"
+      ],
+      "missingArtifactRows": 0
+    }
+  ],
+  "warnings": [
+    "Use one batch folder per new web GPT/Pro chat.",
+    "Upload only the PNG files inside that batch folder with the matching prompt.",
+    "Generated visual text remains retrieval-hint-only and non-evidence."
+  ]
+}
