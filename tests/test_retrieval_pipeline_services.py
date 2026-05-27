@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import json
-from types import SimpleNamespace
+import os
+import sys
+from types import ModuleType, SimpleNamespace
 from unittest.mock import patch
 
 from knowledge_hub.application.query_frame import build_query_frame
 from knowledge_hub.ai.paper_query_plan import build_rule_based_query_frame, build_rule_query_plan
 from knowledge_hub.ai.evidence_assembly import EvidenceAssemblyService
 from knowledge_hub.ai.rag import RAGSearcher
+from knowledge_hub.ai.reranker import RerankerConfig, SentenceTransformerReranker, build_reranker, reranker_runtime_status
 from knowledge_hub.ai.retrieval_pipeline import RetrievalPipelineService
 from knowledge_hub.core.models import SearchResult
 from tests.test_rag_search import DummyEmbedder, DummyFeatureSQLite, DummyVectorDB, FakeLLM
@@ -77,6 +80,176 @@ class _LocalTitleLookupSQLite(DummyFeatureSQLite):
                 }
             ]
         return []
+
+
+def test_reranker_config_defaults_to_ettin_cached_labs_candidate():
+    config = RerankerConfig.from_config(_ConfigStub())
+
+    assert config.enabled is False
+    assert config.model == "cross-encoder/ettin-reranker-17m-v1"
+    assert config.candidate_window == 8
+    assert config.timeout_ms == 1200
+    assert config.allow_download is False
+    assert config.max_length == 512
+    assert config.trust_remote_code is False
+
+
+def test_reranker_config_accepts_explicit_ettin_download_opt_in():
+    config = RerankerConfig.from_config(
+        _ConfigStub(
+            {
+                "labs": {
+                    "retrieval": {
+                        "reranker": {
+                            "enabled": True,
+                            "model": "cross-encoder/ettin-reranker-32m-v1",
+                            "candidate_window": 4,
+                            "timeout_ms": 2500,
+                            "fallback_on_error": True,
+                            "allow_download": True,
+                            "max_length": 768,
+                        }
+                    }
+                }
+            }
+        )
+    )
+
+    assert config.enabled is True
+    assert config.model == "cross-encoder/ettin-reranker-32m-v1"
+    assert config.candidate_window == 4
+    assert config.timeout_ms == 2500
+    assert config.allow_download is True
+    assert config.max_length == 768
+
+
+def test_sentence_transformer_reranker_uses_cached_only_loading_by_default(monkeypatch):
+    captured: dict[str, object] = {}
+    for key in ("USE_TF", "TRANSFORMERS_NO_TF", "USE_FLAX", "TRANSFORMERS_NO_FLAX", "TOKENIZERS_PARALLELISM"):
+        monkeypatch.delenv(key, raising=False)
+
+    class _FakeCrossEncoder:
+        def __init__(
+            self,
+            model_name_or_path,
+            *,
+            local_files_only=False,
+            max_length=None,
+            trust_remote_code=False,
+            cache_folder=None,
+        ):
+            captured.update(
+                {
+                    "model": model_name_or_path,
+                    "local_files_only": local_files_only,
+                    "max_length": max_length,
+                    "trust_remote_code": trust_remote_code,
+                    "cache_folder": cache_folder,
+                }
+            )
+
+    module = ModuleType("sentence_transformers")
+    module.CrossEncoder = _FakeCrossEncoder
+    monkeypatch.setitem(sys.modules, "sentence_transformers", module)
+
+    config = RerankerConfig(
+        enabled=True,
+        model="cross-encoder/ettin-reranker-17m-v1",
+        allow_download=False,
+        max_length=512,
+        cache_folder="/tmp/khub-reranker-cache",
+    )
+
+    _ = SentenceTransformerReranker(config).client
+
+    assert captured == {
+        "model": "cross-encoder/ettin-reranker-17m-v1",
+        "local_files_only": True,
+        "max_length": 512,
+        "trust_remote_code": False,
+        "cache_folder": "/tmp/khub-reranker-cache",
+    }
+    assert os.environ["USE_TF"] == "0"
+    assert os.environ["TRANSFORMERS_NO_TF"] == "1"
+    assert os.environ["TOKENIZERS_PARALLELISM"] == "false"
+
+
+def test_reranker_status_blocks_uncached_model_when_download_disabled(monkeypatch):
+    monkeypatch.setattr("knowledge_hub.ai.reranker._module_available", lambda name: name == "sentence_transformers")
+    monkeypatch.setattr("knowledge_hub.ai.reranker._model_config_cached", lambda model: False)
+    monkeypatch.setattr("knowledge_hub.ai.reranker._package_version_at_least", lambda package, minimum: True)
+
+    config = RerankerConfig(enabled=True, allow_download=False)
+    status = reranker_runtime_status(config)
+
+    assert status["ready"] is False
+    assert status["available"] is True
+    assert status["model_config_cached"] is False
+    assert "model_not_cached" in status["reasons"]
+    assert build_reranker(config) is None
+
+
+def test_reranker_status_allows_download_opt_in_without_cache(monkeypatch):
+    monkeypatch.setattr("knowledge_hub.ai.reranker._module_available", lambda name: name == "sentence_transformers")
+    monkeypatch.setattr("knowledge_hub.ai.reranker._model_config_cached", lambda model: False)
+    monkeypatch.setattr("knowledge_hub.ai.reranker._package_version_at_least", lambda package, minimum: True)
+
+    status = reranker_runtime_status(RerankerConfig(enabled=True, allow_download=True))
+
+    assert status["ready"] is True
+    assert status["local_files_only"] is False
+    assert "model_not_cached" not in status["reasons"]
+
+
+def test_reranker_status_blocks_ettin_when_runtime_versions_are_too_old(monkeypatch):
+    monkeypatch.setattr("knowledge_hub.ai.reranker._module_available", lambda name: name == "sentence_transformers")
+    monkeypatch.setattr("knowledge_hub.ai.reranker._model_config_cached", lambda model: True)
+
+    def _version_ok(package, minimum):  # noqa: ANN001
+        _ = minimum
+        return package != "transformers"
+
+    monkeypatch.setattr("knowledge_hub.ai.reranker._package_version_at_least", _version_ok)
+
+    status = reranker_runtime_status(RerankerConfig(enabled=True, allow_download=False))
+
+    assert status["ready"] is False
+    assert status["model_config_cached"] is True
+    assert "transformers_version_too_old" in status["reasons"]
+    assert build_reranker(RerankerConfig(enabled=True, allow_download=False)) is None
+
+
+def test_reranker_status_blocks_when_model_cache_unknown(monkeypatch):
+    monkeypatch.setattr("knowledge_hub.ai.reranker._module_available", lambda name: name == "sentence_transformers")
+    monkeypatch.setattr("knowledge_hub.ai.reranker._model_config_cached", lambda model: None)
+    monkeypatch.setattr("knowledge_hub.ai.reranker._package_version_at_least", lambda package, minimum: True)
+
+    config = RerankerConfig(enabled=True, allow_download=False)
+    status = reranker_runtime_status(config)
+
+    assert status["ready"] is False
+    assert status["model_config_cached"] is None
+    assert "model_cache_unknown" in status["reasons"]
+    assert build_reranker(config) is None
+
+
+def test_reranker_status_allows_download_when_model_cache_unknown(monkeypatch):
+    monkeypatch.setattr("knowledge_hub.ai.reranker._module_available", lambda name: name == "sentence_transformers")
+    monkeypatch.setattr("knowledge_hub.ai.reranker._model_config_cached", lambda model: None)
+    monkeypatch.setattr("knowledge_hub.ai.reranker._package_version_at_least", lambda package, minimum: True)
+
+    status = reranker_runtime_status(RerankerConfig(enabled=True, allow_download=True))
+
+    assert status["ready"] is True
+    assert "model_cache_unknown" not in status["reasons"]
+
+
+def test_packaging_version_import_available():
+    from packaging.version import Version
+
+    assert Version("5.4.1") >= Version("5.4.1")
+    assert Version("5.7.0") >= Version("5.7.0")
+    assert not (Version("4.57.3") >= Version("5.7.0"))
 
 
 class _CompareCardSQLite(DummyFeatureSQLite):
@@ -526,6 +699,45 @@ def test_retrieval_pipeline_records_cross_encoder_fallback_when_timeout_occurs()
     assert diagnostics["rerankerApplied"] is False
     assert diagnostics["rerankerFallbackUsed"] is True
     assert diagnostics["rerankerReason"] == "timeout"
+
+
+def test_retrieval_pipeline_reuses_reranker_cache_across_service_instances():
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        DummyVectorDB([]),
+        llm=FakeLLM(),
+        sqlite_db=DummyFeatureSQLite({}),
+        config=_ConfigStub(
+            {
+                "labs": {
+                    "retrieval": {
+                        "reranker": {
+                            "enabled": True,
+                            "model": "test-reranker",
+                            "candidate_window": 2,
+                            "timeout_ms": 1500,
+                            "fallback_on_error": True,
+                        }
+                    }
+                }
+            }
+        ),
+    )
+    built: list[object] = []
+
+    def _build(config):  # noqa: ANN001
+        reranker = object()
+        built.append(reranker)
+        return reranker
+
+    with patch("knowledge_hub.ai.retrieval_pipeline.build_reranker", side_effect=_build):
+        service_a = RetrievalPipelineService(searcher)
+        config = service_a._reranker_config()
+        first = service_a._get_reranker(config)
+        second = RetrievalPipelineService(searcher)._get_reranker(config)
+
+    assert first is second
+    assert len(built) == 1
 
 
 def test_evidence_assembly_builds_citation_target_from_result_metadata():

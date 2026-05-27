@@ -26,6 +26,9 @@ def test_setup_local_profile_writes_public_defaults(tmp_path, monkeypatch):
     assert cfg.summarization_provider == "ollama"
     assert cfg.embedding_provider == "ollama"
     assert cfg.paper_summary_parser == "auto"
+    assert cfg.get_nested("labs", "retrieval", "reranker", "enabled") is False
+    assert cfg.get_nested("labs", "retrieval", "reranker", "model") == "cross-encoder/ettin-reranker-17m-v1"
+    assert cfg.get_nested("labs", "retrieval", "reranker", "allow_download") is False
     assert "blocked/degraded" in result.output
     assert "ollama serve" in result.output
     assert "python -m knowledge_hub.interfaces.cli.main doctor" in result.output

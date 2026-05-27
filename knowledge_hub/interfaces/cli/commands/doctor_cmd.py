@@ -474,6 +474,11 @@ def _reranker_check(config) -> dict[str, object]:
     state = reranker_runtime_status(config)
     enabled = bool(state.get("enabled"))
     ready = bool(state.get("ready"))
+    reasons_list = [str(item) for item in state.get("reasons") or []]
+    display_reasons = reasons_list if enabled else ["disabled"]
+    uses_version_gated_ettin = bool(
+        state.get("min_sentence_transformers_version") or state.get("min_transformers_version")
+    )
     if ready:
         status = "ok"
         summary = "labs reranker runtime이 준비되었습니다."
@@ -483,13 +488,35 @@ def _reranker_check(config) -> dict[str, object]:
     else:
         status = "ok"
         summary = "labs reranker는 기본 off이며, 필요 시 켤 수 있습니다."
-    reasons = ", ".join(str(item) for item in state.get("reasons") or []) or "-"
+    reasons = ", ".join(display_reasons) or "-"
+    if not enabled:
+        fix_command = ""
+    elif "sentence_transformers_missing" in reasons_list:
+        fix_command = (
+            "pip install 'knowledge-hub-cli[ettin-reranker]'"
+            if uses_version_gated_ettin
+            else "pip install 'knowledge-hub-cli[st]'"
+        )
+    elif (
+        "sentence_transformers_version_too_old" in reasons_list
+        or "transformers_version_too_old" in reasons_list
+    ):
+        fix_command = "pip install 'knowledge-hub-cli[ettin-reranker]'"
+    elif "model_not_cached" in reasons_list or "model_cache_unknown" in reasons_list:
+        fix_command = "pre-cache the reranker model or set labs.retrieval.reranker.allow_download=true for one download"
+    else:
+        fix_command = ""
     return {
         "area": "reranker",
         "status": status,
         "summary": summary,
-        "detail": f"enabled={enabled} model={state.get('model')} window={state.get('candidate_window')} timeout_ms={state.get('timeout_ms')} ready={ready} reasons={reasons}",
-        "fixCommand": "pip install 'knowledge-hub-cli[st]'" if not ready else "",
+        "detail": (
+            f"enabled={enabled} model={state.get('model')} "
+            f"window={state.get('candidate_window')} timeout_ms={state.get('timeout_ms')} "
+            f"max_length={state.get('max_length')} allow_download={state.get('allow_download')} "
+            f"model_config_cached={state.get('model_config_cached')} ready={ready} reasons={reasons}"
+        ),
+        "fixCommand": fix_command,
     }
 
 

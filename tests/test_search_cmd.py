@@ -262,7 +262,7 @@ class _DiagnosticSearcher(_FakeSearcher):
                 "retrievalPlan": {"queryIntent": "paper_lookup", "retrievalMode": "hybrid"},
                 "rerankSignals": {
                     "rerankerApplied": False,
-                    "rerankerModel": "BAAI/bge-reranker-v2-m3",
+                    "rerankerModel": "cross-encoder/ettin-reranker-17m-v1",
                     "rerankerWindow": 8,
                     "rerankerLatencyMs": 1201,
                     "rerankerFallbackUsed": True,

@@ -92,9 +92,9 @@ def test_seeded_vector_corpus_survives_status_doctor_and_search(monkeypatch, tmp
         "knowledge_hub.interfaces.cli.commands.status_cmd.reranker_runtime_status",
         lambda config: {
             "enabled": False,
-            "model": "BAAI/bge-reranker-v2-m3",
-            "candidate_window": 12,
-            "timeout_ms": 1500,
+            "model": "cross-encoder/ettin-reranker-17m-v1",
+            "candidate_window": 8,
+            "timeout_ms": 1200,
             "ready": False,
             "reason": "disabled",
             "reasons": ["disabled"],

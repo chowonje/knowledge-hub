@@ -391,6 +391,18 @@ paper:
   summary:
     parser: auto
 
+labs:
+  retrieval:
+    reranker:
+      enabled: false
+      model: cross-encoder/ettin-reranker-17m-v1
+      candidate_window: 8
+      timeout_ms: 1200
+      fallback_on_error: true
+      allow_download: false
+      max_length: 512
+      trust_remote_code: false
+
 storage:
   papers_dir: ~/.khub/papers
   vector_db: ~/.khub/chroma_db
@@ -411,6 +423,10 @@ providers:
     base_url: http://localhost:8080
     timeout: 60
 ```
+
+`cross-encoder/ettin-reranker-*`는 labs 전용이며 기본값은 `enabled=false`입니다. Ettin reranker를 실제로 켤 때는
+`pip install 'knowledge-hub-cli[ettin-reranker]'`로 version-gated runtime을 설치하고, 로컬 캐시에 모델이 없으면
+일회성 다운로드를 위해 `labs.retrieval.reranker.allow_download=true`를 명시해야 합니다.
 
 ## AI Providers
 
