@@ -1,0 +1,175 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 4 compares CLIP zero-shot average score versus model GFLOPs for prompt engineering and ensembling against a baseline using contextless class names. The chart includes RN50, RN101, RN50x4, RN50x16, and RN50x64, with annotations for a 4X efficiency gain and a 5 point improvement.",
+      "visibleText": "Visible fragments include: Average Score (%), Model GFLOPs, Prompt engineering and ensembling, Contextless class names, RN50, RN101, RN50x4, RN50x16, RN50x64, 4X efficiency gain, 5 point improvement, Figure 4. Prompt engineering and ensembling improve zero-shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classification performance by almost 5 points on average across 36 datasets. This improvement is similar to the gain from using 4 times more compute with the baseline zero-shot method but is free when amortized over many predictions.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot performance",
+        "prompt engineering",
+        "ensembling",
+        "contextless class names",
+        "Model GFLOPs",
+        "RN50x64",
+        "average score"
+      ],
+      "uncertainty": "High for the chart labels, legend, annotations, and caption; surrounding body text is cropped and not treated as complete context.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 4 shows MAE reconstructions of ImageNet validation images. Rows include example images such as a bus, vase, zebras, mushrooms, and peppers/tomatoes, with columns for original, mask 75%, mask 85%, and mask 95%. The caption states that a model pre-trained with 75% masking is applied at higher masking ratios and still produces plausible reconstructions.",
+      "visibleText": "Visible fragments include: original, mask 75%, mask 85%, mask 95%, Figure 4. Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize. 2. Related Work. Masked language modeling.",
+      "retrievalKeywords": [
+        "MAE",
+        "masked autoencoder",
+        "ImageNet validation",
+        "reconstructions",
+        "mask 75%",
+        "mask 85%",
+        "mask 95%",
+        "generalize"
+      ],
+      "uncertainty": "High for the figure labels and caption; neighboring page text is cropped and only partial surrounding text is visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 6 presents CIFAR-10 training curves comparing plain networks and ResNets. The caption explains dashed lines as training error and bold lines as testing error, with panels for plain networks, ResNets, and ResNets with 110 and 1202 layers. A lower cropped plot with layer-index standard deviation and part of a PASCAL VOC object detection mAP table are also visible.",
+      "visibleText": "Visible fragments include: Figure 6. Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers. Other fragments include error (%), iter. (1e4), plain-20, plain-32, plain-44, plain-56, ResNet-20, ResNet-32, ResNet-44, ResNet-56, ResNet-110, residual-110, residual-1202, std, layer index original, training data, test data, VOC 07 test, VOC 12 test, VGG-16, ResNet-101, 73.2, 70.4, 76.4, 73.8, and Table 7. Object detection mAP on the PASCAL VOC.",
+      "retrievalKeywords": [
+        "ResNet",
+        "CIFAR-10",
+        "training error",
+        "testing error",
+        "plain networks",
+        "residual networks",
+        "ResNet-110",
+        "ResNet-1202",
+        "PASCAL VOC"
+      ],
+      "uncertainty": "High for the main Figure 6 caption and plot labels; lower for the partially visible bottom plot and table because they are cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 5 is a horizontal bar chart of Delta Score (%) for Zero-Shot CLIP versus a supervised linear probe on ResNet50. Green bars show datasets where zero-shot CLIP is higher, and blue bars show lower performance. The caption states zero-shot CLIP outperforms a supervised linear classifier on ResNet-50 features on 16 of 27 datasets, including ImageNet.",
+      "visibleText": "Visible fragments include: Food101 +22.5, Kinetics700 +14.5, SST2 +12.4, SUN397 +7.8, UCF101 +7.7, HatefulMemes +6.7, CIFAR10 +3.9, CIFAR100 +3.0, STL10 +3.0, FER2013 +2.8, Caltech101 +2.0, ImageNet +1.9, OxfordPets +1.1, PascalVOC2007 +0.5, Birdsnap -3.2, MNIST -10.0, FGVCAircraft -11.3, RESISC45 -11.9, Flowers102 -12.5, DTD -16.6, CLEVRCounts -18.2, GTSRB -18.4, PatchCamelyon -19.5, KITTI Distance -34.0, EuroSAT -37.1, Delta Score (%), Zero-Shot CLIP vs. Linear Probe on ResNet50, Figure 5. Zero-shot CLIP is competitive with a fully supervised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classifier outperforms a fully supervised linear classifier fitted on ResNet-50 features on 16 datasets, including ImageNet.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot CLIP",
+        "linear probe",
+        "ResNet50",
+        "Delta Score",
+        "supervised baseline",
+        "ImageNet",
+        "EuroSAT",
+        "Food101"
+      ],
+      "uncertainty": "High for the bar labels and caption; the top of the chart is slightly cropped but the visible dataset labels and scores are readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 5 plots MAE masking ratio against ImageNet-1K validation accuracy for fine-tuning and linear probing. The caption emphasizes that a high masking ratio of 75% works well for both settings.",
+      "visibleText": "Visible fragments include: fine-tuning, linear probing, masking ratio (%), 83.2, 83.4, 84.7, 84.9, 85.0, 84.5, 83.0, 54.6, 58.9, 61.7, 67.0, 69.9, 71.8, 73.2, 73.5, 66.1, Figure 5. Masking ratio. A high masking ratio (75%) works well for both fine-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper. 4. ImageNet Experiments.",
+      "retrievalKeywords": [
+        "MAE",
+        "masking ratio",
+        "fine-tuning",
+        "linear probing",
+        "ImageNet-1K validation accuracy",
+        "75% masking",
+        "ImageNet Experiments"
+      ],
+      "uncertainty": "High for the caption and major plotted values; some plot labels are small, and surrounding body text is cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 6 compares zero-shot CLIP with few-shot linear probes as the number of labeled training examples per class increases. The plot shows average score versus examples per class, with labels for Zero-Shot CLIP, Linear Probe CLIP, BiT-M (ImageNet-21K), SimCLRv2, and ResNet50. The caption states zero-shot CLIP matches a 4-shot linear classifier on the same feature space and nearly matches the best 16-shot linear classifier results across publicly available models.",
+      "visibleText": "Visible fragments include: Learning Transferable Visual Models From Natural Language Supervision, Average Score (%), number of labeled training examples per class, Zero-Shot CLIP, Linear Probe CLIP, BiT-M (ImageNet-21K), SimCLRv2, ResNet50, Figure 6. Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classifier trained on the same feature space and nearly matches the best results of a 16-shot linear classifier across publicly available models. For both BiT-M and SimCLRv2, the best performing model is highlighted. Light gray lines are other models in the eval suite. The 20 datasets with at least 16 examples per class were used in this analysis.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot CLIP",
+        "few-shot linear probes",
+        "Linear Probe CLIP",
+        "BiT-M",
+        "ImageNet-21K",
+        "SimCLRv2",
+        "ResNet50",
+        "labeled training examples per class"
+      ],
+      "uncertainty": "High for the chart labels and caption; adjacent body text is partially cropped and not treated as complete context.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 7 shows MAE training schedules for fine-tuning and linear probing as epochs increase on a log scale. Both curves improve with longer schedules, and the caption says each point is a full training schedule using a ViT-L model with the default setting in Table 1.",
+      "visibleText": "Visible fragments include: fine-tuning, linear probing, epochs (log-scale), 82.3, 83.3, 84.3, 84.9, 85.1, 57.3, 64.4, 69.7, 73.5, 75.1, Figure 7. Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training schedule. The model is ViT-L with the default setting in Table 1.",
+      "retrievalKeywords": [
+        "MAE",
+        "training schedules",
+        "epochs log-scale",
+        "fine-tuning",
+        "linear probing",
+        "ViT-L",
+        "ImageNet validation accuracy",
+        "longer training"
+      ],
+      "uncertainty": "High for the figure labels, plotted values, and caption; surrounding text is cropped and only partially visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 8 is a scatter plot comparing zero-shot CLIP performance with linear probe CLIP performance across datasets. The plot includes a dashed diagonal, a blue trend band/line, and a correlation label r = 0.82. The caption says zero-shot and linear probe performance are strongly correlated, but zero-shot performance is mostly shifted 10 to 25 points lower and approaches linear probe performance on only 5 datasets.",
+      "visibleText": "Visible fragments include: Zero-Shot CLIP Performance, Linear Probe CLIP Performance, r = 0.82, STL10, CIFAR10, Food101, Caltech101, OxfordPets, MNIST, VOC2007, Flowers102, UCF101, RESISC45, SUN397, HatefulMemes, Kinetics700, FER2013, DTD, PCAM, EuroSAT, GTSRB, Birdsnap, FGVCAircraft, KITTI Distance, CLEVRCounts, Country211, Stanford Cars, CIFAR100, ImageNet, Figure 8. Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does zero-shot performance approach linear probe performance, at no more than a 3 point difference.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot performance",
+        "linear probe performance",
+        "correlation",
+        "r = 0.82",
+        "sub-optimal",
+        "dataset scatter plot",
+        "linear probe CLIP"
+      ],
+      "uncertainty": "High for the axis labels, correlation label, dataset labels, and caption; some adjacent page text is cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

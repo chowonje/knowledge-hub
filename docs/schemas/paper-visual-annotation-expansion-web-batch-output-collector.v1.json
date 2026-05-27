@@ -193,7 +193,7 @@
           "batchNumber": { "type": "integer", "minimum": 1 },
           "outputRef": {
             "type": "string",
-            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_002/batch_[0-9]{2}_web_output\\.manual\\.json$"
+            "pattern": "^eval/knowledgeos/reports/visual_annotation_expansion_web_batch_outputs_[0-9]{3}/batch_[0-9]{2}_web_output\\.manual\\.json$"
           },
           "present": { "type": "boolean" },
           "expectedRows": { "type": "integer", "minimum": 0 },
