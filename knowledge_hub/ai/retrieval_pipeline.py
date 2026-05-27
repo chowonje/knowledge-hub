@@ -1096,7 +1096,7 @@ class RetrievalPipelineService:
         self.searcher = searcher
         self._ctx = getattr(searcher, "_ctx", None)
         self._caches = getattr(searcher, "_caches", None)
-        self._reranker_cache: tuple[str, Any] | None = None
+        self._reranker_cache: tuple[tuple[Any, ...], Any] | None = None
 
     def _paper_coverage_service(self) -> PaperCoverageService:
         search_runtime = PaperCoverageSearchRuntime(
@@ -1274,11 +1274,16 @@ class RetrievalPipelineService:
     def _get_reranker(self, config: RerankerConfig):
         if not config.enabled:
             return None
-        cache = self._reranker_cache
-        if cache and cache[0] == config.model:
+        cache = getattr(self.searcher, "_reranker_cache", None) or self._reranker_cache
+        cache_key = config.cache_key()
+        if cache and cache[0] == cache_key:
             return cache[1]
         reranker = build_reranker(config)
-        self._reranker_cache = (config.model, reranker)
+        self._reranker_cache = (cache_key, reranker)
+        try:
+            setattr(self.searcher, "_reranker_cache", self._reranker_cache)
+        except Exception:
+            pass
         return reranker
 
     def _apply_cross_encoder_reranking(

@@ -63,6 +63,58 @@ def _config(tmp_path: Path) -> SimpleNamespace:
     )
 
 
+def test_reranker_check_default_off_does_not_request_labs_dependencies(monkeypatch):
+    monkeypatch.setattr(
+        doctor_module,
+        "reranker_runtime_status",
+        lambda config: {
+            "enabled": False,
+            "ready": False,
+            "model": "cross-encoder/ettin-reranker-17m-v1",
+            "candidate_window": 8,
+            "timeout_ms": 1200,
+            "max_length": 512,
+            "allow_download": False,
+            "model_config_cached": True,
+            "min_sentence_transformers_version": "5.4.1",
+            "min_transformers_version": "5.7.0",
+            "reasons": ["disabled", "sentence_transformers_version_too_old", "transformers_version_too_old"],
+        },
+    )
+
+    check = doctor_module._reranker_check(object())
+
+    assert check["status"] == "ok"
+    assert check["fixCommand"] == ""
+    assert "reasons=disabled" in str(check["detail"])
+    assert "transformers_version_too_old" not in str(check["detail"])
+
+
+def test_reranker_check_enabled_ettin_points_to_ettin_extra(monkeypatch):
+    monkeypatch.setattr(
+        doctor_module,
+        "reranker_runtime_status",
+        lambda config: {
+            "enabled": True,
+            "ready": False,
+            "model": "cross-encoder/ettin-reranker-17m-v1",
+            "candidate_window": 8,
+            "timeout_ms": 1200,
+            "max_length": 512,
+            "allow_download": False,
+            "model_config_cached": True,
+            "min_sentence_transformers_version": "5.4.1",
+            "min_transformers_version": "5.7.0",
+            "reasons": ["sentence_transformers_missing"],
+        },
+    )
+
+    check = doctor_module._reranker_check(object())
+
+    assert check["status"] == "degraded"
+    assert check["fixCommand"] == "pip install 'knowledge-hub-cli[ettin-reranker]'"
+
+
 def _create_lexical_sidecar(vector_path: Path) -> sqlite3.Connection:
     vector_path.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(vector_path / "_lexical.sqlite3")

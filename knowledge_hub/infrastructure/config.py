@@ -241,6 +241,20 @@ DEFAULT_CONFIG = {
             "strict": True,
         },
     },
+    "labs": {
+        "retrieval": {
+            "reranker": {
+                "enabled": False,
+                "model": "cross-encoder/ettin-reranker-17m-v1",
+                "candidate_window": 8,
+                "timeout_ms": 1200,
+                "fallback_on_error": True,
+                "allow_download": False,
+                "max_length": 512,
+                "trust_remote_code": False,
+            },
+        },
+    },
     "obsidian": {
         "enabled": False,
         "vault_path": "",

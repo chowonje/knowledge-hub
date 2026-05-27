@@ -103,12 +103,25 @@ def run_status(khub_ctx):
     runtime_table.add_row("vector corpus", vector_value, vector_reasons)
 
     reranker = reranker_runtime_status(config)
-    reranker_reasons = ", ".join(str(item) for item in reranker.get("reasons") or []) or "-"
-    runtime_table.add_row("reranker enabled", "예" if reranker.get("enabled") else "아니오", reranker_reasons)
+    reranker_enabled = bool(reranker.get("enabled"))
+    reranker_reasons = (
+        ", ".join(str(item) for item in reranker.get("reasons") or [])
+        if reranker_enabled
+        else "disabled"
+    ) or "-"
+    reranker_runtime_value = "ready" if reranker.get("ready") else "unavailable"
+    reranker_runtime_reason = str(reranker.get("reason") or "-")
+    if not reranker_enabled:
+        reranker_runtime_value = "disabled"
+        reranker_runtime_reason = "labs opt-in"
+    runtime_table.add_row("reranker enabled", "예" if reranker_enabled else "아니오", reranker_reasons)
     runtime_table.add_row("reranker model", str(reranker.get("model") or "-"), f"ready={bool(reranker.get('ready'))}")
     runtime_table.add_row("reranker window", str(reranker.get("candidate_window") or "-"), "labs opt-in")
     runtime_table.add_row("reranker timeout", str(reranker.get("timeout_ms") or "-"), "ms")
-    runtime_table.add_row("reranker runtime", "ready" if reranker.get("ready") else "unavailable", str(reranker.get("reason") or "-"))
+    runtime_table.add_row("reranker max length", str(reranker.get("max_length") or "-"), "tokens")
+    runtime_table.add_row("reranker download", "허용" if reranker.get("allow_download") else "차단", "local_files_only")
+    runtime_table.add_row("reranker cache", str(reranker.get("model_config_cached")), "config.json")
+    runtime_table.add_row("reranker runtime", reranker_runtime_value, reranker_runtime_reason)
     console.print(runtime_table)
 
     for warning in list(runtime.get("warnings") or [])[:5]:
