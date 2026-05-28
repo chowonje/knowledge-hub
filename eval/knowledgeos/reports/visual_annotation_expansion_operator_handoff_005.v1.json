@@ -1,0 +1,1308 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-operator-handoff.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T08:29:24Z",
+  "decision": "ready_for_operator_web_vlm_run",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "handoffId": "visual_annotation_expansion_operator_handoff_005",
+  "sourceManualRunPacket": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_manual_run_packet_005.v1.json",
+    "packetRows": 40
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualOperatorWebModelRunRequired": true,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "operatorSteps": [
+    "Open each batch in the manual run packet.",
+    "Upload only the listed context-crop PNG attachments for that batch.",
+    "Paste the batch prompt and row metadata into web GPT/Pro.",
+    "Ask for JSON only with schema knowledge-hub.paper.visual-annotation-web-output.v1.",
+    "Combine the returned rows into eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.manual.json.",
+    "Run validation with: PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py --output eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.manual.json --source-expansion-pack eval/knowledgeos/reports/visual_annotation_expansion_pack_design_005.v1.json --source-attachment-pack eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005.v1.json --validation-json eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.validation.v1.json --validation-md eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.validation.v1.md"
+  ],
+  "expectedOutputRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.manual.json",
+  "validationCommand": "PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py --output eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.manual.json --source-expansion-pack eval/knowledgeos/reports/visual_annotation_expansion_pack_design_005.v1.json --source-attachment-pack eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005.v1.json --validation-json eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.validation.v1.json --validation-md eval/knowledgeos/reports/visual_annotation_expansion_web_output_005.validation.v1.md",
+  "outputContract": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+    "allowedUse": "retrieval_hint_only",
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false
+  },
+  "counts": {
+    "packetRows": 40,
+    "templateRows": 40,
+    "batchRows": 5,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "templateRows": [
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "candidateType": "table_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/01-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p2-table_region-1fecf35c16.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "candidateType": "table_region",
+      "page": 6,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/02-emu3.5-native-multimodal-models-are-world-learners-p6-table_region-ea8e904c4c.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "candidateType": "table_region",
+      "page": 6,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/03-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p6-table_region-00a96171af.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "candidateType": "table_region",
+      "page": 15,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/04-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p15-table_region-5cd6344640.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "candidateType": "table_region",
+      "page": 8,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/05-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p8-table_region-c45ef0401e.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "candidateType": "table_region",
+      "page": 4,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/06-high-resolution-image-synthesis-with-latent-diffusion-models-p4-table_region-c388a21db1.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+      "paperId": "qwen-image-technical-report",
+      "candidateType": "table_region",
+      "page": 9,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/07-qwen-image-technical-report-p9-table_region-7889ebd3d8.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "candidateType": "table_region",
+      "page": 7,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/08-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p7-table_region-0bafbfcfff.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "candidateType": "figure_caption_region",
+      "page": 4,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/09-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-figure_caption_region-a4ccacf781.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "candidateType": "figure_caption_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/10-emu3.5-native-multimodal-models-are-world-learners-p1-figure_caption_region-decd8c9078.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "candidateType": "figure_caption_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/11-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-figure_caption_region-599517831d.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "candidateType": "figure_caption_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/12-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-figure_caption_region-0de8098f7e.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "candidateType": "figure_caption_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/13-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p2-figure_caption_region-d7d10670a5.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "candidateType": "figure_caption_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/14-high-resolution-image-synthesis-with-latent-diffusion-models-p1-figure_caption_region-24a73d2eda.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+      "paperId": "qwen-image-technical-report",
+      "candidateType": "figure_caption_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/15-qwen-image-technical-report-p2-figure_caption_region-6b728766ad.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "candidateType": "figure_caption_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/16-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-figure_caption_region-d7fcd3761f.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "candidateType": "equation_region",
+      "page": 4,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/17-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-equation_region-66dc218ed3.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "candidateType": "equation_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/18-emu3.5-native-multimodal-models-are-world-learners-p2-equation_region-a0e33d60d3.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "candidateType": "equation_region",
+      "page": 5,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/19-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p5-equation_region-dbe0abfb6f.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "candidateType": "equation_region",
+      "page": 4,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/20-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p4-equation_region-f3a9aecab1.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "candidateType": "equation_region",
+      "page": 3,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/21-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p3-equation_region-dc3fd3a2d6.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "candidateType": "equation_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/22-high-resolution-image-synthesis-with-latent-diffusion-models-p1-equation_region-aca1ff9b30.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+      "paperId": "qwen-image-technical-report",
+      "candidateType": "equation_region",
+      "page": 14,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/23-qwen-image-technical-report-p14-equation_region-a3d9713657.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "candidateType": "equation_region",
+      "page": 20,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/24-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p20-equation_region-3538b1d2cc.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:layout_region:1:45ff0082a3c9dd85",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/25-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p1-layout_region-8268ff3c17.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:layout_region:1:45ff0082a3c9dd85",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:layout_region:1:03b6139e0d9b28fb",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/26-emu3.5-native-multimodal-models-are-world-learners-p1-layout_region-7361592798.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:layout_region:1:03b6139e0d9b28fb",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:layout_region:1:f15a56f92bf8e4d7",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/27-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p1-layout_region-7e2a46b04c.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:layout_region:1:f15a56f92bf8e4d7",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:layout_region:1:c96ad0bb30a29669",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/28-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-layout_region-63d62596fa.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:layout_region:1:c96ad0bb30a29669",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:layout_region:1:9f959e82ebee205d",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/29-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-layout_region-da29262c4e.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:layout_region:1:9f959e82ebee205d",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:layout_region:1:47134ad1cd52c96a",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/30-high-resolution-image-synthesis-with-latent-diffusion-models-p1-layout_region-6fad153496.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:layout_region:1:47134ad1cd52c96a",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:layout_region:6:ed37c9f9cfe1ded1",
+      "paperId": "qwen-image-technical-report",
+      "candidateType": "layout_region",
+      "page": 6,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/31-qwen-image-technical-report-p6-layout_region-a735b8f591.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:layout_region:6:ed37c9f9cfe1ded1",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:layout_region:1:3d2326e60384515a",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/32-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p1-layout_region-8d87e0bd59.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:layout_region:1:3d2326e60384515a",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "candidateType": "image_region",
+      "page": 4,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/33-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-image_region-35e5f7c70e.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "candidateType": "image_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/34-emu3.5-native-multimodal-models-are-world-learners-p1-image_region-3adbc14e69.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "candidateType": "image_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/35-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-image_region-8473d7fc66.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "candidateType": "image_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/36-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-image_region-2c98531c19.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "candidateType": "image_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/37-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-image_region-2b79f24bcc.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "candidateType": "image_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/38-high-resolution-image-synthesis-with-latent-diffusion-models-p1-image_region-079b7b928c.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+      "paperId": "qwen-image-technical-report",
+      "candidateType": "image_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/39-qwen-image-technical-report-p1-image_region-ea864a8b48.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "candidateType": "image_region",
+      "page": 2,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/40-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-image_region-4c8abd6fd5.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    }
+  ],
+  "warnings": [
+    "This handoff is not web/VLM output and must not be validated as completed output.",
+    "The operator must replace every FILL_IN placeholder with observations from attached context crops.",
+    "Do not upload whole pages or whole images for this gate.",
+    "Do not treat derivedTextForRetrieval as strict, citation-grade, or answer-visible evidence."
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: NewtonBench Figure 1 summarizes benchmark design with experimentation complexity, physical law curation by expression trees and counterfactual shifts, physics-domain icons, and agentic exploration with run-experiment, code-interpreter, and final-law-submission steps.",
+      "visibleText": "Visible fragments include Experimentation Complexity, Vanilla Equation, Simple System, Complex System, Physical Law Curation, Expression Tree, Counterfactual Shifts, Equation Difficulty, NewtonBench, Physics Domains, Gravitation, Coulomb's Law, Fourier's Law, Snell's Law, Radioactive Decay, Harmonic Motion, Hooke's Law, Bose-Einstein Distribution, Agentic Exploration, Run Experiment, Code Interpreter Tool-use, Final Law Submission, and Figure 1 caption.",
+      "retrievalKeywords": ["NewtonBench", "experimentation complexity", "physical law curation", "counterfactual shifts", "agentic exploration", "physics domains", "expression tree", "scientific law discovery"],
+      "uncertainty": "Major headings and the caption are legible; small formulas, code snippets, and miniature in-panel annotations are only partially legible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Emu3.5 benchmark comparison figure shows bars against Qwen-Image/Edit, GPT-Image-1, Nano Banana, and FLUX.1[dev] on LongText-Bench, LeX-Bench, CVTG-2K, ImgEdit, GEdit-Bench, and OminiContext, plus win/loss/tie pie charts against Nano Banana.",
+      "visibleText": "Visible fragments include Emu3.5, Qwen-Image/Edit, GPT-Image-1, Nano Banana, FLUX.1[dev], LongText-Bench, LeX-Bench, CVTG-2K, ImgEdit, GEdit-Bench, OminiContext, Win, Loss, Tie, World Exploration, Embodied Manipulation, Visual Guidance, Visual Narrative, Comparison on Image Generation and Editing Benchmarks, and Figure 1 caption.",
+      "retrievalKeywords": ["Emu3.5", "image generation benchmarks", "LongText-Bench", "LeX-Bench", "CVTG-2K", "ImgEdit", "GEdit-Bench", "OminiContext", "Nano Banana win rate"],
+      "uncertainty": "Chart labels and the caption are legible; some small numeric bar labels and pie-slice percentages are difficult to verify precisely.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Faster R-CNN Figure 1 compares multi-scale schemes: image and feature-map pyramids, multiple filter sizes, and reference-box anchor pyramids in regression functions.",
+      "visibleText": "Visible fragments include feature map, image, multiple scaled images, multiple filter sizes, multiple references, Figure 1 different schemes for addressing multiple scales and sizes, pyramids of images and feature maps, pyramids of filters, reference boxes in regression functions, anchor boxes, multiple scales and aspect ratios.",
+      "retrievalKeywords": ["Faster R-CNN", "region proposal networks", "anchor boxes", "reference boxes", "image pyramids", "feature maps", "filter sizes", "multiple scales"],
+      "uncertainty": "The main diagram labels and figure caption are legible; surrounding body text is cropped and partially cut off at the bottom.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AutoGen Figure 1 illustrates LLM-based multi-agent conversation applications, including agent customization, flexible conversation patterns, joint and hierarchical chats, and an example agent chat with Python, yfinance, stock price plotting, and revised code.",
+      "visibleText": "Visible fragments include Conversable agent, Agent Customization, Multi-Agent Conversations, Flexible Conversation Patterns, Joint chat, Hierarchical chat, Example Agent Chat, Plot a chart of META and TESLA stock price change YTD, yfinance not installed, Installing, No please plot percent change, Got it here is the revised code, Figure 1 AutoGen enables diverse LLM-based applications.",
+      "retrievalKeywords": ["AutoGen", "multi-agent conversations", "agent customization", "conversable agents", "flexible conversation patterns", "joint chat", "hierarchical chat", "example agent chat", "yfinance"],
+      "uncertainty": "The figure labels and caption are legible; miniature chat bubbles, code snippets, and chart details are only partly readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Llama-3.1-8B computes a cyclic month question by mapping input concept geometry to a base-10 addition mechanism with period 2, 5, 10, and 50 neurons, modular arithmetic expressions, sum 6+8=14, and output 14 to February.",
+      "visibleText": "Visible fragments include What month is six months after August, Input concept is circular, Base-10 addition mechanism, Period 2 neurons, Period 5 neurons, Period 10 neurons, Period 50 neurons, modular expressions for 6+8, 6+8=14, Output concept is circular again, 14 to February, Figure 1 caption about Llama-3.1-8B and addition mechanism used for numbers, months, weekdays, and hours.",
+      "retrievalKeywords": ["Llama-3.1-8B", "cyclic concepts", "base-10 addition", "Fourier number space", "period neurons", "month arithmetic", "six months after August", "14 to February"],
+      "uncertainty": "The main labels, arithmetic expressions, and caption are legible; tiny scatterplot details and small clock markings are not individually readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Latent Diffusion Models Figure 1 compares input reconstructions with ours f=4, DALL-E f=8, and VQGAN f=16, reporting PSNR and R-FID, and captioning less aggressive downsampling and spatial autoencoding.",
+      "visibleText": "Visible fragments include High-Resolution Image Synthesis with Latent Diffusion Models, Dominik Lorenz, Patrick Esser, Bjorn Ommer, Runway ML, CompVis latent-diffusion, Input, ours f=4, PSNR 27.4, R-FID 0.58, DALL-E f=8, PSNR 22.8, R-FID 32.01, VQGAN f=16, PSNR 19.9, R-FID 4.98, Figure 1, DIV2K validation set, 512 px, spatial down-sampling factor.",
+      "retrievalKeywords": ["Latent Diffusion Models", "less aggressive downsampling", "autoencoding models", "DALL-E", "VQGAN", "PSNR", "R-FID", "DIV2K", "ImageNet-val"],
+      "uncertainty": "The comparison table and caption are mostly legible; the page title, left-column body text, and some surrounding content are cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Qwen-Image Figure 2 showcases complex text rendering with multi-line layouts, paragraph-level semantics, fine-grained details, alphabetic and logographic language support, and examples such as bookstore signage, chalkboard introduction, poster, wellbeing infographic, and poem note.",
+      "visibleText": "Visible fragments include New Arrivals This Week, Author Meet And Greet on Saturday, Best-Selling Novels Here, Introducing Qwen-Image, Imagination Unleashed, Launching in the Cloud, August 2025, Habits for Emotional Wellbeing, Practice Mindfulness, Continuous Learning, Cultivate Gratitude, Regular Physical Activity, Stay Connected, Prioritize Sleep, poem line, and Figure 2 caption about complex text rendering.",
+      "retrievalKeywords": ["Qwen-Image", "complex text rendering", "multi-line layouts", "paragraph-level semantics", "fine-grained details", "alphabetic languages", "logographic languages", "precise image editing", "emotional wellbeing infographic"],
+      "uncertainty": "The caption and large rendered text are legible; smaller book titles and poem lines are partially legible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Imagen sample grid for photorealistic text-to-image generation at 1024x1024, with sample prompts including a rocketship toward the moon, a dragon fruit wearing a karate belt in snow, a strawberry mug floating in a dark chocolate sea, a corgi sushi house, and a sloth treasure chest.",
+      "visibleText": "Visible fragments include A cute corgi lives in a house made out of sushi, a cute sloth holding a small treasure chest, a rocketship heading towards the moon, a dragon fruit wearing karate belt in the snow, a strawberry mug filled with white sesame seeds floating in a dark chocolate sea, Imagen, Figure 1 select 1024 x 1024 Imagen samples for various text inputs.",
+      "retrievalKeywords": ["Imagen", "photorealistic text-to-image", "1024 x 1024 samples", "deep language understanding", "rocketship moon", "dragon fruit karate belt", "strawberry mug", "white sesame seeds", "dark chocolate sea"],
+      "uncertainty": "The main caption and several sample captions are legible; top-row captions and left/right prompt text are partially cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

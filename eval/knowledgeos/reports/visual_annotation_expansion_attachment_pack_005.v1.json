@@ -1,0 +1,2627 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T08:29:24Z",
+  "decision": "ready_for_manual_web_vlm_expansion_run",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "attachmentPackId": "visual_annotation_expansion_attachment_pack_005",
+  "sourceExpansionPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_pack_design_005.v1.json",
+    "packRows": 40
+  },
+  "assetRootRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005",
+  "scope": {
+    "writes": "report_and_attachment_files_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 40,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "attachmentPolicy": {
+    "attachmentKind": "context_crop_png",
+    "renderSource": "already_local_pdf_only",
+    "cropExpansionPolicy": "candidate_type_context_margin_v1",
+    "pageImagePolicy": "not_written_in_expansion_pack_002",
+    "wholeImagePolicy": "deferred_to_visual_full_image_annotation_pack_design",
+    "uploadGuidance": "Upload these 24 PNG context crops with the expansion pack row JSON to the manual web/VLM session.",
+    "derivedTextUse": "retrieval_hint_only"
+  },
+  "counts": {
+    "sourcePackRows": 40,
+    "attachmentRows": 40,
+    "cropAttachmentRows": 40,
+    "pageAttachmentRows": 0,
+    "wholeImageRows": 0,
+    "imageCandidateRows": 8,
+    "figureCandidateRows": 8,
+    "tableCandidateRows": 8,
+    "equationCandidateRows": 8,
+    "layoutCandidateRows": 8,
+    "blockedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "attachmentRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f438a521a431c93a",
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+      "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+      "page": 2,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/01-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p2-table_region-1fecf35c16.png",
+      "attachmentSha256": "sha256:a4a842c06a46605d7bfacf1020659d1805857d1fd9ed2877e0959e3ff6171280",
+      "attachmentBytes": 146469,
+      "pixelWidth": 1000,
+      "pixelHeight": 726,
+      "sourceBbox": [
+        108.0,
+        91.06,
+        504.0,
+        122.94
+      ],
+      "cropBbox": [
+        56.0,
+        0.0,
+        556.0,
+        362.94
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f438a521a431c93a",
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+        "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+        "page": 2,
+        "sourceBbox": [
+          108.0,
+          91.06,
+          504.0,
+          122.94
+        ],
+        "cropBbox": [
+          56.0,
+          0.0,
+          556.0,
+          362.94
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:bc17b9f438b4acbe",
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+      "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+      "page": 6,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/02-emu3.5-native-multimodal-models-are-world-learners-p6-table_region-ea8e904c4c.png",
+      "attachmentSha256": "sha256:6b7f8dc1e5946442125ce3f22b055238a1a26fbdfca890d7e971e3e578f5a068",
+      "attachmentBytes": 58739,
+      "pixelWidth": 544,
+      "pixelHeight": 701,
+      "sourceBbox": [
+        222.12,
+        108.99,
+        389.89,
+        118.96
+      ],
+      "cropBbox": [
+        170.12,
+        8.99,
+        441.89,
+        358.96
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:bc17b9f438b4acbe",
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+        "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+        "page": 6,
+        "sourceBbox": [
+          222.12,
+          108.99,
+          389.89,
+          118.96
+        ],
+        "cropBbox": [
+          170.12,
+          8.99,
+          441.89,
+          358.96
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fca66451ab4b129e",
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+      "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "page": 6,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/03-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p6-table_region-00a96171af.png",
+      "attachmentSha256": "sha256:979a3071de7f001f1ab346725619207f62715f6e40ffd121822e4823727a6a20",
+      "attachmentBytes": 160560,
+      "pixelWidth": 1099,
+      "pixelHeight": 609,
+      "sourceBbox": [
+        58.6,
+        53.72,
+        503.57,
+        64.32
+      ],
+      "cropBbox": [
+        6.6,
+        0.0,
+        555.57,
+        304.32
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fca66451ab4b129e",
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+        "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+        "page": 6,
+        "sourceBbox": [
+          58.6,
+          53.72,
+          503.57,
+          64.32
+        ],
+        "cropBbox": [
+          6.6,
+          0.0,
+          555.57,
+          304.32
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b517531758d46beb",
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+      "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "page": 15,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/04-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p15-table_region-5cd6344640.png",
+      "attachmentSha256": "sha256:4d20576ae68ea268ef79268bfb4f75c43999ae83448fabcdcc2357e85e56aa6b",
+      "attachmentBytes": 142931,
+      "pixelWidth": 1000,
+      "pixelHeight": 880,
+      "sourceBbox": [
+        108.0,
+        187.31,
+        504.0,
+        286.59
+      ],
+      "cropBbox": [
+        56.0,
+        87.31,
+        556.0,
+        526.59
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b517531758d46beb",
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+        "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+        "page": 15,
+        "sourceBbox": [
+          108.0,
+          187.31,
+          504.0,
+          286.59
+        ],
+        "cropBbox": [
+          56.0,
+          87.31,
+          556.0,
+          526.59
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:3ec2240567b43387",
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+      "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+      "page": 8,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/05-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p8-table_region-c45ef0401e.png",
+      "attachmentSha256": "sha256:36a1485125c73927b9a1e7622a698bad3dae49a049a4f91774f2e240059babb8",
+      "attachmentBytes": 233765,
+      "pixelWidth": 1005,
+      "pixelHeight": 832,
+      "sourceBbox": [
+        107.25,
+        320.08,
+        505.24,
+        395.51
+      ],
+      "cropBbox": [
+        55.25,
+        220.08,
+        557.24,
+        635.51
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:3ec2240567b43387",
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+        "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+        "page": 8,
+        "sourceBbox": [
+          107.25,
+          320.08,
+          505.24,
+          395.51
+        ],
+        "cropBbox": [
+          55.25,
+          220.08,
+          557.24,
+          635.51
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:1e3919fd00a72a67",
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+      "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+      "page": 4,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/06-high-resolution-image-synthesis-with-latent-diffusion-models-p4-table_region-c388a21db1.png",
+      "attachmentSha256": "sha256:4e89f3cf55903cab669b33cc3c874413a7502d99e895cfb67eb3db7321237328",
+      "attachmentBytes": 181256,
+      "pixelWidth": 682,
+      "pixelHeight": 1023,
+      "sourceBbox": [
+        308.86,
+        380.8,
+        545.12,
+        646.4
+      ],
+      "cropBbox": [
+        256.86,
+        280.8,
+        597.12,
+        792.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:1e3919fd00a72a67",
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+        "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+        "page": 4,
+        "sourceBbox": [
+          308.86,
+          380.8,
+          545.12,
+          646.4
+        ],
+        "cropBbox": [
+          256.86,
+          280.8,
+          597.12,
+          792.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9f69a12e055f3467",
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+      "paperId": "qwen-image-technical-report",
+      "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+      "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+      "page": 9,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/07-qwen-image-technical-report-p9-table_region-7889ebd3d8.png",
+      "attachmentSha256": "sha256:9e0be7053d48a7e478bfe6ecfea6f224a5d8bd2b919d9ff9fa39f025f450a083",
+      "attachmentBytes": 104136,
+      "pixelWidth": 662,
+      "pixelHeight": 700,
+      "sourceBbox": [
+        184.05,
+        336.51,
+        410.91,
+        346.47
+      ],
+      "cropBbox": [
+        132.05,
+        236.51,
+        462.91,
+        586.47
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9f69a12e055f3467",
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+        "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+        "page": 9,
+        "sourceBbox": [
+          184.05,
+          336.51,
+          410.91,
+          346.47
+        ],
+        "cropBbox": [
+          132.05,
+          236.51,
+          462.91,
+          586.47
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:665459b70156b3dd",
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+      "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+      "page": 7,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/08-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p7-table_region-0bafbfcfff.png",
+      "attachmentSha256": "sha256:3e921185ecbaa36cfbb95828b593fc542a24aae46a9b2b3d6b18620f5ca488ab",
+      "attachmentBytes": 97050,
+      "pixelWidth": 546,
+      "pixelHeight": 843,
+      "sourceBbox": [
+        337.37,
+        83.44,
+        505.66,
+        181.28
+      ],
+      "cropBbox": [
+        285.37,
+        0.0,
+        557.66,
+        421.28
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:665459b70156b3dd",
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+        "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+        "page": 7,
+        "sourceBbox": [
+          337.37,
+          83.44,
+          505.66,
+          181.28
+        ],
+        "cropBbox": [
+          285.37,
+          0.0,
+          557.66,
+          421.28
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ed2cb4b49670de7b",
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+      "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+      "page": 4,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/09-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-figure_caption_region-a4ccacf781.png",
+      "attachmentSha256": "sha256:0d1b32b74fdcfd741bf1680460c13a851657121c3e070278c8a3161f9a04749c",
+      "attachmentBytes": 385073,
+      "pixelWidth": 960,
+      "pixelHeight": 723,
+      "sourceBbox": [
+        108.0,
+        348.11,
+        504.0,
+        369.03
+      ],
+      "cropBbox": [
+        66.0,
+        88.11,
+        546.0,
+        449.03
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ed2cb4b49670de7b",
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+        "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+        "page": 4,
+        "sourceBbox": [
+          108.0,
+          348.11,
+          504.0,
+          369.03
+        ],
+        "cropBbox": [
+          66.0,
+          88.11,
+          546.0,
+          449.03
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:7214650f81ae416d",
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+      "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+      "page": 1,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/10-emu3.5-native-multimodal-models-are-world-learners-p1-figure_caption_region-decd8c9078.png",
+      "attachmentSha256": "sha256:84ede9326938c7cc1a2964aed304d3bec2c9c34c62ef41e320f075e855448aee",
+      "attachmentBytes": 101037,
+      "pixelWidth": 1076,
+      "pixelHeight": 745,
+      "sourceBbox": [
+        79.2,
+        646.83,
+        532.8,
+        678.61
+      ],
+      "cropBbox": [
+        37.2,
+        386.83,
+        574.8,
+        758.61
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:7214650f81ae416d",
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+        "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+        "page": 1,
+        "sourceBbox": [
+          79.2,
+          646.83,
+          532.8,
+          678.61
+        ],
+        "cropBbox": [
+          37.2,
+          386.83,
+          574.8,
+          758.61
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b2f470661ca2b2df",
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+      "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "page": 2,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/11-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-figure_caption_region-599517831d.png",
+      "attachmentSha256": "sha256:fdbebd8f1262a4808865eb2d151d3b894b57cd7325af98558416856eaf533cd8",
+      "attachmentBytes": 177197,
+      "pixelWidth": 1134,
+      "pixelHeight": 546,
+      "sourceBbox": [
+        36.0,
+        159.04,
+        526.16,
+        192.91
+      ],
+      "cropBbox": [
+        0.0,
+        0.0,
+        567.0,
+        272.91
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b2f470661ca2b2df",
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+        "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+        "page": 2,
+        "sourceBbox": [
+          36.0,
+          159.04,
+          526.16,
+          192.91
+        ],
+        "cropBbox": [
+          0.0,
+          0.0,
+          567.0,
+          272.91
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f33791bb188065bb",
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+      "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "page": 1,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/12-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-figure_caption_region-0de8098f7e.png",
+      "attachmentSha256": "sha256:bedc275e5728f6bfc3ae3a564528aaa875542bbc4c8106ae41e901b56a6c7c53",
+      "attachmentBytes": 147638,
+      "pixelWidth": 960,
+      "pixelHeight": 792,
+      "sourceBbox": [
+        108.0,
+        449.3,
+        504.0,
+        504.94
+      ],
+      "cropBbox": [
+        66.0,
+        189.3,
+        546.0,
+        584.94
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f33791bb188065bb",
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+        "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+        "page": 1,
+        "sourceBbox": [
+          108.0,
+          449.3,
+          504.0,
+          504.94
+        ],
+        "cropBbox": [
+          66.0,
+          189.3,
+          546.0,
+          584.94
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:5a1ab072fca3aef2",
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+      "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+      "page": 2,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/13-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p2-figure_caption_region-d7d10670a5.png",
+      "attachmentSha256": "sha256:0c62df124dfe026f9cfba70454b03a13ebd6e1c593038630bb6543fb95da16dd",
+      "attachmentBytes": 163541,
+      "pixelWidth": 961,
+      "pixelHeight": 779,
+      "sourceBbox": [
+        108.0,
+        233.83,
+        504.17,
+        309.5
+      ],
+      "cropBbox": [
+        66.0,
+        0.0,
+        546.17,
+        389.5
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:5a1ab072fca3aef2",
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+        "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+        "page": 2,
+        "sourceBbox": [
+          108.0,
+          233.83,
+          504.17,
+          309.5
+        ],
+        "cropBbox": [
+          66.0,
+          0.0,
+          546.17,
+          389.5
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:dc9349c9e4c0d7ff",
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+      "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+      "page": 1,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/14-high-resolution-image-synthesis-with-latent-diffusion-models-p1-figure_caption_region-24a73d2eda.png",
+      "attachmentSha256": "sha256:59185b7f099ba317a7ae1e70b094c739e1b922dcba99deeb1aa52dbe76a51382",
+      "attachmentBytes": 388084,
+      "pixelWidth": 642,
+      "pixelHeight": 874,
+      "sourceBbox": [
+        308.86,
+        320.7,
+        545.11,
+        417.33
+      ],
+      "cropBbox": [
+        266.86,
+        60.7,
+        587.11,
+        497.33
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:dc9349c9e4c0d7ff",
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+        "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+        "page": 1,
+        "sourceBbox": [
+          308.86,
+          320.7,
+          545.11,
+          417.33
+        ],
+        "cropBbox": [
+          266.86,
+          60.7,
+          587.11,
+          497.33
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f900da84c223d23b",
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+      "paperId": "qwen-image-technical-report",
+      "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+      "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+      "page": 2,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/15-qwen-image-technical-report-p2-figure_caption_region-6b728766ad.png",
+      "attachmentSha256": "sha256:818a97c540d134ef69add14dd7a763f6b3f0f43e6036138e4ade5512f47982c2",
+      "attachmentBytes": 871157,
+      "pixelWidth": 1080,
+      "pixelHeight": 703,
+      "sourceBbox": [
+        70.87,
+        750.75,
+        526.06,
+        782.64
+      ],
+      "cropBbox": [
+        28.87,
+        490.75,
+        568.06,
+        841.89
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f900da84c223d23b",
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+        "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+        "page": 2,
+        "sourceBbox": [
+          70.87,
+          750.75,
+          526.06,
+          782.64
+        ],
+        "cropBbox": [
+          28.87,
+          490.75,
+          568.06,
+          841.89
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:e2e7876129781ada",
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+      "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+      "page": 2,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/16-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-figure_caption_region-d7fcd3761f.png",
+      "attachmentSha256": "sha256:24ac541771b9dfed99ee1ef3f3bfda05503443ce0f45214298250ee670002f3d",
+      "attachmentBytes": 949127,
+      "pixelWidth": 960,
+      "pixelHeight": 723,
+      "sourceBbox": [
+        108.0,
+        690.76,
+        504.0,
+        722.91
+      ],
+      "cropBbox": [
+        66.0,
+        430.76,
+        546.0,
+        792.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:e2e7876129781ada",
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+        "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+        "page": 2,
+        "sourceBbox": [
+          108.0,
+          690.76,
+          504.0,
+          722.91
+        ],
+        "cropBbox": [
+          66.0,
+          430.76,
+          546.0,
+          792.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:c2b51e214cddbd88",
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+      "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+      "page": 4,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/17-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-equation_region-66dc218ed3.png",
+      "attachmentSha256": "sha256:4efe9630f1d1cf6a2e8d22be8ba5d6f3caf5e82ec5afbbc39a596194a4a8d9be",
+      "attachmentBytes": 64161,
+      "pixelWidth": 405,
+      "pixelHeight": 438,
+      "sourceBbox": [
+        422.22,
+        249.25,
+        484.26,
+        257.62
+      ],
+      "cropBbox": [
+        352.22,
+        159.25,
+        554.26,
+        377.62
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:c2b51e214cddbd88",
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+        "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+        "page": 4,
+        "sourceBbox": [
+          422.22,
+          249.25,
+          484.26,
+          257.62
+        ],
+        "cropBbox": [
+          352.22,
+          159.25,
+          554.26,
+          377.62
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:66d69eb91028ff7a",
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+      "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+      "page": 2,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/18-emu3.5-native-multimodal-models-are-world-learners-p2-equation_region-a0e33d60d3.png",
+      "attachmentSha256": "sha256:b31292f7d2c817ef608112ffc6fa2afbfe82413e788cb209cc93612bf48a2857",
+      "attachmentBytes": 127895,
+      "pixelWidth": 284,
+      "pixelHeight": 430,
+      "sourceBbox": [
+        505.52,
+        168.61,
+        507.18,
+        173.44
+      ],
+      "cropBbox": [
+        435.52,
+        78.61,
+        577.18,
+        293.44
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:66d69eb91028ff7a",
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+        "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+        "page": 2,
+        "sourceBbox": [
+          505.52,
+          168.61,
+          507.18,
+          173.44
+        ],
+        "cropBbox": [
+          435.52,
+          78.61,
+          577.18,
+          293.44
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:66d648eecda019ab",
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+      "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "page": 5,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/19-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p5-equation_region-dbe0abfb6f.png",
+      "attachmentSha256": "sha256:714a4089bef2945c2efd5fcd8da3a54decc08ef1746286cc1368f07badd31c58",
+      "attachmentBytes": 62062,
+      "pixelWidth": 575,
+      "pixelHeight": 423,
+      "sourceBbox": [
+        70.83,
+        652.86,
+        217.8,
+        664.48
+      ],
+      "cropBbox": [
+        0.83,
+        562.86,
+        287.8,
+        774.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:66d648eecda019ab",
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+        "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+        "page": 5,
+        "sourceBbox": [
+          70.83,
+          652.86,
+          217.8,
+          664.48
+        ],
+        "cropBbox": [
+          0.83,
+          562.86,
+          287.8,
+          774.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9330e3b05cc2a421",
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+      "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "page": 4,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/20-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p4-equation_region-f3a9aecab1.png",
+      "attachmentSha256": "sha256:e1615e558cbe9f8ff69541404868ee5ca07d45963b18b3b16db898f1ead7d83d",
+      "attachmentBytes": 68485,
+      "pixelWidth": 666,
+      "pixelHeight": 492,
+      "sourceBbox": [
+        187.32,
+        94.86,
+        379.55,
+        130.05
+      ],
+      "cropBbox": [
+        117.32,
+        4.86,
+        449.55,
+        250.05
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9330e3b05cc2a421",
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+        "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+        "page": 4,
+        "sourceBbox": [
+          187.32,
+          94.86,
+          379.55,
+          130.05
+        ],
+        "cropBbox": [
+          117.32,
+          4.86,
+          449.55,
+          250.05
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ab43b6ceff510c37",
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+      "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+      "page": 3,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/21-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p3-equation_region-dc3fd3a2d6.png",
+      "attachmentSha256": "sha256:56714bdedac5f03f7cb9749a29f31dcabec986163c387b1e0a58a0954fe88ff4",
+      "attachmentBytes": 112265,
+      "pixelWidth": 803,
+      "pixelHeight": 452,
+      "sourceBbox": [
+        243.57,
+        379.43,
+        504.67,
+        395.0
+      ],
+      "cropBbox": [
+        173.57,
+        289.43,
+        574.67,
+        515.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ab43b6ceff510c37",
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+        "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+        "page": 3,
+        "sourceBbox": [
+          243.57,
+          379.43,
+          504.67,
+          395.0
+        ],
+        "cropBbox": [
+          173.57,
+          289.43,
+          574.67,
+          515.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:db83338e56bf6311",
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+      "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+      "page": 1,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/22-high-resolution-image-synthesis-with-latent-diffusion-models-p1-equation_region-aca1ff9b30.png",
+      "attachmentSha256": "sha256:81f7f077d73763993db3d0c43b980c26040b689741ef797f121a79d41c88f838",
+      "attachmentBytes": 300501,
+      "pixelWidth": 697,
+      "pixelHeight": 443,
+      "sourceBbox": [
+        331.38,
+        178.24,
+        539.33,
+        189.38
+      ],
+      "cropBbox": [
+        261.38,
+        88.24,
+        609.33,
+        309.38
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:db83338e56bf6311",
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+        "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+        "page": 1,
+        "sourceBbox": [
+          331.38,
+          178.24,
+          539.33,
+          189.38
+        ],
+        "cropBbox": [
+          261.38,
+          88.24,
+          609.33,
+          309.38
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:989507469ee41d59",
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+      "paperId": "qwen-image-technical-report",
+      "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+      "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+      "page": 14,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/23-qwen-image-technical-report-p14-equation_region-a3d9713657.png",
+      "attachmentSha256": "sha256:89a0444b79172040abb1193a392f552b7fa89cc8def3597bc1b23fd9a2ba971e",
+      "attachmentBytes": 94390,
+      "pixelWidth": 495,
+      "pixelHeight": 439,
+      "sourceBbox": [
+        168.98,
+        129.55,
+        275.52,
+        138.88
+      ],
+      "cropBbox": [
+        98.98,
+        39.55,
+        345.52,
+        258.88
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:989507469ee41d59",
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+        "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+        "page": 14,
+        "sourceBbox": [
+          168.98,
+          129.55,
+          275.52,
+          138.88
+        ],
+        "cropBbox": [
+          98.98,
+          39.55,
+          345.52,
+          258.88
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9d836151871a6e3f",
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+      "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+      "page": 20,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/24-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p20-equation_region-3538b1d2cc.png",
+      "attachmentSha256": "sha256:2052e5c679dc4481f21966fa1fa028c6ca1073fe68525a03d3dee992ecb607e8",
+      "attachmentBytes": 70440,
+      "pixelWidth": 493,
+      "pixelHeight": 457,
+      "sourceBbox": [
+        207.74,
+        373.24,
+        313.99,
+        391.44
+      ],
+      "cropBbox": [
+        137.74,
+        283.24,
+        383.99,
+        511.44
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9d836151871a6e3f",
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+        "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+        "page": 20,
+        "sourceBbox": [
+          207.74,
+          373.24,
+          313.99,
+          391.44
+        ],
+        "cropBbox": [
+          137.74,
+          283.24,
+          383.99,
+          511.44
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fe148023f6611036",
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:layout_region:1:45ff0082a3c9dd85",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+      "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/25-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p1-layout_region-8268ff3c17.png",
+      "attachmentSha256": "sha256:5ab6ff37c1642a7e4a59b1b7507912f6b41c1b645258e725334f98d9a70ce7fd",
+      "attachmentBytes": 51888,
+      "pixelWidth": 388,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        108.3,
+        564.29,
+        205.99,
+        576.24
+      ],
+      "cropBbox": [
+        60.3,
+        444.29,
+        253.99,
+        696.24
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fe148023f6611036",
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:layout_region:1:45ff0082a3c9dd85",
+        "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+        "page": 1,
+        "sourceBbox": [
+          108.3,
+          564.29,
+          205.99,
+          576.24
+        ],
+        "cropBbox": [
+          60.3,
+          444.29,
+          253.99,
+          696.24
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b8167120d7f23f12",
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:layout_region:1:03b6139e0d9b28fb",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+      "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/26-emu3.5-native-multimodal-models-are-world-learners-p1-layout_region-7361592798.png",
+      "attachmentSha256": "sha256:e8617140ea7473e9b2adb92444c0f29d02e67d7e24fed9874492c3ff3b698708",
+      "attachmentBytes": 37007,
+      "pixelWidth": 282,
+      "pixelHeight": 504,
+      "sourceBbox": [
+        283.76,
+        214.01,
+        328.24,
+        225.97
+      ],
+      "cropBbox": [
+        235.76,
+        94.01,
+        376.24,
+        345.97
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b8167120d7f23f12",
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:layout_region:1:03b6139e0d9b28fb",
+        "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+        "page": 1,
+        "sourceBbox": [
+          283.76,
+          214.01,
+          328.24,
+          225.97
+        ],
+        "cropBbox": [
+          235.76,
+          94.01,
+          376.24,
+          345.97
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:09840109464073bc",
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:layout_region:1:f15a56f92bf8e4d7",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+      "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/27-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p1-layout_region-7e2a46b04c.png",
+      "attachmentSha256": "sha256:892467562bc198cefad785a512fb112ee619a4f109ce91e6b702840b0bb0721e",
+      "attachmentBytes": 53578,
+      "pixelWidth": 368,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        36.3,
+        354.78,
+        135.8,
+        366.74
+      ],
+      "cropBbox": [
+        0.0,
+        234.78,
+        183.8,
+        486.74
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:09840109464073bc",
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:layout_region:1:f15a56f92bf8e4d7",
+        "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+        "page": 1,
+        "sourceBbox": [
+          36.3,
+          354.78,
+          135.8,
+          366.74
+        ],
+        "cropBbox": [
+          0.0,
+          234.78,
+          183.8,
+          486.74
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:57bb333e6698a1e9",
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:layout_region:1:c96ad0bb30a29669",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+      "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/28-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-layout_region-63d62596fa.png",
+      "attachmentSha256": "sha256:22eebc21a6bfd9145889b9ec8b810d636cfbc195201cc0e491b42e4d4ca47c00",
+      "attachmentBytes": 44231,
+      "pixelWidth": 282,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        283.76,
+        523.27,
+        328.24,
+        535.23
+      ],
+      "cropBbox": [
+        235.76,
+        403.27,
+        376.24,
+        655.23
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:57bb333e6698a1e9",
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:layout_region:1:c96ad0bb30a29669",
+        "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+        "page": 1,
+        "sourceBbox": [
+          283.76,
+          523.27,
+          328.24,
+          535.23
+        ],
+        "cropBbox": [
+          235.76,
+          403.27,
+          376.24,
+          655.23
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ce737ee9755e4f67",
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:layout_region:1:9f959e82ebee205d",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+      "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/29-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-layout_region-da29262c4e.png",
+      "attachmentSha256": "sha256:89dfb2d7835beb8ff3c14cde36798e87d8dad50f653b2972cac11c6c01a0ad29",
+      "attachmentBytes": 53103,
+      "pixelWidth": 358,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        108.0,
+        518.97,
+        190.81,
+        530.93
+      ],
+      "cropBbox": [
+        60.0,
+        398.97,
+        238.81,
+        650.93
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ce737ee9755e4f67",
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:layout_region:1:9f959e82ebee205d",
+        "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+        "page": 1,
+        "sourceBbox": [
+          108.0,
+          518.97,
+          190.81,
+          530.93
+        ],
+        "cropBbox": [
+          60.0,
+          398.97,
+          238.81,
+          650.93
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:509301e0f988695f",
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:layout_region:1:47134ad1cd52c96a",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+      "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/30-high-resolution-image-synthesis-with-latent-diffusion-models-p1-layout_region-6fad153496.png",
+      "attachmentSha256": "sha256:11bfbc519e66e7ea697e255bf39227df6eb6e96885a1ce1f5d2cd5f65714e86a",
+      "attachmentBytes": 39730,
+      "pixelWidth": 281,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        146.0,
+        178.69,
+        190.48,
+        190.65
+      ],
+      "cropBbox": [
+        98.0,
+        58.69,
+        238.48,
+        310.65
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:509301e0f988695f",
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:layout_region:1:47134ad1cd52c96a",
+        "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+        "page": 1,
+        "sourceBbox": [
+          146.0,
+          178.69,
+          190.48,
+          190.65
+        ],
+        "cropBbox": [
+          98.0,
+          58.69,
+          238.48,
+          310.65
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b0600ce98ab0b586",
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:layout_region:6:ed37c9f9cfe1ded1",
+      "paperId": "qwen-image-technical-report",
+      "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+      "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+      "page": 6,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/31-qwen-image-technical-report-p6-layout_region-a735b8f591.png",
+      "attachmentSha256": "sha256:1a3286e0e8a3d45ed5efdfd5e520980a76269525464ed8f16e1a64fcf0b068b9",
+      "attachmentBytes": 36013,
+      "pixelWidth": 367,
+      "pixelHeight": 409,
+      "sourceBbox": [
+        70.87,
+        72.14,
+        157.86,
+        84.09
+      ],
+      "cropBbox": [
+        22.87,
+        0.0,
+        205.86,
+        204.09
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b0600ce98ab0b586",
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:layout_region:6:ed37c9f9cfe1ded1",
+        "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+        "page": 6,
+        "sourceBbox": [
+          70.87,
+          72.14,
+          157.86,
+          84.09
+        ],
+        "cropBbox": [
+          22.87,
+          0.0,
+          205.86,
+          204.09
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b73f605e09a3eb2e",
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:layout_region:1:3d2326e60384515a",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+      "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/32-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p1-layout_region-8d87e0bd59.png",
+      "attachmentSha256": "sha256:b740bc614cdec8b9794a53e8ec0ac361b11b613c75db45fbbb3334f68410cd99",
+      "attachmentBytes": 54558,
+      "pixelWidth": 358,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        108.0,
+        538.15,
+        190.81,
+        550.11
+      ],
+      "cropBbox": [
+        60.0,
+        418.15,
+        238.81,
+        670.11
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b73f605e09a3eb2e",
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:layout_region:1:3d2326e60384515a",
+        "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+        "page": 1,
+        "sourceBbox": [
+          108.0,
+          538.15,
+          190.81,
+          550.11
+        ],
+        "cropBbox": [
+          60.0,
+          418.15,
+          238.81,
+          670.11
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:583cce1f82087371",
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+      "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+      "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+      "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+      "page": 4,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/33-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-image_region-35e5f7c70e.png",
+      "attachmentSha256": "sha256:9dd88f8a0db6612c3a77dffa5ee228978c101b6ca7f1c366c65a004b818a80f6",
+      "attachmentBytes": 50541,
+      "pixelWidth": 237,
+      "pixelHeight": 544,
+      "sourceBbox": [
+        454.66,
+        182.06,
+        476.58,
+        213.8
+      ],
+      "cropBbox": [
+        406.66,
+        62.06,
+        524.58,
+        333.8
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:583cce1f82087371",
+        "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+        "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+        "page": 4,
+        "sourceBbox": [
+          454.66,
+          182.06,
+          476.58,
+          213.8
+        ],
+        "cropBbox": [
+          406.66,
+          62.06,
+          524.58,
+          333.8
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:55b9bd85c45161fe",
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+      "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+      "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+      "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+      "page": 1,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/34-emu3.5-native-multimodal-models-are-world-learners-p1-image_region-3adbc14e69.png",
+      "attachmentSha256": "sha256:96443176c2a62f842da535e4dee5c866b64d193d8ea964cd50659a91654e828f",
+      "attachmentBytes": 136294,
+      "pixelWidth": 902,
+      "pixelHeight": 741,
+      "sourceBbox": [
+        209.45,
+        297.25,
+        686.95,
+        427.04
+      ],
+      "cropBbox": [
+        161.45,
+        177.25,
+        612.0,
+        547.04
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:55b9bd85c45161fe",
+        "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+        "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+        "page": 1,
+        "sourceBbox": [
+          209.45,
+          297.25,
+          686.95,
+          427.04
+        ],
+        "cropBbox": [
+          161.45,
+          177.25,
+          612.0,
+          547.04
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fe0984b983264775",
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+      "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+      "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+      "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+      "page": 2,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/35-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-image_region-8473d7fc66.png",
+      "attachmentSha256": "sha256:40fdecbd3b72d98f5e265b98b31e3e088c3a5e9b54472d2b9b8428e382a1041b",
+      "attachmentBytes": 53544,
+      "pixelWidth": 320,
+      "pixelHeight": 488,
+      "sourceBbox": [
+        155.05,
+        103.77,
+        218.53,
+        123.68
+      ],
+      "cropBbox": [
+        107.05,
+        0.0,
+        266.53,
+        243.68
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fe0984b983264775",
+        "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+        "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+        "page": 2,
+        "sourceBbox": [
+          155.05,
+          103.77,
+          218.53,
+          123.68
+        ],
+        "cropBbox": [
+          107.05,
+          0.0,
+          266.53,
+          243.68
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:454a72b3e28bfd5a",
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+      "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+      "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+      "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "page": 1,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/36-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-image_region-2c98531c19.png",
+      "attachmentSha256": "sha256:06c7f480b62f252a6f2936643d20443a9eb937b263f1eb18bc69460d92afcea5",
+      "attachmentBytes": 24283,
+      "pixelWidth": 215,
+      "pixelHeight": 503,
+      "sourceBbox": [
+        147.76,
+        362.85,
+        158.69,
+        373.78
+      ],
+      "cropBbox": [
+        99.76,
+        242.85,
+        206.69,
+        493.78
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:454a72b3e28bfd5a",
+        "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+        "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+        "page": 1,
+        "sourceBbox": [
+          147.76,
+          362.85,
+          158.69,
+          373.78
+        ],
+        "cropBbox": [
+          99.76,
+          242.85,
+          206.69,
+          493.78
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:bf46d4cc023672ea",
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+      "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+      "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+      "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+      "page": 1,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/37-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-image_region-2b79f24bcc.png",
+      "attachmentSha256": "sha256:1812af8fde8d74d6ebaf3f6a4248d26e104b786ec75d79f531db89758ef92246",
+      "attachmentBytes": 23710,
+      "pixelWidth": 202,
+      "pixelHeight": 492,
+      "sourceBbox": [
+        247.66,
+        192.02,
+        252.13,
+        197.99
+      ],
+      "cropBbox": [
+        199.66,
+        72.02,
+        300.13,
+        317.99
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:bf46d4cc023672ea",
+        "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+        "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+        "page": 1,
+        "sourceBbox": [
+          247.66,
+          192.02,
+          252.13,
+          197.99
+        ],
+        "cropBbox": [
+          199.66,
+          72.02,
+          300.13,
+          317.99
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:80135830483d0128",
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+      "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+      "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+      "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+      "page": 1,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/38-high-resolution-image-synthesis-with-latent-diffusion-models-p1-image_region-079b7b928c.png",
+      "attachmentSha256": "sha256:c5d8d8dd40e067b04f1a9b233f50b979325235d96e0348a568828f7e496a1ee4",
+      "attachmentBytes": 207858,
+      "pixelWidth": 310,
+      "pixelHeight": 597,
+      "sourceBbox": [
+        427.22,
+        190.51,
+        485.81,
+        248.98
+      ],
+      "cropBbox": [
+        379.22,
+        70.51,
+        533.81,
+        368.98
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:80135830483d0128",
+        "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+        "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+        "page": 1,
+        "sourceBbox": [
+          427.22,
+          190.51,
+          485.81,
+          248.98
+        ],
+        "cropBbox": [
+          379.22,
+          70.51,
+          533.81,
+          368.98
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:4e1abab702e04534",
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+      "paperId": "qwen-image-technical-report",
+      "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+      "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+      "page": 1,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/39-qwen-image-technical-report-p1-image_region-ea864a8b48.png",
+      "attachmentSha256": "sha256:f0b38a1605887f6772071ccfa1b5c704a989365709956e76dd5e6485e2cbe2c6",
+      "attachmentBytes": 21819,
+      "pixelWidth": 213,
+      "pixelHeight": 501,
+      "sourceBbox": [
+        178.84,
+        121.98,
+        188.81,
+        131.85
+      ],
+      "cropBbox": [
+        130.84,
+        1.98,
+        236.81,
+        251.85
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:4e1abab702e04534",
+        "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+        "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+        "page": 1,
+        "sourceBbox": [
+          178.84,
+          121.98,
+          188.81,
+          131.85
+        ],
+        "cropBbox": [
+          130.84,
+          1.98,
+          236.81,
+          251.85
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:e28be7cd33d6f444",
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+      "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+      "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+      "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+      "page": 2,
+      "candidateType": "image_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/40-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-image_region-4c8abd6fd5.png",
+      "attachmentSha256": "sha256:8abca83eec0adff79087f66fee31781a419640452b7d504118eb484a5329c2d9",
+      "attachmentBytes": 1021506,
+      "pixelWidth": 572,
+      "pixelHeight": 861,
+      "sourceBbox": [
+        211.08,
+        246.86,
+        400.79,
+        436.57
+      ],
+      "cropBbox": [
+        163.08,
+        126.86,
+        448.79,
+        556.57
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:e28be7cd33d6f444",
+        "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+        "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+        "page": 2,
+        "sourceBbox": [
+          211.08,
+          246.86,
+          400.79,
+          436.57
+        ],
+        "cropBbox": [
+          163.08,
+          126.86,
+          448.79,
+          556.57
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "deferred_to_full_image_gate"
+    }
+  ],
+  "warnings": [
+    "Attachment PNGs are eval artifacts for manual web/VLM expansion only.",
+    "Generated visual descriptions must remain derivedTextForRetrieval retrieval hints, not evidence.",
+    "Whole-image and whole-page GPT/VLM work remains deferred to the full-image gate."
+  ]
+}

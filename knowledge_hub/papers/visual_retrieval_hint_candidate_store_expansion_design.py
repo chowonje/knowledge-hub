@@ -67,8 +67,8 @@ def _short_hash(value: str, *, length: int = 16) -> str:
 
 
 def _slug(value: str) -> str:
-    slug = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
-    return slug or "unknown"
+    token = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
+    return token or "unknown"
 
 
 def _contains_private_path(value: Any) -> bool:

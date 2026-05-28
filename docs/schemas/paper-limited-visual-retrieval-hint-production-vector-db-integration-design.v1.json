@@ -1,0 +1,391 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-limited-visual-retrieval-hint-production-vector-db-integration-design.v1.json",
+  "title": "Limited Visual Retrieval Hint Production Vector DB Integration Design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceSearchQualityEvalReport",
+    "sourceCandidateStoreApplyReport",
+    "sourceLabsVectorIndexApplyReport",
+    "sourceLabsVectorIndexApplyExecutorDryRun",
+    "sourceLayoutCandidateReport",
+    "input",
+    "productionVectorIntegrationDesign",
+    "scope",
+    "policy",
+    "method",
+    "counts",
+    "gate",
+    "rows",
+    "productionVectorRecordPreviews",
+    "sourceBlockers",
+    "technicalBlockers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-integration-design.v1"
+    },
+    "status": {
+      "enum": ["ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "ready_for_limited_visual_retrieval_hint_production_vector_db_integration_dry_run",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": {
+      "type": "string"
+    },
+    "sourceSearchQualityEvalReport": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "sourceCandidateStoreApplyReport": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "sourceLabsVectorIndexApplyReport": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "sourceLabsVectorIndexApplyExecutorDryRun": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "sourceLayoutCandidateReport": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "reportRef", "candidateRows", "loaded"],
+      "properties": {
+        "schema": {"type": "string"},
+        "status": {"type": "string"},
+        "reportRef": {"type": "string"},
+        "candidateRows": {"type": "integer", "minimum": 0},
+        "loaded": {"type": "boolean"}
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "productionVectorIntegrationDesign": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "targetVectorDatabaseClass",
+        "writeMethod",
+        "physicalStorePlacement",
+        "collectionPlacement",
+        "runtimeRoute",
+        "defaultRuntimeExposure",
+        "evidenceBoundary"
+      ],
+      "properties": {
+        "targetVectorDatabaseClass": {"type": "string"},
+        "writeMethod": {"type": "string"},
+        "physicalStorePlacement": {"type": "string"},
+        "collectionPlacement": {"type": "string"},
+        "runtimeRoute": {"type": "string"},
+        "defaultRuntimeExposure": {"type": "boolean"},
+        "evidenceBoundary": {"type": "string"}
+      }
+    },
+    "scope": {
+      "$ref": "#/$defs/safetyCounters"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "reportOnly",
+        "designOnly",
+        "candidateDiscoveryOnly",
+        "candidateStoreWrite",
+        "embeddingCalls",
+        "vectorIndexWrite",
+        "productionVectorIndexWrite",
+        "runtimeVisible",
+        "indexEligible",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence"
+      ],
+      "properties": {
+        "reportOnly": {"const": true},
+        "designOnly": {"const": true},
+        "candidateDiscoveryOnly": {"const": true},
+        "candidateStoreWrite": {"const": false},
+        "embeddingCalls": {"const": false},
+        "vectorIndexWrite": {"const": false},
+        "productionVectorIndexWrite": {"const": false},
+        "runtimeVisible": {"const": false},
+        "indexEligible": {"const": false},
+        "strictEvidence": {"const": false},
+        "citationGrade": {"const": false},
+        "answerableWithoutTextEvidence": {"const": false}
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "counts": {
+      "$ref": "#/$defs/counts"
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["passed", "checks", "expectedRows", "observed"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+        "expectedRows": {"type": "integer"},
+        "observed": {"type": "object", "additionalProperties": true}
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/integrationRow"}
+    },
+    "productionVectorRecordPreviews": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/integrationRow"}
+    },
+    "sourceBlockers": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "technicalBlockers": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "$defs": {
+    "sourceSummary": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef"],
+      "properties": {
+        "schema": {"type": "string"},
+        "status": {"type": "string"},
+        "decision": {"type": "string"},
+        "reportRef": {"type": "string"}
+      }
+    },
+    "safetyCounters": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "candidateStoreWriteRows",
+        "embeddingCallRows",
+        "embeddingVectorWriteRows",
+        "vectorIndexWriteRows",
+        "productionVectorIndexWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "operationalSearchIndexQueryRows",
+        "runtimeVisibleRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows",
+        "answerGenerationRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "modelCallRows",
+        "apiCallRows",
+        "graphDbWriteRows",
+        "ontologyWriteRows",
+        "memoryCardWriteRows",
+        "clusterWriteRows"
+      ],
+      "properties": {
+        "candidateStoreWriteRows": {"const": 0},
+        "embeddingCallRows": {"const": 0},
+        "embeddingVectorWriteRows": {"const": 0},
+        "vectorIndexWriteRows": {"const": 0},
+        "productionVectorIndexWriteRows": {"const": 0},
+        "databaseMutationRows": {"const": 0},
+        "indexMutationRows": {"const": 0},
+        "reindexOrReembedRows": {"const": 0},
+        "operationalSearchIndexQueryRows": {"const": 0},
+        "runtimeVisibleRows": {"const": 0},
+        "strictEvidencePromotionRows": {"const": 0},
+        "runtimeAnswerVisibleExposureRows": {"const": 0},
+        "answerGenerationRows": {"const": 0},
+        "vaultScanRows": {"const": 0},
+        "externalDownloadRows": {"const": 0},
+        "modelCallRows": {"const": 0},
+        "apiCallRows": {"const": 0},
+        "graphDbWriteRows": {"const": 0},
+        "ontologyWriteRows": {"const": 0},
+        "memoryCardWriteRows": {"const": 0},
+        "clusterWriteRows": {"const": 0}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceQualityEvalRows",
+        "sourceCandidateStoreAppliedRows",
+        "sourceLabsVectorAppliedRows",
+        "sourcePlannedVectorUpsertRows",
+        "sourceCandidateRowsCoveredByTextBaseline",
+        "sourceCandidateRowsMissingFromTextBaseline",
+        "qualityEvalQueryRows",
+        "qualityEvalTextOnlyHitAt5Rows",
+        "qualityEvalLabsVectorHitAt5Rows",
+        "qualityEvalHybridHitAt5Rows",
+        "qualityEvalHybridHitAt5LiftRows",
+        "productionVectorIntegrationCandidateRows",
+        "plannedProductionVectorRecordRows",
+        "candidateDiscoveryOnlyRows",
+        "blockedRows",
+        "policyViolationRows",
+        "privatePathLeakRows",
+        "candidateStoreWriteRows",
+        "embeddingCallRows",
+        "embeddingVectorWriteRows",
+        "vectorIndexWriteRows",
+        "productionVectorIndexWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "operationalSearchIndexQueryRows",
+        "runtimeVisibleRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "graphDbWriteRows",
+        "ontologyWriteRows",
+        "memoryCardWriteRows",
+        "clusterWriteRows",
+        "schemaViolationCount",
+        "byCandidateType"
+      ],
+      "properties": {
+        "sourceQualityEvalRows": {"type": "integer", "minimum": 0},
+        "sourceCandidateStoreAppliedRows": {"type": "integer", "minimum": 0},
+        "sourceLabsVectorAppliedRows": {"type": "integer", "minimum": 0},
+        "sourcePlannedVectorUpsertRows": {"type": "integer", "minimum": 0},
+        "sourceCandidateRowsCoveredByTextBaseline": {"type": "integer", "minimum": 0},
+        "sourceCandidateRowsMissingFromTextBaseline": {"type": "integer", "minimum": 0},
+        "qualityEvalQueryRows": {"type": "integer", "minimum": 0},
+        "qualityEvalTextOnlyHitAt5Rows": {"type": "integer", "minimum": 0},
+        "qualityEvalLabsVectorHitAt5Rows": {"type": "integer", "minimum": 0},
+        "qualityEvalHybridHitAt5Rows": {"type": "integer", "minimum": 0},
+        "qualityEvalHybridHitAt5LiftRows": {"type": "integer", "minimum": 0},
+        "productionVectorIntegrationCandidateRows": {"type": "integer", "minimum": 0},
+        "plannedProductionVectorRecordRows": {"type": "integer", "minimum": 0},
+        "candidateDiscoveryOnlyRows": {"type": "integer", "minimum": 0},
+        "blockedRows": {"type": "integer", "minimum": 0},
+        "policyViolationRows": {"type": "integer", "minimum": 0},
+        "privatePathLeakRows": {"type": "integer", "minimum": 0},
+        "candidateStoreWriteRows": {"const": 0},
+        "embeddingCallRows": {"const": 0},
+        "embeddingVectorWriteRows": {"const": 0},
+        "vectorIndexWriteRows": {"const": 0},
+        "productionVectorIndexWriteRows": {"const": 0},
+        "databaseMutationRows": {"const": 0},
+        "indexMutationRows": {"const": 0},
+        "reindexOrReembedRows": {"const": 0},
+        "operationalSearchIndexQueryRows": {"const": 0},
+        "runtimeVisibleRows": {"const": 0},
+        "strictEvidenceRows": {"const": 0},
+        "citationGradeRows": {"const": 0},
+        "answerableWithoutTextEvidenceRows": {"const": 0},
+        "graphDbWriteRows": {"const": 0},
+        "ontologyWriteRows": {"const": 0},
+        "memoryCardWriteRows": {"const": 0},
+        "clusterWriteRows": {"const": 0},
+        "schemaViolationCount": {"const": 0},
+        "byCandidateType": {"type": "object", "additionalProperties": {"type": "integer"}}
+      }
+    },
+    "integrationRow": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema",
+        "rowId",
+        "status",
+        "productionNamespace",
+        "productionVectorDocumentId",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "sourceContentHash",
+        "paperId",
+        "page",
+        "bbox",
+        "candidateType",
+        "derivedTextForRetrieval",
+        "retrievalKeywords",
+        "plannedMetadata",
+        "policy",
+        "executionPlan",
+        "blockers"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-production-vector-integration-design-row.v1"
+        },
+        "rowId": {"type": "string"},
+        "status": {
+          "enum": [
+            "planned_production_vector_integration_candidate",
+            "blocked_source_report_gate",
+            "blocked_policy_violation",
+            "blocked_record_contract_violation"
+          ]
+        },
+        "productionNamespace": {"type": "string"},
+        "productionVectorDocumentId": {"type": "string"},
+        "hintCandidateId": {"type": "string"},
+        "sourceCandidateId": {"type": "string"},
+        "sourceContentHash": {"type": "string"},
+        "paperId": {"type": "string"},
+        "page": {"type": "integer"},
+        "bbox": {"type": "array"},
+        "candidateType": {"type": "string"},
+        "derivedTextForRetrieval": {"type": "string"},
+        "retrievalKeywords": {"type": "array", "items": {"type": "string"}},
+        "plannedMetadata": {"type": "object", "additionalProperties": true},
+        "policy": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "allowedUse",
+            "strictEvidence",
+            "citationGrade",
+            "answerableWithoutTextEvidence",
+            "runtimeVisible",
+            "indexEligible",
+            "productionIndexEligible"
+          ],
+          "properties": {
+            "allowedUse": {"const": "retrieval_hint_only"},
+            "strictEvidence": {"const": false},
+            "citationGrade": {"const": false},
+            "answerableWithoutTextEvidence": {"const": false},
+            "runtimeVisible": {"const": false},
+            "indexEligible": {"const": false},
+            "productionIndexEligible": {"const": false}
+          }
+        },
+        "executionPlan": {"type": "object", "additionalProperties": true},
+        "blockers": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

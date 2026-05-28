@@ -1,0 +1,1603 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T02:50:05Z",
+  "decision": "ready_for_manual_web_vlm_expansion_run",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "attachmentPackId": "visual_annotation_expansion_attachment_pack_003",
+  "sourceExpansionPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_pack_design_003.v1.json",
+    "packRows": 24
+  },
+  "assetRootRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003",
+  "scope": {
+    "writes": "report_and_attachment_files_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 24,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "attachmentPolicy": {
+    "attachmentKind": "context_crop_png",
+    "renderSource": "already_local_pdf_only",
+    "cropExpansionPolicy": "candidate_type_context_margin_v1",
+    "pageImagePolicy": "not_written_in_expansion_pack_002",
+    "wholeImagePolicy": "deferred_to_visual_full_image_annotation_pack_design",
+    "uploadGuidance": "Upload these 24 PNG context crops with the expansion pack row JSON to the manual web/VLM session.",
+    "derivedTextUse": "retrieval_hint_only"
+  },
+  "counts": {
+    "sourcePackRows": 24,
+    "attachmentRows": 24,
+    "cropAttachmentRows": 24,
+    "pageAttachmentRows": 0,
+    "wholeImageRows": 0,
+    "imageCandidateRows": 0,
+    "figureCandidateRows": 8,
+    "tableCandidateRows": 8,
+    "equationCandidateRows": 4,
+    "layoutCandidateRows": 4,
+    "blockedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "attachmentRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:8f0e6f40ae547eee",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 21,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/01-clip-2021-p21-table_region-d4eb3193e7.png",
+      "attachmentSha256": "sha256:bafb98e6addf0b8d3fd0f4422ee3f9de9d0aba8a0c2cab75af44b588a05eeb60",
+      "attachmentBytes": 96923,
+      "pixelWidth": 681,
+      "pixelHeight": 765,
+      "sourceBbox": [
+        306.67,
+        160.45,
+        542.93,
+        202.29
+      ],
+      "cropBbox": [
+        254.67,
+        60.45,
+        594.93,
+        442.29
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:8f0e6f40ae547eee",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 21,
+        "sourceBbox": [
+          306.67,
+          160.45,
+          542.93,
+          202.29
+        ],
+        "cropBbox": [
+          254.67,
+          60.45,
+          594.93,
+          442.29
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:f7cc57aa40a43c33",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 7,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/02-mae-2021-p7-table_region-bfbbafd612.png",
+      "attachmentSha256": "sha256:4256d596aefdb679bb7d3ae98689e58ff05ce90f76cf279a8fff3003b7bea4e6",
+      "attachmentBytes": 130983,
+      "pixelWidth": 677,
+      "pixelHeight": 853,
+      "sourceBbox": [
+        50.11,
+        136.25,
+        286.36,
+        222.01
+      ],
+      "cropBbox": [
+        0.0,
+        36.25,
+        338.36,
+        462.01
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:f7cc57aa40a43c33",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 7,
+        "sourceBbox": [
+          50.11,
+          136.25,
+          286.36,
+          222.01
+        ],
+        "cropBbox": [
+          0.0,
+          36.25,
+          338.36,
+          462.01
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:725f9e3f1a875ea8",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/03-resnet-2015-p6-table_region-49e9afc133.png",
+      "attachmentSha256": "sha256:1d51611e7b20d4374f3751285d02ad933237f1bf2c366b0ec5c9c8697a08817f",
+      "attachmentBytes": 110711,
+      "pixelWidth": 677,
+      "pixelHeight": 743,
+      "sourceBbox": [
+        50.11,
+        214.26,
+        286.37,
+        245.23
+      ],
+      "cropBbox": [
+        0.0,
+        114.26,
+        338.37,
+        485.23
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:725f9e3f1a875ea8",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 6,
+        "sourceBbox": [
+          50.11,
+          214.26,
+          286.37,
+          245.23
+        ],
+        "cropBbox": [
+          0.0,
+          114.26,
+          338.37,
+          485.23
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:e8bc29694559b2ca",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 21,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/04-clip-2021-p21-table_region-5d7e41a602.png",
+      "attachmentSha256": "sha256:c024c71c9cc40a1a4dd9ccf528cab4d864400d44018bd233e27412eae520b14b",
+      "attachmentBytes": 74837,
+      "pixelWidth": 677,
+      "pixelHeight": 721,
+      "sourceBbox": [
+        54.89,
+        161.42,
+        288.72,
+        181.35
+      ],
+      "cropBbox": [
+        2.89,
+        61.42,
+        340.72,
+        421.35
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:e8bc29694559b2ca",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 21,
+        "sourceBbox": [
+          54.89,
+          161.42,
+          288.72,
+          181.35
+        ],
+        "cropBbox": [
+          2.89,
+          61.42,
+          340.72,
+          421.35
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:5caac92f47f4c81a",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 8,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/05-mae-2021-p8-table_region-4ea2608fbe.png",
+      "attachmentSha256": "sha256:2489979798be105a04fdef9ac67a33945564ebcc73533ccaa1e4c3fdfec6d5e4",
+      "attachmentBytes": 138547,
+      "pixelWidth": 677,
+      "pixelHeight": 765,
+      "sourceBbox": [
+        50.11,
+        123.25,
+        286.36,
+        165.18
+      ],
+      "cropBbox": [
+        0.0,
+        23.25,
+        338.36,
+        405.18
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:5caac92f47f4c81a",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 8,
+        "sourceBbox": [
+          50.11,
+          123.25,
+          286.36,
+          165.18
+        ],
+        "cropBbox": [
+          0.0,
+          23.25,
+          338.36,
+          405.18
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:9790fbf6893c1e99",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/06-resnet-2015-p6-table_region-d92ada1e73.png",
+      "attachmentSha256": "sha256:8d3e09b092e237ca392f79a3aa35b3a80097260b65c85d4df88b985b7ef28a88",
+      "attachmentBytes": 121512,
+      "pixelWidth": 677,
+      "pixelHeight": 721,
+      "sourceBbox": [
+        50.11,
+        395.24,
+        286.36,
+        415.24
+      ],
+      "cropBbox": [
+        0.0,
+        295.24,
+        338.36,
+        655.24
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:9790fbf6893c1e99",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 6,
+        "sourceBbox": [
+          50.11,
+          395.24,
+          286.36,
+          415.24
+        ],
+        "cropBbox": [
+          0.0,
+          295.24,
+          338.36,
+          655.24
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:94ec8ee73927d106",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 22,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/07-clip-2021-p22-table_region-9624b52f39.png",
+      "attachmentSha256": "sha256:96912abc34650df35506a5ebff1e564a1bb9ae9d0694bc69e38a6e0ca1d21870",
+      "attachmentBytes": 169628,
+      "pixelWidth": 1183,
+      "pixelHeight": 720,
+      "sourceBbox": [
+        54.89,
+        147.01,
+        541.89,
+        166.98
+      ],
+      "cropBbox": [
+        2.89,
+        47.01,
+        593.89,
+        406.98
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:94ec8ee73927d106",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 22,
+        "sourceBbox": [
+          54.89,
+          147.01,
+          541.89,
+          166.98
+        ],
+        "cropBbox": [
+          2.89,
+          47.01,
+          593.89,
+          406.98
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:89c6ebbc58615302",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 8,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/08-mae-2021-p8-table_region-0a9691a1bb.png",
+      "attachmentSha256": "sha256:a08db151b12c439e47c16dda2f5b8c2879f2bcd4225d2be8ad66dda21a39d756",
+      "attachmentBytes": 148128,
+      "pixelWidth": 682,
+      "pixelHeight": 743,
+      "sourceBbox": [
+        308.86,
+        357.57,
+        545.11,
+        388.78
+      ],
+      "cropBbox": [
+        256.86,
+        257.57,
+        597.11,
+        628.78
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:89c6ebbc58615302",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 8,
+        "sourceBbox": [
+          308.86,
+          357.57,
+          545.11,
+          388.78
+        ],
+        "cropBbox": [
+          256.86,
+          257.57,
+          597.11,
+          628.78
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:6377fe9ea1091519",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 7,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/09-clip-2021-p7-figure_caption_region-1252f24b4e.png",
+      "attachmentSha256": "sha256:81d93eacfce50604932f6025bb06eddcb2e8ddfd8568fb32e95ec0801c715d6f",
+      "attachmentBytes": 106133,
+      "pixelWidth": 642,
+      "pixelHeight": 831,
+      "sourceBbox": [
+        306.25,
+        308.38,
+        542.93,
+        383.18
+      ],
+      "cropBbox": [
+        264.25,
+        48.38,
+        584.93,
+        463.18
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:6377fe9ea1091519",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 7,
+        "sourceBbox": [
+          306.25,
+          308.38,
+          542.93,
+          383.18
+        ],
+        "cropBbox": [
+          264.25,
+          48.38,
+          584.93,
+          463.18
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:0fecac724889bae3",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 3,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/10-mae-2021-p3-figure_caption_region-04331d5d79.png",
+      "attachmentSha256": "sha256:c9e1f9779baa9b672cd7d04f2e19063c3a3272c367304c28c288e0a7efe553e5",
+      "attachmentBytes": 300741,
+      "pixelWidth": 641,
+      "pixelHeight": 762,
+      "sourceBbox": [
+        50.11,
+        258.97,
+        286.36,
+        300.98
+      ],
+      "cropBbox": [
+        8.11,
+        0.0,
+        328.36,
+        380.98
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:0fecac724889bae3",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 3,
+        "sourceBbox": [
+          50.11,
+          258.97,
+          286.36,
+          300.98
+        ],
+        "cropBbox": [
+          8.11,
+          0.0,
+          328.36,
+          380.98
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:394d74a41bc086fc",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 8,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/11-resnet-2015-p8-figure_caption_region-69bd31ffec.png",
+      "attachmentSha256": "sha256:25e925416728c85829aceda9c04d4392fb56613d7668b1474168b8d25672bf5b",
+      "attachmentBytes": 107936,
+      "pixelWidth": 1159,
+      "pixelHeight": 545,
+      "sourceBbox": [
+        50.11,
+        172.49,
+        545.11,
+        192.5
+      ],
+      "cropBbox": [
+        8.11,
+        0.0,
+        587.11,
+        272.5
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:394d74a41bc086fc",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 8,
+        "sourceBbox": [
+          50.11,
+          172.49,
+          545.11,
+          192.5
+        ],
+        "cropBbox": [
+          8.11,
+          0.0,
+          587.11,
+          272.5
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:d022fbada8c5dc50",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 8,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/12-clip-2021-p8-figure_caption_region-115dd1b617.png",
+      "attachmentSha256": "sha256:84da9349179d65ae77cab528093a6f9c2497e13804a0b46878f2382ae46e282c",
+      "attachmentBytes": 119608,
+      "pixelWidth": 641,
+      "pixelHeight": 765,
+      "sourceBbox": [
+        306.94,
+        343.75,
+        542.93,
+        385.68
+      ],
+      "cropBbox": [
+        264.94,
+        83.75,
+        584.93,
+        465.68
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:d022fbada8c5dc50",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 8,
+        "sourceBbox": [
+          306.94,
+          343.75,
+          542.93,
+          385.68
+        ],
+        "cropBbox": [
+          264.94,
+          83.75,
+          584.93,
+          465.68
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:315c3e53bc5bbd3a",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 4,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/13-mae-2021-p4-figure_caption_region-a4a60ffb47.png",
+      "attachmentSha256": "sha256:0bd99d8eb0533c128f2ef0297863a1750ecd5d1836fb7cb1429299426d4d64e3",
+      "attachmentBytes": 71783,
+      "pixelWidth": 642,
+      "pixelHeight": 611,
+      "sourceBbox": [
+        308.86,
+        194.17,
+        545.12,
+        225.14
+      ],
+      "cropBbox": [
+        266.86,
+        0.0,
+        587.12,
+        305.14
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:315c3e53bc5bbd3a",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 4,
+        "sourceBbox": [
+          308.86,
+          194.17,
+          545.12,
+          225.14
+        ],
+        "cropBbox": [
+          266.86,
+          0.0,
+          587.12,
+          305.14
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:ff5aaff461d8b382",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 9,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/14-clip-2021-p9-figure_caption_region-06b0a471fa.png",
+      "attachmentSha256": "sha256:bf165b6bb366cc0db6575eab6a1e94900edb1e89a3f546c128a81b4c1700f140",
+      "attachmentBytes": 166409,
+      "pixelWidth": 642,
+      "pixelHeight": 852,
+      "sourceBbox": [
+        54.94,
+        305.7,
+        291.01,
+        391.46
+      ],
+      "cropBbox": [
+        12.94,
+        45.7,
+        333.01,
+        471.46
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:ff5aaff461d8b382",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 9,
+        "sourceBbox": [
+          54.94,
+          305.7,
+          291.01,
+          391.46
+        ],
+        "cropBbox": [
+          12.94,
+          45.7,
+          333.01,
+          471.46
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:b3e4e92563d1e8a2",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 6,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/15-mae-2021-p6-figure_caption_region-7ded22699f.png",
+      "attachmentSha256": "sha256:ea470bfe144e0452dcc2b1e1450b3d0a8204b4fa704146a7a08fdb29c97e968e",
+      "attachmentBytes": 77971,
+      "pixelWidth": 642,
+      "pixelHeight": 655,
+      "sourceBbox": [
+        308.86,
+        216.16,
+        545.11,
+        247.13
+      ],
+      "cropBbox": [
+        266.86,
+        0.0,
+        587.11,
+        327.13
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:b3e4e92563d1e8a2",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 6,
+        "sourceBbox": [
+          308.86,
+          216.16,
+          545.11,
+          247.13
+        ],
+        "cropBbox": [
+          266.86,
+          0.0,
+          587.11,
+          327.13
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:5b2d4fc92f97acca",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/16-clip-2021-p10-figure_caption_region-007c581197.png",
+      "attachmentSha256": "sha256:634dc9f991f9ed603114d14c04d819d2a7864b02bdc60283c39c6c5df3b6b675",
+      "attachmentBytes": 106910,
+      "pixelWidth": 639,
+      "pixelHeight": 808,
+      "sourceBbox": [
+        306.94,
+        284.11,
+        541.64,
+        347.95
+      ],
+      "cropBbox": [
+        264.94,
+        24.11,
+        583.64,
+        427.95
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:5b2d4fc92f97acca",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "sourceBbox": [
+          306.94,
+          284.11,
+          541.64,
+          347.95
+        ],
+        "cropBbox": [
+          264.94,
+          24.11,
+          583.64,
+          427.95
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:0c43009a12b6af2f",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/17-clip-2021-p5-equation_region-580eca5260.png",
+      "attachmentSha256": "sha256:1c95a2a28396d5edfdc2febdb4a8d320bb2f9a99d2dd815d265195ba60021038",
+      "attachmentBytes": 101565,
+      "pixelWidth": 722,
+      "pixelHeight": 513,
+      "sourceBbox": [
+        55.85,
+        237.51,
+        290.61,
+        283.78
+      ],
+      "cropBbox": [
+        0.0,
+        147.51,
+        360.61,
+        403.78
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:0c43009a12b6af2f",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 5,
+        "sourceBbox": [
+          55.85,
+          237.51,
+          290.61,
+          283.78
+        ],
+        "cropBbox": [
+          0.0,
+          147.51,
+          360.61,
+          403.78
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:909ddf76c579d765",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/18-clip-2021-p5-equation_region-bfafd5e5ef.png",
+      "attachmentSha256": "sha256:c46b3d6bfbbd2118bae8674a332c0cda0d10266f8a8e4a53df2cee06f7b800dc",
+      "attachmentBytes": 77062,
+      "pixelWidth": 657,
+      "pixelHeight": 477,
+      "sourceBbox": [
+        55.85,
+        174.21,
+        258.39,
+        202.4
+      ],
+      "cropBbox": [
+        0.0,
+        84.21,
+        328.39,
+        322.4
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:909ddf76c579d765",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 5,
+        "sourceBbox": [
+          55.85,
+          174.21,
+          258.39,
+          202.4
+        ],
+        "cropBbox": [
+          0.0,
+          84.21,
+          328.39,
+          322.4
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:20651fab9ff83152",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/19-clip-2021-p10-equation_region-a20794562b.png",
+      "attachmentSha256": "sha256:e878fbd53ef479ec17281373cce60d673b977260350ba3345ab254f59677272a",
+      "attachmentBytes": 31889,
+      "pixelWidth": 335,
+      "pixelHeight": 443,
+      "sourceBbox": [
+        486.55,
+        236.11,
+        513.82,
+        247.37
+      ],
+      "cropBbox": [
+        416.55,
+        146.11,
+        583.82,
+        367.37
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:20651fab9ff83152",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "sourceBbox": [
+          486.55,
+          236.11,
+          513.82,
+          247.37
+        ],
+        "cropBbox": [
+          416.55,
+          146.11,
+          583.82,
+          367.37
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:6e7cbec3568fd5bd",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/20-clip-2021-p10-equation_region-c7cc7b71d0.png",
+      "attachmentSha256": "sha256:34345598e4fb44bcbde732a5532975b0fca1459ac5a5641e2f1c210cfb5e64df",
+      "attachmentBytes": 57467,
+      "pixelWidth": 723,
+      "pixelHeight": 377,
+      "sourceBbox": [
+        55.13,
+        693.95,
+        291.1,
+        717.45
+      ],
+      "cropBbox": [
+        0.0,
+        603.95,
+        361.1,
+        792.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:6e7cbec3568fd5bd",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "sourceBbox": [
+          55.13,
+          693.95,
+          291.1,
+          717.45
+        ],
+        "cropBbox": [
+          0.0,
+          603.95,
+          361.1,
+          792.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:1fec483504a4bebb",
+      "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/21-clip-2021-p1-layout_region-245d63628e.png",
+      "attachmentSha256": "sha256:3ba5c41a0e49f1d7d0dfcf4a5a2f6288ad90ecb5bb15cb914fac4ca1af8bd1a1",
+      "attachmentBytes": 39631,
+      "pixelWidth": 282,
+      "pixelHeight": 504,
+      "sourceBbox": [
+        150.2,
+        188.02,
+        194.68,
+        199.97
+      ],
+      "cropBbox": [
+        102.2,
+        68.02,
+        242.68,
+        319.97
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:1fec483504a4bebb",
+        "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 1,
+        "sourceBbox": [
+          150.2,
+          188.02,
+          194.68,
+          199.97
+        ],
+        "cropBbox": [
+          102.2,
+          68.02,
+          242.68,
+          319.97
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:7750aa3c8a75d027",
+      "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/22-mae-2021-p1-layout_region-1c3eb161fd.png",
+      "attachmentSha256": "sha256:ad68ac6c8ae9284d3a942d9d7874dde74a98c6fa3cfcb4fbd5c25d9c6097ec00",
+      "attachmentBytes": 34202,
+      "pixelWidth": 282,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        145.99,
+        203.22,
+        190.48,
+        215.17
+      ],
+      "cropBbox": [
+        97.99,
+        83.22,
+        238.48,
+        335.17
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:7750aa3c8a75d027",
+        "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 1,
+        "sourceBbox": [
+          145.99,
+          203.22,
+          190.48,
+          215.17
+        ],
+        "cropBbox": [
+          97.99,
+          83.22,
+          238.48,
+          335.17
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:ff6ed253bbca856c",
+      "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/23-alexnet-2012-p1-layout_region-fbdce7db66.png",
+      "attachmentSha256": "sha256:6e62b0c18479b8a3edff4d056836efeb0a656d683c102339b52edbd656a251cc",
+      "attachmentBytes": 46000,
+      "pixelWidth": 358,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        108.0,
+        447.68,
+        190.81,
+        459.63
+      ],
+      "cropBbox": [
+        60.0,
+        327.68,
+        238.81,
+        579.63
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:ff6ed253bbca856c",
+        "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 1,
+        "sourceBbox": [
+          108.0,
+          447.68,
+          190.81,
+          459.63
+        ],
+        "cropBbox": [
+          60.0,
+          327.68,
+          238.81,
+          579.63
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:f0d8952e19599939",
+      "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 1,
+      "candidateType": "layout_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/24-resnet-2015-p1-layout_region-7b46f50641.png",
+      "attachmentSha256": "sha256:ffad7e05747919ecf6b7628b7a44e2074ce5f9bd6cca74ac44a8218f0363a755",
+      "attachmentBytes": 33882,
+      "pixelWidth": 282,
+      "pixelHeight": 505,
+      "sourceBbox": [
+        145.99,
+        225.25,
+        190.48,
+        237.2
+      ],
+      "cropBbox": [
+        97.99,
+        105.25,
+        238.48,
+        357.2
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceExpansionPackSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+        "sourceExpansionPackRowSchema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:f0d8952e19599939",
+        "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 1,
+        "sourceBbox": [
+          145.99,
+          225.25,
+          190.48,
+          237.2
+        ],
+        "cropBbox": [
+          97.99,
+          105.25,
+          238.48,
+          357.2
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1",
+        "attachmentSource": "visual_annotation_expansion_pack_design_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": "",
+      "wholeImageAttachment": false,
+      "pageImageAttachment": false,
+      "fullImageEscalationStatus": "not_required_for_this_context_crop_gate"
+    }
+  ],
+  "warnings": [
+    "Attachment PNGs are eval artifacts for manual web/VLM expansion only.",
+    "Generated visual descriptions must remain derivedTextForRetrieval retrieval hints, not evidence.",
+    "Whole-image and whole-page GPT/VLM work remains deferred to the full-image gate."
+  ]
+}

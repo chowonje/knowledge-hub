@@ -1,0 +1,101 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: NewtonBench image crop shows data curation with counterfactual shifts of a gravity-like equation, mutations from an original formula to easy, medium, and hard equation difficulties, and an agentic exploration workflow with experiment, interpreter tool-use, law submission, robot icons, code snippets, and ENV blocks.",
+      "visibleText": "Visible fragments include Curation, Counterfactual Shifts, Original, F = G m1 * m2 / r^2, mutations, Equation Difficulty, Easy, Medium, Hard, formulas with G' and r^3, Agentic Exploration, Experiment, Interpreter Tool-use, Law Submission, and ENV labels.",
+      "retrievalKeywords": ["NewtonBench", "Counterfactual Shifts", "Equation Difficulty", "Agentic Exploration", "Interpreter Tool-use", "Law Submission", "ENV"],
+      "uncertainty": "Low for large section labels and the overall workflow; medium for small formula details and code snippets because the crop is narrow and text is small.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Emu3.5 first-page crop shows BAAI affiliation, emu.world URL, abstract text about a large-scale multimodal world model, next-token pretraining on interleaved vision-language video data, reinforcement learning post-training, Discrete Diffusion DiDA for faster inference, and benchmark charts comparing generation/editing systems.",
+      "visibleText": "Visible fragments include BAAI, https://emu.world, Abstract, Emu3.5, large-scale multimodal world model, vision and language, over 10 trillion, Discrete Diffusion DiDA, 20x, Gemini 2.5 Flash Image Nano Banana, github.com/baaivision/Emu3.5, GPT-Image-1, Nano Banana, FLUX.1[dev], Win, Loss, Tie, World Exploration, Embodied Manipulation.",
+      "retrievalKeywords": ["Emu3.5", "BAAI", "multimodal world model", "Discrete Diffusion", "DiDA", "Nano Banana", "GPT-Image-1", "FLUX.1[dev]"],
+      "uncertainty": "Low for the title-area URL, abstract heading, and major abstract phrases; medium for truncated chart labels and left-edge cropped text.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Faster R-CNN figure crop shows an image-pyramid or multi-scale object-detection scheme, with repeated scaled horse-and-rider images under gray pyramid shapes and nearby text about running classifiers at multiple scales and using reference or anchor boxes.",
+      "visibleText": "Visible fragments include multiple scaled images, scheme for addressing multiple scales, classifier is run at all scales, pyramids of reference boxes, images or pyramids of filters, and anchor.",
+      "retrievalKeywords": ["Faster R-CNN", "multiple scaled images", "image pyramid", "object detection", "classifier at all scales", "reference boxes", "anchor boxes"],
+      "uncertainty": "Low for the multi-scale image-pyramid visual and main label; medium for cropped surrounding paragraph fragments.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AutoGen figure crop illustrates a conversable agent composed from LLM, human, and tool capabilities, with dashed boxes and arrows to customized sub-agents, including Python/tool and green LLM-agent icons.",
+      "visibleText": "Visible fragments include Conversable agent, Agent Customization, Figure 1 AutoGen enables, AutoGen agents are conversable, a combination of them, and a chat potentially with.",
+      "retrievalKeywords": ["AutoGen", "Conversable agent", "Agent Customization", "multi-agent conversation", "LLM tools", "human-in-the-loop", "Python tool"],
+      "uncertainty": "Low for the figure labels and icon arrangement; medium for the cropped caption and small icon meanings.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Arithmetic/cyclic-reasoning paper title and author crop shows partial title lines, author names and contribution markers, an equal-contribution note, affiliation fragments, a small logo, and a GitHub URL fragment.",
+      "visibleText": "Visible fragments include n the Wild, Reason Abou, Sheridan Feucht, Usha Bhalla, Jack Merullo, Singh Lubana, Equal contribution, Technion IIT, and github.com/go fragment.",
+      "retrievalKeywords": ["Arithmetic in the Wild", "Reason About", "Sheridan Feucht", "Usha Bhalla", "Jack Merullo", "Singh Lubana", "Equal contribution", "Technion IIT"],
+      "uncertainty": "Medium: the visible crop cuts off the left and right sides of the title, author list, affiliations, and URL, so several text fragments are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Latent Diffusion Models first-page crop shows title and author area, Patrick Esser and Runway ML fragments, latent-diffusion URL fragment, and a comparison figure/table with ours, DALL-E, and VQGAN columns, PSNR/R-FID values, and sample images.",
+      "visibleText": "Visible fragments include Latent Diffusion Models, Patrick Esser, Bjorn, Runway ML, latent-diffusion, ours f=4, DALL-E f=8, VQGAN f=16, PSNR, R-FID, upper bound on achievable quality, and Since diffusion models.",
+      "retrievalKeywords": ["Latent Diffusion Models", "Patrick Esser", "Runway ML", "DALL-E", "VQGAN", "PSNR", "R-FID", "high-resolution image synthesis"],
+      "uncertainty": "Low for the main author/model/comparison labels; medium for cropped title beginning, affiliations, numeric metrics, and bottom paragraph fragments.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Qwen-Image technical report first-page crop shows partial title, project/link icons including a GitHub icon, blue URL fragments, and opening abstract text mentioning Qwen-Image, significant advances, challenges, and text rendering.",
+      "visibleText": "Visible fragments include Qwen, several https URL fragments beside link icons, GitHub icon, present Qwen-Image, achieves significant advances, address the challenges, large-scale, and text rendering.",
+      "retrievalKeywords": ["Qwen", "Qwen-Image", "technical report", "GitHub", "text rendering", "image generation", "project links"],
+      "uncertainty": "Medium to high: the crop is narrow and cuts off the title, URLs, and most abstract lines, leaving only partial fragments.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Imagen photorealistic text-to-image sample gallery crop shows generated images and prompt captions including a Shiba Inu with a backpack riding a bike, a corgi in a sushi house, a partial swimmer prompt, a sloth prompt fragment, and partial bottom-row images of a rocket, dragon fruit, and strawberry.",
+      "visibleText": "Visible fragments include Imagen badges, A photo of a Shiba Inu dog with a backpack riding a bike, wearing sunglasses and a beach hat, A cute corgi lives in a house made out of sushi, 400m Butter fragment, A cute sloth, golden glow, and cropped neighboring prompt text.",
+      "retrievalKeywords": ["Imagen", "photorealistic text-to-image diffusion", "text-to-image samples", "Shiba Inu riding a bike", "corgi sushi house", "prompt captions", "generated images"],
+      "uncertainty": "Low for the central Shiba Inu and corgi captions and visible image content; medium for cropped neighboring images and prompt fragments.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

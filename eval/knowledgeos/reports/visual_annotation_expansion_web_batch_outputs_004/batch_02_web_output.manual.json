@@ -1,0 +1,184 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:f7695e0650ad9755",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 7 showing a horizontal bar chart of data efficiency for zero-shot transfer, measured as labeled examples per class required to match zero-shot performance across datasets; mean 20.8 and median 5.4 are shown.",
+      "visibleText": "Visible fragments include: Learning Transferable Visual Models From Natural Language Supervisi...; # of labeled examples per class required to match zero-shot; FER2013 184; CIFAR10 81; Food101 64; OxfordPets 48; Country211 32; ImageNet 16.0; PCam 14.7; SST2 14.4; Kinetics700 13.6; STL10 12.7; CIFAR100 12.0; HatefulMemes 9.8; StanfordCars 6.0; MNIST 4.8; SUN397 3.9; Caltech101 3.5; KITTI Distance 2.9; UCF101 2.9; Birdsnap 2.7; DTD 2.6; FGVCAircraft 2.0; GTSRB 1.6; CLEVRCounts 1.5; RESISC45 1.5; EuroSAT 0.9; Flowers102 0.9; Mean: 20.8; Median: 5.4; Figure 7. The data efficiency of zero-shot transfer varies widely.; Values are estimated based on log-linear interpolation of 1, 2, 4, 8, 16-shot and fully supervised results.",
+      "retrievalKeywords": [
+        "Figure 7",
+        "data efficiency",
+        "zero-shot transfer",
+        "labeled examples per class",
+        "CLIP",
+        "FER2013",
+        "CIFAR10",
+        "Flowers102",
+        "EuroSAT",
+        "mean 20.8 median 5.4"
+      ],
+      "uncertainty": "Low for the main bar chart and caption text; the page header and neighboring right-column content are clipped, so those fragments are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:fb84bd6d006dd177",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE Figure 6 comparing mask sampling strategies with example reconstructions for random 75%, block 50%, and grid 75% masking; caption links strategy to pretext task difficulty, reconstruction quality, and representations.",
+      "visibleText": "Visible fragments include: random 75%; block 50%; grid 75%; Figure 6. Mask sampling strategies determine the pretext task difficulty, influencing reconstruction quality and representations (Table 1f). Here each output is from an MAE trained with the specified masking strategy. Left: random sampling (our default). Middle: block-wise sampling [2] that removes large random blocks. Right: grid-wise sampling that keeps one of every four patches. Images are from the validation set.; Reconstruction target. We compare different reconstruction targets in Table 1d. Our results thus far are based on pixels without (per-patch) normalization. Using pixels with normalization improves accuracy.",
+      "retrievalKeywords": [
+        "Figure 6",
+        "mask sampling strategies",
+        "random 75%",
+        "block 50%",
+        "grid 75%",
+        "MAE",
+        "reconstruction quality",
+        "pretext task difficulty",
+        "Reconstruction target",
+        "Table 1f"
+      ],
+      "uncertainty": "Low for the figure labels and caption; the right-side neighboring plots and text are only partially visible and not fully transcribed.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:11:d9042e6c82546c0e",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 9 plotting zero-shot error against model GFLOPs for RN50 through RN50x64, showing smoother scaling of zero-shot CLIP performance with model compute and lightly shaded individual evaluation lines.",
+      "visibleText": "Visible fragments include: Learning Transferable Visual Models From Natural Language Supervisi...; Error (%); Model GFLOPs; RN50; RN101; RN50x4; RN50x16; RN50x64; 6.1; 9.9; 21.5; 75.3; 265.9; Figure 9. Zero-shot CLIP performance scales smoothly as a function of model compute. Across 39 evals on 36 different datasets, average zero-shot error is well modeled by a log-log linear trend across a 44x range of compute spanning 5 different CLIP models. Lightly shaded lines are performance on individual evals, showing that performance is much more varied despite the smooth overall trend.; D’Amour et al. (2020).",
+      "retrievalKeywords": [
+        "Figure 9",
+        "zero-shot CLIP performance",
+        "model compute",
+        "Model GFLOPs",
+        "Error (%)",
+        "RN50",
+        "RN50x64",
+        "log-log linear trend",
+        "39 evals",
+        "36 datasets"
+      ],
+      "uncertainty": "Low for the central chart and caption; surrounding column text is cropped and only fragmentary.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:7:5e6020a5e57aa862",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE Figure 9 showing partial fine-tuning results for ViT-L as the number of fine-tuned Transformer blocks increases, comparing MAE baseline against MoCo v3.",
+      "visibleText": "Visible fragments include: # blocks fine-tuned; MAE baseline; MoCo v3; 0; 1; 2; 4; 6; 12; 18; 24; 73.5; 81.0; 83.1; 84.2; 84.4; 84.6; 84.7; 84.9; 77.6; 79.9; 80.8; 81.6; 81.9; 83.2; 83.8; 84.1; Figure 9. Partial fine-tuning results of ViT-L w.r.t. the number of fine-tuned Transformer blocks under the default settings from Table 1. Tuning 0 blocks is linear probing; 24 is full fine-tuning. Our MAE representations are less linearly separable, but are consistently better than MoCo v3 if one or more blocks are fine tuned.; The MAE models in Table 3 are pre-trained for 1600 epochs for better accuracy (Figure 7).",
+      "retrievalKeywords": [
+        "Figure 9",
+        "partial fine-tuning",
+        "ViT-L",
+        "fine-tuned Transformer blocks",
+        "MAE baseline",
+        "MoCo v3",
+        "linear probing",
+        "full fine-tuning",
+        "Table 1",
+        "1600 epochs"
+      ],
+      "uncertainty": "Low for the main plot labels, numeric annotations, and caption; left and right page margins contain clipped neighboring content.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:12:36479d77a4a94f87",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 10 comparing linear probe performance of CLIP models to state-of-the-art computer vision models, with average score versus forward-pass GFLOPs/image across two evaluation suites.",
+      "visibleText": "Visible fragments include: Average Score (%); Forward-pass GFLOPs/image; CLIP-ViT; CLIP-ResNet; EfficientNet-NoisyStudent; EfficientNet; Instagram-pretrained; SimCLRv2; BYOL; MoCo; ViT (ImageNet-21k); BiT-M; BiT-S; ResNet; RN50; RN101; RN50x4; RN50x16; B/32; B/16; L2-800; L2-475; Figure 10. Linear probe performance of CLIP models in comparison with state-of-the-art computer vision models, including EfficientNet, MoCo, Instagram-pretrained ResNeXt models, BiT, ViT, SimCLRv2, BYOL, and the original ResNet models. (Left) Scores are averaged over 12 datasets studied by Kornblith et al. (2019). (Right) Scores are averaged over 27 datasets that contain a wider variety of distributions. Dotted lines indicate models fine-tuned or evaluated on images at a higher-resolution than pre-training. See Table 10 for individual scores and Figure 20 for plots for each dataset.; On this broader evaluation suite, the benefits of CLIP are more clear.; The improvement in average score of the best model over previous systems increases from 2.6% to 5%.",
+      "retrievalKeywords": [
+        "Figure 10",
+        "linear probe performance",
+        "CLIP models",
+        "state-of-the-art computer vision models",
+        "Average Score (%)",
+        "Forward-pass GFLOPs/image",
+        "EfficientNet",
+        "BiT",
+        "ViT",
+        "SimCLRv2"
+      ],
+      "uncertainty": "Low for the caption, legend, and visible chart labels; the top of the plots and lower body paragraphs are cropped, so some plotted points and prose are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:13:d74e50f7fc0acd19",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE Figure 10 displaying uncurated random ImageNet validation sample triplets: masked image, MAE reconstruction, and ground-truth image, with 75% masking ratio.",
+      "visibleText": "Visible fragments include: Figure 10. Uncurated random samples on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 75%.; 13.",
+      "retrievalKeywords": [
+        "Figure 10",
+        "uncurated random samples",
+        "ImageNet validation images",
+        "masked image",
+        "MAE reconstruction",
+        "ground-truth",
+        "masking ratio 75%"
+      ],
+      "uncertainty": "Low for the caption; the image grid is visually summarized at a high level and individual photo contents are not exhaustively enumerated.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:13:c57a4c0a359c0b1e",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 11 showing a horizontal delta-score bar chart comparing logistic regression on CLIP features versus EfficientNet L2 Noisy Student features across 27 datasets, followed by the section heading on robustness to natural distribution shift.",
+      "visibleText": "Visible fragments include: Δ Score (%); Logistic Regression on CLIP vs. EfficientNet L2 NS; Country211 +22.7; HatefulMemes +18.8; StanfordCars +15.9; GTSRB +14.7; SUN397 +6.5; Kinetics700 +6.2; RESISC45 +5.1; FER2013 +4.5; Food101 +3.9; FGVCAircraft +3.2; UCF101 +3.1; KITTI Distance +2.3; Birdsnap +1.4; Flowers102 +1.4; Caltech101 +1.3; EuroSAT +0.9; MNIST +0.6; DTD +0.5; VOC2007 +0.5; STL10 +0.0; OxfordPets -0.5; CIFAR10 -0.8; PatchCamelyon -1.2; CIFAR100 -1.7; CLEVRCounts -2.4; ImageNet -3.0; Figure 11. CLIP’s features outperform the features of the best ImageNet model on a wide variety of datasets. Fitting a linear classifier on CLIP’s features outperforms using the Noisy Student EfficientNet-L2 on 21 out of 27 datasets.; 3.3. Robustness to Natural Distribution Shift.",
+      "retrievalKeywords": [
+        "Figure 11",
+        "CLIP features",
+        "EfficientNet L2 NS",
+        "Logistic Regression",
+        "Delta Score",
+        "Noisy Student EfficientNet-L2",
+        "Country211",
+        "HatefulMemes",
+        "ImageNet",
+        "Robustness to Natural Distribution Shift"
+      ],
+      "uncertainty": "Low for the visible bars, labels, and caption; the very top of the chart and neighboring right-column text are partially clipped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:14:78c3aa6879bfbb7e",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE Figure 11 displaying uncurated random COCO validation sample triplets using an MAE trained on ImageNet: masked image, MAE reconstruction, and ground-truth image, with 75% masking ratio.",
+      "visibleText": "Visible fragments include: Figure 11. Uncurated random samples on COCO validation images, using an MAE trained on ImageNet. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 75%.; 14.",
+      "retrievalKeywords": [
+        "Figure 11",
+        "uncurated random samples",
+        "COCO validation images",
+        "MAE trained on ImageNet",
+        "masked image",
+        "MAE reconstruction",
+        "ground-truth",
+        "masking ratio 75%"
+      ],
+      "uncertainty": "Low for the caption; the image grid is visually summarized at a high level and individual sample contents are not exhaustively enumerated.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

@@ -60,6 +60,10 @@ DEFAULT_EVAL_PAPERS: tuple[dict[str, str], ...] = (
     },
 )
 
+KNOWN_PAPER_IDS_BY_FILENAME: dict[str, str] = {
+    str(row["filename"]): str(row["paperId"]) for row in DEFAULT_EVAL_PAPERS
+}
+
 
 @dataclass(frozen=True, slots=True)
 class PaperSpec:
@@ -80,6 +84,46 @@ def default_paper_specs() -> list[PaperSpec]:
         PaperSpec(paper_id=str(row["paperId"]), filename=str(row["filename"]))
         for row in DEFAULT_EVAL_PAPERS
     ]
+
+
+def paper_id_from_filename(filename: str, *, used_paper_ids: set[str] | None = None) -> str:
+    known = KNOWN_PAPER_IDS_BY_FILENAME.get(str(filename))
+    if known:
+        return known
+    stem = Path(str(filename)).stem
+    base = _slug(stem)[:96].strip("-") or "paper"
+    used = used_paper_ids if used_paper_ids is not None else set()
+    if base not in used:
+        return base
+    digest = _short_hash(str(filename), length=8)
+    candidate = f"{base[:87].strip('-')}-{digest}".strip("-")
+    counter = 2
+    while candidate in used:
+        suffix = f"{digest}-{counter}"
+        candidate = f"{base[: max(1, 96 - len(suffix) - 1)].strip('-')}-{suffix}".strip("-")
+        counter += 1
+    return candidate
+
+
+def discover_local_paper_specs(
+    papers_root: Path | None = None,
+    *,
+    limit: int | None = None,
+) -> list[PaperSpec]:
+    root = papers_root or default_papers_root()
+    pdf_paths = sorted(
+        [path for path in root.expanduser().glob("*.pdf") if path.is_file()],
+        key=lambda path: path.name.casefold(),
+    )
+    if limit is not None:
+        pdf_paths = pdf_paths[: max(0, int(limit))]
+    used: set[str] = set()
+    specs: list[PaperSpec] = []
+    for path in pdf_paths:
+        paper_id = paper_id_from_filename(path.name, used_paper_ids=used)
+        used.add(paper_id)
+        specs.append(PaperSpec(paper_id=paper_id, filename=path.name))
+    return specs
 
 
 def utc_now_iso() -> str:
@@ -107,8 +151,8 @@ def _short_hash(value: str, *, length: int = 12) -> str:
 
 
 def _slug(value: str) -> str:
-    slug = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
-    return slug or "unknown"
+    token = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
+    return token or "unknown"
 
 
 def _round_bbox(value: Any) -> list[float]:
@@ -136,8 +180,8 @@ def _clean_heading_path(value: Any, *, page: int) -> list[str]:
     if isinstance(value, (list, tuple)):
         headings = [normalize_text(item) for item in value if normalize_text(item)]
     else:
-        heading_text = normalize_text(value)
-        headings = [part.strip() for part in heading_text.split(">") if part.strip()] if heading_text else []
+        token = normalize_text(value)
+        headings = [part.strip() for part in token.split(">") if part.strip()] if token else []
     return headings or ([f"Page {page}"] if page > 0 else [])
 
 
@@ -430,16 +474,16 @@ def extract_candidates_from_images(
 
 
 def _candidate_type_from_element_type(element_type: str, text: str) -> str:
-    element_kind = element_type.casefold()
-    if "table" in element_kind:
+    token = element_type.casefold()
+    if "table" in token:
         return "table_region"
-    if "equation" in element_kind or "formula" in element_kind:
+    if "equation" in token or "formula" in token:
         return "equation_region"
-    if "image" in element_kind or "picture" in element_kind:
+    if "image" in token or "picture" in token:
         return "image_region"
-    if "figure" in element_kind or _caption_match(text):
+    if "figure" in token or _caption_match(text):
         return "figure_caption_region"
-    if "heading" in element_kind or "title" in element_kind or "section" in element_kind:
+    if "heading" in token or "title" in token or "section" in token:
         return "layout_region"
     return ""
 
@@ -846,9 +890,11 @@ __all__ = [
     "build_visual_layout_candidate_list_report",
     "default_paper_specs",
     "default_papers_root",
+    "discover_local_paper_specs",
     "extract_candidates_from_blocks",
     "extract_candidates_from_images",
     "extract_candidates_from_parsed_elements",
+    "paper_id_from_filename",
     "render_markdown_report",
     "write_visual_layout_candidate_list_reports",
 ]

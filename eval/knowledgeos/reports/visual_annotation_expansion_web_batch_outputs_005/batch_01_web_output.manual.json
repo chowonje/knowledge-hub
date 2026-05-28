@@ -1,0 +1,101 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: NewtonBench Table 1 compares scientific law discovery benchmarks including AI Feynman, EmpiricalBench, LLM-SR, EvoSLD, LSR-Transform, LSR-Synth, PhysSymbol, and NewtonBench, across problem count, discovery scope, scientific relevance, memorization-free status, scalability, difficulty, and data acquisition.",
+      "visibleText": "Visible fragments include Published as a conference paper at ICLR 2026, Table 1 comparison of benchmarks for scientific law discovery, Benchmark, # Problems, Discovery Scope, Sci. Rel., Mem.-Free, Scalable, Difficulty, Data Acquisition, Traditional Real-World Laws, Out-of-Distribution Laws, Transformed Laws, Synthetic Laws, NewtonBench, 324, Model System, Multi-dimensional, Active Exploration.",
+      "retrievalKeywords": ["NewtonBench", "scientific law discovery benchmark", "memorization-free", "scientific relevance", "active exploration", "model system"],
+      "uncertainty": "Most table text is legible, but some small check and cross marks may be visually ambiguous at this crop resolution.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Emu3.5 crop shows part of a model configuration table and an overall training pipeline with next-token prediction, supervised fine-tuning, and reinforcement learning stages.",
+      "visibleText": "Visible fragments include Table 1 model configurations of Emu3.5, Hidden Size 5120, Intermediate Size 25600, Heads Q/KV 64/8, Vocabulary 282926, Supervised Fine-tuning, Reinforcement Learning, SFT Model, SFT Data 150B, RL Prompts 100k, Reward System, Group Relative Policy Optimization, Figure 4 overall training pipeline of Emu3.5.",
+      "retrievalKeywords": ["Emu3.5", "model configurations", "hidden size 5120", "intermediate size 25600", "SFT Data 150B", "RL Prompts 100k", "training pipeline"],
+      "uncertainty": "The crop truncates the left and right sides of both the table and the pipeline figure, so only central visible fragments are described.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Faster R-CNN Table 1 reports learned average proposal sizes for anchors using the ZF net at shorter-side scale s = 600, listing anchor scales and aspect ratios with corresponding proposal dimensions.",
+      "visibleText": "Visible fragments include Table 1 learned average proposal size for each anchor using the ZF net, anchor entries 128^2, 256^2, 512^2 with 2:1, 1:1, 1:2 ratios, proposal sizes such as 188x111, 113x114, 70x92, 416x229, 261x284, 174x332, 768x437, 499x501, 355x715, plus Alternating training, Approximate joint training, and 3.3 Implementation Details.",
+      "retrievalKeywords": ["Faster R-CNN", "region proposal networks", "anchor", "proposal size", "ZF net", "s = 600", "Implementation Details"],
+      "uncertainty": "The table is legible; surrounding paragraph text is partially cut off at the bottom edge.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AutoGen Table 1 summarizes differences between AutoGen and related multi-agent systems across infrastructure, conversation pattern, execution capability, and human involvement.",
+      "visibleText": "Visible fragments include Table 1 differences between AutoGen and other related multi-agent systems, infrastructure, conversation pattern, execution-capable, human involvement, AutoGen, Multi-agent Debate, CAMEL, BabyAGI, MetaGPT, flexible, static, chat/skip, check marks and crosses.",
+      "retrievalKeywords": ["AutoGen", "multi-agent systems", "conversation pattern", "execution-capable", "human involvement", "CAMEL", "BabyAGI", "MetaGPT"],
+      "uncertainty": "The table is mostly legible; check and cross symbols are described visually from the crop.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Arithmetic in the Wild crop discusses omega task scores for MLP neurons at layer 18, addition-neuron ablations, Fourier-feature partitioning, and possible missing larger periods.",
+      "visibleText": "Visible fragments include omega_task equation, threshold omega greater than 0.4, 16 neurons for months, 15 for weekdays, 26 for hours, 28 for addition, Neuron ablations, N_add set notation, zero-ablation decreases addition accuracy from 95 to 24 percent, ablating other layer 18 MLP neurons retains 95 to 86 percent, Fourier features, periods 2, 5, 10, 20, 50, 100, and 5.2 How Addition Neurons Compute the Sum.",
+      "retrievalKeywords": ["arithmetic in the wild", "omega task", "addition neurons", "layer 18 MLP neurons", "neuron ablations", "Fourier features", "larger periods"],
+      "uncertainty": "The crop appears to be a text region rather than a visible table; lower text continues beyond the crop.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Latent Diffusion Models crop shows the LDM objective and conditioning mechanisms section, including conditional denoising, cross-attention, and Q/K/V definitions.",
+      "visibleText": "Visible fragments include L_LDM objective, time-conditional UNet, 3.3 Conditioning Mechanisms, conditional distributions p(z|y), conditional denoising autoencoder, text, semantic maps, image-to-image translation tasks, cross-attention mechanism, Attention(Q,K,V), Q, K, and V definitions.",
+      "retrievalKeywords": ["latent diffusion models", "LDM objective", "conditioning mechanisms", "conditional denoising autoencoder", "cross-attention", "UNet backbone", "Q K V"],
+      "uncertainty": "The crop is text-only and the left margin is partially cut off; no complete table is visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Qwen-Image Table 1 gives architecture configuration for VLM, VAE, and MMDiT components including layer counts, attention heads, head sizes, intermediate sizes, patch or scale factors, channel sizes, and parameter counts.",
+      "visibleText": "Visible fragments include Table 1 Configuration of Qwen-Image architecture, VLM with ViT and LLM, VAE with Enc and Dec, MMDiT, # Layers 32, 28, 11, 15, 60, heads 16/16, 28/4, 24/24, intermediate sizes 3456, 18944, 12288, patch or scale factor 14, 8x8, 2, parameters 7B, 54M, 73M, 20B.",
+      "retrievalKeywords": ["Qwen-Image", "architecture configuration", "VLM", "VAE", "MMDiT", "ViT", "LLM", "20B parameters"],
+      "uncertainty": "The central table is legible, but surrounding figure and paragraph text are truncated by the crop.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: Imagen Table 2 reports COCO 256x256 human evaluation comparing original images and Imagen outputs for photorealism and alignment, with a separate no-people prompt subset.",
+      "visibleText": "Visible fragments include Table 2 COCO 256 x 256 human evaluation comparing model outputs and original images, Model, Photorealism, Alignment, Original, Imagen, No people, original values around 50.0 percent and alignment around 91 to 92, prompt filtering terms for people such as man, woman, person, child, boy, girl, player, workers, spectators.",
+      "retrievalKeywords": ["photorealistic text-to-image diffusion", "COCO 256 x 256", "human evaluation", "Imagen", "photorealism", "alignment", "no people prompts"],
+      "uncertainty": "The table is legible, but the left edge of the page shows unrelated cropped content from an adjacent table or column.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

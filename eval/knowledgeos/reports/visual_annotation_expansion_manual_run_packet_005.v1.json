@@ -1,0 +1,1395 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T08:29:24Z",
+  "decision": "ready_for_manual_web_vlm_expansion_run",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "packetId": "visual_annotation_expansion_manual_run_packet_005",
+  "sourceExpansionPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_pack_design_005.v1.json",
+    "packRows": 40
+  },
+  "sourceAttachmentPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005.v1.json",
+    "attachmentRows": 40
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualWebModelOutputRows": 0,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "outputContract": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+    "allowedUse": "retrieval_hint_only",
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false
+  },
+  "counts": {
+    "sourcePackRows": 40,
+    "attachmentRows": 40,
+    "packetRows": 40,
+    "batchRows": 5,
+    "missingAttachmentRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "batches": [
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_01",
+      "batchNumber": 1,
+      "totalBatches": 5,
+      "prompt": "You are annotating visual retrieval hints for batch 1 of 5. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/01-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p2-table_region-1fecf35c16.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/02-emu3.5-native-multimodal-models-are-world-learners-p6-table_region-ea8e904c4c.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/03-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p6-table_region-00a96171af.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/04-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p15-table_region-5cd6344640.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/05-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p8-table_region-c45ef0401e.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/06-high-resolution-image-synthesis-with-latent-diffusion-models-p4-table_region-c388a21db1.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/07-qwen-image-technical-report-p9-table_region-7889ebd3d8.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/08-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p7-table_region-0bafbfcfff.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f438a521a431c93a",
+          "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+          "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+          "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+          "page": 2,
+          "bbox": [
+            108.0,
+            91.06,
+            504.0,
+            122.94
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/01-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p2-table_region-1fecf35c16.png",
+          "copyPasteContext": "paperId=newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents page=2 candidateType=table_region bbox=[108.0, 91.06, 504.0, 122.94] plannedCropRef=papers_dir/visual_layout_planned_crops/newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents/page-2/visual-layout-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-table_region-2-43ba20bbd82c40cc.png captionText=Comparison of benchmarks for scientific law discovery. The “Sci. Rel.” column (scientific relevance) indicates if problems are derived from real-world scientific laws (versus being synthetic). The “Mem.-Free” column indicates whether the benchmark fully prevents memorization. nearbyText=Published as a conference paper at ICLR 2026 Table 1: Comparison of benchmarks for scientific law discovery. The “Sci. Rel.” column (scientific relevance) indicates if problems are derived from real-world scientific laws (versus being synthetic). The “Mem.-Free” column indicates whether the benchmark fully prevents memorization. Benchmark # Problems Discovery Scope Sci. Rel. Mem.-Free Scalable Difficulty Data Acqu...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:table_region:2:43ba20bbd82c40cc",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:bc17b9f438b4acbe",
+          "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+          "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+          "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+          "page": 6,
+          "bbox": [
+            222.12,
+            108.99,
+            389.89,
+            118.96
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/02-emu3.5-native-multimodal-models-are-world-learners-p6-table_region-ea8e904c4c.png",
+          "copyPasteContext": "paperId=emu3.5-native-multimodal-models-are-world-learners page=6 candidateType=table_region bbox=[222.12, 108.99, 389.89, 118.96] plannedCropRef=papers_dir/visual_layout_planned_crops/emu3.5-native-multimodal-models-are-world-learners/page-6/visual-layout-emu3.5-native-multimodal-models-are-world-learners-table_region-6-7e5ddeb596848dc5.png captionText=Model configurations of Emu3.5. nearbyText=34.1 64 5120 25600 64/8 282926 32768 Table 1: Model configurations of Emu3.5. Next-Token Prediction Group Relative Policy Optimization",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:table_region:6:7e5ddeb596848dc5",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fca66451ab4b129e",
+          "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+          "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+          "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+          "page": 6,
+          "bbox": [
+            58.6,
+            53.72,
+            503.57,
+            64.32
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/03-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p6-table_region-00a96171af.png",
+          "copyPasteContext": "paperId=faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks page=6 candidateType=table_region bbox=[58.6, 53.72, 503.57, 64.32] plannedCropRef=papers_dir/visual_layout_planned_crops/faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks/page-6/visual-layout-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-table_region-6-bf4da7f980d217f7.png captionText=the learned average proposal size for each anchor using the ZF net (numbers for s = 600). nearbyText=6 Table 1: the learned average proposal size for each anchor using the ZF net (numbers for s = 600). anchor 1282, 2:1 1282, 1:1 1282, 1:2 2562, 2:1 2562, 1:1 2562, 1:2 5122, 2:1 5122, 1:1 5122, 1:2 proposal 188×111 113×114 70×92 416×229 261×284 174×332 768×437 499×501 355×715",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:table_region:6:bf4da7f980d217f7",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b517531758d46beb",
+          "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+          "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+          "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+          "page": 15,
+          "bbox": [
+            108.0,
+            187.31,
+            504.0,
+            286.59
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/04-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p15-table_region-5cd6344640.png",
+          "copyPasteContext": "paperId=autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation page=15 candidateType=table_region bbox=[108.0, 187.31, 504.0, 286.59] plannedCropRef=papers_dir/visual_layout_planned_crops/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation/page-15/visual-layout-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-table_region-15-bf53567890d6c9c9.png captionText=Summary of differences between AutoGen and other related multi-agent systems. infras- tructure: whether the system is designed as a generic infrastructure for building LLM applications. conversation pattern: the types of patterns supported by the implemented systems. Under the... nearbyText=There are a few other specialized single-agent or multi-agent systems, such as Voyager (Wang et al., 2023a) and Generative Agents (Park et al., 2023), which we skip due to lower relevance. In Table 1, we summarize differences between AutoGen and the most relevant multi-agent systems. Table 1: Summary of differences between AutoGen and other related multi-agent systems. infras- tructure: whether the system is desig...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:table_region:15:bf53567890d6c9c9",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:3ec2240567b43387",
+          "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+          "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+          "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+          "page": 8,
+          "bbox": [
+            107.25,
+            320.08,
+            505.24,
+            395.51
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/05-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p8-table_region-c45ef0401e.png",
+          "copyPasteContext": "paperId=arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts page=8 candidateType=table_region bbox=[107.25, 320.08, 505.24, 395.51] plannedCropRef=papers_dir/visual_layout_planned_crops/arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts/page-8/visual-layout-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-table_region-8-96e7bcf8b6c5c548.png nearbyText=Empirically, only a small number of MLP neurons at layer 18 have high ω. We plot the distribution of ω for each task in Figure 42; with a threshold of ω > 0.4, we identify 16 neurons for months, 15 neurons for weekdays, 26 for hours, and 28 for addition. All neurons important for cyclic tasks are a strict subset of those important for addition, except for a single outlying hours neuron, which we ignore. See App. H...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:table_region:8:96e7bcf8b6c5c548",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:1e3919fd00a72a67",
+          "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+          "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+          "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+          "page": 4,
+          "bbox": [
+            308.86,
+            380.8,
+            545.12,
+            646.4
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/06-high-resolution-image-synthesis-with-latent-diffusion-models-p4-table_region-c388a21db1.png",
+          "copyPasteContext": "paperId=high-resolution-image-synthesis-with-latent-diffusion-models page=4 candidateType=table_region bbox=[308.86, 380.8, 545.12, 646.4] plannedCropRef=papers_dir/visual_layout_planned_crops/high-resolution-image-synthesis-with-latent-diffusion-models/page-4/visual-layout-high-resolution-image-synthesis-with-latent-diffusion-models-table_region-4-cdab6c275bd25d05.png nearbyText=The neural backbone ϵθ(◦, t) of our model is realized as a time-conditional UNet [71]. Since the forward process is ﬁxed, zt can be efﬁciently obtained from E during training, and samples from p(z) can be decoded to image space with a single pass through D. 3.3. Conditioning Mechanisms Similar to other types of generative models [56, 83], diffusion models are in principle capable of modeling conditional distributi...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:table_region:4:cdab6c275bd25d05",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9f69a12e055f3467",
+          "paperId": "qwen-image-technical-report",
+          "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+          "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+          "page": 9,
+          "bbox": [
+            184.05,
+            336.51,
+            410.91,
+            346.47
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/07-qwen-image-technical-report-p9-table_region-7889ebd3d8.png",
+          "copyPasteContext": "paperId=qwen-image-technical-report page=9 candidateType=table_region bbox=[184.05, 336.51, 410.91, 346.47] plannedCropRef=papers_dir/visual_layout_planned_crops/qwen-image-technical-report/page-9/visual-layout-qwen-image-technical-report-table_region-9-47a89c68476bd4bb.png captionText=Configuration of Qwen-Image architecture. nearbyText=Figure 8: Comparison of different image-text joint positional encoding strategies. We design the Mul- timodal Scalable RoPE (MSRoPE) strategy, which starts encoding from the image center and positions textual encodings along the diagonal of the grid, enabling better image resolution scaling and improved text-image alignment. Table 1: Configuration of Qwen-Image architecture. Configuration VLM VAE MMDiT ViT LLM Enc...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:qwen-image-technical-report:table_region:9:47a89c68476bd4bb",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:665459b70156b3dd",
+          "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+          "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+          "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+          "page": 7,
+          "bbox": [
+            337.37,
+            83.44,
+            505.66,
+            181.28
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/08-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p7-table_region-0bafbfcfff.png",
+          "copyPasteContext": "paperId=photorealistic-text-to-image-diffusion-models-with-deep-language-understanding page=7 candidateType=table_region bbox=[337.37, 83.44, 505.66, 181.28] plannedCropRef=papers_dir/visual_layout_planned_crops/photorealistic-text-to-image-diffusion-models-with-deep-language-understanding/page-7/visual-layout-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-table_region-7-c8163ca9120a3550.png captionText=COCO 256 × 256 human evalua- tion comparing model outputs and orig- inal images. For the bottom part (no people), we ﬁlter out prompts containing one of man, men, woman, women, person, people, child, adult, adults, boy, boys, girl, girls, guy, lady, ladies, someone, toddler, (... nearbyText=Imagen (Our Work) 7.27 Table 2: COCO 256 × 256 human evalua- tion comparing model outputs and orig- inal images. For the bottom part (no people), we ﬁlter out prompts containing one of man, men, woman, women, person, people, child, adult, adults, boy, boys, girl, girls, guy, lady, ladies, someone, toddler, (sport) player, workers, spectators. Model Photorealism ↑Alignment ↑",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:table_region:7:c8163ca9120a3550",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_02",
+      "batchNumber": 2,
+      "totalBatches": 5,
+      "prompt": "You are annotating visual retrieval hints for batch 2 of 5. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/09-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-figure_caption_region-a4ccacf781.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/10-emu3.5-native-multimodal-models-are-world-learners-p1-figure_caption_region-decd8c9078.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/11-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-figure_caption_region-599517831d.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/12-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-figure_caption_region-0de8098f7e.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/13-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p2-figure_caption_region-d7d10670a5.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/14-high-resolution-image-synthesis-with-latent-diffusion-models-p1-figure_caption_region-24a73d2eda.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/15-qwen-image-technical-report-p2-figure_caption_region-6b728766ad.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/16-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-figure_caption_region-d7fcd3761f.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ed2cb4b49670de7b",
+          "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+          "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+          "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+          "page": 4,
+          "bbox": [
+            108.0,
+            348.11,
+            504.0,
+            369.03
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/09-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-figure_caption_region-a4ccacf781.png",
+          "copyPasteContext": "paperId=newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents page=4 candidateType=figure_caption_region bbox=[108.0, 348.11, 504.0, 369.03] plannedCropRef=papers_dir/visual_layout_planned_crops/newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents/page-4/visual-layout-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-figure_caption_region-4-92b8890073250699.png captionText=An illustration of core designs in NEWTONBENCH: experimentation with model system, counterfactual shifts in physical laws from various domains, and agentic exploration settings. nearbyText=Discovery with Orbital Motion Experiment Figure 1: An illustration of core designs in NEWTONBENCH: experimentation with model system, counterfactual shifts in physical laws from various domains, and agentic exploration settings. System settings, where ftarget is embedded within a larger model (k > 1). In these more advanced model discovery tasks, the agent must leverage assisting equations to disentangle confoundi...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:figure_caption_region:4:92b8890073250699",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:7214650f81ae416d",
+          "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+          "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+          "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+          "page": 1,
+          "bbox": [
+            79.2,
+            646.83,
+            532.8,
+            678.61
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/10-emu3.5-native-multimodal-models-are-world-learners-p1-figure_caption_region-decd8c9078.png",
+          "copyPasteContext": "paperId=emu3.5-native-multimodal-models-are-world-learners page=1 candidateType=figure_caption_region bbox=[79.2, 646.83, 532.8, 678.61] plannedCropRef=papers_dir/visual_layout_planned_crops/emu3.5-native-multimodal-models-are-world-learners/page-1/visual-layout-emu3.5-native-multimodal-models-are-world-learners-figure_caption_region-1-4281f17d9edca1b7.png captionText=(a) Comparison with SOTA models on image generation and editing benchmarks. For editing, the specific models are Qwen-Image-Edit-2509 [106] and FLUX.1 Kontext [dev] [49]. (b) Automated preference evaluation (Win Rate[%]) against Gemini 2.5 Flash Image (Nano Banana) [92] on int... nearbyText=Win Rate (%) Figure 1: (a) Comparison with SOTA models on image generation and editing benchmarks. For editing, the specific models are Qwen-Image-Edit-2509 [106] and FLUX.1 Kontext [dev] [49]. (b) Automated preference evaluation (Win Rate[%]) against Gemini 2.5 Flash Image (Nano Banana) [92] on interleaved generation tasks. arXiv:2510.26583v1 [cs.CV] 30 Oct 2025",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:figure_caption_region:1:4281f17d9edca1b7",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b2f470661ca2b2df",
+          "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+          "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+          "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+          "page": 2,
+          "bbox": [
+            36.0,
+            159.04,
+            526.16,
+            192.91
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/11-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-figure_caption_region-599517831d.png",
+          "copyPasteContext": "paperId=faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks page=2 candidateType=figure_caption_region bbox=[36.0, 159.04, 526.16, 192.91] plannedCropRef=papers_dir/visual_layout_planned_crops/faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks/page-2/visual-layout-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-figure_caption_region-2-053df2c84c04975d.png captionText=Different schemes for addressing multiple scales and sizes. (a) Pyramids of images and feature maps are built, and the classiﬁer is run at all scales. (b) Pyramids of ﬁlters with multiple scales/sizes are run on the feature map. (c) We use pyramids of reference boxes in the re... nearbyText=feature map Figure 1: Different schemes for addressing multiple scales and sizes. (a) Pyramids of images and feature maps are built, and the classiﬁer is run at all scales. (b) Pyramids of ﬁlters with multiple scales/sizes are run on the feature map. (c) We use pyramids of reference boxes in the regression functions. pyramids of images (Figure 1, a) or pyramids of ﬁlters (Figure 1, b), we introduce novel “anchor”...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:figure_caption_region:2:053df2c84c04975d",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f33791bb188065bb",
+          "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+          "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+          "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+          "page": 1,
+          "bbox": [
+            108.0,
+            449.3,
+            504.0,
+            504.94
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/12-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-figure_caption_region-0de8098f7e.png",
+          "copyPasteContext": "paperId=autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation page=1 candidateType=figure_caption_region bbox=[108.0, 449.3, 504.0, 504.94] plannedCropRef=papers_dir/visual_layout_planned_crops/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation/page-1/visual-layout-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-figure_caption_region-1-3db7901a05fe4358.png captionText=AutoGen enables diverse LLM-based applications using multi-agent conversations. (Left) AutoGen agents are conversable, customizable, and can be based on LLMs, tools, humans, or even a combination of them. (Top-middle) Agents can converse to solve tasks. (Right) They can form a... nearbyText=Example Agent Chat Figure 1: AutoGen enables diverse LLM-based applications using multi-agent conversations. (Left) AutoGen agents are conversable, customizable, and can be based on LLMs, tools, humans, or even a combination of them. (Top-middle) Agents can converse to solve tasks. (Right) They can form a chat, potentially with humans in the loop. (Bottom-middle) The framework supports flexible conversation patter...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:figure_caption_region:1:3db7901a05fe4358",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:5a1ab072fca3aef2",
+          "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+          "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+          "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+          "page": 2,
+          "bbox": [
+            108.0,
+            233.83,
+            504.17,
+            309.5
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/13-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p2-figure_caption_region-d7d10670a5.png",
+          "copyPasteContext": "paperId=arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts page=2 candidateType=figure_caption_region bbox=[108.0, 233.83, 504.17, 309.5] plannedCropRef=papers_dir/visual_layout_planned_crops/arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts/page-2/visual-layout-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-figure_caption_region-2-9768341fe65e7ef2.png captionText=Llama-3.1-8B calculates six months after August with a standard addition mechanism that is used for numbers, months, weekdays, and hours. (a) Cyclic concepts are represented with circular geometry at the input token position (Engels et al., 2025). (b) The model computes additi... nearbyText=0 Figure 1: Llama-3.1-8B calculates six months after August with a standard addition mechanism that is used for numbers, months, weekdays, and hours. (a) Cyclic concepts are represented with circular geometry at the input token position (Engels et al., 2025). (b) The model computes addition in a base-10 Fourier number space (Kantamneni & Tegmark, 2025; Fu et al., 2026) using the same neurons for all tasks. We disc...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:figure_caption_region:2:9768341fe65e7ef2",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:dc9349c9e4c0d7ff",
+          "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+          "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+          "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+          "page": 1,
+          "bbox": [
+            308.86,
+            320.7,
+            545.11,
+            417.33
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/14-high-resolution-image-synthesis-with-latent-diffusion-models-p1-figure_caption_region-24a73d2eda.png",
+          "copyPasteContext": "paperId=high-resolution-image-synthesis-with-latent-diffusion-models page=1 candidateType=figure_caption_region bbox=[308.86, 320.7, 545.11, 417.33] plannedCropRef=papers_dir/visual_layout_planned_crops/high-resolution-image-synthesis-with-latent-diffusion-models/page-1/visual-layout-high-resolution-image-synthesis-with-latent-diffusion-models-figure_caption_region-1-bd010932c7e494a5.png captionText=Boosting the upper bound on achievable quality with less agressive downsampling. Since diffusion models offer excel- lent inductive biases for spatial data, we do not need the heavy spa- tial downsampling of related generative models in latent space, but can still greatly redu... nearbyText=Input ours (f = 4) PSNR: 27.4 R-FID: 0.58 DALL-E (f = 8) PSNR: 22.8 R-FID: 32.01 VQGAN (f = 16) PSNR: 19.9 R-FID: 4.98 Figure 1. Boosting the upper bound on achievable quality with less agressive downsampling. Since diffusion models offer excel- lent inductive biases for spatial data, we do not need the heavy spa- tial downsampling of related generative models in latent space, but can still greatly reduce the dime...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:figure_caption_region:1:bd010932c7e494a5",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:f900da84c223d23b",
+          "paperId": "qwen-image-technical-report",
+          "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+          "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+          "page": 2,
+          "bbox": [
+            70.87,
+            750.75,
+            526.06,
+            782.64
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/15-qwen-image-technical-report-p2-figure_caption_region-6b728766ad.png",
+          "copyPasteContext": "paperId=qwen-image-technical-report page=2 candidateType=figure_caption_region bbox=[70.87, 750.75, 526.06, 782.64] plannedCropRef=papers_dir/visual_layout_planned_crops/qwen-image-technical-report/page-2/visual-layout-qwen-image-technical-report-figure_caption_region-2-a2a6bdca9d8f65d3.png captionText=Showcase of Qwen-Image in complex text rendering, including multi-line layouts, paragraph- level semantics, and fine-grained details. Qwen-Image supports both alphabetic languages (e.g., English) and logographic languages (e.g., Chinese) with high fidelity. nearbyText=Figure 2: Showcase of Qwen-Image in complex text rendering, including multi-line layouts, paragraph- level semantics, and fine-grained details. Qwen-Image supports both alphabetic languages (e.g., English) and logographic languages (e.g., Chinese) with high fidelity. 2",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:qwen-image-technical-report:figure_caption_region:2:a2a6bdca9d8f65d3",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:e2e7876129781ada",
+          "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+          "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+          "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+          "page": 2,
+          "bbox": [
+            108.0,
+            690.76,
+            504.0,
+            722.91
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/16-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-figure_caption_region-d7fcd3761f.png",
+          "copyPasteContext": "paperId=photorealistic-text-to-image-diffusion-models-with-deep-language-understanding page=2 candidateType=figure_caption_region bbox=[108.0, 690.76, 504.0, 722.91] plannedCropRef=papers_dir/visual_layout_planned_crops/photorealistic-text-to-image-diffusion-models-with-deep-language-understanding/page-2/visual-layout-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-figure_caption_region-2-16dc56c857fd0641.png captionText=Select 1024 × 1024 Imagen samples for various text inputs. We only include photorealistic images in this ﬁgure and leave artistic content to the Appendix, since generating photorealistic images is more challenging from a technical point of view. Figs. A.1 to A.3 show more samp... nearbyText=A brain riding a rocketship heading towards the moon. A dragon fruit wearing karate belt in the snow. A strawberry mug ﬁlled with white sesame seeds. The mug is ﬂoating in a dark chocolate sea. Figure 1: Select 1024 × 1024 Imagen samples for various text inputs. We only include photorealistic images in this ﬁgure and leave artistic content to the Appendix, since generating photorealistic images is more challenging...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:figure_caption_region:2:16dc56c857fd0641",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_03",
+      "batchNumber": 3,
+      "totalBatches": 5,
+      "prompt": "You are annotating visual retrieval hints for batch 3 of 5. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/17-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-equation_region-66dc218ed3.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/18-emu3.5-native-multimodal-models-are-world-learners-p2-equation_region-a0e33d60d3.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/19-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p5-equation_region-dbe0abfb6f.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/20-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p4-equation_region-f3a9aecab1.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/21-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p3-equation_region-dc3fd3a2d6.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/22-high-resolution-image-synthesis-with-latent-diffusion-models-p1-equation_region-aca1ff9b30.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/23-qwen-image-technical-report-p14-equation_region-a3d9713657.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/24-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p20-equation_region-3538b1d2cc.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:c2b51e214cddbd88",
+          "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+          "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+          "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+          "page": 4,
+          "bbox": [
+            422.22,
+            249.25,
+            484.26,
+            257.62
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/17-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-equation_region-66dc218ed3.png",
+          "copyPasteContext": "paperId=newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents page=4 candidateType=equation_region bbox=[422.22, 249.25, 484.26, 257.62] plannedCropRef=papers_dir/visual_layout_planned_crops/newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents/page-4/visual-layout-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-equation_region-4-803dd3f7dbd45c6f.png nearbyText=(Vanilla Function) <python> def testing_func1(params): ... print(...) </python> <python_output> (execution output)",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:equation_region:4:803dd3f7dbd45c6f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:66d69eb91028ff7a",
+          "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+          "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+          "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+          "page": 2,
+          "bbox": [
+            505.52,
+            168.61,
+            507.18,
+            173.44
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/18-emu3.5-native-multimodal-models-are-world-learners-p2-equation_region-a0e33d60d3.png",
+          "copyPasteContext": "paperId=emu3.5-native-multimodal-models-are-world-learners page=2 candidateType=equation_region bbox=[505.52, 168.61, 507.18, 173.44] plannedCropRef=papers_dir/visual_layout_planned_crops/emu3.5-native-multimodal-models-are-world-learners/page-2/visual-layout-emu3.5-native-multimodal-models-are-world-learners-equation_region-2-688127b9a1184640.png nearbyText=√ How to take the mobile phone out of the book and place it on the table?",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:equation_region:2:688127b9a1184640",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:66d648eecda019ab",
+          "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+          "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+          "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+          "page": 5,
+          "bbox": [
+            70.83,
+            652.86,
+            217.8,
+            664.48
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/19-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p5-equation_region-dbe0abfb6f.png",
+          "copyPasteContext": "paperId=faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks page=5 candidateType=equation_region bbox=[70.83, 652.86, 217.8, 664.48] plannedCropRef=papers_dir/visual_layout_planned_crops/faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks/page-5/visual-layout-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-equation_region-5-128a0a411f67a324.png nearbyText=tx = (x −xa)/wa, ty = (y −ya)/ha, tw = log(w/wa), th = log(h/ha), t∗ x = (x∗−xa)/wa, t∗ y = (y∗−ya)/ha,",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:equation_region:5:128a0a411f67a324",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9330e3b05cc2a421",
+          "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+          "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+          "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+          "page": 4,
+          "bbox": [
+            187.32,
+            94.86,
+            379.55,
+            130.05
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/20-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p4-equation_region-f3a9aecab1.png",
+          "copyPasteContext": "paperId=autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation page=4 candidateType=equation_region bbox=[187.32, 94.86, 379.55, 130.05] plannedCropRef=papers_dir/visual_layout_planned_crops/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation/page-4/visual-layout-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-equation_region-4-45200729f88c94d7.png nearbyText=AssistantAgent UserProxyAgent human_input_mode = “NEVER” code_execution_config = False DEFAULT_SYSTEM_MESSAGE = “You are a helpful AI assistant… In the following cases, suggest python code…” human_input_mode = “ALWAYS” GroupChatManager",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:equation_region:4:45200729f88c94d7",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ab43b6ceff510c37",
+          "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+          "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+          "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+          "page": 3,
+          "bbox": [
+            243.57,
+            379.43,
+            504.67,
+            395.0
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/21-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p3-equation_region-dc3fd3a2d6.png",
+          "copyPasteContext": "paperId=arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts page=3 candidateType=equation_region bbox=[243.57, 379.43, 504.67, 395.0] plannedCropRef=papers_dir/visual_layout_planned_crops/arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts/page-3/visual-layout-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-equation_region-3-f2208953da94826f.png nearbyText=For example, we can train DAS on the months task to localize a k-dimensional subspace of the residual stream that encodes the input concept at a particular layer and token position. We measure success with interchange intervention accuracy (IIA), which in this case indicates whether patching within this subspace from e.g., six months after October→two months after April causes the model to output December (two + O...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:equation_region:3:f2208953da94826f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:db83338e56bf6311",
+          "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+          "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+          "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+          "page": 1,
+          "bbox": [
+            331.38,
+            178.24,
+            539.33,
+            189.38
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/22-high-resolution-image-synthesis-with-latent-diffusion-models-p1-equation_region-aca1ff9b30.png",
+          "copyPasteContext": "paperId=high-resolution-image-synthesis-with-latent-diffusion-models page=1 candidateType=equation_region bbox=[331.38, 178.24, 539.33, 189.38] plannedCropRef=papers_dir/visual_layout_planned_crops/high-resolution-image-synthesis-with-latent-diffusion-models/page-1/visual-layout-high-resolution-image-synthesis-with-latent-diffusion-models-equation_region-1-0dc11401a800bfef.png nearbyText=*The ﬁrst two authors contributed equally to this work. Input ours (f = 4) PSNR: 27.4 R-FID: 0.58 DALL-E (f = 8) PSNR: 22.8 R-FID: 32.01 VQGAN (f = 16) PSNR: 19.9 R-FID: 4.98 Figure 1. Boosting the upper bound on achievable quality with less agressive downsampling. Since diffusion models offer excel- lent inductive biases for spatial data, we do not need the heavy spa- tial downsampling of related generative model...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:equation_region:1:0dc11401a800bfef",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:989507469ee41d59",
+          "paperId": "qwen-image-technical-report",
+          "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+          "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+          "page": 14,
+          "bbox": [
+            168.98,
+            129.55,
+            275.52,
+            138.88
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/23-qwen-image-technical-report-p14-equation_region-a3d9713657.png",
+          "copyPasteContext": "paperId=qwen-image-technical-report page=14 candidateType=equation_region bbox=[168.98, 129.55, 275.52, 138.88] plannedCropRef=papers_dir/visual_layout_planned_crops/qwen-image-technical-report/page-14/visual-layout-qwen-image-technical-report-equation_region-14-1e8a7149fc3a29d8.png nearbyText=On a <background_color> background, displaying <word_color> text \"<word>\". The background is <background_color>, and the <word_color> handwritten text is \"<word>\". Template1",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:qwen-image-technical-report:equation_region:14:1e8a7149fc3a29d8",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:9d836151871a6e3f",
+          "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+          "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+          "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+          "page": 20,
+          "bbox": [
+            207.74,
+            373.24,
+            313.99,
+            391.44
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/24-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p20-equation_region-3538b1d2cc.png",
+          "copyPasteContext": "paperId=photorealistic-text-to-image-diffusion-models-with-deep-language-understanding page=20 candidateType=equation_region bbox=[207.74, 373.24, 313.99, 391.44] plannedCropRef=papers_dir/visual_layout_planned_crops/photorealistic-text-to-image-diffusion-models-with-deep-language-understanding/page-20/visual-layout-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-equation_region-20-2eb72e2516a0abf7.png nearbyText=To sample from the diffusion model, we start at z1 ∼N(0, I) and use the discrete time ancestral sampler [28] and DDIM [64] for certain models. DDIM follows the deterministic update rule zs = αsˆxθ(zt, λt, c) + σs σt (zt −αtˆxθ(zt, λt, c)) (5)",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:equation_region:20:2eb72e2516a0abf7",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_04",
+      "batchNumber": 4,
+      "totalBatches": 5,
+      "prompt": "You are annotating visual retrieval hints for batch 4 of 5. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/25-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p1-layout_region-8268ff3c17.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/26-emu3.5-native-multimodal-models-are-world-learners-p1-layout_region-7361592798.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/27-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p1-layout_region-7e2a46b04c.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/28-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-layout_region-63d62596fa.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/29-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-layout_region-da29262c4e.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/30-high-resolution-image-synthesis-with-latent-diffusion-models-p1-layout_region-6fad153496.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/31-qwen-image-technical-report-p6-layout_region-a735b8f591.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/32-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p1-layout_region-8d87e0bd59.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:layout_region:1:45ff0082a3c9dd85",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fe148023f6611036",
+          "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+          "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+          "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+          "page": 1,
+          "bbox": [
+            108.3,
+            564.29,
+            205.99,
+            576.24
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/25-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p1-layout_region-8268ff3c17.png",
+          "copyPasteContext": "paperId=newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents page=1 candidateType=layout_region bbox=[108.3, 564.29, 205.99, 576.24] plannedCropRef=papers_dir/visual_layout_planned_crops/newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents/page-1/visual-layout-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-layout_region-1-45ff0082a3c9dd85.png nearbyText=Large language models (LLMs) are emerging as powerful tools for scientific law discovery, a foundational challenge in AI-driven science. However, exist- ing benchmarks for this task suffer from a fundamental methodological trilemma, forcing a trade-off between scientific relevance, scalability, and resistance to mem- orization. Furthermore, they oversimplify discovery as static function fitting, failing to capture...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:layout_region:1:45ff0082a3c9dd85",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:layout_region:1:03b6139e0d9b28fb",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b8167120d7f23f12",
+          "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+          "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+          "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+          "page": 1,
+          "bbox": [
+            283.76,
+            214.01,
+            328.24,
+            225.97
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/26-emu3.5-native-multimodal-models-are-world-learners-p1-layout_region-7361592798.png",
+          "copyPasteContext": "paperId=emu3.5-native-multimodal-models-are-world-learners page=1 candidateType=layout_region bbox=[283.76, 214.01, 328.24, 225.97] plannedCropRef=papers_dir/visual_layout_planned_crops/emu3.5-native-multimodal-models-are-world-learners/page-1/visual-layout-emu3.5-native-multimodal-models-are-world-learners-layout_region-1-03b6139e0d9b28fb.png nearbyText=https://emu.world Abstract We introduce Emu3.5, a large-scale multimodal world model that natively predicts the next state across vision and language. Emu3.5 is pre-trained end-to-end with a unified next-token prediction objective on a corpus of vision-language interleaved data containing over 10 trillion tokens, primarily derived from sequential frames and transcripts of internet videos. The model naturally accep...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:layout_region:1:03b6139e0d9b28fb",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:layout_region:1:f15a56f92bf8e4d7",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:09840109464073bc",
+          "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+          "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+          "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+          "page": 1,
+          "bbox": [
+            36.3,
+            354.78,
+            135.8,
+            366.74
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/27-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p1-layout_region-7e2a46b04c.png",
+          "copyPasteContext": "paperId=faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks page=1 candidateType=layout_region bbox=[36.3, 354.78, 135.8, 366.74] plannedCropRef=papers_dir/visual_layout_planned_crops/faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks/page-1/visual-layout-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-layout_region-1-f15a56f92bf8e4d7.png nearbyText=! 1 INTRODUCTION Recent advances in object detection are driven by the success of region proposal methods (e.g., [4]) and region-based convolutional neural networks (R- CNNs) [5]. Although region-based CNNs were com- putationally expensive as originally developed in [5], their cost has been drastically reduced thanks to shar- ing convolutions across proposals [1], [2]. The latest incarnation, Fast R-CNN [2], achie...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:layout_region:1:f15a56f92bf8e4d7",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:layout_region:1:c96ad0bb30a29669",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:57bb333e6698a1e9",
+          "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+          "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+          "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+          "page": 1,
+          "bbox": [
+            283.76,
+            523.27,
+            328.24,
+            535.23
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/28-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-layout_region-63d62596fa.png",
+          "copyPasteContext": "paperId=autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation page=1 candidateType=layout_region bbox=[283.76, 523.27, 328.24, 535.23] plannedCropRef=papers_dir/visual_layout_planned_crops/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation/page-1/visual-layout-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-layout_region-1-c96ad0bb30a29669.png nearbyText=Figure 1: AutoGen enables diverse LLM-based applications using multi-agent conversations. (Left) AutoGen agents are conversable, customizable, and can be based on LLMs, tools, humans, or even a combination of them. (Top-middle) Agents can converse to solve tasks. (Right) They can form a chat, potentially with humans in the loop. (Bottom-middle) The framework supports flexible conversation patterns. Abstract AutoGe...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:layout_region:1:c96ad0bb30a29669",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:layout_region:1:9f959e82ebee205d",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:ce737ee9755e4f67",
+          "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+          "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+          "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+          "page": 1,
+          "bbox": [
+            108.0,
+            518.97,
+            190.81,
+            530.93
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/29-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-layout_region-da29262c4e.png",
+          "copyPasteContext": "paperId=arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts page=1 candidateType=layout_region bbox=[108.0, 518.97, 190.81, 530.93] plannedCropRef=papers_dir/visual_layout_planned_crops/arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts/page-1/visual-layout-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-layout_region-1-9f959e82ebee205d.png nearbyText=Does structure in representations imply structure in computation? We study how Llama-3.1-8B reasons over cyclic concepts (e.g., “what month is six months after August?”). Even though Llama-3.1-8B’s representations for these concepts are circularly structured, we find that instead of directly computing modular addition in the period of the cyclic concept (e.g., 12 for months), the model re-uses a generic addition m...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:layout_region:1:9f959e82ebee205d",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:layout_region:1:47134ad1cd52c96a",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:509301e0f988695f",
+          "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+          "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+          "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+          "page": 1,
+          "bbox": [
+            146.0,
+            178.69,
+            190.48,
+            190.65
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/30-high-resolution-image-synthesis-with-latent-diffusion-models-p1-layout_region-6fad153496.png",
+          "copyPasteContext": "paperId=high-resolution-image-synthesis-with-latent-diffusion-models page=1 candidateType=layout_region bbox=[146.0, 178.69, 190.48, 190.65] plannedCropRef=papers_dir/visual_layout_planned_crops/high-resolution-image-synthesis-with-latent-diffusion-models/page-1/visual-layout-high-resolution-image-synthesis-with-latent-diffusion-models-layout_region-1-47134ad1cd52c96a.png nearbyText=1Ludwig Maximilian University of Munich & IWR, Heidelberg University, Germany Runway ML https://github.com/CompVis/latent-diffusion Abstract By decomposing the image formation process into a se- quential application of denoising autoencoders, diffusion models (DMs) achieve state-of-the-art synthesis results on image data and beyond. Additionally, their formulation al- lows for a guiding mechanism to control the im...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:layout_region:1:47134ad1cd52c96a",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:qwen-image-technical-report:layout_region:6:ed37c9f9cfe1ded1",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b0600ce98ab0b586",
+          "paperId": "qwen-image-technical-report",
+          "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+          "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+          "page": 6,
+          "bbox": [
+            70.87,
+            72.14,
+            157.86,
+            84.09
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/31-qwen-image-technical-report-p6-layout_region-a735b8f591.png",
+          "copyPasteContext": "paperId=qwen-image-technical-report page=6 candidateType=layout_region bbox=[70.87, 72.14, 157.86, 84.09] plannedCropRef=papers_dir/visual_layout_planned_crops/qwen-image-technical-report/page-6/visual-layout-qwen-image-technical-report-layout_region-6-ed37c9f9cfe1ded1.png nearbyText=1 Introduction Image generation models—encompassing both text-to-image generation (T2I) (Rombach et al., 2021; Wu et al., 2022; Liang et al., 2022; OpenAI, 2023; Podell et al., 2023; Chen et al., 2024c; Li et al., 2024b; Esser et al., 2024; BlackForest, 2024; Gao et al., 2025; Gong et al., 2025; Cai et al., 2025) and image editing (TI2I) (Brooks et al., 2023; Zhang et al., 2023; Wang et al., 2025; Deng et al., 202...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:qwen-image-technical-report:layout_region:6:ed37c9f9cfe1ded1",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:layout_region:1:3d2326e60384515a",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:b73f605e09a3eb2e",
+          "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+          "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+          "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+          "page": 1,
+          "bbox": [
+            108.0,
+            538.15,
+            190.81,
+            550.11
+          ],
+          "candidateType": "layout_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/32-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p1-layout_region-8d87e0bd59.png",
+          "copyPasteContext": "paperId=photorealistic-text-to-image-diffusion-models-with-deep-language-understanding page=1 candidateType=layout_region bbox=[108.0, 538.15, 190.81, 550.11] plannedCropRef=papers_dir/visual_layout_planned_crops/photorealistic-text-to-image-diffusion-models-with-deep-language-understanding/page-1/visual-layout-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-layout_region-1-3d2326e60384515a.png nearbyText=We present Imagen, a text-to-image diffusion model with an unprecedented degree of photorealism and a deep level of language understanding. Imagen builds on the power of large transformer language models in understanding text and hinges on the strength of diffusion models in high-ﬁdelity image generation. Our key discovery is that generic large language models (e.g. T5), pretrained on text-only corpora, are surpri...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:layout_region:1:3d2326e60384515a",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_005_batch_05",
+      "batchNumber": 5,
+      "totalBatches": 5,
+      "prompt": "You are annotating visual retrieval hints for batch 5 of 5. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/33-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-image_region-35e5f7c70e.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/34-emu3.5-native-multimodal-models-are-world-learners-p1-image_region-3adbc14e69.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/35-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-image_region-8473d7fc66.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/36-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-image_region-2c98531c19.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/37-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-image_region-2b79f24bcc.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/38-high-resolution-image-synthesis-with-latent-diffusion-models-p1-image_region-079b7b928c.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/39-qwen-image-technical-report-p1-image_region-ea864a8b48.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/40-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-image_region-4c8abd6fd5.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:583cce1f82087371",
+          "paperId": "newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents",
+          "paperRef": "papers_dir/NewtonBench Benchmarking Generalizable Scientific Law Discovery in LLM Agents.pdf",
+          "sourceContentHash": "sha256:79487f7573bbeb5505b515f81319e4a48a33fa4e95bb71cc926a2cd070b6a411",
+          "page": 4,
+          "bbox": [
+            454.66,
+            182.06,
+            476.58,
+            213.8
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/33-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-p4-image_region-35e5f7c70e.png",
+          "copyPasteContext": "paperId=newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents page=4 candidateType=image_region bbox=[454.66, 182.06, 476.58, 213.8] plannedCropRef=papers_dir/visual_layout_planned_crops/newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents/page-4/visual-layout-newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents-image_region-4-04ae14ad971d2f06.png nearbyText=Published as a conference paper at ICLR 2026 Complex System",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:newtonbench-benchmarking-generalizable-scientific-law-discovery-in-llm-agents:image_region:4:04ae14ad971d2f06",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:55b9bd85c45161fe",
+          "paperId": "emu3.5-native-multimodal-models-are-world-learners",
+          "paperRef": "papers_dir/Emu3.5 Native Multimodal Models are World Learners.pdf",
+          "sourceContentHash": "sha256:68c26d4edc2591f12111c2daca0e2f8edc8c09afe769bae3acd4ea846e004365",
+          "page": 1,
+          "bbox": [
+            209.45,
+            297.25,
+            686.95,
+            427.04
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/34-emu3.5-native-multimodal-models-are-world-learners-p1-image_region-3adbc14e69.png",
+          "copyPasteContext": "paperId=emu3.5-native-multimodal-models-are-world-learners page=1 candidateType=image_region bbox=[209.45, 297.25, 686.95, 427.04] plannedCropRef=papers_dir/visual_layout_planned_crops/emu3.5-native-multimodal-models-are-world-learners/page-1/visual-layout-emu3.5-native-multimodal-models-are-world-learners-image_region-1-03dc21098ebf92d6.png nearbyText=Emu3.5: Native Multimodal Models are World Learners Emu3.5 Team BAAI",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:emu3.5-native-multimodal-models-are-world-learners:image_region:1:03dc21098ebf92d6",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:fe0984b983264775",
+          "paperId": "faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks",
+          "paperRef": "papers_dir/Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks.pdf",
+          "sourceContentHash": "sha256:f2630182ccfabd6fc89ac20270b4daf15a0ca849298a7db1e5d124ca443051f1",
+          "page": 2,
+          "bbox": [
+            155.05,
+            103.77,
+            218.53,
+            123.68
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/35-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-p2-image_region-8473d7fc66.png",
+          "copyPasteContext": "paperId=faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks page=2 candidateType=image_region bbox=[155.05, 103.77, 218.53, 123.68] plannedCropRef=papers_dir/visual_layout_planned_crops/faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks/page-2/visual-layout-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks-image_region-2-2ea5949dc69e0e4c.png nearbyText=2 multiple scaled images",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks:image_region:2:2ea5949dc69e0e4c",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:454a72b3e28bfd5a",
+          "paperId": "autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation",
+          "paperRef": "papers_dir/AutoGen Enabling Next-Gen LLM Applications via Multi-Agent Conversation.pdf",
+          "sourceContentHash": "sha256:fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+          "page": 1,
+          "bbox": [
+            147.76,
+            362.85,
+            158.69,
+            373.78
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/36-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-p1-image_region-2c98531c19.png",
+          "copyPasteContext": "paperId=autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation page=1 candidateType=image_region bbox=[147.76, 362.85, 158.69, 373.78] plannedCropRef=papers_dir/visual_layout_planned_crops/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation/page-1/visual-layout-autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-image_region-1-0a83cc7b8ce39324.png nearbyText=AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation Qingyun Wu†, Gagan Bansal∗, Jieyu Zhang±, Yiran Wu†, Beibin Li∗",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation:image_region:1:0a83cc7b8ce39324",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:bf46d4cc023672ea",
+          "paperId": "arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts",
+          "paperRef": "papers_dir/Arithmetic in the Wild Llama uses Base-10 Addition to Reason About Cyclic Concepts.pdf",
+          "sourceContentHash": "sha256:34ef8ead365361bdd4d7ae9bd3653c916bcfd232f147f4c1347dfb1b684e79cc",
+          "page": 1,
+          "bbox": [
+            247.66,
+            192.02,
+            252.13,
+            197.99
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/37-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-p1-image_region-2b79f24bcc.png",
+          "copyPasteContext": "paperId=arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts page=1 candidateType=image_region bbox=[247.66, 192.02, 252.13, 197.99] plannedCropRef=papers_dir/visual_layout_planned_crops/arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts/page-1/visual-layout-arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts-image_region-1-0792bc4980e9c1ad.png nearbyText=Arithmetic in the Wild: Llama uses Base-10 Addition to Reason About Cyclic Concepts Sheridan Feucht⋆ ,a Tal Haklay⋆ ,b",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:arithmetic-in-the-wild-llama-uses-base-10-addition-to-reason-about-cyclic-concepts:image_region:1:0792bc4980e9c1ad",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:80135830483d0128",
+          "paperId": "high-resolution-image-synthesis-with-latent-diffusion-models",
+          "paperRef": "papers_dir/High-Resolution Image Synthesis with Latent Diffusion Models.pdf",
+          "sourceContentHash": "sha256:46ede043a8dc07ca1f0f445620523fe1ad8b2436bd83856a3835612a47e9f79e",
+          "page": 1,
+          "bbox": [
+            427.22,
+            190.51,
+            485.81,
+            248.98
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/38-high-resolution-image-synthesis-with-latent-diffusion-models-p1-image_region-079b7b928c.png",
+          "copyPasteContext": "paperId=high-resolution-image-synthesis-with-latent-diffusion-models page=1 candidateType=image_region bbox=[427.22, 190.51, 485.81, 248.98] plannedCropRef=papers_dir/visual_layout_planned_crops/high-resolution-image-synthesis-with-latent-diffusion-models/page-1/visual-layout-high-resolution-image-synthesis-with-latent-diffusion-models-image_region-1-2360b13807a5f368.png nearbyText=High-Resolution Image Synthesis with Latent Diffusion Models Robin Rombach1 * Andreas Blattmann1 ∗ Dominik Lorenz1 Patrick Esser Bj¨orn Ommer1",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:high-resolution-image-synthesis-with-latent-diffusion-models:image_region:1:2360b13807a5f368",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:4e1abab702e04534",
+          "paperId": "qwen-image-technical-report",
+          "paperRef": "papers_dir/Qwen-Image Technical Report.pdf",
+          "sourceContentHash": "sha256:16538964f7c446ec1fe422d0c7293b7ff7d7f009bc3788a116b20456607779bf",
+          "page": 1,
+          "bbox": [
+            178.84,
+            121.98,
+            188.81,
+            131.85
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/39-qwen-image-technical-report-p1-image_region-ea864a8b48.png",
+          "copyPasteContext": "paperId=qwen-image-technical-report page=1 candidateType=image_region bbox=[178.84, 121.98, 188.81, 131.85] plannedCropRef=papers_dir/visual_layout_planned_crops/qwen-image-technical-report/page-1/visual-layout-qwen-image-technical-report-image_region-1-50985e4339ab85a3.png nearbyText=August 5, 2025 Qwen-Image Technical Report",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:qwen-image-technical-report:image_region:1:50985e4339ab85a3",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_corpus_expansion_pack_005:e28be7cd33d6f444",
+          "paperId": "photorealistic-text-to-image-diffusion-models-with-deep-language-understanding",
+          "paperRef": "papers_dir/Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding.pdf",
+          "sourceContentHash": "sha256:0c168c11ddb3757d82a8f45355118df679bbd254364cc3370dfb3034b396c53a",
+          "page": 2,
+          "bbox": [
+            211.08,
+            246.86,
+            400.79,
+            436.57
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_005/assets/40-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-p2-image_region-4c8abd6fd5.png",
+          "copyPasteContext": "paperId=photorealistic-text-to-image-diffusion-models-with-deep-language-understanding page=2 candidateType=image_region bbox=[211.08, 246.86, 400.79, 436.57] plannedCropRef=papers_dir/visual_layout_planned_crops/photorealistic-text-to-image-diffusion-models-with-deep-language-understanding/page-2/visual-layout-photorealistic-text-to-image-diffusion-models-with-deep-language-understanding-image_region-2-204aa4cc291f768f.png nearbyText=Sprouts in the shape of text ‘Imagen’ coming out of a fairytale book. A photo of a Shiba Inu dog with a backpack riding a bike. It is wearing sunglasses and a beach hat.",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:photorealistic-text-to-image-diffusion-models-with-deep-language-understanding:image_region:2:204aa4cc291f768f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    "This packet is for manual web/VLM use only; this script makes no model calls.",
+    "Return derivedTextForRetrieval as retrieval hints only, not evidence.",
+    "Do not upload whole pages or whole images for this gate; use the listed context crops only."
+  ]
+}

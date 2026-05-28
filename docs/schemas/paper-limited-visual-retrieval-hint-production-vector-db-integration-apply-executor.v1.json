@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-limited-visual-retrieval-hint-production-vector-db-integration-apply-executor.v1.json",
+  "title": "Limited Visual Retrieval Hint Production Vector DB Integration Apply Executor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceProductionVectorDbIntegrationDryRun",
+    "input",
+    "policy",
+    "method",
+    "counts",
+    "gate",
+    "rows",
+    "productionVectorIndexRecordPreviews",
+    "sourceBlockers",
+    "technicalBlockers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-integration-apply-executor.v1"
+    },
+    "status": {
+      "enum": ["ready", "applied", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": [
+        "ready_for_limited_visual_retrieval_hint_production_vector_db_integration_apply",
+        "applied_limited_visual_retrieval_hint_production_vector_db_integration",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceProductionVectorDbIntegrationDryRun": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-integration-dry-run.v1"
+        },
+        "status": {
+          "enum": ["ready", "blocked"]
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["apply", "runId", "collectionName", "productionNamespace"],
+      "properties": {
+        "apply": {
+          "type": "boolean"
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collectionName": {
+          "const": "knowledge_hub_visual_retrieval_hints"
+        },
+        "productionNamespace": {
+          "const": "production_visual_retrieval_hint_candidates_v1"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "dryRunByDefault",
+        "applyRequired",
+        "candidateDiscoveryOnly",
+        "externalEmbeddingCalls",
+        "runtimeVisible",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "indexEligible",
+        "productionIndexEligible"
+      ],
+      "properties": {
+        "dryRunByDefault": {
+          "const": true
+        },
+        "applyRequired": {
+          "const": true
+        },
+        "candidateDiscoveryOnly": {
+          "const": true
+        },
+        "externalEmbeddingCalls": {
+          "const": false
+        },
+        "runtimeVisible": {
+          "const": false
+        },
+        "strictEvidence": {
+          "const": false
+        },
+        "citationGrade": {
+          "const": false
+        },
+        "answerableWithoutTextEvidence": {
+          "const": false
+        },
+        "indexEligible": {
+          "const": false
+        },
+        "productionIndexEligible": {
+          "const": false
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "writeBoundary", "description"],
+      "properties": {
+        "name": {
+          "const": "visual_retrieval_hint_production_vector_db_integration_apply_executor_v1"
+        },
+        "writeBoundary": {
+          "const": "knowledge_hub.infrastructure.persistence.vector.VectorDatabase.add_documents"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "counts": {
+      "$ref": "#/$defs/counts"
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["passed", "expectedRows", "checks", "observed"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "expectedRows": {
+          "const": 125
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "observed": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/row"
+      }
+    },
+    "productionVectorIndexRecordPreviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "sourceBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "technicalBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "sourceDryRunRows",
+        "executorRows",
+        "plannedProductionVectorRecordRows",
+        "dryRunReadyProductionVectorRecordRows",
+        "appliedProductionVectorRecordRows",
+        "readbackValidatedRows",
+        "candidateDiscoveryOnlyRows",
+        "blockedRows",
+        "policyViolationRows",
+        "privatePathLeakRows",
+        "externalEmbeddingCallRows",
+        "embeddingCallRows",
+        "localEmbeddingRows",
+        "embeddingVectorWriteRows",
+        "vectorIndexWriteRows",
+        "productionVectorIndexWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "runtimeVisibleRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourceDryRunRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "executorRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plannedProductionVectorRecordRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dryRunReadyProductionVectorRecordRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "appliedProductionVectorRecordRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "readbackValidatedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidateDiscoveryOnlyRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "policyViolationRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "privatePathLeakRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "externalEmbeddingCallRows": {
+          "const": 0
+        },
+        "embeddingCallRows": {
+          "const": 0
+        },
+        "localEmbeddingRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "embeddingVectorWriteRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "vectorIndexWriteRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "productionVectorIndexWriteRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "databaseMutationRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "indexMutationRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "runtimeVisibleRows": {
+          "const": 0
+        },
+        "strictEvidenceRows": {
+          "const": 0
+        },
+        "citationGradeRows": {
+          "const": 0
+        },
+        "answerableWithoutTextEvidenceRows": {
+          "const": 0
+        },
+        "schemaViolationCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "executorRowId",
+        "status",
+        "vectorDocumentId",
+        "productionVectorRecordSha256",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "sourceContentHash",
+        "paperId",
+        "page",
+        "bbox",
+        "candidateType",
+        "collectionName",
+        "appliedProductionVectorRecord",
+        "readbackValidated",
+        "runtimeVisible",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "blockers"
+      ],
+      "properties": {
+        "executorRowId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "dry_run_ready_production_vector_record",
+            "applied_production_vector_record",
+            "blocked_source_dry_run_gate",
+            "blocked_contract_violation",
+            "blocked_policy_violation",
+            "blocked_readback_mismatch"
+          ]
+        },
+        "vectorDocumentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productionVectorRecordSha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "hintCandidateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceCandidateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceContentHash": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paperId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bbox": {
+          "type": "array"
+        },
+        "candidateType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collectionName": {
+          "const": "knowledge_hub_visual_retrieval_hints"
+        },
+        "appliedProductionVectorRecord": {
+          "type": "boolean"
+        },
+        "readbackValidated": {
+          "type": "boolean"
+        },
+        "runtimeVisible": {
+          "const": false
+        },
+        "strictEvidence": {
+          "const": false
+        },
+        "citationGrade": {
+          "const": false
+        },
+        "answerableWithoutTextEvidence": {
+          "const": false
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
