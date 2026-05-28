@@ -1,0 +1,669 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-retrieval-lane-split-parsed-artifact-evidence-chunk-contract-review.v1.json",
+  "title": "Paper Retrieval Lane Split Parsed Artifact Evidence Chunk Contract Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "input",
+    "policy",
+    "sourceLaneSplitDryRun",
+    "method",
+    "contract",
+    "allowedArtifactContracts",
+    "disallowedSourceContracts",
+    "counts",
+    "gate",
+    "technicalBlockers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.paper-retrieval-lane-split-parsed-artifact-evidence-chunk-contract-review.v1"
+    },
+    "status": {
+      "enum": ["ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": [
+        "paper_retrieval_lane_split_parsed_artifact_evidence_chunk_contract_review_ready",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceLaneSplitDryRunRef",
+        "expectedAllowedArtifactTypes",
+        "expectedDisallowedSourceTypes"
+      ],
+      "properties": {
+        "sourceLaneSplitDryRunRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "expectedAllowedArtifactTypes": {
+          "type": "array",
+          "items": {
+            "enum": ["section", "paragraph", "table", "equation", "figure_caption"]
+          },
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true
+        },
+        "expectedDisallowedSourceTypes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "visual_retrieval_hint_text",
+              "fallback_chunk",
+              "locator_only_anchor",
+              "memory_unit_locator",
+              "korean_summary_or_paraphrase"
+            ]
+          },
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewOnly",
+        "contractOnly",
+        "runtimeRouteWrite",
+        "runtimeConfigMutation",
+        "operationalSearchIndexQuery",
+        "answerVisibleExposure",
+        "answerGeneration",
+        "strictEvidenceCreation",
+        "citationGradePromotion",
+        "runtimeEvidenceCreation",
+        "sourceSpanCreation",
+        "sourceSpanCandidateCreation",
+        "parsedArtifactEvidenceChunkCreation",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "parserExecution",
+        "canonicalParsedArtifactWrite",
+        "vaultScan",
+        "externalDownload",
+        "branchDeletion",
+        "githubMutation"
+      ],
+      "properties": {
+        "reviewOnly": {
+          "const": true
+        },
+        "contractOnly": {
+          "const": true
+        },
+        "runtimeRouteWrite": {
+          "const": false
+        },
+        "runtimeConfigMutation": {
+          "const": false
+        },
+        "operationalSearchIndexQuery": {
+          "const": false
+        },
+        "answerVisibleExposure": {
+          "const": false
+        },
+        "answerGeneration": {
+          "const": false
+        },
+        "strictEvidenceCreation": {
+          "const": false
+        },
+        "citationGradePromotion": {
+          "const": false
+        },
+        "runtimeEvidenceCreation": {
+          "const": false
+        },
+        "sourceSpanCreation": {
+          "const": false
+        },
+        "sourceSpanCandidateCreation": {
+          "const": false
+        },
+        "parsedArtifactEvidenceChunkCreation": {
+          "const": false
+        },
+        "databaseMutation": {
+          "const": false
+        },
+        "indexMutation": {
+          "const": false
+        },
+        "reindexOrReembed": {
+          "const": false
+        },
+        "parserExecution": {
+          "const": false
+        },
+        "canonicalParsedArtifactWrite": {
+          "const": false
+        },
+        "vaultScan": {
+          "const": false
+        },
+        "externalDownload": {
+          "const": false
+        },
+        "branchDeletion": {
+          "const": false
+        },
+        "githubMutation": {
+          "const": false
+        }
+      }
+    },
+    "sourceLaneSplitDryRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "decision", "nextRecommendedTranche", "reportRef", "counts"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.paper-retrieval-lane-split-parsed-artifact-evidence-chunk-dry-run.v1"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nextRecommendedTranche": {
+          "type": "string"
+        },
+        "reportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "completionBoundary", "nextEvidenceWork"],
+      "properties": {
+        "name": {
+          "const": "paper_retrieval_lane_split_parsed_artifact_evidence_chunk_contract_review_v1"
+        },
+        "completionBoundary": {
+          "const": "contract_review_report_only"
+        },
+        "nextEvidenceWork": {
+          "const": "parsed_artifact_evidence_chunk_candidate_dry_run"
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "contractName",
+        "contractVersion",
+        "answerEvidenceLane",
+        "candidateDiscoveryLane",
+        "requiredCommonFields",
+        "allowedArtifactTypes",
+        "disallowedEvidenceSources",
+        "promotionRules",
+        "failureClassifications"
+      ],
+      "properties": {
+        "contractName": {
+          "const": "parsed_artifact_evidence_chunk_contract_v1"
+        },
+        "contractVersion": {
+          "const": "v1"
+        },
+        "answerEvidenceLane": {
+          "const": "parsed_artifact_evidence_chunk"
+        },
+        "candidateDiscoveryLane": {
+          "const": "visual_retrieval_hint_candidate_discovery"
+        },
+        "requiredCommonFields": {
+          "type": "array",
+          "contains": {
+            "const": "sourceContentHash"
+          }
+        },
+        "allowedArtifactTypes": {
+          "type": "array",
+          "minItems": 5
+        },
+        "disallowedEvidenceSources": {
+          "type": "array",
+          "minItems": 5
+        },
+        "promotionRules": {
+          "type": "array",
+          "minItems": 1
+        },
+        "failureClassifications": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    "allowedArtifactContracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "schema",
+          "contractId",
+          "artifactType",
+          "contractVersion",
+          "sourceType",
+          "locatorContract",
+          "requiredFields",
+          "requiredHashFields",
+          "answerEvidenceEligibleWhenContractSatisfied",
+          "answerabilityEligibleWhenContractSatisfied",
+          "contractSha256"
+        ],
+        "properties": {
+          "schema": {
+            "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-artifact-contract.v1"
+          },
+          "artifactType": {
+            "enum": ["section", "paragraph", "table", "equation", "figure_caption"]
+          },
+          "sourceType": {
+            "const": "paper"
+          },
+          "locatorContract": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requiredFields": {
+            "type": "array",
+            "contains": {
+              "const": "sourceContentHash"
+            }
+          },
+          "requiredHashFields": {
+            "type": "array",
+            "contains": {
+              "const": "sourceContentHash"
+            }
+          },
+          "answerEvidenceEligibleWhenContractSatisfied": {
+            "const": true
+          },
+          "answerabilityEligibleWhenContractSatisfied": {
+            "const": true
+          }
+        }
+      }
+    },
+    "disallowedSourceContracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "schema",
+          "contractId",
+          "sourceKind",
+          "reason",
+          "answerEvidenceAllowed",
+          "answerabilityAllowed",
+          "strictEvidenceAllowed",
+          "citationGradeAllowed",
+          "contractSha256"
+        ],
+        "properties": {
+          "schema": {
+            "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-disallowed-source-contract.v1"
+          },
+          "sourceKind": {
+            "enum": [
+              "visual_retrieval_hint_text",
+              "fallback_chunk",
+              "locator_only_anchor",
+              "memory_unit_locator",
+              "korean_summary_or_paraphrase"
+            ]
+          },
+          "answerEvidenceAllowed": {
+            "const": false
+          },
+          "answerabilityAllowed": {
+            "const": false
+          },
+          "strictEvidenceAllowed": {
+            "const": false
+          },
+          "citationGradeAllowed": {
+            "const": false
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceCandidateDiscoveryOnlyRows",
+        "sourcePlannedLaneSplitRows",
+        "sourceParsedArtifactEvidenceChunkLaneRows",
+        "sourceVisualCandidateDiscoveryLaneRows",
+        "sourceAnswerEvidenceEligibleLaneRows",
+        "sourceAnswerabilityEligibleLaneRows",
+        "sourceVisualHintRowsQuarantinedFromAnswerEvidence",
+        "contractRows",
+        "allowedArtifactTypeRows",
+        "allowedArtifactContractRows",
+        "disallowedSourceRows",
+        "disallowedSourceContractRows",
+        "textSpanContractRows",
+        "textSpanArtifactContractRows",
+        "structuredArtifactContractRows",
+        "answerEvidenceEligibleContractRows",
+        "answerabilityEligibleContractRows",
+        "visualHintAnswerEvidenceAllowedRows",
+        "fallbackChunkAnswerEvidenceAllowedRows",
+        "locatorOnlyAnswerEvidenceAllowedRows",
+        "memoryUnitAnswerEvidenceAllowedRows",
+        "paraphraseAnswerEvidenceAllowedRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "runtimeRouteWriteRows",
+        "runtimeConfigMutationRows",
+        "operationalSearchIndexQueryRows",
+        "runtimeVisibleRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "answerableWithoutTextEvidenceRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "sourceSpanCandidateCreatedRows",
+        "parsedArtifactEvidenceChunkCreatedRows",
+        "embeddingCallRows",
+        "embeddingVectorWriteRows",
+        "vectorIndexWriteRows",
+        "productionVectorIndexWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "parserExecutionRows",
+        "canonicalParsedArtifactWriteRows",
+        "graphDbWriteRows",
+        "ontologyWriteRows",
+        "memoryCardWriteRows",
+        "clusterWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "branchDeletionRows",
+        "githubPrMutationRows"
+      ],
+      "properties": {
+        "sourceCandidateDiscoveryOnlyRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourcePlannedLaneSplitRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceParsedArtifactEvidenceChunkLaneRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceVisualCandidateDiscoveryLaneRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceAnswerEvidenceEligibleLaneRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceAnswerabilityEligibleLaneRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceVisualHintRowsQuarantinedFromAnswerEvidence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "contractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allowedArtifactTypeRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allowedArtifactContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "disallowedSourceRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "disallowedSourceContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "textSpanContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "textSpanArtifactContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "structuredArtifactContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "answerEvidenceEligibleContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "answerabilityEligibleContractRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "visualHintAnswerEvidenceAllowedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fallbackChunkAnswerEvidenceAllowedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "locatorOnlyAnswerEvidenceAllowedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "memoryUnitAnswerEvidenceAllowedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "paraphraseAnswerEvidenceAllowedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "privatePathLeakRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "schemaViolationCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "runtimeRouteWriteRows": {
+          "const": 0
+        },
+        "runtimeConfigMutationRows": {
+          "const": 0
+        },
+        "operationalSearchIndexQueryRows": {
+          "const": 0
+        },
+        "runtimeVisibleRows": {
+          "const": 0
+        },
+        "answerVisibleRows": {
+          "const": 0
+        },
+        "answerGenerationRows": {
+          "const": 0
+        },
+        "strictEvidenceRows": {
+          "const": 0
+        },
+        "citationGradeRows": {
+          "const": 0
+        },
+        "runtimeEvidenceRows": {
+          "const": 0
+        },
+        "answerableWithoutTextEvidenceRows": {
+          "const": 0
+        },
+        "candidateStoreWriteRows": {
+          "const": 0
+        },
+        "sourceSpanCreatedRows": {
+          "const": 0
+        },
+        "sourceSpanCandidateCreatedRows": {
+          "const": 0
+        },
+        "parsedArtifactEvidenceChunkCreatedRows": {
+          "const": 0
+        },
+        "embeddingCallRows": {
+          "const": 0
+        },
+        "embeddingVectorWriteRows": {
+          "const": 0
+        },
+        "vectorIndexWriteRows": {
+          "const": 0
+        },
+        "productionVectorIndexWriteRows": {
+          "const": 0
+        },
+        "databaseMutationRows": {
+          "const": 0
+        },
+        "indexMutationRows": {
+          "const": 0
+        },
+        "reindexOrReembedRows": {
+          "const": 0
+        },
+        "parserExecutionRows": {
+          "const": 0
+        },
+        "canonicalParsedArtifactWriteRows": {
+          "const": 0
+        },
+        "graphDbWriteRows": {
+          "const": 0
+        },
+        "ontologyWriteRows": {
+          "const": 0
+        },
+        "memoryCardWriteRows": {
+          "const": 0
+        },
+        "clusterWriteRows": {
+          "const": 0
+        },
+        "vaultScanRows": {
+          "const": 0
+        },
+        "externalDownloadRows": {
+          "const": 0
+        },
+        "branchDeletionRows": {
+          "const": 0
+        },
+        "githubPrMutationRows": {
+          "const": 0
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["passed", "checks"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "technicalBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
