@@ -217,6 +217,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-quality-eval-runner.v1": "paper-parsed-artifact-evidence-chunk-answer-path-labs-opt-in-quality-eval-runner.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-packet.v1": "paper-parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-packet.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-output-capture.v1": "paper-parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-output-capture.v1.json",
+    "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-promotion-review.v1": "paper-parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-promotion-review.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
