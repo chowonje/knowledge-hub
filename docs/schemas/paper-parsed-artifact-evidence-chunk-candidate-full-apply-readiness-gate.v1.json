@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-parsed-artifact-evidence-chunk-candidate-full-apply-readiness-gate.v1.json",
+  "title": "Parsed Artifact Evidence Chunk Candidate Full Apply Readiness Gate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "input",
+    "sourceCandidateDryRun",
+    "sourceCanaryApplyReadback",
+    "policy",
+    "counts",
+    "gate",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-readiness-gate.v1"
+    },
+    "status": {
+      "enum": ["ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": [
+        "parsed_artifact_evidence_chunk_candidate_full_apply_readiness_gate_ready",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": {
+      "const": "parsed_artifact_evidence_chunk_candidate_full_apply_executor_apply_readback"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceCandidateDryRunReportRef",
+        "sourceCanaryApplyReadbackReportRef",
+        "papersDirRef",
+        "candidateStoreRefTemplate"
+      ],
+      "properties": {
+        "sourceCandidateDryRunReportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": { "pattern": "^/" }
+        },
+        "sourceCanaryApplyReadbackReportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": { "pattern": "^/" }
+        },
+        "papersDirRef": {
+          "const": "papers_dir"
+        },
+        "candidateStoreRefTemplate": {
+          "const": "papers_dir/structured_evidence_candidates/evidence_chunk/{paperId}.jsonl"
+        }
+      }
+    },
+    "sourceCandidateDryRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "decision",
+        "reportRef",
+        "selectedCandidateRows",
+        "candidateRows",
+        "heldCandidateRows",
+        "paragraphCandidateRows",
+        "sectionCandidateRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-dry-run.v1" },
+        "status": { "type": "string", "minLength": 1 },
+        "decision": { "type": "string", "minLength": 1 },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "selectedCandidateRows": { "type": "integer", "minimum": 0 },
+        "candidateRows": { "type": "integer", "minimum": 0 },
+        "heldCandidateRows": { "type": "integer", "minimum": 0 },
+        "paragraphCandidateRows": { "type": "integer", "minimum": 0 },
+        "sectionCandidateRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sourceCanaryApplyReadback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "decision",
+        "reportRef",
+        "selectedCanaryRows",
+        "heldRows",
+        "candidateStoreWriteRows",
+        "alreadyCorrectRows",
+        "readbackValidatedRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "schema": { "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-canary-apply-readback.v1" },
+        "status": { "type": "string", "minLength": 1 },
+        "decision": { "type": "string", "minLength": 1 },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "selectedCanaryRows": { "type": "integer", "minimum": 0 },
+        "heldRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "type": "integer", "minimum": 0 },
+        "alreadyCorrectRows": { "type": "integer", "minimum": 0 },
+        "readbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readOnlyReview",
+        "candidateStoreWrite",
+        "fullApplyPerformed",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "answerVisibleExposure",
+        "answerGeneration",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "parserExecution",
+        "canonicalParsedArtifactsWritten"
+      ],
+      "properties": {
+        "readOnlyReview": { "const": true },
+        "candidateStoreWrite": { "const": false },
+        "fullApplyPerformed": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "answerVisibleExposure": { "const": false },
+        "answerGeneration": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "parserExecution": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputCandidateRows",
+        "fullApplyCandidateRows",
+        "canaryCandidateRows",
+        "heldRows",
+        "canaryReadbackValidatedRows",
+        "storeValidatedCanaryRows",
+        "missingStoreRows",
+        "duplicateStoreRows",
+        "hashMismatchRows",
+        "policyViolationRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "parserExecutionRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byReadinessStatus"
+      ],
+      "properties": {
+        "inputCandidateRows": { "type": "integer", "minimum": 0 },
+        "fullApplyCandidateRows": { "type": "integer", "minimum": 0 },
+        "canaryCandidateRows": { "type": "integer", "minimum": 0 },
+        "heldRows": { "type": "integer", "minimum": 0 },
+        "canaryReadbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "storeValidatedCanaryRows": { "type": "integer", "minimum": 0 },
+        "missingStoreRows": { "type": "integer", "minimum": 0 },
+        "duplicateStoreRows": { "type": "integer", "minimum": 0 },
+        "hashMismatchRows": { "type": "integer", "minimum": 0 },
+        "policyViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "answerVisibleRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byArtifactType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byReadinessStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readyForFullApplyExecutor",
+        "canaryOnlyReviewed",
+        "fullApplyAllowedByThisReport",
+        "fullApplyPerformed",
+        "candidateStoreWriteAllowedInThisTranche",
+        "runtimeVisibilityAllowed",
+        "evidencePromotionAllowed",
+        "schemaViolations"
+      ],
+      "properties": {
+        "readyForFullApplyExecutor": { "type": "boolean" },
+        "canaryOnlyReviewed": { "const": true },
+        "fullApplyAllowedByThisReport": { "type": "boolean" },
+        "fullApplyPerformed": { "const": false },
+        "candidateStoreWriteAllowedInThisTranche": { "const": false },
+        "runtimeVisibilityAllowed": { "const": false },
+        "evidencePromotionAllowed": { "const": false },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["readinessRowId", "candidateRecordId", "paperId", "readinessStatus"]
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
