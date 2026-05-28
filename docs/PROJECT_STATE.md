@@ -10,6 +10,8 @@ Canonical product goal: `docs/knowledge_os_definition.md` now defines the final 
 
 2026-05-29 goal lock: v0.1 RC is explicitly bounded to a 300-500 paper local AI research corpus, 80-90% parsed-artifact coverage for the priority corpus, section/paragraph evidence chunks connected to answerability, conservative no-answer behavior, a documented public CLI/MCP Research Preview surface, green smoke/hygiene/core eval gates, current release docs, and a reviewable release-candidate branch/PR state. Full table/equation/figure evidence remains outside the v0.1 default promise.
 
+Durable decision record: `docs/adr/2026-05-29-knowledgeos-product-definition.md` fixes KnowledgeOS as a runtime-first local research knowledge OS, with v0.1 narrowed to section/paragraph evidence-first paper QA and comparison rather than GUI-first or fully general table/equation/figure understanding.
+
 ## Current public release posture
 
 - Public-facing posture is **Research Preview**, not stable-release language.

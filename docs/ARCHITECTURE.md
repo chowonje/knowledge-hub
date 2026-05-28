@@ -10,6 +10,7 @@ The canonical product definition is `docs/knowledge_os_definition.md`: the final
 
 See also:
 - `docs/knowledge_os_definition.md`
+- `docs/adr/2026-05-29-knowledgeos-product-definition.md`
 - `docs/maps/README.md`
 - `docs/maps/canonical-ownership-map.md`
 - `docs/maps/agent-execution-map.md`

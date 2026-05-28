@@ -2,6 +2,8 @@
 
 Last updated: 2026-05-29
 
+Decision record: `docs/adr/2026-05-29-knowledgeos-product-definition.md`
+
 ## Final Goal
 
 KnowledgeOS / knowledge-hub is not a paper storage app and not a general chatbot.
