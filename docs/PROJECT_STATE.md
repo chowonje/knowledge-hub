@@ -8,6 +8,8 @@ Last updated: 2026-05-29
 
 Canonical product goal: `docs/knowledge_os_definition.md` now defines the final deliverable as a CLI/MCP/local-store/evidence-report runtime for auditable AI research workflows. The v0.1 release-candidate scope is section/paragraph evidence-first paper QA and comparison over a local AI-paper corpus; visual/table/equation/figure-caption paths remain labs or limited support until their evidence gates pass.
 
+2026-05-29 goal lock: v0.1 RC is explicitly bounded to a 300-500 paper local AI research corpus, 80-90% parsed-artifact coverage for the priority corpus, section/paragraph evidence chunks connected to answerability, conservative no-answer behavior, a documented public CLI/MCP Research Preview surface, green smoke/hygiene/core eval gates, current release docs, and a reviewable release-candidate branch/PR state. Full table/equation/figure evidence remains outside the v0.1 default promise.
+
 ## Current public release posture
 
 - Public-facing posture is **Research Preview**, not stable-release language.

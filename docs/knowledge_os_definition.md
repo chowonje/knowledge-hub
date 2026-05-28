@@ -12,6 +12,8 @@ The final product is:
 
 In practical terms, KnowledgeOS collects, parses, structures, retrieves, compares, and answers over AI papers and technical documents only when the supporting evidence can be traced back to local source artifacts.
 
+More concretely, answerable claims must be backed by source hash, source location, and an original excerpt. A fluent model response is not the product boundary; the inspectable local evidence runtime is.
+
 ## Final Deliverable
 
 The shipped product is a runtime and evidence substrate, not a GUI-first application.
@@ -59,13 +61,14 @@ v0.1 is complete when:
 
 - `khub discover`, `khub index`, `khub search`, `khub ask`, and `khub trace` work on the default path.
 - A 300-500 paper AI research corpus can be managed locally.
-- Parsed artifact coverage reaches the release target for the priority corpus.
+- Parsed artifact coverage reaches 80-90% for the priority corpus.
 - Section/paragraph evidence chunks are connected to the answerability gate.
 - Lack of evidence produces abstain/no-answer rather than unsupported synthesis.
 - Visual, table, equation, and figure-caption workflows are clearly marked as labs or limited support unless their gates pass.
 - Public CLI/MCP surfaces match the documented Research Preview promise.
 - Full smoke, hygiene, and core eval gates are green for the release branch.
 - `CHANGELOG.md`, `docs/PROJECT_STATE.md`, and release docs are current.
+- The release-candidate branch and PR state are clean enough to review, merge, or intentionally hold.
 
 ## Non-Goals For v0.1
 
