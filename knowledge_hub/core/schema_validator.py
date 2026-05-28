@@ -207,6 +207,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-runtime-adapter-live-smoke.v1": "paper-parsed-artifact-evidence-chunk-runtime-adapter-live-smoke.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-real-answer-quality-smoke.v1": "paper-parsed-artifact-evidence-chunk-real-answer-quality-smoke.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-opt-in-route-review.v1": "paper-parsed-artifact-evidence-chunk-answer-path-opt-in-route-review.v1.json",
+    "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-opt-in-implementation-design.v1": "paper-parsed-artifact-evidence-chunk-answer-path-opt-in-implementation-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
