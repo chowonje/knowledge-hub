@@ -199,6 +199,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-readiness-gate.v1": "paper-parsed-artifact-evidence-chunk-candidate-full-apply-readiness-gate.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-executor-apply-readback.v1": "paper-parsed-artifact-evidence-chunk-candidate-full-apply-executor-apply-readback.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-readback-review.v1": "paper-parsed-artifact-evidence-chunk-candidate-full-apply-readback-review.v1.json",
+    "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-answerability-policy-gate.v1": "paper-parsed-artifact-evidence-chunk-candidate-answerability-policy-gate.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",

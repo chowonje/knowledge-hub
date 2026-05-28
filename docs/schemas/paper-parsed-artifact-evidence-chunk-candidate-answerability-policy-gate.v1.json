@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-parsed-artifact-evidence-chunk-candidate-answerability-policy-gate.v1.json",
+  "title": "Parsed Artifact Evidence Chunk Candidate Answerability Policy Gate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceFullApplyReadbackReview",
+    "policy",
+    "counts",
+    "gate",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-answerability-policy-gate.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": [
+        "parsed_artifact_evidence_chunk_candidate_answerability_policy_gate_ready",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceFullApplyReadbackReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "decision",
+        "nextRecommendedTranche",
+        "reportRef",
+        "expectedCandidateRows",
+        "readbackValidatedRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-readback-review.v1"
+        },
+        "status": { "enum": ["ready", "blocked"] },
+        "decision": {
+          "enum": [
+            "parsed_artifact_evidence_chunk_candidate_full_apply_readback_review_ready",
+            "blocked"
+          ]
+        },
+        "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "expectedCandidateRows": { "type": "integer", "minimum": 0 },
+        "readbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "answerabilityPolicyGateOnly",
+        "allowedArtifactTypes",
+        "candidateStoreWrite",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "answerVisibleExposure",
+        "answerGeneration",
+        "answerableRowsAllowedInThisTranche",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "parserExecution",
+        "canonicalParsedArtifactsWritten",
+        "nextGateRequiredBeforeRuntimeUse"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "answerabilityPolicyGateOnly": { "const": true },
+        "allowedArtifactTypes": {
+          "type": "array",
+          "items": { "enum": ["section", "paragraph"] },
+          "minItems": 2
+        },
+        "candidateStoreWrite": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "answerVisibleExposure": { "const": false },
+        "answerGeneration": { "const": false },
+        "answerableRowsAllowedInThisTranche": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "parserExecution": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "nextGateRequiredBeforeRuntimeUse": { "const": true }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputRows",
+        "readbackValidatedInputRows",
+        "answerabilityPolicyReadyRows",
+        "answerEvidenceEligibleCandidateRows",
+        "answerabilityEligibleCandidateRows",
+        "runtimeIntegrationDryRunReadyRows",
+        "answerableRows",
+        "blockedRows",
+        "blockedInputSchemaViolationRows",
+        "blockedReadbackNotReadyRows",
+        "blockedUnsupportedArtifactTypeRows",
+        "blockedMissingSourceHashRows",
+        "blockedMissingSnippetHashRows",
+        "blockedMissingLocatorRows",
+        "blockedMissingExcerptRows",
+        "blockedPolicyViolationRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "parserExecutionRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byAnswerabilityPolicyStatus"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "readbackValidatedInputRows": { "type": "integer", "minimum": 0 },
+        "answerabilityPolicyReadyRows": { "type": "integer", "minimum": 0 },
+        "answerEvidenceEligibleCandidateRows": { "type": "integer", "minimum": 0 },
+        "answerabilityEligibleCandidateRows": { "type": "integer", "minimum": 0 },
+        "runtimeIntegrationDryRunReadyRows": { "type": "integer", "minimum": 0 },
+        "answerableRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedReadbackNotReadyRows": { "type": "integer", "minimum": 0 },
+        "blockedUnsupportedArtifactTypeRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingSourceHashRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingSnippetHashRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingLocatorRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingExcerptRows": { "type": "integer", "minimum": 0 },
+        "blockedPolicyViolationRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "answerVisibleRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byArtifactType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "byAnswerabilityPolicyStatus": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readyForRuntimeIntegrationDryRun",
+        "candidateStoreWriteAllowed",
+        "sourceSpanCreationAllowed",
+        "runtimeVisibilityAllowed",
+        "evidencePromotionAllowed",
+        "answerVisibleAllowed",
+        "answerableAllowed",
+        "schemaViolations"
+      ],
+      "properties": {
+        "readyForRuntimeIntegrationDryRun": { "type": "boolean" },
+        "candidateStoreWriteAllowed": { "const": false },
+        "sourceSpanCreationAllowed": { "const": false },
+        "runtimeVisibilityAllowed": { "const": false },
+        "evidencePromotionAllowed": { "const": false },
+        "answerVisibleAllowed": { "const": false },
+        "answerableAllowed": { "const": false },
+        "schemaViolations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "policyGateRowId",
+          "sourceReadbackReviewRowId",
+          "candidateRecordId",
+          "paperId",
+          "artifactType",
+          "sourceContentHash",
+          "spanLocator",
+          "snippetHash",
+          "answerabilityPolicyStatus",
+          "answerabilityPolicyBlockers",
+          "answerabilityPolicyReady",
+          "runtimeIntegrationDryRunReady",
+          "answerEvidenceEligible",
+          "answerabilityEligible",
+          "answerable",
+          "candidateOnly",
+          "strictEvidence",
+          "citationGrade",
+          "runtimeEvidence",
+          "answerVisible",
+          "recommendedAction",
+          "checks"
+        ],
+        "properties": {
+          "answerable": { "const": false },
+          "candidateOnly": { "const": true },
+          "strictEvidence": { "const": false },
+          "citationGrade": { "const": false },
+          "runtimeEvidence": { "const": false },
+          "answerVisible": { "const": false }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
