@@ -212,6 +212,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-searcher-ingress-live-smoke.v1": "paper-parsed-artifact-evidence-chunk-answer-path-searcher-ingress-live-smoke.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-default-off-no-answer-regression-smoke.v1": "paper-parsed-artifact-evidence-chunk-answer-path-default-off-no-answer-regression-smoke.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-surface-design.v1": "paper-parsed-artifact-evidence-chunk-answer-path-labs-opt-in-surface-design.v1.json",
+    "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-surface-live-smoke.v1": "paper-parsed-artifact-evidence-chunk-answer-path-labs-opt-in-surface-live-smoke.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
