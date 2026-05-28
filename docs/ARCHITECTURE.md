@@ -4,9 +4,12 @@
 
 `knowledge-hub` is a local-first research knowledge system. It ingests papers, vault notes, and web documents; stores inspectable local artifacts and indices; and exposes grounded retrieval plus bounded labs workflows over those sources.
 
-The main architectural priority is to keep the default runtime retrieval-assistant-first while promoting new capabilities through additive, inspectable labs surfaces first.
+The main architectural priority is to keep the default runtime retrieval-assistant-first and evidence-first while promoting new capabilities through additive, inspectable labs surfaces first.
+
+The canonical product definition is `docs/knowledge_os_definition.md`: the final deliverable is a CLI/MCP/local-store/evidence-report runtime for auditable research workflows, and the v0.1 release candidate is scoped to section/paragraph evidence-first paper QA and comparison rather than a GUI-first app or fully general table/equation/figure understanding.
 
 See also:
+- `docs/knowledge_os_definition.md`
 - `docs/maps/README.md`
 - `docs/maps/canonical-ownership-map.md`
 - `docs/maps/agent-execution-map.md`

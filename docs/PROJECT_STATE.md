@@ -1,10 +1,12 @@
 # Project State
 
-Last updated: 2026-05-28
+Last updated: 2026-05-29
 
 ## What this project is
 
 `knowledge-hub` is a local-first, policy-first, retrieval-assistant-first knowledge runtime.
+
+Canonical product goal: `docs/knowledge_os_definition.md` now defines the final deliverable as a CLI/MCP/local-store/evidence-report runtime for auditable AI research workflows. The v0.1 release-candidate scope is section/paragraph evidence-first paper QA and comparison over a local AI-paper corpus; visual/table/equation/figure-caption paths remain labs or limited support until their evidence gates pass.
 
 ## Current public release posture
 

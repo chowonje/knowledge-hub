@@ -4,6 +4,16 @@ Knowledge Hub는 Obsidian, papers, web, and optional project context를 근거�
 
 Status: **Research Preview**. The supported default path is `discover -> index -> search/ask -> evidence review`. APIs, quality bars, and experimental surfaces may change without notice.
 
+## Product Goal
+
+KnowledgeOS / Knowledge Hub의 최종 결과물은 논문 저장 앱이나 일반 챗봇이 아니라, AI 논문과 기술 문서를 대상으로 한 **local-first, evidence-first research knowledge runtime**입니다.
+
+배포물은 CLI, MCP server, local stores, evidence reports, and docs로 구성됩니다. GUI나 Obsidian plugin은 consumer 또는 projection일 수 있지만 canonical product 본체는 아닙니다.
+
+v0.1 Release Candidate의 좁은 목표는 **section/paragraph evidence-first paper QA and compare runtime**입니다. Table, equation, and figure-caption workflows remain labs or limited support until their evidence gates pass.
+
+Canonical product definition: [docs/knowledge_os_definition.md](docs/knowledge_os_definition.md)
+
 ## Supported Default Path
 
 Knowledge Hub의 public product promise는 의도적으로 좁습니다:

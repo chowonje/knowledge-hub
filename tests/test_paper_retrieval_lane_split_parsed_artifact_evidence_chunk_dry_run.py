@@ -156,7 +156,7 @@ def test_lane_split_blocks_if_source_report_has_unsafe_counter() -> None:
 
 def test_lane_split_blocks_private_path_source_without_leaking_it() -> None:
     source = copy.deepcopy(_final_review_report())
-    source["debugPath"] = "/Users/won/private/paper.pdf"
+    source["debugPath"] = "Mobile Documents/private-paper.pdf"
 
     report = _build(source)
     rendered = json.dumps(report, ensure_ascii=False, sort_keys=True)
@@ -164,4 +164,4 @@ def test_lane_split_blocks_private_path_source_without_leaking_it() -> None:
     assert report["status"] == "blocked"
     assert report["counts"]["privatePathLeakRows"] == 1
     assert "visual_retrieval_hint_final_merge_review_has_private_path_leak" in report["technicalBlockers"]
-    assert "/Users/won/private" not in rendered
+    assert "Mobile Documents/private-paper.pdf" not in rendered

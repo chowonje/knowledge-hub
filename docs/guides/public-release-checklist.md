@@ -1,10 +1,12 @@
 # Public Release Checklist
 
-Last updated: 2026-04-20
+Last updated: 2026-05-29
 
 ## Current verdict
 
 `knowledge-hub` is ready for a **public prototype / research preview** release, but not yet for a **clean first-time-user stable release**.
+
+Canonical release scope: `docs/knowledge_os_definition.md` defines v0.1 as a section/paragraph evidence-first paper QA and comparison runtime, not a full table/equation/figure product.
 
 Why:
 

@@ -281,7 +281,7 @@ def test_final_merge_review_blocks_if_apply_report_would_mutate_index() -> None:
 
 def test_final_merge_review_blocks_private_path_source_without_leaking_it() -> None:
     route_design = copy.deepcopy(_route_design_report())
-    route_design["debugPath"] = "/Users/won/private/paper.pdf"
+    route_design["debugPath"] = "Mobile Documents/private-paper.pdf"
 
     report = _build(route_design=route_design)
     rendered = json.dumps(report, ensure_ascii=False, sort_keys=True)
@@ -289,4 +289,4 @@ def test_final_merge_review_blocks_private_path_source_without_leaking_it() -> N
     assert report["status"] == "blocked"
     assert report["counts"]["privatePathLeakRows"] == 1
     assert "runtime_candidate_discovery_route_design_has_private_path_leak" in report["technicalBlockers"]
-    assert "/Users/won/private" not in rendered
+    assert "Mobile Documents/private-paper.pdf" not in rendered

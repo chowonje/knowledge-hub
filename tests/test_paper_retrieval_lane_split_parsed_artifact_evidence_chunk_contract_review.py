@@ -210,7 +210,7 @@ def test_contract_review_blocks_if_visual_hint_fallback_is_allowed() -> None:
 
 def test_contract_review_blocks_private_path_source_without_leaking_it() -> None:
     source = copy.deepcopy(_lane_split())
-    source["debugPath"] = "/Users/won/private/paper.pdf"
+    source["debugPath"] = "Mobile Documents/private-paper.pdf"
 
     report = _build(source)
     rendered = json.dumps(report, ensure_ascii=False, sort_keys=True)
@@ -218,7 +218,7 @@ def test_contract_review_blocks_private_path_source_without_leaking_it() -> None
     assert report["status"] == "blocked"
     assert report["counts"]["privatePathLeakRows"] == 1
     assert "paper_retrieval_lane_split_dry_run_has_private_path_leak" in report["technicalBlockers"]
-    assert "/Users/won/private" not in rendered
+    assert "Mobile Documents/private-paper.pdf" not in rendered
 
 
 def test_contract_review_write_and_evidence_counters_remain_zero() -> None:
