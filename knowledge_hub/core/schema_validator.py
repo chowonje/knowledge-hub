@@ -191,6 +191,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-integration-apply-executor.v1": "paper-limited-visual-retrieval-hint-production-vector-db-integration-apply-executor.v1.json",
     "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-search-quality-eval.v1": "paper-limited-visual-retrieval-hint-production-vector-db-search-quality-eval.v1.json",
     "knowledge-hub.paper.limited-visual-retrieval-hint-runtime-candidate-discovery-route-design.v1": "paper-limited-visual-retrieval-hint-runtime-candidate-discovery-route-design.v1.json",
+    "knowledge-hub.paper.limited-visual-retrieval-hint-final-merge-review.v1": "paper-limited-visual-retrieval-hint-final-merge-review.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
