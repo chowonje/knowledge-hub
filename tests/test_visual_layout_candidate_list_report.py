@@ -7,9 +7,11 @@ from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.papers.visual_layout_candidate_list_report import (
     VISUAL_LAYOUT_CANDIDATE_LIST_REPORT_SCHEMA_ID,
     build_report_from_candidate_rows,
+    discover_local_paper_specs,
     extract_candidates_from_blocks,
     extract_candidates_from_images,
     extract_candidates_from_parsed_elements,
+    paper_id_from_filename,
     write_visual_layout_candidate_list_reports,
 )
 
@@ -160,3 +162,22 @@ def test_writer_outputs_only_sanitized_refs(tmp_path: Path) -> None:
     assert "/" + "Volumes" + "/" not in combined
     assert "Mobile " + "Documents" not in combined
     assert "i" + "Cloud" not in combined
+
+
+def test_discovers_local_pdf_specs_with_stable_known_ids(tmp_path: Path) -> None:
+    papers_root = tmp_path / "papers"
+    papers_root.mkdir()
+    (papers_root / "4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf").write_bytes(b"")
+    (papers_root / "A New Visual Paper.pdf").write_bytes(b"")
+
+    specs = discover_local_paper_specs(papers_root)
+
+    assert [spec.paper_id for spec in specs] == [
+        "alexnet-2012",
+        "a-new-visual-paper",
+    ]
+    assert [spec.paper_ref for spec in specs] == [
+        "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+        "papers_dir/A New Visual Paper.pdf",
+    ]
+    assert paper_id_from_filename("A New Visual Paper.pdf") == "a-new-visual-paper"

@@ -73,8 +73,8 @@ def _short_hash(value: str, *, length: int = 12) -> str:
 
 
 def _slug(value: str) -> str:
-    slug = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
-    return slug or "unknown"
+    token = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
+    return token or "unknown"
 
 
 def sanitized_report_ref(path: Path, *, project_root: Path | None = None) -> str:

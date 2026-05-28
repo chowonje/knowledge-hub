@@ -1,0 +1,182 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 3 NumPy-like pseudocode for core implementation; image encoder and text encoder outputs are projected into a joint multimodal embedding, normalized, compared by scaled pairwise cosine similarity, and optimized with a symmetric cross-entropy loss.",
+      "visibleText": "Visible fragments include: I_f = image_encoder(I) with shape [n, d_i]; T_f = text_encoder(T) with shape [n, d_t]; joint multimodal embedding [n, d_e]; I_e = l2_normalize(np.dot(I_f, W_i), axis=1); T_e = l2_normalize(np.dot(T_f, W_t), axis=1); scaled pairwise cosine similarities [n, n]; logits = np.dot(I_e, T_e.T) * np.exp(t); symmetric loss function; labels = np.arange(n); loss_i = cross_entropy_loss(logits, labels, axis=0); loss_t = cross_entropy_loss(logits, labels, axis=1); loss = (loss_i + loss_t)/2; Figure 3. Numpy-like pseudocode for the core of an implementation of CLIP. Also visible are cropped neighboring text fragments including section heading 2.5. Training and a paragraph mentioning Vision Transformer (ViT).",
+      "retrievalKeywords": [
+        "CLIP Figure 3",
+        "NumPy-like pseudocode",
+        "image_encoder",
+        "text_encoder",
+        "joint multimodal embedding",
+        "scaled pairwise cosine similarities",
+        "symmetric loss function",
+        "cross_entropy_loss"
+      ],
+      "uncertainty": "Low for the visible pseudocode and figure caption; higher for cropped right-column and bottom paragraph fragments because they are partially cut off.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 3 full pseudocode crop showing minibatch inputs, learned projection matrices, learned temperature parameter, extraction of image and text features, joint multimodal embedding normalization, logits from cosine similarity, and symmetric loss.",
+      "visibleText": "Visible fragments include: I[n, h, w, c] minibatch of aligned images; T[n, l] minibatch of aligned texts; W_i[d_i, d_e] learned projection of image to embed; W_t[d_t, d_e] learned projection of text to embed; t learned temperature parameter; extract feature representations of each modality; I_f = image_encoder(I); T_f = text_encoder(T); joint multimodal embedding [n, d_e]; I_e = l2_normalize(np.dot(I_f, W_i), axis=1); T_e = l2_normalize(np.dot(T_f, W_t), axis=1); scaled pairwise cosine similarities [n, n]; logits = np.dot(I_e, T_e.T) * np.exp(t); symmetric loss function; labels = np.arange(n); loss_i = cross_entropy_loss(logits, labels, axis=0); loss_t = cross_entropy_loss(logits, labels, axis=1); loss = (loss_i + loss_t)/2; Figure 3. Numpy-like pseudocode for the core of an implementation of CLIP.",
+      "retrievalKeywords": [
+        "CLIP pseudocode",
+        "aligned images",
+        "aligned texts",
+        "learned temperature parameter",
+        "l2_normalize",
+        "np.dot",
+        "cosine similarities",
+        "cross entropy"
+      ],
+      "uncertainty": "Low for the main code block and caption; minor uncertainty for small cropped text along the far right edge.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 10 figure region comparing CLIP performance with another performance axis; scatterplot with dataset labels, dashed diagonal y=x line, blue trend line, shaded interval, and correlation label r = 0.82.",
+      "visibleText": "Visible fragments include chart labels HatefulMemes, Kinetics700, FER2013, PCAM, EuroSAT, DTD, GTSRB, Birdsnap, FGVCAircraft, KITTI Distance, and CLEVRCounts. The x-axis reads CLIP Performance with visible ticks around 60, 70, 80, 90, and 100. The plot includes a dashed diagonal line, a blue fitted line with a light-blue band, and the annotation r = 0.82. Text below the chart is cropped but includes fragments such as is correlated with linear, mostly sub-optimal, Comparing, performance across datasets, zero-shot performance mostly shifted 10 to, and no more than 3 point difference.",
+      "retrievalKeywords": [
+        "CLIP Performance",
+        "r = 0.82",
+        "zero-shot",
+        "linear",
+        "fully supervised",
+        "HatefulMemes",
+        "EuroSAT",
+        "GTSRB",
+        "KITTI Distance",
+        "CLEVRCounts"
+      ],
+      "uncertainty": "Moderate because the chart is cropped on the left and top, and the paragraph below is cut off at the left edge.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 10 discussion of a dashed y = x line as an optimal zero-shot classifier, zero-shot classifiers underperforming fully supervised classifiers by 10% to 25%, and positive correlation of 0.82 with p-value less than 10^-6.",
+      "visibleText": "Visible fragments include: across datasets. The dashed, y = x line represents an optimal zero-shot classifier that matches the performance of its fully supervised equivalent. For most datasets, the performance of zero-shot classifiers still underperform fully supervised classifiers by 10% to 25%, suggesting that there is still plenty of headroom for improving CLIP task-learning and zero-shot transfer capabilities. There is a positive correlation of 0.82, p-value less than 10^-6, between zero-shot performance and fully supervised performance. The far-right column is heavily cropped but includes fragments such as The GPT family, increase in training, the zero-shot, models across, and trend is smooth.",
+      "retrievalKeywords": [
+        "dashed y = x line",
+        "optimal zero-shot classifier",
+        "fully supervised equivalent",
+        "zero-shot classifiers",
+        "10% to 25%",
+        "task-learning",
+        "zero-shot transfer",
+        "positive correlation 0.82",
+        "p-value < 10^-6"
+      ],
+      "uncertainty": "Low for the central paragraph text; high for the far-right column fragments because only partial words are visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP first-page layout crop with title fragment about learning transferable visual models, author fragments including Radford, Jong Wook Kim, and Amanda Askell, followed by the Abstract heading and abstract text about fixed category prediction and learning visual concepts from broader supervision.",
+      "visibleText": "Visible fragments include title text ending in learning Transferable Visual. Author fragments include Radford, Jong Wook Kim, Sastry, Amanda Askell, and cropped names beginning Ch and Pam. The centered heading Abstract is visible. Abstract fragments include state-of-the-art computer vision systems, to predict a fixed set of predetermined categories, restricted form of supervision limits generality and usability, labeled data is needed, visual concept, learning directly from raw text about images as a promising alternative, broader source of supervision, and simple pre-training.",
+      "retrievalKeywords": [
+        "CLIP first page",
+        "Learning Transferable Visual",
+        "Radford",
+        "Jong Wook Kim",
+        "Amanda Askell",
+        "Abstract",
+        "fixed set of categories",
+        "visual concept",
+        "pre-training"
+      ],
+      "uncertainty": "Moderate because the crop truncates the title, author list, and abstract lines at the left and right edges.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE first-page layout crop with title fragment 'Masked Autoenco...', author fragments including Kaiming He and Xinlei Chen, Abstract heading, and abstract text about masked autoencoders as scalable self-supervised learners that mask random patches and reconstruct missing pixels using an encoder-decoder design.",
+      "visibleText": "Visible fragments include title fragment Masked Autoenco. Author fragments include Kaiming He and Xinlei Chen. A footnote fragment equal and an affiliation fragment beginning Fac are visible. The centered heading Abstract is visible. Abstract fragments include masked autoencoders, self-supervised learners for computer vision, mask random patches, reconstruct the missing pixels, encoder architecture, visible subset of patches, lightweight decoder, and image from the latent representation.",
+      "retrievalKeywords": [
+        "MAE first page",
+        "Masked Autoenco",
+        "Kaiming He",
+        "Xinlei Chen",
+        "Abstract",
+        "masked autoencoders",
+        "self-supervised learners",
+        "mask random patches",
+        "reconstruct missing pixels",
+        "lightweight decoder"
+      ],
+      "uncertainty": "Moderate because most title, affiliation, and abstract lines are cropped at one or both edges.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet first-page layout crop showing the transition from abstract-like text into section '1 Introduction'; visible fragments mention a neural network with five convolutional layers and three fully connected layers, ILSVRC-2012, object recognition, CIFAR-10/100, and MNIST.",
+      "visibleText": "Visible fragments include upper paragraph snippets: neural network, five convolutional layers, three fully-connected layers, non-saturating neurons, GPU implementation of convolution, regularization, ILSVRC-2012 competition, and compared to 26.2%. The section heading 1 Introduction is clearly visible. Introduction fragments include current approaches to object recognition, better techniques for preventing overfitting, small datasets on the order of tens of thousands, CIFAR-10/100, augmented examples, best error rate on MNIST, realistic settings, and larger training sets.",
+      "retrievalKeywords": [
+        "AlexNet first page",
+        "1 Introduction",
+        "neural network",
+        "five convolutional layers",
+        "three fully connected",
+        "ILSVRC-2012",
+        "object recognition",
+        "CIFAR-10/100",
+        "MNIST"
+      ],
+      "uncertainty": "Moderate to high because the crop shows only the right portion of the page and many lines are truncated.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet first-page layout crop with title fragment 'Deep Residual...', author fragment Kaiming He, Abstract heading, and abstract text about residual learning, training substantially deeper neural networks, reformulating layers with reference to inputs, and improved optimization and accuracy with increased depth.",
+      "visibleText": "Visible fragments include title fragment Deep Residual. Author fragments include Kaiming He and a cropped neighboring name beginning Xia. An email fragment begins kahe. The centered heading Abstract is visible. Abstract fragments include neural networks are more difficult to train, residual learning framework, substantially deeper than prior networks, explicitly reformulate layers, functions with reference to layer inputs, learning unreferenced functions, empirical evidence, easier to optimize, gain accuracy by increased depth, and ImageNet.",
+      "retrievalKeywords": [
+        "ResNet first page",
+        "Deep Residual",
+        "Kaiming He",
+        "Abstract",
+        "residual learning framework",
+        "substantially deeper",
+        "reformulate layers",
+        "easier to optimize",
+        "increased depth",
+        "ImageNet"
+      ],
+      "uncertainty": "Moderate because the crop truncates the title, author list, email line, and most abstract lines.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

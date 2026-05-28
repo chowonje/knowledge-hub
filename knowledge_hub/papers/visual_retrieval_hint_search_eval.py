@@ -28,6 +28,7 @@ from knowledge_hub.papers.visual_retrieval_hint_usefulness_eval import (
     _source_candidate_id,
     _text_context,
     _tokens,
+    clear_rank_index_cache,
     load_json,
     normalize_text,
     sanitized_report_ref,
@@ -380,6 +381,7 @@ def build_visual_retrieval_hint_search_eval(
     *,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
+    clear_rank_index_cache()
     layout_rows = [
         row for row in list(layout_candidate_report.get("candidateRowsDetail") or []) if isinstance(row, dict)
     ]

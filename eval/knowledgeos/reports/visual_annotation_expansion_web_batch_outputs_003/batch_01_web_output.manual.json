@@ -1,0 +1,178 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP FairFace page 21 table region showing Table 4 Non-White Race, Gender, and Age classification accuracy, plus a cropped lower Table 5 gender-classification-by-race table.",
+      "visibleText": "Visible fragments include: Model, Race, Gender, Age; FairFace Model 75.4, 94.4, 60.7; Linear Probe CLIP 92.8, 97.7, 63.1; Zero-Shot CLIP 91.3, 97.2, 54.3; Linear Probe Instagram 87.2, 93.9, 54.1. Caption: Table 4. Percent accuracy on Race, Gender, and Age classification of images in FairFace categories Black, Indian, East Asian, Southeast Asian, Middle Eastern, and Latino, grouped together as FairFace category Non-White. Lower cropped table fragments include column labels White, Indian, Latino, Middle Eastern, Southeast Asian, East Asian, Average and visible average values including 97.2, 97.8, 97.5, 96.9, 97.0, 94.1, and 93.4. Caption fragment: gender classification of images by FairFace race category.",
+      "retrievalKeywords": [
+        "CLIP",
+        "FairFace",
+        "Non-White",
+        "Race Gender Age classification",
+        "Linear Probe CLIP",
+        "Zero-Shot CLIP",
+        "Linear Probe Instagram",
+        "Table 4"
+      ],
+      "uncertainty": "The top Table 4 is legible. The lower Table 5 is cropped on the left and bottom, so some row labels and values are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 7 Table 3 compares previous self-supervised ViT ImageNet-1K results, with Figure 8 plotting MAE pre-training versus supervised pre-training.",
+      "visibleText": "Visible fragments include: table columns method, pre-train data, ViT-B, ViT-L, ViT-H, ViT-H448. Rows include scratch, our impl. with 82.3, 82.6, 83.1; DINO with IN1K and 82.8; MoCo v3 with IN1K, 83.2, 84.1; BEiT with IN1K+DALLE, 83.2, 85.2; MAE with IN1K, 83.6, 85.9, 86.9, 87.8. Caption: Table 3. Comparisons with previous results on ImageNet-1K. Caption text states that pre-training data is ImageNet-1K except the BEiT tokenizer, self-supervised methods are evaluated by end-to-end fine-tuning, ViT models are B/16, L/16, H/14, best values are underlined, results use image size 224 except ViT-H at 448, and MAE reconstructs normalized pixels and is pre-trained for 1600 epochs. Figure text includes Figure 8. MAE pre-training vs. supervised pre-training, axis label params (M), model labels ViT-B/16, ViT-L/16, ViT-H/14, and legend entries MAE, IN1K; supervised, IN1K, our impl.; supervised, IN1K; supervised, JFT300M. Section heading visible: 4.2. Comparisons with Previous Results.",
+      "retrievalKeywords": [
+        "MAE",
+        "ImageNet-1K",
+        "ViT-B",
+        "ViT-L",
+        "ViT-H",
+        "DINO",
+        "MoCo v3",
+        "BEiT",
+        "Figure 8"
+      ],
+      "uncertainty": "The main table and figure caption are legible; neighboring right-column text and part of the plotted line labels are partially cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 6 table region containing ImageNet validation error tables for 10-crop testing and single-model results, with a partial ensemble table.",
+      "visibleText": "Visible fragments include upper table rows: PReLU-net 24.27, 7.38; plain-34 28.54, 10.02; ResNet-34 A 25.03, 7.76; ResNet-34 B 24.52, 7.46; ResNet-34 C 24.19, 7.40; ResNet-50 22.85, 6.71; ResNet-101 21.75, 6.05; ResNet-152 21.43, 5.71. Caption: Table 3. Error rates, 10-crop testing, on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions. Middle table columns: method, top-1 err., top-5 err. Rows include VGG ILSVRC14, GoogLeNet ILSVRC14, VGG v5 24.4 and 7.1, PReLU-net 21.59 and 5.71, BN-inception 21.99 and 5.81, ResNet-34 B 21.84 and 5.71, ResNet-34 C 21.53 and 5.60, ResNet-50 20.74 and 5.25, ResNet-101 19.87 and 4.60, ResNet-152 19.38 and 4.49. Caption: Table 4. Error rates of single-model results on the ImageNet validation set except dagger reported on the test set. Bottom partial table shows method and top-5 err. test with visible rows including VGG 7.32, GoogLeNet 6.66, VGG v5 6.8, and PReLU-net 4.94.",
+      "retrievalKeywords": [
+        "ResNet",
+        "ImageNet validation",
+        "10-crop testing",
+        "single-model results",
+        "top-1 error",
+        "top-5 error",
+        "ResNet-152",
+        "Table 4"
+      ],
+      "uncertainty": "The middle Table 4 is clear. The upper Table 3 is cropped at the top, and the lower Table 5 is cropped before all rows and its full caption.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP FairFace page 21 table region showing Table 3 White-category Race, Gender, and Age accuracy, plus a cropped Table 5 gender classification by race category.",
+      "visibleText": "Visible fragments include: table columns Model, Race, Gender, Age. Rows: FairFace Model 93.7, 94.2, 59.7; Linear Probe CLIP 93.4, 96.5, 63.8; Zero-Shot CLIP 58.3, 95.9, 57.1; Linear Probe Instagram 90.8, 93.2, 54.2. Caption: Table 3. Percent accuracy on Race, Gender, and Age classification of images in FairFace category White. A neighboring cropped caption begins Table 4. Lower cropped table fragments include headers Model, Gender, Black, White, Indian, and partial Latino. Visible model groups include Linear Probe CLIP, Zero-Shot CLIP, and Linear Probe Instagram with Male and Female rows. Visible values include Linear Probe CLIP Male 96.9, 96.4, 98.7; Female 97.9, 96.7, 97.9; aggregate 97.4, 96.5, 98.3. Zero-Shot CLIP visible values include Male 96.3, 96.4, 97.7; Female 97.1, 95.3, 98.3; aggregate 96.7, 95.9, 98.0. Linear Probe Instagram visible values include Male 92.5, 94.8, 96.2; Female 90.1, 91.4, 95.0; aggregate 91.3, 93.2, 95.6. Caption fragment: Table 5. Percent accuracy on gender classification of images.",
+      "retrievalKeywords": [
+        "CLIP",
+        "FairFace",
+        "White",
+        "Race Gender Age classification",
+        "Linear Probe CLIP",
+        "Zero-Shot CLIP",
+        "Linear Probe Instagram",
+        "gender classification"
+      ],
+      "uncertainty": "The top Table 3 is fully legible. The lower Table 5 is cropped on the right and bottom, so later race columns and the full caption are not completely visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 8 Table 4 reports COCO object detection and segmentation transfer results using a ViT Mask R-CNN baseline.",
+      "visibleText": "Visible fragments include: table columns method, pre-train data, APbox with ViT-B and ViT-L, and APmask with ViT-B and ViT-L. Rows: supervised with IN1K w/ labels 47.9, 49.3, 42.9, 43.9; MoCo v3 with IN1K 47.9, 49.3, 42.7, 44.0; BEiT with IN1K+DALLE 49.8, 53.3, 44.4, 47.1; MAE with IN1K 50.3, 53.3, 44.9, 47.2. Caption: Table 4. COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementation. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP. Body text fragments include: linear separability is not the sole metric for evaluating representation quality and section heading 5. Transfer Learning Experiments. Subsection fragment: Object detection and segmentation. We fine-tune Mask R-CNN end-to-end on COCO.",
+      "retrievalKeywords": [
+        "MAE",
+        "COCO",
+        "object detection",
+        "segmentation",
+        "Mask R-CNN",
+        "APbox",
+        "APmask",
+        "ViT-B",
+        "ViT-L"
+      ],
+      "uncertainty": "The main Table 4 and caption are legible. Some neighboring right-column tables and text are cropped and not fully readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 6 table region showing the lower part of ImageNet single-model results and Table 5 ensemble top-5 test error, followed by residual-learning discussion text.",
+      "visibleText": "Visible fragments include the lower portion of Table 4 with rows: VGG v5 24.4, 7.1; PReLU-net 21.59, 5.71; BN-inception 21.99, 5.81; ResNet-34 B 21.84, 5.71; ResNet-34 C 21.53, 5.60; ResNet-50 20.74, 5.25; ResNet-101 19.87, 4.60; ResNet-152 19.38, 4.49. Caption: Table 4. Error rates of single-model results on the ImageNet validation set. Table 5 columns: method and top-5 err. test. Rows: VGG ILSVRC14 7.32; GoogLeNet ILSVRC14 6.66; VGG v5 6.8; PReLU-net 4.94; BN-inception 4.82; ResNet ILSVRC15 3.57. Caption: Table 5. Error rates of ensembles. The top-5 error is on the test set of ImageNet and reported by the test server. Body text fragments include: ResNet reduces the top-1 error by 3.5% and This comparison verifies the effectiveness of residual learning on extremely deep systems.",
+      "retrievalKeywords": [
+        "ResNet",
+        "ILSVRC",
+        "ImageNet",
+        "ensemble",
+        "top-5 error",
+        "test set",
+        "BN-inception",
+        "residual learning",
+        "Table 5"
+      ],
+      "uncertainty": "Table 5 is fully legible. Table 4 is only the lower portion, and neighboring right-column text is cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 22 bias-probe tables showing crime-related and non-human category rates by FairFace race category and age category, with discussion of LR CLIP and ZS CLIP.",
+      "visibleText": "Visible fragments include page header Learning Transferable Visual Models From Natural Language Supervision and page number 22. Table 6 columns: Category, Black, White, Indian, Latino, Middle Eastern, Southeast Asian, East Asian. Rows: Crime-related Categories 16.4, 24.9, 24.4, 10.8, 19.7, 4.4, 1.3; Non-human Categories 14.4, 5.5, 7.6, 3.7, 2.0, 1.9, 0.0. Caption: Table 6. Percent of images classified into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women, 14 total, as well as 3 crime-related categories and 4 non-human categories. Table 7 columns: Category Label Set, 0-2, 3-9, 10-19, 20-29, 30-39, 40-49, 50-59, 60-69, over 70. Rows: Default Label Set 30.3, 35.0, 29.5, 16.3, 13.9, 18.5, 19.1, 16.2, 10.4; Default Label Set plus child category 2.3, 4.3, 14.7, 15.0, 13.4, 18.2, 18.6, 15.5, 9.4. Caption: Table 7. Percent of images classified into crime-related and non-human categories by FairFace Age category, showing comparison between results obtained using a default label set and a label set to which the label child has been added. Body text fragments mention LR CLIP and ZS CLIP across intersectional race and gender categories and 4.9% of images misclassified into non-human classes.",
+      "retrievalKeywords": [
+        "CLIP",
+        "FairFace",
+        "crime-related categories",
+        "non-human categories",
+        "race category",
+        "age category",
+        "child category",
+        "LR CLIP",
+        "ZS CLIP"
+      ],
+      "uncertainty": "Both tables and captions are legible. The bottom body text continues beyond the visible crop, so later sentences are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 8 Table 7 compares pixels versus dVAE tokens as the MAE reconstruction target across IN1K, COCO, and ADE20K, followed by Discussion and Conclusion text.",
+      "visibleText": "Visible fragments include a table with grouped columns IN1K, COCO, and ADE20K. IN1K columns are ViT-B, ViT-L, ViT-H; COCO columns are ViT-B, ViT-L; ADE20K columns are ViT-B, ViT-L. Rows: pixel without norm 83.3, 85.1, 86.2, 49.5, 52.8, 48.0, 51.8; pixel with norm 83.6, 85.9, 86.9, 50.3, 53.3, 48.1, 53.6; dVAE token 83.6, 85.7, 86.9, 50.3, 53.2, 48.1, 53.4; delta 0.0, -0.2, 0.0, 0.0, -0.1, 0.0, -0.2. Caption: Table 7. Pixels vs. tokens as the MAE reconstruction target. Delta is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insignificant. Section heading: 6. Discussion and Conclusion. Body fragments include: Simple algorithms that scale well are the core of deep learning; in NLP, simple self-supervised learning methods enable benefits from exponentially scaling models; and an autoencoder provides scalable benefits.",
+      "retrievalKeywords": [
+        "MAE",
+        "pixels vs tokens",
+        "dVAE token",
+        "reconstruction target",
+        "IN1K",
+        "COCO",
+        "ADE20K",
+        "Discussion and Conclusion",
+        "self-supervised learning"
+      ],
+      "uncertainty": "The table and caption are legible. Surrounding text is cropped on the left and bottom, so only the visible discussion fragments are included.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

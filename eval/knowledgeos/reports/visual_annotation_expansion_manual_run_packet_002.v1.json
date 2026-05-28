@@ -1,0 +1,863 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T14:05:53Z",
+  "decision": "ready_for_manual_web_vlm_expansion_run",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "packetId": "visual_annotation_expansion_manual_run_packet_002",
+  "sourceExpansionPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_pack_design.v1.json",
+    "packRows": 24
+  },
+  "sourceAttachmentPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002.v1.json",
+    "attachmentRows": 24
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualWebModelOutputRows": 0,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "outputContract": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+    "allowedUse": "retrieval_hint_only",
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false
+  },
+  "counts": {
+    "sourcePackRows": 24,
+    "attachmentRows": 24,
+    "packetRows": 24,
+    "batchRows": 3,
+    "missingAttachmentRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "batches": [
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_01",
+      "batchNumber": 1,
+      "totalBatches": 3,
+      "prompt": "You are annotating visual retrieval hints for batch 1 of 3. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/01-clip-2021-p2-image_region-29c8942b4b.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/02-mae-2021-p1-image_region-e3b2cace3b.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/03-alexnet-2012-p6-image_region-bf79cf1040.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/04-clip-2021-p2-image_region-c453ed1cde.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/05-mae-2021-p1-image_region-4fec8160d0.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/06-alexnet-2012-p8-image_region-0159a28636.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/07-clip-2021-p15-image_region-ff64c7a303.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/08-mae-2021-p2-image_region-7fbc5df66c.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2616032b2a9d352d",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:23e126a9a3a4f236",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 2,
+          "bbox": [
+            338.6,
+            184.18,
+            365.52,
+            211.1
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/01-clip-2021-p2-image_region-29c8942b4b.png",
+          "copyPasteContext": "paperId=clip-2021 page=2 candidateType=image_region bbox=[338.6, 184.18, 365.52, 211.1] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-2/visual-layout-clip-2021-image_region-2-2616032b2a9d352d.png nearbyText=Learning Transferable Visual Models From Natural Language Supervision 2 I1·T2 I1·T3 …",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2616032b2a9d352d",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:image_region:1:258a60cc216d8130",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:2a8c6638b4032976",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 1,
+          "bbox": [
+            368.22,
+            231.94,
+            378.9,
+            242.63
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/02-mae-2021-p1-image_region-e3b2cace3b.png",
+          "copyPasteContext": "paperId=mae-2021 page=1 candidateType=image_region bbox=[368.22, 231.94, 378.9, 242.63] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-1/visual-layout-mae-2021-image_region-1-258a60cc216d8130.png nearbyText=Masked Autoencoders Are Scalable Vision Learners Kaiming He∗,† Xinlei Chen∗ Saining Xie Yanghao Li Piotr Doll´ar Ross Girshick",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:image_region:1:258a60cc216d8130",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:alexnet-2012:image_region:6:508eb98021de0fd7",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:3617e1120750874b",
+          "paperId": "alexnet-2012",
+          "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+          "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+          "page": 6,
+          "bbox": [
+            348.09,
+            426.97,
+            504.01,
+            487.66
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/03-alexnet-2012-p6-image_region-bf79cf1040.png",
+          "copyPasteContext": "paperId=alexnet-2012 page=6 candidateType=image_region bbox=[348.09, 426.97, 504.01, 487.66] plannedCropRef=papers_dir/visual_layout_planned_crops/alexnet-2012/page-6/visual-layout-alexnet-2012-image_region-6-508eb98021de0fd7.png nearbyText=with magnitudes proportional to the corresponding eigenvalues times a random variable drawn from a Gaussian with mean zero and standard deviation 0.1. Therefore to each RGB image pixel Ixy = [IR xy, IG xy, IB xy]T we add the following quantity: [p1, p2, p3][α1λ1, α2λ2, α3λ3]T",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:alexnet-2012:image_region:6:508eb98021de0fd7",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2642c8db8bd29d0a",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:adb60e9f3b2ff062",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 2,
+          "bbox": [
+            68.23,
+            178.57,
+            95.15,
+            205.5
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/04-clip-2021-p2-image_region-c453ed1cde.png",
+          "copyPasteContext": "paperId=clip-2021 page=2 candidateType=image_region bbox=[68.23, 178.57, 95.15, 205.5] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-2/visual-layout-clip-2021-image_region-2-2642c8db8bd29d0a.png nearbyText=Learning Transferable Visual Models From Natural Language Supervision 2 I1·T2 I1·T3 …",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2642c8db8bd29d0a",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:image_region:1:40b27e8b4073d98f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:6d69e8144659357e",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 1,
+          "bbox": [
+            368.22,
+            243.65,
+            378.9,
+            254.33
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/05-mae-2021-p1-image_region-4fec8160d0.png",
+          "copyPasteContext": "paperId=mae-2021 page=1 candidateType=image_region bbox=[368.22, 243.65, 378.9, 254.33] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-1/visual-layout-mae-2021-image_region-1-40b27e8b4073d98f.png nearbyText=Masked Autoencoders Are Scalable Vision Learners Kaiming He∗,† Xinlei Chen∗ Saining Xie Yanghao Li Piotr Doll´ar Ross Girshick",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:image_region:1:40b27e8b4073d98f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:alexnet-2012:image_region:8:219e7594a10f3a3f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:cb4aa24186d709ee",
+          "paperId": "alexnet-2012",
+          "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+          "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+          "page": 8,
+          "bbox": [
+            109.6,
+            81.87,
+            291.73,
+            230.68
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/06-alexnet-2012-p8-image_region-0159a28636.png",
+          "copyPasteContext": "paperId=alexnet-2012 page=8 candidateType=image_region bbox=[109.6, 81.87, 291.73, 230.68] plannedCropRef=papers_dir/visual_layout_planned_crops/alexnet-2012/page-8/visual-layout-alexnet-2012-image_region-8-219e7594a10f3a3f.png nearbyText=Figure 4: (Left) Eight ILSVRC-2010 test images and the ﬁve labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5). (Right) Five ILSVRC-2010 test images in the ﬁrst column. The remaining columns show the six training images that produce feature vectors in the last h...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:alexnet-2012:image_region:8:219e7594a10f3a3f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:image_region:15:1da1f1cf8ce81bd5",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:a28e5529f69d2391",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 15,
+          "bbox": [
+            302.45,
+            137.31,
+            331.05,
+            165.91
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/07-clip-2021-p15-image_region-ff64c7a303.png",
+          "copyPasteContext": "paperId=clip-2021 page=15 candidateType=image_region bbox=[302.45, 137.31, 331.05, 165.91] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-15/visual-layout-clip-2021-image_region-15-1da1f1cf8ce81bd5.png nearbyText=Learning Transferable Visual Models From Natural Language Supervision 15 65 70 75 80 85 90 95 100 Average on class subsampled ImageNet (top-1, %)",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:image_region:15:1da1f1cf8ce81bd5",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:image_region:2:0b66280633a636cc",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:c6c1146952b84ce3",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 2,
+          "bbox": [
+            422.57,
+            194.42,
+            540.17,
+            233.62
+          ],
+          "candidateType": "image_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/08-mae-2021-p2-image_region-7fbc5df66c.png",
+          "copyPasteContext": "paperId=mae-2021 page=2 candidateType=image_region bbox=[422.57, 194.42, 540.17, 233.62] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-2/visual-layout-mae-2021-image_region-2-0b66280633a636cc.png nearbyText=Figure 2. Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction† (middle), and the ground-truth (right). The masking ratio is 80%, leaving only 39 out of 196 patches. More examples are in the appendix. †As no loss is computed on visible patches, the model output on visible patches is qualitatively worse. One can simply overlay the output with the v...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:image_region:2:0b66280633a636cc",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_02",
+      "batchNumber": 2,
+      "totalBatches": 3,
+      "prompt": "You are annotating visual retrieval hints for batch 2 of 3. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/09-clip-2021-p2-figure_caption_region-289b56fe5d.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/10-mae-2021-p1-figure_caption_region-0fb21838ff.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/11-resnet-2015-p6-figure_caption_region-082ba73f27.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/12-clip-2021-p3-figure_caption_region-f49947f821.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/13-mae-2021-p2-figure_caption_region-8717d0f4b0.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/14-resnet-2015-p8-figure_caption_region-346008e3d9.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/15-clip-2021-p5-figure_caption_region-d0e128afb9.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/16-mae-2021-p2-figure_caption_region-e44913da92.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:2:b354160446b3a89c",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:f95a9eeaef4c0950",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 2,
+          "bbox": [
+            54.94,
+            253.37,
+            541.44,
+            295.21
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/09-clip-2021-p2-figure_caption_region-289b56fe5d.png",
+          "copyPasteContext": "paperId=clip-2021 page=2 candidateType=figure_caption_region bbox=[54.94, 253.37, 541.44, 295.21] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-2/visual-layout-clip-2021-figure_caption_region-2-b354160446b3a89c.png captionText=Summary of our approach. While standard image models jointly train an image feature extractor and a linear classiﬁer to predict some label, CLIP jointly trains an image encoder and a text encoder to predict the correct pairings of a batch of (image, text) training examples. At... nearbyText=I1·T3 Figure 1. Summary of our approach. While standard image models jointly train an image feature extractor and a linear classiﬁer to predict some label, CLIP jointly trains an image encoder and a text encoder to predict the correct pairings of a batch of (image, text) training examples. At test time the learned text encoder synthesizes a zero-shot linear classiﬁer by embedding the names or descriptions of the t...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:2:b354160446b3a89c",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:1:f3477cc8ce7ec8b1",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:367673bb64ce5b6f",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 1,
+          "bbox": [
+            308.86,
+            341.41,
+            545.12,
+            427.17
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/10-mae-2021-p1-figure_caption_region-0fb21838ff.png",
+          "copyPasteContext": "paperId=mae-2021 page=1 candidateType=figure_caption_region bbox=[308.86, 341.41, 545.12, 427.17] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-1/visual-layout-mae-2021-figure_caption_region-1-f3477cc8ce7ec8b1.png captionText=Our MAE architecture. During pre-training, a large random subset of image patches (e.g., 75%) is masked out. The encoder is applied to the small subset of visible patches. Mask tokens are introduced after the encoder, and the full set of en- coded patches and mask tokens is pr... nearbyText=input target Figure 1. Our MAE architecture. During pre-training, a large random subset of image patches (e.g., 75%) is masked out. The encoder is applied to the small subset of visible patches. Mask tokens are introduced after the encoder, and the full set of en- coded patches and mask tokens is processed by a small decoder that reconstructs the original image in pixels. After pre-training, the decoder is discard...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:1:f3477cc8ce7ec8b1",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:6:6b3dd4d05dc69888",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:0f062059ad64e87a",
+          "paperId": "resnet-2015",
+          "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+          "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+          "page": 6,
+          "bbox": [
+            308.86,
+            156.78,
+            545.11,
+            187.99
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/11-resnet-2015-p6-figure_caption_region-082ba73f27.png",
+          "copyPasteContext": "paperId=resnet-2015 page=6 candidateType=figure_caption_region bbox=[308.86, 156.78, 545.11, 187.99] plannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-figure_caption_region-6-6b3dd4d05dc69888.png captionText=A deeper residual function F for ImageNet. Left: a building block (on 56×56 feature maps) as in Fig. 3 for ResNet- 34. Right: a “bottleneck” building block for ResNet-50/101/152. nearbyText=64-d 256-d Figure 5. A deeper residual function F for ImageNet. Left: a building block (on 56×56 feature maps) as in Fig. 3 for ResNet- 34. Right: a “bottleneck” building block for ResNet-50/101/152. parameter-free, identity shortcuts help with training. Next we investigate projection shortcuts (Eqn.(2)). In Table 3 we compare three options: (A) zero-padding shortcuts are used for increasing dimensions, and all sh...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:6:6b3dd4d05dc69888",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:3:fd2db71adcd98ec4",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:521c8815defaf274",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 3,
+          "bbox": [
+            54.94,
+            233.18,
+            290.57,
+            318.94
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/12-clip-2021-p3-figure_caption_region-f49947f821.png",
+          "copyPasteContext": "paperId=clip-2021 page=3 candidateType=figure_caption_region bbox=[54.94, 233.18, 290.57, 318.94] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-3/visual-layout-clip-2021-figure_caption_region-3-fd2db71adcd98ec4.png captionText=CLIP is much more efﬁcient at zero-shot transfer than our image caption baseline. Although highly expressive, we found that transformer-based language models are relatively weak at zero-shot ImageNet classiﬁcation. Here, we see that it learns 3x slower than a baseline which pr... nearbyText=Bag of Words Contrastive (CLIP) Bag of Words Prediction Transformer Language Model Figure 2. CLIP is much more efﬁcient at zero-shot transfer than our image caption baseline. Although highly expressive, we found that transformer-based language models are relatively weak at zero-shot ImageNet classiﬁcation. Here, we see that it learns 3x slower than a baseline which predicts a bag-of-words (BoW) encoding of the tex...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:3:fd2db71adcd98ec4",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:460a5652014c6369",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:1e0501a4726ace19",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 2,
+          "bbox": [
+            50.11,
+            238.0,
+            544.61,
+            248.73
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/13-mae-2021-p2-figure_caption_region-8717d0f4b0.png",
+          "copyPasteContext": "paperId=mae-2021 page=2 candidateType=figure_caption_region bbox=[50.11, 238.0, 544.61, 248.73] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-2/visual-layout-mae-2021-figure_caption_region-2-460a5652014c6369.png captionText=Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction† nearbyText=Figure 2. Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction† (middle), and the ground-truth (right). The masking ratio is 80%, leaving only 39 out of 196 patches. More examples are in the appendix. †As no loss is computed on visible patches, the model output on visible patches is qualitatively worse. One can simply overlay the output with the v...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:460a5652014c6369",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:5cf998f6a7a3739f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:1230a588ec22b8f3",
+          "paperId": "resnet-2015",
+          "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+          "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+          "page": 8,
+          "bbox": [
+            50.11,
+            328.32,
+            286.37,
+            370.16
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/14-resnet-2015-p8-figure_caption_region-346008e3d9.png",
+          "copyPasteContext": "paperId=resnet-2015 page=8 candidateType=figure_caption_region bbox=[50.11, 328.32, 286.37, 370.16] plannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-8/visual-layout-resnet-2015-figure_caption_region-8-5cf998f6a7a3739f.png captionText=Standard deviations (std) of layer responses on CIFAR- 10. The responses are the outputs of each 3×3 layer, after BN and before nonlinearity. Top: the layers are shown in their original order. Bottom: the responses are ranked in descending order. nearbyText=plain-20 plain-56 ResNet-20 ResNet-56 ResNet-110 Figure 7. Standard deviations (std) of layer responses on CIFAR- 10. The responses are the outputs of each 3×3 layer, after BN and before nonlinearity. Top: the layers are shown in their original order. Bottom: the responses are ranked in descending order. networks such as FitNet [35] and Highway [42] (Table 6), yet is among the state-of-the-art results (6.43%, Tabl...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:5cf998f6a7a3739f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:5:87777b9ff7911bbe",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:7e56c7b1d9b6a57a",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 5,
+          "bbox": [
+            54.94,
+            297.61,
+            290.93,
+            317.57
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/15-clip-2021-p5-figure_caption_region-d0e128afb9.png",
+          "copyPasteContext": "paperId=clip-2021 page=5 candidateType=figure_caption_region bbox=[54.94, 297.61, 290.93, 317.57] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-figure_caption_region-5-87777b9ff7911bbe.png captionText=Numpy-like pseudocode for the core of an implementa- tion of CLIP. nearbyText=# symmetric loss function labels = np.arange(n) loss_i = cross_entropy_loss(logits, labels, axis=0) loss_t = cross_entropy_loss(logits, labels, axis=1) loss = (loss_i + loss_t)/2 Figure 3. Numpy-like pseudocode for the core of an implementa- tion of CLIP. representation of the image. For the second architecture, we experiment with the recently introduced Vision Transformer (ViT) (Dosovitskiy et al., 2020). We clos...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:5:87777b9ff7911bbe",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:b35cefa766216e3f",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:0a6835f3c041e035",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 2,
+          "bbox": [
+            50.11,
+            377.22,
+            545.11,
+            397.14
+          ],
+          "candidateType": "figure_caption_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/16-mae-2021-p2-figure_caption_region-e44913da92.png",
+          "copyPasteContext": "paperId=mae-2021 page=2 candidateType=figure_caption_region bbox=[50.11, 377.22, 545.11, 397.14] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-2/visual-layout-mae-2021-figure_caption_region-2-b35cefa766216e3f.png captionText=Example results on COCO validation images, using an MAE trained on ImageNet (the same model weights as in Figure 2). Observe the reconstructions on the two right-most examples, which, although different from the ground truth, are semantically plausible. nearbyText=(middle), and the ground-truth (right). The masking ratio is 80%, leaving only 39 out of 196 patches. More examples are in the appendix. †As no loss is computed on visible patches, the model output on visible patches is qualitatively worse. One can simply overlay the output with the visible patches to improve visual quality. We intentionally opt not to do this, so we can more comprehensively demonstrate the method...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:b35cefa766216e3f",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_002_batch_03",
+      "batchNumber": 3,
+      "totalBatches": 3,
+      "prompt": "You are annotating visual retrieval hints for batch 3 of 3. Use only the attached context-crop images and the provided row metadata. Return one JSON object with schema knowledge-hub.paper.visual-annotation-web-output.v1 and a rows array. For every row, fill sourceCandidateId, visualObservationStatus, derivedTextForRetrieval, visibleText, retrievalKeywords, uncertainty, limitations, strictEvidence=false, citationGrade=false, and answerableWithoutTextEvidence=false. Do not create citation-grade evidence, do not answer paper claims from the image, do not infer hidden details, and do not include local file paths.",
+      "attachmentRefs": [
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/17-clip-2021-p7-table_region-c37aabf875.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/18-mae-2021-p5-table_region-25a22f5cc1.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/19-resnet-2015-p6-table_region-3639f35d2c.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/20-clip-2021-p17-table_region-911c2f4053.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/21-mae-2021-p5-table_region-b740715491.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/22-clip-2021-p1-equation_region-c3a34cc947.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/23-clip-2021-p5-equation_region-f51a092fa1.png",
+        "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/24-clip-2021-p5-equation_region-344eb60cd0.png"
+      ],
+      "rows": [
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:table_region:7:74d3127c812d1e9b",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:d3cf80e7eb0c4bee",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 7,
+          "bbox": [
+            54.89,
+            135.1,
+            290.93,
+            187.9
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/17-clip-2021-p7-table_region-c37aabf875.png",
+          "copyPasteContext": "paperId=clip-2021 page=7 candidateType=table_region bbox=[54.89, 135.1, 290.93, 187.9] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-7/visual-layout-clip-2021-table_region-7-74d3127c812d1e9b.png captionText=Comparing CLIP to prior zero-shot transfer image classi- ﬁcation results. CLIP improves performance on all three datasets by a large amount. This improvement reﬂects many differences in the 4 years since the development of Visual N-Grams (Li et al., 2017). nearbyText=Visual N-Grams 72.4 11.5 23.0 CLIP 98.4 76.2 58.5 Table 1. Comparing CLIP to prior zero-shot transfer image classi- ﬁcation results. CLIP improves performance on all three datasets by a large amount. This improvement reﬂects many differences in the 4 years since the development of Visual N-Grams (Li et al., 2017). CLIP is a signiﬁcant step towards ﬂexible and practical zero-shot computer vision classiﬁers. As ment...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:table_region:7:74d3127c812d1e9b",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:table_region:5:09cee49d2841b6a3",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:ef5a549a544bbb03",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 5,
+          "bbox": [
+            50.11,
+            238.89,
+            545.12,
+            269.86
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/18-mae-2021-p5-table_region-25a22f5cc1.png",
+          "copyPasteContext": "paperId=mae-2021 page=5 candidateType=table_region bbox=[50.11, 238.89, 545.12, 269.86] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-5/visual-layout-mae-2021-table_region-5-09cee49d2841b6a3.png captionText=MAE ablation experiments with ViT-L/16 on ImageNet-1K. We report ﬁne-tuning (ft) and linear probing (lin) accuracy (%). If not speciﬁed, the default is: the decoder has depth 8 and width 512, the reconstruction target is unnormalized pixels, the data augmentation is random res... nearbyText=(f) Mask sampling. Random sampling works the best. See Figure 6 for visualizations. Table 1. MAE ablation experiments with ViT-L/16 on ImageNet-1K. We report ﬁne-tuning (ft) and linear probing (lin) accuracy (%). If not speciﬁed, the default is: the decoder has depth 8 and width 512, the reconstruction target is unnormalized pixels, the data augmentation is random resized cropping, the masking ratio is 75%, and th...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:table_region:5:09cee49d2841b6a3",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:8b15bd4cbaa96ede",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:83e67a08142799c4",
+          "paperId": "resnet-2015",
+          "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+          "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+          "page": 6,
+          "bbox": [
+            50.11,
+            518.06,
+            286.36,
+            538.07
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/19-resnet-2015-p6-table_region-3639f35d2c.png",
+          "copyPasteContext": "paperId=resnet-2015 page=6 candidateType=table_region bbox=[50.11, 518.06, 286.36, 538.07] plannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-8b15bd4cbaa96ede.png captionText=Error rates (%) of ensembles. The top-5 error is on the test set of ImageNet and reported by the test server. nearbyText=method top-5 err. (test) VGG [41] (ILSVRC’14) 7.32 GoogLeNet [44] (ILSVRC’14) 6.66 VGG [41] (v5) 6.8 PReLU-net [13] 4.94 BN-inception [16] 4.82 ResNet (ILSVRC’15) 3.57 Table 5. Error rates (%) of ensembles. The top-5 error is on the test set of ImageNet and reported by the test server. ResNet reduces the top-1 error by 3.5% (Table 2), resulting from the successfully reduced training error (Fig. 4 right vs. left)....",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:8b15bd4cbaa96ede",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:table_region:17:21f8887ab432c389",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:ca37456e721039f0",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 17,
+          "bbox": [
+            306.89,
+            159.8,
+            543.01,
+            245.55
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/20-clip-2021-p17-table_region-911c2f4053.png",
+          "copyPasteContext": "paperId=clip-2021 page=17 candidateType=table_region bbox=[306.89, 159.8, 543.01, 245.55] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-17/visual-layout-clip-2021-table_region-17-21f8887ab432c389.png captionText=Comparison of human performance on Oxford IIT Pets. As in Parkhi et al. (2012), the metric is average per-class classiﬁca- tion accuracy. Most of the gain in performance when going from the human zero shot case to the human one shot case is on images that participants were hig... nearbyText=Zero-shot human 53.7 57.0 69.7 63.9 Zero-shot CLIP 93.5 93.5 93.5 93.5 One-shot human 75.7 80.3 78.5 81.2 Two-shot human 75.7 85.0 79.2 86.1 Table 2. Comparison of human performance on Oxford IIT Pets. As in Parkhi et al. (2012), the metric is average per-class classiﬁca- tion accuracy. Most of the gain in performance when going from the human zero shot case to the human one shot case is on images that participant...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:table_region:17:21f8887ab432c389",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:mae-2021:table_region:5:1179c62488dbb733",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:d163876ac945e8df",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 5,
+          "bbox": [
+            308.86,
+            367.01,
+            545.11,
+            419.89
+          ],
+          "candidateType": "table_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/21-mae-2021-p5-table_region-b740715491.png",
+          "copyPasteContext": "paperId=mae-2021 page=5 candidateType=table_region bbox=[308.86, 367.01, 545.11, 419.89] plannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-5/visual-layout-mae-2021-table_region-5-1179c62488dbb733.png captionText=Wall-clock time of our MAE training (800 epochs), benchmarked in 128 TPU-v3 cores with TensorFlow. The speedup is relative to the entry whose encoder has mask tokens (gray). The decoder width is 512, and the mask ratio is 75%. †: This entry is estimated by training ten epochs. nearbyText=encoder dec. depth ft acc hours speedup ViT-L, w/ [M] 8 84.2 42.4 - ViT-L 8 84.9 15.4 2.8× ViT-L 1 84.8 11.6 3.7× ViT-H, w/ [M] 8 - 119.6† - ViT-H 8 85.8 34.5 3.5× ViT-H 1 85.9 29.3 4.1× Table 2. Wall-clock time of our MAE training (800 epochs), benchmarked in 128 TPU-v3 cores with TensorFlow. The speedup is relative to the entry whose encoder has mask tokens (gray). The decoder width is 512, and the mask ratio is...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:mae-2021:table_region:5:1179c62488dbb733",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:equation_region:1:dd31b4b813b73af2",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:86a9124715ef316b",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 1,
+          "bbox": [
+            55.44,
+            676.83,
+            291.01,
+            697.3
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/22-clip-2021-p1-equation_region-c3a34cc947.png",
+          "copyPasteContext": "paperId=clip-2021 page=1 candidateType=equation_region bbox=[55.44, 676.83, 291.01, 697.3] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-1/visual-layout-clip-2021-equation_region-1-dd31b4b813b73af2.png nearbyText=Pre-training methods which learn directly from raw text have revolutionized NLP over the last few years (Dai & Le, 2015; Peters et al., 2018; Howard & Ruder, 2018; Rad- ford et al., 2018; Devlin et al., 2018; Raffel et al., 2019). *Equal contribution 1OpenAI, San Francisco, CA 94110, USA. Correspondence to: <{alec, jongwook}@openai.com>. Task-agnostic objectives such as autoregressive and masked language modeling...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:equation_region:1:dd31b4b813b73af2",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1c4738912cb4bdf9",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:13fa942bc5ac0238",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 5,
+          "bbox": [
+            55.85,
+            210.38,
+            258.39,
+            229.53
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/23-clip-2021-p5-equation_region-f51a092fa1.png",
+          "copyPasteContext": "paperId=clip-2021 page=5 candidateType=equation_region bbox=[55.85, 210.38, 258.39, 229.53] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-1c4738912cb4bdf9.png nearbyText=# joint multimodal embedding [n, d_e] I_e = l2_normalize(np.dot(I_f, W_i), axis=1) T_e = l2_normalize(np.dot(T_f, W_t), axis=1) # scaled pairwise cosine similarities [n, n] logits = np.dot(I_e, T_e.T) * np.exp(t) # symmetric loss function labels = np.arange(n) loss_i = cross_entropy_loss(logits, labels, axis=0) loss_t = cross_entropy_loss(logits, labels, axis=1) loss = (loss_i + loss_t)/2",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1c4738912cb4bdf9",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        },
+        {
+          "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1fa7893d5e5d7b10",
+          "sourcePackCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_002:ced52ee3f528f60e",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 5,
+          "bbox": [
+            55.85,
+            138.05,
+            286.01,
+            166.23
+          ],
+          "candidateType": "equation_region",
+          "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_002/assets/24-clip-2021-p5-equation_region-344eb60cd0.png",
+          "copyPasteContext": "paperId=clip-2021 page=5 candidateType=equation_region bbox=[55.85, 138.05, 286.01, 166.23] plannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-1fa7893d5e5d7b10.png nearbyText=# image_encoder - ResNet or Vision Transformer # text_encoder - CBOW or Text Transformer # I[n, h, w, c] - minibatch of aligned images # T[n, l] - minibatch of aligned texts # W_i[d_i, d_e] - learned proj of image to embed # W_t[d_t, d_e] - learned proj of text to embed # t - learned temperature parameter # extract feature representations of each modality I_f = image_encoder(I) #[n, d_i] T_f = text_encoder(T) #[n,...",
+          "expectedOutputSkeleton": {
+            "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1fa7893d5e5d7b10",
+            "visualObservationStatus": "image_attached",
+            "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+            "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+            "retrievalKeywords": [
+              "FILL_IN_KEYWORD"
+            ],
+            "uncertainty": "FILL_IN_UNCERTAINTY.",
+            "limitations": "Retrieval hint only, not evidence.",
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false
+          }
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    "This packet is for manual web/VLM use only; this script makes no model calls.",
+    "Return derivedTextForRetrieval as retrieval hints only, not evidence.",
+    "Do not upload whole pages or whole images for this gate; use the listed context crops only."
+  ]
+}

@@ -1,0 +1,1137 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-attachment-pack.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T12:42:37Z",
+  "decision": "ready_for_manual_web_vlm_run",
+  "nextRecommendedTranche": "visual_annotation_web_pack_manual_calibration",
+  "attachmentPackId": "visual_annotation_attachment_pack_001",
+  "sourceWebPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_web_pack_001.v1.json",
+    "packRows": 18
+  },
+  "assetRootRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001",
+  "scope": {
+    "writes": "report_and_attachment_files_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 18,
+    "pageImageWriteRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "attachmentPolicy": {
+    "attachmentKind": "context_crop_png",
+    "renderSource": "already_local_pdf_only",
+    "cropExpansionPolicy": "candidate_type_context_margin_v1",
+    "pageImagePolicy": "not_written_in_pack_001",
+    "uploadGuidance": "Upload the Markdown web pack plus these PNG attachments to the manual web/VLM session.",
+    "derivedTextUse": "retrieval_hint_only"
+  },
+  "counts": {
+    "sourcePackRows": 18,
+    "attachmentRows": 18,
+    "cropAttachmentRows": 18,
+    "pageAttachmentRows": 0,
+    "blockedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "attachmentRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:ecc446ac2dee9045",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:3:5e4d346d4c7b2c53",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 3,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/01-alexnet-2012-p3-figure_caption_region-ecd99be999.png",
+      "attachmentSha256": "sha256:9a8ac8a78485b3954eaef20571c05b6922de723adfd49af43b8228759b229b78",
+      "attachmentBytes": 86378,
+      "pixelWidth": 509,
+      "pixelHeight": 942,
+      "sourceBbox": [
+        333.92,
+        272.94,
+        504.0,
+        403.21
+      ],
+      "cropBbox": [
+        291.92,
+        12.94,
+        546.0,
+        483.21
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:ecc446ac2dee9045",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:3:5e4d346d4c7b2c53",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 3,
+        "sourceBbox": [
+          333.92,
+          272.94,
+          504.0,
+          403.21
+        ],
+        "cropBbox": [
+          291.92,
+          12.94,
+          546.0,
+          483.21
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:9bf65abe7dadd15e",
+      "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:f9d505b3e6aabed6",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 4,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/02-alexnet-2012-p4-equation_region-0eb9465eea.png",
+      "attachmentSha256": "sha256:4b90e973546c0f9fab1d993fb1df7c3bb6b101e819f2ab4cbab2aaea2efebb7f",
+      "attachmentBytes": 50794,
+      "pixelWidth": 383,
+      "pixelHeight": 449,
+      "sourceBbox": [
+        211.09,
+        185.62,
+        262.24,
+        199.82
+      ],
+      "cropBbox": [
+        141.09,
+        95.62,
+        332.24,
+        319.82
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:9bf65abe7dadd15e",
+        "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:f9d505b3e6aabed6",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 4,
+        "sourceBbox": [
+          211.09,
+          185.62,
+          262.24,
+          199.82
+        ],
+        "cropBbox": [
+          141.09,
+          95.62,
+          332.24,
+          319.82
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:ec8063e0b7464d36",
+      "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:79cf21420d190e08",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 4,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/03-alexnet-2012-p4-equation_region-d56b6c29af.png",
+      "attachmentSha256": "sha256:9db66c7f611e03fd14de583581e388c69154f57e68c181edcf7c3f0941bd8e7a",
+      "attachmentBytes": 65632,
+      "pixelWidth": 458,
+      "pixelHeight": 468,
+      "sourceBbox": [
+        297.63,
+        185.62,
+        386.33,
+        209.08
+      ],
+      "cropBbox": [
+        227.63,
+        95.62,
+        456.33,
+        329.08
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:ec8063e0b7464d36",
+        "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:4:79cf21420d190e08",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 4,
+        "sourceBbox": [
+          297.63,
+          185.62,
+          386.33,
+          209.08
+        ],
+        "cropBbox": [
+          227.63,
+          95.62,
+          456.33,
+          329.08
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:9b24b8f106cc4516",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:5:03c450b40ade0263",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 5,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/04-alexnet-2012-p5-figure_caption_region-baf84f3a74.png",
+      "attachmentSha256": "sha256:f8a5e01778679e6d5849f6b074a96a9c0dc954cf2188d1cd0c2c265dc6129f67",
+      "attachmentBytes": 121720,
+      "pixelWidth": 960,
+      "pixelHeight": 700,
+      "sourceBbox": [
+        108.0,
+        216.17,
+        504.0,
+        269.73
+      ],
+      "cropBbox": [
+        66.0,
+        0.0,
+        546.0,
+        349.73
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:9b24b8f106cc4516",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:5:03c450b40ade0263",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 5,
+        "sourceBbox": [
+          108.0,
+          216.17,
+          504.0,
+          269.73
+        ],
+        "cropBbox": [
+          66.0,
+          0.0,
+          546.0,
+          349.73
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:61e72c38fc4ec26b",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:6:f8996246c800f4f1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 6,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/05-alexnet-2012-p6-figure_caption_region-7ed515b1e7.png",
+      "attachmentSha256": "sha256:fde3726056c5b945c90dabf682697487ddcb60df5ff7912745ad224e76351790",
+      "attachmentBytes": 176224,
+      "pixelWidth": 480,
+      "pixelHeight": 810,
+      "sourceBbox": [
+        348.09,
+        501.02,
+        504.0,
+        565.54
+      ],
+      "cropBbox": [
+        306.09,
+        241.02,
+        546.0,
+        645.54
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:61e72c38fc4ec26b",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:6:f8996246c800f4f1",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 6,
+        "sourceBbox": [
+          348.09,
+          501.02,
+          504.0,
+          565.54
+        ],
+        "cropBbox": [
+          306.09,
+          241.02,
+          546.0,
+          645.54
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:38da736f7cd50f40",
+      "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:6:81ead85a04bce51a",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 6,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/06-alexnet-2012-p6-equation_region-11fb4e7d5b.png",
+      "attachmentSha256": "sha256:500c30577a6565dd9c73e5180cd7df9a37765567aebe74a0ccd97fa514d250ed",
+      "attachmentBytes": 71657,
+      "pixelWidth": 1072,
+      "pixelHeight": 478,
+      "sourceBbox": [
+        108.0,
+        84.27,
+        504.0,
+        119.0
+      ],
+      "cropBbox": [
+        38.0,
+        0.0,
+        574.0,
+        239.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:38da736f7cd50f40",
+        "sourceCandidateId": "visual-layout:alexnet-2012:equation_region:6:81ead85a04bce51a",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 6,
+        "sourceBbox": [
+          108.0,
+          84.27,
+          504.0,
+          119.0
+        ],
+        "cropBbox": [
+          38.0,
+          0.0,
+          574.0,
+          239.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:ce0d1c3d6093078e",
+      "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:0777b7d11b932456",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 7,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/07-alexnet-2012-p7-table_region-48cfaeb9c3.png",
+      "attachmentSha256": "sha256:508eb6765dd685227b936ef3ae2f434706548080fba622f8d3c84f6a283deddb",
+      "attachmentBytes": 117115,
+      "pixelWidth": 715,
+      "pixelHeight": 762,
+      "sourceBbox": [
+        250.56,
+        511.36,
+        504.0,
+        553.96
+      ],
+      "cropBbox": [
+        198.56,
+        411.36,
+        556.0,
+        792.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:ce0d1c3d6093078e",
+        "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:0777b7d11b932456",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 7,
+        "sourceBbox": [
+          250.56,
+          511.36,
+          504.0,
+          553.96
+        ],
+        "cropBbox": [
+          198.56,
+          411.36,
+          556.0,
+          792.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:6193c06eb07d2cc6",
+      "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:b9f742e1da360378",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 7,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/08-alexnet-2012-p7-table_region-51e96969b4.png",
+      "attachmentSha256": "sha256:76091b3b75f009fce5ad1363d6973ed6d76963fdf0c5234fdba2d93d665d4fb9",
+      "attachmentBytes": 109585,
+      "pixelWidth": 533,
+      "pixelHeight": 745,
+      "sourceBbox": [
+        341.64,
+        290.39,
+        504.0,
+        322.03
+      ],
+      "cropBbox": [
+        289.64,
+        190.39,
+        556.0,
+        562.03
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:6193c06eb07d2cc6",
+        "sourceCandidateId": "visual-layout:alexnet-2012:table_region:7:b9f742e1da360378",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 7,
+        "sourceBbox": [
+          341.64,
+          290.39,
+          504.0,
+          322.03
+        ],
+        "cropBbox": [
+          289.64,
+          190.39,
+          556.0,
+          562.03
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:f9f67bf644d50d61",
+      "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:8:889b5135e8e9ab9e",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 8,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/09-alexnet-2012-p8-figure_caption_region-e3f030c188.png",
+      "attachmentSha256": "sha256:126dc4a165757d1c33ed8bf6277b9cabfa521eacbf8d9583ee39fde94f7978ca",
+      "attachmentBytes": 640451,
+      "pixelWidth": 960,
+      "pixelHeight": 756,
+      "sourceBbox": [
+        108.0,
+        244.05,
+        504.0,
+        297.6
+      ],
+      "cropBbox": [
+        66.0,
+        0.0,
+        546.0,
+        377.6
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:f9f67bf644d50d61",
+        "sourceCandidateId": "visual-layout:alexnet-2012:figure_caption_region:8:889b5135e8e9ab9e",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 8,
+        "sourceBbox": [
+          108.0,
+          244.05,
+          504.0,
+          297.6
+        ],
+        "cropBbox": [
+          66.0,
+          0.0,
+          546.0,
+          377.6
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:004ad1cc6c36d072",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:1:aba2bf94ef1625a2",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 1,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/10-resnet-2015-p1-figure_caption_region-088b3fb4a6.png",
+      "attachmentSha256": "sha256:bfe9d5c682a1a9e3174854eb6a8cb86595865c27b80f3d723ca21b6fa0191cac",
+      "attachmentBytes": 86849,
+      "pixelWidth": 642,
+      "pixelHeight": 765,
+      "sourceBbox": [
+        308.86,
+        304.89,
+        545.11,
+        346.73
+      ],
+      "cropBbox": [
+        266.86,
+        44.89,
+        587.11,
+        426.73
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:004ad1cc6c36d072",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:1:aba2bf94ef1625a2",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 1,
+        "sourceBbox": [
+          308.86,
+          304.89,
+          545.11,
+          346.73
+        ],
+        "cropBbox": [
+          266.86,
+          44.89,
+          587.11,
+          426.73
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:25f9c51cc846c7e7",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:2:9687efdba9452012",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 2,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/11-resnet-2015-p2-figure_caption_region-189f3fcaf7.png",
+      "attachmentSha256": "sha256:40d288b9de3bb046689d1feea90290f2630e2f71492405c67d425be5ec964cae",
+      "attachmentBytes": 40580,
+      "pixelWidth": 495,
+      "pixelHeight": 495,
+      "sourceBbox": [
+        86.62,
+        158.15,
+        249.86,
+        167.12
+      ],
+      "cropBbox": [
+        44.62,
+        0.0,
+        291.86,
+        247.12
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:25f9c51cc846c7e7",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:2:9687efdba9452012",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 2,
+        "sourceBbox": [
+          86.62,
+          158.15,
+          249.86,
+          167.12
+        ],
+        "cropBbox": [
+          44.62,
+          0.0,
+          291.86,
+          247.12
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:2b004128c5a9ea24",
+      "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:0e80570b407b6793",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 3,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/12-resnet-2015-p3-equation_region-7ca87b4ec2.png",
+      "attachmentSha256": "sha256:f6dc26eaa8ecc1190826db554f63309c4f3f0ad3dcc78cd52a383b12cb8f91f2",
+      "attachmentBytes": 67947,
+      "pixelWidth": 607,
+      "pixelHeight": 456,
+      "sourceBbox": [
+        123.47,
+        626.46,
+        286.36,
+        643.81
+      ],
+      "cropBbox": [
+        53.47,
+        536.46,
+        356.36,
+        763.81
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:2b004128c5a9ea24",
+        "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:0e80570b407b6793",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 3,
+        "sourceBbox": [
+          123.47,
+          626.46,
+          286.36,
+          643.81
+        ],
+        "cropBbox": [
+          53.47,
+          536.46,
+          356.36,
+          763.81
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:3e357cb116aba58e",
+      "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:69248b1db8c80503",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 3,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/13-resnet-2015-p3-equation_region-08dbaccfe9.png",
+      "attachmentSha256": "sha256:3cecb94c6b5f08c10c2893c98aded7f5cba1077d0c12607768d19ca52cf29f3c",
+      "attachmentBytes": 85798,
+      "pixelWidth": 614,
+      "pixelHeight": 456,
+      "sourceBbox": [
+        375.38,
+        264.43,
+        545.11,
+        281.78
+      ],
+      "cropBbox": [
+        305.38,
+        174.43,
+        612.0,
+        401.78
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:3e357cb116aba58e",
+        "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:69248b1db8c80503",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 3,
+        "sourceBbox": [
+          375.38,
+          264.43,
+          545.11,
+          281.78
+        ],
+        "cropBbox": [
+          305.38,
+          174.43,
+          612.0,
+          401.78
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:73e80d3f26c63da5",
+      "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:7068ad040e2d0243",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 3,
+      "candidateType": "equation_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/14-resnet-2015-p3-equation_region-1c10f6a61b.png",
+      "attachmentSha256": "sha256:a3bfa93e68cf259d62b662ddcb8a32e0707b92a29cd8f0b2f298144cb8b24e37",
+      "attachmentBytes": 63642,
+      "pixelWidth": 713,
+      "pixelHeight": 467,
+      "sourceBbox": [
+        50.11,
+        648.82,
+        286.37,
+        701.8
+      ],
+      "cropBbox": [
+        0.0,
+        558.82,
+        356.37,
+        792.0
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:73e80d3f26c63da5",
+        "sourceCandidateId": "visual-layout:resnet-2015:equation_region:3:7068ad040e2d0243",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 3,
+        "sourceBbox": [
+          50.11,
+          648.82,
+          286.37,
+          701.8
+        ],
+        "cropBbox": [
+          0.0,
+          558.82,
+          356.37,
+          792.0
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:d7a6ec0319b177d6",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:4:0b3754b79959d64e",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 4,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/15-resnet-2015-p4-figure_caption_region-4ba6c7fcef.png",
+      "attachmentSha256": "sha256:ad6b335819a0bfdf02f22c4d5664362316fa458632b087a650025d013492a25f",
+      "attachmentBytes": 97530,
+      "pixelWidth": 641,
+      "pixelHeight": 809,
+      "sourceBbox": [
+        50.11,
+        632.83,
+        286.37,
+        696.68
+      ],
+      "cropBbox": [
+        8.11,
+        372.83,
+        328.37,
+        776.68
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:d7a6ec0319b177d6",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:4:0b3754b79959d64e",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 4,
+        "sourceBbox": [
+          50.11,
+          632.83,
+          286.37,
+          696.68
+        ],
+        "cropBbox": [
+          8.11,
+          372.83,
+          328.37,
+          776.68
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:02625e2f31bc8265",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:5:666c24606607fbbf",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "candidateType": "figure_caption_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/16-resnet-2015-p5-figure_caption_region-11e2f07238.png",
+      "attachmentSha256": "sha256:b2eff1ab84e75faab53097c001156a30517b8e63f36d394e42d082bf4ce1f8a3",
+      "attachmentBytes": 139458,
+      "pixelWidth": 1159,
+      "pixelHeight": 743,
+      "sourceBbox": [
+        50.11,
+        392.29,
+        545.12,
+        423.26
+      ],
+      "cropBbox": [
+        8.11,
+        132.29,
+        587.12,
+        503.26
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:02625e2f31bc8265",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:5:666c24606607fbbf",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 5,
+        "sourceBbox": [
+          50.11,
+          392.29,
+          545.12,
+          423.26
+        ],
+        "cropBbox": [
+          8.11,
+          132.29,
+          587.12,
+          503.26
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:e206894f3bae718a",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:749ede3c6c93e4fa",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/17-resnet-2015-p5-table_region-eb72c89d44.png",
+      "attachmentSha256": "sha256:deea7774ae566e899319afdc644a6b614f502f8adf40e05e13717ad227f9b488",
+      "attachmentBytes": 124338,
+      "pixelWidth": 1195,
+      "pixelHeight": 721,
+      "sourceBbox": [
+        50.11,
+        224.67,
+        545.11,
+        244.6
+      ],
+      "cropBbox": [
+        0.0,
+        124.67,
+        597.11,
+        484.6
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:e206894f3bae718a",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:749ede3c6c93e4fa",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 5,
+        "sourceBbox": [
+          50.11,
+          224.67,
+          545.11,
+          244.6
+        ],
+        "cropBbox": [
+          0.0,
+          124.67,
+          597.11,
+          484.6
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-attachment-row.v1",
+      "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:d26faca025185255",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:6f67c711d387611a",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 5,
+      "candidateType": "table_region",
+      "attachmentKind": "context_crop_png",
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_attachment_pack_001/assets/18-resnet-2015-p5-table_region-1f17bfd7d0.png",
+      "attachmentSha256": "sha256:f25db202b8bf503e4a5402c1aa4bf49c76b99245824d977de5c96389f21c0096",
+      "attachmentBytes": 123873,
+      "pixelWidth": 677,
+      "pixelHeight": 742,
+      "sourceBbox": [
+        50.11,
+        485.61,
+        286.36,
+        516.49
+      ],
+      "cropBbox": [
+        0.0,
+        385.61,
+        338.36,
+        756.49
+      ],
+      "renderPolicy": {
+        "renderer": "pymupdf",
+        "zoom": 2.0,
+        "cropExpansionPolicy": "candidate_type_context_margin_v1",
+        "writeScope": "eval_report_attachment_only"
+      },
+      "provenance": {
+        "sourceWebPackSchema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+        "sourceWebPackRowSchema": "knowledge-hub.paper.visual-annotation-web-pack-row.v1",
+        "sourcePackCandidateId": "visual-annotation-web-pack:visual_annotation_web_pack_001:d26faca025185255",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:5:6f67c711d387611a",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 5,
+        "sourceBbox": [
+          50.11,
+          485.61,
+          286.36,
+          516.49
+        ],
+        "cropBbox": [
+          0.0,
+          385.61,
+          338.36,
+          756.49
+        ],
+        "renderMethod": "pymupdf_context_crop_png_v1"
+      },
+      "retrievalHintUseOnly": true,
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false,
+      "blockerReason": ""
+    }
+  ],
+  "warnings": [
+    "Attachment PNGs are eval artifacts for manual web/VLM calibration only.",
+    "Generated visual descriptions must remain derivedTextForRetrieval retrieval hints, not evidence.",
+    "Full page PNGs are intentionally not written in pack 001 to keep the artifact set small."
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+  "rows": [
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:2:b354160446b3a89c",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 1 summary diagram showing contrastive pre-training, creating a dataset classifier from label text, and zero-shot prediction with image and text encoders; text-image similarity matrix uses I1...IN and T1...TN.",
+      "visibleText": "Visible fragments include: \"Learning Transferable Visual Models From Natural Language Supervision\"; \"(1) Contrastive pre-training\"; \"Pepper the aussie pup\"; \"Text Encoder\"; \"Image Encoder\"; \"I1\"; \"I2\"; \"I3\"; \"IN\"; \"T1\"; \"T2\"; \"T3\"; \"TN\"; \"(2) Create dataset classifier from label text\"; \"plane\"; \"car\"; \"dog\"; \"bird\"; \"A photo of a {object}.\"; \"(3) Use for zero-shot prediction\"; \"A photo of a dog.\"; \"Figure 1. Summary of our approach. While standard image models jointly train an image feature extractor and a linear classifier to predict some label, CLIP jointly trains an image encoder and a text encoder to predict the correct pairings of a batch of (image, text) training examples. At test time the learned text encoder synthesizes a zero-shot linear classifier by embedding the names or descriptions of the target dataset's classes.\"",
+      "retrievalKeywords": [
+        "CLIP",
+        "contrastive pre-training",
+        "zero-shot prediction",
+        "text encoder",
+        "image encoder",
+        "dataset classifier",
+        "label text",
+        "image-text pairings",
+        "similarity matrix",
+        "A photo of a dog"
+      ],
+      "uncertainty": "High confidence for the main figure caption, labels, and diagram structure; small matrix subscripts and some surrounding body text are tiny or partially cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:1:f3477cc8ce7ec8b1",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE Figure 1 architecture diagram showing masked image patches, visible-patch encoder, mask tokens, lightweight decoder, and reconstructed target image.",
+      "visibleText": "Visible fragments include: \"Are Scalable Vision Learners\"; \"Yanghao Li\"; \"Piotr Dollar\"; \"Ross Girshick\"; \"AI Research (FAIR)\"; \"input\"; \"encoder\"; \"decoder\"; \"target\"; \"Figure 1. Our MAE architecture. During pre-training, a large random subset of image patches (e.g., 75%) is masked out. The encoder is applied to the small subset of visible patches. Mask tokens are introduced after the encoder, and the full set of encoded patches and mask tokens is processed by a small decoder that reconstructs the original image in pixels. After pre-training, the decoder is discarded and the encoder is applied to uncorrupted images (full sets of patches) for recognition tasks.\"",
+      "retrievalKeywords": [
+        "MAE",
+        "masked autoencoder",
+        "architecture",
+        "masked patches",
+        "visible patches",
+        "encoder",
+        "decoder",
+        "mask tokens",
+        "reconstructs pixels",
+        "target image"
+      ],
+      "uncertainty": "High confidence for the caption and central diagram labels; the page title and left-side author/abstract text are cropped, so only visible fragments are listed.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:6:6b3dd4d05dc69888",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet Figure 5 compares a basic residual block for ResNet-34 with a bottleneck residual block for ResNet-50/101/152 on ImageNet, including identity shortcut connections and convolution stack dimensions.",
+      "visibleText": "Visible fragments include: \"64-d\"; \"3x3, 64\"; \"relu\"; \"3x3, 64\"; \"+\"; \"relu\"; \"256-d\"; \"1x1, 64\"; \"relu\"; \"3x3, 64\"; \"relu\"; \"1x1, 256\"; \"+\"; \"relu\"; \"Figure 5. A deeper residual function F for ImageNet. Left: a building block (on 56x56 feature maps) as in Fig. 3 for ResNet-34. Right: a 'bottleneck' building block for ResNet-50/101/152.\"",
+      "retrievalKeywords": [
+        "ResNet",
+        "residual function",
+        "ImageNet",
+        "building block",
+        "bottleneck",
+        "ResNet-34",
+        "ResNet-50",
+        "ResNet-101",
+        "ResNet-152",
+        "identity shortcut"
+      ],
+      "uncertainty": "High confidence for the figure caption and block labels; some surrounding paragraph text at the sides is clipped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:3:fd2db71adcd98ec4",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 2 line chart showing zero-shot ImageNet accuracy versus number of images processed; Bag of Words Contrastive (CLIP) is more efficient than Bag of Words Prediction and Transformer Language Model baselines, with arrows labeled 4X and 3X efficiency.",
+      "visibleText": "Visible fragments include: \"Learning Transferable Visual Models From Natural Language Supervision\"; \"Zero-Shot ImageNet Accuracy\"; \"# of images processed\"; \"2M\"; \"33M\"; \"67M\"; \"134M\"; \"268M\"; \"400M\"; \"4X efficiency\"; \"3X efficiency\"; \"Bag of Words Contrastive (CLIP)\"; \"Bag of Words Prediction\"; \"Transformer Language Model\"; \"Figure 2. CLIP is much more efficient at zero-shot transfer than our image caption baseline. Although highly expressive, we found that transformer-based language models are relatively weak at zero-shot ImageNet classification. Here, we see that it learns 3x slower than a baseline which predicts a bag-of-words (BoW) encoding of the text (Joulin et al., 2016). Swapping the prediction objective for the contrastive objective of CLIP further improves efficiency another 4x.\"",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot transfer",
+        "ImageNet accuracy",
+        "images processed",
+        "Bag of Words Contrastive",
+        "Bag of Words Prediction",
+        "Transformer Language Model",
+        "image caption baseline",
+        "4X efficiency",
+        "3X efficiency"
+      ],
+      "uncertainty": "High confidence for the chart labels, legend, and caption; neighboring column text is partially visible and not fully transcribed.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:460a5652014c6369",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE Figure 2 grid of ImageNet validation examples showing triplets of masked image, MAE reconstruction, and ground truth; caption states 80% masking ratio and 39 of 196 patches visible. A partial row of another example grid is visible below.",
+      "visibleText": "Visible fragments include: \"Figure 2. Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 80%, leaving only 39 out of 196 patches. More examples are in the appendix.\"; \"As no loss is computed on visible patches, the model output on visible patches is qualitatively worse. One can simply overlay the output with the visible patches to improve visual quality. We intentionally opt not to do this, so we can more comprehensively demonstrate the method's behavior.\"",
+      "retrievalKeywords": [
+        "MAE",
+        "ImageNet validation",
+        "masked image",
+        "reconstruction",
+        "ground-truth",
+        "80% masking ratio",
+        "39 patches",
+        "196 patches",
+        "visible patches",
+        "visual quality"
+      ],
+      "uncertainty": "High confidence for the Figure 2 caption and footnote; the bottom examples are only partially visible and their caption is not shown in this crop.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:5cf998f6a7a3739f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page crop containing part of Figure 6 CIFAR-10 training curves and Figure 7 layer-response standard deviation plots comparing plain networks and ResNets by original layer order and sorted magnitude.",
+      "visibleText": "Visible fragments include: \"error (%)\"; \"1e4\"; \"plain-20\"; \"plain-32\"; \"plain-44\"; \"plain-56\"; \"56-layer\"; \"20-layer\"; \"Figure 6. Training on CIFAR-10. Dashed lines denote training error, and bol...\"; \"of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right:\"; \"std\"; \"layer index (original)\"; \"layer index (sorted by magnitude)\"; \"plain-20\"; \"plain-56\"; \"ResNet-20\"; \"ResNet-56\"; \"ResNet-110\"; \"Figure 7. Standard deviations (std) of layer responses on CIFAR-10. The responses are the outputs of each 3x3 layer, after BN and before nonlinearity. Top: the layers are shown in their original order. Bottom: the responses are ranked in descending order.\"",
+      "retrievalKeywords": [
+        "ResNet",
+        "CIFAR-10",
+        "training error",
+        "testing error",
+        "plain networks",
+        "layer responses",
+        "standard deviations",
+        "3x3 layer",
+        "BN",
+        "ResNet-110"
+      ],
+      "uncertainty": "Moderate confidence for the complete Figure 7 caption; Figure 6 caption and charts are cropped at the top and right, so those fragments are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:5:87777b9ff7911bbe",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 3 NumPy-like pseudocode for the core implementation: encode aligned images and texts, project and L2-normalize embeddings, compute scaled pairwise cosine similarities, and optimize symmetric cross-entropy losses.",
+      "visibleText": "Visible fragments include: \"# image_encoder - ResNet or Vision Transformer\"; \"# text_encoder - CBOW or Text Transformer\"; \"# I[n, h, w, c] - minibatch of aligned images\"; \"# T[n, l] - minibatch of aligned texts\"; \"# W_i[d_i, d_e] - learned proj of image to embed\"; \"# W_t[d_t, d_e] - learned proj of text to embed\"; \"# t - learned temperature parameter\"; \"# extract feature representations of each modality\"; \"I_f = image_encoder(I) # [n, d_i]\"; \"T_f = text_encoder(T) # [n, d_t]\"; \"# joint multimodal embedding [n, d_e]\"; \"I_e = l2_normalize(np.dot(I_f, W_i), axis=1)\"; \"T_e = l2_normalize(np.dot(T_f, W_t), axis=1)\"; \"# scaled pairwise cosine similarities [n, n]\"; \"logits = np.dot(I_e, T_e.T) * np.exp(t)\"; \"# symmetric loss function\"; \"labels = np.arange(n)\"; \"loss_i = cross_entropy_loss(logits, labels, axis=0)\"; \"loss_t = cross_entropy_loss(logits, labels, axis=1)\"; \"loss = (loss_i + loss_t)/2\"; \"Figure 3. Numpy-like pseudocode for the core of an implementation of CLIP.\"",
+      "retrievalKeywords": [
+        "CLIP",
+        "Numpy-like pseudocode",
+        "image_encoder",
+        "text_encoder",
+        "aligned images",
+        "aligned texts",
+        "l2_normalize",
+        "pairwise cosine similarities",
+        "cross_entropy_loss",
+        "temperature parameter"
+      ],
+      "uncertainty": "High confidence for the pseudocode and caption; right-column prose and lower surrounding body text are partially cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    },
+    {
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:b35cefa766216e3f",
+      "visualObservationStatus": "image_attached",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 2 crop showing continuation of ImageNet reconstruction examples plus Figure 3 COCO validation examples from an ImageNet-trained MAE, with captions emphasizing masked image, reconstruction, ground truth, and semantically plausible reconstructions.",
+      "visibleText": "Visible fragments include: \"Figure 2. Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 80%, leaving only 39 out of 196 patches. More examples are in the appendix.\"; \"As no loss is computed on visible patches, the model output on visible patches is qualitatively worse. One can simply overlay the output with the visible patches to improve visual quality. We intentionally opt not to do this, so we can more comprehensively demonstrate the method's behavior.\"; \"Figure 3. Example results on COCO validation images, using an MAE trained on ImageNet (the same model weights as in Figure 2). Observe the reconstructions on the two right-most examples, which, although different from the ground truth, are semantically plausible.\"",
+      "retrievalKeywords": [
+        "MAE",
+        "COCO validation",
+        "ImageNet validation",
+        "masked image",
+        "reconstruction",
+        "ground truth",
+        "80% masking ratio",
+        "semantically plausible",
+        "ImageNet-trained MAE",
+        "visible patches"
+      ],
+      "uncertainty": "High confidence for both visible captions and the footnote; the top of Figure 2 is cropped and lower body text continues beyond the crop.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "strictEvidence": false,
+      "citationGrade": false,
+      "answerableWithoutTextEvidence": false
+    }
+  ]
+}

@@ -1,0 +1,2086 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T02:49:23Z",
+  "decision": "ready_for_visual_annotation_expansion_attachment_pack",
+  "nextRecommendedTranche": "visual_annotation_expansion_attachment_pack",
+  "packId": "visual_annotation_expansion_pack_003",
+  "sourceCandidateReport": {
+    "schema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_layout_candidate_list_report.v1.json",
+    "candidateRows": 467
+  },
+  "sourceWebPack": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-pack.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_web_pack_001.v1.json",
+    "packRows": 18
+  },
+  "sourceDryRunReport": {
+    "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-dry-run.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_dry_run.v1.json",
+    "dryRunRows": 24
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "selectedExpansionRows": 24,
+    "wholeImageGptRows": 0,
+    "pageImageWriteRows": 0,
+    "cropWriteRows": 0,
+    "candidateStoreMutationRows": 0,
+    "vectorIndexing": false,
+    "indexMutationRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "databaseMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "selectionPolicy": {
+    "packUse": "manual_web_vlm_retrieval_hint_expansion",
+    "maxCandidateRows": 24,
+    "typeQuotas": {
+      "table_region": 8,
+      "figure_caption_region": 8,
+      "equation_region": 4,
+      "layout_region": 4,
+      "image_region": 0
+    },
+    "preferredPaperIds": [
+      "clip-2021",
+      "mae-2021",
+      "alexnet-2012",
+      "resnet-2015"
+    ],
+    "excludedPreviousPackRows": true,
+    "maxPerPaperTypePage": 2,
+    "wholeImagePolicy": "deferred_to_visual_full_image_annotation_pack_design",
+    "attachmentPolicy": "context_crop_png_first_no_whole_image",
+    "rationale": "Expand beyond prior visual annotation batches by selecting a bounded, context-crop-first set that favors tables, figure/caption regions, equations, and layout candidates before raw image regions."
+  },
+  "counts": {
+    "sourceCandidateRows": 467,
+    "previousAnnotatedRows": 42,
+    "eligibleExpansionRows": 425,
+    "selectedExpansionRows": 24,
+    "selectedPaperRows": 4,
+    "imageCandidateRows": 0,
+    "figureCandidateRows": 8,
+    "tableCandidateRows": 8,
+    "equationCandidateRows": 4,
+    "layoutCandidateRows": 4,
+    "wholeImageRows": 0,
+    "pageImageRows": 0,
+    "blockedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "packRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:8f0e6f40ae547eee",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 21,
+      "bbox": [
+        306.67,
+        160.45,
+        542.93,
+        202.29
+      ],
+      "candidateType": "table_region",
+      "priority": 1,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=21\ncandidateType=table_region\nbbox=[306.67, 160.45, 542.93, 202.29]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-21/visual-layout-clip-2021-table_region-21-4bad77d0856486fe.png\ncaptionText=Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace categories ‘Black,’ ‘Indian,’ ‘East Asian,’ ‘Southeast Asian,’ ‘Middle Eastern,’ and ‘Latino’ (grouped to- gether as FairFace category ‘Non-White’)\nnearbyText=FairFace Model 75.4 94.4 60.7 Linear Probe CLIP 92.8 97.7 63.1 Zero-Shot CLIP 91.3 97.2 54.3 Linear Probe Instagram 87.2 93.9 54.1 Table 4. Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace categories ‘Black,’ ‘Indian,’ ‘East Asian,’ ‘Southeast Asian,’ ‘Middle Eastern,’ and ‘Latino’ (grouped to- gether as FairFace category ‘Non-White’) Middle Southeast East Model Gender Black White Indi...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-21/visual-layout-clip-2021-table_region-21-4bad77d0856486fe.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "FairFace Model 75.4 94.4 60.7 Linear Probe CLIP 92.8 97.7 63.1 Zero-Shot CLIP 91.3 97.2 54.3 Linear Probe Instagram 87.2 93.9 54.1 Table 4. Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace categories ‘Black,’ ‘Indian,’ ‘East Asian,’ ‘Southeast Asian,’ ‘Middle Eastern,’ and ‘Latino’ (grouped to- gether as FairFace category ‘Non-White’) Middle Southeast East Model Gender Black White Indi...",
+        "captionText": "Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace categories ‘Black,’ ‘Indian,’ ‘East Asian,’ ‘Southeast Asian,’ ‘Middle Eastern,’ and ‘Latino’ (grouped to- gether as FairFace category ‘Non-White’)",
+        "headingPath": [
+          "Page 21"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-21/visual-layout-clip-2021-table_region-21-4bad77d0856486fe.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 21,
+        "bbox": [
+          306.67,
+          160.45,
+          542.93,
+          202.29
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:f7cc57aa40a43c33",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 7,
+      "bbox": [
+        50.11,
+        136.25,
+        286.36,
+        222.01
+      ],
+      "candidateType": "table_region",
+      "priority": 2,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=7\ncandidateType=table_region\nbbox=[50.11, 136.25, 286.36, 222.01]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-7/visual-layout-mae-2021-table_region-7-8f36af5d66d8b78e.png\ncaptionText=Comparisons with previous results on ImageNet- 1K. The pre-training data is the ImageNet-1K training set (ex- cept the tokenizer in BEiT was pre-trained on 250M DALLE data [50]). All self-supervised methods are evaluated by end-to-end ﬁne-tuning. The ViT models are B/16, L/16,...\nnearbyText=method pre-train data ViT-B ViT-L ViT-H ViT-H448 scratch, our impl. - 82.3 82.6 83.1 - DINO [5] IN1K 82.8 - - - MoCo v3 [9] IN1K 83.2 84.1 - - BEiT [2] IN1K+DALLE 83.2 85.2 - - MAE IN1K 83.6 85.9 86.9 87.8 Table 3. Comparisons with previous results on ImageNet- 1K. The pre-training data is the ImageNet-1K training set (ex- cept the tokenizer in BEiT was pre-trained on 250M DALLE data [50]). All self-supervised met...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-7/visual-layout-mae-2021-table_region-7-8f36af5d66d8b78e.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "method pre-train data ViT-B ViT-L ViT-H ViT-H448 scratch, our impl. - 82.3 82.6 83.1 - DINO [5] IN1K 82.8 - - - MoCo v3 [9] IN1K 83.2 84.1 - - BEiT [2] IN1K+DALLE 83.2 85.2 - - MAE IN1K 83.6 85.9 86.9 87.8 Table 3. Comparisons with previous results on ImageNet- 1K. The pre-training data is the ImageNet-1K training set (ex- cept the tokenizer in BEiT was pre-trained on 250M DALLE data [50]). All self-supervised met...",
+        "captionText": "Comparisons with previous results on ImageNet- 1K. The pre-training data is the ImageNet-1K training set (ex- cept the tokenizer in BEiT was pre-trained on 250M DALLE data [50]). All self-supervised methods are evaluated by end-to-end ﬁne-tuning. The ViT models are B/16, L/16, H/14 [16]. The best for each column is...",
+        "headingPath": [
+          "Page 7"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-7/visual-layout-mae-2021-table_region-7-8f36af5d66d8b78e.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 7,
+        "bbox": [
+          50.11,
+          136.25,
+          286.36,
+          222.01
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:725f9e3f1a875ea8",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        50.11,
+        214.26,
+        286.37,
+        245.23
+      ],
+      "candidateType": "table_region",
+      "priority": 3,
+      "expansionReason": "remaining_high_value_visual_candidate",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=resnet-2015\npage=6\ncandidateType=table_region\nbbox=[50.11, 214.26, 286.37, 245.23]\nplannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-b1729ae3f7fd50f8.png\ncaptionText=Error rates (%, 10-crop testing) on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions.\nnearbyText=ResNet-152 21.43 5.71 Table 3. Error rates (%, 10-crop testing) on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions. method top-1 err. top-5 err. VGG [41] (ILSVRC’14) - 8.43†",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-b1729ae3f7fd50f8.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "ResNet-152 21.43 5.71 Table 3. Error rates (%, 10-crop testing) on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions. method top-1 err. top-5 err. VGG [41] (ILSVRC’14) - 8.43†",
+        "captionText": "Error rates (%, 10-crop testing) on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions.",
+        "headingPath": [
+          "Page 6"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-b1729ae3f7fd50f8.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 6,
+        "bbox": [
+          50.11,
+          214.26,
+          286.37,
+          245.23
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:e8bc29694559b2ca",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 21,
+      "bbox": [
+        54.89,
+        161.42,
+        288.72,
+        181.35
+      ],
+      "candidateType": "table_region",
+      "priority": 4,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=21\ncandidateType=table_region\nbbox=[54.89, 161.42, 288.72, 181.35]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-21/visual-layout-clip-2021-table_region-21-ba742e93b9b8eb98.png\ncaptionText=Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace category ‘White’\nnearbyText=FairFace Model 93.7 94.2 59.7 Linear Probe CLIP 93.4 96.5 63.8 Zero-Shot CLIP 58.3 95.9 57.1 Linear Probe Instagram 90.8 93.2 54.2 Table 3. Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace category ‘White’ Model Race Gender Age",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-21/visual-layout-clip-2021-table_region-21-ba742e93b9b8eb98.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "FairFace Model 93.7 94.2 59.7 Linear Probe CLIP 93.4 96.5 63.8 Zero-Shot CLIP 58.3 95.9 57.1 Linear Probe Instagram 90.8 93.2 54.2 Table 3. Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace category ‘White’ Model Race Gender Age",
+        "captionText": "Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace category ‘White’",
+        "headingPath": [
+          "Page 21"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-21/visual-layout-clip-2021-table_region-21-ba742e93b9b8eb98.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 21,
+        "bbox": [
+          54.89,
+          161.42,
+          288.72,
+          181.35
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:5caac92f47f4c81a",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 8,
+      "bbox": [
+        50.11,
+        123.25,
+        286.36,
+        165.18
+      ],
+      "candidateType": "table_region",
+      "priority": 5,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=8\ncandidateType=table_region\nbbox=[50.11, 123.25, 286.36, 165.18]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-8/visual-layout-mae-2021-table_region-8-33d1507d0cd15829.png\ncaptionText=COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementa- tion. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP.\nnearbyText=method pre-train data ViT-B ViT-L ViT-B ViT-L supervised IN1K w/ labels 47.9 49.3 42.9 43.9 MoCo v3 IN1K 47.9 49.3 42.7 44.0 BEiT IN1K+DALLE 49.8 53.3 44.4 47.1 MAE IN1K 50.3 53.3 44.9 47.2 Table 4. COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementa- tion. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP. Th...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-8/visual-layout-mae-2021-table_region-8-33d1507d0cd15829.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "method pre-train data ViT-B ViT-L ViT-B ViT-L supervised IN1K w/ labels 47.9 49.3 42.9 43.9 MoCo v3 IN1K 47.9 49.3 42.7 44.0 BEiT IN1K+DALLE 49.8 53.3 44.4 47.1 MAE IN1K 50.3 53.3 44.9 47.2 Table 4. COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementa- tion. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP. Th...",
+        "captionText": "COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementa- tion. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP.",
+        "headingPath": [
+          "Page 8"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-8/visual-layout-mae-2021-table_region-8-33d1507d0cd15829.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 8,
+        "bbox": [
+          50.11,
+          123.25,
+          286.36,
+          165.18
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:9790fbf6893c1e99",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        50.11,
+        395.24,
+        286.36,
+        415.24
+      ],
+      "candidateType": "table_region",
+      "priority": 6,
+      "expansionReason": "remaining_high_value_visual_candidate",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=resnet-2015\npage=6\ncandidateType=table_region\nbbox=[50.11, 395.24, 286.36, 415.24]\nplannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-e1c63e0b5921b1e5.png\ncaptionText=Error rates (%) of single-model results on the ImageNet validation set (except † reported on the test set).\nnearbyText=GoogLeNet [44] (ILSVRC’14) - 7.89 VGG [41] (v5) 24.4 7.1 PReLU-net [13] 21.59 5.71 BN-inception [16] 21.99 5.81 ResNet-34 B 21.84 5.71 ResNet-34 C 21.53 5.60 ResNet-50 20.74 5.25 ResNet-101 19.87 4.60 ResNet-152 19.38 4.49 Table 4. Error rates (%) of single-model results on the ImageNet validation set (except † reported on the test set). method top-5 err. (test) VGG [41] (ILSVRC’14) 7.32 GoogLeNet [44] (ILSVRC’14)...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-e1c63e0b5921b1e5.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "GoogLeNet [44] (ILSVRC’14) - 7.89 VGG [41] (v5) 24.4 7.1 PReLU-net [13] 21.59 5.71 BN-inception [16] 21.99 5.81 ResNet-34 B 21.84 5.71 ResNet-34 C 21.53 5.60 ResNet-50 20.74 5.25 ResNet-101 19.87 4.60 ResNet-152 19.38 4.49 Table 4. Error rates (%) of single-model results on the ImageNet validation set (except † reported on the test set). method top-5 err. (test) VGG [41] (ILSVRC’14) 7.32 GoogLeNet [44] (ILSVRC’14)...",
+        "captionText": "Error rates (%) of single-model results on the ImageNet validation set (except † reported on the test set).",
+        "headingPath": [
+          "Page 6"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-6/visual-layout-resnet-2015-table_region-6-e1c63e0b5921b1e5.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 6,
+        "bbox": [
+          50.11,
+          395.24,
+          286.36,
+          415.24
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:94ec8ee73927d106",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 22,
+      "bbox": [
+        54.89,
+        147.01,
+        541.89,
+        166.98
+      ],
+      "candidateType": "table_region",
+      "priority": 7,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=22\ncandidateType=table_region\nbbox=[54.89, 147.01, 541.89, 166.98]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-22/visual-layout-clip-2021-table_region-22-71b8cf43d8079375.png\ncaptionText=Percent of images classiﬁed into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women (for a total of 14), as well as 3 crime-related categories and 4 non-human categories.\nnearbyText=Crime-related Categories 16.4 24.9 24.4 10.8 19.7 4.4 1.3 Non-human Categories 14.4 5.5 7.6 3.7 2.0 1.9 0.0 Table 6. Percent of images classiﬁed into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women (for a total of 14), as well as 3 crime-related categories and 4 non-human categories. Category Label Set 0-2 3-9 10-19 20-29 30...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-22/visual-layout-clip-2021-table_region-22-71b8cf43d8079375.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Crime-related Categories 16.4 24.9 24.4 10.8 19.7 4.4 1.3 Non-human Categories 14.4 5.5 7.6 3.7 2.0 1.9 0.0 Table 6. Percent of images classiﬁed into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women (for a total of 14), as well as 3 crime-related categories and 4 non-human categories. Category Label Set 0-2 3-9 10-19 20-29 30...",
+        "captionText": "Percent of images classiﬁed into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women (for a total of 14), as well as 3 crime-related categories and 4 non-human categories.",
+        "headingPath": [
+          "Page 22"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-22/visual-layout-clip-2021-table_region-22-71b8cf43d8079375.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 22,
+        "bbox": [
+          54.89,
+          147.01,
+          541.89,
+          166.98
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:89c6ebbc58615302",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 8,
+      "bbox": [
+        308.86,
+        357.57,
+        545.11,
+        388.78
+      ],
+      "candidateType": "table_region",
+      "priority": 8,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_table_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=8\ncandidateType=table_region\nbbox=[308.86, 357.57, 545.11, 388.78]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-8/visual-layout-mae-2021-table_region-8-5f83ffc6688fce4b.png\ncaptionText=Pixels vs. tokens as the MAE reconstruction target. △is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insigniﬁcant.\nnearbyText=IN1K COCO ADE20K ViT-B ViT-L ViT-H ViT-B ViT-L ViT-B ViT-L pixel (w/o norm) 83.3 85.1 86.2 49.5 52.8 48.0 51.8 pixel (w/ norm) 83.6 85.9 86.9 50.3 53.3 48.1 53.6 dVAE token 83.6 85.7 86.9 50.3 53.2 48.1 53.4 △ 0.0 -0.2 0.0 0.0 -0.1 0.0 -0.2 Table 7. Pixels vs. tokens as the MAE reconstruction target. △is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insigniﬁc...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-8/visual-layout-mae-2021-table_region-8-5f83ffc6688fce4b.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "IN1K COCO ADE20K ViT-B ViT-L ViT-H ViT-B ViT-L ViT-B ViT-L pixel (w/o norm) 83.3 85.1 86.2 49.5 52.8 48.0 51.8 pixel (w/ norm) 83.6 85.9 86.9 50.3 53.3 48.1 53.6 dVAE token 83.6 85.7 86.9 50.3 53.2 48.1 53.4 △ 0.0 -0.2 0.0 0.0 -0.1 0.0 -0.2 Table 7. Pixels vs. tokens as the MAE reconstruction target. △is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insigniﬁc...",
+        "captionText": "Pixels vs. tokens as the MAE reconstruction target. △is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insigniﬁcant.",
+        "headingPath": [
+          "Page 8"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-8/visual-layout-mae-2021-table_region-8-5f83ffc6688fce4b.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 8,
+        "bbox": [
+          308.86,
+          357.57,
+          545.11,
+          388.78
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:6377fe9ea1091519",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 7,
+      "bbox": [
+        306.25,
+        308.38,
+        542.93,
+        383.18
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 9,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=7\ncandidateType=figure_caption_region\nbbox=[306.25, 308.38, 542.93, 383.18]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-7/visual-layout-clip-2021-figure_caption_region-7-d3e128cd03f8c6bd.png\ncaptionText=Prompt engineering and ensembling improve zero- shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classiﬁcation performance by almost 5 points on average across 36 datasets. This improvement is simila...\nnearbyText=Prompt engineering and ensembling Contextless class names (Li et al. 2017) Figure 4. Prompt engineering and ensembling improve zero- shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classiﬁcation performance by almost 5 points on average across 36 datasets. This improvement is similar to the gain from using 4 times more compute with the...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-7/visual-layout-clip-2021-figure_caption_region-7-d3e128cd03f8c6bd.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Prompt engineering and ensembling Contextless class names (Li et al. 2017) Figure 4. Prompt engineering and ensembling improve zero- shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classiﬁcation performance by almost 5 points on average across 36 datasets. This improvement is similar to the gain from using 4 times more compute with the...",
+        "captionText": "Prompt engineering and ensembling improve zero- shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classiﬁcation performance by almost 5 points on average across 36 datasets. This improvement is similar to the gain from using 4 times more co...",
+        "headingPath": [
+          "Page 7"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-7/visual-layout-clip-2021-figure_caption_region-7-d3e128cd03f8c6bd.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 7,
+        "bbox": [
+          306.25,
+          308.38,
+          542.93,
+          383.18
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:0fecac724889bae3",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 3,
+      "bbox": [
+        50.11,
+        258.97,
+        286.36,
+        300.98
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 10,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=3\ncandidateType=figure_caption_region\nbbox=[50.11, 258.97, 286.36, 300.98]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-3/visual-layout-mae-2021-figure_caption_region-3-534077a253e5a0fa.png\ncaptionText=Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize.\nnearbyText=original mask 75% mask 85% mask 95% Figure 4. Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize. 2. Related Work",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-3/visual-layout-mae-2021-figure_caption_region-3-534077a253e5a0fa.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "original mask 75% mask 85% mask 95% Figure 4. Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize. 2. Related Work",
+        "captionText": "Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize.",
+        "headingPath": [
+          "Page 3"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-3/visual-layout-mae-2021-figure_caption_region-3-534077a253e5a0fa.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 3,
+        "bbox": [
+          50.11,
+          258.97,
+          286.36,
+          300.98
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:394d74a41bc086fc",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 8,
+      "bbox": [
+        50.11,
+        172.49,
+        545.11,
+        192.5
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 11,
+      "expansionReason": "remaining_high_value_visual_candidate",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=resnet-2015\npage=8\ncandidateType=figure_caption_region\nbbox=[50.11, 172.49, 545.11, 192.5]\nplannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-8/visual-layout-resnet-2015-figure_caption_region-8-ddd82bd40f652201.png\ncaptionText=Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers.\nnearbyText=residual-110 residual-1202 Figure 6. Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers. 0 20 40 60 80 100",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-8/visual-layout-resnet-2015-figure_caption_region-8-ddd82bd40f652201.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "residual-110 residual-1202 Figure 6. Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers. 0 20 40 60 80 100",
+        "captionText": "Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers.",
+        "headingPath": [
+          "Page 8"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-8/visual-layout-resnet-2015-figure_caption_region-8-ddd82bd40f652201.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 8,
+        "bbox": [
+          50.11,
+          172.49,
+          545.11,
+          192.5
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:d022fbada8c5dc50",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 8,
+      "bbox": [
+        306.94,
+        343.75,
+        542.93,
+        385.68
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 12,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=8\ncandidateType=figure_caption_region\nbbox=[306.94, 343.75, 542.93, 385.68]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-8/visual-layout-clip-2021-figure_caption_region-8-75613ea3ae6b4e06.png\ncaptionText=Zero-shot CLIP is competitive with a fully super- vised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classiﬁer outperforms a fully supervised linear classiﬁer ﬁtted on ResNet-50 features on 16 datasets, including ImageNet.\nnearbyText=+28.9 StanfordCars Figure 5. Zero-shot CLIP is competitive with a fully super- vised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classiﬁer outperforms a fully supervised linear classiﬁer ﬁtted on ResNet-50 features on 16 datasets, including ImageNet. ten than not and wins on 16 of the 27 datasets. Looking at individual datasets reveals some interesting behavior. On ﬁne-grained classiﬁcation tasks, w...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-8/visual-layout-clip-2021-figure_caption_region-8-75613ea3ae6b4e06.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "+28.9 StanfordCars Figure 5. Zero-shot CLIP is competitive with a fully super- vised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classiﬁer outperforms a fully supervised linear classiﬁer ﬁtted on ResNet-50 features on 16 datasets, including ImageNet. ten than not and wins on 16 of the 27 datasets. Looking at individual datasets reveals some interesting behavior. On ﬁne-grained classiﬁcation tasks, w...",
+        "captionText": "Zero-shot CLIP is competitive with a fully super- vised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classiﬁer outperforms a fully supervised linear classiﬁer ﬁtted on ResNet-50 features on 16 datasets, including ImageNet.",
+        "headingPath": [
+          "Page 8"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-8/visual-layout-clip-2021-figure_caption_region-8-75613ea3ae6b4e06.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 8,
+        "bbox": [
+          306.94,
+          343.75,
+          542.93,
+          385.68
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:315c3e53bc5bbd3a",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 4,
+      "bbox": [
+        308.86,
+        194.17,
+        545.12,
+        225.14
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 13,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=4\ncandidateType=figure_caption_region\nbbox=[308.86, 194.17, 545.12, 225.14]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-4/visual-layout-mae-2021-figure_caption_region-4-5260bb56bfc85410.png\ncaptionText=Masking ratio. A high masking ratio (75%) works well for both ﬁne-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper.\nnearbyText=masking ratio (%) Figure 5. Masking ratio. A high masking ratio (75%) works well for both ﬁne-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper. 4. ImageNet Experiments",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-4/visual-layout-mae-2021-figure_caption_region-4-5260bb56bfc85410.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "masking ratio (%) Figure 5. Masking ratio. A high masking ratio (75%) works well for both ﬁne-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper. 4. ImageNet Experiments",
+        "captionText": "Masking ratio. A high masking ratio (75%) works well for both ﬁne-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper.",
+        "headingPath": [
+          "Page 4"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-4/visual-layout-mae-2021-figure_caption_region-4-5260bb56bfc85410.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 4,
+        "bbox": [
+          308.86,
+          194.17,
+          545.12,
+          225.14
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:ff5aaff461d8b382",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 9,
+      "bbox": [
+        54.94,
+        305.7,
+        291.01,
+        391.46
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 14,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=9\ncandidateType=figure_caption_region\nbbox=[54.94, 305.7, 291.01, 391.46]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-9/visual-layout-clip-2021-figure_caption_region-9-37cc4e2380f5208f.png\ncaptionText=Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classiﬁer trained on the same feature space and nearly matches the best results of a 16-shot linear classiﬁer across publicly available models. For both BiT-M a...\nnearbyText=ResNet50 Figure 6. Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classiﬁer trained on the same feature space and nearly matches the best results of a 16-shot linear classiﬁer across publicly available models. For both BiT-M and SimCLRv2, the best performing model is highlighted. Light gray lines are other models in the eval suite. The 20 datase...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-9/visual-layout-clip-2021-figure_caption_region-9-37cc4e2380f5208f.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "ResNet50 Figure 6. Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classiﬁer trained on the same feature space and nearly matches the best results of a 16-shot linear classiﬁer across publicly available models. For both BiT-M and SimCLRv2, the best performing model is highlighted. Light gray lines are other models in the eval suite. The 20 datase...",
+        "captionText": "Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classiﬁer trained on the same feature space and nearly matches the best results of a 16-shot linear classiﬁer across publicly available models. For both BiT-M and SimCLRv2, the best performing model i...",
+        "headingPath": [
+          "Page 9"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-9/visual-layout-clip-2021-figure_caption_region-9-37cc4e2380f5208f.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 9,
+        "bbox": [
+          54.94,
+          305.7,
+          291.01,
+          391.46
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:b3e4e92563d1e8a2",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 6,
+      "bbox": [
+        308.86,
+        216.16,
+        545.11,
+        247.13
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 15,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=6\ncandidateType=figure_caption_region\nbbox=[308.86, 216.16, 545.11, 247.13]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-6/visual-layout-mae-2021-figure_caption_region-6-dc979079d8bc6a42.png\ncaptionText=Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training sched- ule. The model is ViT-L with the default setting in Table 1.\nnearbyText=epochs (log-scale) Figure 7. Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training sched- ule. The model is ViT-L with the default setting in Table 1. and 28% respectively for BYOL [21] and SimCLR [7]. In addition, there is no evidence that contrastive learning can work without augmentation: the two views of an image are the same and can easily satisfy a...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-6/visual-layout-mae-2021-figure_caption_region-6-dc979079d8bc6a42.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "epochs (log-scale) Figure 7. Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training sched- ule. The model is ViT-L with the default setting in Table 1. and 28% respectively for BYOL [21] and SimCLR [7]. In addition, there is no evidence that contrastive learning can work without augmentation: the two views of an image are the same and can easily satisfy a...",
+        "captionText": "Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training sched- ule. The model is ViT-L with the default setting in Table 1.",
+        "headingPath": [
+          "Page 6"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-6/visual-layout-mae-2021-figure_caption_region-6-dc979079d8bc6a42.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 6,
+        "bbox": [
+          308.86,
+          216.16,
+          545.11,
+          247.13
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:5b2d4fc92f97acca",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        306.94,
+        284.11,
+        541.64,
+        347.95
+      ],
+      "candidateType": "figure_caption_region",
+      "priority": 16,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_figure_caption_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=10\ncandidateType=figure_caption_region\nbbox=[306.94, 284.11, 541.64, 347.95]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-figure_caption_region-10-967a1812d18f9d62.png\ncaptionText=Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does...\nnearbyText=Kinetics700 Figure 8. Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does zero-shot performance approach linear probe performance (≤3 point difference). mance, suggesting that CLIP is relative...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-figure_caption_region-10-967a1812d18f9d62.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": true,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Kinetics700 Figure 8. Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does zero-shot performance approach linear probe performance (≤3 point difference). mance, suggesting that CLIP is relative...",
+        "captionText": "Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does zero-shot performance approach linear pr...",
+        "headingPath": [
+          "Page 10"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-figure_caption_region-10-967a1812d18f9d62.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "bbox": [
+          306.94,
+          284.11,
+          541.64,
+          347.95
+        ],
+        "extractionMethod": "pymupdf_text_block_caption_regex_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:0c43009a12b6af2f",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        55.85,
+        237.51,
+        290.61,
+        283.78
+      ],
+      "candidateType": "equation_region",
+      "priority": 17,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_equation_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=5\ncandidateType=equation_region\nbbox=[55.85, 237.51, 290.61, 283.78]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-6936e394c7364af3.png\nnearbyText=# scaled pairwise cosine similarities [n, n] logits = np.dot(I_e, T_e.T) * np.exp(t) # symmetric loss function labels = np.arange(n) loss_i = cross_entropy_loss(logits, labels, axis=0) loss_t = cross_entropy_loss(logits, labels, axis=1) loss = (loss_i + loss_t)/2 Figure 3. Numpy-like pseudocode for the core of an implementa- tion of CLIP.",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-6936e394c7364af3.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "# scaled pairwise cosine similarities [n, n] logits = np.dot(I_e, T_e.T) * np.exp(t) # symmetric loss function labels = np.arange(n) loss_i = cross_entropy_loss(logits, labels, axis=0) loss_t = cross_entropy_loss(logits, labels, axis=1) loss = (loss_i + loss_t)/2 Figure 3. Numpy-like pseudocode for the core of an implementa- tion of CLIP.",
+        "captionText": "",
+        "headingPath": [
+          "Page 5"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-6936e394c7364af3.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 5,
+        "bbox": [
+          55.85,
+          237.51,
+          290.61,
+          283.78
+        ],
+        "extractionMethod": "pymupdf_text_block_equation_heuristic_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:909ddf76c579d765",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        55.85,
+        174.21,
+        258.39,
+        202.4
+      ],
+      "candidateType": "equation_region",
+      "priority": 18,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_equation_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=5\ncandidateType=equation_region\nbbox=[55.85, 174.21, 258.39, 202.4]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-7b890343228eec5b.png\nnearbyText=# extract feature representations of each modality I_f = image_encoder(I) #[n, d_i] T_f = text_encoder(T) #[n, d_t] # joint multimodal embedding [n, d_e] I_e = l2_normalize(np.dot(I_f, W_i), axis=1) T_e = l2_normalize(np.dot(T_f, W_t), axis=1) # scaled pairwise cosine similarities [n, n] logits = np.dot(I_e, T_e.T) * np.exp(t)",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-7b890343228eec5b.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "# extract feature representations of each modality I_f = image_encoder(I) #[n, d_i] T_f = text_encoder(T) #[n, d_t] # joint multimodal embedding [n, d_e] I_e = l2_normalize(np.dot(I_f, W_i), axis=1) T_e = l2_normalize(np.dot(T_f, W_t), axis=1) # scaled pairwise cosine similarities [n, n] logits = np.dot(I_e, T_e.T) * np.exp(t)",
+        "captionText": "",
+        "headingPath": [
+          "Page 5"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-5/visual-layout-clip-2021-equation_region-5-7b890343228eec5b.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 5,
+        "bbox": [
+          55.85,
+          174.21,
+          258.39,
+          202.4
+        ],
+        "extractionMethod": "pymupdf_text_block_equation_heuristic_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:20651fab9ff83152",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        486.55,
+        236.11,
+        513.82,
+        247.37
+      ],
+      "candidateType": "equation_region",
+      "priority": 19,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_equation_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=10\ncandidateType=equation_region\nbbox=[486.55, 236.11, 513.82, 247.37]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-equation_region-10-b13e1298e1e46bb8.png\nnearbyText=Zero-Shot CLIP Performance r = 0.82 VOC2007",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-equation_region-10-b13e1298e1e46bb8.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Zero-Shot CLIP Performance r = 0.82 VOC2007",
+        "captionText": "",
+        "headingPath": [
+          "Page 10"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-equation_region-10-b13e1298e1e46bb8.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "bbox": [
+          486.55,
+          236.11,
+          513.82,
+          247.37
+        ],
+        "extractionMethod": "pymupdf_text_block_equation_heuristic_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:6e7cbec3568fd5bd",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        55.13,
+        693.95,
+        291.1,
+        717.45
+      ],
+      "candidateType": "equation_region",
+      "priority": 20,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_equation_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=10\ncandidateType=equation_region\nbbox=[55.13, 693.95, 291.1, 717.45]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-equation_region-10-db8ab5cab587035e.png\nnearbyText=If we assume that evaluation datasets are large enough that the parameters of linear classiﬁers trained on them are well estimated, then, because CLIP’s zero-shot classiﬁer is also a linear classiﬁer, the performance of the fully supervised classiﬁers roughly sets an upper bound for what zero-shot transfer can achieve. In Figure 8 we compare CLIP’s zero- shot performance with fully supervised linear classiﬁers acr...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-equation_region-10-db8ab5cab587035e.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "If we assume that evaluation datasets are large enough that the parameters of linear classiﬁers trained on them are well estimated, then, because CLIP’s zero-shot classiﬁer is also a linear classiﬁer, the performance of the fully supervised classiﬁers roughly sets an upper bound for what zero-shot transfer can achieve. In Figure 8 we compare CLIP’s zero- shot performance with fully supervised linear classiﬁers acr...",
+        "captionText": "",
+        "headingPath": [
+          "Page 10"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-10/visual-layout-clip-2021-equation_region-10-db8ab5cab587035e.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "bbox": [
+          55.13,
+          693.95,
+          291.1,
+          717.45
+        ],
+        "extractionMethod": "pymupdf_text_block_equation_heuristic_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:1fec483504a4bebb",
+      "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 1,
+      "bbox": [
+        150.2,
+        188.02,
+        194.68,
+        199.97
+      ],
+      "candidateType": "layout_region",
+      "priority": 21,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_layout_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=clip-2021\npage=1\ncandidateType=layout_region\nbbox=[150.2, 188.02, 194.68, 199.97]\nplannedCropRef=papers_dir/visual_layout_planned_crops/clip-2021/page-1/visual-layout-clip-2021-layout_region-1-7614f0e5b3451acd.png\nnearbyText=Girish Sastry 1 Amanda Askell 1 Pamela Mishkin 1 Jack Clark 1 Gretchen Krueger 1 Ilya Sutskever 1 Abstract State-of-the-art computer vision systems are trained to predict a ﬁxed set of predetermined object categories. This restricted form of super- vision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images i...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-1/visual-layout-clip-2021-layout_region-1-7614f0e5b3451acd.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Girish Sastry 1 Amanda Askell 1 Pamela Mishkin 1 Jack Clark 1 Gretchen Krueger 1 Ilya Sutskever 1 Abstract State-of-the-art computer vision systems are trained to predict a ﬁxed set of predetermined object categories. This restricted form of super- vision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images i...",
+        "captionText": "",
+        "headingPath": [
+          "Abstract"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/clip-2021/page-1/visual-layout-clip-2021-layout_region-1-7614f0e5b3451acd.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 1,
+        "bbox": [
+          150.2,
+          188.02,
+          194.68,
+          199.97
+        ],
+        "extractionMethod": "pymupdf_text_block_layout_heading_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:7750aa3c8a75d027",
+      "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "bbox": [
+        145.99,
+        203.22,
+        190.48,
+        215.17
+      ],
+      "candidateType": "layout_region",
+      "priority": 22,
+      "expansionReason": "new_paper_visual_coverage",
+      "annotationTask": "describe_layout_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=mae-2021\npage=1\ncandidateType=layout_region\nbbox=[145.99, 203.22, 190.48, 215.17]\nplannedCropRef=papers_dir/visual_layout_planned_crops/mae-2021/page-1/visual-layout-mae-2021-layout_region-1-aadf3033f0ed984e.png\nnearbyText=Facebook AI Research (FAIR) Abstract This paper shows that masked autoencoders (MAE) are scalable self-supervised learners for computer vision. Our MAE approach is simple: we mask random patches of the input image and reconstruct the missing pixels. It is based on two core designs. First, we develop an asymmetric encoder-decoder architecture, with an encoder that oper- ates only on the visible subset of patches (w...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-1/visual-layout-mae-2021-layout_region-1-aadf3033f0ed984e.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Facebook AI Research (FAIR) Abstract This paper shows that masked autoencoders (MAE) are scalable self-supervised learners for computer vision. Our MAE approach is simple: we mask random patches of the input image and reconstruct the missing pixels. It is based on two core designs. First, we develop an asymmetric encoder-decoder architecture, with an encoder that oper- ates only on the visible subset of patches (w...",
+        "captionText": "",
+        "headingPath": [
+          "Abstract"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/mae-2021/page-1/visual-layout-mae-2021-layout_region-1-aadf3033f0ed984e.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 1,
+        "bbox": [
+          145.99,
+          203.22,
+          190.48,
+          215.17
+        ],
+        "extractionMethod": "pymupdf_text_block_layout_heading_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:ff6ed253bbca856c",
+      "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 1,
+      "bbox": [
+        108.0,
+        447.68,
+        190.81,
+        459.63
+      ],
+      "candidateType": "layout_region",
+      "priority": 23,
+      "expansionReason": "remaining_high_value_visual_candidate",
+      "annotationTask": "describe_layout_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=alexnet-2012\npage=1\ncandidateType=layout_region\nbbox=[108.0, 447.68, 190.81, 459.63]\nplannedCropRef=papers_dir/visual_layout_planned_crops/alexnet-2012/page-1/visual-layout-alexnet-2012-layout_region-1-0a3974d993387e3b.png\nnearbyText=We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 dif- ferent classes. On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0% which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, consists of ﬁve convolution...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/alexnet-2012/page-1/visual-layout-alexnet-2012-layout_region-1-0a3974d993387e3b.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 dif- ferent classes. On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0% which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, consists of ﬁve convolution...",
+        "captionText": "",
+        "headingPath": [
+          "1 Introduction"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/alexnet-2012/page-1/visual-layout-alexnet-2012-layout_region-1-0a3974d993387e3b.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 1,
+        "bbox": [
+          108.0,
+          447.68,
+          190.81,
+          459.63
+        ],
+        "extractionMethod": "pymupdf_text_block_layout_heading_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-annotation-expansion-pack-row.v1",
+      "packCandidateId": "visual-annotation-expansion-pack:visual_annotation_expansion_pack_003:f0d8952e19599939",
+      "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 1,
+      "bbox": [
+        145.99,
+        225.25,
+        190.48,
+        237.2
+      ],
+      "candidateType": "layout_region",
+      "priority": 24,
+      "expansionReason": "remaining_high_value_visual_candidate",
+      "annotationTask": "describe_layout_region_for_retrieval",
+      "webInput": {
+        "copyPasteContext": "paperId=resnet-2015\npage=1\ncandidateType=layout_region\nbbox=[145.99, 225.25, 190.48, 237.2]\nplannedCropRef=papers_dir/visual_layout_planned_crops/resnet-2015/page-1/visual-layout-resnet-2015-layout_region-1-1442b7b9fe2f781a.png\nnearbyText=Kaiming He Xiangyu Zhang Shaoqing Ren Jian Sun Microsoft Research {kahe, v-xiangz, v-shren, jiansun}@microsoft.com Abstract Deeper neural networks are more difﬁcult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learn- ing residual functions with reference to the layer inputs, in-...",
+        "plannedAttachmentRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-1/visual-layout-resnet-2015-layout_region-1-1442b7b9fe2f781a.png",
+        "attachmentGuidance": {
+          "recommendedAttachmentKind": "context_crop_png",
+          "wholeImageAllowedInThisPack": false,
+          "pageImageAllowedInThisPack": false,
+          "pageCropFallbackAllowed": false,
+          "fullImageGateRequired": false
+        }
+      },
+      "textContext": {
+        "nearbyText": "Kaiming He Xiangyu Zhang Shaoqing Ren Jian Sun Microsoft Research {kahe, v-xiangz, v-shren, jiansun}@microsoft.com Abstract Deeper neural networks are more difﬁcult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learn- ing residual functions with reference to the layer inputs, in-...",
+        "captionText": "",
+        "headingPath": [
+          "Abstract"
+        ]
+      },
+      "visualContext": {
+        "cropRef": "papers_dir/visual_layout_planned_crops/resnet-2015/page-1/visual-layout-resnet-2015-layout_region-1-1442b7b9fe2f781a.png",
+        "imageHash": "",
+        "pageImageRequired": true,
+        "wholeImageAllowedInThisPack": false
+      },
+      "retrievalHintPlan": {
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      },
+      "expectedOutputContract": {
+        "schema": "knowledge-hub.paper.visual-annotation-web-output-row.v1",
+        "allowedUse": "retrieval_hint_only",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "requiredFields": [
+          "sourceCandidateId",
+          "visualObservationStatus",
+          "derivedTextForRetrieval",
+          "visibleText",
+          "retrievalKeywords",
+          "uncertainty",
+          "limitations",
+          "strictEvidence",
+          "citationGrade",
+          "answerableWithoutTextEvidence"
+        ]
+      },
+      "provenance": {
+        "sourceReportSchema": "knowledge-hub.paper.visual-layout-candidate-list-report.v1",
+        "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 1,
+        "bbox": [
+          145.99,
+          225.25,
+          190.48,
+          237.2
+        ],
+        "extractionMethod": "pymupdf_text_block_layout_heading_v1"
+      },
+      "blockerReason": ""
+    }
+  ],
+  "warnings": [
+    "This expansion design writes no crop files and sends no images to GPT/VLM.",
+    "Image-region candidates are included only as bounded context-crop annotation candidates.",
+    "Whole-image or whole-page annotation remains deferred to visual_full_image_annotation_pack_design.",
+    "Any future derivedTextForRetrieval remains retrieval_hint_only and non-evidence."
+  ]
+}

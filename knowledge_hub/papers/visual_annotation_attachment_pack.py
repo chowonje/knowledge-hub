@@ -51,8 +51,8 @@ def normalize_text(value: Any) -> str:
 
 
 def _slug(value: str) -> str:
-    slug = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
-    return slug or "unknown"
+    token = re.sub(r"[^a-z0-9_.-]+", "-", str(value or "").lower()).strip("-")
+    return token or "unknown"
 
 
 def _short_hash(value: str, *, length: int = 12) -> str:
@@ -131,10 +131,10 @@ def _paper_filename_from_ref(paper_ref: str) -> str:
     prefix = "papers_dir/"
     if not paper_ref.startswith(prefix):
         return ""
-    paper_filename = paper_ref[len(prefix) :].strip()
-    if not paper_filename or paper_filename.startswith("/") or ".." in Path(paper_filename).parts:
+    token = paper_ref[len(prefix) :].strip()
+    if not token or token.startswith("/") or ".." in Path(token).parts:
         return ""
-    return paper_filename
+    return token
 
 
 def _asset_filename(row: dict[str, Any]) -> str:

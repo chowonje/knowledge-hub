@@ -1,0 +1,812 @@
+{
+  "schema": "knowledge-hub.paper.visual-annotation-expansion-operator-handoff.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T02:50:31Z",
+  "decision": "ready_for_operator_web_vlm_run",
+  "nextRecommendedTranche": "visual_annotation_expansion_manual_output_capture",
+  "handoffId": "visual_annotation_expansion_operator_handoff_003",
+  "sourceManualRunPacket": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_manual_run_packet_003.v1.json",
+    "packetRows": 24
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualOperatorWebModelRunRequired": true,
+    "vectorIndexing": false,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "candidateStoreMutationRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "operatorSteps": [
+    "Open each batch in the manual run packet.",
+    "Upload only the listed context-crop PNG attachments for that batch.",
+    "Paste the batch prompt and row metadata into web GPT/Pro.",
+    "Ask for JSON only with schema knowledge-hub.paper.visual-annotation-web-output.v1.",
+    "Combine the returned rows into eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.manual.json.",
+    "Run validation with: PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py --output eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.manual.json --source-expansion-pack eval/knowledgeos/reports/visual_annotation_expansion_pack_design_003.v1.json --source-attachment-pack eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003.v1.json --validation-json eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json --validation-md eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.md"
+  ],
+  "expectedOutputRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.manual.json",
+  "validationCommand": "PYTHONPATH=. python eval/knowledgeos/scripts/validate_visual_annotation_expansion_web_output.py --output eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.manual.json --source-expansion-pack eval/knowledgeos/reports/visual_annotation_expansion_pack_design_003.v1.json --source-attachment-pack eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003.v1.json --validation-json eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json --validation-md eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.md",
+  "outputContract": {
+    "schema": "knowledge-hub.paper.visual-annotation-web-output.v1",
+    "allowedUse": "retrieval_hint_only",
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false
+  },
+  "counts": {
+    "packetRows": 24,
+    "templateRows": 24,
+    "batchRows": 3,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "templateRows": [
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+      "paperId": "clip-2021",
+      "candidateType": "table_region",
+      "page": 21,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/01-clip-2021-p21-table_region-d4eb3193e7.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+      "paperId": "mae-2021",
+      "candidateType": "table_region",
+      "page": 7,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/02-mae-2021-p7-table_region-bfbbafd612.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+      "paperId": "resnet-2015",
+      "candidateType": "table_region",
+      "page": 6,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/03-resnet-2015-p6-table_region-49e9afc133.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+      "paperId": "clip-2021",
+      "candidateType": "table_region",
+      "page": 21,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/04-clip-2021-p21-table_region-5d7e41a602.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+      "paperId": "mae-2021",
+      "candidateType": "table_region",
+      "page": 8,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/05-mae-2021-p8-table_region-4ea2608fbe.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+      "paperId": "resnet-2015",
+      "candidateType": "table_region",
+      "page": 6,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/06-resnet-2015-p6-table_region-d92ada1e73.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+      "paperId": "clip-2021",
+      "candidateType": "table_region",
+      "page": 22,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/07-clip-2021-p22-table_region-9624b52f39.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_01",
+      "batchNumber": 1,
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+      "paperId": "mae-2021",
+      "candidateType": "table_region",
+      "page": 8,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/08-mae-2021-p8-table_region-0a9691a1bb.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+      "paperId": "clip-2021",
+      "candidateType": "figure_caption_region",
+      "page": 7,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/09-clip-2021-p7-figure_caption_region-1252f24b4e.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+      "paperId": "mae-2021",
+      "candidateType": "figure_caption_region",
+      "page": 3,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/10-mae-2021-p3-figure_caption_region-04331d5d79.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+      "paperId": "resnet-2015",
+      "candidateType": "figure_caption_region",
+      "page": 8,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/11-resnet-2015-p8-figure_caption_region-69bd31ffec.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+      "paperId": "clip-2021",
+      "candidateType": "figure_caption_region",
+      "page": 8,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/12-clip-2021-p8-figure_caption_region-115dd1b617.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+      "paperId": "mae-2021",
+      "candidateType": "figure_caption_region",
+      "page": 4,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/13-mae-2021-p4-figure_caption_region-a4a60ffb47.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+      "paperId": "clip-2021",
+      "candidateType": "figure_caption_region",
+      "page": 9,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/14-clip-2021-p9-figure_caption_region-06b0a471fa.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+      "paperId": "mae-2021",
+      "candidateType": "figure_caption_region",
+      "page": 6,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/15-mae-2021-p6-figure_caption_region-7ded22699f.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_02",
+      "batchNumber": 2,
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+      "paperId": "clip-2021",
+      "candidateType": "figure_caption_region",
+      "page": 10,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/16-clip-2021-p10-figure_caption_region-007c581197.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+      "paperId": "clip-2021",
+      "candidateType": "equation_region",
+      "page": 5,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/17-clip-2021-p5-equation_region-580eca5260.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+      "paperId": "clip-2021",
+      "candidateType": "equation_region",
+      "page": 5,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/18-clip-2021-p5-equation_region-bfafd5e5ef.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+      "paperId": "clip-2021",
+      "candidateType": "equation_region",
+      "page": 10,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/19-clip-2021-p10-equation_region-a20794562b.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+      "paperId": "clip-2021",
+      "candidateType": "equation_region",
+      "page": 10,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/20-clip-2021-p10-equation_region-c7cc7b71d0.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+      "paperId": "clip-2021",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/21-clip-2021-p1-layout_region-245d63628e.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+      "paperId": "mae-2021",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/22-mae-2021-p1-layout_region-1c3eb161fd.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+      "paperId": "alexnet-2012",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/23-alexnet-2012-p1-layout_region-fbdce7db66.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    },
+    {
+      "batchId": "visual_annotation_expansion_manual_run_packet_003_batch_03",
+      "batchNumber": 3,
+      "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+      "paperId": "resnet-2015",
+      "candidateType": "layout_region",
+      "page": 1,
+      "attachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/24-resnet-2015-p1-layout_region-7b46f50641.png",
+      "fillRequired": [
+        "visualObservationStatus",
+        "derivedTextForRetrieval",
+        "visibleText",
+        "retrievalKeywords",
+        "uncertainty",
+        "limitations"
+      ],
+      "outputRowSkeleton": {
+        "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+        "visualObservationStatus": "image_attached",
+        "derivedTextForRetrieval": "Retrieval hint only: FILL_IN_FROM_ATTACHED_IMAGE.",
+        "visibleText": "Visible fragments include: FILL_IN_VISIBLE_TEXT_ONLY.",
+        "retrievalKeywords": [
+          "FILL_IN_KEYWORD"
+        ],
+        "uncertainty": "FILL_IN_UNCERTAINTY.",
+        "limitations": "Retrieval hint only, not evidence.",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false
+      }
+    }
+  ],
+  "warnings": [
+    "This handoff is not web/VLM output and must not be validated as completed output.",
+    "The operator must replace every FILL_IN placeholder with observations from attached context crops.",
+    "Do not upload whole pages or whole images for this gate.",
+    "Do not treat derivedTextForRetrieval as strict, citation-grade, or answer-visible evidence."
+  ]
+}

@@ -1,0 +1,1636 @@
+{
+  "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-design.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T03:17:05Z",
+  "decision": "ready_for_visual_retrieval_hint_candidate_store_expansion_dry_run",
+  "nextRecommendedTranche": "visual_retrieval_hint_candidate_store_expansion_dry_run",
+  "sourceValidationReport": {
+    "schema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+    "capturedRows": 24,
+    "blockedRows": 0
+  },
+  "scope": {
+    "writes": "report_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "candidateRowsProjected": 24,
+    "candidateStoreMutationRows": 0,
+    "vectorIndexing": false,
+    "indexEligibleRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "storeContract": {
+    "storeName": "visual_retrieval_hint_candidate_store",
+    "storeKind": "quarantined_candidate_store",
+    "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+    "writeMode": "future_explicit_apply_only",
+    "intendedConsumer": "future_retrieval_query_expansion_or_rerank_hint",
+    "identityFields": [
+      "hintCandidateId",
+      "sourceCandidateId",
+      "paperId",
+      "sourceContentHash",
+      "page",
+      "bbox"
+    ],
+    "requiredSourceLinks": [
+      "sourceValidationReportRef",
+      "sourceCandidateId",
+      "sourceContentHash",
+      "paperRef",
+      "page",
+      "bbox"
+    ],
+    "nonEvidencePolicyFields": [
+      "allowedUse",
+      "strictEvidence",
+      "citationGrade",
+      "answerableWithoutTextEvidence",
+      "runtimeVisible",
+      "indexEligible"
+    ],
+    "blockedUntil": [
+      "candidate_store_dry_run",
+      "human_review_of_storage_contract",
+      "separate_index_eligibility_gate"
+    ]
+  },
+  "fullImageEscalationPolicy": {
+    "currentTrancheSendsWholeImagesToGpt": false,
+    "earliestRecommendedTranche": "visual_full_image_annotation_pack_design",
+    "requiresBeforeFullImageGpt": [
+      "visual_retrieval_hint_candidate_store_expansion_design",
+      "visual_retrieval_hint_candidate_store_expansion_dry_run",
+      "visual_annotation_expansion_pack_design"
+    ],
+    "defaultBatchPolicy": "small_batches_not_all_candidates",
+    "recommendedMaxRowsPerBatch": 24,
+    "allowedImageInputsBeforeScaleUp": [
+      "context_crop_png",
+      "page_crop_png_when_context_crop_is_insufficient"
+    ],
+    "wholePageOrWholeImageUse": "Only after a separate pack-design gate, and only for candidates where context crops are insufficient, uncertainty is high, or image-region candidates need object/layout inspection.",
+    "neverUseAsEvidence": true
+  },
+  "counts": {
+    "sourceValidationRows": 24,
+    "candidateRows": 24,
+    "eligibleRows": 24,
+    "blockedRows": 0,
+    "indexEligibleRows": 0,
+    "runtimeVisibleRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeRows": 0,
+    "answerableWithoutTextEvidenceRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "candidateRowsDetail": [
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:21:7383ff52813f3311",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 21,
+      "bbox": [
+        306.67,
+        160.45,
+        542.93,
+        202.29
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/01-clip-2021-p21-table_region-d4eb3193e7.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP FairFace page 21 table region showing Table 4 Non-White Race, Gender, and Age classification accuracy, plus a cropped lower Table 5 gender-classification-by-race table.",
+      "visibleText": "Visible fragments include: Model, Race, Gender, Age; FairFace Model 75.4, 94.4, 60.7; Linear Probe CLIP 92.8, 97.7, 63.1; Zero-Shot CLIP 91.3, 97.2, 54.3; Linear Probe Instagram 87.2, 93.9, 54.1. Caption: Table 4. Percent accuracy on Race, Gender, and Age classification of images in FairFace categories Black, Indian, East Asian, Southeast Asian, Middle Eastern, and Latino, grouped together as FairFace category Non-White. Lower cropped table fragments include column labels White, Indian, Latino, Middle Eastern, Southeast Asian, East Asian, Average and visible average values including 97.2, 97.8, 97.5, 96.9, 97.0, 94.1, and 93.4. Caption fragment: gender classification of images by FairFace race category.",
+      "retrievalKeywords": [
+        "CLIP",
+        "FairFace",
+        "Non-White",
+        "Race Gender Age classification",
+        "Linear Probe CLIP",
+        "Zero-Shot CLIP",
+        "Linear Probe Instagram",
+        "Table 4"
+      ],
+      "uncertainty": "The top Table 4 is legible. The lower Table 5 is cropped on the left and bottom, so some row labels and values are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:4bad77d0856486fe",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 21,
+        "bbox": [
+          306.67,
+          160.45,
+          542.93,
+          202.29
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:7:60c6c34fe4bf2a08",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 7,
+      "bbox": [
+        50.11,
+        136.25,
+        286.36,
+        222.01
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/02-mae-2021-p7-table_region-bfbbafd612.png",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 7 Table 3 compares previous self-supervised ViT ImageNet-1K results, with Figure 8 plotting MAE pre-training versus supervised pre-training.",
+      "visibleText": "Visible fragments include: table columns method, pre-train data, ViT-B, ViT-L, ViT-H, ViT-H448. Rows include scratch, our impl. with 82.3, 82.6, 83.1; DINO with IN1K and 82.8; MoCo v3 with IN1K, 83.2, 84.1; BEiT with IN1K+DALLE, 83.2, 85.2; MAE with IN1K, 83.6, 85.9, 86.9, 87.8. Caption: Table 3. Comparisons with previous results on ImageNet-1K. Caption text states that pre-training data is ImageNet-1K except the BEiT tokenizer, self-supervised methods are evaluated by end-to-end fine-tuning, ViT models are B/16, L/16, H/14, best values are underlined, results use image size 224 except ViT-H at 448, and MAE reconstructs normalized pixels and is pre-trained for 1600 epochs. Figure text includes Figure 8. MAE pre-training vs. supervised pre-training, axis label params (M), model labels ViT-B/16, ViT-L/16, ViT-H/14, and legend entries MAE, IN1K; supervised, IN1K, our impl.; supervised, IN1K; supervised, JFT300M. Section heading visible: 4.2. Comparisons with Previous Results.",
+      "retrievalKeywords": [
+        "MAE",
+        "ImageNet-1K",
+        "ViT-B",
+        "ViT-L",
+        "ViT-H",
+        "DINO",
+        "MoCo v3",
+        "BEiT",
+        "Figure 8"
+      ],
+      "uncertainty": "The main table and figure caption are legible; neighboring right-column text and part of the plotted line labels are partially cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:7:8f36af5d66d8b78e",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 7,
+        "bbox": [
+          50.11,
+          136.25,
+          286.36,
+          222.01
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:table_region:6:8b698e4cb33e4331",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        50.11,
+        214.26,
+        286.37,
+        245.23
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/03-resnet-2015-p6-table_region-49e9afc133.png",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 6 table region containing ImageNet validation error tables for 10-crop testing and single-model results, with a partial ensemble table.",
+      "visibleText": "Visible fragments include upper table rows: PReLU-net 24.27, 7.38; plain-34 28.54, 10.02; ResNet-34 A 25.03, 7.76; ResNet-34 B 24.52, 7.46; ResNet-34 C 24.19, 7.40; ResNet-50 22.85, 6.71; ResNet-101 21.75, 6.05; ResNet-152 21.43, 5.71. Caption: Table 3. Error rates, 10-crop testing, on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions. Middle table columns: method, top-1 err., top-5 err. Rows include VGG ILSVRC14, GoogLeNet ILSVRC14, VGG v5 24.4 and 7.1, PReLU-net 21.59 and 5.71, BN-inception 21.99 and 5.81, ResNet-34 B 21.84 and 5.71, ResNet-34 C 21.53 and 5.60, ResNet-50 20.74 and 5.25, ResNet-101 19.87 and 4.60, ResNet-152 19.38 and 4.49. Caption: Table 4. Error rates of single-model results on the ImageNet validation set except dagger reported on the test set. Bottom partial table shows method and top-5 err. test with visible rows including VGG 7.32, GoogLeNet 6.66, VGG v5 6.8, and PReLU-net 4.94.",
+      "retrievalKeywords": [
+        "ResNet",
+        "ImageNet validation",
+        "10-crop testing",
+        "single-model results",
+        "top-1 error",
+        "top-5 error",
+        "ResNet-152",
+        "Table 4"
+      ],
+      "uncertainty": "The middle Table 4 is clear. The upper Table 3 is cropped at the top, and the lower Table 5 is cropped before all rows and its full caption.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:b1729ae3f7fd50f8",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 6,
+        "bbox": [
+          50.11,
+          214.26,
+          286.37,
+          245.23
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:21:919ea1060820f507",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 21,
+      "bbox": [
+        54.89,
+        161.42,
+        288.72,
+        181.35
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/04-clip-2021-p21-table_region-5d7e41a602.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP FairFace page 21 table region showing Table 3 White-category Race, Gender, and Age accuracy, plus a cropped Table 5 gender classification by race category.",
+      "visibleText": "Visible fragments include: table columns Model, Race, Gender, Age. Rows: FairFace Model 93.7, 94.2, 59.7; Linear Probe CLIP 93.4, 96.5, 63.8; Zero-Shot CLIP 58.3, 95.9, 57.1; Linear Probe Instagram 90.8, 93.2, 54.2. Caption: Table 3. Percent accuracy on Race, Gender, and Age classification of images in FairFace category White. A neighboring cropped caption begins Table 4. Lower cropped table fragments include headers Model, Gender, Black, White, Indian, and partial Latino. Visible model groups include Linear Probe CLIP, Zero-Shot CLIP, and Linear Probe Instagram with Male and Female rows. Visible values include Linear Probe CLIP Male 96.9, 96.4, 98.7; Female 97.9, 96.7, 97.9; aggregate 97.4, 96.5, 98.3. Zero-Shot CLIP visible values include Male 96.3, 96.4, 97.7; Female 97.1, 95.3, 98.3; aggregate 96.7, 95.9, 98.0. Linear Probe Instagram visible values include Male 92.5, 94.8, 96.2; Female 90.1, 91.4, 95.0; aggregate 91.3, 93.2, 95.6. Caption fragment: Table 5. Percent accuracy on gender classification of images.",
+      "retrievalKeywords": [
+        "CLIP",
+        "FairFace",
+        "White",
+        "Race Gender Age classification",
+        "Linear Probe CLIP",
+        "Zero-Shot CLIP",
+        "Linear Probe Instagram",
+        "gender classification"
+      ],
+      "uncertainty": "The top Table 3 is fully legible. The lower Table 5 is cropped on the right and bottom, so later race columns and the full caption are not completely visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:21:ba742e93b9b8eb98",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 21,
+        "bbox": [
+          54.89,
+          161.42,
+          288.72,
+          181.35
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:8:d8bb6136c1efe969",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 8,
+      "bbox": [
+        50.11,
+        123.25,
+        286.36,
+        165.18
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/05-mae-2021-p8-table_region-4ea2608fbe.png",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 8 Table 4 reports COCO object detection and segmentation transfer results using a ViT Mask R-CNN baseline.",
+      "visibleText": "Visible fragments include: table columns method, pre-train data, APbox with ViT-B and ViT-L, and APmask with ViT-B and ViT-L. Rows: supervised with IN1K w/ labels 47.9, 49.3, 42.9, 43.9; MoCo v3 with IN1K 47.9, 49.3, 42.7, 44.0; BEiT with IN1K+DALLE 49.8, 53.3, 44.4, 47.1; MAE with IN1K 50.3, 53.3, 44.9, 47.2. Caption: Table 4. COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementation. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP. Body text fragments include: linear separability is not the sole metric for evaluating representation quality and section heading 5. Transfer Learning Experiments. Subsection fragment: Object detection and segmentation. We fine-tune Mask R-CNN end-to-end on COCO.",
+      "retrievalKeywords": [
+        "MAE",
+        "COCO",
+        "object detection",
+        "segmentation",
+        "Mask R-CNN",
+        "APbox",
+        "APmask",
+        "ViT-B",
+        "ViT-L"
+      ],
+      "uncertainty": "The main Table 4 and caption are legible. Some neighboring right-column tables and text are cropped and not fully readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:33d1507d0cd15829",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 8,
+        "bbox": [
+          50.11,
+          123.25,
+          286.36,
+          165.18
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:table_region:6:2305462f39ba5737",
+      "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 6,
+      "bbox": [
+        50.11,
+        395.24,
+        286.36,
+        415.24
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/06-resnet-2015-p6-table_region-d92ada1e73.png",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet page 6 table region showing the lower part of ImageNet single-model results and Table 5 ensemble top-5 test error, followed by residual-learning discussion text.",
+      "visibleText": "Visible fragments include the lower portion of Table 4 with rows: VGG v5 24.4, 7.1; PReLU-net 21.59, 5.71; BN-inception 21.99, 5.81; ResNet-34 B 21.84, 5.71; ResNet-34 C 21.53, 5.60; ResNet-50 20.74, 5.25; ResNet-101 19.87, 4.60; ResNet-152 19.38, 4.49. Caption: Table 4. Error rates of single-model results on the ImageNet validation set. Table 5 columns: method and top-5 err. test. Rows: VGG ILSVRC14 7.32; GoogLeNet ILSVRC14 6.66; VGG v5 6.8; PReLU-net 4.94; BN-inception 4.82; ResNet ILSVRC15 3.57. Caption: Table 5. Error rates of ensembles. The top-5 error is on the test set of ImageNet and reported by the test server. Body text fragments include: ResNet reduces the top-1 error by 3.5% and This comparison verifies the effectiveness of residual learning on extremely deep systems.",
+      "retrievalKeywords": [
+        "ResNet",
+        "ILSVRC",
+        "ImageNet",
+        "ensemble",
+        "top-5 error",
+        "test set",
+        "BN-inception",
+        "residual learning",
+        "Table 5"
+      ],
+      "uncertainty": "Table 5 is fully legible. Table 4 is only the lower portion, and neighboring right-column text is cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:e1c63e0b5921b1e5",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 6,
+        "bbox": [
+          50.11,
+          395.24,
+          286.36,
+          415.24
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:22:3d7cfa6728d04d79",
+      "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 22,
+      "bbox": [
+        54.89,
+        147.01,
+        541.89,
+        166.98
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/07-clip-2021-p22-table_region-9624b52f39.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 22 bias-probe tables showing crime-related and non-human category rates by FairFace race category and age category, with discussion of LR CLIP and ZS CLIP.",
+      "visibleText": "Visible fragments include page header Learning Transferable Visual Models From Natural Language Supervision and page number 22. Table 6 columns: Category, Black, White, Indian, Latino, Middle Eastern, Southeast Asian, East Asian. Rows: Crime-related Categories 16.4, 24.9, 24.4, 10.8, 19.7, 4.4, 1.3; Non-human Categories 14.4, 5.5, 7.6, 3.7, 2.0, 1.9, 0.0. Caption: Table 6. Percent of images classified into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women, 14 total, as well as 3 crime-related categories and 4 non-human categories. Table 7 columns: Category Label Set, 0-2, 3-9, 10-19, 20-29, 30-39, 40-49, 50-59, 60-69, over 70. Rows: Default Label Set 30.3, 35.0, 29.5, 16.3, 13.9, 18.5, 19.1, 16.2, 10.4; Default Label Set plus child category 2.3, 4.3, 14.7, 15.0, 13.4, 18.2, 18.6, 15.5, 9.4. Caption: Table 7. Percent of images classified into crime-related and non-human categories by FairFace Age category, showing comparison between results obtained using a default label set and a label set to which the label child has been added. Body text fragments mention LR CLIP and ZS CLIP across intersectional race and gender categories and 4.9% of images misclassified into non-human classes.",
+      "retrievalKeywords": [
+        "CLIP",
+        "FairFace",
+        "crime-related categories",
+        "non-human categories",
+        "race category",
+        "age category",
+        "child category",
+        "LR CLIP",
+        "ZS CLIP"
+      ],
+      "uncertainty": "Both tables and captions are legible. The bottom body text continues beyond the visible crop, so later sentences are incomplete.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:table_region:22:71b8cf43d8079375",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 22,
+        "bbox": [
+          54.89,
+          147.01,
+          541.89,
+          166.98
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:8:2bc01c52e31087bf",
+      "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 8,
+      "bbox": [
+        308.86,
+        357.57,
+        545.11,
+        388.78
+      ],
+      "candidateType": "table_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/08-mae-2021-p8-table_region-0a9691a1bb.png",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE page 8 Table 7 compares pixels versus dVAE tokens as the MAE reconstruction target across IN1K, COCO, and ADE20K, followed by Discussion and Conclusion text.",
+      "visibleText": "Visible fragments include a table with grouped columns IN1K, COCO, and ADE20K. IN1K columns are ViT-B, ViT-L, ViT-H; COCO columns are ViT-B, ViT-L; ADE20K columns are ViT-B, ViT-L. Rows: pixel without norm 83.3, 85.1, 86.2, 49.5, 52.8, 48.0, 51.8; pixel with norm 83.6, 85.9, 86.9, 50.3, 53.3, 48.1, 53.6; dVAE token 83.6, 85.7, 86.9, 50.3, 53.2, 48.1, 53.4; delta 0.0, -0.2, 0.0, 0.0, -0.1, 0.0, -0.2. Caption: Table 7. Pixels vs. tokens as the MAE reconstruction target. Delta is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insignificant. Section heading: 6. Discussion and Conclusion. Body fragments include: Simple algorithms that scale well are the core of deep learning; in NLP, simple self-supervised learning methods enable benefits from exponentially scaling models; and an autoencoder provides scalable benefits.",
+      "retrievalKeywords": [
+        "MAE",
+        "pixels vs tokens",
+        "dVAE token",
+        "reconstruction target",
+        "IN1K",
+        "COCO",
+        "ADE20K",
+        "Discussion and Conclusion",
+        "self-supervised learning"
+      ],
+      "uncertainty": "The table and caption are legible. Surrounding text is cropped on the left and bottom, so only the visible discussion fragments are included.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:table_region:8:5f83ffc6688fce4b",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 8,
+        "bbox": [
+          308.86,
+          357.57,
+          545.11,
+          388.78
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:7:1a37a433790b9a22",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 7,
+      "bbox": [
+        306.25,
+        308.38,
+        542.93,
+        383.18
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/09-clip-2021-p7-figure_caption_region-1252f24b4e.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 4 compares CLIP zero-shot average score versus model GFLOPs for prompt engineering and ensembling against a baseline using contextless class names. The chart includes RN50, RN101, RN50x4, RN50x16, and RN50x64, with annotations for a 4X efficiency gain and a 5 point improvement.",
+      "visibleText": "Visible fragments include: Average Score (%), Model GFLOPs, Prompt engineering and ensembling, Contextless class names, RN50, RN101, RN50x4, RN50x16, RN50x64, 4X efficiency gain, 5 point improvement, Figure 4. Prompt engineering and ensembling improve zero-shot performance. Compared to the baseline of using contextless class names, prompt engineering and ensembling boost zero-shot classification performance by almost 5 points on average across 36 datasets. This improvement is similar to the gain from using 4 times more compute with the baseline zero-shot method but is free when amortized over many predictions.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot performance",
+        "prompt engineering",
+        "ensembling",
+        "contextless class names",
+        "Model GFLOPs",
+        "RN50x64",
+        "average score"
+      ],
+      "uncertainty": "High for the chart labels, legend, annotations, and caption; surrounding body text is cropped and not treated as complete context.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:7:d3e128cd03f8c6bd",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 7,
+        "bbox": [
+          306.25,
+          308.38,
+          542.93,
+          383.18
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:3:6e122ed840ea33ae",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 3,
+      "bbox": [
+        50.11,
+        258.97,
+        286.36,
+        300.98
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/10-mae-2021-p3-figure_caption_region-04331d5d79.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 4 shows MAE reconstructions of ImageNet validation images. Rows include example images such as a bus, vase, zebras, mushrooms, and peppers/tomatoes, with columns for original, mask 75%, mask 85%, and mask 95%. The caption states that a model pre-trained with 75% masking is applied at higher masking ratios and still produces plausible reconstructions.",
+      "visibleText": "Visible fragments include: original, mask 75%, mask 85%, mask 95%, Figure 4. Reconstructions of ImageNet validation images using an MAE pre-trained with a masking ratio of 75% but applied on inputs with higher masking ratios. The predictions differ plausibly from the original images, showing that the method can generalize. 2. Related Work. Masked language modeling.",
+      "retrievalKeywords": [
+        "MAE",
+        "masked autoencoder",
+        "ImageNet validation",
+        "reconstructions",
+        "mask 75%",
+        "mask 85%",
+        "mask 95%",
+        "generalize"
+      ],
+      "uncertainty": "High for the figure labels and caption; neighboring page text is cropped and only partial surrounding text is visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:3:534077a253e5a0fa",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 3,
+        "bbox": [
+          50.11,
+          258.97,
+          286.36,
+          300.98
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:figure_caption_region:8:7ec512c0cf518107",
+      "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 8,
+      "bbox": [
+        50.11,
+        172.49,
+        545.11,
+        192.5
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/11-resnet-2015-p8-figure_caption_region-69bd31ffec.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 6 presents CIFAR-10 training curves comparing plain networks and ResNets. The caption explains dashed lines as training error and bold lines as testing error, with panels for plain networks, ResNets, and ResNets with 110 and 1202 layers. A lower cropped plot with layer-index standard deviation and part of a PASCAL VOC object detection mAP table are also visible.",
+      "visibleText": "Visible fragments include: Figure 6. Training on CIFAR-10. Dashed lines denote training error, and bold lines denote testing error. Left: plain networks. The error of plain-110 is higher than 60% and not displayed. Middle: ResNets. Right: ResNets with 110 and 1202 layers. Other fragments include error (%), iter. (1e4), plain-20, plain-32, plain-44, plain-56, ResNet-20, ResNet-32, ResNet-44, ResNet-56, ResNet-110, residual-110, residual-1202, std, layer index original, training data, test data, VOC 07 test, VOC 12 test, VGG-16, ResNet-101, 73.2, 70.4, 76.4, 73.8, and Table 7. Object detection mAP on the PASCAL VOC.",
+      "retrievalKeywords": [
+        "ResNet",
+        "CIFAR-10",
+        "training error",
+        "testing error",
+        "plain networks",
+        "residual networks",
+        "ResNet-110",
+        "ResNet-1202",
+        "PASCAL VOC"
+      ],
+      "uncertainty": "High for the main Figure 6 caption and plot labels; lower for the partially visible bottom plot and table because they are cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:ddd82bd40f652201",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 8,
+        "bbox": [
+          50.11,
+          172.49,
+          545.11,
+          192.5
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:8:272352414ddb5953",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 8,
+      "bbox": [
+        306.94,
+        343.75,
+        542.93,
+        385.68
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/12-clip-2021-p8-figure_caption_region-115dd1b617.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 5 is a horizontal bar chart of Delta Score (%) for Zero-Shot CLIP versus a supervised linear probe on ResNet50. Green bars show datasets where zero-shot CLIP is higher, and blue bars show lower performance. The caption states zero-shot CLIP outperforms a supervised linear classifier on ResNet-50 features on 16 of 27 datasets, including ImageNet.",
+      "visibleText": "Visible fragments include: Food101 +22.5, Kinetics700 +14.5, SST2 +12.4, SUN397 +7.8, UCF101 +7.7, HatefulMemes +6.7, CIFAR10 +3.9, CIFAR100 +3.0, STL10 +3.0, FER2013 +2.8, Caltech101 +2.0, ImageNet +1.9, OxfordPets +1.1, PascalVOC2007 +0.5, Birdsnap -3.2, MNIST -10.0, FGVCAircraft -11.3, RESISC45 -11.9, Flowers102 -12.5, DTD -16.6, CLEVRCounts -18.2, GTSRB -18.4, PatchCamelyon -19.5, KITTI Distance -34.0, EuroSAT -37.1, Delta Score (%), Zero-Shot CLIP vs. Linear Probe on ResNet50, Figure 5. Zero-shot CLIP is competitive with a fully supervised baseline. Across a 27 dataset eval suite, a zero-shot CLIP classifier outperforms a fully supervised linear classifier fitted on ResNet-50 features on 16 datasets, including ImageNet.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot CLIP",
+        "linear probe",
+        "ResNet50",
+        "Delta Score",
+        "supervised baseline",
+        "ImageNet",
+        "EuroSAT",
+        "Food101"
+      ],
+      "uncertainty": "High for the bar labels and caption; the top of the chart is slightly cropped but the visible dataset labels and scores are readable.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:8:75613ea3ae6b4e06",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 8,
+        "bbox": [
+          306.94,
+          343.75,
+          542.93,
+          385.68
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:4:0ecee7372a8c2dd1",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 4,
+      "bbox": [
+        308.86,
+        194.17,
+        545.12,
+        225.14
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/13-mae-2021-p4-figure_caption_region-a4a60ffb47.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 5 plots MAE masking ratio against ImageNet-1K validation accuracy for fine-tuning and linear probing. The caption emphasizes that a high masking ratio of 75% works well for both settings.",
+      "visibleText": "Visible fragments include: fine-tuning, linear probing, masking ratio (%), 83.2, 83.4, 84.7, 84.9, 85.0, 84.5, 83.0, 54.6, 58.9, 61.7, 67.0, 69.9, 71.8, 73.2, 73.5, 66.1, Figure 5. Masking ratio. A high masking ratio (75%) works well for both fine-tuning (top) and linear probing (bottom). The y-axes are ImageNet-1K validation accuracy (%) in all plots in this paper. 4. ImageNet Experiments.",
+      "retrievalKeywords": [
+        "MAE",
+        "masking ratio",
+        "fine-tuning",
+        "linear probing",
+        "ImageNet-1K validation accuracy",
+        "75% masking",
+        "ImageNet Experiments"
+      ],
+      "uncertainty": "High for the caption and major plotted values; some plot labels are small, and surrounding body text is cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:4:5260bb56bfc85410",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 4,
+        "bbox": [
+          308.86,
+          194.17,
+          545.12,
+          225.14
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:9:056f3fe7e8348200",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 9,
+      "bbox": [
+        54.94,
+        305.7,
+        291.01,
+        391.46
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/14-clip-2021-p9-figure_caption_region-06b0a471fa.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 6 compares zero-shot CLIP with few-shot linear probes as the number of labeled training examples per class increases. The plot shows average score versus examples per class, with labels for Zero-Shot CLIP, Linear Probe CLIP, BiT-M (ImageNet-21K), SimCLRv2, and ResNet50. The caption states zero-shot CLIP matches a 4-shot linear classifier on the same feature space and nearly matches the best 16-shot linear classifier results across publicly available models.",
+      "visibleText": "Visible fragments include: Learning Transferable Visual Models From Natural Language Supervision, Average Score (%), number of labeled training examples per class, Zero-Shot CLIP, Linear Probe CLIP, BiT-M (ImageNet-21K), SimCLRv2, ResNet50, Figure 6. Zero-shot CLIP outperforms few-shot linear probes. Zero-shot CLIP matches the average performance of a 4-shot linear classifier trained on the same feature space and nearly matches the best results of a 16-shot linear classifier across publicly available models. For both BiT-M and SimCLRv2, the best performing model is highlighted. Light gray lines are other models in the eval suite. The 20 datasets with at least 16 examples per class were used in this analysis.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot CLIP",
+        "few-shot linear probes",
+        "Linear Probe CLIP",
+        "BiT-M",
+        "ImageNet-21K",
+        "SimCLRv2",
+        "ResNet50",
+        "labeled training examples per class"
+      ],
+      "uncertainty": "High for the chart labels and caption; adjacent body text is partially cropped and not treated as complete context.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:9:37cc4e2380f5208f",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 9,
+        "bbox": [
+          54.94,
+          305.7,
+          291.01,
+          391.46
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:6:a20fa27dc1268fe7",
+      "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 6,
+      "bbox": [
+        308.86,
+        216.16,
+        545.11,
+        247.13
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/15-mae-2021-p6-figure_caption_region-7ded22699f.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 7 shows MAE training schedules for fine-tuning and linear probing as epochs increase on a log scale. Both curves improve with longer schedules, and the caption says each point is a full training schedule using a ViT-L model with the default setting in Table 1.",
+      "visibleText": "Visible fragments include: fine-tuning, linear probing, epochs (log-scale), 82.3, 83.3, 84.3, 84.9, 85.1, 57.3, 64.4, 69.7, 73.5, 75.1, Figure 7. Training schedules. A longer training schedule gives a noticeable improvement. Here each point is a full training schedule. The model is ViT-L with the default setting in Table 1.",
+      "retrievalKeywords": [
+        "MAE",
+        "training schedules",
+        "epochs log-scale",
+        "fine-tuning",
+        "linear probing",
+        "ViT-L",
+        "ImageNet validation accuracy",
+        "longer training"
+      ],
+      "uncertainty": "High for the figure labels, plotted values, and caption; surrounding text is cropped and only partially visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:6:dc979079d8bc6a42",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 6,
+        "bbox": [
+          308.86,
+          216.16,
+          545.11,
+          247.13
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:10:8ae776681eff1396",
+      "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        306.94,
+        284.11,
+        541.64,
+        347.95
+      ],
+      "candidateType": "figure_caption_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/16-clip-2021-p10-figure_caption_region-007c581197.png",
+      "derivedTextForRetrieval": "Retrieval hint only: Figure 8 is a scatter plot comparing zero-shot CLIP performance with linear probe CLIP performance across datasets. The plot includes a dashed diagonal, a blue trend band/line, and a correlation label r = 0.82. The caption says zero-shot and linear probe performance are strongly correlated, but zero-shot performance is mostly shifted 10 to 25 points lower and approaches linear probe performance on only 5 datasets.",
+      "visibleText": "Visible fragments include: Zero-Shot CLIP Performance, Linear Probe CLIP Performance, r = 0.82, STL10, CIFAR10, Food101, Caltech101, OxfordPets, MNIST, VOC2007, Flowers102, UCF101, RESISC45, SUN397, HatefulMemes, Kinetics700, FER2013, DTD, PCAM, EuroSAT, GTSRB, Birdsnap, FGVCAircraft, KITTI Distance, CLEVRCounts, Country211, Stanford Cars, CIFAR100, ImageNet, Figure 8. Zero-shot performance is correlated with linear probe performance but still mostly sub-optimal. Comparing zero-shot and linear probe performance across datasets shows a strong correlation with zero-shot performance mostly shifted 10 to 25 points lower. On only 5 datasets does zero-shot performance approach linear probe performance, at no more than a 3 point difference.",
+      "retrievalKeywords": [
+        "CLIP",
+        "zero-shot performance",
+        "linear probe performance",
+        "correlation",
+        "r = 0.82",
+        "sub-optimal",
+        "dataset scatter plot",
+        "linear probe CLIP"
+      ],
+      "uncertainty": "High for the axis labels, correlation label, dataset labels, and caption; some adjacent page text is cropped.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:10:967a1812d18f9d62",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "bbox": [
+          306.94,
+          284.11,
+          541.64,
+          347.95
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:5:a5cfa0b0864a4292",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        55.85,
+        237.51,
+        290.61,
+        283.78
+      ],
+      "candidateType": "equation_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/17-clip-2021-p5-equation_region-580eca5260.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 3 NumPy-like pseudocode for core implementation; image encoder and text encoder outputs are projected into a joint multimodal embedding, normalized, compared by scaled pairwise cosine similarity, and optimized with a symmetric cross-entropy loss.",
+      "visibleText": "Visible fragments include: I_f = image_encoder(I) with shape [n, d_i]; T_f = text_encoder(T) with shape [n, d_t]; joint multimodal embedding [n, d_e]; I_e = l2_normalize(np.dot(I_f, W_i), axis=1); T_e = l2_normalize(np.dot(T_f, W_t), axis=1); scaled pairwise cosine similarities [n, n]; logits = np.dot(I_e, T_e.T) * np.exp(t); symmetric loss function; labels = np.arange(n); loss_i = cross_entropy_loss(logits, labels, axis=0); loss_t = cross_entropy_loss(logits, labels, axis=1); loss = (loss_i + loss_t)/2; Figure 3. Numpy-like pseudocode for the core of an implementation of CLIP. Also visible are cropped neighboring text fragments including section heading 2.5. Training and a paragraph mentioning Vision Transformer (ViT).",
+      "retrievalKeywords": [
+        "CLIP Figure 3",
+        "NumPy-like pseudocode",
+        "image_encoder",
+        "text_encoder",
+        "joint multimodal embedding",
+        "scaled pairwise cosine similarities",
+        "symmetric loss function",
+        "cross_entropy_loss"
+      ],
+      "uncertainty": "Low for the visible pseudocode and figure caption; higher for cropped right-column and bottom paragraph fragments because they are partially cut off.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:6936e394c7364af3",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 5,
+        "bbox": [
+          55.85,
+          237.51,
+          290.61,
+          283.78
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:5:96e864eaac443f0b",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 5,
+      "bbox": [
+        55.85,
+        174.21,
+        258.39,
+        202.4
+      ],
+      "candidateType": "equation_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/18-clip-2021-p5-equation_region-bfafd5e5ef.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP Figure 3 full pseudocode crop showing minibatch inputs, learned projection matrices, learned temperature parameter, extraction of image and text features, joint multimodal embedding normalization, logits from cosine similarity, and symmetric loss.",
+      "visibleText": "Visible fragments include: I[n, h, w, c] minibatch of aligned images; T[n, l] minibatch of aligned texts; W_i[d_i, d_e] learned projection of image to embed; W_t[d_t, d_e] learned projection of text to embed; t learned temperature parameter; extract feature representations of each modality; I_f = image_encoder(I); T_f = text_encoder(T); joint multimodal embedding [n, d_e]; I_e = l2_normalize(np.dot(I_f, W_i), axis=1); T_e = l2_normalize(np.dot(T_f, W_t), axis=1); scaled pairwise cosine similarities [n, n]; logits = np.dot(I_e, T_e.T) * np.exp(t); symmetric loss function; labels = np.arange(n); loss_i = cross_entropy_loss(logits, labels, axis=0); loss_t = cross_entropy_loss(logits, labels, axis=1); loss = (loss_i + loss_t)/2; Figure 3. Numpy-like pseudocode for the core of an implementation of CLIP.",
+      "retrievalKeywords": [
+        "CLIP pseudocode",
+        "aligned images",
+        "aligned texts",
+        "learned temperature parameter",
+        "l2_normalize",
+        "np.dot",
+        "cosine similarities",
+        "cross entropy"
+      ],
+      "uncertainty": "Low for the main code block and caption; minor uncertainty for small cropped text along the far right edge.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:7b890343228eec5b",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 5,
+        "bbox": [
+          55.85,
+          174.21,
+          258.39,
+          202.4
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:10:f75e7778a2640f77",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        486.55,
+        236.11,
+        513.82,
+        247.37
+      ],
+      "candidateType": "equation_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/19-clip-2021-p10-equation_region-a20794562b.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 10 figure region comparing CLIP performance with another performance axis; scatterplot with dataset labels, dashed diagonal y=x line, blue trend line, shaded interval, and correlation label r = 0.82.",
+      "visibleText": "Visible fragments include chart labels HatefulMemes, Kinetics700, FER2013, PCAM, EuroSAT, DTD, GTSRB, Birdsnap, FGVCAircraft, KITTI Distance, and CLEVRCounts. The x-axis reads CLIP Performance with visible ticks around 60, 70, 80, 90, and 100. The plot includes a dashed diagonal line, a blue fitted line with a light-blue band, and the annotation r = 0.82. Text below the chart is cropped but includes fragments such as is correlated with linear, mostly sub-optimal, Comparing, performance across datasets, zero-shot performance mostly shifted 10 to, and no more than 3 point difference.",
+      "retrievalKeywords": [
+        "CLIP Performance",
+        "r = 0.82",
+        "zero-shot",
+        "linear",
+        "fully supervised",
+        "HatefulMemes",
+        "EuroSAT",
+        "GTSRB",
+        "KITTI Distance",
+        "CLEVRCounts"
+      ],
+      "uncertainty": "Moderate because the chart is cropped on the left and top, and the paragraph below is cut off at the left edge.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:b13e1298e1e46bb8",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "bbox": [
+          486.55,
+          236.11,
+          513.82,
+          247.37
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:10:3c7f38012be09d67",
+      "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 10,
+      "bbox": [
+        55.13,
+        693.95,
+        291.1,
+        717.45
+      ],
+      "candidateType": "equation_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/20-clip-2021-p10-equation_region-c7cc7b71d0.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP page 10 discussion of a dashed y = x line as an optimal zero-shot classifier, zero-shot classifiers underperforming fully supervised classifiers by 10% to 25%, and positive correlation of 0.82 with p-value less than 10^-6.",
+      "visibleText": "Visible fragments include: across datasets. The dashed, y = x line represents an optimal zero-shot classifier that matches the performance of its fully supervised equivalent. For most datasets, the performance of zero-shot classifiers still underperform fully supervised classifiers by 10% to 25%, suggesting that there is still plenty of headroom for improving CLIP task-learning and zero-shot transfer capabilities. There is a positive correlation of 0.82, p-value less than 10^-6, between zero-shot performance and fully supervised performance. The far-right column is heavily cropped but includes fragments such as The GPT family, increase in training, the zero-shot, models across, and trend is smooth.",
+      "retrievalKeywords": [
+        "dashed y = x line",
+        "optimal zero-shot classifier",
+        "fully supervised equivalent",
+        "zero-shot classifiers",
+        "10% to 25%",
+        "task-learning",
+        "zero-shot transfer",
+        "positive correlation 0.82",
+        "p-value < 10^-6"
+      ],
+      "uncertainty": "Low for the central paragraph text; high for the far-right column fragments because only partial words are visible.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:equation_region:10:db8ab5cab587035e",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 10,
+        "bbox": [
+          55.13,
+          693.95,
+          291.1,
+          717.45
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:clip-2021:layout_region:1:3764120a5bf66acf",
+      "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page": 1,
+      "bbox": [
+        150.2,
+        188.02,
+        194.68,
+        199.97
+      ],
+      "candidateType": "layout_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/21-clip-2021-p1-layout_region-245d63628e.png",
+      "derivedTextForRetrieval": "Retrieval hint only: CLIP first-page layout crop with title fragment about learning transferable visual models, author fragments including Radford, Jong Wook Kim, and Amanda Askell, followed by the Abstract heading and abstract text about fixed category prediction and learning visual concepts from broader supervision.",
+      "visibleText": "Visible fragments include title text ending in learning Transferable Visual. Author fragments include Radford, Jong Wook Kim, Sastry, Amanda Askell, and cropped names beginning Ch and Pam. The centered heading Abstract is visible. Abstract fragments include state-of-the-art computer vision systems, to predict a fixed set of predetermined categories, restricted form of supervision limits generality and usability, labeled data is needed, visual concept, learning directly from raw text about images as a promising alternative, broader source of supervision, and simple pre-training.",
+      "retrievalKeywords": [
+        "CLIP first page",
+        "Learning Transferable Visual",
+        "Radford",
+        "Jong Wook Kim",
+        "Amanda Askell",
+        "Abstract",
+        "fixed set of categories",
+        "visual concept",
+        "pre-training"
+      ],
+      "uncertainty": "Moderate because the crop truncates the title, author list, and abstract lines at the left and right edges.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:clip-2021:layout_region:1:7614f0e5b3451acd",
+        "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+        "page": 1,
+        "bbox": [
+          150.2,
+          188.02,
+          194.68,
+          199.97
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:mae-2021:layout_region:1:7e8e4671cdd367fc",
+      "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "page": 1,
+      "bbox": [
+        145.99,
+        203.22,
+        190.48,
+        215.17
+      ],
+      "candidateType": "layout_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/22-mae-2021-p1-layout_region-1c3eb161fd.png",
+      "derivedTextForRetrieval": "Retrieval hint only: MAE first-page layout crop with title fragment 'Masked Autoenco...', author fragments including Kaiming He and Xinlei Chen, Abstract heading, and abstract text about masked autoencoders as scalable self-supervised learners that mask random patches and reconstruct missing pixels using an encoder-decoder design.",
+      "visibleText": "Visible fragments include title fragment Masked Autoenco. Author fragments include Kaiming He and Xinlei Chen. A footnote fragment equal and an affiliation fragment beginning Fac are visible. The centered heading Abstract is visible. Abstract fragments include masked autoencoders, self-supervised learners for computer vision, mask random patches, reconstruct the missing pixels, encoder architecture, visible subset of patches, lightweight decoder, and image from the latent representation.",
+      "retrievalKeywords": [
+        "MAE first page",
+        "Masked Autoenco",
+        "Kaiming He",
+        "Xinlei Chen",
+        "Abstract",
+        "masked autoencoders",
+        "self-supervised learners",
+        "mask random patches",
+        "reconstruct missing pixels",
+        "lightweight decoder"
+      ],
+      "uncertainty": "Moderate because most title, affiliation, and abstract lines are cropped at one or both edges.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:mae-2021:layout_region:1:aadf3033f0ed984e",
+        "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+        "page": 1,
+        "bbox": [
+          145.99,
+          203.22,
+          190.48,
+          215.17
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:alexnet-2012:layout_region:1:330062fb88b99ac7",
+      "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "page": 1,
+      "bbox": [
+        108.0,
+        447.68,
+        190.81,
+        459.63
+      ],
+      "candidateType": "layout_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/23-alexnet-2012-p1-layout_region-fbdce7db66.png",
+      "derivedTextForRetrieval": "Retrieval hint only: AlexNet first-page layout crop showing the transition from abstract-like text into section '1 Introduction'; visible fragments mention a neural network with five convolutional layers and three fully connected layers, ILSVRC-2012, object recognition, CIFAR-10/100, and MNIST.",
+      "visibleText": "Visible fragments include upper paragraph snippets: neural network, five convolutional layers, three fully-connected layers, non-saturating neurons, GPU implementation of convolution, regularization, ILSVRC-2012 competition, and compared to 26.2%. The section heading 1 Introduction is clearly visible. Introduction fragments include current approaches to object recognition, better techniques for preventing overfitting, small datasets on the order of tens of thousands, CIFAR-10/100, augmented examples, best error rate on MNIST, realistic settings, and larger training sets.",
+      "retrievalKeywords": [
+        "AlexNet first page",
+        "1 Introduction",
+        "neural network",
+        "five convolutional layers",
+        "three fully connected",
+        "ILSVRC-2012",
+        "object recognition",
+        "CIFAR-10/100",
+        "MNIST"
+      ],
+      "uncertainty": "Moderate to high because the crop shows only the right portion of the page and many lines are truncated.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:alexnet-2012:layout_region:1:0a3974d993387e3b",
+        "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+        "page": 1,
+        "bbox": [
+          108.0,
+          447.68,
+          190.81,
+          459.63
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    },
+    {
+      "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-row.v1",
+      "hintCandidateId": "visual-retrieval-hint:resnet-2015:layout_region:1:0848218a8267509b",
+      "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page": 1,
+      "bbox": [
+        145.99,
+        225.25,
+        190.48,
+        237.2
+      ],
+      "candidateType": "layout_region",
+      "sourceAttachmentRef": "eval/knowledgeos/reports/visual_annotation_expansion_attachment_pack_003/assets/24-resnet-2015-p1-layout_region-7b46f50641.png",
+      "derivedTextForRetrieval": "Retrieval hint only: ResNet first-page layout crop with title fragment 'Deep Residual...', author fragment Kaiming He, Abstract heading, and abstract text about residual learning, training substantially deeper neural networks, reformulating layers with reference to inputs, and improved optimization and accuracy with increased depth.",
+      "visibleText": "Visible fragments include title fragment Deep Residual. Author fragments include Kaiming He and a cropped neighboring name beginning Xia. An email fragment begins kahe. The centered heading Abstract is visible. Abstract fragments include neural networks are more difficult to train, residual learning framework, substantially deeper than prior networks, explicitly reformulate layers, functions with reference to layer inputs, learning unreferenced functions, empirical evidence, easier to optimize, gain accuracy by increased depth, and ImageNet.",
+      "retrievalKeywords": [
+        "ResNet first page",
+        "Deep Residual",
+        "Kaiming He",
+        "Abstract",
+        "residual learning framework",
+        "substantially deeper",
+        "reformulate layers",
+        "easier to optimize",
+        "increased depth",
+        "ImageNet"
+      ],
+      "uncertainty": "Moderate because the crop truncates the title, author list, email line, and most abstract lines.",
+      "limitations": "Retrieval hint only, not evidence.",
+      "policy": {
+        "allowedUse": "retrieval_hint_only",
+        "targetDerivedTextField": "derivedTextForRetrieval",
+        "strictEvidence": false,
+        "citationGrade": false,
+        "answerableWithoutTextEvidence": false,
+        "runtimeVisible": false,
+        "indexEligible": false,
+        "requiresFutureIndexEligibilityGate": true,
+        "answerabilityGateBypassAllowed": false
+      },
+      "storeProjection": {
+        "plannedStoreRef": "papers_dir/visual_retrieval_hints/visual_retrieval_hint_candidates.v1.jsonl",
+        "writeStatus": "not_written_design_only",
+        "indexStatus": "not_indexed",
+        "runtimeVisibility": "not_runtime_visible"
+      },
+      "provenance": {
+        "sourceValidationReportSchema": "knowledge-hub.paper.visual-annotation-expansion-web-output-validation.v1",
+        "sourceValidationReportRef": "eval/knowledgeos/reports/visual_annotation_expansion_web_output_003.validation.v1.json",
+        "sourceCandidateId": "visual-layout:resnet-2015:layout_region:1:1442b7b9fe2f781a",
+        "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+        "page": 1,
+        "bbox": [
+          145.99,
+          225.25,
+          190.48,
+          237.2
+        ],
+        "extractionMethod": "visual_annotation_expansion_manual_output_capture_to_candidate_store_design_v1"
+      },
+      "blockerReason": ""
+    }
+  ],
+  "warnings": [
+    "This is a design report only; the planned candidate store is not written.",
+    "All projected rows remain retrieval_hint_only, not evidence.",
+    "Whole-image or whole-page GPT/VLM batches require a later pack-design gate."
+  ]
+}

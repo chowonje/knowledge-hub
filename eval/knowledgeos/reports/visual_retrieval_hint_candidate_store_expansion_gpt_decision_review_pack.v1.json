@@ -1,0 +1,1031 @@
+{
+  "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-review-pack.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-27T02:15:56Z",
+  "decision": "ready_for_manual_gpt_decision_recommendation_run",
+  "nextRecommendedTranche": "visual_retrieval_hint_candidate_store_expansion_gpt_recommendation_output_capture",
+  "packId": "visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001",
+  "sourceDecisionRecord": {
+    "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-human-product-decision-record.v1",
+    "status": "decision_record_template_ready",
+    "reportRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_human_product_decision_record.v1.json",
+    "decisionRows": 24,
+    "humanDecisionRows": 0,
+    "candidateStoreWriteRows": 0
+  },
+  "sourceReviewReport": {
+    "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-review.v1",
+    "status": "ready",
+    "reportRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_review.v1.json",
+    "reviewRows": 24,
+    "blockedRows": 0
+  },
+  "targetRecommendationOutput": {
+    "schema": "knowledge-hub.paper.visual-retrieval-hint-candidate-store-expansion-gpt-decision-recommendation-output.v1",
+    "allowedUse": "recommendation_only",
+    "finalHumanDecision": false,
+    "applyAllowed": false,
+    "candidateStoreWrite": false,
+    "strictEvidence": false,
+    "citationGrade": false,
+    "answerableWithoutTextEvidence": false,
+    "runtimeVisible": false,
+    "indexEligible": false
+  },
+  "scope": {
+    "writes": "report_and_operator_prompt_files_only",
+    "apiCalls": false,
+    "modelCalls": false,
+    "webModelCalls": false,
+    "manualOperatorWebModelRunRequired": true,
+    "operatorPromptRows": 3,
+    "recommendationTemplateRows": 3,
+    "bundleArtifactRows": 6,
+    "completedGptRecommendationRows": 0,
+    "finalHumanDecisionRows": 0,
+    "candidateStoreWriteRows": 0,
+    "vectorIndexing": false,
+    "indexEligibleRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerabilityGateBypassRows": 0,
+    "cropWriteRows": 0,
+    "pageImageWriteRows": 0,
+    "wholeImageWriteRows": 0,
+    "wholeImageGptRows": 0,
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "counts": {
+    "sourceDecisionRows": 24,
+    "sourceReviewRows": 24,
+    "gptReviewRows": 24,
+    "batchRows": 3,
+    "operatorPromptRows": 3,
+    "recommendationTemplateRows": 3,
+    "bundleArtifactRows": 6,
+    "completedGptRecommendationRows": 0,
+    "finalHumanDecisionRows": 0,
+    "applyDesignCandidateRows": 0,
+    "candidateStoreWriteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "batchBundles": [
+    {
+      "batchId": "visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001_batch_01",
+      "batchNumber": 1,
+      "rowCount": 8,
+      "promptRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_01_prompt.md",
+      "recommendationTemplateRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_01_recommendation_template.v1.json",
+      "rows": [
+        {
+          "rowNumber": 1,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:6eb061dfeece81c4626f",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:c1f89941fb7be3644bff",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:image_region:2:e25902a7066b85fb",
+          "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2616032b2a9d352d",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 2,
+          "bbox": [
+            338.6,
+            184.18,
+            365.52,
+            211.1
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped CLIP Figure 1 panels for creating a dataset classifier from text labels and using it for zero-shot prediction; label list flows into the prompt template “A photo of a {object}.” and an image of a dog flows in...",
+          "visibleTextSnippet": "Visible fragments include: “(2) Create dataset classifier from labe”; “plane”; “car”; “dog”; “bird”; “A photo of a {object}.”; “(3) Use for zero-shot prediction”; “Image Encoder”; fragments of caption/body text including “jointly train a...",
+          "retrievalKeywordCount": 6,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 2,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:df43a4bfbe69d6bcb4a1",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:2e2a0807ceaf9db6b4f0",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:image_region:1:d54434235dc1f73e",
+          "sourceCandidateId": "visual-layout:mae-2021:image_region:1:258a60cc216d8130",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 1,
+          "bbox": [
+            368.22,
+            231.94,
+            378.9,
+            242.63
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped MAE architecture figure showing a masked input image grid, a column of visible patches, an encoder block, and blue latent/output tokens; title/author area and Figure 1 caption are partially visible.",
+          "visibleTextSnippet": "Visible fragments include: “...nghao Li”; “Piotr Dollá...”; “†project lead”; “...ch (FAIR)”; “input”; “encoder”; “...gure 1.”; “Our MAE architectu...”; “...dom subset of image patches”.",
+          "retrievalKeywordCount": 6,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 3,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:b559f2041324d26c0de5",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:2b631daf02390e0ccf31",
+          "hintCandidateId": "visual-retrieval-hint:alexnet-2012:image_region:6:6bc72fab3308cc56",
+          "sourceCandidateId": "visual-layout:alexnet-2012:image_region:6:508eb98021de0fd7",
+          "paperId": "alexnet-2012",
+          "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+          "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+          "page": 6,
+          "bbox": [
+            348.09,
+            426.97,
+            504.01,
+            487.66
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped AlexNet Figure 3 showing a grid of 96 first-layer convolutional kernels, mostly edge/color filters, with caption describing 11×11×3 kernels learned from 224×224×3 inputs and split across GPU 1 and GPU 2.",
+          "visibleTextSnippet": "Visible fragments include: “Without dropout, our network ex-”; “...oubles the number of iterations required to converge.”; “Figure 3: 96 convolutional kernels of size 11×11×3 learned by the first convolutional layer on the 224×224×3 inpu...",
+          "retrievalKeywordCount": 7,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 4,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:5b4b81e34fa9b65bc885",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:d5ec46b38f333ec8284b",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:image_region:2:0d674a922cfdab51",
+          "sourceCandidateId": "visual-layout:clip-2021:image_region:2:2642c8db8bd29d0a",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 2,
+          "bbox": [
+            68.23,
+            178.57,
+            95.15,
+            205.5
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped CLIP Figure 1 contrastive pre-training panel showing stacked text prompts, a stacked dog image, and arrows into partially visible Text Encoder and Image Encoder blocks.",
+          "visibleTextSnippet": "Visible fragments include: “(1) Contrastive pre-training”; “Pepper the aussie pup”; “Text Enco...” or “Text Encoder” partially cropped; “Image Enco...” or “Image Encoder” partially cropped; “Figure 1. Summary of ou...”; “some label, CLIP...",
+          "retrievalKeywordCount": 6,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 5,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:690182582317bc8522c1",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:790399bfbe88257071f6",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:image_region:1:e3eb86ab7dd4815d",
+          "sourceCandidateId": "visual-layout:mae-2021:image_region:1:40b27e8b4073d98f",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 1,
+          "bbox": [
+            368.22,
+            243.65,
+            378.9,
+            254.33
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped MAE Figure 1 architecture close-up showing a masked image patch grid labeled input, selected visible image patches, a gray encoder block, and a vertical stack of blue tokens.",
+          "visibleTextSnippet": "Visible fragments include: “...nghao Li”; “Piotr Dollá...”; “†project lead”; “...ch (FAIR)”; “input”; “encoder”; “...ure 1.”; “Our MAE architectu...”; “...dom subset of image patches”; “...coder is applied to the small”.",
+          "retrievalKeywordCount": 7,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 6,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:b81e3df56b0d667ab017",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:21c0a3e3811bd6b7df36",
+          "hintCandidateId": "visual-retrieval-hint:alexnet-2012:image_region:8:aebea8a49393b7e9",
+          "sourceCandidateId": "visual-layout:alexnet-2012:image_region:8:219e7594a10f3a3f",
+          "paperId": "alexnet-2012",
+          "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+          "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+          "page": 8,
+          "bbox": [
+            109.6,
+            81.87,
+            291.73,
+            230.68
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped AlexNet Figure 4 showing ILSVRC-2010 test images with top-5 prediction bar charts on the left and a partial nearest-neighbor/training-image panel on the right; visible classes include mite, container ship, mo...",
+          "visibleTextSnippet": "Visible fragments include: “mite”; “container ship”; “motor scooter”; “leopard”; “grille”; “mushroom”; “cherry”; “Madagascar cat”; prediction labels such as “black widow”, “cockroach”, “tick”, “starfish”, “lifeboat”, “amphibian”, “firebo...",
+          "retrievalKeywordCount": 8,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 7,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:15f9df5f512fed72e7ca",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:d764bea83df59a21a472",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:image_region:15:b2eef0626d7910cf",
+          "sourceCandidateId": "visual-layout:clip-2021:image_region:15:1da1f1cf8ce81bd5",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 15,
+          "bbox": [
+            302.45,
+            137.31,
+            331.05,
+            165.91
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped CLIP appendix/section figure under “Language Supervision” showing dataset-example grids for banana-like images across rows with partially visible dataset names and a heading about distribution shift.",
+          "visibleTextSnippet": "Visible fragments include: “Language Supervision”; “Dataset Example”; partially cropped row-label fragments including “...geNet”, “...NetV2”, “...Net-R”, “...ctNet”, “...geNet Sketch”, and “...Net-A”; bottom fragments include “distributi...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 8,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:c8d7d60056f58534cc8b",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:66b668274a69ed4eea11",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:image_region:2:47e41fe986d634ac",
+          "sourceCandidateId": "visual-layout:mae-2021:image_region:2:0b66280633a636cc",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 2,
+          "bbox": [
+            422.57,
+            194.42,
+            540.17,
+            233.62
+          ],
+          "candidateType": "image_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: Cropped MAE reconstruction examples showing rows of original/masked/reconstructed images including a bird, butterfly, horn player, coffee cups, bears, harbor scene, escalator, church, horse rider, people, street scen...",
+          "visibleTextSnippet": "Visible fragments include: “masked image (left), our MAE reconstruction†”; “96 patches. More examples are in the appendix.”; “One can simply overlay the output with the visible”; “demonstrate the method’s behavior.”",
+          "retrievalKeywordCount": 7,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001_batch_02",
+      "batchNumber": 2,
+      "rowCount": 8,
+      "promptRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_02_prompt.md",
+      "recommendationTemplateRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_02_recommendation_template.v1.json",
+      "rows": [
+        {
+          "rowNumber": 9,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:c762f661957ea19c5690",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:d501a8611cc89f62b77f",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:2:791bd02c68004e94",
+          "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:2:b354160446b3a89c",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 2,
+          "bbox": [
+            54.94,
+            253.37,
+            541.44,
+            295.21
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Figure 1 summary diagram showing contrastive pre-training, creating a dataset classifier from label text, and zero-shot prediction with image and text encoders; text-image similarity matrix uses I1...IN and T1.....",
+          "visibleTextSnippet": "Visible fragments include: \"Learning Transferable Visual Models From Natural Language Supervision\"; \"(1) Contrastive pre-training\"; \"Pepper the aussie pup\"; \"Text Encoder\"; \"Image Encoder\"; \"I1\"; \"I2\"; \"I3\"; \"IN\"; \"T1\"; \"T2\"; \"T3\"; \"TN\";...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 10,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:0d7de4c618a6da6a92f4",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:0f8e4ae5e1c97fa67a59",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:1:7f1d38a62ebc3ebe",
+          "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:1:f3477cc8ce7ec8b1",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 1,
+          "bbox": [
+            308.86,
+            341.41,
+            545.12,
+            427.17
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: MAE Figure 1 architecture diagram showing masked image patches, visible-patch encoder, mask tokens, lightweight decoder, and reconstructed target image.",
+          "visibleTextSnippet": "Visible fragments include: \"Are Scalable Vision Learners\"; \"Yanghao Li\"; \"Piotr Dollar\"; \"Ross Girshick\"; \"AI Research (FAIR)\"; \"input\"; \"encoder\"; \"decoder\"; \"target\"; \"Figure 1. Our MAE architecture. During pre-training, a large random...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 11,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:13761eef7ec3fe530d98",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:4d4860fd6acf7ede06d4",
+          "hintCandidateId": "visual-retrieval-hint:resnet-2015:figure_caption_region:6:beeb9fb9ad38518d",
+          "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:6:6b3dd4d05dc69888",
+          "paperId": "resnet-2015",
+          "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+          "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+          "page": 6,
+          "bbox": [
+            308.86,
+            156.78,
+            545.11,
+            187.99
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: ResNet Figure 5 compares a basic residual block for ResNet-34 with a bottleneck residual block for ResNet-50/101/152 on ImageNet, including identity shortcut connections and convolution stack dimensions.",
+          "visibleTextSnippet": "Visible fragments include: \"64-d\"; \"3x3, 64\"; \"relu\"; \"3x3, 64\"; \"+\"; \"relu\"; \"256-d\"; \"1x1, 64\"; \"relu\"; \"3x3, 64\"; \"relu\"; \"1x1, 256\"; \"+\"; \"relu\"; \"Figure 5. A deeper residual function F for ImageNet. Left: a building block (on 56x56...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 12,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:5bd268b815e24a1a028c",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:20786bf7ed5e35a4fcf8",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:3:7de4aa3a082925a4",
+          "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:3:fd2db71adcd98ec4",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 3,
+          "bbox": [
+            54.94,
+            233.18,
+            290.57,
+            318.94
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Figure 2 line chart showing zero-shot ImageNet accuracy versus number of images processed; Bag of Words Contrastive (CLIP) is more efficient than Bag of Words Prediction and Transformer Language Model baselines,...",
+          "visibleTextSnippet": "Visible fragments include: \"Learning Transferable Visual Models From Natural Language Supervision\"; \"Zero-Shot ImageNet Accuracy\"; \"# of images processed\"; \"2M\"; \"33M\"; \"67M\"; \"134M\"; \"268M\"; \"400M\"; \"4X efficiency\"; \"3X efficiency\"; \"Ba...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 13,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:13cbdac7b3dead9257ee",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:9c9395ff483cdcfd043f",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:2:b1c1635f3ea9867d",
+          "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:460a5652014c6369",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 2,
+          "bbox": [
+            50.11,
+            238.0,
+            544.61,
+            248.73
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: MAE Figure 2 grid of ImageNet validation examples showing triplets of masked image, MAE reconstruction, and ground truth; caption states 80% masking ratio and 39 of 196 patches visible. A partial row of another examp...",
+          "visibleTextSnippet": "Visible fragments include: \"Figure 2. Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 80%, leaving only...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 14,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:beac111660267e9fccb6",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:ea85d04fd7be470abcb1",
+          "hintCandidateId": "visual-retrieval-hint:resnet-2015:figure_caption_region:8:5983f29673800b6b",
+          "sourceCandidateId": "visual-layout:resnet-2015:figure_caption_region:8:5cf998f6a7a3739f",
+          "paperId": "resnet-2015",
+          "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+          "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+          "page": 8,
+          "bbox": [
+            50.11,
+            328.32,
+            286.37,
+            370.16
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: ResNet page crop containing part of Figure 6 CIFAR-10 training curves and Figure 7 layer-response standard deviation plots comparing plain networks and ResNets by original layer order and sorted magnitude.",
+          "visibleTextSnippet": "Visible fragments include: \"error (%)\"; \"1e4\"; \"plain-20\"; \"plain-32\"; \"plain-44\"; \"plain-56\"; \"56-layer\"; \"20-layer\"; \"Figure 6. Training on CIFAR-10. Dashed lines denote training error, and bol...\"; \"of plain-110 is higher than 60% and...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 15,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:34698183e6ed4f83f286",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:8e26b3c090e8c77c85cb",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:figure_caption_region:5:aa1447f2ba9526ae",
+          "sourceCandidateId": "visual-layout:clip-2021:figure_caption_region:5:87777b9ff7911bbe",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 5,
+          "bbox": [
+            54.94,
+            297.61,
+            290.93,
+            317.57
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Figure 3 NumPy-like pseudocode for the core implementation: encode aligned images and texts, project and L2-normalize embeddings, compute scaled pairwise cosine similarities, and optimize symmetric cross-entropy...",
+          "visibleTextSnippet": "Visible fragments include: \"# image_encoder - ResNet or Vision Transformer\"; \"# text_encoder - CBOW or Text Transformer\"; \"# I[n, h, w, c] - minibatch of aligned images\"; \"# T[n, l] - minibatch of aligned texts\"; \"# W_i[d_i, d_e] - learn...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 16,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:70478a24097b4a06b2dd",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:612148b43d09f146aea9",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:figure_caption_region:2:eea2a43fb3574de9",
+          "sourceCandidateId": "visual-layout:mae-2021:figure_caption_region:2:b35cefa766216e3f",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 2,
+          "bbox": [
+            50.11,
+            377.22,
+            545.11,
+            397.14
+          ],
+          "candidateType": "figure_caption_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: MAE page 2 crop showing continuation of ImageNet reconstruction examples plus Figure 3 COCO validation examples from an ImageNet-trained MAE, with captions emphasizing masked image, reconstruction, ground truth, and...",
+          "visibleTextSnippet": "Visible fragments include: \"Figure 2. Example results on ImageNet validation images. For each triplet, we show the masked image (left), our MAE reconstruction (middle), and the ground-truth (right). The masking ratio is 80%, leaving only...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001_batch_03",
+      "batchNumber": 3,
+      "rowCount": 8,
+      "promptRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_03_prompt.md",
+      "recommendationTemplateRef": "eval/knowledgeos/reports/visual_retrieval_hint_candidate_store_expansion_gpt_decision_review_pack_001/batch_03_recommendation_template.v1.json",
+      "rows": [
+        {
+          "rowNumber": 17,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:db120d08b4cac0dbd6db",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:e14ef794358fe5c36fa1",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:7:202c4c0be3960b79",
+          "sourceCandidateId": "visual-layout:clip-2021:table_region:7:74d3127c812d1e9b",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 7,
+          "bbox": [
+            54.89,
+            135.1,
+            290.93,
+            187.9
+          ],
+          "candidateType": "table_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Table 1 compares prior zero-shot transfer image classification results with Visual N-Grams on aYahoo, ImageNet, and SUN. Visible scores are Visual N-Grams 72.4, 11.5, 23.0 and CLIP 98.4, 76.2, 58.5. The caption...",
+          "visibleTextSnippet": "Visible fragments include: paper header “Learning Transferable Visual Models From Natural Language Supervision”; table columns “aYahoo”, “ImageNet”, “SUN”; rows “Visual N-Grams 72.4 11.5 23.0” and “CLIP 98.4 76.2 58.5”; caption beginning...",
+          "retrievalKeywordCount": 10,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 18,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:abfd5b806f9806ea46f1",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:28f1413585f3041d7500",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:5:626e13443e1ee40c",
+          "sourceCandidateId": "visual-layout:mae-2021:table_region:5:09cee49d2841b6a3",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 5,
+          "bbox": [
+            50.11,
+            238.89,
+            545.12,
+            269.86
+          ],
+          "candidateType": "table_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: MAE Table 1 shows ablation experiments with ViT-L/16 on ImageNet-1K, reporting fine-tuning and linear probing accuracy. Visible subpanels cover reconstruction target, data augmentation, and mask sampling. Reconstruct...",
+          "visibleTextSnippet": "Visible fragments include: subtable “(d) Reconstruction target” with columns “case”, “ft”, “lin”; rows “pixel (w/o norm) 84.9 73.5”, “pixel (w/ norm) 85.4 73.9”, “PCA 84.6 72.3”, “dVAE token 85.3 71.6”; subtable “(e) Data augmentation” w...",
+          "retrievalKeywordCount": 11,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 19,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:eb537adfee4af2e90637",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:a55c435eed801c7b034f",
+          "hintCandidateId": "visual-retrieval-hint:resnet-2015:table_region:6:7adc39075ec4efe2",
+          "sourceCandidateId": "visual-layout:resnet-2015:table_region:6:8b15bd4cbaa96ede",
+          "paperId": "resnet-2015",
+          "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+          "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+          "page": 6,
+          "bbox": [
+            50.11,
+            518.06,
+            286.36,
+            538.07
+          ],
+          "candidateType": "table_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: ResNet Table 5 reports ImageNet test-set top-5 error rates for ensembles. The methods and visible top-5 error values are VGG ILSVRC’14 7.32, GoogLeNet ILSVRC’14 6.66, VGG v5 6.8, PReLU-net 4.94, BN-inception 4.82, an...",
+          "visibleTextSnippet": "Visible fragments include: table columns “method” and “top-5 err. (test)”; rows “VGG [41] (ILSVRC’14) 7.32”, “GoogLeNet [44] (ILSVRC’14) 6.66”, “VGG [41] (v5) 6.8”, “PReLU-net [13] 4.94”, “BN-inception [16] 4.82”, “ResNet (ILSVRC’15) 3.5...",
+          "retrievalKeywordCount": 11,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 20,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:cf9e699ce8bb3a923a6c",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:4d3c2a02674dc5f33ede",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:table_region:17:0c93a8dbedbc0a03",
+          "sourceCandidateId": "visual-layout:clip-2021:table_region:17:21f8887ab432c389",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 17,
+          "bbox": [
+            306.89,
+            159.8,
+            543.01,
+            245.55
+          ],
+          "candidateType": "table_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Table 2 compares human performance and zero-shot CLIP on Oxford IIT Pets. Columns are Accuracy, Majority Vote on Full Dataset, Accuracy on Guesses, and Majority Vote Accuracy on Guesses. Rows show zero-shot huma...",
+          "visibleTextSnippet": "Visible fragments include: table columns “Accuracy”, “Majority Vote on Full Dataset”, “Accuracy on Guesses”, “Majority Vote Accuracy on Guesses”; rows “Zero-shot human 53.7 57.0 69.7 63.9”, “Zero-shot CLIP 93.5 93.5 93.5 93.5”, “One-shot...",
+          "retrievalKeywordCount": 11,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 21,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:1823d9c2e5740eb6bafd",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:d37b99e76c4a05b99d57",
+          "hintCandidateId": "visual-retrieval-hint:mae-2021:table_region:5:eeae9d1ecf9c1122",
+          "sourceCandidateId": "visual-layout:mae-2021:table_region:5:1179c62488dbb733",
+          "paperId": "mae-2021",
+          "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+          "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+          "page": 5,
+          "bbox": [
+            308.86,
+            367.01,
+            545.11,
+            419.89
+          ],
+          "candidateType": "table_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: MAE Table 2 reports wall-clock training time for MAE training over 800 epochs on 128 TPU-v3 cores with TensorFlow. Columns are encoder, decoder depth, fine-tuning accuracy, hours, and speedup. Visible rows include Vi...",
+          "visibleTextSnippet": "Visible fragments include: table columns “encoder”, “dec. depth”, “ft acc”, “hours”, “speedup”; rows “ViT-L, w/ [M] 8 84.2 42.4 -”, “ViT-L 8 84.9 15.4 2.8×”, “ViT-L 1 84.8 11.6 3.7×”, “ViT-H, w/ [M] 8 - 119.6† -”, “ViT-H 8 85.8 34.5 3.5×...",
+          "retrievalKeywordCount": 11,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 22,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:807cba0239437c743ee9",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:d1aa7f255536983f4ebb",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:1:1578f0d850ce7830",
+          "sourceCandidateId": "visual-layout:clip-2021:equation_region:1:dd31b4b813b73af2",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 1,
+          "bbox": [
+            55.44,
+            676.83,
+            291.01,
+            697.3
+          ],
+          "candidateType": "equation_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP page 1 shows the section heading Introduction and Motivating Work, an opening paragraph about pre-training methods that learn directly from raw text revolutionizing NLP, and an author footnote for equal contribu...",
+          "visibleTextSnippet": "Visible fragments include: section title “1. Introduction and Motivating Work”; paragraph “Pre-training methods which learn directly from raw text have revolutionized NLP over the last few years” followed by citations including “Dai & Le...",
+          "retrievalKeywordCount": 11,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 23,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:01845f08da4cf9d4e8a2",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:b1bed350f76b06d27e9a",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:5:a85a9e64dfa04951",
+          "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1c4738912cb4bdf9",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 5,
+          "bbox": [
+            55.85,
+            210.38,
+            258.39,
+            229.53
+          ],
+          "candidateType": "equation_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Figure 3 lower pseudocode shows the learned temperature parameter, extraction of image and text features, projection into a joint multimodal embedding, L2 normalization, scaled pairwise cosine similarities via l...",
+          "visibleTextSnippet": "Visible fragments include: “# t - learned temperature parameter”; “# extract feature representations of each modality”; “I_f = image_encoder(I) #[n, d_i]”; “T_f = text_encoder(T) #[n, d_t]”; “# joint multimodal embedding [n, d_e]”; “I_e...",
+          "retrievalKeywordCount": 11,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        },
+        {
+          "rowNumber": 24,
+          "decisionRowId": "visual-retrieval-hint-expansion-decision:b24230b3a36d5cd1fbf3",
+          "sourceReviewRowId": "visual-retrieval-hint-expansion-review:4690dc33bf0d035c8c3d",
+          "hintCandidateId": "visual-retrieval-hint:clip-2021:equation_region:5:2d6d39c3bbc50090",
+          "sourceCandidateId": "visual-layout:clip-2021:equation_region:5:1fa7893d5e5d7b10",
+          "paperId": "clip-2021",
+          "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+          "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+          "page": 5,
+          "bbox": [
+            55.85,
+            138.05,
+            286.01,
+            166.23
+          ],
+          "candidateType": "equation_region",
+          "currentDecision": "hold_pending_human_product_review",
+          "derivedTextForRetrievalSnippet": "Retrieval hint only: CLIP Figure 3 pseudocode defines image_encoder as ResNet or Vision Transformer, text_encoder as CBOW or Text Transformer, image minibatch I[n,h,w,c], text minibatch T[n,l], projection matrices W_i and W_t, and learne...",
+          "visibleTextSnippet": "Visible fragments include: paper header “Learning Transferable Visual Models From Natural Language Supervision”; code comments “# image_encoder - ResNet or Vision Transformer”, “# text_encoder - CBOW or Text Transformer”, “# I[n, h, w, c...",
+          "retrievalKeywordCount": 12,
+          "allowedSuggestedDecisions": [
+            "approve_store_candidate_only",
+            "hold_pending_more_context",
+            "reject_visual_hint_candidate",
+            "request_recrop_or_reannotation"
+          ],
+          "gptOutputPolicy": {
+            "finalHumanDecision": false,
+            "applyAllowed": false,
+            "candidateStoreWrite": false,
+            "strictEvidence": false,
+            "citationGrade": false,
+            "answerableWithoutTextEvidence": false,
+            "runtimeVisible": false,
+            "indexEligible": false
+          }
+        }
+      ]
+    }
+  ],
+  "operatorInstructions": [
+    "Run one batch at a time in web GPT/Pro if you want recommendation assistance.",
+    "Do not attach images or PDFs for this pack; use only the text in each batch prompt.",
+    "Treat GPT output as non-final recommendation data, not as the human/product decision record.",
+    "A human must copy decisions into a separate decision file and validate them before any apply-design tranche."
+  ],
+  "warnings": [
+    "This pack is not GPT output and contains recommendation templates.",
+    "GPT recommendations must not be promoted to final human decisions automatically.",
+    "GPT recommendations are not strict evidence, citation-grade evidence, or runtime answer-visible text.",
+    "This pack makes no in-repo model/API/web call."
+  ]
+}
