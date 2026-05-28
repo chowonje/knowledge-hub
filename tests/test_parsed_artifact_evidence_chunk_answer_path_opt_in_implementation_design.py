@@ -144,13 +144,14 @@ def test_implementation_design_blocks_when_route_review_not_ready() -> None:
     ).ok
 
 
-def test_implementation_design_blocks_when_public_searcher_gap_not_confirmed() -> None:
+def test_implementation_design_accepts_when_searcher_ingress_already_present() -> None:
     source = copy.deepcopy(_route_review_report())
     source["gate"]["publicSearcherIngressGap"] = False
     report = _build(source)
 
-    assert report["status"] == "blocked"
-    assert "public_searcher_ingress_gap_not_confirmed" in report["gate"]["semanticViolations"]
+    assert report["status"] == "ready"
+    assert report["gate"]["publicSearcherIngressGapConfirmed"] is False
+    assert report["gate"]["semanticViolations"] == []
 
 
 def test_implementation_design_blocks_on_unsafe_route_review_counters() -> None:

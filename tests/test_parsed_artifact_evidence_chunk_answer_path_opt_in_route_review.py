@@ -31,7 +31,7 @@ def _quality_report(path: Path, *, status: str = "ready", pass_rows: int = 2) ->
     return path
 
 
-def test_route_review_ready_identifies_internal_path_and_public_searcher_gap(tmp_path: Path) -> None:
+def test_route_review_ready_identifies_full_internal_and_searcher_path(tmp_path: Path) -> None:
     report = build_parsed_artifact_evidence_chunk_answer_path_opt_in_route_review(
         answer_quality_smoke_report=_quality_report(tmp_path / "quality.json"),
         generated_at="2026-05-29T00:00:00Z",
@@ -41,9 +41,9 @@ def test_route_review_ready_identifies_internal_path_and_public_searcher_gap(tmp
     assert report["decision"] == READY_DECISION
     assert report["counts"]["answerQualitySmokePassRows"] == 2
     assert report["counts"]["routeReviewFailRows"] == 0
-    assert report["counts"]["routeReviewGapRows"] == 1
+    assert report["counts"]["routeReviewGapRows"] == 0
     assert report["gate"]["internalRuntimeQueryPlanIngressReady"] is True
-    assert report["gate"]["publicSearcherIngressGap"] is True
+    assert report["gate"]["publicSearcherIngressGap"] is False
     assert report["gate"]["publicCliDefaultUnchanged"] is True
     assert report["counts"]["publicCliFlagRows"] == 0
     assert validate_payload(

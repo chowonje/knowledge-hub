@@ -234,6 +234,10 @@ def build_parsed_artifact_evidence_chunk_answer_path_opt_in_route_review(
     rows = _route_rows()
     required_fail_rows = [row for row in rows if row.get("requiredForCurrentReview") and row.get("status") != "pass"]
     gap_rows = [row for row in rows if row.get("status") == "gap"]
+    public_searcher_gap = any(
+        row.get("rowId") == "public_searcher_generate_answer_query_plan_ingress" and row.get("status") == "gap"
+        for row in rows
+    )
     private_path_leak_rows = sum(1 for row in rows if _contains_private_path(row))
     semantic_violations = list(smoke_violations)
     semantic_violations.extend(str(row.get("rowId")) for row in required_fail_rows)
@@ -299,10 +303,7 @@ def build_parsed_artifact_evidence_chunk_answer_path_opt_in_route_review(
                     "answer_payload_exposes_contracts",
                 }
             ),
-            "publicSearcherIngressGap": any(
-                row.get("rowId") == "public_searcher_generate_answer_query_plan_ingress" and row.get("status") == "gap"
-                for row in rows
-            ),
+            "publicSearcherIngressGap": public_searcher_gap,
             "publicCliDefaultUnchanged": any(
                 row.get("rowId") == "khub_ask_has_no_public_strict_chunk_flag" and row.get("status") == "pass"
                 for row in rows
@@ -311,13 +312,17 @@ def build_parsed_artifact_evidence_chunk_answer_path_opt_in_route_review(
         },
         "implementationNotes": [
             "internal_runtime_can_accept_query_plan_opt_in",
-            "public_rag_searcher_generate_answer_lacks_query_plan_ingress",
+            "public_rag_searcher_generate_answer_lacks_query_plan_ingress"
+            if public_searcher_gap
+            else "public_rag_searcher_generate_answer_has_query_plan_ingress",
             "keep_khub_ask_public_flag_out_until_labs_internal_route_is_verified",
         ],
         "rows": rows,
         "warnings": [
             "route_review_only_no_runtime_behavior_change",
-            "public_searcher_query_plan_ingress_gap_is_expected_input_for_next_tranche",
+            "public_searcher_query_plan_ingress_gap_is_expected_input_for_next_tranche"
+            if public_searcher_gap
+            else "public_searcher_query_plan_ingress_present_ready_for_opt_in_smoke",
         ],
     }
 

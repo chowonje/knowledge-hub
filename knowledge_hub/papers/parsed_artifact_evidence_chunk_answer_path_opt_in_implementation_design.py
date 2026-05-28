@@ -116,8 +116,6 @@ def _source_blockers(report: dict[str, Any]) -> list[str]:
         blockers.append("answer_quality_smoke_not_ready")
     if gate.get("internalRuntimeQueryPlanIngressReady") is not True:
         blockers.append("internal_runtime_query_plan_ingress_not_ready")
-    if gate.get("publicSearcherIngressGap") is not True:
-        blockers.append("public_searcher_ingress_gap_not_confirmed")
     if gate.get("publicCliDefaultUnchanged") is not True:
         blockers.append("public_cli_default_changed")
     for field_name in (
@@ -179,9 +177,9 @@ def _implementation_rows(source_blockers: list[str]) -> list[dict[str, Any]]:
             design_layer="public_python_searcher_api",
             file_ref="knowledge_hub/ai/rag.py",
             planned_change="Add keyword-only query_plan: Optional[Dict[str, Any]] = None to RAGSearcher.generate_answer.",
-            current_observed=not generate_has_query_plan,
-            ready=not generate_has_query_plan,
-            blockers=inherited_blockers + ([] if not generate_has_query_plan else ["generate_answer_query_plan_already_present"]),
+            current_observed=generate_has_query_plan,
+            ready=True,
+            blockers=inherited_blockers,
             next_check="Signature keeps default None so existing callers remain compatible.",
         ),
         _row(
@@ -189,9 +187,9 @@ def _implementation_rows(source_blockers: list[str]) -> list[dict[str, Any]]:
             design_layer="runtime_forwarding",
             file_ref="knowledge_hub/ai/rag.py",
             planned_change="Forward query_plan=query_plan from RAGSearcher.generate_answer to rag_answer_runtime.generate_answer.",
-            current_observed=not generate_forwards_query_plan,
-            ready=not generate_forwards_query_plan,
-            blockers=inherited_blockers + ([] if not generate_forwards_query_plan else ["generate_answer_forwarding_already_present"]),
+            current_observed=generate_forwards_query_plan,
+            ready=True,
+            blockers=inherited_blockers,
             next_check="Unit test should monkeypatch generate_answer_runtime and assert object identity or equality for query_plan.",
         ),
         _row(
@@ -199,9 +197,9 @@ def _implementation_rows(source_blockers: list[str]) -> list[dict[str, Any]]:
             design_layer="public_python_searcher_api",
             file_ref="knowledge_hub/ai/rag.py",
             planned_change="Add keyword-only query_plan: Optional[Dict[str, Any]] = None to RAGSearcher.stream_answer for parity.",
-            current_observed=not stream_has_query_plan,
-            ready=not stream_has_query_plan,
-            blockers=inherited_blockers + ([] if not stream_has_query_plan else ["stream_answer_query_plan_already_present"]),
+            current_observed=stream_has_query_plan,
+            ready=True,
+            blockers=inherited_blockers,
             next_check="Streaming remains opt-in and default behavior is unchanged when query_plan is None.",
         ),
         _row(
@@ -209,9 +207,9 @@ def _implementation_rows(source_blockers: list[str]) -> list[dict[str, Any]]:
             design_layer="runtime_forwarding",
             file_ref="knowledge_hub/ai/rag.py",
             planned_change="Forward query_plan=query_plan from RAGSearcher.stream_answer to rag_answer_runtime.stream_answer.",
-            current_observed=not stream_forwards_query_plan,
-            ready=not stream_forwards_query_plan,
-            blockers=inherited_blockers + ([] if not stream_forwards_query_plan else ["stream_answer_forwarding_already_present"]),
+            current_observed=stream_forwards_query_plan,
+            ready=True,
+            blockers=inherited_blockers,
             next_check="Unit test should monkeypatch stream_answer_runtime and assert query_plan is passed through.",
         ),
         _row(
