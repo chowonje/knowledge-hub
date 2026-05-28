@@ -1,0 +1,497 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-limited-visual-retrieval-hint-runtime-candidate-discovery-route-design.v1.json",
+  "title": "Limited Visual Retrieval Hint Runtime Candidate Discovery Route Design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceProductionVectorSearchQualityEval",
+    "sourceProductionVectorApplyExecutorReport",
+    "input",
+    "policy",
+    "method",
+    "counts",
+    "gate",
+    "routeBindingRowsDetail",
+    "plannedRuntimeRouteBindings",
+    "sourceBlockers",
+    "technicalBlockers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.limited-visual-retrieval-hint-runtime-candidate-discovery-route-design.v1"
+    },
+    "status": {
+      "enum": ["ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": ["ready_for_visual_retrieval_hint_final_merge_review", "blocked"]
+    },
+    "nextRecommendedTranche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceProductionVectorSearchQualityEval": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef", "qualityGatePassed"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-search-quality-eval.v1"
+        },
+        "status": {
+          "enum": ["ready", "needs_review", "blocked"]
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "qualityGatePassed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "sourceProductionVectorApplyExecutorReport": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.limited-visual-retrieval-hint-production-vector-db-integration-apply-executor.v1"
+        },
+        "status": {
+          "enum": ["ready", "applied", "blocked"]
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceProductionVectorSearchQualityEvalRef",
+        "sourceProductionVectorApplyExecutorReportRef",
+        "expectedHintRows",
+        "routeName",
+        "routeMode",
+        "targetRuntimeBoundary",
+        "targetPipelineBoundary",
+        "targetVectorStoreRef",
+        "targetCollectionName"
+      ],
+      "properties": {
+        "sourceProductionVectorSearchQualityEvalRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "sourceProductionVectorApplyExecutorReportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "expectedHintRows": {
+          "const": 125
+        },
+        "routeName": {
+          "const": "visual_retrieval_hint_candidate_discovery"
+        },
+        "routeMode": {
+          "const": "candidate_discovery_only"
+        },
+        "targetRuntimeBoundary": {
+          "const": "knowledge_hub.ai.rag_search_runtime.RAGSearchRuntime.search_with_diagnostics"
+        },
+        "targetPipelineBoundary": {
+          "const": "knowledge_hub.ai.retrieval_pipeline.RetrievalPipelineService.execute"
+        },
+        "targetVectorStoreRef": {
+          "const": "config.vector_db_path/visual_retrieval_hints"
+        },
+        "targetCollectionName": {
+          "const": "knowledge_hub_visual_retrieval_hints"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "designOnly",
+        "candidateDiscoveryOnly",
+        "futureRuntimeApplyGateRequired",
+        "candidateStoreWrite",
+        "embeddingCalls",
+        "vectorIndexWrite",
+        "productionVectorIndexWrite",
+        "operationalSearchIndexQuery",
+        "runtimeRouteWrite",
+        "runtimeConfigMutation",
+        "runtimeVisible",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "answerGeneration",
+        "graphDbWrite",
+        "ontologyWrite",
+        "memoryCardWrite",
+        "clusterWrite"
+      ],
+      "properties": {
+        "designOnly": {
+          "const": true
+        },
+        "candidateDiscoveryOnly": {
+          "const": true
+        },
+        "futureRuntimeApplyGateRequired": {
+          "const": true
+        },
+        "candidateStoreWrite": {
+          "const": false
+        },
+        "embeddingCalls": {
+          "const": false
+        },
+        "vectorIndexWrite": {
+          "const": false
+        },
+        "productionVectorIndexWrite": {
+          "const": false
+        },
+        "operationalSearchIndexQuery": {
+          "const": false
+        },
+        "runtimeRouteWrite": {
+          "const": false
+        },
+        "runtimeConfigMutation": {
+          "const": false
+        },
+        "runtimeVisible": {
+          "const": false
+        },
+        "strictEvidence": {
+          "const": false
+        },
+        "citationGrade": {
+          "const": false
+        },
+        "answerableWithoutTextEvidence": {
+          "const": false
+        },
+        "answerGeneration": {
+          "const": false
+        },
+        "graphDbWrite": {
+          "const": false
+        },
+        "ontologyWrite": {
+          "const": false
+        },
+        "memoryCardWrite": {
+          "const": false
+        },
+        "clusterWrite": {
+          "const": false
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "description", "candidateDiscoveryRoute", "runtimeBoundaryNotChanged", "answerEvidenceGate"],
+      "properties": {
+        "name": {
+          "const": "visual_retrieval_hint_runtime_candidate_discovery_route_design_v1"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidateDiscoveryRoute": {
+          "const": "visual_retrieval_hint_candidate_discovery"
+        },
+        "runtimeBoundaryNotChanged": {
+          "const": "knowledge_hub.ai.rag_search_runtime.RAGSearchRuntime.search_with_diagnostics"
+        },
+        "answerEvidenceGate": {
+          "const": "strict_text_evidence_required_after_candidate_discovery"
+        }
+      }
+    },
+    "counts": {
+      "$ref": "#/$defs/counts"
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["passed", "checks", "expectedRows", "observed"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "expectedRows": {
+          "const": 125
+        },
+        "observed": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "routeBindingRowsDetail": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/routeBindingRow"
+      }
+    },
+    "plannedRuntimeRouteBindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/routeBindingRow"
+      }
+    },
+    "sourceBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "technicalBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "sourceProductionVectorRecordRows",
+        "sourceApplyPreviewRows",
+        "sourceSearchQualityQueryRows",
+        "plannedRouteBindingRows",
+        "candidateDiscoveryOnlyRows",
+        "routeBindingRows",
+        "blockedRows",
+        "productionVectorIndexWriteRows",
+        "operationalSearchIndexQueryRows",
+        "runtimeVisibleRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "runtimeRouteWriteRows",
+        "runtimeConfigMutationRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "sourceProductionVectorRecordRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceApplyPreviewRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceSearchQualityQueryRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plannedRouteBindingRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidateDiscoveryOnlyRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "routeBindingRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "productionVectorIndexWriteRows": {
+          "const": 0
+        },
+        "operationalSearchIndexQueryRows": {
+          "const": 0
+        },
+        "runtimeVisibleRows": {
+          "const": 0
+        },
+        "strictEvidenceRows": {
+          "const": 0
+        },
+        "citationGradeRows": {
+          "const": 0
+        },
+        "answerableWithoutTextEvidenceRows": {
+          "const": 0
+        },
+        "runtimeRouteWriteRows": {
+          "const": 0
+        },
+        "runtimeConfigMutationRows": {
+          "const": 0
+        },
+        "schemaViolationCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "routeBindingRow": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema",
+        "rowId",
+        "status",
+        "routeName",
+        "routeMode",
+        "targetRuntimeBoundary",
+        "targetPipelineBoundary",
+        "targetVectorStoreRef",
+        "targetCollectionName",
+        "vectorDocumentId",
+        "hintCandidateId",
+        "sourceCandidateId",
+        "sourceContentHash",
+        "paperId",
+        "page",
+        "bbox",
+        "candidateType",
+        "candidateDiscoveryPolicy",
+        "policy",
+        "executionPlan",
+        "sourceRefs",
+        "blockers",
+        "routeBindingSha256"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.visual-retrieval-hint-runtime-candidate-discovery-route-binding-row.v1"
+        },
+        "rowId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "planned_runtime_candidate_discovery_route_binding",
+            "blocked_source_report_gate",
+            "blocked_policy_violation",
+            "blocked_route_contract_violation"
+          ]
+        },
+        "routeName": {
+          "const": "visual_retrieval_hint_candidate_discovery"
+        },
+        "routeMode": {
+          "const": "candidate_discovery_only"
+        },
+        "targetRuntimeBoundary": {
+          "const": "knowledge_hub.ai.rag_search_runtime.RAGSearchRuntime.search_with_diagnostics"
+        },
+        "targetPipelineBoundary": {
+          "const": "knowledge_hub.ai.retrieval_pipeline.RetrievalPipelineService.execute"
+        },
+        "targetVectorStoreRef": {
+          "const": "config.vector_db_path/visual_retrieval_hints"
+        },
+        "targetCollectionName": {
+          "const": "knowledge_hub_visual_retrieval_hints"
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "allowedUse",
+            "strictEvidence",
+            "citationGrade",
+            "answerableWithoutTextEvidence",
+            "runtimeVisible",
+            "indexEligible",
+            "productionIndexEligible",
+            "candidateDiscoveryOnly"
+          ],
+          "properties": {
+            "allowedUse": {
+              "const": "retrieval_hint_only"
+            },
+            "strictEvidence": {
+              "const": false
+            },
+            "citationGrade": {
+              "const": false
+            },
+            "answerableWithoutTextEvidence": {
+              "const": false
+            },
+            "runtimeVisible": {
+              "const": false
+            },
+            "indexEligible": {
+              "const": false
+            },
+            "productionIndexEligible": {
+              "const": false
+            },
+            "candidateDiscoveryOnly": {
+              "const": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
