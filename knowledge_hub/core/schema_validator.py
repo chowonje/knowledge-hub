@@ -204,6 +204,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-contract-review.v1": "paper-parsed-artifact-evidence-chunk-candidate-runtime-contract-review.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-adapter-design.v1": "paper-parsed-artifact-evidence-chunk-candidate-runtime-adapter-design.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-adapter-dry-run.v1": "paper-parsed-artifact-evidence-chunk-candidate-runtime-adapter-dry-run.v1.json",
+    "knowledge-hub.paper.parsed-artifact-evidence-chunk-runtime-adapter-live-smoke.v1": "paper-parsed-artifact-evidence-chunk-runtime-adapter-live-smoke.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
