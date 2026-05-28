@@ -1,0 +1,451 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-user-test-packet.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-28T21:19:08Z",
+  "decision": "parsed_artifact_evidence_chunk_answer_path_labs_opt_in_user_test_packet_ready",
+  "nextRecommendedTranche": "parsed_artifact_evidence_chunk_answer_path_labs_opt_in_user_test_output_capture",
+  "inputs": {
+    "qualityEvalRunnerReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_labs_opt_in_quality_eval_runner.v1.json",
+    "qualityEvalRunnerSchema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-labs-opt-in-quality-eval-runner.v1",
+    "qualityEvalRunnerStatus": "ready",
+    "qualityEvalRunnerDecision": "parsed_artifact_evidence_chunk_answer_path_labs_opt_in_quality_eval_runner_ready"
+  },
+  "policy": {
+    "packetOnly": true,
+    "labsOnly": true,
+    "manualUserRunRequired": true,
+    "defaultPublicAskRemainsClosed": true,
+    "mcpDefaultProfileRemainsClosed": true,
+    "externalModelCallsAllowed": false,
+    "answerTextExcludedFromPacket": true,
+    "citationPayloadExcludedFromPacket": true,
+    "sourcePayloadExcludedFromPacket": true,
+    "excerptExcludedFromPacket": true,
+    "candidateStoreWrites": false,
+    "sourceSpanCreation": false,
+    "strictEvidenceCreation": false,
+    "runtimeDefaultChange": false
+  },
+  "counts": {
+    "inputRunnerRows": 1,
+    "runnerReadyInputRows": 1,
+    "sourceCaseRows": 4,
+    "packetRows": 4,
+    "expectedAnswerableCommandRows": 3,
+    "expectedNoEvidenceCommandRows": 1,
+    "externalRejectionCommandRows": 1,
+    "cliCommandRows": 5,
+    "mcpInstructionRows": 1,
+    "jsonAssertionRows": 47,
+    "answerTextIncludedRows": 0,
+    "citationPayloadIncludedRows": 0,
+    "sourcePayloadIncludedRows": 0,
+    "excerptIncludedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "readyForLabsOptInUserTestOutputCapture": true,
+    "qualityEvalRunnerReady": true,
+    "packetHasExpectedAnswerableCommands": true,
+    "packetHasExpectedNoEvidenceCommand": true,
+    "packetHasExternalRejectionCommand": true,
+    "semanticViolations": []
+  },
+  "instructions": {
+    "runFromRepoRoot": true,
+    "cliSurface": "khub labs paper evidence-chunk-ask",
+    "mcpSurface": "paper_evidence_chunk_answer_preview",
+    "mcpProfileRequirement": "labs_or_all_only",
+    "defaultMcpProfileExpected": "tool_hidden",
+    "doNotUseAllowExternal": true,
+    "captureOutputPolicy": "save_sanitized_json_only_if_user_requests_capture"
+  },
+  "rows": [
+    {
+      "packetRowId": "user-test:alphafold_protein_structure_seed",
+      "caseId": "alphafold_protein_structure_seed",
+      "testType": "expected_answerable",
+      "surface": "khub_labs_cli",
+      "command": "khub labs paper evidence-chunk-ask 'What parsed section or paragraph evidence is available about AlphaFold protein structure prediction?' --paper-id 1207.0580 --json",
+      "expectedExitCode": 0,
+      "paperIds": [
+        "1207.0580"
+      ],
+      "expectedStatus": "ok",
+      "expectedAnswerable": true,
+      "expectedMinCitations": 2,
+      "expectedMinSpanRows": 2,
+      "expectedEvidenceTerms": [
+        "AlphaFold",
+        "protein",
+        "structure"
+      ],
+      "expectedNoEvidence": false,
+      "expectedNoExternalCall": true,
+      "expectedNoPrivatePathLeak": true,
+      "jsonAssertions": [
+        {
+          "jsonPath": "$.schema",
+          "operator": "equals",
+          "expected": "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1"
+        },
+        {
+          "jsonPath": "$.status",
+          "operator": "equals",
+          "expected": "ok"
+        },
+        {
+          "jsonPath": "$.answerable",
+          "operator": "equals",
+          "expected": true
+        },
+        {
+          "jsonPath": "$.sourceType",
+          "operator": "equals",
+          "expected": "paper"
+        },
+        {
+          "jsonPath": "$.allowExternal",
+          "operator": "equals",
+          "expected": false
+        },
+        {
+          "jsonPath": "$.queryPlan.parsed_artifact_evidence_chunk_adapter",
+          "operator": "equals",
+          "expected": "runtime_v1"
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.adapterRowsAdded",
+          "operator": "atLeast",
+          "expected": 2
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.citationCount",
+          "operator": "atLeast",
+          "expected": 2
+        },
+        {
+          "jsonPath": "$.evidencePacketContractSummary.spanRows",
+          "operator": "atLeast",
+          "expected": 2
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "AlphaFold"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "protein"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "structure"
+        }
+      ],
+      "answerTextIncludedInPacket": false,
+      "citationPayloadIncludedInPacket": false,
+      "sourcePayloadIncludedInPacket": false,
+      "excerptIncludedInPacket": false
+    },
+    {
+      "packetRowId": "user-test:word_vectors_similarity_seed",
+      "caseId": "word_vectors_similarity_seed",
+      "testType": "expected_answerable",
+      "surface": "khub_labs_cli",
+      "command": "khub labs paper evidence-chunk-ask 'What parsed section or paragraph evidence is available about continuous word representations?' --paper-id 1301.3781 --json",
+      "expectedExitCode": 0,
+      "paperIds": [
+        "1301.3781"
+      ],
+      "expectedStatus": "ok",
+      "expectedAnswerable": true,
+      "expectedMinCitations": 2,
+      "expectedMinSpanRows": 2,
+      "expectedEvidenceTerms": [
+        "continuous",
+        "vector",
+        "word",
+        "similarity"
+      ],
+      "expectedNoEvidence": false,
+      "expectedNoExternalCall": true,
+      "expectedNoPrivatePathLeak": true,
+      "jsonAssertions": [
+        {
+          "jsonPath": "$.schema",
+          "operator": "equals",
+          "expected": "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1"
+        },
+        {
+          "jsonPath": "$.status",
+          "operator": "equals",
+          "expected": "ok"
+        },
+        {
+          "jsonPath": "$.answerable",
+          "operator": "equals",
+          "expected": true
+        },
+        {
+          "jsonPath": "$.sourceType",
+          "operator": "equals",
+          "expected": "paper"
+        },
+        {
+          "jsonPath": "$.allowExternal",
+          "operator": "equals",
+          "expected": false
+        },
+        {
+          "jsonPath": "$.queryPlan.parsed_artifact_evidence_chunk_adapter",
+          "operator": "equals",
+          "expected": "runtime_v1"
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.adapterRowsAdded",
+          "operator": "atLeast",
+          "expected": 2
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.citationCount",
+          "operator": "atLeast",
+          "expected": 2
+        },
+        {
+          "jsonPath": "$.evidencePacketContractSummary.spanRows",
+          "operator": "atLeast",
+          "expected": 2
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "continuous"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "vector"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "word"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "similarity"
+        }
+      ],
+      "answerTextIncludedInPacket": false,
+      "citationPayloadIncludedInPacket": false,
+      "sourcePayloadIncludedInPacket": false,
+      "excerptIncludedInPacket": false
+    },
+    {
+      "packetRowId": "user-test:resolved_pair_compare_seed",
+      "caseId": "resolved_pair_compare_seed",
+      "testType": "expected_answerable",
+      "surface": "khub_labs_cli",
+      "command": "khub labs paper evidence-chunk-ask 'Compare available parsed evidence for the AlphaFold and word vector papers.' --paper-id 1207.0580 --paper-id 1301.3781 --json",
+      "expectedExitCode": 0,
+      "paperIds": [
+        "1207.0580",
+        "1301.3781"
+      ],
+      "expectedStatus": "ok",
+      "expectedAnswerable": true,
+      "expectedMinCitations": 4,
+      "expectedMinSpanRows": 4,
+      "expectedEvidenceTerms": [
+        "AlphaFold",
+        "CASP14",
+        "continuous",
+        "similarity"
+      ],
+      "expectedNoEvidence": false,
+      "expectedNoExternalCall": true,
+      "expectedNoPrivatePathLeak": true,
+      "jsonAssertions": [
+        {
+          "jsonPath": "$.schema",
+          "operator": "equals",
+          "expected": "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1"
+        },
+        {
+          "jsonPath": "$.status",
+          "operator": "equals",
+          "expected": "ok"
+        },
+        {
+          "jsonPath": "$.answerable",
+          "operator": "equals",
+          "expected": true
+        },
+        {
+          "jsonPath": "$.sourceType",
+          "operator": "equals",
+          "expected": "paper"
+        },
+        {
+          "jsonPath": "$.allowExternal",
+          "operator": "equals",
+          "expected": false
+        },
+        {
+          "jsonPath": "$.queryPlan.parsed_artifact_evidence_chunk_adapter",
+          "operator": "equals",
+          "expected": "runtime_v1"
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.adapterRowsAdded",
+          "operator": "atLeast",
+          "expected": 4
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.citationCount",
+          "operator": "atLeast",
+          "expected": 4
+        },
+        {
+          "jsonPath": "$.evidencePacketContractSummary.spanRows",
+          "operator": "atLeast",
+          "expected": 4
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "AlphaFold"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "CASP14"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "continuous"
+        },
+        {
+          "jsonPath": "$.sources[*].text",
+          "operator": "containsCaseInsensitive",
+          "expected": "similarity"
+        }
+      ],
+      "answerTextIncludedInPacket": false,
+      "citationPayloadIncludedInPacket": false,
+      "sourcePayloadIncludedInPacket": false,
+      "excerptIncludedInPacket": false
+    },
+    {
+      "packetRowId": "user-test:missing_candidate_store_no_evidence_seed",
+      "caseId": "missing_candidate_store_no_evidence_seed",
+      "testType": "expected_no_evidence",
+      "surface": "khub_labs_cli",
+      "command": "khub labs paper evidence-chunk-ask 'What parsed section or paragraph evidence is available for this missing paper?' --paper-id missing-paper-id --json",
+      "expectedExitCode": 0,
+      "paperIds": [
+        "missing-paper-id"
+      ],
+      "expectedStatus": "no_evidence",
+      "expectedAnswerable": false,
+      "expectedMinCitations": 0,
+      "expectedMinSpanRows": 0,
+      "expectedEvidenceTerms": [],
+      "expectedNoEvidence": true,
+      "expectedNoExternalCall": true,
+      "expectedNoPrivatePathLeak": true,
+      "jsonAssertions": [
+        {
+          "jsonPath": "$.schema",
+          "operator": "equals",
+          "expected": "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1"
+        },
+        {
+          "jsonPath": "$.status",
+          "operator": "equals",
+          "expected": "no_evidence"
+        },
+        {
+          "jsonPath": "$.answerable",
+          "operator": "equals",
+          "expected": false
+        },
+        {
+          "jsonPath": "$.sourceType",
+          "operator": "equals",
+          "expected": "paper"
+        },
+        {
+          "jsonPath": "$.allowExternal",
+          "operator": "equals",
+          "expected": false
+        },
+        {
+          "jsonPath": "$.queryPlan.parsed_artifact_evidence_chunk_adapter",
+          "operator": "equals",
+          "expected": "runtime_v1"
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.adapterRowsAdded",
+          "operator": "atLeast",
+          "expected": 0
+        },
+        {
+          "jsonPath": "$.evidencePacketSummary.citationCount",
+          "operator": "atLeast",
+          "expected": 0
+        },
+        {
+          "jsonPath": "$.evidencePacketContractSummary.spanRows",
+          "operator": "atLeast",
+          "expected": 0
+        }
+      ],
+      "answerTextIncludedInPacket": false,
+      "citationPayloadIncludedInPacket": false,
+      "sourcePayloadIncludedInPacket": false,
+      "excerptIncludedInPacket": false
+    }
+  ],
+  "externalRejection": {
+    "packetRowId": "user-test:external-rejection",
+    "caseId": "external_rejection",
+    "testType": "external_rejection",
+    "surface": "khub_labs_cli",
+    "command": "khub labs paper evidence-chunk-ask 'What parsed section or paragraph evidence is available about AlphaFold protein structure prediction?' --paper-id 1207.0580 --allow-external --json",
+    "expectedExitCode": 1,
+    "paperIds": [
+      "1207.0580"
+    ],
+    "expectedErrorContains": "--allow-external is not enabled",
+    "expectedNoExternalCall": true,
+    "expectedNoPrivatePathLeak": true
+  },
+  "warnings": [
+    "packet_commands_are_for_manual_user_testing_and_are_not_executed_by_this_report",
+    "actual_cli_output_may_include_answer_or_source_payloads_but_this_packet_does_not_include_them"
+  ]
+}
