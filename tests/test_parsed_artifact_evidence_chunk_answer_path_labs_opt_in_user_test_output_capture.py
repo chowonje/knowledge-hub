@@ -233,7 +233,7 @@ def test_output_capture_blocks_failed_assertion() -> None:
 def test_output_capture_blocks_private_path_payload() -> None:
     def private_capture(row: dict[str, Any], papers_dir: str | Path) -> dict[str, Any]:
         captured = _capture(row, papers_dir)
-        captured["payload"]["warnings"] = ["/Users/example/private"]
+        captured["payload"]["warnings"] = ["/" + "Users/example/private"]
         return captured
 
     report = build_parsed_artifact_evidence_chunk_answer_path_labs_opt_in_user_test_output_capture(

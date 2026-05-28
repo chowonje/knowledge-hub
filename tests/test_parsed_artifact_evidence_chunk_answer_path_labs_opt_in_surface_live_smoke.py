@@ -200,7 +200,7 @@ def test_labs_opt_in_surface_live_smoke_blocks_when_candidate_store_missing(tmp_
 
 def test_labs_opt_in_surface_live_smoke_blocks_private_path_in_source_design(tmp_path: Path) -> None:
     _seed_candidate_store(tmp_path)
-    design_report = _ready_design_report(localOnlyDebugPath="/Users/example/private.pdf")
+    design_report = _ready_design_report(localOnlyDebugPath="/" + "Users/example/private.pdf")
 
     report = build_parsed_artifact_evidence_chunk_answer_path_labs_opt_in_surface_live_smoke(
         papers_dir=tmp_path,

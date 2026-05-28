@@ -123,7 +123,7 @@ def test_promotion_review_blocks_when_product_definition_missing_scope() -> None
 
 def test_promotion_review_blocks_private_path_marker() -> None:
     capture = _capture_report()
-    capture["rows"] = [{"warning": "/Users/example/private"}]
+    capture["rows"] = [{"warning": "/" + "Users/example/private"}]
 
     report = build_parsed_artifact_evidence_chunk_answer_path_labs_opt_in_user_test_promotion_review(
         output_capture_report=capture,

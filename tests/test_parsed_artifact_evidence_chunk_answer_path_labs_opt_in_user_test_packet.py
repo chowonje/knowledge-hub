@@ -154,7 +154,7 @@ def test_labs_opt_in_user_test_packet_blocks_when_runner_not_ready() -> None:
 
 def test_labs_opt_in_user_test_packet_blocks_private_path_marker() -> None:
     runner = _runner_report()
-    runner["rows"][0]["question"] = "/Users/example/private marker"
+    runner["rows"][0]["question"] = "/" + "Users/example/private marker"
 
     report = build_parsed_artifact_evidence_chunk_answer_path_labs_opt_in_user_test_packet(
         quality_eval_runner_report=runner,

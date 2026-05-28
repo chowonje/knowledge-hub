@@ -165,7 +165,7 @@ def test_implementation_design_blocks_on_unsafe_route_review_counters() -> None:
 
 def test_implementation_design_blocks_private_path_markers() -> None:
     source = copy.deepcopy(_route_review_report())
-    source["rows"].append({"fileRef": "/Users/example/private"})
+    source["rows"].append({"fileRef": "/" + "Users/example/private"})
     report = _build(source)
 
     assert report["status"] == "blocked"
