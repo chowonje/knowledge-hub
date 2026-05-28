@@ -3,6 +3,10 @@ from __future__ import annotations
 import inspect
 from typing import Any
 
+from knowledge_hub.papers.evidence_chunk_answer_preview import (
+    build_paper_evidence_chunk_answer_preview,
+    normalize_paper_ids,
+)
 from knowledge_hub.papers.memory_builder import PaperMemoryBuilder
 from knowledge_hub.papers.memory_payloads import card_payload
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
@@ -108,6 +112,38 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
             "items": items,
             "warnings": [],
         }
+        return emit(status_ok, payload, artifact=payload)
+
+    if name == "paper_evidence_chunk_answer_preview":
+        question = str(arguments.get("question", "")).strip()
+        if not question:
+            return emit(status_failed, {"error": "question is required"}, status_message="question required")
+        paper_ids = normalize_paper_ids(arguments.get("paper_ids") or arguments.get("paperIds") or [])
+        if not paper_ids:
+            return emit(status_failed, {"error": "paper_ids is required"}, status_message="paper_ids required")
+        if to_bool(arguments.get("allow_external"), default=False):
+            return emit(
+                status_failed,
+                {"error": "external model calls are not enabled for paper_evidence_chunk_answer_preview"},
+                status_message="external calls disabled",
+            )
+        top_k = to_int(arguments.get("top_k"), 8, minimum=1, maximum=20) or 8
+        mode = str(arguments.get("mode", "semantic")).strip().lower() or "semantic"
+        if mode not in {"semantic", "keyword", "hybrid"}:
+            mode = "semantic"
+        alpha = max(0.0, min(1.0, float(arguments.get("alpha", 0.7) or 0.7)))
+        try:
+            payload = build_paper_evidence_chunk_answer_preview(
+                searcher,
+                question=question,
+                paper_ids=paper_ids,
+                top_k=top_k,
+                retrieval_mode=mode,
+                alpha=alpha,
+                allow_external=False,
+            )
+        except ValueError as error:
+            return emit(status_failed, {"error": str(error)}, status_message="request invalid")
         return emit(status_ok, payload, artifact=payload)
 
     if name == "search_papers":

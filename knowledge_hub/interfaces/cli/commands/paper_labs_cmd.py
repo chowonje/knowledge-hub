@@ -12,6 +12,7 @@ from rich.console import Console
 
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import _resolve_vault_papers_dir
+from knowledge_hub.papers.evidence_chunk_answer_preview import build_paper_evidence_chunk_answer_preview
 from knowledge_hub.papers.paper_lanes import (
     LANE_DEFINITIONS,
     all_lane_slugs,
@@ -496,6 +497,53 @@ def paper_topic_synthesize(
         console.print(str(payload["topicSummary"]))
     if payload.get("warnings"):
         console.print(f"warnings: {', '.join(str(item) for item in payload['warnings'])}")
+
+
+@paper_labs_group.command("evidence-chunk-ask")
+@click.argument("question")
+@click.option("--paper-id", "paper_ids", multiple=True, required=True, help="Resolved paper id. Repeat for compare-style prompts.")
+@click.option("--top-k", type=int, default=8, show_default=True)
+@click.option("--mode", "retrieval_mode", type=click.Choice(["semantic", "keyword", "hybrid"]), default="semantic", show_default=True)
+@click.option("--alpha", type=float, default=0.7, show_default=True)
+@click.option("--allow-external/--no-allow-external", default=False, show_default=True)
+@click.option("--json/--no-json", "as_json", default=False, show_default=True)
+@click.pass_context
+def paper_evidence_chunk_ask(ctx, question, paper_ids, top_k, retrieval_mode, alpha, allow_external, as_json):
+    """Labs-only paper answer using parsed-artifact evidence chunk opt-in."""
+    if bool(allow_external):
+        raise click.ClickException("--allow-external is not enabled for evidence-chunk-ask.")
+    khub = ctx.obj["khub"]
+    try:
+        payload = build_paper_evidence_chunk_answer_preview(
+            _searcher_for_khub(khub),
+            question=question,
+            paper_ids=list(paper_ids),
+            top_k=max(1, int(top_k)),
+            retrieval_mode=retrieval_mode,
+            alpha=float(alpha),
+            allow_external=False,
+        )
+    except ValueError as error:
+        raise click.ClickException(str(error)) from error
+    annotate_schema_errors(payload, payload.get("schema", ""))
+    if as_json:
+        click.echo(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+    console.print(
+        f"[bold]paper evidence-chunk ask[/bold] status={payload.get('status')} "
+        f"answerable={payload.get('answerable')} paperIds={','.join(payload.get('paperIds') or [])}"
+    )
+    if payload.get("answer"):
+        console.print(str(payload.get("answer")))
+    summary = dict(payload.get("evidencePacketSummary") or {})
+    console.print(
+        "[dim]"
+        f"adapter={summary.get('adapterStatus') or 'unknown'} "
+        f"rowsAdded={summary.get('adapterRowsAdded', 0)} "
+        f"citations={summary.get('citationCount', 0)} "
+        "allow_external=False"
+        "[/dim]"
+    )
 
 
 @paper_memory_batch_group.command("prepare")
