@@ -10,6 +10,9 @@ from knowledge_hub.ai.evidence_collaborator import (
     EvidenceAssemblyCollaborator,
     make_evidence_assembly_collaborator,
 )
+from knowledge_hub.ai.parsed_artifact_evidence_chunk_runtime_adapter import (
+    collect_parsed_artifact_evidence_chunk_runtime_evidence,
+)
 from knowledge_hub.ai.retrieval_fit import (
     classify_query_intent,
     is_non_substantive_text,
@@ -838,6 +841,46 @@ def _context_budget_payload(
     }
 
 
+def _refresh_validation_counts(
+    validation: dict[str, Any],
+    *,
+    query: str,
+    source_type: str | None,
+    evidence: list[dict[str, Any]],
+) -> dict[str, Any]:
+    refreshed = dict(validation or {})
+    refreshed["selectedCount"] = len(evidence)
+    refreshed["nonSubstantiveEvidenceCount"] = sum(1 for item in evidence if _is_non_substantive_evidence(item))
+    refreshed["substantiveEvidenceCount"] = sum(
+        1 for item in evidence if _is_substantive_evidence(item, query=query, source_type=source_type)
+    )
+    refreshed["directAnswerEvidenceCount"] = sum(1 for item in evidence if _is_direct_answer_candidate(item, query=query))
+    refreshed["sourceMismatchCount"] = sum(1 for item in evidence if _is_source_mismatch(item, source_type))
+    refreshed["temporalGroundedCount"] = sum(1 for item in evidence if _is_temporal_grounded(item))
+    refreshed["weakObservedAtOnlyCount"] = sum(1 for item in evidence if _is_observed_at_only(item))
+    refreshed["highFreshnessCount"] = sum(
+        1 for item in evidence if _safe_float(item.get("freshness_score"), 0.0) >= 0.55
+    )
+    refreshed["highAuthorityCount"] = sum(
+        1 for item in evidence if _safe_float(item.get("source_trust_score"), 0.0) >= 0.85
+    )
+    refreshed["memoryProvenanceCount"] = sum(1 for item in evidence if dict(item.get("memory_provenance") or {}))
+    refreshed["semanticFamilyCount"] = len({_semantic_family_key(item, query=query) for item in evidence})
+    if evidence:
+        top1 = evidence[0]
+        top1_substantive = _is_substantive_evidence(top1, query=query, source_type=source_type)
+        refreshed["top1Substantive"] = top1_substantive
+        refreshed["top1RejectedReason"] = "" if top1_substantive else _top1_reselection_reason(
+            top1,
+            query=query,
+            source_type=source_type,
+        )
+    else:
+        refreshed["top1Substantive"] = False
+        refreshed["top1RejectedReason"] = "no_evidence"
+    return refreshed
+
+
 @dataclass
 class EvidencePacket:
     filtered_results: list[SearchResult]
@@ -874,9 +917,11 @@ class EvidenceAssemblyService:
         collaborator: EvidenceAssemblyCollaborator,
         *,
         eval_answer_profile: str | None = None,
+        papers_dir: str | None = None,
     ):
         self.collaborator = collaborator
         self.eval_answer_profile = str(eval_answer_profile or "").strip()
+        self.papers_dir = str(papers_dir or "").strip()
 
     @classmethod
     def from_searcher(cls, searcher: Any) -> "EvidenceAssemblyService":
@@ -885,6 +930,7 @@ class EvidenceAssemblyService:
         return cls(
             collaborator,
             eval_answer_profile=str(getattr(searcher, "_eval_answer_profile", "") or "").strip(),
+            papers_dir=str(getattr(getattr(searcher, "config", None), "papers_dir", "") or "").strip(),
         )
 
     def _dedupe_evidence(
@@ -1103,6 +1149,24 @@ class EvidenceAssemblyService:
             profile=eval_profile,
         )
         validation.update(reselection)
+        normalized_requested_source = normalize_source_type(source_type)
+        evidence_chunk_adapter = collect_parsed_artifact_evidence_chunk_runtime_evidence(
+            query_plan=query_plan,
+            query_frame=frame_payload,
+            metadata_filter=metadata_filter,
+            source_type=normalized_requested_source or source_type,
+            papers_dir=self.papers_dir,
+        )
+        if evidence_chunk_adapter.evidence:
+            selected_results = [*evidence_chunk_adapter.results, *selected_results]
+            evidence = [*evidence_chunk_adapter.evidence, *evidence]
+            parent_ctx_by_result.update(evidence_chunk_adapter.parent_contexts)
+            validation = _refresh_validation_counts(
+                validation,
+                query=query,
+                source_type=source_type,
+                evidence=evidence,
+            )
         citations = _build_citations(selected_results, evidence)
         for citation, item in zip(citations, evidence, strict=False):
             item["citation_label"] = citation["label"]
@@ -1111,7 +1175,6 @@ class EvidenceAssemblyService:
             evidence,
             contradicting_beliefs=contradicting_beliefs,
         )
-        normalized_requested_source = normalize_source_type(source_type)
         answer_signals = {
             **dict(answer_signals or {}),
             "query_intent": str(dict(query_plan or {}).get("query_intent") or dict(query_plan or {}).get("queryIntent") or classify_query_intent(query)),
@@ -1204,6 +1267,7 @@ class EvidenceAssemblyService:
             "insufficientEvidenceReasons": insufficient_reasons,
             "validation": validation,
             "answerableDecisionReason": answerable_reason,
+            "parsedArtifactEvidenceChunkAdapter": evidence_chunk_adapter.diagnostics,
             "top1RejectedReason": str(validation.get("top1RejectedReason") or ""),
             "paperFamily": paper_family,
             "uniquePaperCount": len(unique_selected_paper_ids),
