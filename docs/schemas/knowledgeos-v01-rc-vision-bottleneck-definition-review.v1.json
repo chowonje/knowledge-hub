@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-vision-bottleneck-definition-review.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "productDecision",
+    "counts",
+    "gate",
+    "bottleneckRows",
+    "checkRows",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "nonNegativeInteger": { "type": "integer", "minimum": 0 },
+    "checkRow": {
+      "type": "object",
+      "required": ["checkId", "status", "blockers"],
+      "additionalProperties": false,
+      "properties": {
+        "checkId": { "type": "string" },
+        "status": { "enum": ["pass", "fail"] },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "properties": {
+    "schema": { "const": "knowledge-hub.product.knowledgeos-v01-rc-vision-bottleneck-definition-review.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "knowledgeos_v01_rc_vision_bottleneck_definition_ready",
+        "knowledgeos_v01_rc_vision_bottleneck_definition_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "productDefinitionDocRef",
+        "draftPrPostOpenReviewReportRef",
+        "publicDefaultPromotionGateReportRef",
+        "labsReleaseGateReportRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "productDefinitionDocRef": { "type": "string" },
+        "draftPrPostOpenReviewReportRef": { "type": "string" },
+        "publicDefaultPromotionGateReportRef": { "type": "string" },
+        "labsReleaseGateReportRef": { "type": "string" }
+      }
+    },
+    "productDecision": {
+      "type": "object",
+      "required": [
+        "decisionLabel",
+        "v01RcPromise",
+        "finalVisionPromise",
+        "shipPosture",
+        "publicDefaultDecision",
+        "strongestNextAction"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "decisionLabel": { "const": "narrow_scope" },
+        "v01RcPromise": { "type": "string" },
+        "finalVisionPromise": { "type": "string" },
+        "shipPosture": { "type": "string" },
+        "publicDefaultDecision": { "const": "hold_public_default_promotion" },
+        "strongestNextAction": { "type": "string" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "visionBottleneckReviewRows",
+        "productDefinitionReadyRows",
+        "draftPrPostOpenReadyRows",
+        "labsReleaseGateReadyRows",
+        "publicDefaultPromotionGateReadyRows",
+        "releaseSmokePassedRows",
+        "publicHygieneIssueRows",
+        "noAnswerPassRows",
+        "readyForHumanReviewRows",
+        "readyForMergeRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "corpusScaleClaimProvenRows",
+        "v01RcBottleneckRows",
+        "finalVisionBottleneckRows",
+        "totalBottleneckRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "pushRows",
+        "githubPrMutationRows",
+        "mergeRows",
+        "branchDeletionRows",
+        "releaseTagRows",
+        "packagePublishRows",
+        "rawGithubPayloadPersistedRows",
+        "defaultMcpToolRows",
+        "defaultKhubAskRouteRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "visionBottleneckReviewRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "productDefinitionReadyRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "draftPrPostOpenReadyRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "labsReleaseGateReadyRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "publicDefaultPromotionGateReadyRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "releaseSmokePassedRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "publicHygieneIssueRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "noAnswerPassRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "readyForHumanReviewRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "readyForMergeRows": { "const": 0 },
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "generalRcReadyRows": { "const": 0 },
+        "corpusScaleClaimProvenRows": { "const": 0 },
+        "v01RcBottleneckRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "finalVisionBottleneckRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "totalBottleneckRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "blockedRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "pushRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "releaseTagRows": { "const": 0 },
+        "packagePublishRows": { "const": 0 },
+        "rawGithubPayloadPersistedRows": { "const": 0 },
+        "defaultMcpToolRows": { "const": 0 },
+        "defaultKhubAskRouteRows": { "const": 0 },
+        "privatePathLeakRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "schemaViolationCount": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "visionBottleneckDefinitionReady",
+        "productDefinitionReady",
+        "draftPrPostOpenReady",
+        "labsReleaseGateReady",
+        "publicDefaultPromotionGateReady",
+        "readyForHumanReview",
+        "readyForMerge",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "visionBottleneckDefinitionReady": { "type": "boolean" },
+        "productDefinitionReady": { "type": "boolean" },
+        "draftPrPostOpenReady": { "type": "boolean" },
+        "labsReleaseGateReady": { "type": "boolean" },
+        "publicDefaultPromotionGateReady": { "type": "boolean" },
+        "readyForHumanReview": { "type": "boolean" },
+        "readyForMerge": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "generalRcReady": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "bottleneckRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "bottleneckId",
+          "layer",
+          "severity",
+          "status",
+          "blocksV01Rc",
+          "blocksFinalVision",
+          "summary",
+          "nextTranche"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "bottleneckId": { "type": "string" },
+          "layer": { "type": "string" },
+          "severity": { "type": "string" },
+          "status": { "type": "string" },
+          "blocksV01Rc": { "type": "boolean" },
+          "blocksFinalVision": { "type": "boolean" },
+          "summary": { "type": "string" },
+          "nextTranche": { "type": "string" }
+        }
+      }
+    },
+    "checkRows": { "type": "array", "items": { "$ref": "#/$defs/checkRow" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}

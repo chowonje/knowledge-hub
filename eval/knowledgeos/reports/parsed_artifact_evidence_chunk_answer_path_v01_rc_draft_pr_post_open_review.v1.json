@@ -1,0 +1,224 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-draft-pr-post-open-review.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-29T06:44:24Z",
+  "decision": "knowledge_hub_v01_rc_draft_pr_post_open_review_ready",
+  "nextRecommendedTranche": "operator_mark_pr_ready_or_merge_decision_after_review",
+  "inputs": {
+    "releasePackageHandoffReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_release_package_handoff.v1.json",
+    "publicDefaultPromotionGateReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_public_default_promotion_decision_gate.v1.json",
+    "releaseNotesReviewReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_research_preview_release_notes_review.v1.json",
+    "prNumber": 171,
+    "branchName": "codex/v01-rc-public-default-promotion-decision-gate-20260529",
+    "baseBranch": "main",
+    "headShortSha": "a496b96",
+    "originMainShortSha": "ef7138b",
+    "remoteMainShortSha": "ef7138b",
+    "remoteBranchShortSha": "a496b96"
+  },
+  "policy": {
+    "reportOnly": true,
+    "gitReadOnly": true,
+    "githubReadOnly": true,
+    "githubMutationAllowed": false,
+    "markReadyAllowed": false,
+    "mergeAllowed": false,
+    "branchDeletionAllowed": false,
+    "releaseTagAllowed": false,
+    "packagePublishAllowed": false,
+    "publicDefaultPromotionAllowed": false,
+    "readyForGeneralRelease": false,
+    "rawGithubPayloadPersisted": false
+  },
+  "postOpenReviewDecision": {
+    "draftPrPostOpenReview": "ready_for_human_review_not_merge",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "defaultSurfaceDecision": "do_not_enable_default_ask_or_default_mcp",
+    "mergeDecision": "not_ready_for_merge_in_this_tranche",
+    "releaseTagDecision": "not_ready_for_release_tag",
+    "nextGate": "operator_mark_pr_ready_or_merge_decision_after_review"
+  },
+  "counts": {
+    "postOpenReviewRows": 1,
+    "githubPrLookupRows": 1,
+    "openPrRows": 1,
+    "draftPrRows": 1,
+    "baseMainRows": 1,
+    "headBranchMatchRows": 1,
+    "mergeStateCleanRows": 1,
+    "ciCheckRows": 7,
+    "ciCheckSuccessRows": 7,
+    "branchAheadCommitRows": 3,
+    "branchBehindCommitRows": 0,
+    "currentDirtyRows": 9,
+    "currentBlockingDirtyRows": 0,
+    "remoteBranchRows": 1,
+    "releasePackageHandoffReadyRows": 1,
+    "releaseNotesReadyRows": 1,
+    "publicDefaultPromotionGateReadyRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "readyForHumanReviewRows": 1,
+    "readyForMergeRows": 0,
+    "readyForReleaseTagRows": 0,
+    "generalRcReadyRows": 0,
+    "corpusScaleClaimProvenRows": 0,
+    "stalePrePrHandoffRows": 1,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "pushRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "postOpenReviewReady": true,
+    "releasePackageHandoffReady": true,
+    "releaseNotesReviewReady": true,
+    "publicDefaultPromotionGateReady": true,
+    "currentBranchReady": true,
+    "githubPrStateReady": true,
+    "ciChecksGreen": true,
+    "readyForHumanReview": true,
+    "readyForMerge": false,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "githubPr": {
+    "number": 171,
+    "title": "KnowledgeOS v0.1 RC Research Preview package",
+    "url": "https://github.com/chowonje/knowledge-hub/pull/171",
+    "state": "OPEN",
+    "isDraft": true,
+    "mergeStateStatus": "CLEAN",
+    "baseRefName": "main",
+    "headRefName": "codex/v01-rc-public-default-promotion-decision-gate-20260529"
+  },
+  "checkRows": [
+    {
+      "checkId": "release_package_handoff",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "release_notes_review",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_default_promotion_gate",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "unsafe_counters",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "current_branch_state",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "github_pr_171",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "ciCheckRows": [
+    {
+      "name": "static-guards",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "python-hermetic (3.10)",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "python-hermetic (3.11)",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "python-hermetic (3.12)",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "python-hermetic (3.13)",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "authority-contracts",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "evidence-first-gates",
+      "workflowName": "CI",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    }
+  ],
+  "staleArtifactRows": [
+    {
+      "artifactRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_release_package_handoff.v1.json",
+      "staleReason": "pre_pr_open_handoff_snapshot",
+      "historicalStatus": "ready",
+      "historicalOpenPrRows": 0,
+      "currentAuthority": "live_github_pr_state"
+    }
+  ],
+  "nextActionRows": [
+    {
+      "actionId": "operator_review_draft_pr",
+      "requiresExplicitApproval": true,
+      "summary": "Review PR #171 and decide whether to mark ready or keep collecting corpus-scale evidence."
+    },
+    {
+      "actionId": "merge_decision_separate_tranche",
+      "requiresExplicitApproval": true,
+      "summary": "Merge, branch deletion, release tags, and package publishing remain out of scope."
+    }
+  ],
+  "warnings": [
+    "post_open_review_only_no_pr_mutation",
+    "draft_pr_ready_for_human_review_is_not_merge_approval",
+    "public_default_promotion_remains_held",
+    "corpus_scale_quality_gate_required_before_general_rc_language"
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-29T06:25:17Z",
+  "decision": "knowledge_hub_v01_rc_release_package_handoff_ready",
+  "nextRecommendedTranche": "operator_push_and_open_draft_pr_or_corpus_scale_quality_gate",
+  "inputs": {
+    "releaseNotesReviewReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_research_preview_release_notes_review.v1.json",
+    "branchName": "codex/v01-rc-public-default-promotion-decision-gate-20260529",
+    "baseBranch": "main",
+    "headShortSha": "a94150d",
+    "originMainShortSha": "ef7138b",
+    "remoteMainShortSha": "ef7138b"
+  },
+  "policy": {
+    "reportOnly": true,
+    "operatorHandoffOnly": true,
+    "gitReadOnly": true,
+    "githubReadOnly": true,
+    "pushAllowed": false,
+    "prCreationAllowed": false,
+    "mergeAllowed": false,
+    "releaseTagAllowed": false,
+    "packagePublishAllowed": false,
+    "publicDefaultPromotionAllowed": false,
+    "readyForGeneralRelease": false,
+    "rawGithubPayloadPersisted": false
+  },
+  "handoffDecision": {
+    "releasePackageHandoff": "ready_for_operator_push_and_draft_pr",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "defaultSurfaceDecision": "do_not_enable_default_ask_or_default_mcp",
+    "mergeDecision": "not_ready_for_merge",
+    "releaseTagDecision": "not_ready_for_release_tag",
+    "nextGate": "operator_push_and_open_draft_pr_or_corpus_scale_quality_gate"
+  },
+  "counts": {
+    "releasePackageHandoffRows": 1,
+    "releaseNotesReviewReadyRows": 1,
+    "releaseNotesReadyRows": 1,
+    "currentBranchAheadCommitRows": 3,
+    "currentBranchBehindCommitRows": 0,
+    "currentDirtyRows": 0,
+    "currentBlockingDirtyRows": 0,
+    "remoteBranchRows": 0,
+    "openPrRows": 0,
+    "draftPrBodyRows": 1,
+    "operatorCommandRows": 2,
+    "releasePackageHandoffReadyRows": 1,
+    "readyForMergeRows": 0,
+    "readyForReleaseTagRows": 0,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "corpusScaleClaimProvenRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "pushRows": 0,
+    "githubPrMutationRows": 0,
+    "branchDeletionRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "releasePackageHandoffReady": true,
+    "releaseNotesReviewReady": true,
+    "currentBranchReady": true,
+    "githubPrStateReady": true,
+    "publicDefaultPromotionAllowed": false,
+    "readyForMerge": false,
+    "readyForReleaseTag": false,
+    "semanticViolations": []
+  },
+  "draftPr": {
+    "title": "KnowledgeOS v0.1 RC Research Preview package",
+    "baseBranch": "main",
+    "headBranch": "codex/v01-rc-public-default-promotion-decision-gate-20260529",
+    "bodyMarkdown": "# KnowledgeOS v0.1 RC Research Preview package\n\n## Summary\n\n- Packages the v0.1 RC Research Preview release notes and evidence reports for review.\n- Keeps parsed-artifact evidence chunks limited to labs/explicit opt-in surfaces.\n- Keeps public/default `khub ask`, default MCP activation, and general RC language held.\n\n## Scope\n\n- Base: `main`\n- Head: `codex/v01-rc-public-default-promotion-decision-gate-20260529`\n- Release note: `docs/releases/knowledge-hub-v0.1-rc-research-preview.md`\n- Public path: `discover -> index -> search/ask -> evidence review`\n\n## Gate Evidence\n\n- releaseNotesReadyRows: `1`\n- publicDefaultPromotionReadyRows: `0`\n- publicDefaultPromotionHeldRows: `1`\n- generalRcReadyRows: `0`\n- corpusScaleClaimProvenRows: `0`\n- privatePathLeakRows: `0`\n- schemaViolationCount: `0`\n\n## Non-Goals\n\n- Does not publish a package, create a release tag, or mark a GitHub release.\n- Does not make evidence chunks default-on.\n- Does not promote default MCP or public `khub ask` behavior.\n- Does not claim corpus-scale answer quality.\n\n## Reviewer Focus\n\n- Check Research Preview wording and known limits.\n- Check public/default surface boundaries.\n- Check generated report counters before considering broader release claims.\n"
+  },
+  "operatorCommands": [
+    {
+      "commandId": "push_branch",
+      "command": "git push -u origin codex/v01-rc-public-default-promotion-decision-gate-20260529"
+    },
+    {
+      "commandId": "open_draft_pr",
+      "command": "gh pr create --draft --base main --head codex/v01-rc-public-default-promotion-decision-gate-20260529 --title \"KnowledgeOS v0.1 RC Research Preview package\" --body-file <prepared-body-file>"
+    }
+  ],
+  "checkRows": [
+    {
+      "checkId": "release_notes_review",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "unsafe_counters",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "current_branch_state",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "github_pr_state",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "warnings": [
+    "handoff_only_no_push_or_pr_created",
+    "research_preview_only_not_general_release",
+    "public_default_promotion_remains_held",
+    "corpus_scale_quality_gate_required_before_default_promotion"
+  ]
+}

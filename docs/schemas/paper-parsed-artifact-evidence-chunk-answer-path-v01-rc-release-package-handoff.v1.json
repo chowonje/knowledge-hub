@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "policy",
+    "handoffDecision",
+    "counts",
+    "gate",
+    "draftPr",
+    "operatorCommands",
+    "checkRows",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "knowledge_hub_v01_rc_release_package_handoff_ready",
+        "knowledge_hub_v01_rc_release_package_handoff_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "releaseNotesReviewReportRef",
+        "branchName",
+        "baseBranch",
+        "headShortSha",
+        "originMainShortSha",
+        "remoteMainShortSha"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "releaseNotesReviewReportRef": { "type": "string" },
+        "branchName": { "type": "string" },
+        "baseBranch": { "type": "string" },
+        "headShortSha": { "type": "string" },
+        "originMainShortSha": { "type": "string" },
+        "remoteMainShortSha": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "operatorHandoffOnly",
+        "gitReadOnly",
+        "githubReadOnly",
+        "pushAllowed",
+        "prCreationAllowed",
+        "mergeAllowed",
+        "releaseTagAllowed",
+        "packagePublishAllowed",
+        "publicDefaultPromotionAllowed",
+        "readyForGeneralRelease",
+        "rawGithubPayloadPersisted"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reportOnly": { "const": true },
+        "operatorHandoffOnly": { "const": true },
+        "gitReadOnly": { "const": true },
+        "githubReadOnly": { "const": true },
+        "pushAllowed": { "const": false },
+        "prCreationAllowed": { "const": false },
+        "mergeAllowed": { "const": false },
+        "releaseTagAllowed": { "const": false },
+        "packagePublishAllowed": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "readyForGeneralRelease": { "const": false },
+        "rawGithubPayloadPersisted": { "const": false }
+      }
+    },
+    "handoffDecision": {
+      "type": "object",
+      "required": [
+        "releasePackageHandoff",
+        "publicDefaultDecision",
+        "defaultSurfaceDecision",
+        "mergeDecision",
+        "releaseTagDecision",
+        "nextGate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "releasePackageHandoff": { "enum": ["ready_for_operator_push_and_draft_pr", "blocked"] },
+        "publicDefaultDecision": { "const": "hold_public_default_promotion" },
+        "defaultSurfaceDecision": { "const": "do_not_enable_default_ask_or_default_mcp" },
+        "mergeDecision": { "const": "not_ready_for_merge" },
+        "releaseTagDecision": { "const": "not_ready_for_release_tag" },
+        "nextGate": { "type": "string" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "releasePackageHandoffRows",
+        "releaseNotesReviewReadyRows",
+        "releaseNotesReadyRows",
+        "currentBranchAheadCommitRows",
+        "currentBranchBehindCommitRows",
+        "currentDirtyRows",
+        "currentBlockingDirtyRows",
+        "remoteBranchRows",
+        "openPrRows",
+        "draftPrBodyRows",
+        "operatorCommandRows",
+        "releasePackageHandoffReadyRows",
+        "readyForMergeRows",
+        "readyForReleaseTagRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "corpusScaleClaimProvenRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "pushRows",
+        "githubPrMutationRows",
+        "branchDeletionRows",
+        "rawGithubPayloadPersistedRows",
+        "defaultMcpToolRows",
+        "defaultKhubAskRouteRows",
+        "releaseTagRows",
+        "packagePublishRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "releasePackageHandoffRows": { "type": "integer", "minimum": 0 },
+        "releaseNotesReviewReadyRows": { "type": "integer", "minimum": 0 },
+        "releaseNotesReadyRows": { "type": "integer", "minimum": 0 },
+        "currentBranchAheadCommitRows": { "type": "integer", "minimum": 0 },
+        "currentBranchBehindCommitRows": { "type": "integer", "minimum": 0 },
+        "currentDirtyRows": { "type": "integer", "minimum": 0 },
+        "currentBlockingDirtyRows": { "type": "integer", "minimum": 0 },
+        "remoteBranchRows": { "type": "integer", "minimum": 0 },
+        "openPrRows": { "type": "integer", "minimum": 0 },
+        "draftPrBodyRows": { "type": "integer", "minimum": 0 },
+        "operatorCommandRows": { "type": "integer", "minimum": 0 },
+        "releasePackageHandoffReadyRows": { "type": "integer", "minimum": 0 },
+        "readyForMergeRows": { "const": 0 },
+        "readyForReleaseTagRows": { "const": 0 },
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "type": "integer", "minimum": 0 },
+        "generalRcReadyRows": { "const": 0 },
+        "corpusScaleClaimProvenRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "pushRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "rawGithubPayloadPersistedRows": { "const": 0 },
+        "defaultMcpToolRows": { "const": 0 },
+        "defaultKhubAskRouteRows": { "const": 0 },
+        "releaseTagRows": { "const": 0 },
+        "packagePublishRows": { "const": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "releasePackageHandoffReady",
+        "releaseNotesReviewReady",
+        "currentBranchReady",
+        "githubPrStateReady",
+        "publicDefaultPromotionAllowed",
+        "readyForMerge",
+        "readyForReleaseTag",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "releasePackageHandoffReady": { "type": "boolean" },
+        "releaseNotesReviewReady": { "type": "boolean" },
+        "currentBranchReady": { "type": "boolean" },
+        "githubPrStateReady": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "readyForMerge": { "const": false },
+        "readyForReleaseTag": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "draftPr": {
+      "type": "object",
+      "required": ["title", "baseBranch", "headBranch", "bodyMarkdown"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "baseBranch": { "type": "string" },
+        "headBranch": { "type": "string" },
+        "bodyMarkdown": { "type": "string" }
+      }
+    },
+    "operatorCommands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["commandId", "command"],
+        "additionalProperties": false,
+        "properties": {
+          "commandId": { "type": "string" },
+          "command": { "type": "string" }
+        }
+      }
+    },
+    "checkRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["checkId", "status", "blockers"],
+        "additionalProperties": false,
+        "properties": {
+          "checkId": { "type": "string" },
+          "status": { "enum": ["pass", "fail"] },
+          "blockers": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
