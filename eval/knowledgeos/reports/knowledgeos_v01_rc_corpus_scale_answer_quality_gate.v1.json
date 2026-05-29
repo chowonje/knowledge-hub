@@ -1,0 +1,182 @@
+{
+  "schema": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-gate.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-29T08:33:43Z",
+  "decision": "knowledgeos_v01_rc_corpus_scale_answer_quality_gate_held",
+  "nextRecommendedTranche": "corpus_scale_answer_quality_live_runner_design",
+  "inputs": {
+    "postMergeReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_post_merge_convergence_cleanup_decision.v1.json",
+    "seedSource": "complex_qa_seed_pack_20_paper_50_question",
+    "noAnswerReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_default_off_no_answer_regression_smoke.v1.json",
+    "labsQualityReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_labs_opt_in_quality_eval_runner.v1.json"
+  },
+  "qualityGateDecision": {
+    "corpusScaleGate": "held",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "generalRcDecision": "blocked_pending_corpus_scale_answer_quality",
+    "nextGate": "corpus_scale_answer_quality_live_runner_design",
+    "gateBlockers": [
+      "corpus_scale_live_answer_quality_execution_missing",
+      "answer_quality_scores_not_computed",
+      "strict_evidence_ready_rows_below_threshold"
+    ]
+  },
+  "counts": {
+    "corpusScaleAnswerQualityGateRows": 1,
+    "seedPaperRows": 20,
+    "seedQuestionRows": 50,
+    "abstainBaselineRows": 50,
+    "abstainNoAnswerPassRows": 50,
+    "abstainNoAnswerExpectedRows": 50,
+    "defaultOffNoAnswerPassRows": 3,
+    "labsQualityInputRows": 4,
+    "labsQualityPassRows": 4,
+    "structuredEvidenceComparisonRows": 50,
+    "strictEvidenceAvailableRows": 0,
+    "plannedAnswerQualityDryRunRows": 0,
+    "liveAnswerExecutionRows": 0,
+    "answerQualityMeasuredRows": 0,
+    "qualityAxisRows": 5,
+    "qualityAxisPassRows": 2,
+    "qualityAxisBlockedRows": 3,
+    "corpusScaleAnswerQualityGateGreenRows": 0,
+    "corpusScaleAnswerQualityGateHeldRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "answerGeneratedRows": 0,
+    "answerQualityScoreComputedRows": 0,
+    "answerPathInvokedRows": 0,
+    "llmCallRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "reportReady": true,
+    "corpusScaleAnswerQualityGateGreen": false,
+    "seedBreadthReady": true,
+    "noAnswerSafetyReady": true,
+    "strictEvidenceReadyRowsMeetThreshold": false,
+    "liveAnswerQualityMeasured": false,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "qualityAxisRows": [
+    {
+      "axisId": "corpus_breadth",
+      "status": "pass",
+      "required": "20 papers and 50 seed questions",
+      "observedRows": 50,
+      "blockers": []
+    },
+    {
+      "axisId": "answerability_no_answer_safety",
+      "status": "pass",
+      "required": "expected no-answer remains no-answer",
+      "observedRows": 17,
+      "blockers": []
+    },
+    {
+      "axisId": "citation_provenance",
+      "status": "blocked",
+      "required": "citation/provenance scored on corpus-scale live answer outputs",
+      "observedRows": 0,
+      "blockers": [
+        "corpus_scale_live_answer_quality_execution_missing"
+      ]
+    },
+    {
+      "axisId": "source_coverage",
+      "status": "blocked",
+      "required": "source coverage scored on corpus-scale live answer outputs",
+      "observedRows": 0,
+      "blockers": [
+        "corpus_scale_live_answer_quality_execution_missing"
+      ]
+    },
+    {
+      "axisId": "answer_support",
+      "status": "blocked",
+      "required": "answer support measured against strict evidence",
+      "observedRows": 0,
+      "blockers": [
+        "answer_quality_scores_not_computed",
+        "strict_evidence_ready_rows_below_threshold"
+      ]
+    }
+  ],
+  "checkRows": [
+    {
+      "checkId": "post_merge_convergence_cleanup",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "complex_qa_seed_pack",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "complex_qa_abstain_baseline",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "structured_evidence_comparison",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "answer_quality_dry_run",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "default_off_no_answer_smoke",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "labs_opt_in_quality_eval_runner",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "unsafe_counters",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "warnings": [
+    "this_gate_defines_corpus_scale_thresholds_but_does_not_call_models_or_judges",
+    "public_default_promotion_remains_held_until_corpus_scale_gate_is_green",
+    "current_report_expected_to_hold_because_live_answer_quality_execution_is_not_yet_open"
+  ]
+}
