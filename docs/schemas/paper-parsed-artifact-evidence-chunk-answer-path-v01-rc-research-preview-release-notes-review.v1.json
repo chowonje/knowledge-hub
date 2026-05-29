@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-research-preview-release-notes-review.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "policy",
+    "releaseNotesDecision",
+    "counts",
+    "gate",
+    "checkRows",
+    "requiredPhraseRows",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-research-preview-release-notes-review.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "knowledge_hub_v01_rc_research_preview_release_notes_review_ready",
+        "knowledge_hub_v01_rc_research_preview_release_notes_review_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": ["promotionDecisionGateReportRef", "releaseNotesDocRef"],
+      "additionalProperties": false,
+      "properties": {
+        "promotionDecisionGateReportRef": { "type": "string" },
+        "releaseNotesDocRef": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "releaseNotesOnly",
+        "runtimeMutationAllowed",
+        "publicDefaultPromotionAllowed",
+        "readyForGeneralRelease",
+        "rawPayloadPersisted"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reportOnly": { "const": true },
+        "releaseNotesOnly": { "const": true },
+        "runtimeMutationAllowed": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "readyForGeneralRelease": { "const": false },
+        "rawPayloadPersisted": { "const": false }
+      }
+    },
+    "releaseNotesDecision": {
+      "type": "object",
+      "required": [
+        "researchPreviewReleaseNotesReady",
+        "publicDefaultDecision",
+        "defaultSurfaceDecision",
+        "generalRcDecision",
+        "nextGate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "researchPreviewReleaseNotesReady": { "type": "boolean" },
+        "publicDefaultDecision": { "const": "hold_public_default_promotion" },
+        "defaultSurfaceDecision": { "const": "do_not_enable_default_ask_or_default_mcp" },
+        "generalRcDecision": { "const": "blocked_pending_corpus_scale_quality_gate" },
+        "nextGate": { "type": "string" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "releaseNotesReviewRows",
+        "promotionGateReadyRows",
+        "releaseNotesDocRows",
+        "releaseNotesReadyRows",
+        "requiredPhraseRows",
+        "requiredPhrasePassRows",
+        "missingRequiredPhraseRows",
+        "forbiddenPhraseRows",
+        "releaseNotesPathAllowedRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "corpusScaleClaimProvenRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "pushRows",
+        "githubPrMutationRows",
+        "branchDeletionRows",
+        "rawGithubPayloadPersistedRows",
+        "defaultMcpToolRows",
+        "defaultKhubAskRouteRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "releaseNotesReviewRows": { "type": "integer", "minimum": 0 },
+        "promotionGateReadyRows": { "type": "integer", "minimum": 0 },
+        "releaseNotesDocRows": { "type": "integer", "minimum": 0 },
+        "releaseNotesReadyRows": { "type": "integer", "minimum": 0 },
+        "requiredPhraseRows": { "type": "integer", "minimum": 0 },
+        "requiredPhrasePassRows": { "type": "integer", "minimum": 0 },
+        "missingRequiredPhraseRows": { "type": "integer", "minimum": 0 },
+        "forbiddenPhraseRows": { "type": "integer", "minimum": 0 },
+        "releaseNotesPathAllowedRows": { "type": "integer", "minimum": 0 },
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "type": "integer", "minimum": 0 },
+        "generalRcReadyRows": { "const": 0 },
+        "corpusScaleClaimProvenRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "pushRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "rawGithubPayloadPersistedRows": { "const": 0 },
+        "defaultMcpToolRows": { "const": 0 },
+        "defaultKhubAskRouteRows": { "const": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "releaseNotesReviewReady",
+        "promotionGateReady",
+        "requiredPhrasesPresent",
+        "forbiddenPromotionPhrasesAbsent",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "releaseNotesReviewReady": { "type": "boolean" },
+        "promotionGateReady": { "type": "boolean" },
+        "requiredPhrasesPresent": { "type": "boolean" },
+        "forbiddenPromotionPhrasesAbsent": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "generalRcReady": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "checkRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["checkId", "status", "blockers"],
+        "additionalProperties": false,
+        "properties": {
+          "checkId": { "type": "string" },
+          "status": { "enum": ["pass", "fail"] },
+          "blockers": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "requiredPhraseRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phrase", "present"],
+        "additionalProperties": false,
+        "properties": {
+          "phrase": { "type": "string" },
+          "present": { "type": "boolean" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
