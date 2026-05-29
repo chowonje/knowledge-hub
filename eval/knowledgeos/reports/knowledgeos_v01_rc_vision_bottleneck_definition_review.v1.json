@@ -1,0 +1,166 @@
+{
+  "schema": "knowledge-hub.product.knowledgeos-v01-rc-vision-bottleneck-definition-review.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-29T07:38:49Z",
+  "decision": "knowledgeos_v01_rc_vision_bottleneck_definition_ready",
+  "nextRecommendedTranche": "operator_ready_or_merge_pr_171_or_corpus_scale_quality_gate",
+  "inputs": {
+    "productDefinitionDocRef": "docs/knowledge_os_definition.md",
+    "draftPrPostOpenReviewReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_draft_pr_post_open_review.v1.json",
+    "publicDefaultPromotionGateReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_public_default_promotion_decision_gate.v1.json",
+    "labsReleaseGateReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_labs_release_gate.v1.json"
+  },
+  "productDecision": {
+    "decisionLabel": "narrow_scope",
+    "v01RcPromise": "Research Preview section/paragraph evidence-first paper QA and compare runtime",
+    "finalVisionPromise": "Local-first evidence-first research knowledge runtime for auditable AI research workflows",
+    "shipPosture": "pr_171_ready_for_human_review_not_merge",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "strongestNextAction": "operator_ready_or_merge_pr_171"
+  },
+  "counts": {
+    "visionBottleneckReviewRows": 1,
+    "productDefinitionReadyRows": 1,
+    "draftPrPostOpenReadyRows": 1,
+    "labsReleaseGateReadyRows": 1,
+    "publicDefaultPromotionGateReadyRows": 1,
+    "releaseSmokePassedRows": 10,
+    "publicHygieneIssueRows": 0,
+    "noAnswerPassRows": 3,
+    "readyForHumanReviewRows": 1,
+    "readyForMergeRows": 0,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "corpusScaleClaimProvenRows": 0,
+    "v01RcBottleneckRows": 2,
+    "finalVisionBottleneckRows": 3,
+    "totalBottleneckRows": 5,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "pushRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "visionBottleneckDefinitionReady": true,
+    "productDefinitionReady": true,
+    "draftPrPostOpenReady": true,
+    "labsReleaseGateReady": true,
+    "publicDefaultPromotionGateReady": true,
+    "readyForHumanReview": true,
+    "readyForMerge": false,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "bottleneckRows": [
+    {
+      "bottleneckId": "pr_171_operator_ready_or_merge_decision",
+      "layer": "v0.1_rc_release_flow",
+      "severity": "P1",
+      "status": "open",
+      "blocksV01Rc": true,
+      "blocksFinalVision": false,
+      "summary": "PR #171 is clean and CI-green but still draft; ready/merge/cleanup requires an explicit operator decision.",
+      "nextTranche": "operator_mark_pr_ready_or_merge_decision_after_review"
+    },
+    {
+      "bottleneckId": "corpus_scale_answer_quality_gate_missing",
+      "layer": "v0.1_rc_quality",
+      "severity": "P1",
+      "status": "open",
+      "blocksV01Rc": false,
+      "blocksFinalVision": true,
+      "summary": "The current evidence proves a narrow Research Preview path, not corpus-scale answer quality for public/default promotion.",
+      "nextTranche": "corpus_scale_quality_gate"
+    },
+    {
+      "bottleneckId": "public_default_surface_promotion_held",
+      "layer": "public_default_surface",
+      "severity": "P1",
+      "status": "open",
+      "blocksV01Rc": false,
+      "blocksFinalVision": true,
+      "summary": "Public/default khub ask and default MCP remain held; the evidence chunk route is still labs/Research Preview bounded.",
+      "nextTranche": "public_default_promotion_gate_after_corpus_scale_quality"
+    },
+    {
+      "bottleneckId": "table_equation_figure_structured_evidence_labs_only",
+      "layer": "structured_evidence_modalities",
+      "severity": "P2",
+      "status": "open",
+      "blocksV01Rc": false,
+      "blocksFinalVision": true,
+      "summary": "Table, equation, and figure-caption evidence remain labs/limited support and are outside the v0.1 default promise.",
+      "nextTranche": "structured_evidence_modality_roadmap_after_v01_rc"
+    },
+    {
+      "bottleneckId": "post_merge_convergence_and_release_cleanup_pending",
+      "layer": "release_operations",
+      "severity": "P2",
+      "status": "open",
+      "blocksV01Rc": true,
+      "blocksFinalVision": false,
+      "summary": "After PR #171 is merged, a post-merge convergence report, branch cleanup decision, and release posture check must close the candidate.",
+      "nextTranche": "post_merge_convergence_after_pr_171"
+    }
+  ],
+  "checkRows": [
+    {
+      "checkId": "product_definition",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "draft_pr_post_open_review",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "labs_release_gate",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_default_promotion_gate",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "unsafe_counters",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "warnings": [
+    "v01_rc_is_research_preview_not_full_final_vision",
+    "ready_for_human_review_is_not_merge_approval",
+    "public_default_promotion_remains_held",
+    "table_equation_figure_default_support_remains_future_scope"
+  ]
+}
