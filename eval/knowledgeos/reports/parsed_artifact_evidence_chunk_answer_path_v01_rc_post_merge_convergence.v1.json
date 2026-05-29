@@ -1,0 +1,157 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-post-merge-convergence.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-29T05:11:51Z",
+  "decision": "knowledge_hub_v01_rc_research_preview_post_merge_convergence_ready",
+  "nextRecommendedTranche": "knowledge_hub_v01_rc_public_default_promotion_decision_gate_or_release_notes",
+  "inputs": {
+    "releaseGateReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_labs_release_gate.v1.json",
+    "branchPrReadinessReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_branch_pr_readiness_review.v1.json",
+    "draftPrHandoffReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_draft_pr_opening_or_handoff.v1.json",
+    "prNumber": 169,
+    "baseBranch": "main",
+    "originMainShortSha": "46db241",
+    "originMainSha": "46db241275f85b5c7737ce7178a58ceae44aa0f8",
+    "remoteMainSha": "46db241275f85b5c7737ce7178a58ceae44aa0f8",
+    "mergeCommitSha": "46db241275f85b5c7737ce7178a58ceae44aa0f8",
+    "githubPrLookupStatus": "ok"
+  },
+  "policy": {
+    "reportOnly": true,
+    "gitReadOnly": true,
+    "githubReadOnly": true,
+    "publicDefaultPromotionAllowed": false,
+    "readyForGeneralRelease": false,
+    "rawGithubPayloadPersisted": false
+  },
+  "convergenceDecision": {
+    "postMergeConvergence": "research_preview_rc_candidate",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "generalRcDecision": "blocked_pending_public_default_and_corpus_scale_evidence",
+    "strongestNextBlocker": "public_default_promotion_decision_and_corpus_scale_quality_evidence"
+  },
+  "counts": {
+    "postMergeReviewRows": 1,
+    "prMergedRows": 1,
+    "mainMergeCommitMatchRows": 1,
+    "remoteMainMatchesLocalOriginRows": 1,
+    "ciCheckRows": 7,
+    "ciCheckSuccessRows": 7,
+    "liveReleaseSmokeCheckedRows": 10,
+    "liveReleaseSmokePassedRows": 10,
+    "releaseSmokePassedRows": 10,
+    "publicHygieneIssueRows": 0,
+    "noAnswerPassRows": 3,
+    "labsSurfaceSmokePassRows": 1,
+    "labsLimitedPromotionReadyRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "preMergeReportStaleRows": 2,
+    "qualityEvalCaseRows": 4,
+    "realAnswerSmokeCaseRows": 2,
+    "corpusScaleClaimProvenRows": 0,
+    "researchPreviewRcCandidateRows": 1,
+    "generalRcReadyRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "pushRows": 0,
+    "githubPrMutationRows": 0,
+    "branchDeletionRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "postMergeConvergenceReady": true,
+    "prMerged": true,
+    "mainContainsMergeCommit": true,
+    "remoteMainVerified": true,
+    "releaseGateReady": true,
+    "preMergeReportsPresent": true,
+    "liveReleaseSmokeReady": true,
+    "livePublicHygieneReady": true,
+    "researchPreviewRcCandidate": true,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "checkRows": [
+    {
+      "checkId": "release_gate",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "pre_merge_reports",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "git_main_state",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "github_pr_169",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "live_checks",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "staleArtifactRows": [
+    {
+      "artifactRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_branch_pr_readiness_review.v1.json",
+      "staleReason": "pre_merge_branch_pr_readiness_snapshot",
+      "historicalStatus": "ready",
+      "historicalNextRecommendedTranche": "knowledge_hub_v01_rc_draft_pr_opening_or_handoff"
+    },
+    {
+      "artifactRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_draft_pr_opening_or_handoff.v1.json",
+      "staleReason": "pre_merge_draft_pr_handoff_snapshot",
+      "historicalStatus": "ready",
+      "historicalNextRecommendedTranche": "operator_push_and_open_draft_pr_or_request_codex_pr_creation"
+    }
+  ],
+  "nextBlockerRows": [
+    {
+      "blockerId": "public_default_promotion_held",
+      "severity": "P1",
+      "summary": "Evidence chunk answer path remains labs-only; public/default khub ask and default MCP promotion are still held."
+    },
+    {
+      "blockerId": "corpus_scale_quality_evidence_missing",
+      "severity": "P2",
+      "summary": "Current quality evidence is tranche-scale; corpus-scale v0.1 claims still need a broader gate."
+    },
+    {
+      "blockerId": "pre_merge_state_reports_historical_only",
+      "severity": "P2",
+      "summary": "Branch readiness and draft handoff reports are now historical snapshots after PR #169 merge."
+    }
+  ],
+  "warnings": [
+    "research_preview_rc_candidate_is_not_general_release_ready",
+    "public_default_promotion_remains_held",
+    "pre_merge_readiness_reports_are_historical_after_pr_169_merge"
+  ]
+}
