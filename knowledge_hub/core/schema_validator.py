@@ -227,6 +227,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1": "paper-parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-draft-pr-post-open-review.v1": "paper-parsed-artifact-evidence-chunk-answer-path-v01-rc-draft-pr-post-open-review.v1.json",
     "knowledge-hub.product.knowledgeos-v01-rc-vision-bottleneck-definition-review.v1": "knowledgeos-v01-rc-vision-bottleneck-definition-review.v1.json",
+    "knowledge-hub.product.knowledgeos-v01-rc-post-merge-convergence-cleanup-decision.v1": "knowledgeos-v01-rc-post-merge-convergence-cleanup-decision.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
