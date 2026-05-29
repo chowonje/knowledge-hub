@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-dry-run.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "dryRunPlan",
+    "gate",
+    "counts",
+    "caseSummary",
+    "caseRows",
+    "checkRows",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "nonNegativeInteger": { "type": "integer", "minimum": 0 },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/nonNegativeInteger" }
+    },
+    "checkRow": {
+      "type": "object",
+      "required": ["checkId", "status", "blockers"],
+      "additionalProperties": false,
+      "properties": {
+        "checkId": { "type": "string" },
+        "status": { "enum": ["pass", "fail"] },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "plannedQueryPlan": {
+      "type": "object",
+      "required": ["sourceType", "requiresExplicitPaperIds", "adapter", "surface"],
+      "additionalProperties": false,
+      "properties": {
+        "sourceType": { "const": "paper" },
+        "requiresExplicitPaperIds": { "const": true },
+        "adapter": { "const": "parsed_artifact_evidence_chunk_adapter_runtime_v1" },
+        "surface": { "const": "labs_internal_only" }
+      }
+    },
+    "caseRow": {
+      "type": "object",
+      "required": [
+        "caseIndex",
+        "caseId",
+        "questionCategory",
+        "expectedEvidenceType",
+        "answerabilityExpectation",
+        "paperIds",
+        "questionSha256",
+        "plannedQueryPlan",
+        "plannedScoreAxes",
+        "expectedRuntimeDisposition",
+        "status",
+        "blockers"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "caseIndex": { "type": "integer", "minimum": 1 },
+        "caseId": { "type": "string" },
+        "questionCategory": { "type": "string" },
+        "expectedEvidenceType": { "type": "string" },
+        "answerabilityExpectation": {
+          "enum": ["answerable", "expected_no_answer", "blocked_until_structured_evidence"]
+        },
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "questionSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "plannedQueryPlan": { "$ref": "#/$defs/plannedQueryPlan" },
+        "plannedScoreAxes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "answerability",
+              "no_answer_safety",
+              "citation_provenance",
+              "source_coverage",
+              "answer_support"
+            ]
+          }
+        },
+        "expectedRuntimeDisposition": {
+          "enum": [
+            "answer_only_if_evidence_contract_passes",
+            "must_abstain",
+            "abstain_until_structured_evidence_available"
+          ]
+        },
+        "status": { "const": "planned" },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-dry-run.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner_dry_run_ready",
+        "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner_dry_run_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": ["liveRunnerDesignReportRef", "corpusManifestRef", "caseSet"],
+      "additionalProperties": false,
+      "properties": {
+        "liveRunnerDesignReportRef": { "type": "string" },
+        "corpusManifestRef": { "type": "string" },
+        "caseSet": { "const": "complex_qa_seed_pack_20_paper_50_question" }
+      }
+    },
+    "dryRunPlan": {
+      "type": "object",
+      "required": [
+        "runnerId",
+        "mode",
+        "executionSurface",
+        "caseSelection",
+        "outputPolicy",
+        "answerExecutionInThisTranche",
+        "modelOrJudgeCallsInThisTranche"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "runnerId": { "const": "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner" },
+        "mode": { "const": "dry_run" },
+        "executionSurface": { "const": "labs_internal_only" },
+        "caseSelection": { "const": "fixed_20_paper_50_question_seed" },
+        "outputPolicy": { "const": "schema_backed_sanitized_case_scores_only" },
+        "answerExecutionInThisTranche": { "const": false },
+        "modelOrJudgeCallsInThisTranche": { "const": false }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "dryRunReady",
+        "sourceDesignReady",
+        "seedPackReady",
+        "caseRowsReady",
+        "liveExecutionAllowedInThisTranche",
+        "modelOrJudgeCallsAllowedInThisTranche",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "dryRunReady": { "type": "boolean" },
+        "sourceDesignReady": { "type": "boolean" },
+        "seedPackReady": { "type": "boolean" },
+        "caseRowsReady": { "type": "boolean" },
+        "liveExecutionAllowedInThisTranche": { "const": false },
+        "modelOrJudgeCallsAllowedInThisTranche": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "generalRcReady": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "liveRunnerDryRunRows",
+        "sourceDesignReadyRows",
+        "seedPaperRows",
+        "seedQuestionRows",
+        "dryRunCaseRows",
+        "plannedRunnerPaperRows",
+        "plannedRunnerQuestionRows",
+        "plannedAnswerPathInvocationRows",
+        "plannedSanitizedOutputRows",
+        "plannedScoreAxisRows",
+        "plannedScoreRows",
+        "plannedAnswerableRows",
+        "plannedExpectedNoAnswerRows",
+        "plannedBlockedUntilStructuredEvidenceRows",
+        "plannedNoAnswerOrBlockedRows",
+        "runnerDryRunRows",
+        "liveAnswerExecutionRows",
+        "answerPathInvokedRows",
+        "answerGeneratedRows",
+        "answerQualityMeasuredRows",
+        "answerQualityScoreComputedRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "llmCallRows",
+        "githubPrMutationRows",
+        "mergeRows",
+        "branchDeletionRows",
+        "releaseTagRows",
+        "packagePublishRows",
+        "rawPayloadPersistedRows",
+        "defaultMcpToolRows",
+        "defaultKhubAskRouteRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "liveRunnerDryRunRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "sourceDesignReadyRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "seedPaperRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "seedQuestionRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "dryRunCaseRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedRunnerPaperRows": { "const": 20 },
+        "plannedRunnerQuestionRows": { "const": 50 },
+        "plannedAnswerPathInvocationRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedSanitizedOutputRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedScoreAxisRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedScoreRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedAnswerableRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedExpectedNoAnswerRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedBlockedUntilStructuredEvidenceRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedNoAnswerOrBlockedRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "runnerDryRunRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "liveAnswerExecutionRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerGeneratedRows": { "const": 0 },
+        "answerQualityMeasuredRows": { "const": 0 },
+        "answerQualityScoreComputedRows": { "const": 0 },
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "generalRcReadyRows": { "const": 0 },
+        "blockedRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "releaseTagRows": { "const": 0 },
+        "packagePublishRows": { "const": 0 },
+        "rawPayloadPersistedRows": { "const": 0 },
+        "defaultMcpToolRows": { "const": 0 },
+        "defaultKhubAskRouteRows": { "const": 0 },
+        "privatePathLeakRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "schemaViolationCount": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "caseSummary": {
+      "type": "object",
+      "required": ["byQuestionCategory", "byAnswerabilityExpectation"],
+      "additionalProperties": false,
+      "properties": {
+        "byQuestionCategory": { "$ref": "#/$defs/stringMap" },
+        "byAnswerabilityExpectation": { "$ref": "#/$defs/stringMap" }
+      }
+    },
+    "caseRows": { "type": "array", "items": { "$ref": "#/$defs/caseRow" } },
+    "checkRows": { "type": "array", "items": { "$ref": "#/$defs/checkRow" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
