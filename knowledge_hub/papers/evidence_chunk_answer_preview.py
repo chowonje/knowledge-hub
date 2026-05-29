@@ -31,9 +31,15 @@ def normalize_paper_ids(values: Any) -> list[str]:
     return out
 
 
-def build_evidence_chunk_query_plan(paper_ids: list[str]) -> dict[str, Any]:
+def build_evidence_chunk_query_plan(
+    paper_ids: list[str],
+    *,
+    question_category: str = "",
+    expected_evidence_type: str = "",
+    answerability_expectation: str = "",
+) -> dict[str, Any]:
     resolved_ids = normalize_paper_ids(paper_ids)
-    return {
+    plan = {
         "family": "paper_lookup",
         "source_type": "paper",
         "parsed_artifact_evidence_chunk_adapter": ADAPTER_OPT_IN_VALUE,
@@ -41,6 +47,19 @@ def build_evidence_chunk_query_plan(paper_ids: list[str]) -> dict[str, Any]:
         "resolvedPaperIds": resolved_ids,
         "resolved_paper_ids": resolved_ids,
     }
+    category = _clean_text(question_category)
+    evidence_type = _clean_text(expected_evidence_type)
+    expectation = _clean_text(answerability_expectation)
+    if category:
+        plan["question_category"] = category
+        plan["questionCategory"] = category
+    if evidence_type:
+        plan["expected_evidence_type"] = evidence_type
+        plan["expectedEvidenceType"] = evidence_type
+    if expectation:
+        plan["answerability_expectation"] = expectation
+        plan["answerabilityExpectation"] = expectation
+    return plan
 
 
 def _call_generate_answer(searcher: Any, question: str, **kwargs: Any) -> dict[str, Any]:
@@ -72,6 +91,9 @@ def build_paper_evidence_chunk_answer_preview(
     *,
     question: str,
     paper_ids: list[str],
+    question_category: str = "",
+    expected_evidence_type: str = "",
+    answerability_expectation: str = "",
     top_k: int = 8,
     retrieval_mode: str = "semantic",
     alpha: float = 0.7,
@@ -94,7 +116,12 @@ def build_paper_evidence_chunk_answer_preview(
     except Exception:
         alpha_value = 0.7
     top_k_value = max(1, int(top_k or 8))
-    query_plan = build_evidence_chunk_query_plan(resolved_ids)
+    query_plan = build_evidence_chunk_query_plan(
+        resolved_ids,
+        question_category=question_category,
+        expected_evidence_type=expected_evidence_type,
+        answerability_expectation=answerability_expectation,
+    )
     metadata_filter = {"arxiv_id": resolved_ids[0]} if len(resolved_ids) == 1 else {}
     answer_payload = _call_generate_answer(
         searcher,
@@ -133,6 +160,9 @@ def build_paper_evidence_chunk_answer_preview(
             "parsed_artifact_evidence_chunk_adapter": query_plan["parsed_artifact_evidence_chunk_adapter"],
             "parsedArtifactEvidenceChunkAdapter": query_plan["parsedArtifactEvidenceChunkAdapter"],
             "resolvedPaperIds": resolved_ids,
+            "questionCategory": _clean_text(query_plan.get("questionCategory")),
+            "expectedEvidenceType": _clean_text(query_plan.get("expectedEvidenceType")),
+            "answerabilityExpectation": _clean_text(query_plan.get("answerabilityExpectation")),
         },
         "answer": str(answer_payload.get("answer") or ""),
         "answerable": bool(answerable),

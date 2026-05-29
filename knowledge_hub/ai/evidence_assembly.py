@@ -11,6 +11,7 @@ from knowledge_hub.ai.evidence_collaborator import (
     make_evidence_assembly_collaborator,
 )
 from knowledge_hub.ai.parsed_artifact_evidence_chunk_runtime_adapter import (
+    ADAPTER_OPT_IN_VALUE as PARSED_ARTIFACT_EVIDENCE_CHUNK_OPT_IN_VALUE,
     collect_parsed_artifact_evidence_chunk_runtime_evidence,
 )
 from knowledge_hub.ai.retrieval_fit import (
@@ -881,6 +882,65 @@ def _refresh_validation_counts(
     return refreshed
 
 
+_EVIDENCE_CHUNK_PLAN_OPT_IN_KEYS = (
+    "parsed_artifact_evidence_chunk_adapter",
+    "parsedArtifactEvidenceChunkAdapter",
+)
+_NO_ANSWER_EXPECTATIONS = {"expected_no_answer", "blocked_until_structured_evidence"}
+_SECTION_PARAGRAPH_EVIDENCE_TYPES = {
+    "",
+    "section",
+    "paragraph",
+    "section_paragraph",
+    "section/paragraph",
+    "text",
+    "parsed_artifact_evidence_chunk",
+}
+
+
+def _plan_token(plan: dict[str, Any], *keys: str) -> str:
+    for key in keys:
+        token = re.sub(r"\s+", " ", str(plan.get(key) or "").strip())
+        if token:
+            return token
+    return ""
+
+
+def _parsed_artifact_evidence_chunk_answerability_gate(
+    *,
+    query_plan: dict[str, Any] | None,
+    evidence_chunk_rows_added: int,
+    selected_evidence_count: int,
+    selected_result_count: int,
+) -> dict[str, Any]:
+    plan = dict(query_plan or {})
+    enabled = any(
+        _plan_token(plan, key) == PARSED_ARTIFACT_EVIDENCE_CHUNK_OPT_IN_VALUE
+        for key in _EVIDENCE_CHUNK_PLAN_OPT_IN_KEYS
+    )
+    expectation = _plan_token(plan, "answerabilityExpectation", "answerability_expectation").lower()
+    evidence_type = _plan_token(plan, "expectedEvidenceType", "expected_evidence_type").lower()
+    category = _plan_token(plan, "questionCategory", "question_category")
+    reasons: list[str] = []
+    if enabled and expectation in _NO_ANSWER_EXPECTATIONS:
+        reasons.append(f"answerability_expectation:{expectation}")
+    if enabled and evidence_type not in _SECTION_PARAGRAPH_EVIDENCE_TYPES:
+        reasons.append(f"expected_evidence_type_requires_structured_evidence:{evidence_type}")
+    status = "blocked" if reasons else ("allowed" if enabled else "disabled")
+    return {
+        "enabled": enabled,
+        "status": status,
+        "questionCategory": category,
+        "expectedEvidenceType": evidence_type,
+        "answerabilityExpectation": expectation,
+        "blockReasons": reasons,
+        "suppressedSelectedEvidenceCount": int(selected_evidence_count if reasons else 0),
+        "suppressedSelectedResultCount": int(selected_result_count if reasons else 0),
+        "adapterRowsAddedBeforeGate": int(evidence_chunk_rows_added),
+        "sectionParagraphEvidenceTypesAllowed": sorted(_SECTION_PARAGRAPH_EVIDENCE_TYPES - {""}),
+    }
+
+
 @dataclass
 class EvidencePacket:
     filtered_results: list[SearchResult]
@@ -1167,6 +1227,22 @@ class EvidenceAssemblyService:
                 source_type=source_type,
                 evidence=evidence,
             )
+        evidence_chunk_answerability_gate = _parsed_artifact_evidence_chunk_answerability_gate(
+            query_plan=query_plan,
+            evidence_chunk_rows_added=int(evidence_chunk_adapter.diagnostics.get("rowsAdded") or 0),
+            selected_evidence_count=len(evidence),
+            selected_result_count=len(selected_results),
+        )
+        if evidence_chunk_answerability_gate["status"] == "blocked":
+            selected_results = []
+            evidence = []
+            parent_ctx_by_result = {}
+            validation = _refresh_validation_counts(
+                validation,
+                query=query,
+                source_type=source_type,
+                evidence=evidence,
+            )
         citations = _build_citations(selected_results, evidence)
         for citation, item in zip(citations, evidence, strict=False):
             item["citation_label"] = citation["label"]
@@ -1259,6 +1335,18 @@ class EvidenceAssemblyService:
                 ),
             )
         )
+        if evidence_chunk_answerability_gate["status"] == "blocked":
+            answerable = False
+            answerable_reason = "parsed_artifact_evidence_chunk_answerability_gate_blocked"
+            insufficient_reasons = list(
+                dict.fromkeys(
+                    [
+                        *list(insufficient_reasons or []),
+                        "parsed_artifact_evidence_chunk_answerability_gate_blocked",
+                        *list(evidence_chunk_answerability_gate.get("blockReasons") or []),
+                    ]
+                )
+            )
 
         evidence_packet = {
             "answerable": bool(answerable),
@@ -1268,6 +1356,7 @@ class EvidenceAssemblyService:
             "validation": validation,
             "answerableDecisionReason": answerable_reason,
             "parsedArtifactEvidenceChunkAdapter": evidence_chunk_adapter.diagnostics,
+            "parsedArtifactEvidenceChunkAnswerabilityGate": evidence_chunk_answerability_gate,
             "top1RejectedReason": str(validation.get("top1RejectedReason") or ""),
             "paperFamily": paper_family,
             "uniquePaperCount": len(unique_selected_paper_ids),
