@@ -1,0 +1,191 @@
+{
+  "schema": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-design.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-29T08:49:58Z",
+  "decision": "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner_design_ready",
+  "nextRecommendedTranche": "corpus_scale_answer_quality_live_runner_dry_run",
+  "inputs": {
+    "corpusScaleGateReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_gate.v1.json",
+    "corpusScaleGateStatus": "ready",
+    "corpusScaleGateDecision": "knowledgeos_v01_rc_corpus_scale_answer_quality_gate_held",
+    "corpusScaleGateNextRecommendedTranche": "corpus_scale_answer_quality_live_runner_design"
+  },
+  "runnerDesign": {
+    "runnerId": "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner",
+    "mode": "design_only",
+    "caseSet": "complex_qa_seed_pack_20_paper_50_question",
+    "executionSurface": "labs_internal_only",
+    "capturePolicy": "schema_backed_sanitized_scores_only",
+    "publicDefaultPromotionPolicy": "hold_until_measured_gate_green"
+  },
+  "gate": {
+    "designReady": true,
+    "corpusScaleGateHeld": true,
+    "liveExecutionAllowedInThisTranche": false,
+    "modelOrJudgeCallsAllowedInThisTranche": false,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "counts": {
+    "liveRunnerDesignRows": 1,
+    "corpusScaleGateReadyRows": 1,
+    "heldCorpusScaleGateRows": 1,
+    "seedPaperRows": 20,
+    "seedQuestionRows": 50,
+    "plannedRunnerPaperRows": 20,
+    "plannedRunnerQuestionRows": 50,
+    "plannedExecutionPhaseRows": 5,
+    "plannedScoreAxisRows": 5,
+    "plannedThresholdRows": 7,
+    "liveAnswerExecutionRows": 0,
+    "answerPathInvokedRows": 0,
+    "answerGeneratedRows": 0,
+    "answerQualityMeasuredRows": 0,
+    "answerQualityScoreComputedRows": 0,
+    "runnerDryRunRows": 0,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "llmCallRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "executionPhaseRows": [
+    {
+      "phaseId": "load_seed_cases",
+      "status": "planned",
+      "summary": "Load the fixed 20-paper / 50-question corpus-scale seed and preserve case ids."
+    },
+    {
+      "phaseId": "invoke_labs_answer_path",
+      "status": "planned",
+      "summary": "Invoke only an explicit labs/internal answer path with paper ids and adapter opt-in."
+    },
+    {
+      "phaseId": "capture_sanitized_outputs",
+      "status": "planned",
+      "summary": "Persist only schema-backed, sanitized per-case scores and redacted diagnostics."
+    },
+    {
+      "phaseId": "score_deterministic_axes",
+      "status": "planned",
+      "summary": "Score answerability, no-answer safety, provenance, source coverage, and support without a judge model."
+    },
+    {
+      "phaseId": "hold_public_default",
+      "status": "planned",
+      "summary": "Keep public khub ask and default MCP promotion blocked until the measured gate is green."
+    }
+  ],
+  "scoreAxisRows": [
+    {
+      "axisId": "answerability",
+      "status": "planned",
+      "required": "Every answerable decision must be backed by eligible evidence; unsupported cases must abstain.",
+      "minimumRows": 50
+    },
+    {
+      "axisId": "no_answer_safety",
+      "status": "planned",
+      "required": "Expected no-answer cases must remain no-answer with no fallback-only elevation.",
+      "minimumRows": 50
+    },
+    {
+      "axisId": "citation_provenance",
+      "status": "planned",
+      "required": "Answer citations must carry source hash and chars/page/bbox provenance before scoring as supported.",
+      "minimumRows": 50
+    },
+    {
+      "axisId": "source_coverage",
+      "status": "planned",
+      "required": "Resolved paper ids and cited source ids must cover each case's expected source set.",
+      "minimumRows": 50
+    },
+    {
+      "axisId": "answer_support",
+      "status": "planned",
+      "required": "Claim support is measured against selected evidence terms and citation spans, not final-answer fluency.",
+      "minimumRows": 50
+    }
+  ],
+  "thresholdRows": [
+    {
+      "thresholdId": "minimum_seed_papers",
+      "value": "20"
+    },
+    {
+      "thresholdId": "minimum_seed_questions",
+      "value": "50"
+    },
+    {
+      "thresholdId": "expected_no_answer_pass_rate",
+      "value": "1.0"
+    },
+    {
+      "thresholdId": "non_evidence_leak_count",
+      "value": "0"
+    },
+    {
+      "thresholdId": "private_path_leak_rows",
+      "value": "0"
+    },
+    {
+      "thresholdId": "schema_violation_count",
+      "value": "0"
+    },
+    {
+      "thresholdId": "public_default_promotion",
+      "value": "held"
+    }
+  ],
+  "checkRows": [
+    {
+      "checkId": "corpus_scale_answer_quality_gate",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "unsafe_counters",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_default_hold",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "warnings": [
+    "design_only_no_live_answer_execution_or_scoring",
+    "next_tranche_must_be_dry_run_before_any_measured_execution",
+    "public_default_promotion_remains_held"
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-design.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "runnerDesign",
+    "gate",
+    "counts",
+    "executionPhaseRows",
+    "scoreAxisRows",
+    "thresholdRows",
+    "checkRows",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "nonNegativeInteger": { "type": "integer", "minimum": 0 },
+    "phaseRow": {
+      "type": "object",
+      "required": ["phaseId", "status", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "phaseId": { "type": "string" },
+        "status": { "const": "planned" },
+        "summary": { "type": "string" }
+      }
+    },
+    "scoreAxisRow": {
+      "type": "object",
+      "required": ["axisId", "status", "required", "minimumRows"],
+      "additionalProperties": false,
+      "properties": {
+        "axisId": { "type": "string" },
+        "status": { "const": "planned" },
+        "required": { "type": "string" },
+        "minimumRows": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "thresholdRow": {
+      "type": "object",
+      "required": ["thresholdId", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "thresholdId": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    },
+    "checkRow": {
+      "type": "object",
+      "required": ["checkId", "status", "blockers"],
+      "additionalProperties": false,
+      "properties": {
+        "checkId": { "type": "string" },
+        "status": { "enum": ["pass", "fail"] },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-design.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner_design_ready",
+        "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner_design_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "corpusScaleGateReportRef",
+        "corpusScaleGateStatus",
+        "corpusScaleGateDecision",
+        "corpusScaleGateNextRecommendedTranche"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "corpusScaleGateReportRef": { "type": "string" },
+        "corpusScaleGateStatus": { "type": "string" },
+        "corpusScaleGateDecision": { "type": "string" },
+        "corpusScaleGateNextRecommendedTranche": { "type": "string" }
+      }
+    },
+    "runnerDesign": {
+      "type": "object",
+      "required": [
+        "runnerId",
+        "mode",
+        "caseSet",
+        "executionSurface",
+        "capturePolicy",
+        "publicDefaultPromotionPolicy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "runnerId": { "const": "knowledgeos_v01_rc_corpus_scale_answer_quality_live_runner" },
+        "mode": { "const": "design_only" },
+        "caseSet": { "const": "complex_qa_seed_pack_20_paper_50_question" },
+        "executionSurface": { "const": "labs_internal_only" },
+        "capturePolicy": { "const": "schema_backed_sanitized_scores_only" },
+        "publicDefaultPromotionPolicy": { "const": "hold_until_measured_gate_green" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "designReady",
+        "corpusScaleGateHeld",
+        "liveExecutionAllowedInThisTranche",
+        "modelOrJudgeCallsAllowedInThisTranche",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "designReady": { "type": "boolean" },
+        "corpusScaleGateHeld": { "type": "boolean" },
+        "liveExecutionAllowedInThisTranche": { "const": false },
+        "modelOrJudgeCallsAllowedInThisTranche": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "generalRcReady": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "liveRunnerDesignRows",
+        "corpusScaleGateReadyRows",
+        "heldCorpusScaleGateRows",
+        "seedPaperRows",
+        "seedQuestionRows",
+        "plannedRunnerPaperRows",
+        "plannedRunnerQuestionRows",
+        "plannedExecutionPhaseRows",
+        "plannedScoreAxisRows",
+        "plannedThresholdRows",
+        "liveAnswerExecutionRows",
+        "answerPathInvokedRows",
+        "answerGeneratedRows",
+        "answerQualityMeasuredRows",
+        "answerQualityScoreComputedRows",
+        "runnerDryRunRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "llmCallRows",
+        "githubPrMutationRows",
+        "mergeRows",
+        "branchDeletionRows",
+        "releaseTagRows",
+        "packagePublishRows",
+        "rawPayloadPersistedRows",
+        "defaultMcpToolRows",
+        "defaultKhubAskRouteRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "liveRunnerDesignRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "corpusScaleGateReadyRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "heldCorpusScaleGateRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "seedPaperRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "seedQuestionRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedRunnerPaperRows": { "const": 20 },
+        "plannedRunnerQuestionRows": { "const": 50 },
+        "plannedExecutionPhaseRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedScoreAxisRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "plannedThresholdRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "liveAnswerExecutionRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerGeneratedRows": { "const": 0 },
+        "answerQualityMeasuredRows": { "const": 0 },
+        "answerQualityScoreComputedRows": { "const": 0 },
+        "runnerDryRunRows": { "const": 0 },
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "generalRcReadyRows": { "const": 0 },
+        "blockedRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "releaseTagRows": { "const": 0 },
+        "packagePublishRows": { "const": 0 },
+        "rawPayloadPersistedRows": { "const": 0 },
+        "defaultMcpToolRows": { "const": 0 },
+        "defaultKhubAskRouteRows": { "const": 0 },
+        "privatePathLeakRows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "schemaViolationCount": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "executionPhaseRows": { "type": "array", "items": { "$ref": "#/$defs/phaseRow" } },
+    "scoreAxisRows": { "type": "array", "items": { "$ref": "#/$defs/scoreAxisRow" } },
+    "thresholdRows": { "type": "array", "items": { "$ref": "#/$defs/thresholdRow" } },
+    "checkRows": { "type": "array", "items": { "$ref": "#/$defs/checkRow" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
