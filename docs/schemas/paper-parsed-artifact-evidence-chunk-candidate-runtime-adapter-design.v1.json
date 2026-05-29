@@ -1,0 +1,402 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-parsed-artifact-evidence-chunk-candidate-runtime-adapter-design.v1.json",
+  "title": "Parsed Artifact Evidence Chunk Candidate Runtime Adapter Design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceRuntimeContractReview",
+    "policy",
+    "adapterDesign",
+    "counts",
+    "gate",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-adapter-design.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": [
+        "parsed_artifact_evidence_chunk_candidate_runtime_adapter_design_ready",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+    "sourceRuntimeContractReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "decision",
+        "nextRecommendedTranche",
+        "reportRef",
+        "inputRows",
+        "contractReviewReadyRows",
+        "runtimeAdapterDesignCandidateRows",
+        "answerableRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-contract-review.v1"
+        },
+        "status": { "enum": ["ready", "blocked"] },
+        "decision": {
+          "enum": [
+            "parsed_artifact_evidence_chunk_candidate_runtime_contract_review_ready",
+            "blocked"
+          ]
+        },
+        "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "contractReviewReadyRows": { "type": "integer", "minimum": 0 },
+        "runtimeAdapterDesignCandidateRows": { "type": "integer", "minimum": 0 },
+        "answerableRows": { "const": 0 },
+        "blockedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "runtimeAdapterDesignOnly",
+        "runtimeCodeChanged",
+        "evidenceAssemblyChanged",
+        "candidateStoreReadOnlyPlanned",
+        "candidateStoreWrite",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "answerVisibleExposure",
+        "answerGeneration",
+        "answerableRowsAllowedInThisTranche",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "parserExecution",
+        "canonicalParsedArtifactsWritten",
+        "futureRuntimeAdapterRequired",
+        "nextGateRequiredBeforeRuntimeUse"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "runtimeAdapterDesignOnly": { "const": true },
+        "runtimeCodeChanged": { "const": false },
+        "evidenceAssemblyChanged": { "const": false },
+        "candidateStoreReadOnlyPlanned": { "const": true },
+        "candidateStoreWrite": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "answerVisibleExposure": { "const": false },
+        "answerGeneration": { "const": false },
+        "answerableRowsAllowedInThisTranche": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "parserExecution": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "futureRuntimeAdapterRequired": { "const": true },
+        "nextGateRequiredBeforeRuntimeUse": { "const": true }
+      }
+    },
+    "adapterDesign": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "adapterId",
+        "adapterMode",
+        "integrationBoundary",
+        "insertionPoint",
+        "activationPolicy",
+        "selectionPolicy",
+        "candidateStoreRead",
+        "futureEvidenceItemShape",
+        "futureDiagnosticsShape",
+        "answerabilityPolicy"
+      ],
+      "properties": {
+        "adapterId": { "const": "parsed_artifact_evidence_chunk_runtime_adapter_v1" },
+        "adapterMode": { "const": "opt_in_runtime_design" },
+        "integrationBoundary": {
+          "const": "knowledge_hub.ai.evidence_assembly.EvidenceAssemblyService.assemble"
+        },
+        "insertionPoint": { "type": "string", "minLength": 1 },
+        "activationPolicy": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "sourceTypeRequired",
+            "queryPlanOptInKeys",
+            "queryPlanOptInValue",
+            "resolvedPaperIdsRequired",
+            "fallbackToAllPapersAllowed",
+            "defaultEnabled"
+          ],
+          "properties": {
+            "sourceTypeRequired": { "const": "paper" },
+            "queryPlanOptInKeys": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 2
+            },
+            "queryPlanOptInValue": { "const": "runtime_v1" },
+            "resolvedPaperIdsRequired": { "const": true },
+            "fallbackToAllPapersAllowed": { "const": false },
+            "defaultEnabled": { "const": false }
+          }
+        },
+        "selectionPolicy": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "maxRowsPerResolvedPaper",
+            "maxRowsTotal",
+            "allowedArtifactTypes",
+            "requiresSourceContentHash",
+            "requiresCharsLocator",
+            "requiresSnippetHash",
+            "requiresExcerptReadback"
+          ],
+          "properties": {
+            "maxRowsPerResolvedPaper": { "const": 2 },
+            "maxRowsTotal": { "const": 4 },
+            "allowedArtifactTypes": {
+              "type": "array",
+              "items": { "enum": ["paragraph", "section"] },
+              "minItems": 2
+            },
+            "requiresSourceContentHash": { "const": true },
+            "requiresCharsLocator": { "const": true },
+            "requiresSnippetHash": { "const": true },
+            "requiresExcerptReadback": { "const": true }
+          }
+        },
+        "candidateStoreRead": { "type": "object" },
+        "futureEvidenceItemShape": { "type": "object" },
+        "futureDiagnosticsShape": { "type": "object" },
+        "answerabilityPolicy": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "currentTrancheAnswerabilityAllowed",
+            "futureAdapterMayAffectAnswerabilityOnlyAfterDryRunAndImplementationGate",
+            "legacyRetrievalBypassAllowed"
+          ],
+          "properties": {
+            "currentTrancheAnswerabilityAllowed": { "const": false },
+            "futureAdapterMayAffectAnswerabilityOnlyAfterDryRunAndImplementationGate": { "const": true },
+            "legacyRetrievalBypassAllowed": { "const": false }
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputRows",
+        "contractReadyInputRows",
+        "runtimeAdapterDesignReadyRows",
+        "futureAdapterCandidateRows",
+        "plannedCandidateStoreReadRows",
+        "plannedEvidenceItemShapeRows",
+        "plannedDiagnosticsRows",
+        "answerableRows",
+        "blockedRows",
+        "blockedInputSchemaViolationRows",
+        "blockedContractNotReadyRows",
+        "blockedMissingRequiredFieldRows",
+        "blockedInvalidLocatorRows",
+        "blockedPolicyQuarantineRows",
+        "blockedPrivatePathRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "parserExecutionRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byAdapterDesignStatus"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "contractReadyInputRows": { "type": "integer", "minimum": 0 },
+        "runtimeAdapterDesignReadyRows": { "type": "integer", "minimum": 0 },
+        "futureAdapterCandidateRows": { "type": "integer", "minimum": 0 },
+        "plannedCandidateStoreReadRows": { "type": "integer", "minimum": 0 },
+        "plannedEvidenceItemShapeRows": { "type": "integer", "minimum": 0 },
+        "plannedDiagnosticsRows": { "type": "integer", "minimum": 0 },
+        "answerableRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedContractNotReadyRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingRequiredFieldRows": { "type": "integer", "minimum": 0 },
+        "blockedInvalidLocatorRows": { "type": "integer", "minimum": 0 },
+        "blockedPolicyQuarantineRows": { "type": "integer", "minimum": 0 },
+        "blockedPrivatePathRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "answerVisibleRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byArtifactType": { "type": "object" },
+        "byAdapterDesignStatus": { "type": "object" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readyForRuntimeAdapterDryRun",
+        "readyForRuntimeApply",
+        "runtimeCodeChangeAllowed",
+        "candidateStoreWriteAllowed",
+        "sourceSpanCreationAllowed",
+        "runtimeVisibilityAllowed",
+        "evidencePromotionAllowed",
+        "answerVisibleAllowed",
+        "answerableAllowed",
+        "schemaViolations"
+      ],
+      "properties": {
+        "readyForRuntimeAdapterDryRun": { "type": "boolean" },
+        "readyForRuntimeApply": { "const": false },
+        "runtimeCodeChangeAllowed": { "const": false },
+        "candidateStoreWriteAllowed": { "const": false },
+        "sourceSpanCreationAllowed": { "const": false },
+        "runtimeVisibilityAllowed": { "const": false },
+        "evidencePromotionAllowed": { "const": false },
+        "answerVisibleAllowed": { "const": false },
+        "answerableAllowed": { "const": false },
+        "schemaViolations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "adapterDesignRowId",
+          "sourceContractReviewRowId",
+          "candidateRecordId",
+          "sourceCandidateRowId",
+          "paperId",
+          "artifactType",
+          "sourceRef",
+          "sourceContentHash",
+          "spanLocator",
+          "charStart",
+          "charEnd",
+          "snippetHash",
+          "candidateStoreRef",
+          "adapterDesignStatus",
+          "adapterDesignBlockers",
+          "adapterDesignReady",
+          "futureAdapterCandidate",
+          "futureCandidateStoreReadRequired",
+          "futureRuntimeEvidenceAllowed",
+          "futureAnswerVisibleAllowed",
+          "futureAnswerabilityAllowed",
+          "candidateOnly",
+          "strictEvidence",
+          "citationGrade",
+          "runtimeEvidence",
+          "answerVisible",
+          "answerable",
+          "plannedAdapterInputs",
+          "plannedEvidenceItemShape",
+          "plannedDiagnosticsShape",
+          "checks"
+        ],
+        "properties": {
+          "adapterDesignRowId": { "type": "string", "minLength": 1 },
+          "sourceContractReviewRowId": { "type": "string", "minLength": 1 },
+          "candidateRecordId": { "type": "string", "minLength": 1 },
+          "sourceCandidateRowId": { "type": "string" },
+          "paperId": { "type": "string", "minLength": 1 },
+          "artifactType": { "enum": ["paragraph", "section", ""] },
+          "sourceRef": { "type": "string", "not": { "pattern": "^/" } },
+          "sourceContentHash": { "type": "string" },
+          "spanLocator": { "type": "string" },
+          "charStart": { "type": "integer", "minimum": 0 },
+          "charEnd": { "type": "integer", "minimum": 0 },
+          "snippetHash": { "type": "string" },
+          "candidateStoreRef": { "type": "string", "not": { "pattern": "^/" } },
+          "adapterDesignStatus": { "type": "string", "minLength": 1 },
+          "adapterDesignBlockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "adapterDesignReady": { "type": "boolean" },
+          "futureAdapterCandidate": { "type": "boolean" },
+          "futureCandidateStoreReadRequired": { "type": "boolean" },
+          "futureRuntimeEvidenceAllowed": { "const": false },
+          "futureAnswerVisibleAllowed": { "const": false },
+          "futureAnswerabilityAllowed": { "const": false },
+          "candidateOnly": { "const": true },
+          "strictEvidence": { "const": false },
+          "citationGrade": { "const": false },
+          "runtimeEvidence": { "const": false },
+          "answerVisible": { "const": false },
+          "answerable": { "const": false },
+          "plannedAdapterInputs": { "type": "object" },
+          "plannedEvidenceItemShape": { "type": "object" },
+          "plannedDiagnosticsShape": { "type": "object" },
+          "checks": { "type": "object" }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

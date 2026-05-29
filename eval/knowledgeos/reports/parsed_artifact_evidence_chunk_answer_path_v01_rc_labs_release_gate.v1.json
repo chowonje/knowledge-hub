@@ -1,0 +1,185 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-labs-release-gate.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-28T21:46:45Z",
+  "decision": "parsed_artifact_evidence_chunk_answer_path_v01_rc_labs_release_gate_ready",
+  "nextRecommendedTranche": "knowledge_hub_v01_rc_branch_pr_readiness_review",
+  "inputs": {
+    "promotionReviewReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_labs_opt_in_user_test_promotion_review.v1.json",
+    "defaultOffNoAnswerReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_default_off_no_answer_regression_smoke.v1.json",
+    "surfaceLiveSmokeReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_labs_opt_in_surface_live_smoke.v1.json",
+    "releaseSmokeCommand": "python scripts/check_release_smoke.py --mode release --json",
+    "publicHygieneCommand": "python scripts/check_public_release_hygiene.py --repo-root . --json"
+  },
+  "policy": {
+    "reportOnly": true,
+    "labsLimitedRcGate": true,
+    "publicDefaultPromotionAllowed": false,
+    "publicKhubAskChanged": false,
+    "defaultMcpAskChanged": false,
+    "runtimeDefaultChange": false,
+    "rawReleaseSmokePayloadPersisted": false,
+    "rawPublicHygienePayloadPersisted": false,
+    "rawOutputPersisted": false,
+    "answerTextExcludedFromReport": true,
+    "citationPayloadExcludedFromReport": true,
+    "sourcePayloadExcludedFromReport": true,
+    "excerptExcludedFromReport": true
+  },
+  "releaseDecision": {
+    "v01LabsReleaseGateDecision": "ready",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "publicDefaultHoldReason": "public_default_promotion_remains_held_after_labs_release_gate",
+    "nextGate": "knowledge_hub_v01_rc_branch_pr_readiness_review"
+  },
+  "counts": {
+    "promotionReviewReadyRows": 1,
+    "releaseSmokeCheckedRows": 10,
+    "releaseSmokePassedRows": 10,
+    "releaseSmokeFailedRows": 0,
+    "publicHygieneIssueRows": 0,
+    "publicHygieneTrackedFileRows": 2490,
+    "noAnswerScenarioRows": 3,
+    "noAnswerPassRows": 3,
+    "noAnswerRows": 3,
+    "answerableRows": 0,
+    "adapterAppliedRows": 0,
+    "adapterRowsAdded": 0,
+    "labsSurfaceSmokePassRows": 1,
+    "labsSurfacePayloadSchemaValidRows": 1,
+    "labsLimitedPromotionReadyRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "releaseGatePassRows": 1,
+    "releaseGateBlockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "rawOutputPersistedRows": 0,
+    "answerTextIncludedRows": 0,
+    "citationPayloadIncludedRows": 0,
+    "sourcePayloadIncludedRows": 0,
+    "excerptIncludedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "readyForV01RcBranchPrReadinessReview": true,
+    "promotionReviewReady": true,
+    "releaseSmokePassed": true,
+    "publicHygienePassed": true,
+    "noAnswerRegressionPassed": true,
+    "labsSurfaceSmokePassed": true,
+    "publicDefaultPromotionAllowed": false,
+    "publicDefaultPromotionHeld": true,
+    "semanticViolations": []
+  },
+  "checkRows": [
+    {
+      "checkId": "promotion_review",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "release_smoke",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_hygiene",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "no_answer_regression",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "labs_surface_smoke",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "releaseSmokeRows": [
+    {
+      "checkId": "top_help",
+      "status": "pass",
+      "summary": "top-level help surface is present",
+      "durationSec": 0.067
+    },
+    {
+      "checkId": "setup",
+      "status": "pass",
+      "summary": "local setup profile created",
+      "durationSec": 1.172
+    },
+    {
+      "checkId": "advanced_help",
+      "status": "pass",
+      "summary": "advanced help inventory is present",
+      "durationSec": 1.128
+    },
+    {
+      "checkId": "labs_help",
+      "status": "pass",
+      "summary": "labs help surface is present",
+      "durationSec": 1.129
+    },
+    {
+      "checkId": "papers_help",
+      "status": "pass",
+      "summary": "papers help surface is present",
+      "durationSec": 1.257
+    },
+    {
+      "checkId": "hidden_paper_help",
+      "status": "pass",
+      "summary": "hidden paper operator help remains directly invokable",
+      "durationSec": 1.271
+    },
+    {
+      "checkId": "capture_help",
+      "status": "pass",
+      "summary": "dinger capture help surface is present",
+      "durationSec": 1.229
+    },
+    {
+      "checkId": "status",
+      "status": "pass",
+      "summary": "status surface rendered runtime diagnostics",
+      "durationSec": 1.257
+    },
+    {
+      "checkId": "doctor",
+      "status": "pass",
+      "summary": "doctor returned accepted local status=needs_setup",
+      "durationSec": 2.526
+    },
+    {
+      "checkId": "invalid_command",
+      "status": "pass",
+      "summary": "invalid command exits non-zero with a user-facing error",
+      "durationSec": 0.069
+    }
+  ],
+  "publicHygieneIssueRows": [],
+  "warnings": [
+    "public_default_promotion_remains_held_even_when_labs_release_gate_is_ready",
+    "release_smoke_and_public_hygiene_payloads_are_summarized_to_avoid_local_path_leaks"
+  ]
+}

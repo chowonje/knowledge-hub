@@ -122,6 +122,30 @@ def build_tools(profile: str | None = None) -> list[Tool]:
             },
         ),
         Tool(
+            name="paper_evidence_chunk_answer_preview",
+            description="labs-only parsed-artifact evidence chunk paper answer preview; requires explicit paper ids",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "question": {"type": "string", "description": "paper-scoped question"},
+                    "paper_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "explicit resolved paper ids",
+                    },
+                    "top_k": {"type": "integer", "default": 8},
+                    "mode": {
+                        "type": "string",
+                        "enum": ["semantic", "keyword", "hybrid"],
+                        "default": "semantic",
+                    },
+                    "alpha": {"type": "number", "default": 0.7},
+                    "allow_external": {"type": "boolean", "default": False},
+                },
+                "required": ["question", "paper_ids"],
+            },
+        ),
+        Tool(
             name="build_task_context",
             description="질의 목표에 맞춰 Obsidian/논문/웹 지식과 현재 repo 컨텍스트를 읽기 전용으로 조합",
             inputSchema={

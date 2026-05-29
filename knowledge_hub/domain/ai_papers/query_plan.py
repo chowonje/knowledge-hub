@@ -207,6 +207,9 @@ _DISCOVER_QUERY_RESCUES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     ),
 )
 _AMBIGUOUS_SHORT_SOURCE_ALIASES = {"cnn", "gpt", "rag"}
+_QUERY_PLAN_EXTENSION_ALIASES: tuple[tuple[str, str], ...] = (
+    ("parsed_artifact_evidence_chunk_adapter", "parsedArtifactEvidenceChunkAdapter"),
+)
 _EXPLICIT_TITLE_RESCUES = {
     normalize_term("Attention Is All You Need"): {
         "paper_id": "1706.03762",
@@ -887,6 +890,13 @@ def normalize_query_plan_dict(value: Any) -> dict[str, Any]:
         normalized["expandedTerms"] = list(normalized["expanded_terms"])
         normalized["resolvedPaperIds"] = list(normalized["resolved_paper_ids"])
         normalized["evidencePolicyKey"] = normalized["evidence_policy_key"]
+        for snake_key, camel_key in _QUERY_PLAN_EXTENSION_ALIASES:
+            extension_value = value.get(snake_key)
+            if extension_value is None:
+                extension_value = value.get(camel_key)
+            if extension_value is not None:
+                normalized[snake_key] = _clean_text(extension_value)
+                normalized[camel_key] = _clean_text(extension_value)
         return normalized
     return {}
 

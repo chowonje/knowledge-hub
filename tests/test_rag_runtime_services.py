@@ -712,6 +712,42 @@ def test_generate_answer_passes_ask_v2_mode_to_runtime(monkeypatch):
     assert captured["ask_v2_mode"] == "claim_first"
 
 
+def test_generate_answer_passes_query_plan_to_runtime(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB([]), llm=FakeLLM())
+    query_plan = {
+        "parsedArtifactEvidenceChunkAdapter": "runtime_v1",
+        "resolvedPaperIds": ["1706.03762"],
+    }
+    captured: dict[str, object] = {}
+
+    def _fake_runtime(_searcher, **kwargs):
+        assert _searcher is searcher
+        captured.update(kwargs)
+        return {"status": "ok"}
+
+    monkeypatch.setattr("knowledge_hub.ai.rag.generate_answer_runtime", _fake_runtime)
+    payload = searcher.generate_answer("rag query", source_type="paper", query_plan=query_plan)
+
+    assert payload == {"status": "ok"}
+    assert captured["query_plan"] == query_plan
+
+
+def test_generate_answer_defaults_query_plan_to_none(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB([]), llm=FakeLLM())
+    captured: dict[str, object] = {}
+
+    def _fake_runtime(_searcher, **kwargs):
+        assert _searcher is searcher
+        captured.update(kwargs)
+        return {"status": "ok"}
+
+    monkeypatch.setattr("knowledge_hub.ai.rag.generate_answer_runtime", _fake_runtime)
+    payload = searcher.generate_answer("rag query")
+
+    assert payload == {"status": "ok"}
+    assert captured["query_plan"] is None
+
+
 def test_stream_answer_passes_ask_v2_mode_to_runtime(monkeypatch):
     searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB([]), llm=FakeLLM())
     captured: dict[str, object] = {}
@@ -726,6 +762,26 @@ def test_stream_answer_passes_ask_v2_mode_to_runtime(monkeypatch):
 
     assert chunks == ["chunk"]
     assert captured["ask_v2_mode"] == "section_first"
+
+
+def test_stream_answer_passes_query_plan_to_runtime(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB([]), llm=FakeLLM())
+    query_plan = {
+        "parsed_artifact_evidence_chunk_adapter": "runtime_v1",
+        "resolved_paper_ids": ["1706.03762"],
+    }
+    captured: dict[str, object] = {}
+
+    def _fake_runtime(_searcher, **kwargs):
+        assert _searcher is searcher
+        captured.update(kwargs)
+        yield "chunk"
+
+    monkeypatch.setattr("knowledge_hub.ai.rag.stream_answer_runtime", _fake_runtime)
+    chunks = list(searcher.stream_answer("rag query", source_type="paper", query_plan=query_plan))
+
+    assert chunks == ["chunk"]
+    assert captured["query_plan"] == query_plan
 
 
 def test_should_use_ask_v2_treats_paper_gate_as_warn_only_but_keeps_web_strict():

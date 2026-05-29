@@ -1,0 +1,512 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-limited-visual-retrieval-hint-final-merge-review.v1.json",
+  "title": "Limited Visual Retrieval Hint Final Merge Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "input",
+    "policy",
+    "sourceRuntimeCandidateDiscoveryRouteDesign",
+    "sourceProductionVectorSearchQualityEval",
+    "sourceProductionVectorApplyExecutorReport",
+    "branchCleanupAudit",
+    "method",
+    "counts",
+    "gate",
+    "technicalBlockers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.limited-visual-retrieval-hint-final-merge-review.v1"
+    },
+    "status": {
+      "enum": ["ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": ["visual_retrieval_hint_candidate_discovery_tranche_complete", "blocked"]
+    },
+    "nextRecommendedTranche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceRuntimeCandidateDiscoveryRouteDesignRef",
+        "sourceProductionVectorSearchQualityEvalRef",
+        "sourceProductionVectorApplyExecutorReportRef",
+        "expectedHintRows",
+        "baseRef",
+        "staleWorktreeDoNotReuseRef"
+      ],
+      "properties": {
+        "sourceRuntimeCandidateDiscoveryRouteDesignRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "sourceProductionVectorSearchQualityEvalRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "sourceProductionVectorApplyExecutorReportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "expectedHintRows": {
+          "const": 125
+        },
+        "baseRef": {
+          "const": "refs/remotes/origin/main"
+        },
+        "staleWorktreeDoNotReuseRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewOnly",
+        "branchCleanupAuditOnly",
+        "candidateDiscoveryOnly",
+        "runtimeRouteWrite",
+        "runtimeConfigMutation",
+        "operationalSearchIndexQuery",
+        "runtimeVisible",
+        "answerVisible",
+        "answerGeneration",
+        "strictEvidence",
+        "citationGrade",
+        "answerableWithoutTextEvidence",
+        "candidateStoreWrite",
+        "embeddingCalls",
+        "vectorIndexWrite",
+        "productionVectorIndexWrite",
+        "databaseMutation",
+        "indexMutation",
+        "githubMutation",
+        "branchDeletion"
+      ],
+      "properties": {
+        "reviewOnly": {
+          "const": true
+        },
+        "branchCleanupAuditOnly": {
+          "const": true
+        },
+        "candidateDiscoveryOnly": {
+          "const": true
+        },
+        "runtimeRouteWrite": {
+          "const": false
+        },
+        "runtimeConfigMutation": {
+          "const": false
+        },
+        "operationalSearchIndexQuery": {
+          "const": false
+        },
+        "runtimeVisible": {
+          "const": false
+        },
+        "answerVisible": {
+          "const": false
+        },
+        "answerGeneration": {
+          "const": false
+        },
+        "strictEvidence": {
+          "const": false
+        },
+        "citationGrade": {
+          "const": false
+        },
+        "answerableWithoutTextEvidence": {
+          "const": false
+        },
+        "candidateStoreWrite": {
+          "const": false
+        },
+        "embeddingCalls": {
+          "const": false
+        },
+        "vectorIndexWrite": {
+          "const": false
+        },
+        "productionVectorIndexWrite": {
+          "const": false
+        },
+        "databaseMutation": {
+          "const": false
+        },
+        "indexMutation": {
+          "const": false
+        },
+        "githubMutation": {
+          "const": false
+        },
+        "branchDeletion": {
+          "const": false
+        }
+      }
+    },
+    "sourceRuntimeCandidateDiscoveryRouteDesign": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "sourceProductionVectorSearchQualityEval": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "sourceProductionVectorApplyExecutorReport": {
+      "$ref": "#/$defs/sourceSummary"
+    },
+    "branchCleanupAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseRef",
+        "baseIsOriginMain",
+        "staleWorktreeDoNotReuseRef",
+        "staleWorktreeReuseAllowed",
+        "deleteBranches",
+        "closePullRequests",
+        "pushBranches",
+        "githubMutationRows",
+        "branchDeletionRows"
+      ],
+      "properties": {
+        "baseRef": {
+          "const": "refs/remotes/origin/main"
+        },
+        "baseIsOriginMain": {
+          "const": true
+        },
+        "staleWorktreeDoNotReuseRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "staleWorktreeReuseAllowed": {
+          "const": false
+        },
+        "deleteBranches": {
+          "const": false
+        },
+        "closePullRequests": {
+          "const": false
+        },
+        "pushBranches": {
+          "const": false
+        },
+        "githubMutationRows": {
+          "const": 0
+        },
+        "branchDeletionRows": {
+          "const": 0
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "completionBoundary", "nextEvidenceWork"],
+      "properties": {
+        "name": {
+          "const": "visual_retrieval_hint_final_merge_review_v1"
+        },
+        "completionBoundary": {
+          "const": "candidate_discovery_only"
+        },
+        "nextEvidenceWork": {
+          "const": "paper_retrieval_lane_split_parsed_artifact_evidence_chunk_dry_run"
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewRows",
+        "sourceRouteBindingRows",
+        "plannedRouteBindingRows",
+        "candidateDiscoveryOnlyRows",
+        "sourceProductionVectorRecordRows",
+        "sourceApplyPreviewRows",
+        "qualityEvalProductionVectorHitAt5Rows",
+        "qualityEvalHybridHitAt5Rows",
+        "qualityEvalHybridHitAt5LiftRows",
+        "qualityEvalRankRegressedRows",
+        "sourceApplyPlannedRows",
+        "sourceApplyAppliedRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "branchDeletionRows",
+        "githubPrMutationRows",
+        "runtimeRouteWriteRows",
+        "runtimeConfigMutationRows",
+        "operationalSearchIndexQueryRows",
+        "runtimeVisibleRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "answerableWithoutTextEvidenceRows",
+        "candidateStoreWriteRows",
+        "embeddingCallRows",
+        "embeddingVectorWriteRows",
+        "vectorIndexWriteRows",
+        "productionVectorIndexWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "graphDbWriteRows",
+        "ontologyWriteRows",
+        "memoryCardWriteRows",
+        "clusterWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows"
+      ],
+      "properties": {
+        "reviewRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceRouteBindingRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plannedRouteBindingRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidateDiscoveryOnlyRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceProductionVectorRecordRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceApplyPreviewRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualityEvalProductionVectorHitAt5Rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualityEvalHybridHitAt5Rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualityEvalHybridHitAt5LiftRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualityEvalRankRegressedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceApplyPlannedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceApplyAppliedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "privatePathLeakRows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "schemaViolationCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "branchDeletionRows": {
+          "const": 0
+        },
+        "githubPrMutationRows": {
+          "const": 0
+        },
+        "runtimeRouteWriteRows": {
+          "const": 0
+        },
+        "runtimeConfigMutationRows": {
+          "const": 0
+        },
+        "operationalSearchIndexQueryRows": {
+          "const": 0
+        },
+        "runtimeVisibleRows": {
+          "const": 0
+        },
+        "answerVisibleRows": {
+          "const": 0
+        },
+        "answerGenerationRows": {
+          "const": 0
+        },
+        "strictEvidenceRows": {
+          "const": 0
+        },
+        "citationGradeRows": {
+          "const": 0
+        },
+        "answerableWithoutTextEvidenceRows": {
+          "const": 0
+        },
+        "candidateStoreWriteRows": {
+          "const": 0
+        },
+        "embeddingCallRows": {
+          "const": 0
+        },
+        "embeddingVectorWriteRows": {
+          "const": 0
+        },
+        "vectorIndexWriteRows": {
+          "const": 0
+        },
+        "productionVectorIndexWriteRows": {
+          "const": 0
+        },
+        "databaseMutationRows": {
+          "const": 0
+        },
+        "indexMutationRows": {
+          "const": 0
+        },
+        "graphDbWriteRows": {
+          "const": 0
+        },
+        "ontologyWriteRows": {
+          "const": 0
+        },
+        "memoryCardWriteRows": {
+          "const": 0
+        },
+        "clusterWriteRows": {
+          "const": 0
+        },
+        "vaultScanRows": {
+          "const": 0
+        },
+        "externalDownloadRows": {
+          "const": 0
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["passed", "checks", "expectedRows", "observed"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "expectedRows": {
+          "const": 125
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "observed": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "technicalBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "sourceSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "decision",
+        "nextRecommendedTranche",
+        "reportRef",
+        "counts"
+      ],
+      "properties": {
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nextRecommendedTranche": {
+          "type": "string"
+        },
+        "reportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}

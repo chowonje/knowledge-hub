@@ -38,6 +38,7 @@ class _FakeSearcher:
     def __init__(self):
         self.database = SimpleNamespace(get_stats=lambda: {"total_documents": 3, "collection_name": "knowledge_hub"})
         self.llm = SimpleNamespace(generate=lambda prompt, context="": f"generated:{prompt[:24]}::{len(context)}")
+        self.answer_calls = []
 
     def search(self, query, top_k=5, source_type="all", retrieval_mode="hybrid", alpha=0.7, expand_parent_context=True):
         return [
@@ -79,10 +80,46 @@ class _FakeSearcher:
         allow_external=False,
         paper_memory_mode="off",
         metadata_filter=None,
+        query_plan=None,
+        ask_v2_mode=None,
     ):
-        _ = (question, top_k, min_score, source_type, retrieval_mode, alpha, allow_external)
+        _ = (question, top_k, min_score, source_type, retrieval_mode, alpha, allow_external, ask_v2_mode)
+        self.answer_calls.append(
+            {
+                "question": question,
+                "source_type": source_type,
+                "allow_external": allow_external,
+                "metadata_filter": metadata_filter,
+                "query_plan": query_plan,
+            }
+        )
+        evidence_packet = {}
+        evidence_contract = {}
+        citations = []
+        if isinstance(query_plan, dict) and query_plan.get("parsed_artifact_evidence_chunk_adapter") == "runtime_v1":
+            resolved_ids = list(query_plan.get("resolvedPaperIds") or [])
+            evidence_packet = {
+                "answerable": True,
+                "selectedEvidenceCount": 1,
+                "citationCount": 1,
+                "parsedArtifactEvidenceChunkAdapter": {
+                    "enabled": True,
+                    "status": "applied",
+                    "resolvedPaperIds": resolved_ids,
+                    "candidateRowsConsidered": 1,
+                    "rowsAdded": 1,
+                },
+            }
+            evidence_contract = {
+                "answerable": True,
+                "spans": [{"sourceId": resolved_ids[0] if resolved_ids else "2501.00001"}],
+            }
+            citations = [{"source_id": resolved_ids[0] if resolved_ids else "2501.00001", "span_locator": "chars:0-10"}]
         return {
             "answer": "RAG 재작성 답변",
+            "evidencePacket": evidence_packet,
+            "evidencePacketContract": evidence_contract,
+            "citations": citations,
             "warnings": ["answer verification caution: unsupported=0 uncertain=1 conflict_mentioned=False"],
             "answerSignals": {
                 "total_sources": 1,
@@ -921,6 +958,8 @@ def test_tool_specs_accept_memory_mode_contract():
 
     assert ask_tool.inputSchema["properties"]["memory_route_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
     assert ask_tool.inputSchema["properties"]["paper_memory_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
+    assert "query_plan" not in ask_tool.inputSchema["properties"]
+    assert "parsed_artifact_evidence_chunk_adapter" not in ask_tool.inputSchema["properties"]
     assert paper_lookup_tool.inputSchema["properties"]["memory_route_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
     assert paper_lookup_tool.inputSchema["properties"]["paper_memory_mode"]["enum"] == ["off", "compat", "on", "prefilter"]
 
@@ -1094,6 +1133,51 @@ def test_ask_knowledge_requires_question_and_returns_answer_shape():
     assert paper_prefilter["status"] == "ok"
     assert paper_prefilter["payload"]["paper_memory_prefilter"]["applied"] is True
     assert paper_prefilter["payload"]["paper_memory_prefilter"]["matchedPaperIds"] == ["2501.00001"]
+
+
+def test_paper_evidence_chunk_answer_preview_is_labs_only_schema_backed(monkeypatch):
+    monkeypatch.setenv("KHUB_MCP_PROFILE", "labs")
+    module = _import_mcp_server()
+    _setup_fakes(module)
+
+    missing = _decode_response(asyncio.run(module.call_tool("paper_evidence_chunk_answer_preview", {"question": "method?"})))
+    assert missing["status"] == "failed"
+    assert "paper_ids" in missing["payload"]["error"]
+
+    external = _decode_response(
+        asyncio.run(
+            module.call_tool(
+                "paper_evidence_chunk_answer_preview",
+                {"question": "method?", "paper_ids": ["2501.00001"], "allow_external": True},
+            )
+        )
+    )
+    assert external["status"] == "failed"
+    assert "external model calls" in external["payload"]["error"]
+
+    ok = _decode_response(
+        asyncio.run(
+            module.call_tool(
+                "paper_evidence_chunk_answer_preview",
+                {"question": "method?", "paper_ids": ["2501.00001"], "mode": "semantic"},
+            )
+        )
+    )
+
+    assert ok["status"] == "ok"
+    assert ok["verify"]["schemaValid"] is True
+    assert ok["payload"]["schema"] == "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1"
+    assert ok["payload"]["mode"] == "labs_opt_in_preview"
+    assert ok["payload"]["sourceType"] == "paper"
+    assert ok["payload"]["allowExternal"] is False
+    assert ok["payload"]["paperIds"] == ["2501.00001"]
+    assert ok["payload"]["queryPlan"]["parsed_artifact_evidence_chunk_adapter"] == "runtime_v1"
+    assert ok["payload"]["queryPlan"]["resolvedPaperIds"] == ["2501.00001"]
+    assert ok["payload"]["evidencePacketSummary"]["adapterStatus"] == "applied"
+    assert ok["payload"]["evidencePacketSummary"]["adapterRowsAdded"] == 1
+    assert module.SERVER_STATE.searcher.answer_calls[-1]["source_type"] == "paper"
+    assert module.SERVER_STATE.searcher.answer_calls[-1]["allow_external"] is False
+    assert module.SERVER_STATE.searcher.answer_calls[-1]["query_plan"]["resolvedPaperIds"] == ["2501.00001"]
 
 
 def test_ko_note_review_tools_are_exposed_and_return_payloads(monkeypatch):
@@ -1368,6 +1452,7 @@ def test_list_tools_contains_core_contracts(monkeypatch):
     assert "transform_run" not in names
     assert "ask_graph" not in names
     assert "notebook_workbench_chat" not in names
+    assert "paper_evidence_chunk_answer_preview" not in names
 
 
 def test_default_profile_blocks_direct_calls_to_hidden_mcp_tools(monkeypatch):
@@ -1381,6 +1466,7 @@ def test_default_profile_blocks_direct_calls_to_hidden_mcp_tools(monkeypatch):
         ("run_agentic_query", {"goal": "RAG 비교"}),
         ("build_paper_memory", {"paper_id": "2501.00001"}),
         ("mcp_job_list", {"limit": 5}),
+        ("paper_evidence_chunk_answer_preview", {"question": "method?", "paper_ids": ["2501.00001"]}),
     ):
         blocked = _decode_response(asyncio.run(module.call_tool(tool_name, arguments)))
         assert blocked["status"] == "failed"
@@ -1418,6 +1504,7 @@ def test_list_tools_includes_labs_profile(monkeypatch):
     assert "transform_run" in names
     assert "ask_graph" in names
     assert "notebook_workbench_chat" in names
+    assert "paper_evidence_chunk_answer_preview" in names
 
 
 def test_list_tools_all_profile_includes_labs_surface(monkeypatch):
@@ -1433,6 +1520,7 @@ def test_list_tools_all_profile_includes_labs_surface(monkeypatch):
     assert "mcp_job_list" in names
     assert "learning_start_or_resume_topic" in names
     assert "build_paper_memory" in names
+    assert "paper_evidence_chunk_answer_preview" in names
 
 
 def test_crawl_youtube_ingest_returns_schema_backed_payload():

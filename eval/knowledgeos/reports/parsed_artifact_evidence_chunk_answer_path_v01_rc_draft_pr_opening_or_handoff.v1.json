@@ -1,0 +1,111 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-draft-pr-opening-or-handoff.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-28T22:09:55Z",
+  "decision": "knowledge_hub_v01_rc_draft_pr_opening_or_handoff_ready",
+  "nextRecommendedTranche": "operator_push_and_open_draft_pr_or_request_codex_pr_creation",
+  "inputs": {
+    "branchPrReadinessReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_branch_pr_readiness_review.v1.json",
+    "branchName": "codex/next-implementation-20260528",
+    "baseBranch": "main",
+    "headShortSha": "67649c9",
+    "githubPrLookupStatus": "ok"
+  },
+  "policy": {
+    "reportOnly": true,
+    "pushAllowed": false,
+    "githubPrMutationAllowed": false,
+    "branchDeletionAllowed": false,
+    "publicDefaultPromotionAllowed": false,
+    "readyForMerge": false,
+    "rawGithubPayloadPersisted": false,
+    "requiresExplicitOperatorApproval": true
+  },
+  "handoffDecision": {
+    "operatorAction": "push_branch_and_open_draft_pr",
+    "readyForDraftPrCreation": true,
+    "readyForExistingDraftPrReview": false,
+    "readyForMerge": false,
+    "publicDefaultDecision": "hold_public_default_promotion"
+  },
+  "counts": {
+    "branchReadinessReadyRows": 1,
+    "currentBranchAheadCommitRows": 35,
+    "currentBranchBehindCommitRows": 0,
+    "currentDirtyRows": 0,
+    "currentSelfHandoffDirtyRows": 0,
+    "currentBlockingDirtyRows": 0,
+    "openPrRows": 0,
+    "draftPrHandoffReadyRows": 1,
+    "draftPrBodyRows": 1,
+    "operatorActionRows": 1,
+    "readyForMergeRows": 0,
+    "releaseSmokePassedRows": 10,
+    "publicHygieneIssueRows": 0,
+    "noAnswerPassRows": 3,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "pushRows": 0,
+    "githubPrMutationRows": 0,
+    "branchDeletionRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "readyForOperatorPushAndDraftPr": true,
+    "branchReadinessReady": true,
+    "currentBranchCleanOrSelfHandoffOnly": true,
+    "currentBranchAheadOfOriginMain": true,
+    "currentBranchNotBehindOriginMain": true,
+    "githubPrStateAcceptable": true,
+    "publicDefaultPromotionAllowed": false,
+    "readyForMerge": false,
+    "semanticViolations": []
+  },
+  "draftPr": {
+    "title": "KnowledgeOS v0.1 RC labs evidence chunk preview",
+    "baseBranch": "main",
+    "headBranch": "codex/next-implementation-20260528",
+    "draft": true,
+    "bodyMarkdown": "# KnowledgeOS v0.1 RC labs evidence chunk preview\n\n## Summary\n\n- Defines the KnowledgeOS v0.1 RC product scope as a section/paragraph evidence-first paper QA and comparison Research Preview.\n- Adds the parsed-artifact evidence chunk candidate path, opt-in runtime adapter, labs-only CLI/MCP preview surface, quality/user-test reports, and release/readiness gates.\n- Keeps public/default `khub ask` and default MCP promotion held; labs activation remains explicit.\n\n## Scope\n\n- Base: `main`\n- Head: `codex/next-implementation-20260528`\n- Current branch commits ahead of origin/main: `35`\n- Changed files recorded by readiness review: `184`\n\n## Verification\n\n- release smoke passed rows: `10`\n- public hygiene issue rows: `0`\n- no-answer pass rows: `3`\n- public default promotion ready rows: `0`\n- public default promotion held rows: `1`\n\n## Non-Goals\n\n- Does not make parsed-artifact evidence chunks default-on.\n- Does not promote visual/table/equation/figure evidence to public/default answerability.\n- Does not claim merge readiness; this is a draft PR review handoff.\n\n## Reviewer Notes\n\n- Review public/default surface boundaries first.\n- Check schema-backed reports before discussing answer-quality expansion.\n- Treat public/default promotion as a later explicit tranche.\n"
+  },
+  "operatorCommands": [
+    {
+      "commandId": "push_branch",
+      "command": "git push -u origin codex/next-implementation-20260528",
+      "requiresExplicitApproval": true,
+      "executedByThisReport": false
+    },
+    {
+      "commandId": "create_draft_pr",
+      "command": "gh pr create --draft --base main --head codex/next-implementation-20260528 --title \"KnowledgeOS v0.1 RC labs evidence chunk preview\" --body-file <prepared-pr-body.md>",
+      "requiresExplicitApproval": true,
+      "executedByThisReport": false
+    }
+  ],
+  "warnings": [
+    "this_handoff_does_not_push_or_create_a_pr",
+    "ready_for_draft_pr_creation_is_not_ready_for_merge",
+    "public_default_promotion_remains_held",
+    "self_handoff_dirty_rows_are_expected_until_this_handoff_commit_lands"
+  ]
+}

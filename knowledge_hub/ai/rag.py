@@ -780,6 +780,7 @@ class RAGSearcher:
         metadata_filter: Optional[Dict[str, Any]] = None,
         ask_v2_mode: Optional[str] = None,
         answer_route_override: Optional[str] = None,
+        query_plan: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """RAG 답변 생성: 공통 retrieval pipeline + evidence assembly + answer orchestration"""
         return generate_answer_runtime(
@@ -796,6 +797,7 @@ class RAGSearcher:
             metadata_filter=metadata_filter,
             ask_v2_mode=ask_v2_mode,
             answer_route_override=answer_route_override,
+            query_plan=query_plan,
         )
 
     def stream_answer(
@@ -812,6 +814,7 @@ class RAGSearcher:
         metadata_filter: Optional[Dict[str, Any]] = None,
         ask_v2_mode: Optional[str] = None,
         answer_route_override: Optional[str] = None,
+        query_plan: Optional[Dict[str, Any]] = None,
     ):
         """스트리밍 RAG 답변"""
         yield from stream_answer_runtime(
@@ -828,4 +831,5 @@ class RAGSearcher:
             metadata_filter=metadata_filter,
             ask_v2_mode=ask_v2_mode,
             answer_route_override=answer_route_override,
+            query_plan=query_plan,
         )

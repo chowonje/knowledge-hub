@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-retrieval-lane-split-parsed-artifact-evidence-chunk-dry-run.v1.json",
+  "title": "Paper Retrieval Lane Split Parsed Artifact Evidence Chunk Dry Run",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "input",
+    "policy",
+    "sourceVisualRetrievalHintFinalMergeReview",
+    "method",
+    "laneSemantics",
+    "counts",
+    "gate",
+    "retrievalLaneRows",
+    "technicalBlockers",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.paper-retrieval-lane-split-parsed-artifact-evidence-chunk-dry-run.v1"
+    },
+    "status": {
+      "enum": ["ready", "blocked"]
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": ["paper_retrieval_lane_split_parsed_artifact_evidence_chunk_dry_run_ready", "blocked"]
+    },
+    "nextRecommendedTranche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceVisualRetrievalHintFinalMergeReviewRef",
+        "expectedVisualHintRows",
+        "targetRuntimeBoundary",
+        "targetPipelineBoundary",
+        "targetEvidenceBoundary"
+      ],
+      "properties": {
+        "sourceVisualRetrievalHintFinalMergeReviewRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "expectedVisualHintRows": {
+          "const": 125
+        },
+        "targetRuntimeBoundary": {
+          "const": "knowledge_hub.ai.rag_search_runtime.RAGSearchRuntime.search_with_diagnostics"
+        },
+        "targetPipelineBoundary": {
+          "const": "knowledge_hub.ai.retrieval_pipeline.RetrievalPipelineService.execute"
+        },
+        "targetEvidenceBoundary": {
+          "const": "knowledge_hub.ai.evidence_assembly.EvidenceAssemblyService.assemble"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dryRunOnly",
+        "laneSplitDesignOnly",
+        "candidateDiscoveryOnlyForVisualHints",
+        "parsedArtifactEvidenceRequiredForAnswerability",
+        "runtimeRouteWrite",
+        "runtimeConfigMutation",
+        "operationalSearchIndexQuery",
+        "answerVisibleExposure",
+        "answerGeneration",
+        "strictEvidenceCreation",
+        "citationGradePromotion",
+        "sourceSpanCreation",
+        "parsedArtifactEvidenceChunkCreation",
+        "databaseMutation",
+        "indexMutation",
+        "reindexOrReembed",
+        "parserExecution",
+        "vaultScan",
+        "externalDownload",
+        "branchDeletion",
+        "githubMutation"
+      ],
+      "properties": {
+        "dryRunOnly": {
+          "const": true
+        },
+        "laneSplitDesignOnly": {
+          "const": true
+        },
+        "candidateDiscoveryOnlyForVisualHints": {
+          "const": true
+        },
+        "parsedArtifactEvidenceRequiredForAnswerability": {
+          "const": true
+        },
+        "runtimeRouteWrite": {
+          "const": false
+        },
+        "runtimeConfigMutation": {
+          "const": false
+        },
+        "operationalSearchIndexQuery": {
+          "const": false
+        },
+        "answerVisibleExposure": {
+          "const": false
+        },
+        "answerGeneration": {
+          "const": false
+        },
+        "strictEvidenceCreation": {
+          "const": false
+        },
+        "citationGradePromotion": {
+          "const": false
+        },
+        "sourceSpanCreation": {
+          "const": false
+        },
+        "parsedArtifactEvidenceChunkCreation": {
+          "const": false
+        },
+        "databaseMutation": {
+          "const": false
+        },
+        "indexMutation": {
+          "const": false
+        },
+        "reindexOrReembed": {
+          "const": false
+        },
+        "parserExecution": {
+          "const": false
+        },
+        "vaultScan": {
+          "const": false
+        },
+        "externalDownload": {
+          "const": false
+        },
+        "branchDeletion": {
+          "const": false
+        },
+        "githubMutation": {
+          "const": false
+        }
+      }
+    },
+    "sourceVisualRetrievalHintFinalMergeReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "status", "decision", "nextRecommendedTranche", "reportRef", "counts"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.limited-visual-retrieval-hint-final-merge-review.v1"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nextRecommendedTranche": {
+          "type": "string"
+        },
+        "reportRef": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "^/"
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "completionBoundary", "nextEvidenceWork"],
+      "properties": {
+        "name": {
+          "const": "paper_retrieval_lane_split_parsed_artifact_evidence_chunk_dry_run_v1"
+        },
+        "completionBoundary": {
+          "const": "dry_run_report_only"
+        },
+        "nextEvidenceWork": {
+          "const": "paper_retrieval_lane_split_parsed_artifact_evidence_chunk_contract_review"
+        }
+      }
+    },
+    "laneSemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateDiscoveryLane",
+        "answerEvidenceLane",
+        "candidateDiscoveryMayPrecedeEvidenceResolution",
+        "visualHintTextMaySatisfyAnswerability",
+        "visualHintTextMayBeQuotedAsEvidence",
+        "parsedArtifactEvidenceMustCarrySourceHashAndLocator"
+      ],
+      "properties": {
+        "candidateDiscoveryLane": {
+          "const": "visual_retrieval_hint_candidate_discovery"
+        },
+        "answerEvidenceLane": {
+          "const": "parsed_artifact_evidence_chunk"
+        },
+        "candidateDiscoveryMayPrecedeEvidenceResolution": {
+          "const": true
+        },
+        "visualHintTextMaySatisfyAnswerability": {
+          "const": false
+        },
+        "visualHintTextMayBeQuotedAsEvidence": {
+          "const": false
+        },
+        "parsedArtifactEvidenceMustCarrySourceHashAndLocator": {
+          "const": true
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceFinalMergeReviewRows",
+        "sourcePlannedRouteBindingRows",
+        "sourceCandidateDiscoveryOnlyRows",
+        "sourceQualityEvalHybridHitAt5Rows",
+        "sourceQualityEvalHybridHitAt5LiftRows",
+        "sourceQualityEvalRankRegressedRows",
+        "retrievalLaneRows",
+        "plannedLaneSplitRows",
+        "parsedArtifactEvidenceChunkLaneRows",
+        "visualCandidateDiscoveryLaneRows",
+        "answerEvidenceEligibleLaneRows",
+        "answerEvidenceIneligibleLaneRows",
+        "answerabilityEligibleLaneRows",
+        "answerabilityIneligibleLaneRows",
+        "visualHintRowsQuarantinedFromAnswerEvidence",
+        "fallbackToVisualHintAsEvidenceAllowedRows",
+        "blockedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "runtimeRouteWriteRows",
+        "runtimeConfigMutationRows",
+        "operationalSearchIndexQueryRows",
+        "runtimeVisibleRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "answerableWithoutTextEvidenceRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "sourceSpanCandidateCreatedRows",
+        "parsedArtifactEvidenceChunkCreatedRows",
+        "embeddingCallRows",
+        "embeddingVectorWriteRows",
+        "vectorIndexWriteRows",
+        "productionVectorIndexWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "parserExecutionRows",
+        "canonicalParsedArtifactWriteRows",
+        "graphDbWriteRows",
+        "ontologyWriteRows",
+        "memoryCardWriteRows",
+        "clusterWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "branchDeletionRows",
+        "githubPrMutationRows"
+      ],
+      "properties": {
+        "sourceFinalMergeReviewRows": { "type": "integer", "minimum": 0 },
+        "sourcePlannedRouteBindingRows": { "type": "integer", "minimum": 0 },
+        "sourceCandidateDiscoveryOnlyRows": { "type": "integer", "minimum": 0 },
+        "sourceQualityEvalHybridHitAt5Rows": { "type": "integer", "minimum": 0 },
+        "sourceQualityEvalHybridHitAt5LiftRows": { "type": "integer", "minimum": 0 },
+        "sourceQualityEvalRankRegressedRows": { "type": "integer", "minimum": 0 },
+        "retrievalLaneRows": { "const": 2 },
+        "plannedLaneSplitRows": { "type": "integer", "minimum": 0 },
+        "parsedArtifactEvidenceChunkLaneRows": { "type": "integer", "minimum": 0 },
+        "visualCandidateDiscoveryLaneRows": { "type": "integer", "minimum": 0 },
+        "answerEvidenceEligibleLaneRows": { "type": "integer", "minimum": 0 },
+        "answerEvidenceIneligibleLaneRows": { "type": "integer", "minimum": 0 },
+        "answerabilityEligibleLaneRows": { "type": "integer", "minimum": 0 },
+        "answerabilityIneligibleLaneRows": { "type": "integer", "minimum": 0 },
+        "visualHintRowsQuarantinedFromAnswerEvidence": { "type": "integer", "minimum": 0 },
+        "fallbackToVisualHintAsEvidenceAllowedRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "runtimeRouteWriteRows": { "const": 0 },
+        "runtimeConfigMutationRows": { "const": 0 },
+        "operationalSearchIndexQueryRows": { "const": 0 },
+        "runtimeVisibleRows": { "const": 0 },
+        "answerVisibleRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "answerableWithoutTextEvidenceRows": { "const": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "sourceSpanCandidateCreatedRows": { "const": 0 },
+        "parsedArtifactEvidenceChunkCreatedRows": { "const": 0 },
+        "embeddingCallRows": { "const": 0 },
+        "embeddingVectorWriteRows": { "const": 0 },
+        "vectorIndexWriteRows": { "const": 0 },
+        "productionVectorIndexWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "graphDbWriteRows": { "const": 0 },
+        "ontologyWriteRows": { "const": 0 },
+        "memoryCardWriteRows": { "const": 0 },
+        "clusterWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["passed", "checks", "expectedVisualHintRows", "observed"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "expectedVisualHintRows": {
+          "const": 125
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "observed": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "retrievalLaneRows": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "schema",
+          "rowId",
+          "status",
+          "laneName",
+          "laneKind",
+          "sourceType",
+          "retrievalUnitKind",
+          "lanePolicy",
+          "evidenceContract",
+          "dryRunEffects",
+          "blockers",
+          "laneSplitRowSha256"
+        ],
+        "properties": {
+          "schema": {
+            "const": "knowledge-hub.paper.paper-retrieval-lane-split-dry-run-row.v1"
+          },
+          "rowId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": ["paper_retrieval_lane_split_dry_run_ready", "blocked_source_report_gate"]
+          },
+          "laneName": {
+            "enum": ["parsed_artifact_evidence_chunk", "visual_retrieval_hint_candidate_discovery"]
+          },
+          "laneKind": {
+            "enum": ["answer_evidence", "candidate_discovery"]
+          },
+          "sourceType": {
+            "const": "paper"
+          },
+          "retrievalUnitKind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lanePolicy": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "evidenceContract": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "dryRunEffects": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "laneSplitRowSha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "technicalBlockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-opt-in-implementation-design.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "policy",
+    "counts",
+    "gate",
+    "design",
+    "rows",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-opt-in-implementation-design.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "parsed_artifact_evidence_chunk_answer_path_opt_in_implementation_design_ready",
+        "parsed_artifact_evidence_chunk_answer_path_opt_in_implementation_design_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": ["routeReviewReportRef", "routeReviewSchema", "routeReviewStatus", "routeReviewDecision"],
+      "additionalProperties": false,
+      "properties": {
+        "routeReviewReportRef": { "type": "string" },
+        "routeReviewSchema": { "type": "string" },
+        "routeReviewStatus": { "type": "string" },
+        "routeReviewDecision": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "implementationDesignOnly",
+        "runtimeCodeChanged",
+        "publicCliFlagAdded",
+        "defaultOn",
+        "answerGenerationRun",
+        "llmCalls",
+        "judgeModelCalls",
+        "candidateStoreWrites",
+        "sourceSpanCreation",
+        "strictEvidenceCreation",
+        "parserExecution",
+        "databaseMutation",
+        "indexMutation",
+        "vaultScan",
+        "externalDownload"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reportOnly": { "const": true },
+        "implementationDesignOnly": { "const": true },
+        "runtimeCodeChanged": { "const": false },
+        "publicCliFlagAdded": { "const": false },
+        "defaultOn": { "const": false },
+        "answerGenerationRun": { "const": false },
+        "llmCalls": { "const": false },
+        "judgeModelCalls": { "const": false },
+        "candidateStoreWrites": { "const": false },
+        "sourceSpanCreation": { "const": false },
+        "strictEvidenceCreation": { "const": false },
+        "parserExecution": { "const": false },
+        "databaseMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputRouteReviewRows",
+        "routeReviewPassRows",
+        "routeReviewGapRows",
+        "designRows",
+        "designReadyRows",
+        "blockedRows",
+        "plannedSearcherIngressRows",
+        "plannedRuntimeForwardingRows",
+        "plannedTestRows",
+        "runtimeRouteWriteRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "answerVisibleDefaultRows",
+        "answerGenerationRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "llmCallRows",
+        "judgeModelCallRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "inputRouteReviewRows": { "type": "integer", "minimum": 0 },
+        "routeReviewPassRows": { "type": "integer", "minimum": 0 },
+        "routeReviewGapRows": { "type": "integer", "minimum": 0 },
+        "designRows": { "type": "integer", "minimum": 0 },
+        "designReadyRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "plannedSearcherIngressRows": { "type": "integer", "minimum": 0 },
+        "plannedRuntimeForwardingRows": { "type": "integer", "minimum": 0 },
+        "plannedTestRows": { "type": "integer", "minimum": 0 },
+        "runtimeRouteWriteRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "answerVisibleDefaultRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "llmCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "readyForSearcherIngressImplementation",
+        "routeReviewReady",
+        "internalRuntimeQueryPlanIngressReady",
+        "publicSearcherIngressGapConfirmed",
+        "publicCliDefaultUnchanged",
+        "plannedPublicCliChange",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "readyForSearcherIngressImplementation": { "type": "boolean" },
+        "routeReviewReady": { "type": "boolean" },
+        "internalRuntimeQueryPlanIngressReady": { "type": "boolean" },
+        "publicSearcherIngressGapConfirmed": { "type": "boolean" },
+        "publicCliDefaultUnchanged": { "type": "boolean" },
+        "plannedPublicCliChange": { "const": false },
+        "semanticViolations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "design": {
+      "type": "object",
+      "required": [
+        "ingressMode",
+        "targetClass",
+        "targetMethods",
+        "queryPlanParameter",
+        "queryPlanType",
+        "queryPlanDefault",
+        "forwardTo",
+        "activationOwnedBy",
+        "activationKeys",
+        "activationValue",
+        "publicCliFlag",
+        "defaultBehavior",
+        "plannedTests"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ingressMode": { "type": "string" },
+        "targetClass": { "type": "string" },
+        "targetMethods": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "queryPlanParameter": { "type": "string" },
+        "queryPlanType": { "type": "string" },
+        "queryPlanDefault": { "type": "null" },
+        "forwardTo": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "activationOwnedBy": { "type": "string" },
+        "activationKeys": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "activationValue": { "type": "string" },
+        "publicCliFlag": { "type": "null" },
+        "defaultBehavior": { "type": "string" },
+        "plannedTests": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rowId",
+          "designLayer",
+          "fileRef",
+          "plannedChange",
+          "currentObserved",
+          "status",
+          "blockers",
+          "nextCheck"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "rowId": { "type": "string" },
+          "designLayer": { "type": "string" },
+          "fileRef": { "type": "string" },
+          "plannedChange": { "type": "string" },
+          "currentObserved": { "type": "boolean" },
+          "status": { "enum": ["design_ready", "blocked"] },
+          "blockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "nextCheck": { "type": "string" }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

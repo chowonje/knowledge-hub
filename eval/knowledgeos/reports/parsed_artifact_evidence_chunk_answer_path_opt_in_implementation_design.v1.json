@@ -1,0 +1,176 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-opt-in-implementation-design.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-28T19:48:12Z",
+  "decision": "parsed_artifact_evidence_chunk_answer_path_opt_in_implementation_design_ready",
+  "nextRecommendedTranche": "parsed_artifact_evidence_chunk_answer_path_opt_in_searcher_ingress_implementation",
+  "inputs": {
+    "routeReviewReportRef": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_opt_in_route_review.v1.json",
+    "routeReviewSchema": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-opt-in-route-review.v1",
+    "routeReviewStatus": "ready",
+    "routeReviewDecision": "parsed_artifact_evidence_chunk_answer_path_opt_in_route_review_ready"
+  },
+  "policy": {
+    "reportOnly": true,
+    "implementationDesignOnly": true,
+    "runtimeCodeChanged": false,
+    "publicCliFlagAdded": false,
+    "defaultOn": false,
+    "answerGenerationRun": false,
+    "llmCalls": false,
+    "judgeModelCalls": false,
+    "candidateStoreWrites": false,
+    "sourceSpanCreation": false,
+    "strictEvidenceCreation": false,
+    "parserExecution": false,
+    "databaseMutation": false,
+    "indexMutation": false,
+    "vaultScan": false,
+    "externalDownload": false
+  },
+  "counts": {
+    "inputRouteReviewRows": 1,
+    "routeReviewPassRows": 7,
+    "routeReviewGapRows": 1,
+    "designRows": 7,
+    "designReadyRows": 7,
+    "blockedRows": 0,
+    "plannedSearcherIngressRows": 2,
+    "plannedRuntimeForwardingRows": 2,
+    "plannedTestRows": 4,
+    "runtimeRouteWriteRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "answerVisibleDefaultRows": 0,
+    "answerGenerationRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "llmCallRows": 0,
+    "judgeModelCallRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "readyForSearcherIngressImplementation": true,
+    "routeReviewReady": true,
+    "internalRuntimeQueryPlanIngressReady": true,
+    "publicSearcherIngressGapConfirmed": true,
+    "publicCliDefaultUnchanged": true,
+    "plannedPublicCliChange": false,
+    "semanticViolations": []
+  },
+  "design": {
+    "ingressMode": "internal_python_api_opt_in",
+    "targetClass": "knowledge_hub.ai.rag.RAGSearcher",
+    "targetMethods": [
+      "generate_answer",
+      "stream_answer"
+    ],
+    "queryPlanParameter": "query_plan",
+    "queryPlanType": "Optional[Dict[str, Any]]",
+    "queryPlanDefault": null,
+    "forwardTo": [
+      "knowledge_hub.ai.rag_answer_runtime.generate_answer",
+      "knowledge_hub.ai.rag_answer_runtime.stream_answer"
+    ],
+    "activationOwnedBy": "knowledge_hub.ai.parsed_artifact_evidence_chunk_runtime_adapter",
+    "activationKeys": [
+      "parsed_artifact_evidence_chunk_adapter",
+      "parsedArtifactEvidenceChunkAdapter"
+    ],
+    "activationValue": "runtime_v1",
+    "publicCliFlag": null,
+    "defaultBehavior": "unchanged_when_query_plan_is_none",
+    "plannedTests": [
+      "RAGSearcher.generate_answer forwards query_plan",
+      "RAGSearcher.generate_answer defaults query_plan to None",
+      "RAGSearcher.stream_answer forwards query_plan",
+      "khub ask has no public parsed-artifact evidence chunk flag"
+    ]
+  },
+  "rows": [
+    {
+      "rowId": "rag_searcher_generate_answer_add_query_plan_param",
+      "designLayer": "public_python_searcher_api",
+      "fileRef": "knowledge_hub/ai/rag.py",
+      "plannedChange": "Add keyword-only query_plan: Optional[Dict[str, Any]] = None to RAGSearcher.generate_answer.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "Signature keeps default None so existing callers remain compatible."
+    },
+    {
+      "rowId": "rag_searcher_generate_answer_forward_query_plan",
+      "designLayer": "runtime_forwarding",
+      "fileRef": "knowledge_hub/ai/rag.py",
+      "plannedChange": "Forward query_plan=query_plan from RAGSearcher.generate_answer to rag_answer_runtime.generate_answer.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "Unit test should monkeypatch generate_answer_runtime and assert object identity or equality for query_plan."
+    },
+    {
+      "rowId": "rag_searcher_stream_answer_add_query_plan_param",
+      "designLayer": "public_python_searcher_api",
+      "fileRef": "knowledge_hub/ai/rag.py",
+      "plannedChange": "Add keyword-only query_plan: Optional[Dict[str, Any]] = None to RAGSearcher.stream_answer for parity.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "Streaming remains opt-in and default behavior is unchanged when query_plan is None."
+    },
+    {
+      "rowId": "rag_searcher_stream_answer_forward_query_plan",
+      "designLayer": "runtime_forwarding",
+      "fileRef": "knowledge_hub/ai/rag.py",
+      "plannedChange": "Forward query_plan=query_plan from RAGSearcher.stream_answer to rag_answer_runtime.stream_answer.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "Unit test should monkeypatch stream_answer_runtime and assert query_plan is passed through."
+    },
+    {
+      "rowId": "khub_ask_no_public_flag",
+      "designLayer": "public_cli",
+      "fileRef": "knowledge_hub/interfaces/cli/commands/search_cmd.py",
+      "plannedChange": "Keep khub ask public flags unchanged; no parsed-artifact evidence chunk CLI flag in this tranche.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "CLI tests should verify no public opt-in flag is introduced by the searcher ingress implementation."
+    },
+    {
+      "rowId": "default_none_preserves_behavior",
+      "designLayer": "compatibility",
+      "fileRef": "knowledge_hub/ai/rag.py",
+      "plannedChange": "Keep query_plan optional and default None so absent opt-in preserves existing search/ask behavior.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "Regression test should call generate_answer without query_plan and assert forwarded value is None."
+    },
+    {
+      "rowId": "activation_remains_adapter_owned",
+      "designLayer": "answerability_policy",
+      "fileRef": "knowledge_hub/ai/parsed_artifact_evidence_chunk_runtime_adapter.py",
+      "plannedChange": "Do not duplicate activation policy in RAGSearcher; adapter remains responsible for opt-in, source type, resolved-paper, hash, locator, and row-cap checks.",
+      "currentObserved": true,
+      "status": "design_ready",
+      "blockers": [],
+      "nextCheck": "Implementation should only pass query_plan through and leave adapter gating unchanged."
+    }
+  ],
+  "warnings": [
+    "report_only_no_runtime_code_change",
+    "next_tranche_must_keep_query_plan_default_none",
+    "next_tranche_must_not_add_public_cli_flag"
+  ]
+}

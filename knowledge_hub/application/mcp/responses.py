@@ -94,6 +94,7 @@ TRANSFORM_TOOL_NAMES = {
 }
 PAPER_LABS_TOOL_NAMES = {
     "paper_topic_synthesize",
+    "paper_evidence_chunk_answer_preview",
 }
 ONTOLOGY_TOOL_NAMES = {
     "ontology_profile_list",
@@ -245,6 +246,7 @@ SCHEMA_BY_TOOL = {
     "entity_merge_apply": "knowledge-hub.entity.merge.apply.result.v1",
     "entity_merge_reject": "knowledge-hub.entity.merge.reject.result.v1",
     "paper_topic_synthesize": "knowledge-hub.paper-topic-synthesis.result.v1",
+    "paper_evidence_chunk_answer_preview": "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1",
 }
 
 

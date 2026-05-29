@@ -1,0 +1,420 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-parsed-artifact-evidence-chunk-candidate-runtime-adapter-dry-run.v1.json",
+  "title": "Parsed Artifact Evidence Chunk Candidate Runtime Adapter Dry-run",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "sourceRuntimeAdapterDesign",
+    "sourceFullApply",
+    "sourceFullApplyReadbackReview",
+    "policy",
+    "adapterDryRun",
+    "scenarioResults",
+    "counts",
+    "gate",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-adapter-dry-run.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": [
+        "parsed_artifact_evidence_chunk_candidate_runtime_adapter_dry_run_ready",
+        "blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+    "sourceRuntimeAdapterDesign": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef", "inputRows", "runtimeAdapterDesignReadyRows"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-runtime-adapter-design.v1"
+        },
+        "status": { "enum": ["ready", "blocked"] },
+        "decision": {
+          "enum": [
+            "parsed_artifact_evidence_chunk_candidate_runtime_adapter_design_ready",
+            "blocked"
+          ]
+        },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "runtimeAdapterDesignReadyRows": { "type": "integer", "minimum": 0 },
+        "answerableRows": { "const": 0 },
+        "blockedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "sourceFullApply": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef", "readbackValidatedRows"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-executor-apply-readback.v1"
+        },
+        "status": { "enum": ["applied", "ready", "blocked"] },
+        "decision": {
+          "enum": [
+            "parsed_artifact_evidence_chunk_candidate_full_apply_executor_apply_readback_ready",
+            "parsed_artifact_evidence_chunk_candidate_full_apply_executor_apply_readback_pending_apply",
+            "blocked"
+          ]
+        },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "readbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "sourceFullApplyReadbackReview": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "status", "decision", "reportRef", "readbackValidatedRows"],
+      "properties": {
+        "schema": {
+          "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-candidate-full-apply-readback-review.v1"
+        },
+        "status": { "enum": ["ready", "blocked"] },
+        "decision": {
+          "enum": [
+            "parsed_artifact_evidence_chunk_candidate_full_apply_readback_review_ready",
+            "blocked"
+          ]
+        },
+        "reportRef": { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "readbackValidatedRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportOnly",
+        "runtimeAdapterDryRunOnly",
+        "runtimeCodeChanged",
+        "evidenceAssemblyChanged",
+        "candidateStoreReadSimulated",
+        "candidateStoreWrite",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationGradeEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "answerVisibleExposure",
+        "answerGeneration",
+        "answerableRowsAllowedInThisTranche",
+        "parserRoutingChanged",
+        "answerIntegrationChanged",
+        "databaseMutation",
+        "vaultScan",
+        "reindexOrReembed",
+        "parserExecution",
+        "canonicalParsedArtifactsWritten",
+        "futureRuntimeAdapterImplementationRequired",
+        "nextGateRequiredBeforeRuntimeUse"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "runtimeAdapterDryRunOnly": { "const": true },
+        "runtimeCodeChanged": { "const": false },
+        "evidenceAssemblyChanged": { "const": false },
+        "candidateStoreReadSimulated": { "const": true },
+        "candidateStoreWrite": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationGradeEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "answerVisibleExposure": { "const": false },
+        "answerGeneration": { "const": false },
+        "answerableRowsAllowedInThisTranche": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerIntegrationChanged": { "const": false },
+        "databaseMutation": { "const": false },
+        "vaultScan": { "const": false },
+        "reindexOrReembed": { "const": false },
+        "parserExecution": { "const": false },
+        "canonicalParsedArtifactsWritten": { "const": false },
+        "futureRuntimeAdapterImplementationRequired": { "const": true },
+        "nextGateRequiredBeforeRuntimeUse": { "const": true }
+      }
+    },
+    "adapterDryRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapterId",
+        "adapterMode",
+        "sourceTypeRequired",
+        "queryPlanOptInKeys",
+        "queryPlanOptInValue",
+        "resolvedPaperIds",
+        "maxRowsPerResolvedPaper",
+        "maxRowsTotal",
+        "fallbackToAllPapersAllowed",
+        "selectedCandidateRecordIds"
+      ],
+      "properties": {
+        "adapterId": { "const": "parsed_artifact_evidence_chunk_runtime_adapter_v1" },
+        "adapterMode": { "const": "opt_in_runtime_dry_run" },
+        "sourceTypeRequired": { "const": "paper" },
+        "queryPlanOptInKeys": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 2
+        },
+        "queryPlanOptInValue": { "const": "runtime_v1" },
+        "resolvedPaperIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "maxItems": 2
+        },
+        "maxRowsPerResolvedPaper": { "const": 2 },
+        "maxRowsTotal": { "const": 4 },
+        "fallbackToAllPapersAllowed": { "const": false },
+        "selectedCandidateRecordIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "maxItems": 4
+        }
+      }
+    },
+    "scenarioResults": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "scenarioId",
+          "enabled",
+          "status",
+          "sourceType",
+          "resolvedPaperIds",
+          "candidateRowsConsidered",
+          "rowsAdded",
+          "blockedRows",
+          "skippedReason"
+        ],
+        "properties": {
+          "scenarioId": { "type": "string", "minLength": 1 },
+          "enabled": { "type": "boolean" },
+          "status": { "enum": ["skipped", "applied_dry_run"] },
+          "sourceType": { "type": "string" },
+          "resolvedPaperIds": { "type": "array", "items": { "type": "string" } },
+          "candidateRowsConsidered": { "type": "integer", "minimum": 0 },
+          "rowsAdded": { "type": "integer", "minimum": 0 },
+          "blockedRows": { "const": 0 },
+          "skippedReason": { "type": "string" }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputRows",
+        "adapterDesignReadyInputRows",
+        "candidateStoreRecordInputRows",
+        "candidateStoreRecordMatchedRows",
+        "excerptReadbackRows",
+        "snippetHashVerifiedRows",
+        "adapterDryRunReadyRows",
+        "resolvedPaperRows",
+        "positiveScenarioCandidateRowsConsidered",
+        "positiveScenarioSelectedRows",
+        "positiveScenarioHeldRows",
+        "dryRunScenarioRows",
+        "skippedScenarioRows",
+        "plannedEvidenceItemPreviewRows",
+        "plannedDiagnosticsRows",
+        "answerableRows",
+        "blockedRows",
+        "blockedInputSchemaViolationRows",
+        "blockedAdapterDesignNotReadyRows",
+        "blockedMissingCandidateRecordRows",
+        "blockedRecordMismatchRows",
+        "blockedInvalidLocatorRows",
+        "blockedPolicyQuarantineRows",
+        "blockedPrivatePathRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeRows",
+        "runtimeEvidenceRows",
+        "answerVisibleRows",
+        "answerGenerationRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "parserExecutionRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "privatePathLeakRows",
+        "schemaViolationCount",
+        "byArtifactType",
+        "byAdapterDryRunStatus"
+      ],
+      "properties": {
+        "inputRows": { "type": "integer", "minimum": 0 },
+        "adapterDesignReadyInputRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreRecordInputRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreRecordMatchedRows": { "type": "integer", "minimum": 0 },
+        "excerptReadbackRows": { "type": "integer", "minimum": 0 },
+        "snippetHashVerifiedRows": { "type": "integer", "minimum": 0 },
+        "adapterDryRunReadyRows": { "type": "integer", "minimum": 0 },
+        "resolvedPaperRows": { "type": "integer", "minimum": 0 },
+        "positiveScenarioCandidateRowsConsidered": { "type": "integer", "minimum": 0 },
+        "positiveScenarioSelectedRows": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "positiveScenarioHeldRows": { "type": "integer", "minimum": 0 },
+        "dryRunScenarioRows": { "const": 4 },
+        "skippedScenarioRows": { "const": 3 },
+        "plannedEvidenceItemPreviewRows": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "plannedDiagnosticsRows": { "const": 4 },
+        "answerableRows": { "const": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "blockedInputSchemaViolationRows": { "type": "integer", "minimum": 0 },
+        "blockedAdapterDesignNotReadyRows": { "type": "integer", "minimum": 0 },
+        "blockedMissingCandidateRecordRows": { "type": "integer", "minimum": 0 },
+        "blockedRecordMismatchRows": { "type": "integer", "minimum": 0 },
+        "blockedInvalidLocatorRows": { "type": "integer", "minimum": 0 },
+        "blockedPolicyQuarantineRows": { "type": "integer", "minimum": 0 },
+        "blockedPrivatePathRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "answerVisibleRows": { "const": 0 },
+        "answerGenerationRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "byArtifactType": { "type": "object" },
+        "byAdapterDryRunStatus": { "type": "object" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readyForRuntimeAdapterImplementation",
+        "readyForRuntimeApply",
+        "runtimeCodeChangeAllowed",
+        "candidateStoreWriteAllowed",
+        "sourceSpanCreationAllowed",
+        "runtimeVisibilityAllowed",
+        "evidencePromotionAllowed",
+        "answerVisibleAllowed",
+        "answerableAllowed",
+        "schemaViolations"
+      ],
+      "properties": {
+        "readyForRuntimeAdapterImplementation": { "type": "boolean" },
+        "readyForRuntimeApply": { "const": false },
+        "runtimeCodeChangeAllowed": { "const": false },
+        "candidateStoreWriteAllowed": { "const": false },
+        "sourceSpanCreationAllowed": { "const": false },
+        "runtimeVisibilityAllowed": { "const": false },
+        "evidencePromotionAllowed": { "const": false },
+        "answerVisibleAllowed": { "const": false },
+        "answerableAllowed": { "const": false },
+        "schemaViolations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "adapterDryRunRowId",
+          "sourceAdapterDesignRowId",
+          "candidateRecordId",
+          "paperId",
+          "artifactType",
+          "sourceRef",
+          "sourceContentHash",
+          "spanLocator",
+          "charStart",
+          "charEnd",
+          "snippetHash",
+          "candidateStoreRef",
+          "adapterDryRunStatus",
+          "adapterDryRunBlockers",
+          "adapterDryRunReady",
+          "candidateStoreRecordMatched",
+          "excerptReadback",
+          "snippetHashVerified",
+          "selectedForPositiveScenario",
+          "selectionReason",
+          "plannedEvidenceItemPreview",
+          "candidateOnly",
+          "strictEvidence",
+          "citationGrade",
+          "runtimeEvidence",
+          "answerVisible",
+          "answerable",
+          "checks"
+        ],
+        "properties": {
+          "adapterDryRunRowId": { "type": "string", "minLength": 1 },
+          "sourceAdapterDesignRowId": { "type": "string", "minLength": 1 },
+          "candidateRecordId": { "type": "string", "minLength": 1 },
+          "paperId": { "type": "string", "minLength": 1 },
+          "artifactType": { "enum": ["paragraph", "section", ""] },
+          "sourceRef": { "type": "string", "not": { "pattern": "^/" } },
+          "sourceContentHash": { "type": "string" },
+          "spanLocator": { "type": "string" },
+          "charStart": { "type": "integer", "minimum": 0 },
+          "charEnd": { "type": "integer", "minimum": 0 },
+          "snippetHash": { "type": "string" },
+          "candidateStoreRef": { "type": "string", "not": { "pattern": "^/" } },
+          "adapterDryRunStatus": { "type": "string", "minLength": 1 },
+          "adapterDryRunBlockers": { "type": "array", "items": { "type": "string" } },
+          "adapterDryRunReady": { "type": "boolean" },
+          "candidateStoreRecordMatched": { "type": "boolean" },
+          "excerptReadback": { "type": "boolean" },
+          "snippetHashVerified": { "type": "boolean" },
+          "selectedForPositiveScenario": { "type": "boolean" },
+          "selectionReason": { "type": "string" },
+          "plannedEvidenceItemPreview": { "type": "object" },
+          "candidateOnly": { "const": true },
+          "strictEvidence": { "const": false },
+          "citationGrade": { "const": false },
+          "runtimeEvidence": { "const": false },
+          "answerVisible": { "const": false },
+          "answerable": { "const": false },
+          "checks": { "type": "object" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}

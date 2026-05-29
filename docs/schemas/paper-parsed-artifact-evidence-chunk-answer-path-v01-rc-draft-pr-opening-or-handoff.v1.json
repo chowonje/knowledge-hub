@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-draft-pr-opening-or-handoff.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "policy",
+    "handoffDecision",
+    "counts",
+    "gate",
+    "draftPr",
+    "operatorCommands",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-draft-pr-opening-or-handoff.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "decision": {
+      "enum": [
+        "knowledge_hub_v01_rc_draft_pr_opening_or_handoff_ready",
+        "knowledge_hub_v01_rc_draft_pr_opening_or_handoff_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "branchPrReadinessReportRef",
+        "branchName",
+        "baseBranch",
+        "headShortSha",
+        "githubPrLookupStatus"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "branchPrReadinessReportRef": {
+          "const": "eval/knowledgeos/reports/parsed_artifact_evidence_chunk_answer_path_v01_rc_branch_pr_readiness_review.v1.json"
+        },
+        "branchName": { "type": "string" },
+        "baseBranch": { "type": "string" },
+        "headShortSha": { "type": "string" },
+        "githubPrLookupStatus": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "pushAllowed",
+        "githubPrMutationAllowed",
+        "branchDeletionAllowed",
+        "publicDefaultPromotionAllowed",
+        "readyForMerge",
+        "rawGithubPayloadPersisted",
+        "requiresExplicitOperatorApproval"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reportOnly": { "const": true },
+        "pushAllowed": { "const": false },
+        "githubPrMutationAllowed": { "const": false },
+        "branchDeletionAllowed": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "readyForMerge": { "const": false },
+        "rawGithubPayloadPersisted": { "const": false },
+        "requiresExplicitOperatorApproval": { "const": true }
+      }
+    },
+    "handoffDecision": {
+      "type": "object",
+      "required": [
+        "operatorAction",
+        "readyForDraftPrCreation",
+        "readyForExistingDraftPrReview",
+        "readyForMerge",
+        "publicDefaultDecision"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "operatorAction": {
+          "enum": ["push_branch_and_open_draft_pr", "review_existing_draft_pr", "blocked"]
+        },
+        "readyForDraftPrCreation": { "type": "boolean" },
+        "readyForExistingDraftPrReview": { "type": "boolean" },
+        "readyForMerge": { "const": false },
+        "publicDefaultDecision": { "const": "hold_public_default_promotion" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "branchReadinessReadyRows",
+        "currentBranchAheadCommitRows",
+        "currentBranchBehindCommitRows",
+        "currentDirtyRows",
+        "currentSelfHandoffDirtyRows",
+        "currentBlockingDirtyRows",
+        "openPrRows",
+        "draftPrHandoffReadyRows",
+        "draftPrBodyRows",
+        "operatorActionRows",
+        "readyForMergeRows",
+        "releaseSmokePassedRows",
+        "publicHygieneIssueRows",
+        "noAnswerPassRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "pushRows",
+        "githubPrMutationRows",
+        "branchDeletionRows",
+        "rawGithubPayloadPersistedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "branchReadinessReadyRows": { "type": "integer", "minimum": 0 },
+        "currentBranchAheadCommitRows": { "type": "integer", "minimum": 0 },
+        "currentBranchBehindCommitRows": { "type": "integer", "minimum": 0 },
+        "currentDirtyRows": { "type": "integer", "minimum": 0 },
+        "currentSelfHandoffDirtyRows": { "type": "integer", "minimum": 0 },
+        "currentBlockingDirtyRows": { "type": "integer", "minimum": 0 },
+        "openPrRows": { "type": "integer", "minimum": 0 },
+        "draftPrHandoffReadyRows": { "type": "integer", "minimum": 0 },
+        "draftPrBodyRows": { "type": "integer", "minimum": 0 },
+        "operatorActionRows": { "type": "integer", "minimum": 0 },
+        "readyForMergeRows": { "const": 0 },
+        "releaseSmokePassedRows": { "type": "integer", "minimum": 0 },
+        "publicHygieneIssueRows": { "type": "integer", "minimum": 0 },
+        "noAnswerPassRows": { "type": "integer", "minimum": 0 },
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "pushRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "rawGithubPayloadPersistedRows": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "readyForOperatorPushAndDraftPr",
+        "branchReadinessReady",
+        "currentBranchCleanOrSelfHandoffOnly",
+        "currentBranchAheadOfOriginMain",
+        "currentBranchNotBehindOriginMain",
+        "githubPrStateAcceptable",
+        "publicDefaultPromotionAllowed",
+        "readyForMerge",
+        "semanticViolations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "readyForOperatorPushAndDraftPr": { "type": "boolean" },
+        "branchReadinessReady": { "type": "boolean" },
+        "currentBranchCleanOrSelfHandoffOnly": { "type": "boolean" },
+        "currentBranchAheadOfOriginMain": { "type": "boolean" },
+        "currentBranchNotBehindOriginMain": { "type": "boolean" },
+        "githubPrStateAcceptable": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "readyForMerge": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "draftPr": {
+      "type": "object",
+      "required": ["title", "baseBranch", "headBranch", "draft", "bodyMarkdown"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "baseBranch": { "type": "string" },
+        "headBranch": { "type": "string" },
+        "draft": { "const": true },
+        "bodyMarkdown": { "type": "string" }
+      }
+    },
+    "operatorCommands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["commandId", "command", "requiresExplicitApproval", "executedByThisReport"],
+        "additionalProperties": false,
+        "properties": {
+          "commandId": { "type": "string" },
+          "command": { "type": "string" },
+          "requiresExplicitApproval": { "const": true },
+          "executedByThisReport": { "const": false }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
