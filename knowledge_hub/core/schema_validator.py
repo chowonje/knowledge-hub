@@ -224,6 +224,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-post-merge-convergence.v1": "paper-parsed-artifact-evidence-chunk-answer-path-v01-rc-post-merge-convergence.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-public-default-promotion-decision-gate.v1": "paper-parsed-artifact-evidence-chunk-answer-path-v01-rc-public-default-promotion-decision-gate.v1.json",
     "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-research-preview-release-notes-review.v1": "paper-parsed-artifact-evidence-chunk-answer-path-v01-rc-research-preview-release-notes-review.v1.json",
+    "knowledge-hub.paper.parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1": "paper-parsed-artifact-evidence-chunk-answer-path-v01-rc-release-package-handoff.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
