@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-section-paragraph-span-artifacts-report.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "paperDiagnostics",
+    "candidateRows",
+    "sectionSpanRows",
+    "paragraphSpanRows",
+    "candidates",
+    "blockerRows",
+    "blockers",
+    "mutationCounters",
+    "schemaViolationCount",
+    "privatePathLeakRows",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-section-paragraph-span-artifacts-report.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paperRows", "paperRefs", "writes", "canonicalParsedArtifactWriteRows", "charBasis"],
+      "properties": {
+        "paperRows": { "type": "integer", "minimum": 0 },
+        "paperRefs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^papers_dir/[^/].*" }
+        },
+        "writes": { "const": "report_only" },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "charBasis": { "const": "pymupdf_block_reading_order_normalized_text_v1" }
+      }
+    },
+    "paperDiagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paperId",
+          "paperRef",
+          "textAssemblyHash",
+          "assemblyCharCount",
+          "sectionSpanRows",
+          "paragraphSpanRows",
+          "pageCount",
+          "candidateRows"
+        ],
+        "properties": {
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "textAssemblyHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "assemblyCharCount": { "type": "integer", "minimum": 0 },
+          "sectionSpanRows": { "type": "integer", "minimum": 0 },
+          "paragraphSpanRows": { "type": "integer", "minimum": 0 },
+          "pageCount": { "type": "integer", "minimum": 0 },
+          "candidateRows": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "candidateRows": { "type": "integer", "minimum": 0 },
+    "sectionSpanRows": { "type": "integer", "minimum": 0 },
+    "paragraphSpanRows": { "type": "integer", "minimum": 0 },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema", "paperId", "artifactId", "spanType", "sourceContentHash", "charStart", "charEnd", "page", "bbox", "textHash"],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.text-span-artifact-candidate.v1" },
+          "paperId": { "type": "string" },
+          "artifactId": { "type": "string" },
+          "spanType": { "enum": ["section", "paragraph"] },
+          "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "charStart": { "type": "integer", "minimum": 0 },
+          "charEnd": { "type": "integer", "minimum": 1 },
+          "page": { "type": "integer", "minimum": 1 },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "textHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "blockerRows": { "type": "integer", "minimum": 0 },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["paperId", "paperRef", "blockerReason", "detail"],
+        "properties": {
+          "paperId": { "type": "string", "minLength": 1 },
+          "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+          "blockerReason": { "type": "string", "minLength": 1 },
+          "detail": { "type": "string" }
+        }
+      }
+    },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalParsedArtifactWriteRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows"
+      ],
+      "properties": {
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 }
+      }
+    },
+    "schemaViolationCount": { "const": 0 },
+    "privatePathLeakRows": { "const": 0 },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}
