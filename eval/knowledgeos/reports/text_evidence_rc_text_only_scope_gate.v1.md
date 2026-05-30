@@ -5,9 +5,9 @@
 - textOnlyRcReady: `False`
 - publicRcReady: `False`
 - phaseRows: `6`
-- textReadyRows: `3`
+- textReadyRows: `4`
 - deferredRows: `6`
-- blockerRows: `4`
+- blockerRows: `3`
 - nextAction: `replay_missing_text_evidence_phase_reports`
 
 ## Deferred
@@ -19,7 +19,6 @@
 - `vlm_visual_interpretation` -> `codex/visual-layout-image-format-evidence-20260526`: external or VLM-derived interpretation cannot become citation-grade text evidence by default
 
 ## Blockers
-- `missing_phase_report:figure_caption_text_qa_readback` (hold): required phase report figure_caption_text_qa_readback.v1.json is not present in current reports_root
 - `missing_phase_report:text_equation_locator_context_artifacts` (hold): required phase report text_equation_locator_context_artifacts.v1.json is not present in current reports_root
 - `missing_phase_report:text_complex_qa_eval_alignment` (hold): required phase report text_complex_qa_eval_alignment.v1.json is not present in current reports_root
 - `missing_convergence_report` (hold): required convergence report text_evidence_rc_convergence.v1.json is not present in current reports_root

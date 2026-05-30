@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-figure-caption-text-qa-readback-report.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidateReportStatus",
+    "candidateArtifactRows",
+    "qaRows",
+    "answerableRows",
+    "noAnswerRows",
+    "visualUnsupportedRows",
+    "rows",
+    "mutationCounters",
+    "warnings",
+    "schemaErrors"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.figure-caption-text-qa-readback-report.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "candidateReportStatus": { "type": "string" },
+    "candidateArtifactRows": { "type": "integer", "minimum": 0 },
+    "qaRows": { "type": "integer", "minimum": 0 },
+    "answerableRows": { "type": "integer", "minimum": 0 },
+    "noAnswerRows": { "type": "integer", "minimum": 0 },
+    "visualUnsupportedRows": { "type": "integer", "minimum": 0 },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema", "status", "paperId", "question", "answerabilityStatus", "blockerReason", "evidenceMode", "visualReasoningRequested", "candidateAnswerPacket"],
+        "properties": {
+          "schema": { "const": "knowledge-hub.paper.figure-caption-text-qa-readback.v1" },
+          "status": { "enum": ["answerable", "no_answer"] },
+          "paperId": { "type": "string", "minLength": 1 },
+          "question": { "type": "string", "minLength": 1 },
+          "requestedFigureLabel": { "type": "string" },
+          "answerabilityStatus": { "enum": ["answerable", "no_answer"] },
+          "blockerReason": { "type": "string" },
+          "evidenceMode": { "const": "caption_text_only" },
+          "visualReasoningRequested": { "type": "boolean" },
+          "candidateAnswerPacket": {}
+        }
+      }
+    },
+    "mutationCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "strictEvidencePromotionRows",
+        "runtimeAnswerVisibleExposureRows"
+      ],
+      "properties": {
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "strictEvidencePromotionRows": { "const": 0 },
+        "runtimeAnswerVisibleExposureRows": { "const": 0 }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  }
+}

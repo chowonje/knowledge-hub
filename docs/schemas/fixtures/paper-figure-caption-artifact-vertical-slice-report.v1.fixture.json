@@ -1,0 +1,99 @@
+{
+  "schema": "knowledge-hub.paper.figure-caption-artifact-vertical-slice-report.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-26T00:00:00Z",
+  "scope": {
+    "paperRows": 3,
+    "paperRefs": [
+      "papers_dir/sample-a.pdf",
+      "papers_dir/sample-b.pdf",
+      "papers_dir/sample-c.pdf"
+    ],
+    "writes": "report_only",
+    "canonicalParsedArtifactWriteRows": 0
+  },
+  "paperDiagnostics": [
+    {
+      "paperId": "sample-paper",
+      "paperRef": "papers_dir/sample-a.pdf",
+      "pageCount": 8,
+      "captionCandidateRows": 1
+    }
+  ],
+  "candidateArtifactRows": 1,
+  "candidateArtifacts": [
+    {
+      "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+      "paperId": "sample-paper",
+      "paperRef": "papers_dir/sample-a.pdf",
+      "artifactId": "figure-caption:sample-paper:figure-1:abc123def456",
+      "sourceContentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "page": 2,
+      "bbox": [10.0, 20.0, 200.0, 80.0],
+      "figureLabel": "Figure 1",
+      "captionText": "A minimal local-first figure caption candidate.",
+      "captionTextHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "extractionMethod": "pymupdf_text_block_regex_v1",
+      "confidence": 0.86,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "blockIndex": 0
+      }
+    }
+  ],
+  "blockerRows": 0,
+  "blockers": [],
+  "qaReadbackRows": 2,
+  "answerableQaRows": 1,
+  "noAnswerQaRows": 1,
+  "qaReadback": [
+    {
+      "paperId": "sample-paper",
+      "question": "이 논문의 Figure 1은 무엇을 보여주는가?",
+      "requestedFigureLabel": "Figure 1",
+      "answerabilityStatus": "answerable",
+      "blockerReason": "",
+      "candidateAnswerPacket": {
+        "packetType": "figure_caption_candidate_answer_packet.v1",
+        "answerVisible": false,
+        "strictEvidence": false,
+        "answer": "Figure 1 shows: A minimal local-first figure caption candidate.",
+        "evidence": {
+          "artifactId": "figure-caption:sample-paper:figure-1:abc123def456",
+          "paperId": "sample-paper",
+          "sourceContentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "page": 2,
+          "bbox": [10.0, 20.0, 200.0, 80.0],
+          "figureLabel": "Figure 1",
+          "captionTextHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "extractionMethod": "pymupdf_text_block_regex_v1"
+        }
+      }
+    },
+    {
+      "paperId": "sample-paper",
+      "question": "이 논문의 Figure 99은 무엇을 보여주는가?",
+      "requestedFigureLabel": "Figure 99",
+      "answerabilityStatus": "no_answer",
+      "blockerReason": "figure_caption_not_found",
+      "candidateAnswerPacket": null
+    }
+  ],
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "answerVisiblePromotionRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "answerabilityGateBypassRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "warnings": [],
+  "schemaErrors": []
+}
