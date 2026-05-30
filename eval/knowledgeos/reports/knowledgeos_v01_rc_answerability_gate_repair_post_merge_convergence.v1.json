@@ -1,0 +1,140 @@
+{
+  "schema": "knowledge-hub.product.knowledgeos-v01-rc-answerability-gate-repair-post-merge-convergence.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-30T02:35:19Z",
+  "decision": "knowledgeos_v01_rc_answerability_gate_repair_post_merge_convergence_ready",
+  "nextRecommendedTranche": "corpus_scale_answer_quality_positive_section_paragraph_seed",
+  "inputs": {
+    "controlledExecutionReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_controlled_execution.v1.json",
+    "prNumber": 178,
+    "headBranch": "codex/corpus-scale-answerability-gate-repair-20260530",
+    "baseBranch": "main",
+    "headShortSha": "7c20038",
+    "originMainShortSha": "7c20038",
+    "remoteMainShortSha": "7c20038",
+    "mergeCommitShortSha": "7c20038"
+  },
+  "postMergeDecision": {
+    "postMergeConvergence": "answerability_gate_repair_merged",
+    "controlledExecutionDecision": "ready_after_answerability_gate_repair",
+    "branchCleanupDecision": "cleanup_recommended_not_applied",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "generalRcDecision": "blocked_pending_positive_section_paragraph_quality",
+    "nextGate": "corpus_scale_answer_quality_positive_section_paragraph_seed"
+  },
+  "counts": {
+    "postMergeConvergenceRows": 1,
+    "controlledExecutionInputRows": 1,
+    "controlledExecutionReadyRows": 1,
+    "controlledExecutionAttemptedCaseRows": 50,
+    "controlledExecutionPassRows": 50,
+    "controlledExecutionFailRows": 0,
+    "controlledExecutionUnexpectedAnswerableRows": 0,
+    "controlledExecutionNoAnswerSafetyFailRows": 0,
+    "controlledExecutionSemanticViolationRows": 0,
+    "prMergedRows": 1,
+    "mainMergeCommitMatchRows": 1,
+    "remoteMainMatchesLocalOriginRows": 1,
+    "ciCheckRows": 7,
+    "ciCheckSuccessRows": 7,
+    "releaseSmokeCheckedRows": 10,
+    "releaseSmokePassedRows": 10,
+    "publicHygieneIssueRows": 0,
+    "answerabilityGateRepairCompleteRows": 1,
+    "positiveSectionParagraphSeedRecommendedRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "corpusScaleClaimProvenRows": 0,
+    "remoteFeatureBranchStillExistsRows": 1,
+    "branchCleanupRecommendedRows": 1,
+    "branchCleanupAppliedRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "rawPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "postMergeConvergenceReady": true,
+    "controlledExecutionReadyAfterRepair": true,
+    "prMerged": true,
+    "mainContainsMergeCommit": true,
+    "remoteMainVerified": true,
+    "ciChecksGreen": true,
+    "releaseSmokeReady": true,
+    "publicHygieneReady": true,
+    "answerabilityGateRepairComplete": true,
+    "positiveSectionParagraphSeedRecommended": true,
+    "branchCleanupRecommended": true,
+    "branchCleanupApplied": false,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "checkRows": [
+    {
+      "checkId": "controlled_execution_report",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "github_pr_178",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "git_main_state",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "release_smoke",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_hygiene",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "cleanupRows": [
+    {
+      "cleanupId": "remote_feature_branch",
+      "targetRef": "origin/codex/corpus-scale-answerability-gate-repair-20260530",
+      "status": "recommended_not_applied",
+      "requiresExplicitApproval": true,
+      "summary": "Remote feature branch cleanup is separate from this read-only convergence report."
+    }
+  ],
+  "warnings": [
+    "controlled_execution_ready_after_answerability_gate_repair",
+    "public_default_promotion_remains_held",
+    "branch_cleanup_not_applied_in_this_tranche"
+  ]
+}
