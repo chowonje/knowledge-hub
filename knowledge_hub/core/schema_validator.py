@@ -233,6 +233,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-dry-run.v1": "knowledgeos-v01-rc-corpus-scale-answer-quality-live-runner-dry-run.v1.json",
     "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-controlled-execution.v1": "knowledgeos-v01-rc-corpus-scale-answer-quality-controlled-execution.v1.json",
     "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-controlled-execution-post-merge-convergence.v1": "knowledgeos-v01-rc-corpus-scale-controlled-execution-post-merge-convergence.v1.json",
+    "knowledge-hub.product.knowledgeos-v01-rc-answerability-gate-repair-post-merge-convergence.v1": "knowledgeos-v01-rc-answerability-gate-repair-post-merge-convergence.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
