@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-research-preview-release-readiness-decision-gate.v1",
+  "title": "KnowledgeOS v0.1 RC Research Preview release readiness decision gate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "readinessDecision",
+    "counts",
+    "gate",
+    "checkRows",
+    "nextActionRows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.product.knowledgeos-v01-rc-research-preview-release-readiness-decision-gate.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": [
+        "knowledgeos_v01_rc_research_preview_release_readiness_decision_gate_ready",
+        "knowledgeos_v01_rc_research_preview_release_readiness_decision_gate_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positiveCompleteReviewReportRef",
+        "productDefinitionDocRef",
+        "releaseNotesDocRef"
+      ],
+      "properties": {
+        "positiveCompleteReviewReportRef": { "type": "string", "minLength": 1 },
+        "productDefinitionDocRef": { "type": "string", "minLength": 1 },
+        "releaseNotesDocRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "readinessDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "researchPreviewDecision",
+        "publicDefaultDecision",
+        "defaultSurfaceDecision",
+        "generalReleaseDecision",
+        "strongestSupportedClaim",
+        "nextGate"
+      ],
+      "properties": {
+        "researchPreviewDecision": { "type": "string", "minLength": 1 },
+        "publicDefaultDecision": { "const": "hold_public_default_promotion" },
+        "defaultSurfaceDecision": { "const": "do_not_enable_default_ask_or_default_mcp" },
+        "generalReleaseDecision": { "const": "not_ready_for_general_release" },
+        "strongestSupportedClaim": { "type": "string", "minLength": 1 },
+        "nextGate": { "type": "string", "minLength": 1 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": ["integer", "number"] },
+      "required": [
+        "releaseReadinessDecisionRows",
+        "positiveCompleteReviewReadyRows",
+        "productDefinitionReadyRows",
+        "releaseNotesReadyRows",
+        "inputCaseRows",
+        "positiveSeedRows",
+        "positiveAnswerPassRows",
+        "positiveAnswerFailRows",
+        "provenancePassRows",
+        "provenanceFailRows",
+        "strictProvenanceSpanRows",
+        "sourceContentHashRows",
+        "charsLocatorRows",
+        "answerContractCitationProvenanceRows",
+        "heldExpectedNoAnswerRows",
+        "heldStructuredModalityRows",
+        "qualityPrMergedRows",
+        "ciCheckSuccessRows",
+        "releaseSmokePassedRows",
+        "publicHygieneIssueRows",
+        "positiveSectionParagraphQualityCompleteRows",
+        "researchPreviewReleaseReadyRows",
+        "researchPreviewReleaseHeldRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "corpusScalePositiveSliceProvenRows",
+        "corpusScaleClaimProvenRows",
+        "tableEquationFigureDefaultEvidenceRows",
+        "visualHintAnswerEvidenceRows",
+        "branchCleanupRecommendedRows",
+        "branchCleanupAppliedRows",
+        "blockedRows",
+        "candidateStoreWriteRows",
+        "sourceSpanCreatedRows",
+        "strictEvidenceRows",
+        "citationGradeEvidenceRows",
+        "runtimeEvidenceRows",
+        "parserExecutionRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "canonicalParsedArtifactWriteRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "publicCliFlagRows",
+        "defaultOnRows",
+        "externalLlmCallRows",
+        "modelApiCallRows",
+        "judgeModelCallRows",
+        "pushRows",
+        "githubPrMutationRows",
+        "mergeRows",
+        "branchDeletionRows",
+        "releaseTagRows",
+        "packagePublishRows",
+        "rawGithubPayloadPersistedRows",
+        "defaultMcpToolRows",
+        "defaultKhubAskRouteRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "publicDefaultPromotionReadyRows": { "const": 0 },
+        "publicDefaultPromotionHeldRows": { "type": "integer", "minimum": 0 },
+        "generalRcReadyRows": { "const": 0 },
+        "corpusScaleClaimProvenRows": { "const": 0 },
+        "tableEquationFigureDefaultEvidenceRows": { "const": 0 },
+        "visualHintAnswerEvidenceRows": { "const": 0 },
+        "branchCleanupAppliedRows": { "const": 0 },
+        "candidateStoreWriteRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "strictEvidenceRows": { "const": 0 },
+        "citationGradeEvidenceRows": { "const": 0 },
+        "runtimeEvidenceRows": { "const": 0 },
+        "parserExecutionRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "publicCliFlagRows": { "const": 0 },
+        "defaultOnRows": { "const": 0 },
+        "externalLlmCallRows": { "const": 0 },
+        "modelApiCallRows": { "const": 0 },
+        "judgeModelCallRows": { "const": 0 },
+        "pushRows": { "const": 0 },
+        "githubPrMutationRows": { "const": 0 },
+        "mergeRows": { "const": 0 },
+        "branchDeletionRows": { "const": 0 },
+        "releaseTagRows": { "const": 0 },
+        "packagePublishRows": { "const": 0 },
+        "rawGithubPayloadPersistedRows": { "const": 0 },
+        "defaultMcpToolRows": { "const": 0 },
+        "defaultKhubAskRouteRows": { "const": 0 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "releaseReadinessDecisionReady",
+        "positiveCompleteReviewReady",
+        "productDefinitionReady",
+        "releaseNotesReady",
+        "researchPreviewReleaseAllowed",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "properties": {
+        "releaseReadinessDecisionReady": { "type": "boolean" },
+        "positiveCompleteReviewReady": { "type": "boolean" },
+        "productDefinitionReady": { "type": "boolean" },
+        "releaseNotesReady": { "type": "boolean" },
+        "researchPreviewReleaseAllowed": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "generalRcReady": { "const": false },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "checkRows": { "type": "array", "items": { "$ref": "#/$defs/checkRow" } },
+    "nextActionRows": { "type": "array", "items": { "$ref": "#/$defs/nextActionRow" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "checkRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkId", "status", "blockers"],
+      "properties": {
+        "checkId": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["pass", "fail"] },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "nextActionRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "status", "requiresExplicitApproval", "summary"],
+      "properties": {
+        "actionId": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["recommended_not_applied", "blocked", "held"] },
+        "requiresExplicitApproval": { "type": "boolean" },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
