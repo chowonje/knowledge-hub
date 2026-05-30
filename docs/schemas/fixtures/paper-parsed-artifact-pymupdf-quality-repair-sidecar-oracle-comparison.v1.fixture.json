@@ -1,0 +1,173 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-comparison.v1",
+  "status": "comparison_complete",
+  "generatedAt": "2026-05-25T00:00:00+00:00",
+  "scope": "eval_critical_pymupdf_quality_repair_sidecar_oracle_comparison",
+  "request": {
+    "inputSchema": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-executor-dry-run.v1",
+    "inputStatus": "executor_dry_run_complete",
+    "inputGateDecision": "ready_for_pymupdf_quality_repair_sidecar_oracle_comparison",
+    "requiredParentTranche": "parsed_artifact_pymupdf_quality_repair_executor_dry_run",
+    "sidecarOraclePackSchema": "",
+    "sidecarOraclePackStatus": "",
+    "sidecarOraclePackState": "not_provided",
+    "reportOnly": true,
+    "comparisonOnly": true
+  },
+  "safety": {
+    "sidecarParserInvoked": false,
+    "parserRerun": false,
+    "canonicalParsedArtifactWrite": false,
+    "parserRoutingChanged": false,
+    "dbMutation": false,
+    "indexMutation": false,
+    "reindex": false,
+    "reembed": false,
+    "vaultScan": false,
+    "externalDownload": false,
+    "sourceSpanCreated": false,
+    "strictEvidenceCreated": false,
+    "citationEvidenceCreated": false,
+    "runtimeEvidenceCreated": false,
+    "answerPathInvoked": false,
+    "answerabilityPromoted": false,
+    "privatePathLeakAllowed": false
+  },
+  "counts": {
+    "inputPlanRows": 1,
+    "oracleRequirementRows": 1,
+    "oracleAgreesPlanRows": 0,
+    "oracleMissingPlanRows": 1,
+    "oracleConflictPlanRows": 0,
+    "unsafePlanRows": 0,
+    "oracleAgreementSignalRows": 0,
+    "oracleMissingSignalRows": 1,
+    "oracleConflictSignalRows": 0,
+    "unsafeSignalRows": 0,
+    "safeApplyCandidateRows": 0,
+    "sidecarOraclePackRows": 0,
+    "parserRerunRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "parserRoutingChangedRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "runtimeEvidenceCreatedRows": 0,
+    "citationEvidenceCreatedRows": 0,
+    "strictEvidenceCreatedRows": 0,
+    "answerPathInvokedRows": 0,
+    "answerabilityPromotionRows": 0,
+    "schemaViolationCount": 0,
+    "privatePathLeakRows": 0
+  },
+  "gate": {
+    "decision": "blocked_until_sidecar_oracle_candidate_pack_available",
+    "schemaViolations": [],
+    "unsafeUpstreamFlags": [],
+    "nextTranche": "parsed_artifact_pymupdf_quality_repair_sidecar_oracle_candidate_pack_design"
+  },
+  "byPaperId": {
+    "2600.00001": {
+      "artifactId": "paper_2600_00001",
+      "oracleComparisonDisposition": "oracle_missing",
+      "safeApplyCandidate": false,
+      "requiredOracleRows": 1
+    }
+  },
+  "byOracleComparisonDisposition": {
+    "oracle_missing": 1
+  },
+  "byOracleSignalStatus": {
+    "oracle_missing": 1
+  },
+  "bySidecarOracleRequirement": {
+    "table_body_cell_oracle": 1
+  },
+  "byPrimaryRepairStrategy": {
+    "pymupdf_table_numeric_locator_repair_design": 1
+  },
+  "comparisonRows": [
+    {
+      "planId": "pymupdf-quality-repair-executor-dry-run:0001",
+      "artifactId": "paper_2600_00001",
+      "sourceIds": ["2600.00001"],
+      "paperId": "2600.00001",
+      "paperTitle": "Fixture Paper",
+      "primaryRepairStrategy": "pymupdf_table_numeric_locator_repair_design",
+      "affectedEvidenceTypes": ["table_numeric"],
+      "requiredOracleRows": 1,
+      "oracleAgreementRows": 0,
+      "oracleMissingRows": 1,
+      "oracleConflictRows": 0,
+      "unsafeOracleRows": 0,
+      "oracleComparisonDisposition": "oracle_missing",
+      "oracleComparisonReasons": ["sidecar_oracle_pack_not_provided"],
+      "safeApplyCandidate": false,
+      "safeApplyBlockers": [
+        "oracle_missing",
+        "sidecar_oracle_comparison_required_before_apply"
+      ],
+      "reportOnly": true,
+      "mutationCounters": {
+        "parserRerunRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+        "parserRoutingChangedRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "sourceSpanCreatedRows": 0,
+        "runtimeEvidenceCreatedRows": 0,
+        "citationEvidenceCreatedRows": 0,
+        "strictEvidenceCreatedRows": 0,
+        "answerPathInvokedRows": 0,
+        "answerabilityPromotionRows": 0,
+        "schemaViolationCount": 0,
+        "privatePathLeakRows": 0
+      }
+    }
+  ],
+  "oracleSignalRows": [
+    {
+      "planId": "pymupdf-quality-repair-executor-dry-run:0001",
+      "artifactId": "paper_2600_00001",
+      "paperId": "2600.00001",
+      "requirement": "table_body_cell_oracle",
+      "component": "table_numeric_region_locator",
+      "expectedCandidateParsers": ["camelot_local", "pdfplumber_local"],
+      "observedCandidateParsers": ["camelot_local", "pdfplumber_local"],
+      "oracleStatus": "oracle_missing",
+      "oracleStatusReasons": ["sidecar_oracle_pack_not_provided"],
+      "sourceContentHashVerified": false,
+      "pageLocatorVerified": false,
+      "bboxOrLocatorVerified": false,
+      "deterministicIdentityVerified": false,
+      "oracleInvokedByThisReport": false,
+      "localOnly": true,
+      "reportOnly": true,
+      "mutationCounters": {
+        "parserRerunRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+        "parserRoutingChangedRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "sourceSpanCreatedRows": 0,
+        "runtimeEvidenceCreatedRows": 0,
+        "citationEvidenceCreatedRows": 0,
+        "strictEvidenceCreatedRows": 0,
+        "answerPathInvokedRows": 0,
+        "answerabilityPromotionRows": 0,
+        "schemaViolationCount": 0,
+        "privatePathLeakRows": 0
+      }
+    }
+  ],
+  "warnings": ["sidecar_oracle_candidate_pack_missing_or_incomplete"]
+}
