@@ -1,0 +1,226 @@
+{
+  "schema": "knowledge-hub.paper.text-evidence-rc-text-only-scope-gate.v1",
+  "status": "blocked",
+  "generatedAt": "2026-05-30T16:06:11Z",
+  "scope": {
+    "writes": "report_only",
+    "scopePolicy": "text_evidence_v0_1_rc_only",
+    "visualLayoutBranchDeferred": true,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "canonicalCheckoutEdited": false,
+    "vaultScanRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "externalDownloadRows": 0
+  },
+  "inputReports": {
+    "convergenceReportRef": "text_evidence_rc_convergence.v1.json",
+    "convergenceStatus": "",
+    "convergenceNextAction": ""
+  },
+  "evidencePolicy": {
+    "allowsTextEvidence": true,
+    "allowsCaptionTextEvidence": true,
+    "allowsSectionParagraphTextSpans": true,
+    "allowsTableCaptionCandidates": true,
+    "allowsEquationLocatorContextCandidates": true,
+    "allowsVisualInspectionEvidence": false,
+    "allowsVlmDerivedCitationGradeEvidence": false,
+    "allowsStrictEvidencePromotion": false,
+    "allowsRuntimeAnswerVisibleExposure": false
+  },
+  "phaseRows": 6,
+  "textReadyRows": 1,
+  "textHoldRows": 5,
+  "deferredRows": 6,
+  "blockerRows": 6,
+  "textOnlyRcReady": false,
+  "publicRcReady": false,
+  "decision": "text_only_scope_blocked",
+  "phaseReports": [
+    {
+      "phase": "figure_caption_text_qa_readback",
+      "reportRef": "figure_caption_text_qa_readback.v1.json",
+      "reportSchema": "",
+      "reportStatus": "",
+      "requiredScope": "caption_text_only",
+      "textScopeReady": false,
+      "phaseDisposition": "text_scope_hold",
+      "keyCounts": {},
+      "visualUnsupportedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0,
+      "privatePathLeakRows": 0
+    },
+    {
+      "phase": "text_section_paragraph_span_artifacts",
+      "reportRef": "text_section_paragraph_span_artifacts.v1.json",
+      "reportSchema": "",
+      "reportStatus": "",
+      "requiredScope": "section_paragraph_text_spans",
+      "textScopeReady": false,
+      "phaseDisposition": "text_scope_hold",
+      "keyCounts": {},
+      "visualUnsupportedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0,
+      "privatePathLeakRows": 0
+    },
+    {
+      "phase": "text_table_caption_candidate_artifacts",
+      "reportRef": "text_table_caption_candidate_artifacts.v1.json",
+      "reportSchema": "",
+      "reportStatus": "",
+      "requiredScope": "table_caption_and_table_like_text_candidates",
+      "textScopeReady": false,
+      "phaseDisposition": "text_scope_hold",
+      "keyCounts": {},
+      "visualUnsupportedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0,
+      "privatePathLeakRows": 0
+    },
+    {
+      "phase": "text_equation_locator_context_artifacts",
+      "reportRef": "text_equation_locator_context_artifacts.v1.json",
+      "reportSchema": "",
+      "reportStatus": "",
+      "requiredScope": "equation_locator_and_surrounding_text_context",
+      "textScopeReady": false,
+      "phaseDisposition": "text_scope_hold",
+      "keyCounts": {},
+      "visualUnsupportedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0,
+      "privatePathLeakRows": 0
+    },
+    {
+      "phase": "text_complex_qa_eval_alignment",
+      "reportRef": "text_complex_qa_eval_alignment.v1.json",
+      "reportSchema": "",
+      "reportStatus": "",
+      "requiredScope": "text_answerable_candidate_visual_unsupported_split",
+      "textScopeReady": false,
+      "phaseDisposition": "text_scope_hold",
+      "keyCounts": {},
+      "visualUnsupportedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0,
+      "privatePathLeakRows": 0
+    },
+    {
+      "phase": "source_alias_normalization",
+      "reportRef": "source_alias_normalization.v1.json",
+      "reportSchema": "knowledge-hub.paper.source-alias-normalization-report.v1",
+      "reportStatus": "ready",
+      "requiredScope": "short_alias_contextual_resolution_policy",
+      "textScopeReady": true,
+      "phaseDisposition": "text_scope_ready",
+      "keyCounts": {
+        "caseRows": 10,
+        "unsafeDirectAliasRows": 0,
+        "expectationFailureRows": 0,
+        "privatePathLeakRows": 0,
+        "rowCount": 10
+      },
+      "visualUnsupportedRows": 0,
+      "strictEvidencePromotionRows": 0,
+      "runtimeAnswerVisibleExposureRows": 0,
+      "privatePathLeakRows": 0
+    }
+  ],
+  "deferredItems": [
+    {
+      "itemId": "visual_layout_image_format_branch",
+      "deferredReason": "outside_text_evidence_v01_rc_scope",
+      "futureBranchHint": "codex/visual-layout-image-format-evidence-20260526",
+      "requiredBeforePublicTextRc": false
+    },
+    {
+      "itemId": "bbox_identity_context_probe",
+      "deferredReason": "requires layout-aware provenance recovery, not text-only answerability",
+      "futureBranchHint": "codex/visual-layout-image-format-evidence-20260526",
+      "requiredBeforePublicTextRc": false
+    },
+    {
+      "itemId": "table_cell_grid_numeric_extraction",
+      "deferredReason": "table captions are candidates only until cell identity is recovered",
+      "futureBranchHint": "codex/table-cell-grid-evidence-20260526",
+      "requiredBeforePublicTextRc": false
+    },
+    {
+      "itemId": "equation_visual_latex_reconstruction",
+      "deferredReason": "equation locator/context is text-only; LaTeX reconstruction needs a later parser path",
+      "futureBranchHint": "codex/equation-visual-latex-evidence-20260526",
+      "requiredBeforePublicTextRc": false
+    },
+    {
+      "itemId": "figure_visual_binding",
+      "deferredReason": "figure captions can be text evidence; image/visual binding is a separate evidence type",
+      "futureBranchHint": "codex/figure-visual-binding-evidence-20260526",
+      "requiredBeforePublicTextRc": false
+    },
+    {
+      "itemId": "vlm_visual_interpretation",
+      "deferredReason": "external or VLM-derived interpretation cannot become citation-grade text evidence by default",
+      "futureBranchHint": "codex/visual-layout-image-format-evidence-20260526",
+      "requiredBeforePublicTextRc": false
+    }
+  ],
+  "blockers": [
+    {
+      "blockerId": "missing_phase_report:figure_caption_text_qa_readback",
+      "severity": "hold",
+      "reason": "required phase report figure_caption_text_qa_readback.v1.json is not present in current reports_root"
+    },
+    {
+      "blockerId": "missing_phase_report:text_section_paragraph_span_artifacts",
+      "severity": "hold",
+      "reason": "required phase report text_section_paragraph_span_artifacts.v1.json is not present in current reports_root"
+    },
+    {
+      "blockerId": "missing_phase_report:text_table_caption_candidate_artifacts",
+      "severity": "hold",
+      "reason": "required phase report text_table_caption_candidate_artifacts.v1.json is not present in current reports_root"
+    },
+    {
+      "blockerId": "missing_phase_report:text_equation_locator_context_artifacts",
+      "severity": "hold",
+      "reason": "required phase report text_equation_locator_context_artifacts.v1.json is not present in current reports_root"
+    },
+    {
+      "blockerId": "missing_phase_report:text_complex_qa_eval_alignment",
+      "severity": "hold",
+      "reason": "required phase report text_complex_qa_eval_alignment.v1.json is not present in current reports_root"
+    },
+    {
+      "blockerId": "missing_convergence_report",
+      "severity": "hold",
+      "reason": "required convergence report text_evidence_rc_convergence.v1.json is not present in current reports_root"
+    }
+  ],
+  "nextAction": "replay_missing_text_evidence_phase_reports",
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "mergeRows": 0,
+    "cherryPickRows": 0,
+    "worktreeDeletionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0,
+    "strictEvidencePromotionRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "reportHash": "sha256:1813b0ae7fec19dad40607cf0d72e5b546da4476f12090a2818d5418811de352",
+  "warnings": [
+    "Visual/layout/image/format evidence remains deferred to later branch work.",
+    "This report does not close PR #149 and does not edit the canonical dirty checkout."
+  ],
+  "schemaErrors": []
+}
