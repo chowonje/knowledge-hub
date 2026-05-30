@@ -39,6 +39,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.text-evidence-rc-text-only-scope-gate.v1": "paper-text-evidence-rc-text-only-scope-gate.v1.json",
     "knowledge-hub.paper.text-span-artifact-candidate.v1": "paper-text-span-artifact-candidate.v1.json",
     "knowledge-hub.paper.text-section-paragraph-span-artifacts-report.v1": "paper-text-section-paragraph-span-artifacts-report.v1.json",
+    "knowledge-hub.paper.table-text-artifact-candidate.v1": "paper-table-text-artifact-candidate.v1.json",
+    "knowledge-hub.paper.text-table-caption-candidate-artifacts-report.v1": "paper-text-table-caption-candidate-artifacts-report.v1.json",
     "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1": "paper-evidence-chunk-answer-preview-result.v1.json",
     "knowledge-hub.paper.extraction-report.v1": "paper-extraction-report-result.v1.json",
     "knowledge-hub.paper.parsed-materialization.result.v1": "paper-parsed-materialization-result.v1.json",

@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-text-only-scope-gate.v1",
   "status": "blocked",
-  "generatedAt": "2026-05-30T16:25:53Z",
+  "generatedAt": "2026-05-30T16:55:15Z",
   "scope": {
     "writes": "report_only",
     "scopePolicy": "text_evidence_v0_1_rc_only",
@@ -32,10 +32,10 @@
     "allowsRuntimeAnswerVisibleExposure": false
   },
   "phaseRows": 6,
-  "textReadyRows": 2,
-  "textHoldRows": 4,
+  "textReadyRows": 3,
+  "textHoldRows": 3,
   "deferredRows": 6,
-  "blockerRows": 5,
+  "blockerRows": 4,
   "textOnlyRcReady": false,
   "publicRcReady": false,
   "decision": "text_only_scope_blocked",
@@ -74,12 +74,15 @@
     {
       "phase": "text_table_caption_candidate_artifacts",
       "reportRef": "text_table_caption_candidate_artifacts.v1.json",
-      "reportSchema": "",
-      "reportStatus": "",
+      "reportSchema": "knowledge-hub.paper.text-table-caption-candidate-artifacts-report.v1",
+      "reportStatus": "ready",
       "requiredScope": "table_caption_and_table_like_text_candidates",
-      "textScopeReady": false,
-      "phaseDisposition": "text_scope_hold",
-      "keyCounts": {},
+      "textScopeReady": true,
+      "phaseDisposition": "text_scope_ready",
+      "keyCounts": {
+        "candidateRows": 47,
+        "privatePathLeakRows": 0
+      },
       "visualUnsupportedRows": 0,
       "strictEvidencePromotionRows": 0,
       "runtimeAnswerVisibleExposureRows": 0,
@@ -179,11 +182,6 @@
       "reason": "required phase report figure_caption_text_qa_readback.v1.json is not present in current reports_root"
     },
     {
-      "blockerId": "missing_phase_report:text_table_caption_candidate_artifacts",
-      "severity": "hold",
-      "reason": "required phase report text_table_caption_candidate_artifacts.v1.json is not present in current reports_root"
-    },
-    {
       "blockerId": "missing_phase_report:text_equation_locator_context_artifacts",
       "severity": "hold",
       "reason": "required phase report text_equation_locator_context_artifacts.v1.json is not present in current reports_root"
@@ -215,7 +213,7 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:15fb2e950597c97cec513726f482d32e116aa1c96302aa1ccec74981b22cba21",
+  "reportHash": "sha256:be8db577fbdfa25bb4a1f7d9320c94c0db8a847c79f3b0281790b3d76ea769f6",
   "warnings": [
     "Visual/layout/image/format evidence remains deferred to later branch work.",
     "This report does not close PR #149 and does not edit the canonical dirty checkout."
