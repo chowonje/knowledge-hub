@@ -34,6 +34,8 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.public.evidence.v1": "paper-public-evidence-result.v1.json",
     "knowledge-hub.paper.public.memory.v1": "paper-public-memory-result.v1.json",
     "knowledge-hub.paper.public.related.v1": "paper-public-related-result.v1.json",
+    "knowledge-hub.paper.source-alias-normalization-case.v1": "paper-source-alias-normalization-case.v1.json",
+    "knowledge-hub.paper.source-alias-normalization-report.v1": "paper-source-alias-normalization-report.v1.json",
     "knowledge-hub.paper.evidence-chunk-answer-preview.result.v1": "paper-evidence-chunk-answer-preview-result.v1.json",
     "knowledge-hub.paper.extraction-report.v1": "paper-extraction-report-result.v1.json",
     "knowledge-hub.paper.parsed-materialization.result.v1": "paper-parsed-materialization-result.v1.json",

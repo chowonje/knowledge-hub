@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-source-alias-normalization-case.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "caseId",
+    "query",
+    "queryHash",
+    "shortAlias",
+    "shortAliasPresent",
+    "description",
+    "family",
+    "disposition",
+    "expectedDisposition",
+    "expectationMet",
+    "sourceResolutionPolicy",
+    "directShortAliasResolutionAllowed",
+    "contextSignals",
+    "contextTerms",
+    "explicitPaperId",
+    "explicitTitle",
+    "queryPlan",
+    "queryPlanResolvedPaperIdRows",
+    "unsafeDirectAliasResolution",
+    "blockerReason",
+    "runtimeWiringChangedRows",
+    "strictEvidencePromotionRows",
+    "runtimeAnswerVisibleExposureRows"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.source-alias-normalization-case.v1" },
+    "caseId": { "type": "string", "minLength": 1 },
+    "query": { "type": "string", "minLength": 1 },
+    "queryHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "shortAlias": { "enum": ["RAG", "GPT", "CNN", "VLM"] },
+    "shortAliasPresent": { "type": "boolean" },
+    "description": { "type": "string" },
+    "family": {
+      "enum": ["concept_explainer", "paper_lookup", "paper_compare", "paper_discover"]
+    },
+    "disposition": {
+      "enum": [
+        "blocked_short_alias_no_context",
+        "concept_only",
+        "contextual_alias_resolved",
+        "discover_only",
+        "explicit_id_resolved",
+        "explicit_title_context"
+      ]
+    },
+    "expectedDisposition": {
+      "enum": [
+        "blocked_short_alias_no_context",
+        "concept_only",
+        "contextual_alias_resolved",
+        "discover_only",
+        "explicit_id_resolved",
+        "explicit_title_context"
+      ]
+    },
+    "expectationMet": { "type": "boolean" },
+    "sourceResolutionPolicy": {
+      "enum": [
+        "contextual_resolution_only",
+        "explicit_source_resolution_allowed",
+        "no_direct_source_resolution",
+        "representative_candidates_only",
+        "shortlist_only"
+      ]
+    },
+    "directShortAliasResolutionAllowed": { "type": "boolean" },
+    "contextSignals": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "contextTerms": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "explicitPaperId": { "type": "string" },
+    "explicitTitle": { "type": "string" },
+    "queryPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "entities", "expandedTerms", "resolvedPaperIds", "answerMode"],
+      "properties": {
+        "family": { "type": "string" },
+        "entities": { "type": "array", "items": { "type": "string" } },
+        "expandedTerms": { "type": "array", "items": { "type": "string" } },
+        "resolvedPaperIds": { "type": "array", "items": { "type": "string" } },
+        "answerMode": { "type": "string" }
+      }
+    },
+    "queryPlanResolvedPaperIdRows": { "type": "integer", "minimum": 0 },
+    "unsafeDirectAliasResolution": { "type": "boolean" },
+    "blockerReason": { "type": "string" },
+    "runtimeWiringChangedRows": { "const": 0 },
+    "strictEvidencePromotionRows": { "const": 0 },
+    "runtimeAnswerVisibleExposureRows": { "const": 0 }
+  }
+}
