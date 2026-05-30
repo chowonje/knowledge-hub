@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-positive-section-paragraph-seed.v1",
+  "title": "KnowledgeOS v0.1 RC corpus-scale answer quality positive section/paragraph seed",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "policy",
+    "selectionPolicy",
+    "counts",
+    "gate",
+    "positiveSeedRows",
+    "heldProbeRows",
+    "checkRows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-positive-section-paragraph-seed.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "type": "string", "minLength": 1 },
+    "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "postMergeReportRef",
+        "controlledExecutionReportRef",
+        "liveRunnerDryRunReportRef",
+        "corpusManifestRef",
+        "papersDirRef"
+      ],
+      "properties": {
+        "postMergeReportRef": { "type": "string", "minLength": 1 },
+        "controlledExecutionReportRef": { "type": "string", "minLength": 1 },
+        "liveRunnerDryRunReportRef": { "type": "string", "minLength": 1 },
+        "corpusManifestRef": { "type": "string", "minLength": 1 },
+        "papersDirRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "labsInternalOnly",
+        "reportOnly",
+        "localFakeLlmOnly",
+        "externalModelCallsAllowed",
+        "judgeModelCallsAllowed",
+        "answerTextExcludedFromReport",
+        "citationPayloadExcludedFromReport",
+        "sourcePayloadExcludedFromReport",
+        "excerptExcludedFromReport",
+        "publicDefaultPromotionAllowed",
+        "tableEquationFigurePromotionAllowed"
+      ],
+      "properties": {
+        "labsInternalOnly": { "type": "boolean" },
+        "reportOnly": { "type": "boolean" },
+        "localFakeLlmOnly": { "type": "boolean" },
+        "externalModelCallsAllowed": { "type": "boolean" },
+        "judgeModelCallsAllowed": { "type": "boolean" },
+        "answerTextExcludedFromReport": { "type": "boolean" },
+        "citationPayloadExcludedFromReport": { "type": "boolean" },
+        "sourcePayloadExcludedFromReport": { "type": "boolean" },
+        "excerptExcludedFromReport": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "type": "boolean" },
+        "tableEquationFigurePromotionAllowed": { "type": "boolean" }
+      }
+    },
+    "selectionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimumPositiveSeedRows",
+        "eligibleQuestionCategories",
+        "eligibleOriginalEvidenceTypes",
+        "proposedExpectedEvidenceType",
+        "proposedAnswerabilityExpectation",
+        "requiresSourceCoverageForAllPaperIds",
+        "requiresCitationAndSpanRowsPerPaper",
+        "requiresSupportTermCoverage"
+      ],
+      "properties": {
+        "minimumPositiveSeedRows": { "type": "integer", "minimum": 0 },
+        "eligibleQuestionCategories": { "type": "array", "items": { "type": "string" } },
+        "eligibleOriginalEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+        "proposedExpectedEvidenceType": { "type": "string", "minLength": 1 },
+        "proposedAnswerabilityExpectation": { "type": "string", "minLength": 1 },
+        "requiresSourceCoverageForAllPaperIds": { "type": "boolean" },
+        "requiresCitationAndSpanRowsPerPaper": { "type": "integer", "minimum": 0 },
+        "requiresSupportTermCoverage": { "type": "boolean" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": ["integer", "number"] },
+      "required": [
+        "inputCaseRows",
+        "eligibleSectionParagraphProbeRows",
+        "positiveProbeAttemptedRows",
+        "positiveProbePassRows",
+        "positiveProbeHeldRows",
+        "positiveSeedRows",
+        "heldExpectedNoAnswerRows",
+        "heldStructuredModalityRows",
+        "controlledExecutionUnexpectedAnswerableRows",
+        "controlledExecutionNoAnswerSafetyFailRows",
+        "publicDefaultPromotionHeldRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ]
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positiveSectionParagraphSeedReady",
+        "postMergeReady",
+        "controlledExecutionReady",
+        "noAnswerSafetyStillGreen",
+        "positiveSeedRowsPresent",
+        "expectedNoAnswerRowsHeld",
+        "structuredModalityRowsHeld",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "properties": {
+        "positiveSectionParagraphSeedReady": { "type": "boolean" },
+        "postMergeReady": { "type": "boolean" },
+        "controlledExecutionReady": { "type": "boolean" },
+        "noAnswerSafetyStillGreen": { "type": "boolean" },
+        "positiveSeedRowsPresent": { "type": "boolean" },
+        "expectedNoAnswerRowsHeld": { "type": "boolean" },
+        "structuredModalityRowsHeld": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "type": "boolean" },
+        "generalRcReady": { "type": "boolean" },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "positiveSeedRows": { "type": "array", "items": { "$ref": "#/$defs/probeRow" } },
+    "heldProbeRows": { "type": "array", "items": { "$ref": "#/$defs/probeRow" } },
+    "checkRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["checkId", "status", "blockers"],
+        "properties": {
+          "checkId": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["pass", "fail"] },
+          "blockers": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "probeRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseIndex",
+        "caseId",
+        "questionCategory",
+        "originalExpectedEvidenceType",
+        "originalAnswerabilityExpectation",
+        "proposedExpectedEvidenceType",
+        "proposedAnswerabilityExpectation",
+        "paperIds",
+        "questionSha256",
+        "observedStatus",
+        "observedAnswerable",
+        "adapterStatus",
+        "adapterRowsAdded",
+        "adapterCandidateRowsConsidered",
+        "selectedEvidenceCount",
+        "citationCount",
+        "evidencePacketContractSpanRows",
+        "localFakeLlmCallRows",
+        "observedSourceIds",
+        "missingSourceIds",
+        "supportTermGroups",
+        "matchedSupportTermGroups",
+        "missingSupportTermGroups",
+        "dimensionStatuses",
+        "qualityScore",
+        "qualityGrade",
+        "selectedPositiveSeed",
+        "answerTextIncludedInReport",
+        "citationPayloadIncludedInReport",
+        "sourcePayloadIncludedInReport",
+        "excerptIncludedInReport",
+        "failureReasons"
+      ],
+      "properties": {
+        "caseIndex": { "type": "integer", "minimum": 0 },
+        "caseId": { "type": "string", "minLength": 1 },
+        "questionCategory": { "type": "string" },
+        "originalExpectedEvidenceType": { "type": "string" },
+        "originalAnswerabilityExpectation": { "type": "string" },
+        "proposedExpectedEvidenceType": { "type": "string" },
+        "proposedAnswerabilityExpectation": { "type": "string" },
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "questionSha256": { "type": "string" },
+        "observedStatus": { "type": "string" },
+        "observedAnswerable": { "type": "boolean" },
+        "adapterStatus": { "type": "string" },
+        "adapterRowsAdded": { "type": "integer", "minimum": 0 },
+        "adapterCandidateRowsConsidered": { "type": "integer", "minimum": 0 },
+        "selectedEvidenceCount": { "type": "integer", "minimum": 0 },
+        "citationCount": { "type": "integer", "minimum": 0 },
+        "evidencePacketContractSpanRows": { "type": "integer", "minimum": 0 },
+        "localFakeLlmCallRows": { "type": "integer", "minimum": 0 },
+        "observedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "missingSourceIds": { "type": "array", "items": { "type": "string" } },
+        "supportTermGroups": { "type": "array", "items": { "type": "string" } },
+        "matchedSupportTermGroups": { "type": "array", "items": { "type": "string" } },
+        "missingSupportTermGroups": { "type": "array", "items": { "type": "string" } },
+        "dimensionStatuses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaValid",
+            "answerabilityExpectation",
+            "sourceCoverage",
+            "citationProvenance",
+            "supportTermCoverage",
+            "publicDefaultHeld"
+          ],
+          "properties": {
+            "schemaValid": { "type": "boolean" },
+            "answerabilityExpectation": { "type": "boolean" },
+            "sourceCoverage": { "type": "boolean" },
+            "citationProvenance": { "type": "boolean" },
+            "supportTermCoverage": { "type": "boolean" },
+            "publicDefaultHeld": { "type": "boolean" }
+          }
+        },
+        "qualityScore": { "type": "number", "minimum": 0, "maximum": 1 },
+        "qualityGrade": { "enum": ["pass", "partial", "fail"] },
+        "selectedPositiveSeed": { "type": "boolean" },
+        "answerTextIncludedInReport": { "type": "boolean" },
+        "citationPayloadIncludedInReport": { "type": "boolean" },
+        "sourcePayloadIncludedInReport": { "type": "boolean" },
+        "excerptIncludedInReport": { "type": "boolean" },
+        "failureReasons": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
