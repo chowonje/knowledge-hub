@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-figure-caption-text-qa-readback.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "paperId",
+    "question",
+    "requestedFigureLabel",
+    "answerabilityStatus",
+    "blockerReason",
+    "evidenceMode",
+    "visualReasoningRequested",
+    "candidateAnswerPacket"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.figure-caption-text-qa-readback.v1" },
+    "status": { "enum": ["answerable", "no_answer"] },
+    "paperId": { "type": "string", "minLength": 1 },
+    "question": { "type": "string", "minLength": 1 },
+    "requestedFigureLabel": { "type": "string" },
+    "answerabilityStatus": { "enum": ["answerable", "no_answer"] },
+    "blockerReason": { "type": "string" },
+    "evidenceMode": { "const": "caption_text_only" },
+    "visualReasoningRequested": { "type": "boolean" },
+    "candidateAnswerPacket": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["packetType", "answerVisible", "strictEvidence", "answer", "evidence"],
+          "properties": {
+            "packetType": { "const": "figure_caption_candidate_answer_packet.v1" },
+            "answerVisible": { "const": false },
+            "strictEvidence": { "const": false },
+            "answer": { "type": "string", "minLength": 1 },
+            "evidence": {
+              "type": "object",
+              "additionalProperties": true,
+              "required": ["artifactId", "paperId", "sourceContentHash", "page", "bbox", "figureLabel", "captionTextHash", "extractionMethod"],
+              "properties": {
+                "artifactId": { "type": "string" },
+                "paperId": { "type": "string" },
+                "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+                "page": { "type": "integer", "minimum": 1 },
+                "bbox": {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "items": { "type": "number" }
+                },
+                "figureLabel": { "type": "string" },
+                "captionTextHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+                "extractionMethod": { "const": "pymupdf_text_block_regex_v1" }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

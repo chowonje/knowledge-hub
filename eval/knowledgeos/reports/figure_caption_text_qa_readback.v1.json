@@ -1,0 +1,79 @@
+{
+  "schema": "knowledge-hub.paper.figure-caption-text-qa-readback-report.v1",
+  "status": "ready",
+  "candidateReportStatus": "ready",
+  "candidateArtifactRows": 43,
+  "qaRows": 3,
+  "answerableRows": 1,
+  "noAnswerRows": 2,
+  "visualUnsupportedRows": 1,
+  "rows": [
+    {
+      "schema": "knowledge-hub.paper.figure-caption-text-qa-readback.v1",
+      "status": "answerable",
+      "paperId": "alexnet-2012",
+      "question": "이 논문의 Figure 1은 무엇을 보여주는가?",
+      "requestedFigureLabel": "Figure 1",
+      "answerabilityStatus": "answerable",
+      "blockerReason": "",
+      "evidenceMode": "caption_text_only",
+      "visualReasoningRequested": false,
+      "candidateAnswerPacket": {
+        "packetType": "figure_caption_candidate_answer_packet.v1",
+        "answerVisible": false,
+        "strictEvidence": false,
+        "answer": "Figure 1 shows: A four-layer convolutional neural network with ReLUs (solid line) reaches a 25% training error rate on CIFAR-10 six times faster than an equivalent network with tanh neurons (dashed line). The learning rates for each net- work were chosen independently to make train- ing as fast as possible. No regularization of any kind was employed. The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consis- tently learn several times faster than equivalents with saturating neurons.",
+        "evidence": {
+          "artifactId": "figure-caption:alexnet-2012:figure-1:b20df6a95de3",
+          "paperId": "alexnet-2012",
+          "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+          "page": 3,
+          "bbox": [
+            333.92,
+            272.94,
+            504.0,
+            403.21
+          ],
+          "figureLabel": "Figure 1",
+          "captionTextHash": "sha256:a66eb6da9d97ed5496dbc74b6fc37f7f1c663469eb97c23e06559ed04c1d7193",
+          "extractionMethod": "pymupdf_text_block_regex_v1"
+        }
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-text-qa-readback.v1",
+      "status": "no_answer",
+      "paperId": "alexnet-2012",
+      "question": "이 논문의 Figure 99은 무엇을 보여주는가?",
+      "requestedFigureLabel": "Figure 99",
+      "answerabilityStatus": "no_answer",
+      "blockerReason": "figure_caption_not_found",
+      "evidenceMode": "caption_text_only",
+      "visualReasoningRequested": false,
+      "candidateAnswerPacket": null
+    },
+    {
+      "schema": "knowledge-hub.paper.figure-caption-text-qa-readback.v1",
+      "status": "no_answer",
+      "paperId": "alexnet-2012",
+      "question": "이 논문의 Figure 1에서 막대가 더 높은가?",
+      "requestedFigureLabel": "Figure 1",
+      "answerabilityStatus": "no_answer",
+      "blockerReason": "visual_reasoning_not_supported_in_text_evidence_v01",
+      "evidenceMode": "caption_text_only",
+      "visualReasoningRequested": true,
+      "candidateAnswerPacket": null
+    }
+  ],
+  "mutationCounters": {
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0
+  },
+  "warnings": [],
+  "schemaErrors": []
+}

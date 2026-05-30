@@ -1,7 +1,7 @@
 {
   "schema": "knowledge-hub.paper.text-evidence-rc-text-only-scope-gate.v1",
   "status": "blocked",
-  "generatedAt": "2026-05-30T16:55:15Z",
+  "generatedAt": "2026-05-30T17:28:04Z",
   "scope": {
     "writes": "report_only",
     "scopePolicy": "text_evidence_v0_1_rc_only",
@@ -32,10 +32,10 @@
     "allowsRuntimeAnswerVisibleExposure": false
   },
   "phaseRows": 6,
-  "textReadyRows": 3,
-  "textHoldRows": 3,
+  "textReadyRows": 4,
+  "textHoldRows": 2,
   "deferredRows": 6,
-  "blockerRows": 4,
+  "blockerRows": 3,
   "textOnlyRcReady": false,
   "publicRcReady": false,
   "decision": "text_only_scope_blocked",
@@ -43,13 +43,18 @@
     {
       "phase": "figure_caption_text_qa_readback",
       "reportRef": "figure_caption_text_qa_readback.v1.json",
-      "reportSchema": "",
-      "reportStatus": "",
+      "reportSchema": "knowledge-hub.paper.figure-caption-text-qa-readback-report.v1",
+      "reportStatus": "ready",
       "requiredScope": "caption_text_only",
-      "textScopeReady": false,
-      "phaseDisposition": "text_scope_hold",
-      "keyCounts": {},
-      "visualUnsupportedRows": 0,
+      "textScopeReady": true,
+      "phaseDisposition": "text_scope_ready",
+      "keyCounts": {
+        "answerableRows": 1,
+        "noAnswerRows": 2,
+        "visualUnsupportedRows": 1,
+        "rowCount": 3
+      },
+      "visualUnsupportedRows": 1,
       "strictEvidencePromotionRows": 0,
       "runtimeAnswerVisibleExposureRows": 0,
       "privatePathLeakRows": 0
@@ -177,11 +182,6 @@
   ],
   "blockers": [
     {
-      "blockerId": "missing_phase_report:figure_caption_text_qa_readback",
-      "severity": "hold",
-      "reason": "required phase report figure_caption_text_qa_readback.v1.json is not present in current reports_root"
-    },
-    {
       "blockerId": "missing_phase_report:text_equation_locator_context_artifacts",
       "severity": "hold",
       "reason": "required phase report text_equation_locator_context_artifacts.v1.json is not present in current reports_root"
@@ -213,7 +213,7 @@
   },
   "schemaViolationCount": 0,
   "privatePathLeakRows": 0,
-  "reportHash": "sha256:be8db577fbdfa25bb4a1f7d9320c94c0db8a847c79f3b0281790b3d76ea769f6",
+  "reportHash": "sha256:941ca8bb6f8f7cd6646da91647b6382cc717efaba848c4379cabbe196e495abc",
   "warnings": [
     "Visual/layout/image/format evidence remains deferred to later branch work.",
     "This report does not close PR #149 and does not edit the canonical dirty checkout."

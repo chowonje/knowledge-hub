@@ -1,0 +1,19 @@
+{
+  "schema": "knowledge-hub.paper.figure-caption-artifact-candidate.v1",
+  "paperId": "sample-paper",
+  "paperRef": "papers_dir/sample.pdf",
+  "artifactId": "figure-caption:sample-paper:figure-1:abc123def456",
+  "sourceContentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "page": 2,
+  "bbox": [10.0, 20.0, 200.0, 80.0],
+  "figureLabel": "Figure 1",
+  "captionText": "A minimal local-first figure caption candidate.",
+  "captionTextHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "extractionMethod": "pymupdf_text_block_regex_v1",
+  "confidence": 0.86,
+  "blockerReason": "",
+  "diagnostics": {
+    "source": "pymupdf_block",
+    "blockIndex": 0
+  }
+}
