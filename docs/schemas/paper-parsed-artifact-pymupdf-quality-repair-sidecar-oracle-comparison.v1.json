@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-comparison.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "request",
+    "safety",
+    "counts",
+    "gate",
+    "byPaperId",
+    "byOracleComparisonDisposition",
+    "byOracleSignalStatus",
+    "bySidecarOracleRequirement",
+    "byPrimaryRepairStrategy",
+    "comparisonRows",
+    "oracleSignalRows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-comparison.v1"
+    },
+    "status": {
+      "enum": ["comparison_complete", "ready", "blocked"]
+    },
+    "generatedAt": { "type": "string" },
+    "scope": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": [
+        "inputSchema",
+        "inputStatus",
+        "inputGateDecision",
+        "requiredParentTranche",
+        "sidecarOraclePackSchema",
+        "sidecarOraclePackStatus",
+        "sidecarOraclePackState",
+        "reportOnly",
+        "comparisonOnly"
+      ],
+      "properties": {
+        "inputSchema": {
+          "const": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-executor-dry-run.v1"
+        },
+        "inputStatus": { "enum": ["executor_dry_run_complete", "ready"] },
+        "inputGateDecision": {
+          "const": "ready_for_pymupdf_quality_repair_sidecar_oracle_comparison"
+        },
+        "requiredParentTranche": {
+          "const": "parsed_artifact_pymupdf_quality_repair_executor_dry_run"
+        },
+        "sidecarOraclePackSchema": { "type": "string" },
+        "sidecarOraclePackStatus": { "type": "string" },
+        "sidecarOraclePackState": {
+          "enum": ["not_provided", "schema_mismatch", "not_ready", "ready"]
+        },
+        "reportOnly": { "const": true },
+        "comparisonOnly": { "const": true }
+      },
+      "additionalProperties": true
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "sidecarParserInvoked",
+        "parserRerun",
+        "canonicalParsedArtifactWrite",
+        "parserRoutingChanged",
+        "dbMutation",
+        "indexMutation",
+        "reindex",
+        "reembed",
+        "vaultScan",
+        "externalDownload",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "answerPathInvoked",
+        "answerabilityPromoted",
+        "privatePathLeakAllowed"
+      ],
+      "properties": {
+        "sidecarParserInvoked": { "const": false },
+        "parserRerun": { "const": false },
+        "canonicalParsedArtifactWrite": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "dbMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindex": { "const": false },
+        "reembed": { "const": false },
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "answerabilityPromoted": { "const": false },
+        "privatePathLeakAllowed": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputPlanRows",
+        "oracleRequirementRows",
+        "oracleAgreesPlanRows",
+        "oracleMissingPlanRows",
+        "oracleConflictPlanRows",
+        "unsafePlanRows",
+        "oracleAgreementSignalRows",
+        "oracleMissingSignalRows",
+        "oracleConflictSignalRows",
+        "unsafeSignalRows",
+        "safeApplyCandidateRows",
+        "sidecarOraclePackRows",
+        "parserRerunRows",
+        "canonicalParsedArtifactWriteRows",
+        "parserRoutingChangedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "sourceSpanCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "answerPathInvokedRows",
+        "answerabilityPromotionRows",
+        "schemaViolationCount",
+        "privatePathLeakRows"
+      ],
+      "properties": {
+        "inputPlanRows": { "type": "integer", "minimum": 0 },
+        "oracleRequirementRows": { "type": "integer", "minimum": 0 },
+        "oracleAgreesPlanRows": { "type": "integer", "minimum": 0 },
+        "oracleMissingPlanRows": { "type": "integer", "minimum": 0 },
+        "oracleConflictPlanRows": { "type": "integer", "minimum": 0 },
+        "unsafePlanRows": { "type": "integer", "minimum": 0 },
+        "oracleAgreementSignalRows": { "type": "integer", "minimum": 0 },
+        "oracleMissingSignalRows": { "type": "integer", "minimum": 0 },
+        "oracleConflictSignalRows": { "type": "integer", "minimum": 0 },
+        "unsafeSignalRows": { "type": "integer", "minimum": 0 },
+        "safeApplyCandidateRows": { "type": "integer", "minimum": 0 },
+        "sidecarOraclePackRows": { "type": "integer", "minimum": 0 },
+        "parserRerunRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerabilityPromotionRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": ["decision", "schemaViolations", "unsafeUpstreamFlags", "nextTranche"],
+      "properties": {
+        "decision": {
+          "enum": [
+            "blocked_until_sidecar_oracle_candidate_pack_available",
+            "blocked_until_sidecar_oracle_conflicts_resolved",
+            "blocked_until_sidecar_oracle_comparison_gaps_resolved",
+            "ready_for_pymupdf_quality_repair_safe_apply_subset_review"
+          ]
+        },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "nextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "byPaperId": { "type": "object" },
+    "byOracleComparisonDisposition": { "type": "object" },
+    "byOracleSignalStatus": { "type": "object" },
+    "bySidecarOracleRequirement": { "type": "object" },
+    "byPrimaryRepairStrategy": { "type": "object" },
+    "comparisonRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/comparisonRow" }
+    },
+    "oracleSignalRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/oracleSignalRow" }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "comparisonRow": {
+      "type": "object",
+      "required": [
+        "planId",
+        "artifactId",
+        "sourceIds",
+        "paperId",
+        "paperTitle",
+        "primaryRepairStrategy",
+        "affectedEvidenceTypes",
+        "requiredOracleRows",
+        "oracleAgreementRows",
+        "oracleMissingRows",
+        "oracleConflictRows",
+        "unsafeOracleRows",
+        "oracleComparisonDisposition",
+        "oracleComparisonReasons",
+        "safeApplyCandidate",
+        "safeApplyBlockers",
+        "reportOnly",
+        "mutationCounters"
+      ],
+      "properties": {
+        "planId": { "type": "string" },
+        "artifactId": { "type": "string" },
+        "sourceIds": { "type": "array", "items": { "type": "string" } },
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "primaryRepairStrategy": { "type": "string" },
+        "affectedEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+        "requiredOracleRows": { "type": "integer", "minimum": 0 },
+        "oracleAgreementRows": { "type": "integer", "minimum": 0 },
+        "oracleMissingRows": { "type": "integer", "minimum": 0 },
+        "oracleConflictRows": { "type": "integer", "minimum": 0 },
+        "unsafeOracleRows": { "type": "integer", "minimum": 0 },
+        "oracleComparisonDisposition": {
+          "enum": ["oracle_agrees", "oracle_missing", "oracle_conflict", "unsafe"]
+        },
+        "oracleComparisonReasons": { "type": "array", "items": { "type": "string" } },
+        "safeApplyCandidate": { "type": "boolean" },
+        "safeApplyBlockers": { "type": "array", "items": { "type": "string" } },
+        "reportOnly": { "const": true },
+        "mutationCounters": { "$ref": "#/$defs/zeroCounters" }
+      },
+      "additionalProperties": true
+    },
+    "oracleSignalRow": {
+      "type": "object",
+      "required": [
+        "planId",
+        "artifactId",
+        "paperId",
+        "requirement",
+        "component",
+        "expectedCandidateParsers",
+        "observedCandidateParsers",
+        "oracleStatus",
+        "oracleStatusReasons",
+        "sourceContentHashVerified",
+        "pageLocatorVerified",
+        "bboxOrLocatorVerified",
+        "deterministicIdentityVerified",
+        "oracleInvokedByThisReport",
+        "localOnly",
+        "reportOnly",
+        "mutationCounters"
+      ],
+      "properties": {
+        "planId": { "type": "string" },
+        "artifactId": { "type": "string" },
+        "paperId": { "type": "string" },
+        "requirement": { "type": "string" },
+        "component": { "type": "string" },
+        "expectedCandidateParsers": { "type": "array", "items": { "type": "string" } },
+        "observedCandidateParsers": { "type": "array", "items": { "type": "string" } },
+        "oracleStatus": {
+          "enum": ["oracle_agrees", "oracle_missing", "oracle_conflict", "unsafe"]
+        },
+        "oracleStatusReasons": { "type": "array", "items": { "type": "string" } },
+        "sourceContentHashVerified": { "type": "boolean" },
+        "pageLocatorVerified": { "type": "boolean" },
+        "bboxOrLocatorVerified": { "type": "boolean" },
+        "deterministicIdentityVerified": { "type": "boolean" },
+        "oracleInvokedByThisReport": { "const": false },
+        "localOnly": { "const": true },
+        "reportOnly": { "const": true },
+        "mutationCounters": { "$ref": "#/$defs/zeroCounters" }
+      },
+      "additionalProperties": true
+    },
+    "zeroCounters": {
+      "type": "object",
+      "properties": {
+        "parserRerunRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerabilityPromotionRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
