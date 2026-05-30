@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-gate-refresh-after-positive-answer-execution.v1",
+  "title": "KnowledgeOS v0.1 RC corpus-scale answer quality gate refresh after positive answer execution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "policy",
+    "qualityDimensions",
+    "counts",
+    "gate",
+    "provenanceRows",
+    "checkRows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-gate-refresh-after-positive-answer-execution.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": { "type": "string", "minLength": 1 },
+    "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positiveExecutionReportRef", "corpusManifestRef", "papersDirRef"],
+      "properties": {
+        "positiveExecutionReportRef": { "type": "string", "minLength": 1 },
+        "corpusManifestRef": { "type": "string", "minLength": 1 },
+        "papersDirRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "labsInternalOnly",
+        "reportOnly",
+        "localFakeLlmOnly",
+        "externalModelCallsAllowed",
+        "judgeModelCallsAllowed",
+        "answerStyleJudged",
+        "answerTextExcludedFromReport",
+        "answerContractRawCitationPayloadExcluded",
+        "sourcePayloadExcludedFromReport",
+        "excerptExcludedFromReport",
+        "publicDefaultPromotionAllowed",
+        "tableEquationFigurePromotionAllowed"
+      ],
+      "properties": {
+        "labsInternalOnly": { "type": "boolean" },
+        "reportOnly": { "type": "boolean" },
+        "localFakeLlmOnly": { "type": "boolean" },
+        "externalModelCallsAllowed": { "type": "boolean" },
+        "judgeModelCallsAllowed": { "type": "boolean" },
+        "answerStyleJudged": { "type": "boolean" },
+        "answerTextExcludedFromReport": { "type": "boolean" },
+        "answerContractRawCitationPayloadExcluded": { "type": "boolean" },
+        "sourcePayloadExcludedFromReport": { "type": "boolean" },
+        "excerptExcludedFromReport": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "type": "boolean" },
+        "tableEquationFigurePromotionAllowed": { "type": "boolean" }
+      }
+    },
+    "qualityDimensions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": ["integer", "number"] },
+      "required": [
+        "inputPositiveExecutionRows",
+        "attemptedProvenanceRows",
+        "provenancePassRows",
+        "provenanceFailRows",
+        "positiveSectionParagraphQualityCompleteRows",
+        "heldExpectedNoAnswerRows",
+        "heldStructuredModalityRows",
+        "strictProvenanceSpanRows",
+        "sourceContentHashRows",
+        "charsLocatorRows",
+        "answerContractCitationProvenanceRows",
+        "publicDefaultPromotionHeldRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ]
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qualityGateRefreshReady",
+        "positiveExecutionReady",
+        "noAnswerSafetyStillGreen",
+        "allPositiveProvenancePassed",
+        "positiveSectionParagraphQualityComplete",
+        "expectedNoAnswerRowsHeld",
+        "structuredModalityRowsHeld",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "properties": {
+        "qualityGateRefreshReady": { "type": "boolean" },
+        "positiveExecutionReady": { "type": "boolean" },
+        "noAnswerSafetyStillGreen": { "type": "boolean" },
+        "allPositiveProvenancePassed": { "type": "boolean" },
+        "positiveSectionParagraphQualityComplete": { "type": "boolean" },
+        "expectedNoAnswerRowsHeld": { "type": "boolean" },
+        "structuredModalityRowsHeld": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "type": "boolean" },
+        "generalRcReady": { "type": "boolean" },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "provenanceRows": { "type": "array", "items": { "$ref": "#/$defs/provenanceRow" } },
+    "checkRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["checkId", "status", "blockers"],
+        "properties": {
+          "checkId": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["pass", "fail"] },
+          "blockers": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "spanProofRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spanRef",
+        "sourceId",
+        "sourceRef",
+        "sourceContentHash",
+        "sourceContentHashAvailable",
+        "spanLocator",
+        "spanOffsetAvailable",
+        "charStart",
+        "charEnd",
+        "evidenceKind",
+        "candidateRecordId",
+        "candidateStoreRef",
+        "strictProvenance",
+        "excerptIncludedInReport"
+      ],
+      "properties": {
+        "spanRef": { "type": "string" },
+        "sourceId": { "type": "string" },
+        "sourceRef": { "type": "string" },
+        "sourceContentHash": { "type": "string" },
+        "sourceContentHashAvailable": { "type": "boolean" },
+        "spanLocator": { "type": "string" },
+        "spanOffsetAvailable": { "type": "boolean" },
+        "charStart": { "type": "integer", "minimum": 0 },
+        "charEnd": { "type": "integer", "minimum": 0 },
+        "evidenceKind": { "type": "string" },
+        "candidateRecordId": { "type": "string" },
+        "candidateStoreRef": { "type": "string" },
+        "strictProvenance": { "type": "boolean" },
+        "excerptIncludedInReport": { "type": "boolean" }
+      }
+    },
+    "provenanceRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseIndex",
+        "caseId",
+        "questionCategory",
+        "paperIds",
+        "questionSha256",
+        "observedStatus",
+        "localFakeLlmCallRows",
+        "observedSourceIds",
+        "missingSourceIds",
+        "minRequiredProvenanceRows",
+        "evidencePacketContractSpanRows",
+        "strictProvenanceSpanRows",
+        "sourceContentHashRows",
+        "charsLocatorRows",
+        "answerContractCitationRows",
+        "answerContractCitationProvenanceRows",
+        "dimensionStatuses",
+        "qualityScore",
+        "qualityGrade",
+        "pass",
+        "spanProofRows",
+        "answerTextIncludedInReport",
+        "citationPayloadIncludedInReport",
+        "sourcePayloadIncludedInReport",
+        "excerptIncludedInReport",
+        "failureReasons"
+      ],
+      "properties": {
+        "caseIndex": { "type": "integer", "minimum": 0 },
+        "caseId": { "type": "string", "minLength": 1 },
+        "questionCategory": { "type": "string" },
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "questionSha256": { "type": "string" },
+        "observedStatus": { "type": "string" },
+        "localFakeLlmCallRows": { "type": "integer", "minimum": 0 },
+        "observedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "missingSourceIds": { "type": "array", "items": { "type": "string" } },
+        "minRequiredProvenanceRows": { "type": "integer", "minimum": 0 },
+        "evidencePacketContractSpanRows": { "type": "integer", "minimum": 0 },
+        "strictProvenanceSpanRows": { "type": "integer", "minimum": 0 },
+        "sourceContentHashRows": { "type": "integer", "minimum": 0 },
+        "charsLocatorRows": { "type": "integer", "minimum": 0 },
+        "answerContractCitationRows": { "type": "integer", "minimum": 0 },
+        "answerContractCitationProvenanceRows": { "type": "integer", "minimum": 0 },
+        "dimensionStatuses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "answerPayloadStatusOk",
+            "evidencePacketContractPresent",
+            "answerContractPresent",
+            "sourceCoverage",
+            "sourceHashCoverage",
+            "charsLocatorCoverage",
+            "answerContractCitationProvenance",
+            "publicDefaultHeld"
+          ],
+          "properties": {
+            "answerPayloadStatusOk": { "type": "boolean" },
+            "evidencePacketContractPresent": { "type": "boolean" },
+            "answerContractPresent": { "type": "boolean" },
+            "sourceCoverage": { "type": "boolean" },
+            "sourceHashCoverage": { "type": "boolean" },
+            "charsLocatorCoverage": { "type": "boolean" },
+            "answerContractCitationProvenance": { "type": "boolean" },
+            "publicDefaultHeld": { "type": "boolean" }
+          }
+        },
+        "qualityScore": { "type": "number", "minimum": 0, "maximum": 1 },
+        "qualityGrade": { "enum": ["pass", "partial", "fail"] },
+        "pass": { "type": "boolean" },
+        "spanProofRows": { "type": "array", "items": { "$ref": "#/$defs/spanProofRow" } },
+        "answerTextIncludedInReport": { "type": "boolean" },
+        "citationPayloadIncludedInReport": { "type": "boolean" },
+        "sourcePayloadIncludedInReport": { "type": "boolean" },
+        "excerptIncludedInReport": { "type": "boolean" },
+        "failureReasons": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
