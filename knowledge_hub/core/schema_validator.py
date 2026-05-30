@@ -243,6 +243,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-positive-answer-execution-gate.v1": "knowledgeos-v01-rc-corpus-scale-answer-quality-positive-answer-execution-gate.v1.json",
     "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-gate-refresh-after-positive-answer-execution.v1": "knowledgeos-v01-rc-corpus-scale-answer-quality-gate-refresh-after-positive-answer-execution.v1.json",
     "knowledge-hub.product.knowledgeos-v01-rc-positive-section-paragraph-quality-complete-review.v1": "knowledgeos-v01-rc-positive-section-paragraph-quality-complete-review.v1.json",
+    "knowledge-hub.product.knowledgeos-v01-rc-research-preview-release-readiness-decision-gate.v1": "knowledgeos-v01-rc-research-preview-release-readiness-decision-gate.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-pack-design.v1": "paper-visual-annotation-expansion-pack-design.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-attachment-pack.v1": "paper-visual-annotation-expansion-attachment-pack.v1.json",
     "knowledge-hub.paper.visual-annotation-expansion-manual-run-packet.v1": "paper-visual-annotation-expansion-manual-run-packet.v1.json",
