@@ -1,0 +1,1732 @@
+{
+  "schema": "knowledge-hub.paper.text-table-caption-candidate-artifacts-report.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-30T16:55:10Z",
+  "scope": {
+    "paperRows": 4,
+    "paperRefs": [
+      "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf"
+    ],
+    "writes": "report_only",
+    "canonicalParsedArtifactWriteRows": 0,
+    "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+    "tableGridGuarantee": "none_v0_1_candidate_only"
+  },
+  "paperDiagnostics": [
+    {
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "captionRows": 2,
+      "tableLikeTextRows": 2,
+      "candidateRows": 2,
+      "pageCount": 9
+    },
+    {
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "captionRows": 14,
+      "tableLikeTextRows": 7,
+      "candidateRows": 14,
+      "pageCount": 12
+    },
+    {
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "captionRows": 20,
+      "tableLikeTextRows": 6,
+      "candidateRows": 20,
+      "pageCount": 48
+    },
+    {
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "captionRows": 11,
+      "tableLikeTextRows": 6,
+      "candidateRows": 11,
+      "pageCount": 14
+    }
+  ],
+  "candidateRows": 47,
+  "captionOnlyRows": 26,
+  "tableLikeTextRows": 21,
+  "numericCandidateRows": 21,
+  "candidates": [
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "table-text:alexnet-2012:table-1:2fcdd9bd4ebd",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 25320,
+      "captionCharEnd": 25424,
+      "page": 7,
+      "captionBbox": [
+        341.64,
+        290.39,
+        504.0,
+        322.03
+      ],
+      "tableTextBbox": [
+        256.54,
+        431.09,
+        496.53,
+        499.93
+      ],
+      "tableLabel": "Table 1",
+      "captionText": "Comparison of results on ILSVRC- 2010 test set. In italics are best results achieved by others.",
+      "captionTextHash": "sha256:26bd3c924771637da941ba535ec7bea3244d5f191401024cff3970480242d758",
+      "tableText": "Model Top-1 (val) Top-5 (val) Top-5 (test) SIFT + FVs [7] — — 26.2% 1 CNN 40.7% 18.2% — 5 CNNs 38.1% 16.4% 16.4% 1 CNN* 39.0% 16.6% — 7 CNNs* 36.7% 15.4% 15.3%",
+      "tableTextHash": "sha256:ddbb2cd3672a4def3dd860fe8a060ab5cf4db40de705590ed8783ee0f60033f4",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 5,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "alexnet-2012",
+      "paperRef": "papers_dir/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+      "artifactId": "table-text:alexnet-2012:table-2:a72d325d1558",
+      "sourceContentHash": "sha256:90137160c57217953d5f61857e64ca58e85f06e1b13b4f475c918b1b582b9771",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 26253,
+      "captionCharEnd": 26498,
+      "page": 7,
+      "captionBbox": [
+        250.56,
+        511.36,
+        504.0,
+        553.96
+      ],
+      "tableTextBbox": [
+        108.0,
+        711.56,
+        504.0,
+        732.03
+      ],
+      "tableLabel": "Table 2",
+      "captionText": "Comparison of error rates on ILSVRC-2012 validation and test sets. In italics are best results achieved by others. Models with an asterisk* were “pre-trained” to classify the entire ImageNet 2011 Fall release. See Section 6 for details.",
+      "captionTextHash": "sha256:e665647e65d4382e9c3ca5654e51a3efe546108b3a2fbd81edd448ffae93aea9",
+      "tableText": "5The error rates without averaging predictions over ten patches as described in Section 4.1 are 39.0% and 18.3%.",
+      "tableTextHash": "sha256:f818d3da4b9c4b5f389b086cfc85e7b56cdf56be28f38b82d9ecb9c290d1b8d6",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 8,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-1:2087425abfd9",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 20825,
+      "captionCharEnd": 21035,
+      "page": 5,
+      "captionBbox": [
+        50.11,
+        224.67,
+        545.11,
+        244.6
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 1",
+      "captionText": "Architectures for ImageNet. Building blocks are shown in brackets (see also Fig. 5), with the numbers of blocks stacked. Down- sampling is performed by conv3 1, conv4 1, and conv5 1 with a stride of 2.",
+      "captionTextHash": "sha256:6792ff49404114ec848bc71fc6e87562f26cebac2728fb29af01dc9897db94fb",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 70,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-2:0ba22d785861",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 22677,
+      "captionCharEnd": 22859,
+      "page": 5,
+      "captionBbox": [
+        50.11,
+        485.61,
+        286.36,
+        516.49
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 2",
+      "captionText": "Top-1 error (%, 10-crop testing) on ImageNet validation. Here the ResNets have no extra parameter compared to their plain counterparts. Fig. 4 shows the training procedures.",
+      "captionTextHash": "sha256:64fef511e444a11abfe72cb028fb94117b3f34b2971a1ab7e29e10934bc4769f",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 99,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-3:9ce688716b82",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 25520,
+      "captionCharEnd": 25702,
+      "page": 6,
+      "captionBbox": [
+        50.11,
+        214.26,
+        286.37,
+        245.23
+      ],
+      "tableTextBbox": [
+        67.1,
+        257.66,
+        269.37,
+        387.61
+      ],
+      "tableLabel": "Table 3",
+      "captionText": "Error rates (%, 10-crop testing) on ImageNet validation. VGG-16 is based on our test. ResNet-50/101/152 are of option B that only uses projections for increasing dimensions.",
+      "captionTextHash": "sha256:60ad64fa0df6a68c1808905b99e79e83617eddcebc9eea05e640960cc36c6d83",
+      "tableText": "method top-1 err. top-5 err. VGG [41] (ILSVRC’14) - 8.43†\nGoogLeNet [44] (ILSVRC’14) - 7.89 VGG [41] (v5) 24.4 7.1 PReLU-net [13] 21.59 5.71 BN-inception [16] 21.99 5.81 ResNet-34 B 21.84 5.71 ResNet-34 C 21.53 5.60 ResNet-50 20.74 5.25 ResNet-101 19.87 4.60 ResNet-152 19.38 4.49",
+      "tableTextHash": "sha256:7219f0894a41f10d31bd8824cc8c8cacb4548e24afbd47d3e7860f186b3b5ab1",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 24,
+        "nearbyTableLikeBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-4:d3c29d8b62c7",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 25987,
+      "captionCharEnd": 26103,
+      "page": 6,
+      "captionBbox": [
+        50.11,
+        395.24,
+        286.36,
+        415.24
+      ],
+      "tableTextBbox": [
+        72.77,
+        427.93,
+        263.7,
+        510.42
+      ],
+      "tableLabel": "Table 4",
+      "captionText": "Error rates (%) of single-model results on the ImageNet validation set (except † reported on the test set).",
+      "captionTextHash": "sha256:84509412f49bb94573ec654ad2e0de402e8303a355ac566b1103db47180cd189",
+      "tableText": "method top-5 err. (test) VGG [41] (ILSVRC’14) 7.32 GoogLeNet [44] (ILSVRC’14) 6.66 VGG [41] (v5) 6.8 PReLU-net [13] 4.94 BN-inception [16] 4.82 ResNet (ILSVRC’15) 3.57",
+      "tableTextHash": "sha256:5ea905f86475388dff3101e3c605aad39bb9d5b9959362c0cb1bac644d95d791",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 27,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-5:5ecf391c1dc6",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 27283,
+      "captionCharEnd": 27401,
+      "page": 6,
+      "captionBbox": [
+        50.11,
+        518.06,
+        286.36,
+        538.07
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 5",
+      "captionText": "Error rates (%) of ensembles. The top-5 error is on the test set of ImageNet and reported by the test server.",
+      "captionTextHash": "sha256:72213a744807bec43ba5271f7c14a082c3ebfd4344585b84d6c7e1869f1105fb",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 30,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-6:d62c911e47bd",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 29516,
+      "captionCharEnd": 29685,
+      "page": 7,
+      "captionBbox": [
+        308.86,
+        253.09,
+        545.11,
+        284.06
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 6",
+      "captionText": "Classiﬁcation error on the CIFAR-10 test set. All meth- ods are with data augmentation. For ResNet-110, we run it 5 times and show “best (mean±std)” as in [43].",
+      "captionTextHash": "sha256:b80a4d2f1db9f98877d25ff43eac8f4e2afea249a83dab69cf9c111d4f8b8250",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 2,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-7:a908e293d8cd",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 34270,
+      "captionCharEnd": 34417,
+      "page": 8,
+      "captionBbox": [
+        308.86,
+        265.11,
+        545.11,
+        296.0
+      ],
+      "tableTextBbox": [
+        238.4,
+        270.52,
+        274.33,
+        301.42
+      ],
+      "tableLabel": "Table 7",
+      "captionText": "Object detection mAP (%) on the PASCAL VOC 2007/2012 test sets using baseline Faster R-CNN. See also Ta- ble 10 and 11 for better results.",
+      "captionTextHash": "sha256:7458bccb4ef4f3c754985f322458d89c9118f1b24b430b1b9b5b29ba2807ff84",
+      "tableText": "plain-20 plain-56 ResNet-20 ResNet-56 ResNet-110",
+      "tableTextHash": "sha256:2371d449265dd1ba92dbc268cdee46246453c36352c8f942ebe3bbbd583c34a5",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 38,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-8:7b8646f86861",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 34862,
+      "captionCharEnd": 34988,
+      "page": 8,
+      "captionBbox": [
+        308.86,
+        340.94,
+        545.11,
+        360.87
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 8",
+      "captionText": "Object detection mAP (%) on the COCO validation set using baseline Faster R-CNN. See also Table 9 for better results.",
+      "captionTextHash": "sha256:36346e196909c5abbcdb6d61580875fa0332d7f73f3afed62554f8a3bf68ee54",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 49,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-9:a5244cac531a",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 50126,
+      "captionCharEnd": 50210,
+      "page": 11,
+      "captionBbox": [
+        130.07,
+        183.24,
+        465.16,
+        192.21
+      ],
+      "tableTextBbox": [
+        53.27,
+        210.01,
+        541.96,
+        334.04
+      ],
+      "tableLabel": "Table 9",
+      "captionText": "Object detection improvements on MS COCO using Faster R-CNN and ResNet-101.",
+      "captionTextHash": "sha256:661e3066e96caf1294f6c318284c8f3bec97f7ed3209484bff23ca3ff9b3cbb8",
+      "tableText": "system net data mAP areo bike bird boat bottle bus car cat chair cow table dog horse mbike person plant sheep sofa train tv baseline VGG-16 07+12 73.2 76.5 79.0 70.9 65.5 52.1 83.1 84.7 86.4 52.0 81.9 65.7 84.8 84.6 77.5 76.7 38.8 73.6 73.9 83.0 72.6 baseline ResNet-101 07+12 76.4 79.8 80.7 76.2 68.3 55.9 85.1 85.3 89.8 56.7 87.8 69.4 88.3 88.9 80.9 78.4 41.7 78.6 79.8 85.3 72.0 baseline+++ ResNet-101 COCO+07+12 85.6 90.0 89.6 87.8 80.8 76.1 89.9 89.9 89.6 75.5 90.0 80.7 89.6 90.3 89.1 88.7 65.4 88.1 85.6 89.0 86.8\nsystem net data mAP areo bike bird boat bottle bus car cat chair cow table dog horse mbike person plant sheep sofa train tv baseline VGG-16 07++12 70.4 84.9 79.8 74.3 53.9 49.8 77.5 75.9 88.5 45.6 77.1 55.3 86.9 81.7 80.9 79.6 40.1 72.6 60.9 81.2 61.5 baseline ResNet-101 07++12 73.8 86.5 81.6 77.2 58.0 51.0 78.6 76.6 93.2 48.6 80.4 59.0 92.1 85.3 84.8 80.7 48.1 77.3 66.5 84.7 65.6 baseline+++ ResNet-101 COCO+07++12 83.8 92.1 88.4 84.8 75.9 71.4 86.3 87.8 94.2 66.8 89.4 69.2 93.9 91.9 90.9 89.6 67.9 88.2 76.8 90.3 80.0",
+      "tableTextHash": "sha256:79d04779863e4cb37ef439edf1d52cf3ee1540abbc268dda0e3dd2f729ec4ebf",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 1,
+        "nearbyTableLikeBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-10:d28a2c81c7ed",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 50734,
+      "captionCharEnd": 50928,
+      "page": 11,
+      "captionBbox": [
+        50.11,
+        255.39,
+        545.11,
+        275.31
+      ],
+      "tableTextBbox": [
+        53.27,
+        295.66,
+        541.96,
+        334.04
+      ],
+      "tableLabel": "Table 10",
+      "captionText": "Detection results on the PASCAL VOC 2007 test set. The baseline is the Faster R-CNN system. The system “baseline+++” include box reﬁnement, context, and multi-scale testing in Table 9.",
+      "captionTextHash": "sha256:00949cdf2f7b9ffa8706500322b46b88e0747fc616e3042ed8845b82e5d73604",
+      "tableText": "system net data mAP areo bike bird boat bottle bus car cat chair cow table dog horse mbike person plant sheep sofa train tv baseline VGG-16 07++12 70.4 84.9 79.8 74.3 53.9 49.8 77.5 75.9 88.5 45.6 77.1 55.3 86.9 81.7 80.9 79.6 40.1 72.6 60.9 81.2 61.5 baseline ResNet-101 07++12 73.8 86.5 81.6 77.2 58.0 51.0 78.6 76.6 93.2 48.6 80.4 59.0 92.1 85.3 84.8 80.7 48.1 77.3 66.5 84.7 65.6 baseline+++ ResNet-101 COCO+07++12 83.8 92.1 88.4 84.8 75.9 71.4 86.3 87.8 94.2 66.8 89.4 69.2 93.9 91.9 90.9 89.6 67.9 88.2 76.8 90.3 80.0",
+      "tableTextHash": "sha256:3b2b5c5c546afb82152e94b1300d7e23db880aeeedd5f69e0e02e06fc9da98bf",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 3,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-11:5fcb10e6f9a3",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 51455,
+      "captionCharEnd": 51735,
+      "page": 11,
+      "captionBbox": [
+        50.11,
+        340.57,
+        545.11,
+        371.92
+      ],
+      "tableTextBbox": [
+        334.81,
+        407.97,
+        519.16,
+        416.94
+      ],
+      "tableLabel": "Table 11",
+      "captionText": "Detection results on the PASCAL VOC 2012 test set (http://host.robots.ox.ac.uk:8080/leaderboard/ displaylb.php?challengeid=11&compid=4). The baseline is the Faster R-CNN system. The system “baseline+++” include box reﬁnement, context, and multi-scale testing in Table 9.",
+      "captionTextHash": "sha256:4b907cfea92e47ac8df9f5e029841aaa139507834cf8aff710f1d7b4c79bcbb9",
+      "tableText": "GoogLeNet [44] (ILSVRC’14) - 43.9",
+      "tableTextHash": "sha256:a95c2bdc90b7223690fe7100bd50ef9476b307409aafc4bb81e3e4322e6dc5a1",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 5,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-12:40c013f6276f",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 52120,
+      "captionCharEnd": 52279,
+      "page": 11,
+      "captionBbox": [
+        308.86,
+        451.11,
+        545.11,
+        481.99
+      ],
+      "tableTextBbox": [
+        308.86,
+        499.37,
+        545.12,
+        545.2
+      ],
+      "tableLabel": "Table 12",
+      "captionText": "Our results (mAP, %) on the ImageNet detection dataset. Our detection system is Faster R-CNN [32] with the improvements in Table 9, using ResNet-101.",
+      "captionTextHash": "sha256:3d7df8a234d812f4e4e7f22342ccf7998ed2fd13b81ccb45b1f8e60dd7ee0a39",
+      "tableText": "we achieve 85.6% mAP on PASCAL VOC 2007 (Table 10) and 83.8% on PASCAL VOC 2012 (Table 11)6. The result on PASCAL VOC 2012 is 10 points higher than the previ- ous state-of-the-art result [6].",
+      "tableTextHash": "sha256:8f7e686b9c08c504b307bdd26d2698a4508662f520c0fc28a3a353ade86588a2",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 10,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-14:05e62fa8978d",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 54730,
+      "captionCharEnd": 54832,
+      "page": 12,
+      "captionBbox": [
+        308.86,
+        147.93,
+        545.11,
+        167.85
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 14",
+      "captionText": "Comparisons of localization error (%) on the ImageNet dataset with state-of-the-art methods.",
+      "captionTextHash": "sha256:6c9e6e2f2b7f5f92ca3c042c537029663a275c89e2b442b63fed35d71261b453",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 6,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "resnet-2015",
+      "paperRef": "papers_dir/Deep Residual Learning for Image Recognition.pdf",
+      "artifactId": "table-text:resnet-2015:table-13:e91f330a65d6",
+      "sourceContentHash": "sha256:1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 54834,
+      "captionCharEnd": 55130,
+      "page": 12,
+      "captionBbox": [
+        50.11,
+        152.92,
+        286.36,
+        205.72
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 13",
+      "captionText": "Localization error (%) on the ImageNet validation. In the column of “LOC error on GT class” ([41]), the ground truth class is used. In the “testing” column, “1-crop” denotes testing on a center crop of 224×224 pixels, “dense” denotes dense (fully convolutional) and multi-scale testing.",
+      "captionTextHash": "sha256:5497eb5b676ae0dbb0f5931c0c17f119ba1354ff3ed7fe36537740e2f77c9ba2",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 7,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-1:f1734facf468",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 31905,
+      "captionCharEnd": 32170,
+      "page": 7,
+      "captionBbox": [
+        54.89,
+        135.1,
+        290.93,
+        187.9
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 1",
+      "captionText": "Comparing CLIP to prior zero-shot transfer image classi- ﬁcation results. CLIP improves performance on all three datasets by a large amount. This improvement reﬂects many differences in the 4 years since the development of Visual N-Grams (Li et al., 2017).",
+      "captionTextHash": "sha256:1408067ce8ff299eba4eed5746a1c820c6f731d23b816a6e5c286a009b34a1c9",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 7,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-2:5e606833c479",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 78193,
+      "captionCharEnd": 78694,
+      "page": 17,
+      "captionBbox": [
+        306.89,
+        159.8,
+        543.01,
+        245.55
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 2",
+      "captionText": "Comparison of human performance on Oxford IIT Pets. As in Parkhi et al. (2012), the metric is average per-class classiﬁca- tion accuracy. Most of the gain in performance when going from the human zero shot case to the human one shot case is on images that participants were highly uncertain on. “Guesses” refers to restricting the dataset to where participants selected an answer other than “I don’t know”, the “majority vote” is taking the most frequent (exclusive of ties) answer per image.",
+      "captionTextHash": "sha256:0ee6f3e9297a12dfe1f3a1bea0330cc5a203d00950505c4556d860bfb07b92f2",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 18,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-4:d21f1d062ab4",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 98647,
+      "captionCharEnd": 98881,
+      "page": 21,
+      "captionBbox": [
+        306.67,
+        160.45,
+        542.93,
+        202.29
+      ],
+      "tableTextBbox": [
+        101.02,
+        263.11,
+        488.65,
+        296.99
+      ],
+      "tableLabel": "Table 4",
+      "captionText": "Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace categories ‘Black,’ ‘Indian,’ ‘East Asian,’ ‘Southeast Asian,’ ‘Middle Eastern,’ and ‘Latino’ (grouped to- gether as FairFace category ‘Non-White’)",
+      "captionTextHash": "sha256:0072c5b14775aa547631f5534672dacb14c44cebd64fcbc3d33ec04c98bbe8b7",
+      "tableText": "Male 96.9 96.4 98.7 96.5 98.9 96.2 96.9 97.2 Linear Probe CLIP Female 97.9 96.7 97.9 99.2 97.2 98.5 97.3 97.8 97.4 96.5 98.3 97.8 98.4 97.3 97.1 97.5",
+      "tableTextHash": "sha256:9743da6f38103b0aa11fb9d24be127311e5d0d054b8d699a729a1defe3d82ed1",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 5,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-3:78ec888ff489",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 98883,
+      "captionCharEnd": 98986,
+      "page": 21,
+      "captionBbox": [
+        54.89,
+        161.42,
+        288.72,
+        181.35
+      ],
+      "tableTextBbox": [
+        101.02,
+        263.11,
+        488.65,
+        337.86
+      ],
+      "tableLabel": "Table 3",
+      "captionText": "Percent accuracy on Race, Gender, and Age classiﬁcation of images in FairFace category ‘White’",
+      "captionTextHash": "sha256:44184f5265dbc466f7c0b21c110e7a094d92333d552ba0826ce1e38167544da5",
+      "tableText": "Male 96.9 96.4 98.7 96.5 98.9 96.2 96.9 97.2 Linear Probe CLIP Female 97.9 96.7 97.9 99.2 97.2 98.5 97.3 97.8 97.4 96.5 98.3 97.8 98.4 97.3 97.1 97.5\nMale 96.3 96.4 97.7 97.2 98.3 95.5 96.8 96.9 Zero-Shot CLIP Female 97.1 95.3 98.3 97.8 97.5 97.2 96.4 97.0 96.7 95.9 98.0 97.5 98.0 96.3 96.6",
+      "tableTextHash": "sha256:4af8e0ea47daa66444e58afdc666ee7cb4fe82321d5c03dff10f91b9cc9ff90d",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 6,
+        "nearbyTableLikeBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-5:05552c27186f",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 99523,
+      "captionCharEnd": 99608,
+      "page": 21,
+      "captionBbox": [
+        142.65,
+        392.69,
+        454.23,
+        401.66
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 5",
+      "captionText": "Percent accuracy on gender classiﬁcation of images by FairFace race category",
+      "captionTextHash": "sha256:786ae7633b3cf395cf5d5052e07807fde336c05b129086b31ab900d4d4c3f20c",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 11,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-6:8d093f1d65fd",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 102536,
+      "captionCharEnd": 102803,
+      "page": 22,
+      "captionBbox": [
+        54.89,
+        147.01,
+        541.89,
+        166.98
+      ],
+      "tableTextBbox": [
+        69.32,
+        203.64,
+        525.07,
+        242.52
+      ],
+      "tableLabel": "Table 6",
+      "captionText": "Percent of images classiﬁed into crime-related and non-human categories by FairFace Race category. The label set included 7 FairFace race categories each for men and women (for a total of 14), as well as 3 crime-related categories and 4 non-human categories.",
+      "captionTextHash": "sha256:9ad5440e68874d1d89ef17dff55c987a92889c213c2d1f3ad45a97a7d676d37f",
+      "tableText": "Category Label Set 0-2 3-9 10-19 20-29 30-39 40-49 50-59 60-69 over 70\nDefault Label Set 30.3 35.0 29.5 16.3 13.9 18.5 19.1 16.2 10.4 Default Label Set + ‘child’ category 2.3 4.3 14.7 15.0 13.4 18.2 18.6 15.5 9.4",
+      "tableTextHash": "sha256:e6e73d9cc267c4f44f8d69aacea34f4dfaf278a125ab7751c08bfeb1fe1de287",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 3,
+        "nearbyTableLikeBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-7:e0f62d577af6",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 103020,
+      "captionCharEnd": 103412,
+      "page": 22,
+      "captionBbox": [
+        54.89,
+        256.48,
+        541.44,
+        287.37
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 7",
+      "captionText": "Percent of images classiﬁed into crime-related and non-human categories by FairFace Age category, showing comparison between results obtained using a default label set and a label set to which the label ’child’ has been added. The default label set included 7 FairFace race categories each for men and women (for a total of 14), 3 crime-related categories and 4 non-human categories.",
+      "captionTextHash": "sha256:615ead46e0600569f110dbec1fc3826c4401af963d5af76f1a546fdc4998e412",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 6,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-8:915564661630",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 117515,
+      "captionCharEnd": 117576,
+      "page": 25,
+      "captionBbox": [
+        54.89,
+        166.29,
+        287.9,
+        175.26
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 8",
+      "captionText": "CelebA Zero-Shot Top-1 Identity Recognition Accuracy",
+      "captionTextHash": "sha256:1c46c32b35720910389eebdc55ebe7d76f179b816a6191e72f5ab0d3961c2c06",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 5,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-9:415736d52c4f",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 179624,
+      "captionCharEnd": 179803,
+      "page": 39,
+      "captionBbox": [
+        54.89,
+        561.7,
+        541.44,
+        581.7
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 9",
+      "captionText": "Datasets examined for linear probes. We note that, for the Birdsnap and Kinetics700 datasets, we used the resources that are available online at the time of this writing.",
+      "captionTextHash": "sha256:8ee7cdd7fde0741b2fc7f60e5fe5b17d41a0f17637649524806f5426377725cc",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 4,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-10:9f9f8f2fc741",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 189508,
+      "captionCharEnd": 189696,
+      "page": 40,
+      "captionBbox": [
+        54.89,
+        707.77,
+        541.44,
+        727.7
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 10",
+      "captionText": "Linear probe performance of various pre-trained models over 27 datasets. Scores within the 99.5% Clopper-Pearson conﬁdence interval of each dataset’s top score are shown in bold.",
+      "captionTextHash": "sha256:32f1d3778499ca10b41119b53fd5afb9b926b37ed9568a1ca983574886a94f92",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 54,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-11:b47debcc25d6",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 203926,
+      "captionCharEnd": 203990,
+      "page": 43,
+      "captionBbox": [
+        178.36,
+        241.07,
+        418.52,
+        250.04
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 11",
+      "captionText": "Zero-shot performance of CLIP models over 27 datasets.",
+      "captionTextHash": "sha256:db5e59c75306151caf958dd41833521061c98d65d892fdb34ba1e9cc63bde0d7",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 32,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-12:ab721d5ee22b",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 207174,
+      "captionCharEnd": 207728,
+      "page": 44,
+      "captionBbox": [
+        306.89,
+        191.89,
+        542.93,
+        299.57
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 12",
+      "captionText": "CLIP performs similarly when trained on only YFCC100M. Comparing a ResNet-50 trained on only YFCC100M with a same sized subset of WIT shows simi- lar average performance and number of wins on zero shot and linear classiﬁer evals. However, large differences in dataset speciﬁc performance occur. We include performance on the 3 datasets where YFCC does best and worst compared to WIT according to a linear probe in order to highlight this as well as aggregate performance across all linear and zero-shot evals and the canonical ImageNet dataset.",
+      "captionTextHash": "sha256:5c16511078e26e50e7e682839b1301de073cad20654ce1a4a186b6fdff451232",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 8,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-13:ce7ae0e9de48",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 217257,
+      "captionCharEnd": 217791,
+      "page": 46,
+      "captionBbox": [
+        54.89,
+        237.68,
+        543.01,
+        279.6
+      ],
+      "tableTextBbox": [
+        330.05,
+        311.29,
+        531.38,
+        377.05
+      ],
+      "tableLabel": "Table 13",
+      "captionText": "CLIP improves zero-shot retrieval and is competitive with the best ﬁne-tuned result on Flickr30k text retrieval. Bold indicates best overall performance while an underline indicates best in category performance (zero-shot or ﬁne-tuned). For all other models, best results from the paper are reported regardless of model size / variant. MSCOCO performance is reported on the 5k test set. a(Li et al., 2020a) b(Chen et al., 2019) c(Gan et al., 2020) d(Li et al., 2020b) e(Yu et al., 2020) f(Li et al., 2017) g(Qi et al., 2020)",
+      "captionTextHash": "sha256:5f18829fc8a5e3816f5aaaa4e9b69720e5f5760a9d8333b68d94783c49ec67d0",
+      "tableText": "UCF101 K700 RareAct Top-1 AVG mWAP mWSAP\nR(2+1)D-BERTa 98.7 - - - NS ENet-L2b - 84.8 - - HT100M S3Dd 91.3 - - - Baseline I3De - 70.2 - -",
+      "tableTextHash": "sha256:e6597c9bb805eb66c2398154c5085d5cf617ceec305f6e7deb171f4ba82e0373",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 6,
+        "nearbyTableLikeBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-14:0b0d442b5fff",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 218325,
+      "captionCharEnd": 218786,
+      "page": 46,
+      "captionBbox": [
+        54.89,
+        435.02,
+        291.01,
+        520.7
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 14",
+      "captionText": "OCR performance on 5 datasets. All metrics are accuracy on the test set except for Hateful Memes which reports ROC AUC on the dev set. Single model SOTA reported to best of knowledge. ES Best reports the best performance across the 56 non-CLIP models in our evaluation suite. a(Assiri, 2020) b(Jaderberg et al., 2015) c(Wang et al., 2020) d(Lippe et al., 2020) f(Jaderberg et al., 2014) g(Wang et al., 2018) h(Xie et al., 2020) i(Mahajan et al., 2018)",
+      "captionTextHash": "sha256:dc2122f27c94714cc6c93978fc11bb12138cae7332434fa0bd03ecd5aebe34bb",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 23,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-15:dad5508528af",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 218788,
+      "captionCharEnd": 219322,
+      "page": 46,
+      "captionBbox": [
+        306.89,
+        452.44,
+        542.93,
+        549.08
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 15",
+      "captionText": "Action recognition performance on 3 video datasets. Sin- gle model SOTA reported to best of knowledge. Note that linear CLIP and linear NS ENet-L2 are trained and evaluated on a single frame subsampled version of each dataset and not directly compa- rable to prior work. On Kinetics-700, we report the ActivityNet competition metric which is the average of top-1 and top-5 per- formance. a(Kalfaoglu et al., 2020) b(Lu et al., 2020) c(Xie et al., 2020) d(Miech et al., 2020b) e(Carreira et al., 2019) f(Alayrac et al., 2020)",
+      "captionTextHash": "sha256:06f7a7e003b70c119040fba234f6862e1810bd5f8c8f7046c2fda3788ef0530c",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 24,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-16:972fd1edd784",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 221189,
+      "captionCharEnd": 221323,
+      "page": 47,
+      "captionBbox": [
+        54.89,
+        160.16,
+        540.77,
+        170.81
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 16",
+      "captionText": "Detailed ImageNet robustness performance. IN is used to abbreviate for ImageNet. a(Xie et al., 2020) b(Touvron et al., 2019)",
+      "captionTextHash": "sha256:9a6e6eaeff35afd6d2470afcb0486ff0278a97eb8a17496106dd4b21a5fd761a",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 3,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-17:8535411d8807",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 224674,
+      "captionCharEnd": 224940,
+      "page": 47,
+      "captionBbox": [
+        54.89,
+        634.02,
+        291.01,
+        686.89
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 17",
+      "captionText": "Geolocalization performance on the IM2GPS test set. Metric is percent of images localized within a given radius. Models are ordered by average performance. a(Muller-Budack et al., 2018) b(Hongsuck Seo et al., 2018) c(Vo et al., 2017) c(Weyand et al., 2016)",
+      "captionTextHash": "sha256:a4f93ff3aaed5604fedfefd9709f6615942544b640b67d346e6ecb71bc94d98a",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 12,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-18:9780432fc4e4",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 225270,
+      "captionCharEnd": 225307,
+      "page": 48,
+      "captionBbox": [
+        221.82,
+        233.78,
+        375.06,
+        242.74
+      ],
+      "tableTextBbox": [
+        105.44,
+        291.05,
+        483.48,
+        344.38
+      ],
+      "tableLabel": "Table 18",
+      "captionText": "Common CLIP hyperparameters",
+      "captionTextHash": "sha256:cde82bde22ff65c9583160c23abc71a7962a14d45b83f82cc31a3ef46471de8a",
+      "tableText": "RN50 5 × 10−4 1024 224 (3, 4, 6, 3) 2048 12 512 8 RN101 5 × 10−4 512 224 (3, 4, 23, 3) 2048 12 512 8 RN50x4 5 × 10−4 640 288 (4, 6, 10, 6) 2560 12 640 10 RN50x16 4 × 10−4 768 384 (6, 8, 18, 8) 3072 12 768 12 RN50x64 3.6 × 10−4 1024 448 (3, 15, 36, 10) 4096 12 1024 16",
+      "tableTextHash": "sha256:b5066a23700c562566256c831530cfa186afec1a651d625c1c6cfa8c457771ac",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 4,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-19:0951f5da49ea",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 225692,
+      "captionCharEnd": 225729,
+      "page": 48,
+      "captionBbox": [
+        224.94,
+        357.99,
+        371.94,
+        366.96
+      ],
+      "tableTextBbox": [
+        95.76,
+        413.27,
+        493.15,
+        455.95
+      ],
+      "tableLabel": "Table 19",
+      "captionText": "CLIP-ResNet hyperparameters",
+      "captionTextHash": "sha256:ce6cae2de35330485602eca8b42cc0474223b0587d44b7bca34bb7a3a68b333b",
+      "tableText": "ViT-B/32 5 × 10−4 512 224 12 768 12 12 512 8 ViT-B/16 5 × 10−4 512 224 12 768 12 12 512 8 ViT-L/14 4 × 10−4 768 224 24 1024 16 12 768 12 ViT-L/14-336px 2 × 10−5 768 336 24 1024 16 12 768 12",
+      "tableTextHash": "sha256:fc0267b6f0bce5f2c68816a61317f7a8ff3841ba1e454ef524e516a46c94c609",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 7,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "clip-2021",
+      "paperRef": "papers_dir/Learning Transferable Visual Models From Natural Language Supervision.pdf",
+      "artifactId": "table-text:clip-2021:table-20:df7b6f4207a5",
+      "sourceContentHash": "sha256:6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 226054,
+      "captionCharEnd": 226088,
+      "page": 48,
+      "captionBbox": [
+        231.19,
+        469.56,
+        365.7,
+        478.52
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 20",
+      "captionText": "CLIP-ViT hyperparameters",
+      "captionTextHash": "sha256:d1f572b6d29c4b23a48cf83d7445776b2c1eccd6d6d41666a99969a065eb67fd",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 10,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-1:3e88863cb92f",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 18929,
+      "captionCharEnd": 19336,
+      "page": 5,
+      "captionBbox": [
+        50.11,
+        238.89,
+        545.12,
+        269.86
+      ],
+      "tableTextBbox": [
+        328.36,
+        288.81,
+        522.73,
+        360.64
+      ],
+      "tableLabel": "Table 1",
+      "captionText": "MAE ablation experiments with ViT-L/16 on ImageNet-1K. We report ﬁne-tuning (ft) and linear probing (lin) accuracy (%). If not speciﬁed, the default is: the decoder has depth 8 and width 512, the reconstruction target is unnormalized pixels, the data augmentation is random resized cropping, the masking ratio is 75%, and the pre-training length is 800 epochs. Default settings are marked in gray .",
+      "captionTextHash": "sha256:204c83ee8bea576c57d6ab5c03f633737ae660a21af4d9ed1b2569b1864513bd",
+      "tableText": "encoder dec. depth ft acc hours speedup ViT-L, w/ [M] 8 84.2 42.4 - ViT-L 8 84.9 15.4 2.8× ViT-L 1 84.8 11.6 3.7× ViT-H, w/ [M] 8 - 119.6† - ViT-H 8 85.8 34.5 3.5× ViT-H 1 85.9 29.3 4.1×",
+      "tableTextHash": "sha256:012c0859556cb1fb3d1669c8efd367353dac504ea82bd9c958cf7459cb343545",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 12,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-2:bc8f4ca908d3",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 21441,
+      "captionCharEnd": 21727,
+      "page": 5,
+      "captionBbox": [
+        308.86,
+        367.01,
+        545.11,
+        419.89
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 2",
+      "captionText": "Wall-clock time of our MAE training (800 epochs), benchmarked in 128 TPU-v3 cores with TensorFlow. The speedup is relative to the entry whose encoder has mask tokens (gray). The decoder width is 512, and the mask ratio is 75%. †: This entry is estimated by training ten epochs.",
+      "captionTextHash": "sha256:3725756c83717c89339b15f46956bdbf2bf1d1dfd97cab18eb47fe7e15a28b8b",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 16,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-3:81ee8d67904c",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 28130,
+      "captionCharEnd": 28634,
+      "page": 7,
+      "captionBbox": [
+        50.11,
+        136.25,
+        286.36,
+        222.01
+      ],
+      "tableTextBbox": [
+        322.98,
+        149.19,
+        529.97,
+        161.28
+      ],
+      "tableLabel": "Table 3",
+      "captionText": "Comparisons with previous results on ImageNet- 1K. The pre-training data is the ImageNet-1K training set (ex- cept the tokenizer in BEiT was pre-trained on 250M DALLE data [50]). All self-supervised methods are evaluated by end-to-end ﬁne-tuning. The ViT models are B/16, L/16, H/14 [16]. The best for each column is underlined. All results are on an image size of 224, except for ViT-H with an extra result on 448. Here our MAE reconstructs normalized pixels and is pre-trained for 1600 epochs.",
+      "captionTextHash": "sha256:b89211bf1b7c6bc6e88485b8d61165453e8cf962205217b74f91be0db8848034",
+      "tableText": "0 1 2 4 6 12 18 24 70",
+      "tableTextHash": "sha256:90784c519cb923e0c4556bf83168b75a49e7a80bc8bd00b9e4d2d78cc93a41da",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 10,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-4:43b49037a9ec",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 33210,
+      "captionCharEnd": 33434,
+      "page": 8,
+      "captionBbox": [
+        50.11,
+        123.25,
+        286.36,
+        165.18
+      ],
+      "tableTextBbox": [
+        316.38,
+        175.76,
+        532.39,
+        224.58
+      ],
+      "tableLabel": "Table 4",
+      "captionText": "COCO object detection and segmentation using a ViT Mask R-CNN baseline. All entries are based on our implementa- tion. Self-supervised entries use IN1K data without labels. Mask AP follows a similar trend as box AP.",
+      "captionTextHash": "sha256:607722cb987aa9dfd54fdbf42cc38f1ee1bff252fe082a6b57434b341b4db23d",
+      "tableText": "dataset ViT-B ViT-L ViT-H ViT-H448 prev best iNat 2017 70.5 75.7 79.3 83.4 75.4 [55] iNat 2018 75.4 80.1 83.0 86.8 81.2 [54] iNat 2019 80.5 83.4 85.7 88.3 84.1 [54] Places205 63.9 65.8 65.9 66.8 66.0 [19]†",
+      "tableTextHash": "sha256:885f1be100c481759b13d34b5e7fb6d6f188eb8ee16206c16cee18bbfa9ba8f4",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 3,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-5:4543bc78b8ce",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 33436,
+      "captionCharEnd": 33650,
+      "page": 8,
+      "captionBbox": [
+        308.86,
+        123.28,
+        545.12,
+        165.2
+      ],
+      "tableTextBbox": [
+        316.38,
+        175.76,
+        532.39,
+        234.52
+      ],
+      "tableLabel": "Table 5",
+      "captionText": "ADE20K semantic segmentation (mIoU) using Uper- Net. BEiT results are reproduced using the ofﬁcial code. Other entries are based on our implementation. Self-supervised entries use IN1K data without labels.",
+      "captionTextHash": "sha256:edb727b689ffa35d7f88766ba37a601a4143702913d08f61e476cb63fd244dfd",
+      "tableText": "dataset ViT-B ViT-L ViT-H ViT-H448 prev best iNat 2017 70.5 75.7 79.3 83.4 75.4 [55] iNat 2018 75.4 80.1 83.0 86.8 81.2 [54] iNat 2019 80.5 83.4 85.7 88.3 84.1 [54] Places205 63.9 65.8 65.9 66.8 66.0 [19]†\nPlaces365 57.9 59.4 59.8 60.3 58.0 [40]‡",
+      "tableTextHash": "sha256:14d960fe98f9508499e0749be4331dde1c5fa7266ead0cb5d7fd3c6124862c45",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 4,
+        "nearbyTableLikeBlockCount": 2
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-6:50ec4e87f2ae",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 34255,
+      "captionCharEnd": 34435,
+      "page": 8,
+      "captionBbox": [
+        308.86,
+        239.95,
+        545.11,
+        270.92
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 6",
+      "captionText": "Transfer learning accuracy on classiﬁcation datasets, using MAE pre-trained on IN1K and then ﬁne-tuned. We provide system-level comparisons with the previous best results.",
+      "captionTextHash": "sha256:4efeee71dbb8a95404b1154c8e8877a0f3b6fb61a398a04d7a95a6aea2dcb09c",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 8,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-7:ba8be27e0442",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 35695,
+      "captionCharEnd": 35875,
+      "page": 8,
+      "captionBbox": [
+        308.86,
+        357.57,
+        545.11,
+        388.78
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 7",
+      "captionText": "Pixels vs. tokens as the MAE reconstruction target. △is the difference between using dVAE tokens and using normalized pixels. The difference is statistically insigniﬁcant.",
+      "captionTextHash": "sha256:d9c5b6392805c992865780f4d664089d4841b614086973a3ab8d1d2959c92421",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 14,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-8:8f1ef5f9e0b9",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 51839,
+      "captionCharEnd": 51869,
+      "page": 11,
+      "captionBbox": [
+        372.81,
+        153.43,
+        481.16,
+        162.48
+      ],
+      "tableTextBbox": [
+        338.24,
+        174.0,
+        508.41,
+        295.78
+      ],
+      "tableLabel": "Table 8",
+      "captionText": "Pre-training setting.",
+      "captionTextHash": "sha256:18904c30cf983e093f14f7bcb31c6a4077c126735aadb44d490f8407148f10d5",
+      "tableText": "conﬁg value optimizer AdamW base learning rate 1e-3 weight decay 0.05 optimizer momentum β1, β2=0.9, 0.999 layer-wise lr decay [10, 2] 0.75 batch size 1024 learning rate schedule cosine decay warmup epochs 5 training epochs 100 (B), 50 (L/H) augmentation RandAug (9, 0.5) [12] label smoothing [52] 0.1 mixup [69] 0.8 cutmix [68] 1.0 drop path [30] 0.1 (B/L) 0.2 (H)",
+      "tableTextHash": "sha256:c22b301cbec8670eaac901b964b6fbd1148f5a9078bbbdbf23d4e90dd05a2409",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 4,
+        "nearbyTableLikeBlockCount": 1
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-9:9d092836c72b",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 52238,
+      "captionCharEnd": 52277,
+      "page": 11,
+      "captionBbox": [
+        352.67,
+        303.8,
+        501.31,
+        312.85
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 9",
+      "captionText": "End-to-end ﬁne-tuning setting.",
+      "captionTextHash": "sha256:a6203f4f98677bf4b06135151d3cddb8da4ddacc4322c4e385a927056942bf39",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 6,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-10:9337d1440d35",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 52948,
+      "captionCharEnd": 53072,
+      "page": 11,
+      "captionBbox": [
+        308.86,
+        413.53,
+        545.11,
+        433.53
+      ],
+      "tableTextBbox": [],
+      "tableLabel": "Table 10",
+      "captionText": "Linear probing setting. We use LARS with a large batch for faster training; SGD works similarly with a 4096 batch.",
+      "captionTextHash": "sha256:7dedb41804f609b65901d9b601ff6d9f1bb2dc2ce9b4576ec3307c2c94d2e822",
+      "tableText": "",
+      "tableTextHash": "",
+      "structureGrade": "caption_only",
+      "numericCandidate": false,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.68,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 10,
+        "nearbyTableLikeBlockCount": 0
+      }
+    },
+    {
+      "schema": "knowledge-hub.paper.table-text-artifact-candidate.v1",
+      "paperId": "mae-2021",
+      "paperRef": "papers_dir/Masked Autoencoders Are Scalable Vision Learners.pdf",
+      "artifactId": "table-text:mae-2021:table-11:6b60064d3371",
+      "sourceContentHash": "sha256:1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "charBasis": "pymupdf_block_reading_order_normalized_text_v1",
+      "captionCharStart": 56902,
+      "captionCharEnd": 56949,
+      "page": 12,
+      "captionBbox": [
+        77.47,
+        202.2,
+        259.01,
+        211.25
+      ],
+      "tableTextBbox": [
+        50.11,
+        232.63,
+        286.37,
+        291.11
+      ],
+      "tableLabel": "Table 11",
+      "captionText": "Supervised training ViT from scratch.",
+      "captionTextHash": "sha256:3c092918f8abd8aff37f810ff56299682bb27af7a22c7aac224b6c64e7cedd8f",
+      "tableText": "The accuracy is 82.6% for ViT-L (81.5% w/o EMA), and 83.1% for ViT-H (80.9% w/o EMA). Both ViT-L and ViT-H show an overﬁtting trend if not using EMA. As a by-product, our recipe for ViT-B has 82.3% accu- racy (82.1% w/o EMA), vs. 81.8% in [53].",
+      "tableTextHash": "sha256:c6fc11522738a25d92ab0ce95e7f43cc1ecbf2db41ef3c4aa6fa84b81088becd",
+      "structureGrade": "table_like_text_candidate",
+      "numericCandidate": true,
+      "extractionMethod": "pymupdf_table_caption_text_candidate_v1",
+      "confidence": 0.78,
+      "blockerReason": "",
+      "diagnostics": {
+        "source": "pymupdf_block",
+        "captionBlockIndex": 4,
+        "nearbyTableLikeBlockCount": 1
+      }
+    }
+  ],
+  "blockerRows": 0,
+  "blockers": [],
+  "mutationCounters": {
+    "canonicalParsedArtifactWriteRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "strictEvidencePromotionRows": 0,
+    "runtimeAnswerVisibleExposureRows": 0
+  },
+  "schemaViolationCount": 0,
+  "privatePathLeakRows": 0,
+  "warnings": [
+    "row/column/cell structure remains candidate-grade and is not strict evidence in v0.1"
+  ],
+  "schemaErrors": []
+}
