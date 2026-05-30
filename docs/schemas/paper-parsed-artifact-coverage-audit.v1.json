@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-coverage-audit.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "request",
+    "safety",
+    "counts",
+    "nextParsedCoverageBottleneck",
+    "items",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-coverage-audit.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "scope": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": ["paperIds", "includedCorpusTiers", "reportOnly"],
+      "properties": {
+        "paperIds": { "type": "array", "items": { "type": "string" } },
+        "includedCorpusTiers": { "type": "array", "items": { "type": "string" } },
+        "reportOnly": { "const": true }
+      },
+      "additionalProperties": true
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "vaultScan",
+        "externalDownload",
+        "dbMutation",
+        "indexMutation",
+        "reindex",
+        "reembed",
+        "canonicalParsedArtifactWrite",
+        "privatePathLeakAllowed"
+      ],
+      "properties": {
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false },
+        "dbMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindex": { "const": false },
+        "reembed": { "const": false },
+        "canonicalParsedArtifactWrite": { "const": false },
+        "privatePathLeakAllowed": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "totalCorpusArtifacts",
+        "registeredPapers",
+        "ready",
+        "missingSource",
+        "missingParsed",
+        "hashMismatch",
+        "unknownStatus",
+        "parsedDegraded"
+      ],
+      "properties": {
+        "totalCorpusArtifacts": { "type": "integer", "minimum": 0 },
+        "registeredPapers": { "type": "integer", "minimum": 0 },
+        "ready": { "type": "integer", "minimum": 0 },
+        "missingSource": { "type": "integer", "minimum": 0 },
+        "missingParsed": { "type": "integer", "minimum": 0 },
+        "hashMismatch": { "type": "integer", "minimum": 0 },
+        "unknownStatus": { "type": "integer", "minimum": 0 },
+        "parsedDegraded": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "nextParsedCoverageBottleneck": { "type": "string" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifactId",
+          "sourceIds",
+          "corpusTier",
+          "paperId",
+          "paperTitle",
+          "paperRegistered",
+          "matchedSourceId",
+          "coverageStatus",
+          "sourceStatus",
+          "parsedStatus",
+          "parsedDegraded",
+          "corpusArtifact",
+          "registeredSourceArtifact",
+          "parsedDiagnostic",
+          "blockers",
+          "recommendedNextAction"
+        ],
+        "properties": {
+          "artifactId": { "type": "string" },
+          "sourceIds": { "type": "array", "items": { "type": "string" } },
+          "corpusTier": { "type": "string" },
+          "paperId": { "type": "string" },
+          "paperTitle": { "type": "string" },
+          "paperRegistered": { "type": "boolean" },
+          "matchedSourceId": { "type": "string" },
+          "coverageStatus": {
+            "enum": ["ready", "missing_source", "missing_parsed", "hash_mismatch", "unknown_status"]
+          },
+          "sourceStatus": { "type": "string" },
+          "parsedStatus": { "type": "string" },
+          "parsedDegraded": { "type": "boolean" },
+          "corpusArtifact": { "type": "object" },
+          "registeredSourceArtifact": { "type": "object" },
+          "parsedDiagnostic": { "type": "object" },
+          "blockers": { "type": "array", "items": { "type": "string" } },
+          "recommendedNextAction": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

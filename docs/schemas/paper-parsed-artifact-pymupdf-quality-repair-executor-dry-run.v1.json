@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-executor-dry-run.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "request",
+    "safety",
+    "counts",
+    "gate",
+    "byPaperId",
+    "byDryRunDisposition",
+    "byPrimaryRepairStrategy",
+    "byAffectedEvidenceType",
+    "bySidecarOracleRequirement",
+    "executorPlanRows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-executor-dry-run.v1"
+    },
+    "status": {
+      "enum": ["executor_dry_run_complete", "ready", "blocked"]
+    },
+    "generatedAt": { "type": "string" },
+    "scope": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": [
+        "inputSchema",
+        "inputStatus",
+        "inputGateDecision",
+        "requiredParentTranche",
+        "reportOnly",
+        "dryRunOnly"
+      ],
+      "properties": {
+        "inputSchema": {
+          "const": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-design.v1"
+        },
+        "inputStatus": { "enum": ["design_ready", "ready"] },
+        "inputGateDecision": {
+          "const": "ready_for_pymupdf_quality_repair_executor_dry_run"
+        },
+        "requiredParentTranche": {
+          "const": "parsed_artifact_pymupdf_quality_repair_design"
+        },
+        "reportOnly": { "const": true },
+        "dryRunOnly": { "const": true }
+      },
+      "additionalProperties": true
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "parserRerun",
+        "canonicalParsedArtifactWrite",
+        "parserRoutingChanged",
+        "dbMutation",
+        "indexMutation",
+        "reindex",
+        "reembed",
+        "vaultScan",
+        "externalDownload",
+        "sourceSpanCreated",
+        "strictEvidenceCreated",
+        "citationEvidenceCreated",
+        "runtimeEvidenceCreated",
+        "answerPathInvoked",
+        "answerabilityPromoted",
+        "privatePathLeakAllowed"
+      ],
+      "properties": {
+        "parserRerun": { "const": false },
+        "canonicalParsedArtifactWrite": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "dbMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindex": { "const": false },
+        "reembed": { "const": false },
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false },
+        "sourceSpanCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "answerabilityPromoted": { "const": false },
+        "privatePathLeakAllowed": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputCorpusRows",
+        "coverageReadyRows",
+        "repairDesignRows",
+        "dryRunPlanRows",
+        "plannedRepairActionRows",
+        "plannedAuthorityCheckRows",
+        "dryRunReadyRows",
+        "blockedNeedsSidecarOracleRows",
+        "blockedConflictRows",
+        "unsafeRows",
+        "sidecarOracleRequiredBeforeApplyRows",
+        "safeApplyCandidateRows",
+        "tableNumericPlannedRows",
+        "figureCaptionPlannedRows",
+        "equationRegionPlannedRows",
+        "parserRerunRows",
+        "canonicalParsedArtifactWriteRows",
+        "parserRoutingChangedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "sourceSpanCreatedRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "answerPathInvokedRows",
+        "answerabilityPromotionRows",
+        "schemaViolationCount",
+        "privatePathLeakRows"
+      ],
+      "properties": {
+        "inputCorpusRows": { "type": "integer", "minimum": 0 },
+        "coverageReadyRows": { "type": "integer", "minimum": 0 },
+        "repairDesignRows": { "type": "integer", "minimum": 0 },
+        "dryRunPlanRows": { "type": "integer", "minimum": 0 },
+        "plannedRepairActionRows": { "type": "integer", "minimum": 0 },
+        "plannedAuthorityCheckRows": { "type": "integer", "minimum": 0 },
+        "dryRunReadyRows": { "type": "integer", "minimum": 0 },
+        "blockedNeedsSidecarOracleRows": { "type": "integer", "minimum": 0 },
+        "blockedConflictRows": { "type": "integer", "minimum": 0 },
+        "unsafeRows": { "type": "integer", "minimum": 0 },
+        "sidecarOracleRequiredBeforeApplyRows": { "type": "integer", "minimum": 0 },
+        "safeApplyCandidateRows": { "type": "integer", "minimum": 0 },
+        "tableNumericPlannedRows": { "type": "integer", "minimum": 0 },
+        "figureCaptionPlannedRows": { "type": "integer", "minimum": 0 },
+        "equationRegionPlannedRows": { "type": "integer", "minimum": 0 },
+        "parserRerunRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerabilityPromotionRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "decision",
+        "schemaViolations",
+        "unsafeUpstreamFlags",
+        "duplicateArtifactIdRows",
+        "duplicateIdempotencyKeyRows",
+        "nextTranche"
+      ],
+      "properties": {
+        "decision": {
+          "enum": [
+            "ready_for_pymupdf_quality_repair_sidecar_oracle_comparison",
+            "ready_for_pymupdf_quality_repair_safe_apply_subset_review",
+            "blocked_until_pymupdf_quality_repair_dry_run_gaps_resolved"
+          ]
+        },
+        "schemaViolations": { "type": "array", "items": { "type": "string" } },
+        "unsafeUpstreamFlags": { "type": "array", "items": { "type": "string" } },
+        "duplicateArtifactIdRows": { "type": "integer", "minimum": 0 },
+        "duplicateIdempotencyKeyRows": { "type": "integer", "minimum": 0 },
+        "nextTranche": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "byPaperId": { "type": "object" },
+    "byDryRunDisposition": { "type": "object" },
+    "byPrimaryRepairStrategy": { "type": "object" },
+    "byAffectedEvidenceType": { "type": "object" },
+    "bySidecarOracleRequirement": { "type": "object" },
+    "executorPlanRows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/executorPlanRow" }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "executorPlanRow": {
+      "type": "object",
+      "required": [
+        "planId",
+        "parentDesignId",
+        "artifactId",
+        "sourceIds",
+        "paperId",
+        "paperTitle",
+        "parser",
+        "primaryRepairStrategy",
+        "repairStrategyComponents",
+        "affectedEvidenceTypes",
+        "diagnosticMetrics",
+        "idempotencyKey",
+        "dryRunDisposition",
+        "dryRunDispositionReasons",
+        "authorityCheckPlan",
+        "plannedRepairActions",
+        "sidecarOracleRequirements",
+        "sidecarOracleRequiredBeforeApply",
+        "safeApplyCandidate",
+        "safeApplyBlockers",
+        "reportOnly",
+        "mutationCounters"
+      ],
+      "properties": {
+        "planId": { "type": "string" },
+        "parentDesignId": { "type": "string" },
+        "artifactId": { "type": "string" },
+        "sourceIds": { "type": "array", "items": { "type": "string" } },
+        "paperId": { "type": "string" },
+        "paperTitle": { "type": "string" },
+        "parser": { "type": "string" },
+        "primaryRepairStrategy": { "type": "string" },
+        "repairStrategyComponents": { "type": "array", "items": { "type": "string" } },
+        "affectedEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+        "diagnosticMetrics": { "type": "object" },
+        "idempotencyKey": { "type": "string" },
+        "dryRunDisposition": {
+          "enum": ["dry_run_ready", "blocked_needs_sidecar_oracle", "blocked_conflict", "unsafe"]
+        },
+        "dryRunDispositionReasons": { "type": "array", "items": { "type": "string" } },
+        "authorityCheckPlan": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/authorityCheck" }
+        },
+        "plannedRepairActions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/plannedRepairAction" }
+        },
+        "sidecarOracleRequirements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sidecarOracleRequirement" }
+        },
+        "sidecarOracleRequiredBeforeApply": { "type": "boolean" },
+        "safeApplyCandidate": { "const": false },
+        "safeApplyBlockers": { "type": "array", "items": { "type": "string" } },
+        "reportOnly": { "const": true },
+        "mutationCounters": { "$ref": "#/$defs/zeroCounters" }
+      },
+      "additionalProperties": true
+    },
+    "authorityCheck": {
+      "type": "object",
+      "required": ["check", "required", "planned", "materializedByThisReport", "basis"],
+      "properties": {
+        "check": { "type": "string" },
+        "required": { "type": "boolean" },
+        "planned": { "const": true },
+        "materializedByThisReport": { "const": false },
+        "basis": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "plannedRepairAction": {
+      "type": "object",
+      "required": [
+        "component",
+        "action",
+        "target",
+        "dryRunOnly",
+        "writesCanonicalParsedArtifact",
+        "createsSourceSpan",
+        "createsStrictEvidence",
+        "createsCitationEvidence",
+        "createsRuntimeEvidence",
+        "invokesAnswerPath",
+        "requiresSourceContentHash",
+        "requiresStablePageLocator",
+        "outputKind"
+      ],
+      "properties": {
+        "component": { "type": "string" },
+        "action": { "type": "string" },
+        "target": { "type": "string" },
+        "dryRunOnly": { "const": true },
+        "writesCanonicalParsedArtifact": { "const": false },
+        "createsSourceSpan": { "const": false },
+        "createsStrictEvidence": { "const": false },
+        "createsCitationEvidence": { "const": false },
+        "createsRuntimeEvidence": { "const": false },
+        "invokesAnswerPath": { "const": false },
+        "requiresSourceContentHash": { "const": true },
+        "requiresStablePageLocator": { "const": true },
+        "outputKind": { "const": "candidate_diff_only" }
+      },
+      "additionalProperties": true
+    },
+    "sidecarOracleRequirement": {
+      "type": "object",
+      "required": [
+        "requirement",
+        "component",
+        "requiredBeforeApply",
+        "localOnly",
+        "invokedByThisReport",
+        "candidateParsers"
+      ],
+      "properties": {
+        "requirement": { "type": "string" },
+        "component": { "type": "string" },
+        "requiredBeforeApply": { "const": true },
+        "localOnly": { "const": true },
+        "invokedByThisReport": { "const": false },
+        "candidateParsers": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "zeroCounters": {
+      "type": "object",
+      "properties": {
+        "parserRerunRows": { "const": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "sourceSpanCreatedRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerabilityPromotionRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

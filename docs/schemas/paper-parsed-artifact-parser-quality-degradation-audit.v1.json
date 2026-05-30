@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.paper.parsed-artifact-parser-quality-degradation-audit.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "scope",
+    "request",
+    "safety",
+    "counts",
+    "byPaperId",
+    "byDegradationReason",
+    "byEvidenceImpact",
+    "byRecommendedRecoveryStrategy",
+    "recommendedRecoveryStrategy",
+    "nextRecommendedTranche",
+    "coverageParserQualitySeparation",
+    "items",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.parsed-artifact-parser-quality-degradation-audit.v1" },
+    "status": { "enum": ["degradation_audit_complete", "ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "scope": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": ["coverageReportSchema", "coverageReportStatus", "coverageReadyRequired", "reportOnly"],
+      "properties": {
+        "coverageReportSchema": { "type": "string" },
+        "coverageReportStatus": { "type": "string" },
+        "coverageReadyRequired": { "const": true },
+        "reportOnly": { "const": true }
+      },
+      "additionalProperties": true
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "vaultScan",
+        "externalDownload",
+        "dbMutation",
+        "indexMutation",
+        "reindex",
+        "reembed",
+        "canonicalParsedArtifactWrite",
+        "parserRoutingChanged",
+        "answerPathInvoked",
+        "answerabilityPromoted",
+        "runtimeEvidenceCreated",
+        "citationEvidenceCreated",
+        "strictEvidenceCreated",
+        "privatePathLeakAllowed"
+      ],
+      "properties": {
+        "vaultScan": { "const": false },
+        "externalDownload": { "const": false },
+        "dbMutation": { "const": false },
+        "indexMutation": { "const": false },
+        "reindex": { "const": false },
+        "reembed": { "const": false },
+        "canonicalParsedArtifactWrite": { "const": false },
+        "parserRoutingChanged": { "const": false },
+        "answerPathInvoked": { "const": false },
+        "answerabilityPromoted": { "const": false },
+        "runtimeEvidenceCreated": { "const": false },
+        "citationEvidenceCreated": { "const": false },
+        "strictEvidenceCreated": { "const": false },
+        "privatePathLeakAllowed": { "const": false }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "inputCorpusRows",
+        "coverageReadyRows",
+        "parserDegradedRows",
+        "pageBlobSectionsOnlyRows",
+        "tablesCaptionOnlyRows",
+        "multiColumnProbeOnlyRows",
+        "canonicalParsedArtifactWriteRows",
+        "parserRoutingChangedRows",
+        "databaseMutationRows",
+        "indexMutationRows",
+        "reindexOrReembedRows",
+        "vaultScanRows",
+        "externalDownloadRows",
+        "runtimeEvidenceCreatedRows",
+        "citationEvidenceCreatedRows",
+        "strictEvidenceCreatedRows",
+        "answerPathInvokedRows",
+        "answerabilityPromotionRows",
+        "schemaViolationCount",
+        "privatePathLeakRows"
+      ],
+      "properties": {
+        "inputCorpusRows": { "type": "integer", "minimum": 0 },
+        "coverageReadyRows": { "type": "integer", "minimum": 0 },
+        "parserDegradedRows": { "type": "integer", "minimum": 0 },
+        "pageBlobSectionsOnlyRows": { "type": "integer", "minimum": 0 },
+        "tablesCaptionOnlyRows": { "type": "integer", "minimum": 0 },
+        "multiColumnProbeOnlyRows": { "type": "integer", "minimum": 0 },
+        "classifiedRows": { "type": "integer", "minimum": 0 },
+        "canonicalParsedArtifactWriteRows": { "const": 0 },
+        "parserRoutingChangedRows": { "const": 0 },
+        "databaseMutationRows": { "const": 0 },
+        "indexMutationRows": { "const": 0 },
+        "reindexOrReembedRows": { "const": 0 },
+        "vaultScanRows": { "const": 0 },
+        "externalDownloadRows": { "const": 0 },
+        "runtimeEvidenceCreatedRows": { "const": 0 },
+        "citationEvidenceCreatedRows": { "const": 0 },
+        "strictEvidenceCreatedRows": { "const": 0 },
+        "answerPathInvokedRows": { "const": 0 },
+        "answerabilityPromotionRows": { "const": 0 },
+        "schemaViolationCount": { "const": 0 },
+        "privatePathLeakRows": { "const": 0 }
+      },
+      "additionalProperties": true
+    },
+    "byPaperId": { "type": "object" },
+    "byDegradationReason": { "type": "object" },
+    "byEvidenceImpact": { "type": "object" },
+    "byPrimaryEvidenceImpact": { "type": "object" },
+    "byRecommendedRecoveryStrategy": { "type": "object" },
+    "recommendedRecoveryStrategy": {
+      "enum": [
+        "pymupdf_quality_repair_design",
+        "alternative_parser_probe_needed",
+        "table_specific_extractor_needed",
+        "figure_caption_location_identity_needed",
+        "no_action_coverage_ready"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string" },
+    "coverageParserQualitySeparation": {
+      "type": "object",
+      "required": ["coverageReadyRows", "coverageProblemRows", "parserQualityProblemRows", "decision"],
+      "properties": {
+        "coverageReadyRows": { "type": "integer", "minimum": 0 },
+        "coverageProblemRows": { "type": "integer", "minimum": 0 },
+        "parserQualityProblemRows": { "type": "integer", "minimum": 0 },
+        "decision": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifactId",
+          "sourceIds",
+          "corpusTier",
+          "paperId",
+          "paperTitle",
+          "coverageStatus",
+          "parsedStatus",
+          "parser",
+          "parserQualityCategory",
+          "parsedDegraded",
+          "degradationReasons",
+          "evidenceImpacts",
+          "primaryEvidenceImpact",
+          "recommendedRecoveryStrategy",
+          "secondaryRecoveryStrategies",
+          "diagnosticMetrics",
+          "reportOnly",
+          "mutationCounters"
+        ],
+        "properties": {
+          "artifactId": { "type": "string" },
+          "sourceIds": { "type": "array", "items": { "type": "string" } },
+          "corpusTier": { "type": "string" },
+          "paperId": { "type": "string" },
+          "paperTitle": { "type": "string" },
+          "coverageStatus": { "type": "string" },
+          "parsedStatus": { "type": "string" },
+          "parser": { "type": "string" },
+          "parserQualityCategory": { "type": "string" },
+          "parsedDegraded": { "type": "boolean" },
+          "degradationReasons": { "type": "array", "items": { "type": "string" } },
+          "evidenceImpacts": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "table_numeric_blocked",
+                "figure_caption_blocked",
+                "equation_region_blocked",
+                "section_span_usable",
+                "unknown"
+              ]
+            }
+          },
+          "primaryEvidenceImpact": {
+            "enum": [
+              "table_numeric_blocked",
+              "figure_caption_blocked",
+              "equation_region_blocked",
+              "section_span_usable",
+              "unknown"
+            ]
+          },
+          "recommendedRecoveryStrategy": {
+            "enum": [
+              "pymupdf_quality_repair_design",
+              "alternative_parser_probe_needed",
+              "table_specific_extractor_needed",
+              "figure_caption_location_identity_needed",
+              "no_action_coverage_ready"
+            ]
+          },
+          "secondaryRecoveryStrategies": { "type": "array", "items": { "type": "string" } },
+          "diagnosticMetrics": { "type": "object" },
+          "reportOnly": { "const": true },
+          "mutationCounters": {
+            "type": "object",
+            "properties": {
+              "canonicalParsedArtifactWriteRows": { "const": 0 },
+              "parserRoutingChangedRows": { "const": 0 },
+              "databaseMutationRows": { "const": 0 },
+              "indexMutationRows": { "const": 0 },
+              "reindexOrReembedRows": { "const": 0 },
+              "vaultScanRows": { "const": 0 },
+              "externalDownloadRows": { "const": 0 },
+              "runtimeEvidenceCreatedRows": { "const": 0 },
+              "citationEvidenceCreatedRows": { "const": 0 },
+              "strictEvidenceCreatedRows": { "const": 0 },
+              "answerPathInvokedRows": { "const": 0 },
+              "answerabilityPromotionRows": { "const": 0 },
+              "schemaViolationCount": { "const": 0 },
+              "privatePathLeakRows": { "const": 0 }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

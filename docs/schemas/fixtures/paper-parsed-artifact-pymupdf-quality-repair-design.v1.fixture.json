@@ -1,0 +1,334 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-design.v1",
+  "status": "design_ready",
+  "generatedAt": "2026-05-24T00:00:00+00:00",
+  "scope": "eval_critical_pymupdf_quality_repair_design",
+  "request": {
+    "inputSchema": "knowledge-hub.paper.parsed-artifact-parser-quality-degradation-audit.v1",
+    "inputStatus": "degradation_audit_complete",
+    "requiredParentTranche": "parsed_artifact_parser_quality_degradation_audit",
+    "reportOnly": true
+  },
+  "safety": {
+    "parserRerun": false,
+    "canonicalParsedArtifactWrite": false,
+    "parserRoutingChanged": false,
+    "dbMutation": false,
+    "indexMutation": false,
+    "reindex": false,
+    "reembed": false,
+    "vaultScan": false,
+    "externalDownload": false,
+    "sourceSpanCreated": false,
+    "strictEvidenceCreated": false,
+    "citationEvidenceCreated": false,
+    "runtimeEvidenceCreated": false,
+    "answerPathInvoked": false,
+    "answerabilityPromoted": false,
+    "privatePathLeakAllowed": false
+  },
+  "counts": {
+    "inputCorpusRows": 1,
+    "coverageReadyRows": 1,
+    "parserDegradedRows": 1,
+    "repairDesignRows": 1,
+    "upstreamNoActionRows": 0,
+    "pageBlobSectionsOnlyRows": 1,
+    "tablesCaptionOnlyRows": 1,
+    "multiColumnProbeOnlyRows": 1,
+    "tableNumericBlockedRows": 1,
+    "figureCaptionBlockedRows": 1,
+    "equationRegionBlockedRows": 1,
+    "dryRunReadyRows": 1,
+    "dryRunBlockedRows": 0,
+    "parserRerunRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "parserRoutingChangedRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "runtimeEvidenceCreatedRows": 0,
+    "citationEvidenceCreatedRows": 0,
+    "strictEvidenceCreatedRows": 0,
+    "answerPathInvokedRows": 0,
+    "answerabilityPromotionRows": 0,
+    "schemaViolationCount": 0,
+    "privatePathLeakRows": 0
+  },
+  "gate": {
+    "decision": "ready_for_pymupdf_quality_repair_executor_dry_run",
+    "schemaViolations": [],
+    "unsafeUpstreamFlags": [],
+    "designGapRows": 0,
+    "nextTranche": "parsed_artifact_pymupdf_quality_repair_executor_dry_run"
+  },
+  "requiredAuthority": {
+    "sourceContentHash": {
+      "required": true,
+      "basis": "existing_canonical_source_pdf_hash_from_coverage_audit_or_corpus_manifest",
+      "materializedInThisDesign": false,
+      "mustBeVerifiedByDryRun": true
+    },
+    "pageLocatorBasis": {
+      "required": true,
+      "basis": "pymupdf_page_index_plus_page_count_and_text_layer_diagnostics",
+      "materializedInThisDesign": false,
+      "mustBeVerifiedByDryRun": true
+    },
+    "tableLocatorBasis": {
+      "required": true,
+      "basis": "page_bbox_table_region_plus_row_column_or_cell_locator_before_numeric_evidence",
+      "materializedInThisDesign": false,
+      "mustBeVerifiedByDryRun": true
+    },
+    "captionLocatorBasis": {
+      "required": true,
+      "basis": "caption_text_identity_plus_page_bbox_or_block_locator_and_figure_region_link",
+      "materializedInThisDesign": false,
+      "mustBeVerifiedByDryRun": true
+    },
+    "equationLocatorBasis": {
+      "required": true,
+      "basis": "formula_region_bbox_or_tex_pdf_alignment_with_page_and_source_hash",
+      "materializedInThisDesign": false,
+      "mustBeVerifiedByDryRun": true
+    },
+    "deterministicIdentityKeyBasis": {
+      "required": true,
+      "basis": "artifactId_sourceContentHash_parser_structureType_page_locator_normalizedTextHash",
+      "components": [
+        "artifactId",
+        "sourceContentHash",
+        "parser",
+        "structureType",
+        "page",
+        "locator",
+        "normalizedTextHash"
+      ],
+      "materializedInThisDesign": false,
+      "mustBeVerifiedByDryRun": true
+    }
+  },
+  "expectedRepairedArtifactShape": {
+    "artifactKind": "pymupdf_quality_repair_dry_run_sidecar",
+    "writeTarget": "future_ignored_report_or_noncanonical_sidecar_only",
+    "canonicalParsedArtifactOverwrite": false,
+    "parserRoutingChange": false,
+    "sourceSpanCreated": false,
+    "strictEvidenceCreated": false,
+    "citationEvidenceCreated": false,
+    "runtimeEvidenceCreated": false,
+    "contains": [
+      "artifactId",
+      "deterministicIdentityKeys",
+      "pageLocators",
+      "parser",
+      "promotionBlockers",
+      "repairDiagnostics",
+      "schema",
+      "sourceContentHash"
+    ],
+    "repairComponents": [
+      "page_block_segmentation"
+    ],
+    "mustNotContain": [
+      "SourceSpan",
+      "StrictEvidence",
+      "citation_grade_evidence",
+      "runtime_answer_evidence",
+      "canonical_parsed_artifact_overwrite"
+    ]
+  },
+  "byPaperId": {
+    "2600.00001": {
+      "artifactId": "paper_example",
+      "primaryRepairStrategy": "pymupdf_multi_column_table_figure_equation_repair_design",
+      "affectedEvidenceTypes": [
+        "table_numeric",
+        "figure_caption",
+        "equation_region"
+      ],
+      "dryRunExecutorReadiness": "ready_for_pymupdf_quality_repair_executor_dry_run"
+    }
+  },
+  "byPrimaryRepairStrategy": {
+    "pymupdf_multi_column_table_figure_equation_repair_design": 1
+  },
+  "byAffectedEvidenceType": {
+    "equation_region": 1,
+    "figure_caption": 1,
+    "table_numeric": 1
+  },
+  "byUnsafeOrInsufficientProvenanceBlocker": {
+    "deterministic_identity_key_must_be_materialized_by_dry_run": 1
+  },
+  "byDryRunExecutorReadiness": {
+    "ready_for_pymupdf_quality_repair_executor_dry_run": 1
+  },
+  "designRows": [
+    {
+      "designId": "pymupdf-quality-repair-design:0001",
+      "artifactId": "paper_example",
+      "sourceIds": [
+        "2600.00001"
+      ],
+      "paperId": "2600.00001",
+      "paperTitle": "Example Paper",
+      "parser": "pymupdf",
+      "coverageStatus": "ready",
+      "parsedStatus": "degraded",
+      "parserQualityCategory": "coverage_ready_multi_structure_quality_degraded",
+      "degradationReasons": [
+        "page_blob_sections_only",
+        "multi_column_probe_only",
+        "tables_caption_only"
+      ],
+      "affectedEvidenceTypes": [
+        "table_numeric",
+        "figure_caption",
+        "equation_region"
+      ],
+      "usableEvidenceTypes": [
+        "section_span"
+      ],
+      "primaryRepairStrategy": "pymupdf_multi_column_table_figure_equation_repair_design",
+      "repairStrategyComponents": [
+        "page_block_segmentation",
+        "multi_column_reading_order_probe",
+        "table_numeric_region_locator",
+        "figure_caption_region_locator",
+        "equation_region_locator"
+      ],
+      "diagnosticMetrics": {
+        "pageCount": 10,
+        "pagesWithText": 10,
+        "textLayerDetected": true,
+        "columnCountDetected": 2,
+        "tablesDetected": 0,
+        "figuresDetected": 2,
+        "equationsDetected": 0
+      },
+      "requiredAuthority": {
+        "sourceContentHash": {
+          "required": true,
+          "basis": "existing_canonical_source_pdf_hash_from_coverage_audit_or_corpus_manifest",
+          "materializedInThisDesign": false,
+          "mustBeVerifiedByDryRun": true
+        },
+        "pageLocatorBasis": {
+          "required": true,
+          "basis": "pymupdf_page_index_plus_page_count_and_text_layer_diagnostics",
+          "materializedInThisDesign": false,
+          "mustBeVerifiedByDryRun": true
+        },
+        "tableLocatorBasis": {
+          "required": true,
+          "basis": "page_bbox_table_region_plus_row_column_or_cell_locator_before_numeric_evidence",
+          "materializedInThisDesign": false,
+          "mustBeVerifiedByDryRun": true
+        },
+        "captionLocatorBasis": {
+          "required": true,
+          "basis": "caption_text_identity_plus_page_bbox_or_block_locator_and_figure_region_link",
+          "materializedInThisDesign": false,
+          "mustBeVerifiedByDryRun": true
+        },
+        "equationLocatorBasis": {
+          "required": true,
+          "basis": "formula_region_bbox_or_tex_pdf_alignment_with_page_and_source_hash",
+          "materializedInThisDesign": false,
+          "mustBeVerifiedByDryRun": true
+        },
+        "deterministicIdentityKeyBasis": {
+          "required": true,
+          "basis": "artifactId_sourceContentHash_parser_structureType_page_locator_normalizedTextHash",
+          "components": [
+            "artifactId",
+            "sourceContentHash",
+            "parser",
+            "structureType",
+            "page",
+            "locator",
+            "normalizedTextHash"
+          ],
+          "materializedInThisDesign": false,
+          "mustBeVerifiedByDryRun": true
+        }
+      },
+      "expectedRepairedArtifactShape": {
+        "artifactKind": "pymupdf_quality_repair_dry_run_sidecar",
+        "writeTarget": "future_ignored_report_or_noncanonical_sidecar_only",
+        "canonicalParsedArtifactOverwrite": false,
+        "parserRoutingChange": false,
+        "sourceSpanCreated": false,
+        "strictEvidenceCreated": false,
+        "citationEvidenceCreated": false,
+        "runtimeEvidenceCreated": false,
+        "contains": [
+          "artifactId",
+          "deterministicIdentityKeys",
+          "equationRegions",
+          "figureCaptionRegions",
+          "formulaRegionLocatorRequirements",
+          "pageLocators",
+          "parser",
+          "promotionBlockers",
+          "repairDiagnostics",
+          "schema",
+          "sourceContentHash",
+          "tableNumericCellLocatorRequirements",
+          "tableRegions"
+        ],
+        "repairComponents": [
+          "page_block_segmentation",
+          "multi_column_reading_order_probe",
+          "table_numeric_region_locator",
+          "figure_caption_region_locator",
+          "equation_region_locator"
+        ],
+        "mustNotContain": [
+          "SourceSpan",
+          "StrictEvidence",
+          "citation_grade_evidence",
+          "runtime_answer_evidence",
+          "canonical_parsed_artifact_overwrite"
+        ]
+      },
+      "unsafeOrInsufficientProvenanceBlockers": [
+        "source_content_hash_must_be_reverified_before_repair_output_is_trusted",
+        "page_locator_must_be_stable_against_existing_source_pdf",
+        "deterministic_identity_key_must_be_materialized_by_dry_run",
+        "report_only_design_not_evidence",
+        "strict_or_runtime_promotion_requires_later_explicit_tranche"
+      ],
+      "dryRunExecutorReadiness": "ready_for_pymupdf_quality_repair_executor_dry_run",
+      "dryRunExecutorReadinessReasons": [
+        "row_has_artifact_and_source_identity",
+        "required_authority_is_explicitly_declared"
+      ],
+      "reportOnly": true,
+      "mutationCounters": {
+        "parserRerunRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+        "parserRoutingChangedRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "sourceSpanCreatedRows": 0,
+        "runtimeEvidenceCreatedRows": 0,
+        "citationEvidenceCreatedRows": 0,
+        "strictEvidenceCreatedRows": 0,
+        "answerPathInvokedRows": 0,
+        "answerabilityPromotionRows": 0,
+        "schemaViolationCount": 0,
+        "privatePathLeakRows": 0
+      }
+    }
+  ],
+  "warnings": []
+}

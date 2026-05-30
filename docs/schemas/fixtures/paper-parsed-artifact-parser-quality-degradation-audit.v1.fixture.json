@@ -1,0 +1,146 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-parser-quality-degradation-audit.v1",
+  "status": "degradation_audit_complete",
+  "generatedAt": "2026-05-24T00:00:00+00:00",
+  "scope": "eval_critical_coverage_ready_parser_quality",
+  "request": {
+    "coverageReportSchema": "knowledge-hub.paper.parsed-artifact-coverage-audit.v1",
+    "coverageReportStatus": "ready",
+    "coverageReadyRequired": true,
+    "reportOnly": true
+  },
+  "safety": {
+    "vaultScan": false,
+    "externalDownload": false,
+    "dbMutation": false,
+    "indexMutation": false,
+    "reindex": false,
+    "reembed": false,
+    "canonicalParsedArtifactWrite": false,
+    "parserRoutingChanged": false,
+    "answerPathInvoked": false,
+    "answerabilityPromoted": false,
+    "runtimeEvidenceCreated": false,
+    "citationEvidenceCreated": false,
+    "strictEvidenceCreated": false,
+    "privatePathLeakAllowed": false
+  },
+  "counts": {
+    "inputCorpusRows": 1,
+    "coverageReadyRows": 1,
+    "parserDegradedRows": 1,
+    "pageBlobSectionsOnlyRows": 1,
+    "tablesCaptionOnlyRows": 1,
+    "multiColumnProbeOnlyRows": 1,
+    "classifiedRows": 1,
+    "canonicalParsedArtifactWriteRows": 0,
+    "parserRoutingChangedRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "runtimeEvidenceCreatedRows": 0,
+    "citationEvidenceCreatedRows": 0,
+    "strictEvidenceCreatedRows": 0,
+    "answerPathInvokedRows": 0,
+    "answerabilityPromotionRows": 0,
+    "schemaViolationCount": 0,
+    "privatePathLeakRows": 0
+  },
+  "byPaperId": {
+    "2600.00001": {
+      "artifactId": "paper_example",
+      "coverageStatus": "ready",
+      "parserQualityCategory": "coverage_ready_multi_structure_quality_degraded",
+      "degradationReasons": ["page_blob_sections_only", "multi_column_probe_only", "tables_caption_only"],
+      "evidenceImpacts": [
+        "table_numeric_blocked",
+        "figure_caption_blocked",
+        "equation_region_blocked",
+        "section_span_usable"
+      ],
+      "recommendedRecoveryStrategy": "pymupdf_quality_repair_design"
+    }
+  },
+  "byDegradationReason": {
+    "multi_column_probe_only": 1,
+    "page_blob_sections_only": 1,
+    "tables_caption_only": 1
+  },
+  "byEvidenceImpact": {
+    "equation_region_blocked": 1,
+    "figure_caption_blocked": 1,
+    "section_span_usable": 1,
+    "table_numeric_blocked": 1
+  },
+  "byPrimaryEvidenceImpact": {
+    "table_numeric_blocked": 1
+  },
+  "byRecommendedRecoveryStrategy": {
+    "pymupdf_quality_repair_design": 1
+  },
+  "recommendedRecoveryStrategy": "pymupdf_quality_repair_design",
+  "nextRecommendedTranche": "parsed_artifact_pymupdf_quality_repair_design",
+  "coverageParserQualitySeparation": {
+    "coverageReadyRows": 1,
+    "coverageProblemRows": 0,
+    "parserQualityProblemRows": 1,
+    "decision": "coverage_ready_parser_quality_remains_blocker"
+  },
+  "items": [
+    {
+      "artifactId": "paper_example",
+      "sourceIds": ["2600.00001"],
+      "corpusTier": "local_corpus",
+      "paperId": "2600.00001",
+      "paperTitle": "Example Paper",
+      "coverageStatus": "ready",
+      "parsedStatus": "degraded",
+      "parser": "pymupdf",
+      "parserQualityCategory": "coverage_ready_multi_structure_quality_degraded",
+      "parsedDegraded": true,
+      "degradationReasons": ["page_blob_sections_only", "multi_column_probe_only", "tables_caption_only"],
+      "evidenceImpacts": [
+        "table_numeric_blocked",
+        "figure_caption_blocked",
+        "equation_region_blocked",
+        "section_span_usable"
+      ],
+      "primaryEvidenceImpact": "table_numeric_blocked",
+      "recommendedRecoveryStrategy": "pymupdf_quality_repair_design",
+      "secondaryRecoveryStrategies": [
+        "alternative_parser_probe_needed",
+        "table_specific_extractor_needed",
+        "figure_caption_location_identity_needed"
+      ],
+      "diagnosticMetrics": {
+        "pageCount": 10,
+        "pagesWithText": 10,
+        "textLayerDetected": true,
+        "columnCountDetected": 2,
+        "tablesDetected": 0,
+        "figuresDetected": 2,
+        "equationsDetected": 0
+      },
+      "reportOnly": true,
+      "mutationCounters": {
+        "canonicalParsedArtifactWriteRows": 0,
+        "parserRoutingChangedRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "runtimeEvidenceCreatedRows": 0,
+        "citationEvidenceCreatedRows": 0,
+        "strictEvidenceCreatedRows": 0,
+        "answerPathInvokedRows": 0,
+        "answerabilityPromotionRows": 0,
+        "schemaViolationCount": 0,
+        "privatePathLeakRows": 0
+      }
+    }
+  ],
+  "warnings": []
+}
