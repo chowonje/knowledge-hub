@@ -1,0 +1,133 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-candidate-pack-design.v1",
+  "status": "design_ready",
+  "generatedAt": "2026-05-25T00:00:00+00:00",
+  "scope": "eval_critical_pymupdf_quality_repair_sidecar_oracle_candidate_pack_design",
+  "request": {
+    "inputSchema": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-comparison.v1",
+    "inputStatus": "comparison_complete",
+    "inputGateDecision": "blocked_until_sidecar_oracle_candidate_pack_available",
+    "requiredParentTranche": "parsed_artifact_pymupdf_quality_repair_sidecar_oracle_comparison",
+    "designedPackSchemaId": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-pack.v1",
+    "reportOnly": true,
+    "designOnly": true
+  },
+  "safety": {
+    "sidecarParserInvoked": false,
+    "parserRerun": false,
+    "canonicalParsedArtifactWrite": false,
+    "parserRoutingChanged": false,
+    "dbMutation": false,
+    "indexMutation": false,
+    "reindex": false,
+    "reembed": false,
+    "vaultScan": false,
+    "externalDownload": false,
+    "sourceSpanCreated": false,
+    "strictEvidenceCreated": false,
+    "citationEvidenceCreated": false,
+    "runtimeEvidenceCreated": false,
+    "answerPathInvoked": false,
+    "answerabilityPromoted": false,
+    "privatePathLeakAllowed": false
+  },
+  "counts": {
+    "inputPlanRows": 1,
+    "oracleRequirementRows": 1,
+    "oracleMissingSignalRows": 1,
+    "candidatePackDesignRows": 1,
+    "sidecarOraclePackSchemaDefinedRows": 1,
+    "sidecarParserProfileRows": 1,
+    "futureExecutorDryRunReadyRows": 1,
+    "futureParserInvocationRows": 0,
+    "safeApplyCandidateRows": 0,
+    "parserRerunRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "parserRoutingChangedRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "runtimeEvidenceCreatedRows": 0,
+    "citationEvidenceCreatedRows": 0,
+    "strictEvidenceCreatedRows": 0,
+    "answerPathInvokedRows": 0,
+    "answerabilityPromotionRows": 0,
+    "schemaViolationCount": 0,
+    "privatePathLeakRows": 0
+  },
+  "gate": {
+    "decision": "ready_for_sidecar_oracle_candidate_pack_executor_dry_run",
+    "schemaViolations": [],
+    "unsafeUpstreamFlags": [],
+    "nextTranche": "parsed_artifact_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run"
+  },
+  "oraclePackSchema": {
+    "schemaId": "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-pack.v1",
+    "statusValues": ["oracle_pack_ready", "ready", "complete", "blocked"],
+    "rowStatusValues": ["oracle_agrees", "oracle_missing", "oracle_conflict", "unsafe"],
+    "requiredTopLevelFields": ["schema", "status", "generatedAt", "scope", "request", "safety", "counts", "oracleRows", "warnings"],
+    "requiredRowFields": ["planId", "artifactId", "paperId", "requirement", "component", "oracleStatus", "candidateParsers", "sourceContentHashVerified", "pageLocatorVerified", "bboxOrLocatorVerified", "deterministicIdentityVerified", "reportOnly", "mutationCounters"],
+    "nonEvidenceGuarantees": ["sidecar_parser_output_is_candidate_only"]
+  },
+  "byPaperId": {
+    "2600.00001": {
+      "artifactId": "paper_2600_00001",
+      "candidatePackDesignRows": 1,
+      "requirements": ["table_body_cell_oracle"]
+    }
+  },
+  "bySidecarOracleRequirement": {
+    "table_body_cell_oracle": 1
+  },
+  "byRepairComponent": {
+    "table_numeric_region_locator": 1
+  },
+  "byCandidateParser": {
+    "camelot_local": 1,
+    "pdfplumber_local": 1
+  },
+  "candidatePackDesignRows": [
+    {
+      "designId": "pymupdf-quality-repair-sidecar-oracle-pack-row-design:0001",
+      "planId": "pymupdf-quality-repair-executor-dry-run:0001",
+      "artifactId": "paper_2600_00001",
+      "paperId": "2600.00001",
+      "requirement": "table_body_cell_oracle",
+      "component": "table_numeric_region_locator",
+      "candidateParsers": ["camelot_local", "pdfplumber_local"],
+      "requiredSignals": ["table_bbox_candidate", "row_column_grid_candidate", "cell_text_candidate", "cell_locator", "source_content_hash"],
+      "agreementCriteria": ["table body is linked to caption vicinity"],
+      "allowedOracleStatuses": ["oracle_agrees", "oracle_missing", "oracle_conflict", "unsafe"],
+      "requiredPackFields": ["planId", "artifactId", "paperId", "requirement", "component", "oracleStatus", "candidateParsers", "sourceContentHashVerified", "pageLocatorVerified", "bboxOrLocatorVerified", "deterministicIdentityVerified", "reportOnly", "mutationCounters"],
+      "mustRemainCandidateOnly": true,
+      "sourceContentHashRequiredForAgreement": true,
+      "pageLocatorRequiredForAgreement": true,
+      "bboxOrLocatorRequiredForAgreement": true,
+      "deterministicIdentityRequiredForAgreement": true,
+      "futureExecutorAction": "populate_local_oracle_candidate_row",
+      "reportOnly": true,
+      "mutationCounters": {
+        "parserRerunRows": 0,
+        "canonicalParsedArtifactWriteRows": 0,
+        "parserRoutingChangedRows": 0,
+        "databaseMutationRows": 0,
+        "indexMutationRows": 0,
+        "reindexOrReembedRows": 0,
+        "vaultScanRows": 0,
+        "externalDownloadRows": 0,
+        "sourceSpanCreatedRows": 0,
+        "runtimeEvidenceCreatedRows": 0,
+        "citationEvidenceCreatedRows": 0,
+        "strictEvidenceCreatedRows": 0,
+        "answerPathInvokedRows": 0,
+        "answerabilityPromotionRows": 0,
+        "schemaViolationCount": 0,
+        "privatePathLeakRows": 0
+      }
+    }
+  ],
+  "warnings": []
+}
