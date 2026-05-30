@@ -1,0 +1,102 @@
+{
+  "schema": "knowledge-hub.paper.parsed-artifact-coverage-audit.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-24T00:00:00+00:00",
+  "scope": "eval_critical_corpus_manifest",
+  "request": {
+    "paperIds": [],
+    "includedCorpusTiers": ["local_corpus", "repo_fixture"],
+    "reportOnly": true
+  },
+  "safety": {
+    "vaultScan": false,
+    "externalDownload": false,
+    "dbMutation": false,
+    "indexMutation": false,
+    "reindex": false,
+    "reembed": false,
+    "canonicalParsedArtifactWrite": false,
+    "privatePathLeakAllowed": false
+  },
+  "counts": {
+    "totalCorpusArtifacts": 1,
+    "registeredPapers": 1,
+    "ready": 0,
+    "missingSource": 0,
+    "missingParsed": 1,
+    "hashMismatch": 0,
+    "unknownStatus": 0,
+    "parsedDegraded": 0
+  },
+  "nextParsedCoverageBottleneck": "source_ready_papers_need_explicit_materialize_parsed_dry_run",
+  "items": [
+    {
+      "artifactId": "paper_example",
+      "sourceIds": ["2600.00001"],
+      "corpusTier": "local_corpus",
+      "paperId": "2600.00001",
+      "paperTitle": "Example Paper",
+      "paperRegistered": true,
+      "matchedSourceId": "2600.00001",
+      "coverageStatus": "missing_parsed",
+      "sourceStatus": "ok",
+      "parsedStatus": "missing_parsed",
+      "parsedDegraded": false,
+      "corpusArtifact": {
+        "artifactId": "paper_example",
+        "sourceIds": ["2600.00001"],
+        "corpusTier": "local_corpus",
+        "status": "ok",
+        "path": "papers_dir/example.pdf",
+        "filename": "example.pdf",
+        "expectedSourceContentHash": "sha256:example",
+        "observedSourceContentHash": "sha256:example"
+      },
+      "registeredSourceArtifact": {
+        "kind": "pdf",
+        "exists": true,
+        "path": "papers_dir/example.pdf",
+        "status": "ok",
+        "reason": "registered_source_pdf_ok",
+        "expectedSourceContentHash": "sha256:example",
+        "observedSourceContentHash": "sha256:example"
+      },
+      "parsedDiagnostic": {
+        "paperId": "2600.00001",
+        "paperTitle": "Example Paper",
+        "artifactPaths": {
+          "artifactDir": "parsed/2600.00001",
+          "manifestPath": "parsed/2600.00001/manifest.json",
+          "documentJsonPath": "parsed/2600.00001/document.json",
+          "documentMarkdownPath": "parsed/2600.00001/document.md"
+        },
+        "diagnostic": {
+          "paperId": "2600.00001",
+          "artifactPaths": {
+            "artifactDir": "parsed/2600.00001",
+            "manifestPath": "parsed/2600.00001/manifest.json",
+            "documentJsonPath": "parsed/2600.00001/document.json",
+            "documentMarkdownPath": "parsed/2600.00001/document.md"
+          },
+          "parser": "unknown",
+          "pageCount": 0,
+          "pagesWithText": 0,
+          "textLayerDetected": false,
+          "ocrAttempted": false,
+          "ocrApplied": false,
+          "columnCountDetected": 0,
+          "tablesDetected": 0,
+          "figuresDetected": 0,
+          "equationsDetected": 0,
+          "extractionDegraded": true,
+          "degradationReasons": ["parsed_artifact_missing", "parsed_document_missing"],
+          "readingOrderMethod": ""
+        },
+        "warnings": ["parsed_artifact_missing", "parsed_document_missing"]
+      },
+      "blockers": ["parsed_artifact_missing", "parsed_document_missing"],
+      "recommendedNextAction": "run_explicit_materialize_parsed_dry_run_for_source_ready_paper"
+    }
+  ],
+  "warnings": []
+}
