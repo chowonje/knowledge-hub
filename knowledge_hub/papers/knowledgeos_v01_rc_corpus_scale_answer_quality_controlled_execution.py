@@ -171,6 +171,9 @@ def _execution_row(
         searcher,
         question=question,
         paper_ids=list(case.get("paperIds") or []),
+        question_category=_clean_text(case.get("questionCategory")),
+        expected_evidence_type=_clean_text(case.get("expectedEvidenceType")),
+        answerability_expectation=_clean_text(case.get("answerabilityExpectation")),
         allow_external=False,
     )
     validation = validate_payload(preview, PAPER_EVIDENCE_CHUNK_ANSWER_PREVIEW_SCHEMA_ID, strict=True)

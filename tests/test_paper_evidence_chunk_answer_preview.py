@@ -61,11 +61,19 @@ class _FakeKhub:
 
 
 def test_build_evidence_chunk_query_plan_sets_runtime_opt_in() -> None:
-    plan = build_evidence_chunk_query_plan(["2501.00001", "2501.00001", "2501.00002"])
+    plan = build_evidence_chunk_query_plan(
+        ["2501.00001", "2501.00001", "2501.00002"],
+        question_category="table_numeric_qa",
+        expected_evidence_type="table",
+        answerability_expectation="blocked_until_structured_evidence",
+    )
 
     assert plan["parsed_artifact_evidence_chunk_adapter"] == "runtime_v1"
     assert plan["parsedArtifactEvidenceChunkAdapter"] == "runtime_v1"
     assert plan["resolvedPaperIds"] == ["2501.00001", "2501.00002"]
+    assert plan["questionCategory"] == "table_numeric_qa"
+    assert plan["expectedEvidenceType"] == "table"
+    assert plan["answerabilityExpectation"] == "blocked_until_structured_evidence"
 
 
 def test_build_paper_evidence_chunk_answer_preview_forces_paper_local_scope() -> None:
@@ -75,6 +83,9 @@ def test_build_paper_evidence_chunk_answer_preview_forces_paper_local_scope() ->
         searcher,
         question="What method evidence exists?",
         paper_ids=["2501.00001"],
+        question_category="method_comparison_qa",
+        expected_evidence_type="section",
+        answerability_expectation="answerable",
         retrieval_mode="semantic",
         allow_external=False,
     )
@@ -87,6 +98,12 @@ def test_build_paper_evidence_chunk_answer_preview_forces_paper_local_scope() ->
     assert searcher.calls[-1]["source_type"] == "paper"
     assert searcher.calls[-1]["allow_external"] is False
     assert searcher.calls[-1]["query_plan"]["resolvedPaperIds"] == ["2501.00001"]
+    assert searcher.calls[-1]["query_plan"]["questionCategory"] == "method_comparison_qa"
+    assert searcher.calls[-1]["query_plan"]["expectedEvidenceType"] == "section"
+    assert searcher.calls[-1]["query_plan"]["answerabilityExpectation"] == "answerable"
+    assert payload["queryPlan"]["questionCategory"] == "method_comparison_qa"
+    assert payload["queryPlan"]["expectedEvidenceType"] == "section"
+    assert payload["queryPlan"]["answerabilityExpectation"] == "answerable"
     assert validate_payload(payload, PAPER_EVIDENCE_CHUNK_ANSWER_PREVIEW_SCHEMA_ID, strict=True).ok
 
 

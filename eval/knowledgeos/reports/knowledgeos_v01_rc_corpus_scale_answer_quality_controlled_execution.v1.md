@@ -1,15 +1,15 @@
 # KnowledgeOS v0.1 RC Corpus-Scale Answer Quality Controlled Execution
 
 - schema: `knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-controlled-execution.v1`
-- status: `blocked`
-- decision: `knowledgeos_v01_rc_corpus_scale_answer_quality_controlled_execution_blocked`
-- nextRecommendedTranche: `corpus_scale_answer_quality_answerability_gate_repair`
+- status: `ready`
+- decision: `knowledgeos_v01_rc_corpus_scale_answer_quality_controlled_execution_ready`
+- nextRecommendedTranche: `corpus_scale_answer_quality_positive_section_paragraph_seed`
 - attemptedCaseRows: `50`
-- executionPassRows: `1`
-- executionFailRows: `49`
-- unexpectedAnswerableRows: `49`
-- noAnswerSafetyFailRows: `49`
-- localFakeLlmCallRows: `49`
+- executionPassRows: `50`
+- executionFailRows: `0`
+- unexpectedAnswerableRows: `0`
+- noAnswerSafetyFailRows: `0`
+- localFakeLlmCallRows: `0`
 - liveAnswerExecutionRows: `50`
 - answerPathInvokedRows: `50`
 - externalLlmCallRows: `0`
@@ -17,29 +17,17 @@
 - judgeModelCallRows: `0`
 - publicDefaultPromotionHeldRows: `1`
 - privatePathLeakRows: `0`
-- schemaViolationCount: `3`
+- schemaViolationCount: `0`
 
 ## Checks
 
 - `live_runner_dry_run`: `pass`; blockers=`none`
 - `unsafe_counters`: `pass`; blockers=`none`
-- `no_answer_safety`: `fail`; blockers=`no_answer_safety_fail_rows:49`
+- `no_answer_safety`: `pass`; blockers=`none`
 - `public_default_hold`: `pass`; blockers=`none`
 
 ## Failure Preview
 
-- `complex-paper-qa-seed-20260520-q001` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q002` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q003` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q004` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q005` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q006` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q007` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q008` category=`table_numeric_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q009` category=`table_numeric_qa` expectation=`expected_no_answer` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q010` category=`table_numeric_qa` expectation=`expected_no_answer` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q011` category=`equation_citation_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
-- `complex-paper-qa-seed-20260520-q012` category=`equation_citation_qa` expectation=`blocked_until_structured_evidence` observedAnswerable=`True` failures=`['answer_support_failed', 'answerability_expectation_failed', 'citation_provenance_failed', 'no_answer_safety_failed', 'unexpected_answerable_for_no_answer_or_blocked_case', 'unexpected_llm_call_for_no_answer_or_blocked_case']`
 
 ## Mutation Guarantees
 

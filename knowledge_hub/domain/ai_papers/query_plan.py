@@ -209,6 +209,9 @@ _DISCOVER_QUERY_RESCUES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
 _AMBIGUOUS_SHORT_SOURCE_ALIASES = {"cnn", "gpt", "rag"}
 _QUERY_PLAN_EXTENSION_ALIASES: tuple[tuple[str, str], ...] = (
     ("parsed_artifact_evidence_chunk_adapter", "parsedArtifactEvidenceChunkAdapter"),
+    ("question_category", "questionCategory"),
+    ("expected_evidence_type", "expectedEvidenceType"),
+    ("answerability_expectation", "answerabilityExpectation"),
 )
 _EXPLICIT_TITLE_RESCUES = {
     normalize_term("Attention Is All You Need"): {
@@ -1023,6 +1026,11 @@ def merge_query_plans(base: dict[str, Any], candidate: dict[str, Any]) -> dict[s
     merged["resolvedPaperIds"] = list(merged["resolved_paper_ids"])
     merged["evidence_policy_key"] = _clean_text(update.get("evidence_policy_key") or merged.get("evidence_policy_key") or policy_key_for_family(merged.get("family", "")))
     merged["evidencePolicyKey"] = merged["evidence_policy_key"]
+    for snake_key, camel_key in _QUERY_PLAN_EXTENSION_ALIASES:
+        extension_value = update.get(snake_key) or update.get(camel_key) or merged.get(snake_key) or merged.get(camel_key)
+        if extension_value is not None:
+            merged[snake_key] = _clean_text(extension_value)
+            merged[camel_key] = _clean_text(extension_value)
     return merged
 
 

@@ -90,12 +90,21 @@ def test_query_plan_normalization_preserves_evidence_chunk_adapter_opt_in() -> N
             "family": "paper_lookup",
             "parsed_artifact_evidence_chunk_adapter": "runtime_v1",
             "resolvedPaperIds": ["paper-a"],
+            "questionCategory": "table_numeric_qa",
+            "expectedEvidenceType": "table",
+            "answerabilityExpectation": "blocked_until_structured_evidence",
         }
     )
 
     assert normalized["parsed_artifact_evidence_chunk_adapter"] == "runtime_v1"
     assert normalized["parsedArtifactEvidenceChunkAdapter"] == "runtime_v1"
     assert normalized["resolvedPaperIds"] == ["paper-a"]
+    assert normalized["question_category"] == "table_numeric_qa"
+    assert normalized["questionCategory"] == "table_numeric_qa"
+    assert normalized["expected_evidence_type"] == "table"
+    assert normalized["expectedEvidenceType"] == "table"
+    assert normalized["answerability_expectation"] == "blocked_until_structured_evidence"
+    assert normalized["answerabilityExpectation"] == "blocked_until_structured_evidence"
 
 
 def test_searcher_ingress_live_smoke_ready_with_fake_local_llm(tmp_path: Path) -> None:
