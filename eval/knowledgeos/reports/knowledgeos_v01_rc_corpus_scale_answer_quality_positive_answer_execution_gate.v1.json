@@ -1,0 +1,542 @@
+{
+  "schema": "knowledge-hub.product.knowledgeos-v01-rc-corpus-scale-answer-quality-positive-answer-execution-gate.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-30T03:09:37Z",
+  "decision": "knowledgeos_v01_rc_corpus_scale_answer_quality_positive_answer_execution_gate_ready",
+  "nextRecommendedTranche": "corpus_scale_answer_quality_gate_refresh_after_positive_answer_execution",
+  "inputs": {
+    "positiveSeedReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_positive_section_paragraph_seed.v1.json",
+    "controlledExecutionReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_controlled_execution.v1.json",
+    "corpusManifestRef": "eval/knowledgeos/fixtures/corpus_manifest.json",
+    "papersDirRef": "papers_dir"
+  },
+  "policy": {
+    "labsInternalOnly": true,
+    "reportOnly": true,
+    "localFakeLlmOnly": true,
+    "externalModelCallsAllowed": false,
+    "judgeModelCallsAllowed": false,
+    "answerStyleJudged": false,
+    "answerTextExcludedFromReport": true,
+    "citationPayloadExcludedFromReport": true,
+    "sourcePayloadExcludedFromReport": true,
+    "excerptExcludedFromReport": true,
+    "publicDefaultPromotionAllowed": false,
+    "tableEquationFigurePromotionAllowed": false
+  },
+  "qualityDimensions": [
+    "schema_valid",
+    "answer_payload_status_ok",
+    "answerability_expectation",
+    "source_coverage",
+    "citation_provenance",
+    "support_term_coverage",
+    "answer_generated",
+    "public_default_held"
+  ],
+  "counts": {
+    "positiveAnswerExecutionGateRows": 1,
+    "inputPositiveSeedReportRows": 1,
+    "positiveSeedReadyInputRows": 1,
+    "controlledExecutionReadyRows": 1,
+    "inputPositiveSeedRows": 7,
+    "attemptedPositiveAnswerRows": 7,
+    "positiveAnswerPassRows": 7,
+    "positiveAnswerPartialRows": 0,
+    "positiveAnswerFailRows": 0,
+    "positiveMethodComparisonRows": 3,
+    "positiveLimitationRows": 4,
+    "heldExpectedNoAnswerRows": 17,
+    "heldStructuredModalityRows": 34,
+    "heldProbeRows": 6,
+    "controlledExecutionUnexpectedAnswerableRows": 0,
+    "controlledExecutionNoAnswerSafetyFailRows": 0,
+    "sourceCoveragePassRows": 7,
+    "supportTermCoveragePassRows": 7,
+    "citationProvenancePassRows": 7,
+    "answerGeneratedPassRows": 7,
+    "averageQualityScore": 1.0,
+    "minQualityScore": 1.0,
+    "adapterRowsAdded": 20,
+    "selectedEvidenceCount": 20,
+    "citationCount": 20,
+    "evidencePacketContractSpanRows": 20,
+    "localFakeLlmCallRows": 7,
+    "answerTextHashRows": 7,
+    "answerTextIncludedRows": 0,
+    "liveAnswerExecutionRows": 7,
+    "answerPathInvokedRows": 7,
+    "answerGeneratedRows": 7,
+    "answerQualityMeasuredRows": 7,
+    "answerQualityScoreComputedRows": 7,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "positiveAnswerExecutionGateReady": true,
+    "positiveSeedReady": true,
+    "controlledExecutionReady": true,
+    "noAnswerSafetyStillGreen": true,
+    "allPositiveAnswersPassed": true,
+    "positiveAnswerPassRowsPresent": true,
+    "expectedNoAnswerRowsHeld": true,
+    "structuredModalityRowsHeld": true,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "executionRows": [
+    {
+      "caseIndex": 28,
+      "caseId": "complex-paper-qa-seed-20260520-q028",
+      "questionCategory": "method_comparison_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "2404.16130",
+        "2410.05779"
+      ],
+      "questionSha256": "d3eadeb13475e28c765b25292eab3b8f62bfee2e8bf7e7eeccd3bdbc4ca974da",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 4,
+      "adapterCandidateRowsConsidered": 8,
+      "selectedEvidenceCount": 4,
+      "citationCount": 4,
+      "evidencePacketContractSpanRows": 4,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "2404.16130",
+        "2410.05779"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "GraphRAG",
+        "LightRAG",
+        "graph",
+        "retrieval"
+      ],
+      "matchedSupportTermGroups": [
+        "GraphRAG",
+        "LightRAG",
+        "graph",
+        "retrieval"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    },
+    {
+      "caseIndex": 29,
+      "caseId": "complex-paper-qa-seed-20260520-q029",
+      "questionCategory": "method_comparison_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "1706.03762",
+        "2312.00752"
+      ],
+      "questionSha256": "f7b3f9f4517adba395bde22bb76b9bf263788e881c8203dfb95921f5c427e202",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 4,
+      "adapterCandidateRowsConsidered": 8,
+      "selectedEvidenceCount": 4,
+      "citationCount": 4,
+      "evidencePacketContractSpanRows": 4,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "1706.03762",
+        "2312.00752"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "Transformer",
+        "Mamba",
+        "sequence",
+        "selective"
+      ],
+      "matchedSupportTermGroups": [
+        "Transformer",
+        "Mamba",
+        "sequence",
+        "selective"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    },
+    {
+      "caseIndex": 34,
+      "caseId": "complex-paper-qa-seed-20260520-q034",
+      "questionCategory": "method_comparison_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "2005.11401",
+        "2310.11511"
+      ],
+      "questionSha256": "a1682eb4ce13f0e1a0e29236b70f3b28f174187c5fc2843325594073632ac71b",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 4,
+      "adapterCandidateRowsConsidered": 8,
+      "selectedEvidenceCount": 4,
+      "citationCount": 4,
+      "evidencePacketContractSpanRows": 4,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "2005.11401",
+        "2310.11511"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "RAG",
+        "Self-RAG",
+        "retrieval",
+        "critique"
+      ],
+      "matchedSupportTermGroups": [
+        "RAG",
+        "Self-RAG",
+        "retrieval",
+        "critique"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    },
+    {
+      "caseIndex": 35,
+      "caseId": "complex-paper-qa-seed-20260520-q035",
+      "questionCategory": "limitation_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "1706.03762"
+      ],
+      "questionSha256": "0dbab13984916f1d39258329671867235c016e216e3e5782c4c9239327594e05",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 2,
+      "adapterCandidateRowsConsidered": 4,
+      "selectedEvidenceCount": 2,
+      "citationCount": 2,
+      "evidencePacketContractSpanRows": 2,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "1706.03762"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "limitation|caveat|risk|boundary|future|however",
+        "model|experiment|training|compute"
+      ],
+      "matchedSupportTermGroups": [
+        "limitation|caveat|risk|boundary|future|however",
+        "model|experiment|training|compute"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    },
+    {
+      "caseIndex": 36,
+      "caseId": "complex-paper-qa-seed-20260520-q036",
+      "questionCategory": "limitation_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "2312.00752"
+      ],
+      "questionSha256": "0095bb355ef9efbe7ae45a21c8bf78ad51f8477f6e4b7ca315391f84504cef37",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 2,
+      "adapterCandidateRowsConsidered": 4,
+      "selectedEvidenceCount": 2,
+      "citationCount": 2,
+      "evidencePacketContractSpanRows": 2,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "2312.00752"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "limitation|caveat|risk|boundary|however",
+        "selective|state|space|Mamba"
+      ],
+      "matchedSupportTermGroups": [
+        "limitation|caveat|risk|boundary|however",
+        "selective|state|space|Mamba"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    },
+    {
+      "caseIndex": 37,
+      "caseId": "complex-paper-qa-seed-20260520-q037",
+      "questionCategory": "limitation_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "2010.11929"
+      ],
+      "questionSha256": "fc7870f662b71e2eeed04b801ccd2832e7cec9ad4da9e33aec7b7453f1ae38b1",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 2,
+      "adapterCandidateRowsConsidered": 4,
+      "selectedEvidenceCount": 2,
+      "citationCount": 2,
+      "evidencePacketContractSpanRows": 2,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "2010.11929"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "limitation|caveat|risk|boundary|data|scale|compute",
+        "ViT|image|Transformer"
+      ],
+      "matchedSupportTermGroups": [
+        "limitation|caveat|risk|boundary|data|scale|compute",
+        "ViT|image|Transformer"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    },
+    {
+      "caseIndex": 39,
+      "caseId": "complex-paper-qa-seed-20260520-q039",
+      "questionCategory": "limitation_qa",
+      "expectedEvidenceType": "section_paragraph",
+      "answerabilityExpectation": "answerable",
+      "paperIds": [
+        "2310.11511"
+      ],
+      "questionSha256": "e0278b865113227f540d4acfd7e986f2d7ced56fa7382cc5768bc9414972dc67",
+      "observedStatus": "ok",
+      "observedAnswerable": true,
+      "adapterStatus": "applied",
+      "adapterRowsAdded": 2,
+      "adapterCandidateRowsConsidered": 4,
+      "selectedEvidenceCount": 2,
+      "citationCount": 2,
+      "evidencePacketContractSpanRows": 2,
+      "localFakeLlmCallRows": 1,
+      "observedSourceIds": [
+        "2310.11511"
+      ],
+      "missingSourceIds": [],
+      "supportTermGroups": [
+        "limitation|failure|risk|caveat|retrieval",
+        "Self-RAG|reflection|critique"
+      ],
+      "matchedSupportTermGroups": [
+        "limitation|failure|risk|caveat|retrieval",
+        "Self-RAG|reflection|critique"
+      ],
+      "missingSupportTermGroups": [],
+      "dimensionStatuses": {
+        "schemaValid": true,
+        "answerPayloadStatusOk": true,
+        "answerabilityExpectation": true,
+        "sourceCoverage": true,
+        "citationProvenance": true,
+        "supportTermCoverage": true,
+        "answerGenerated": true,
+        "publicDefaultHeld": true
+      },
+      "qualityScore": 1.0,
+      "qualityGrade": "pass",
+      "pass": true,
+      "answerTextSha256": "sha256:8bfd50b59618894987f5181e391e11e06d69bb351230ee7223c61bfdcfddbe1f",
+      "answerTextByteLength": 66,
+      "answerTextIncludedInReport": false,
+      "citationPayloadIncludedInReport": false,
+      "sourcePayloadIncludedInReport": false,
+      "excerptIncludedInReport": false,
+      "failureReasons": []
+    }
+  ],
+  "checkRows": [
+    {
+      "checkId": "positive_section_paragraph_seed",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "controlled_execution_no_answer_safety",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "unsafe_counters",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "positive_answer_execution",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_default_hold",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "warnings": [
+    "positive_answer_execution_uses_labs_internal_opt_in_answer_path_with_local_fake_llm_only",
+    "runner_scores_evidence_support_citation_contract_and_answer_generation_not_human_answer_style",
+    "raw_question_answer_citation_source_and_excerpt_payloads_are_not_included",
+    "expected_no_answer_and_structured_modality_rows_remain_held",
+    "public_default_promotion_remains_held"
+  ]
+}
