@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.product.knowledgeos-v01-rc-positive-section-paragraph-quality-complete-review.v1",
+  "title": "KnowledgeOS v0.1 RC positive section/paragraph quality complete review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "decision",
+    "nextRecommendedTranche",
+    "inputs",
+    "qualityDecision",
+    "counts",
+    "gate",
+    "checkRows",
+    "pullRequestRows",
+    "cleanupRows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "knowledge-hub.product.knowledgeos-v01-rc-positive-section-paragraph-quality-complete-review.v1"
+    },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "decision": {
+      "enum": [
+        "knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review_ready",
+        "knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review_blocked"
+      ]
+    },
+    "nextRecommendedTranche": { "type": "string", "minLength": 1 },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positiveSeedReportRef",
+        "positiveExecutionReportRef",
+        "provenanceRefreshReportRef",
+        "baseBranch",
+        "headShortSha",
+        "originMainShortSha",
+        "remoteMainShortSha",
+        "latestQualityMergeCommitShortSha"
+      ],
+      "properties": {
+        "positiveSeedReportRef": { "type": "string", "minLength": 1 },
+        "positiveExecutionReportRef": { "type": "string", "minLength": 1 },
+        "provenanceRefreshReportRef": { "type": "string", "minLength": 1 },
+        "baseBranch": { "type": "string", "minLength": 1 },
+        "headShortSha": { "type": "string" },
+        "originMainShortSha": { "type": "string" },
+        "remoteMainShortSha": { "type": "string" },
+        "latestQualityMergeCommitShortSha": { "type": "string" }
+      }
+    },
+    "qualityDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sectionParagraphQuality",
+        "positiveAnswerSlice",
+        "noAnswerSafety",
+        "publicDefaultDecision",
+        "generalRcDecision",
+        "nextGate"
+      ],
+      "properties": {
+        "sectionParagraphQuality": { "enum": ["complete", "blocked"] },
+        "positiveAnswerSlice": { "type": "string", "minLength": 1 },
+        "noAnswerSafety": { "type": "string", "minLength": 1 },
+        "publicDefaultDecision": { "type": "string", "minLength": 1 },
+        "generalRcDecision": { "type": "string", "minLength": 1 },
+        "nextGate": { "type": "string", "minLength": 1 }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": ["integer", "number"] },
+      "required": [
+        "qualityCompleteReviewRows",
+        "positiveSeedReadyRows",
+        "positiveExecutionReadyRows",
+        "provenanceRefreshReadyRows",
+        "inputCaseRows",
+        "positiveSeedRows",
+        "positiveAnswerPassRows",
+        "positiveAnswerFailRows",
+        "provenancePassRows",
+        "provenanceFailRows",
+        "heldExpectedNoAnswerRows",
+        "heldStructuredModalityRows",
+        "strictProvenanceSpanRows",
+        "sourceContentHashRows",
+        "charsLocatorRows",
+        "answerContractCitationProvenanceRows",
+        "rawPayloadKeyRows",
+        "prRows",
+        "prMergedRows",
+        "ciCheckRows",
+        "ciCheckSuccessRows",
+        "mainLatestQualityMergeCommitMatchRows",
+        "remoteMainMatchesLocalOriginRows",
+        "releaseSmokeCheckedRows",
+        "releaseSmokePassedRows",
+        "publicHygieneIssueRows",
+        "positiveSectionParagraphQualityCompleteRows",
+        "researchPreviewReleaseReadinessDecisionRecommendedRows",
+        "publicDefaultPromotionReadyRows",
+        "publicDefaultPromotionHeldRows",
+        "generalRcReadyRows",
+        "corpusScalePositiveSliceProvenRows",
+        "corpusScaleClaimProvenRows",
+        "branchCleanupAppliedRows",
+        "privatePathLeakRows",
+        "schemaViolationCount"
+      ]
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qualityCompleteReviewReady",
+        "positiveSeedReady",
+        "positiveExecutionReady",
+        "provenanceRefreshReady",
+        "crossReportConsistent",
+        "allQualityPrsMerged",
+        "ciChecksGreen",
+        "mainContainsLatestQualityMergeCommit",
+        "remoteMainVerified",
+        "releaseSmokeReady",
+        "publicHygieneReady",
+        "positiveSectionParagraphQualityComplete",
+        "expectedNoAnswerRowsHeld",
+        "structuredModalityRowsHeld",
+        "publicDefaultPromotionAllowed",
+        "generalRcReady",
+        "semanticViolations"
+      ],
+      "properties": {
+        "qualityCompleteReviewReady": { "type": "boolean" },
+        "positiveSeedReady": { "type": "boolean" },
+        "positiveExecutionReady": { "type": "boolean" },
+        "provenanceRefreshReady": { "type": "boolean" },
+        "crossReportConsistent": { "type": "boolean" },
+        "allQualityPrsMerged": { "type": "boolean" },
+        "ciChecksGreen": { "type": "boolean" },
+        "mainContainsLatestQualityMergeCommit": { "type": "boolean" },
+        "remoteMainVerified": { "type": "boolean" },
+        "releaseSmokeReady": { "type": "boolean" },
+        "publicHygieneReady": { "type": "boolean" },
+        "positiveSectionParagraphQualityComplete": { "type": "boolean" },
+        "expectedNoAnswerRowsHeld": { "type": "boolean" },
+        "structuredModalityRowsHeld": { "type": "boolean" },
+        "publicDefaultPromotionAllowed": { "type": "boolean" },
+        "generalRcReady": { "type": "boolean" },
+        "semanticViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "checkRows": { "type": "array", "items": { "$ref": "#/$defs/checkRow" } },
+    "pullRequestRows": { "type": "array", "items": { "$ref": "#/$defs/pullRequestRow" } },
+    "cleanupRows": { "type": "array", "items": { "$ref": "#/$defs/cleanupRow" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "checkRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkId", "status", "blockers"],
+      "properties": {
+        "checkId": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["pass", "fail"] },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "pullRequestRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prNumber",
+        "phase",
+        "status",
+        "merged",
+        "mergeCommitShortSha",
+        "ciCheckRows",
+        "ciCheckSuccessRows",
+        "blockers"
+      ],
+      "properties": {
+        "prNumber": { "type": "integer", "minimum": 0 },
+        "phase": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["pass", "fail"] },
+        "merged": { "type": "boolean" },
+        "mergeCommitShortSha": { "type": "string" },
+        "ciCheckRows": { "type": "integer", "minimum": 0 },
+        "ciCheckSuccessRows": { "type": "integer", "minimum": 0 },
+        "blockers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "cleanupRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cleanupId", "targetRefs", "status", "requiresExplicitApproval", "summary"],
+      "properties": {
+        "cleanupId": { "type": "string", "minLength": 1 },
+        "targetRefs": { "type": "array", "items": { "type": "string" } },
+        "status": { "enum": ["recommended_not_applied", "not_needed"] },
+        "requiresExplicitApproval": { "type": "boolean" },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

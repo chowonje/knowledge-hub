@@ -1,0 +1,207 @@
+{
+  "schema": "knowledge-hub.product.knowledgeos-v01-rc-positive-section-paragraph-quality-complete-review.v1",
+  "status": "ready",
+  "generatedAt": "2026-05-30T04:46:56Z",
+  "decision": "knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review_ready",
+  "nextRecommendedTranche": "knowledgeos_v01_rc_research_preview_release_readiness_decision_gate",
+  "inputs": {
+    "positiveSeedReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_positive_section_paragraph_seed.v1.json",
+    "positiveExecutionReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_positive_answer_execution_gate.v1.json",
+    "provenanceRefreshReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_corpus_scale_answer_quality_gate_refresh_after_positive_answer_execution.v1.json",
+    "baseBranch": "main",
+    "headShortSha": "1f74352",
+    "originMainShortSha": "1f74352",
+    "remoteMainShortSha": "1f74352",
+    "latestQualityMergeCommitShortSha": "1f74352"
+  },
+  "qualityDecision": {
+    "sectionParagraphQuality": "complete",
+    "positiveAnswerSlice": "7_positive_rows_ready_with_hash_chars_citation_provenance",
+    "noAnswerSafety": "expected_no_answer_and_structured_modality_rows_held",
+    "publicDefaultDecision": "hold_public_default_promotion",
+    "generalRcDecision": "not_ready_from_this_gate_alone",
+    "nextGate": "knowledgeos_v01_rc_research_preview_release_readiness_decision_gate"
+  },
+  "counts": {
+    "qualityCompleteReviewRows": 1,
+    "positiveSeedReportRows": 1,
+    "positiveExecutionReportRows": 1,
+    "provenanceRefreshReportRows": 1,
+    "positiveSeedReadyRows": 1,
+    "positiveExecutionReadyRows": 1,
+    "provenanceRefreshReadyRows": 1,
+    "inputCaseRows": 50,
+    "positiveSeedRows": 7,
+    "positiveAnswerPassRows": 7,
+    "positiveAnswerFailRows": 0,
+    "provenancePassRows": 7,
+    "provenanceFailRows": 0,
+    "positiveMethodComparisonRows": 3,
+    "positiveLimitationRows": 4,
+    "heldExpectedNoAnswerRows": 17,
+    "heldStructuredModalityRows": 34,
+    "controlledExecutionUnexpectedAnswerableRows": 0,
+    "controlledExecutionNoAnswerSafetyFailRows": 0,
+    "strictProvenanceSpanRows": 20,
+    "sourceContentHashRows": 20,
+    "charsLocatorRows": 20,
+    "answerContractCitationRows": 20,
+    "answerContractCitationProvenanceRows": 20,
+    "rawPayloadKeyRows": 0,
+    "prRows": 3,
+    "prMergedRows": 3,
+    "ciCheckRows": 21,
+    "ciCheckSuccessRows": 21,
+    "mainLatestQualityMergeCommitMatchRows": 1,
+    "remoteMainMatchesLocalOriginRows": 1,
+    "releaseSmokeCheckedRows": 10,
+    "releaseSmokePassedRows": 10,
+    "publicHygieneIssueRows": 0,
+    "positiveSectionParagraphQualityCompleteRows": 1,
+    "researchPreviewReleaseReadinessDecisionRecommendedRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "publicDefaultPromotionHeldRows": 1,
+    "generalRcReadyRows": 0,
+    "corpusScalePositiveSliceProvenRows": 1,
+    "corpusScaleClaimProvenRows": 0,
+    "remoteFeatureBranchStillExistsRows": 3,
+    "branchCleanupRecommendedRows": 3,
+    "branchCleanupAppliedRows": 0,
+    "blockedRows": 0,
+    "candidateStoreWriteRows": 0,
+    "sourceSpanCreatedRows": 0,
+    "strictEvidenceRows": 0,
+    "citationGradeEvidenceRows": 0,
+    "runtimeEvidenceRows": 0,
+    "parserExecutionRows": 0,
+    "databaseMutationRows": 0,
+    "indexMutationRows": 0,
+    "reindexOrReembedRows": 0,
+    "canonicalParsedArtifactWriteRows": 0,
+    "vaultScanRows": 0,
+    "externalDownloadRows": 0,
+    "publicCliFlagRows": 0,
+    "defaultOnRows": 0,
+    "externalLlmCallRows": 0,
+    "modelApiCallRows": 0,
+    "judgeModelCallRows": 0,
+    "githubPrMutationRows": 0,
+    "mergeRows": 0,
+    "branchDeletionRows": 0,
+    "releaseTagRows": 0,
+    "packagePublishRows": 0,
+    "rawPayloadPersistedRows": 0,
+    "rawGithubPayloadPersistedRows": 0,
+    "defaultMcpToolRows": 0,
+    "defaultKhubAskRouteRows": 0,
+    "privatePathLeakRows": 0,
+    "schemaViolationCount": 0
+  },
+  "gate": {
+    "qualityCompleteReviewReady": true,
+    "positiveSeedReady": true,
+    "positiveExecutionReady": true,
+    "provenanceRefreshReady": true,
+    "crossReportConsistent": true,
+    "allQualityPrsMerged": true,
+    "ciChecksGreen": true,
+    "mainContainsLatestQualityMergeCommit": true,
+    "remoteMainVerified": true,
+    "releaseSmokeReady": true,
+    "publicHygieneReady": true,
+    "positiveSectionParagraphQualityComplete": true,
+    "expectedNoAnswerRowsHeld": true,
+    "structuredModalityRowsHeld": true,
+    "publicDefaultPromotionAllowed": false,
+    "generalRcReady": false,
+    "semanticViolations": []
+  },
+  "checkRows": [
+    {
+      "checkId": "positive_seed_report",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "positive_answer_execution_report",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "positive_provenance_refresh_report",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "cross_report_consistency",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "git_main_state",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "release_smoke",
+      "status": "pass",
+      "blockers": []
+    },
+    {
+      "checkId": "public_hygiene",
+      "status": "pass",
+      "blockers": []
+    }
+  ],
+  "pullRequestRows": [
+    {
+      "prNumber": 180,
+      "phase": "positive_section_paragraph_seed",
+      "status": "pass",
+      "merged": true,
+      "mergeCommitShortSha": "12530d7",
+      "ciCheckRows": 7,
+      "ciCheckSuccessRows": 7,
+      "blockers": []
+    },
+    {
+      "prNumber": 181,
+      "phase": "positive_answer_execution",
+      "status": "pass",
+      "merged": true,
+      "mergeCommitShortSha": "2dfc109",
+      "ciCheckRows": 7,
+      "ciCheckSuccessRows": 7,
+      "blockers": []
+    },
+    {
+      "prNumber": 182,
+      "phase": "positive_provenance_refresh",
+      "status": "pass",
+      "merged": true,
+      "mergeCommitShortSha": "1f74352",
+      "ciCheckRows": 7,
+      "ciCheckSuccessRows": 7,
+      "blockers": []
+    }
+  ],
+  "cleanupRows": [
+    {
+      "cleanupId": "remote_feature_branches",
+      "targetRefs": [
+        "origin/codex/corpus-scale-answer-quality-positive-section-paragraph-seed-20260530-20260530",
+        "origin/codex/corpus-scale-answer-quality-positive-answer-execution-gate-20260530-20260530",
+        "origin/codex/corpus-scale-answer-quality-positive-provenance-refresh-20260530-20260530"
+      ],
+      "status": "recommended_not_applied",
+      "requiresExplicitApproval": true,
+      "summary": "Remote feature branch cleanup is separate from this read-only complete review."
+    }
+  ],
+  "warnings": [
+    "complete_review_closes_positive_section_paragraph_quality_slice_only",
+    "public_default_promotion_remains_held",
+    "table_equation_figure_evidence_remains_outside_this_gate",
+    "branch_cleanup_not_applied_in_this_tranche"
+  ]
+}
