@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-text-span-artifact-candidate.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "paperId",
+    "paperRef",
+    "artifactId",
+    "spanType",
+    "sourceContentHash",
+    "charBasis",
+    "charStart",
+    "charEnd",
+    "page",
+    "bbox",
+    "text",
+    "textHash",
+    "headingPath",
+    "extractionMethod",
+    "confidence",
+    "blockerReason",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper.text-span-artifact-candidate.v1" },
+    "paperId": { "type": "string", "minLength": 1 },
+    "paperRef": { "type": "string", "pattern": "^papers_dir/[^/].*" },
+    "artifactId": { "type": "string", "pattern": "^(section|paragraph)-span:" },
+    "spanType": { "enum": ["section", "paragraph"] },
+    "sourceContentHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "charBasis": { "const": "pymupdf_block_reading_order_normalized_text_v1" },
+    "charStart": { "type": "integer", "minimum": 0 },
+    "charEnd": { "type": "integer", "minimum": 1 },
+    "page": { "type": "integer", "minimum": 1 },
+    "bbox": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "type": "number" }
+    },
+    "text": { "type": "string", "minLength": 1 },
+    "textHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "headingPath": { "type": "array", "items": { "type": "string" } },
+    "extractionMethod": { "const": "pymupdf_text_block_span_candidate_v1" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "blockerReason": { "type": "string" },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "blockIndex", "candidateRule"],
+      "properties": {
+        "source": { "const": "pymupdf_block" },
+        "blockIndex": { "type": "integer", "minimum": 0 },
+        "candidateRule": { "enum": ["section_heading", "paragraph_block"] }
+      }
+    }
+  }
+}
