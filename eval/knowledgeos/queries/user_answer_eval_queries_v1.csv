@@ -3,7 +3,7 @@ Transformer의 핵심 아이디어를 비전공자도 이해할 수 있게 설�
 RAG가 왜 필요한지 파인튜닝과 비교해서 설명해줘,paper,comparison,paper,compare_summary,medium,paper_rag_vs_finetuning
 Attention Is All You Need 논문의 핵심 기여를 3가지로 정리해줘,paper,paper_lookup,paper,structured_summary,medium,paper_lookup_contributions
 BERT와 GPT는 학습 방식과 활용 목적이 어떻게 다른지 비교해줘,paper,comparison,paper,compare_summary,medium,paper_bert_vs_gpt
-LoRA와 full fine-tuning은 비용, 성능, 운영 측면에서 어떻게 다른지 비교해줘,paper,comparison,paper,compare_summary,medium,paper_lora_vs_full_ft
+"LoRA와 full fine-tuning은 비용, 성능, 운영 측면에서 어떻게 다른지 비교해줘",paper,comparison,paper,compare_summary,medium,paper_lora_vs_full_ft
 최근 벡터 검색 품질 개선 글들은 rerank를 어떤 역할로 설명하나?,web,temporal,web,timeline_compare,medium,web_temporal_rerank
 최근 LLM agent 연구에서 많이 다루는 핵심 주제를 정리해줘,paper,paper_discover,paper,shortlist_summary,hard,paper_topic_agent
 recent long-context model discussions what are the main tradeoffs,web,temporal,web,timeline_compare,hard,web_temporal_long_context

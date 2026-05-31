@@ -54,6 +54,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-executor-dry-run.v1": "paper-parsed-artifact-pymupdf-quality-repair-executor-dry-run.v1.json",
     "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-comparison.v1": "paper-parsed-artifact-pymupdf-quality-repair-sidecar-oracle-comparison.v1.json",
     "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-candidate-pack-design.v1": "paper-parsed-artifact-pymupdf-quality-repair-sidecar-oracle-candidate-pack-design.v1.json",
+    "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-candidate-pack-executor-dry-run.v1": "paper-parsed-artifact-pymupdf-quality-repair-sidecar-oracle-candidate-pack-executor-dry-run.v1.json",
     "knowledge-hub.paper.parsed-artifact-pymupdf-quality-repair-sidecar-oracle-pack.v1": "paper-parsed-artifact-pymupdf-quality-repair-sidecar-oracle-pack.v1.json",
     "knowledge-hub.paper.parsed-artifact-coverage-batch-report.v1": "paper-parsed-artifact-coverage-batch-report.v1.json",
     "knowledge-hub.paper.parsed-artifact-source-blocker-report.v1": "paper-parsed-artifact-source-blocker-report.v1.json",
