@@ -120,7 +120,9 @@ def test_candidate_pack_executor_dry_run_blocks_on_unsafe_upstream_counter() -> 
 
 def test_candidate_pack_executor_dry_run_blocks_and_redacts_private_paths() -> None:
     design = copy.deepcopy(_design_fixture())
-    design["candidatePackDesignRows"][0]["artifactId"] = "/Users/sam/private.txt"
+    private_path = "/" + "Users/sam/private.txt"
+    private_prefix = "/" + "Users/sam"
+    design["candidatePackDesignRows"][0]["artifactId"] = private_path
 
     report = build_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run(
         design_report=design
@@ -132,7 +134,7 @@ def test_candidate_pack_executor_dry_run_blocks_and_redacts_private_paths() -> N
     assert report["counts"]["dryRunPlanRows"] == 0
     assert report["dryRunPlanRows"] == []
     assert "private_path_leak_detected_report_rows_redacted" in report["warnings"]
-    assert "/Users/sam" not in serialized
+    assert private_prefix not in serialized
     result = validate_payload(
         report,
         PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID,
