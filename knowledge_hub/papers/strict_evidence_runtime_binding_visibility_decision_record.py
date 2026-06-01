@@ -21,8 +21,6 @@ from knowledge_hub.papers.strict_evidence_runtime_binding_executor_apply_readbac
     EXPECTED_ELIGIBILITY_STORE_ROWS,
     EXPECTED_INPUT_ROWS,
     EXPECTED_RUNTIME_BINDING_RECORD_ROWS,
-    EXPECTED_SOURCE_SPAN_STORE_ROWS,
-    EXPECTED_STRICT_EVIDENCE_STORE_ROWS,
 )
 from knowledge_hub.papers.strict_evidence_runtime_binding_post_apply_promotion_hold_review import (
     DEFAULT_OUTPUT_DIR as DEFAULT_HOLD_REVIEW_OUTPUT_DIR,
@@ -429,9 +427,9 @@ def build_strict_evidence_runtime_binding_visibility_decision_record(
     expected_section_decision_rows: int = EXPECTED_SECTION_DECISION_ROWS,
     expected_figure_caption_decision_rows: int = EXPECTED_FIGURE_CAPTION_DECISION_ROWS,
     expected_citation_grade_store_rows: int = EXPECTED_CITATION_GRADE_STORE_ROWS,
-    expected_strict_evidence_store_rows: int = EXPECTED_STRICT_EVIDENCE_STORE_ROWS,
+    expected_strict_evidence_store_rows: int | None = None,
     expected_eligibility_store_rows: int = EXPECTED_ELIGIBILITY_STORE_ROWS,
-    expected_source_span_store_rows: int = EXPECTED_SOURCE_SPAN_STORE_ROWS,
+    expected_source_span_store_rows: int | None = None,
 ) -> dict[str, Any]:
     hold_path = Path(str(hold_review_report_path)).expanduser()
     hold_review = _read_json(hold_path)
@@ -450,6 +448,25 @@ def build_strict_evidence_runtime_binding_visibility_decision_record(
         if not validation.ok:
             input_schema_violations.extend(f"input_schema:{error}" for error in validation.errors)
 
+    hold_counts = hold_review.get("counts") if isinstance(hold_review.get("counts"), dict) else {}
+    hold_input = hold_review.get("input") if isinstance(hold_review.get("input"), dict) else {}
+    effective_expected_strict_evidence_store_rows = (
+        expected_strict_evidence_store_rows
+        if expected_strict_evidence_store_rows is not None
+        else (
+            _safe_int(hold_input.get("expectedStrictEvidenceStoreRows"))
+            or _safe_int(hold_counts.get("strictEvidenceStoreRows"))
+        )
+    )
+    effective_expected_source_span_store_rows = (
+        expected_source_span_store_rows
+        if expected_source_span_store_rows is not None
+        else (
+            _safe_int(hold_input.get("expectedSourceSpanStoreRows"))
+            or _safe_int(hold_counts.get("sourceSpanStoreRows"))
+        )
+    )
+
     hold_rows = hold_review.get("rows") if isinstance(hold_review.get("rows"), list) else []
     aggregate_violations = _aggregate_hold_violations(
         hold_review=hold_review,
@@ -459,9 +476,9 @@ def build_strict_evidence_runtime_binding_visibility_decision_record(
         expected_section_decision_rows=expected_section_decision_rows,
         expected_figure_caption_decision_rows=expected_figure_caption_decision_rows,
         expected_citation_grade_store_rows=expected_citation_grade_store_rows,
-        expected_strict_evidence_store_rows=expected_strict_evidence_store_rows,
+        expected_strict_evidence_store_rows=effective_expected_strict_evidence_store_rows,
         expected_eligibility_store_rows=expected_eligibility_store_rows,
-        expected_source_span_store_rows=expected_source_span_store_rows,
+        expected_source_span_store_rows=effective_expected_source_span_store_rows,
     )
     rows = _decision_rows(hold_rows, aggregate_violations=aggregate_violations)
     counts = _counts(rows, hold_review, input_schema_violations)
@@ -482,9 +499,9 @@ def build_strict_evidence_runtime_binding_visibility_decision_record(
             "expectedSectionDecisionRows": expected_section_decision_rows,
             "expectedFigureCaptionDecisionRows": expected_figure_caption_decision_rows,
             "expectedCitationGradeStoreRows": expected_citation_grade_store_rows,
-            "expectedStrictEvidenceStoreRows": expected_strict_evidence_store_rows,
+            "expectedStrictEvidenceStoreRows": effective_expected_strict_evidence_store_rows,
             "expectedEligibilityStoreRows": expected_eligibility_store_rows,
-            "expectedSourceSpanStoreRows": expected_source_span_store_rows,
+            "expectedSourceSpanStoreRows": effective_expected_source_span_store_rows,
         },
         "counts": counts,
         "decision": decision,
