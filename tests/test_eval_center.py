@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import json
 import os
 from pathlib import Path
@@ -123,6 +124,19 @@ def _seed_answer_loop(runs_root: Path) -> Path:
             "failureCardCount": 1,
         },
     )
+
+
+def test_canonical_eval_query_csvs_have_no_extra_fields():
+    queries_dir = Path(__file__).resolve().parents[1] / "eval" / "knowledgeos" / "queries"
+    failures: list[str] = []
+    for path in sorted(queries_dir.glob("*.csv")):
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            reader = csv.DictReader(handle)
+            for row_number, row in enumerate(reader, start=2):
+                extras = row.get(None)
+                if extras:
+                    failures.append(f"{path.name}: row {row_number} has {len(extras)} extra field(s)")
+    assert failures == []
 
 
 def test_build_eval_center_summary_rolls_up_current_artifacts(tmp_path: Path):

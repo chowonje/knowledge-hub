@@ -314,3 +314,56 @@ def test_runtime_visibility_executor_dry_run_integrated_measured_local_report() 
         STRICT_EVIDENCE_RUNTIME_BINDING_VISIBILITY_EXECUTOR_DRY_RUN_SCHEMA_ID,
         strict=True,
     ).ok
+
+
+def test_runtime_visibility_executor_dry_run_integrated_paper_filter_uses_selected_counts() -> None:
+    payload = build_strict_evidence_runtime_binding_visibility_executor_dry_run(
+        paper_ids=["1706.03762"]
+    )
+
+    assert payload["status"] == "ok"
+    assert payload["input"]["requestedPaperIds"] == ["1706.03762"]
+    assert payload["input"]["expectedVisibilityDecisionRows"] == 23
+    assert payload["input"]["expectedSectionVisibilityDecisionRows"] == 19
+    assert payload["input"]["expectedFigureCaptionVisibilityDecisionRows"] == 4
+    assert payload["input"]["expectedPlannedRuntimeVisibilityRows"] == 23
+    assert payload["counts"]["inputRows"] == 23
+    assert payload["counts"]["plannedRuntimeVisibilityRows"] == 23
+    assert payload["counts"]["dryRunReadyRuntimeVisibilityRecordOnlyRows"] == 23
+    assert payload["counts"]["sectionVisibilityDecisionRows"] == 19
+    assert payload["counts"]["figureCaptionVisibilityDecisionRows"] == 4
+    assert payload["counts"]["runtimeVisibilityRecordWriteRows"] == 0
+    assert payload["counts"]["runtimeVisibleRows"] == 0
+    assert payload["counts"]["answerIntegrationVisibleRows"] == 0
+    assert payload["counts"]["databaseMutationRows"] == 0
+    assert payload["counts"]["vaultScanRows"] == 0
+    assert validate_payload(
+        payload,
+        STRICT_EVIDENCE_RUNTIME_BINDING_VISIBILITY_EXECUTOR_DRY_RUN_SCHEMA_ID,
+        strict=True,
+    ).ok
+
+
+def test_runtime_visibility_executor_dry_run_blocks_missing_paper_filter() -> None:
+    payload = build_strict_evidence_runtime_binding_visibility_executor_dry_run(
+        paper_ids=["missing-paper-id"]
+    )
+
+    assert payload["status"] == "blocked"
+    assert payload["input"]["requestedPaperIds"] == ["missing-paper-id"]
+    assert payload["input"]["expectedVisibilityDecisionRows"] == 0
+    assert payload["counts"]["inputRows"] == 0
+    assert payload["counts"]["plannedRuntimeVisibilityRows"] == 0
+    assert payload["counts"]["runtimeVisibilityRecordWriteRows"] == 0
+    assert payload["counts"]["runtimeVisibleRows"] == 0
+    assert payload["counts"]["answerIntegrationVisibleRows"] == 0
+    assert payload["counts"]["databaseMutationRows"] == 0
+    assert payload["counts"]["vaultScanRows"] == 0
+    assert payload["warnings"] == [
+        "requested_paper_ids_not_found_in_visibility_decision_report"
+    ]
+    assert validate_payload(
+        payload,
+        STRICT_EVIDENCE_RUNTIME_BINDING_VISIBILITY_EXECUTOR_DRY_RUN_SCHEMA_ID,
+        strict=True,
+    ).ok

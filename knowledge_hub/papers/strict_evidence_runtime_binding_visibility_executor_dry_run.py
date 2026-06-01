@@ -609,13 +609,34 @@ def build_strict_evidence_runtime_binding_visibility_executor_dry_run(
     decision_rows = [
         row for row in decision_report.get("rows", []) if isinstance(row, dict)
     ] if decision_report else []
+    missing_requested_paper_ids: set[str] = set()
     if requested_papers:
         found = {_safe_text(row.get("paper_id")) for row in decision_rows if _safe_text(row.get("paper_id"))}
-        if requested_papers - found:
+        missing_requested_paper_ids = requested_papers - found
+        if missing_requested_paper_ids:
             warnings.append("requested_paper_ids_not_found_in_visibility_decision_report")
         decision_rows = [
             row for row in decision_rows if _safe_text(row.get("paper_id")) in requested_papers
         ]
+    output_expected_visibility_decision_rows = expected_visibility_decision_rows
+    output_expected_section_visibility_decision_rows = expected_section_visibility_decision_rows
+    output_expected_figure_caption_visibility_decision_rows = (
+        expected_figure_caption_visibility_decision_rows
+    )
+    output_expected_planned_runtime_visibility_rows = expected_planned_runtime_visibility_rows
+    if requested_papers:
+        output_expected_visibility_decision_rows = len(decision_rows)
+        output_expected_section_visibility_decision_rows = sum(
+            1
+            for row in decision_rows
+            if _safe_text(row.get("artifact_type") or row.get("artifactType")) == "section"
+        )
+        output_expected_figure_caption_visibility_decision_rows = sum(
+            1
+            for row in decision_rows
+            if _safe_text(row.get("artifact_type") or row.get("artifactType")) == "figure"
+        )
+        output_expected_planned_runtime_visibility_rows = len(decision_rows)
 
     schema_violations = _dedupe(input_schema_violations)
     rows = _dry_run_rows(
@@ -629,14 +650,15 @@ def build_strict_evidence_runtime_binding_visibility_executor_dry_run(
     status = "ok"
     if (
         schema_violations
+        or missing_requested_paper_ids
         or not rows
         or counts["dryRunReadyRuntimeVisibilityRecordOnlyRows"] != len(rows)
         or counts["dryRunReadyRuntimeVisibilityRecordOnlyRows"]
-        != expected_visibility_decision_rows
-        or counts["plannedRuntimeVisibilityRows"] != expected_planned_runtime_visibility_rows
-        or counts["sectionVisibilityDecisionRows"] != expected_section_visibility_decision_rows
+        != output_expected_visibility_decision_rows
+        or counts["plannedRuntimeVisibilityRows"] != output_expected_planned_runtime_visibility_rows
+        or counts["sectionVisibilityDecisionRows"] != output_expected_section_visibility_decision_rows
         or counts["figureCaptionVisibilityDecisionRows"]
-        != expected_figure_caption_visibility_decision_rows
+        != output_expected_figure_caption_visibility_decision_rows
     ):
         status = "blocked"
 
@@ -662,12 +684,12 @@ def build_strict_evidence_runtime_binding_visibility_executor_dry_run(
             else "",
             "requestedPaperIds": sorted(requested_papers),
             "runId": run_id,
-            "expectedVisibilityDecisionRows": expected_visibility_decision_rows,
-            "expectedSectionVisibilityDecisionRows": expected_section_visibility_decision_rows,
+            "expectedVisibilityDecisionRows": output_expected_visibility_decision_rows,
+            "expectedSectionVisibilityDecisionRows": output_expected_section_visibility_decision_rows,
             "expectedFigureCaptionVisibilityDecisionRows": (
-                expected_figure_caption_visibility_decision_rows
+                output_expected_figure_caption_visibility_decision_rows
             ),
-            "expectedPlannedRuntimeVisibilityRows": expected_planned_runtime_visibility_rows,
+            "expectedPlannedRuntimeVisibilityRows": output_expected_planned_runtime_visibility_rows,
         },
         "counts": counts,
         "dryRunOnlyPolicyMatrix": matrix,
