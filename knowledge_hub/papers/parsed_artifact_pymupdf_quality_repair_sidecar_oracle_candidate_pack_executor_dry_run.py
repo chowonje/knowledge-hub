@@ -23,9 +23,9 @@ PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID 
 _READY_PARENT_GATE = "ready_for_sidecar_oracle_candidate_pack_executor_dry_run"
 
 _PRIVATE_PATH_PATTERNS = (
-    "/" + "Users/" + r"[^\\s\"']+",
-    "/" + "private/var/" + r"[^\\s\"']+",
-    "/" + "Volumes/" + r"[^\\s\"']+",
+    "/" + "Users/" + r"[^\s\"']+",
+    "/" + "private/var/" + r"[^\s\"']+",
+    "/" + "Volumes/" + r"[^\s\"']+",
     "Mobile" + " Documents",
     "i" + "Cloud",
 )
@@ -153,8 +153,14 @@ def build_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run(
         for row in list(design_report.get("candidatePackDesignRows") or [])
         if isinstance(row, dict)
     ]
-    dry_run_rows = [_dry_run_plan_row(row, index) for index, row in enumerate(design_rows, start=1)]
-    private_leak_rows = _private_path_leak_rows(dry_run_rows)
+    candidate_dry_run_rows = [
+        _dry_run_plan_row(row, index) for index, row in enumerate(design_rows, start=1)
+    ]
+    private_leak_rows = _private_path_leak_rows(candidate_dry_run_rows)
+    dry_run_rows = [] if private_leak_rows else candidate_dry_run_rows
+    warnings: list[str] = []
+    if private_leak_rows:
+        warnings.append("private_path_leak_detected_report_rows_redacted")
 
     by_requirement: Counter[str] = Counter()
     by_component: Counter[str] = Counter()
@@ -254,7 +260,7 @@ def build_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run(
         "byRepairComponent": dict(sorted(by_component.items())),
         "byCandidateParser": dict(sorted(by_parser.items())),
         "dryRunPlanRows": dry_run_rows,
-        "warnings": [],
+        "warnings": warnings,
     }
 
 

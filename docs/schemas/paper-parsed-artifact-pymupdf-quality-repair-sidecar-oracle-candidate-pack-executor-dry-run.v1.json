@@ -45,9 +45,7 @@
           ]
         },
         "inputStatus": { "enum": ["design_ready", "ready", ""] },
-        "inputGateDecision": {
-          "enum": ["ready_for_sidecar_oracle_candidate_pack_executor_dry_run", ""]
-        },
+        "inputGateDecision": { "type": "string" },
         "requiredParentTranche": {
           "const": "parsed_artifact_pymupdf_quality_repair_sidecar_oracle_candidate_pack_design"
         },
@@ -167,8 +165,8 @@
         "strictEvidenceCreatedRows": { "const": 0 },
         "answerPathInvokedRows": { "const": 0 },
         "answerabilityPromotionRows": { "const": 0 },
-        "schemaViolationCount": { "const": 0 },
-        "privatePathLeakRows": { "const": 0 }
+        "schemaViolationCount": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
@@ -198,6 +196,39 @@
     },
     "warnings": { "type": "array", "items": { "type": "string" } }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "enum": ["executor_dry_run_complete", "ready"] }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": {
+              "inputGateDecision": {
+                "const": "ready_for_sidecar_oracle_candidate_pack_executor_dry_run"
+              }
+            }
+          },
+          "counts": {
+            "properties": {
+              "schemaViolationCount": { "const": 0 },
+              "privatePathLeakRows": { "const": 0 }
+            }
+          },
+          "gate": {
+            "properties": {
+              "schemaViolations": { "maxItems": 0 },
+              "unsafeUpstreamFlags": { "maxItems": 0 }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "dryRunPlanRow": {
       "type": "object",

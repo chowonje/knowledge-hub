@@ -10,6 +10,7 @@ from knowledge_hub.papers.parsed_artifact_pymupdf_quality_repair_sidecar_oracle_
     PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID,
     SIDECAR_ORACLE_PACK_SCHEMA_ID,
     ZERO_COUNTER_KEYS,
+    build_blocked_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run,
     build_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run,
     render_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run_markdown,
     write_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run_reports,
@@ -95,6 +96,12 @@ def test_candidate_pack_executor_dry_run_blocks_on_unexpected_parent_gate() -> N
     )
     assert "candidate_pack_design_gate_not_ready_for_executor_dry_run" in report["gate"]["schemaViolations"]
     assert report["counts"]["schemaViolationCount"] == 1
+    result = validate_payload(
+        report,
+        PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID,
+        strict=True,
+    )
+    assert result.ok, result.errors
 
 
 def test_candidate_pack_executor_dry_run_blocks_on_unsafe_upstream_counter() -> None:
@@ -109,6 +116,44 @@ def test_candidate_pack_executor_dry_run_blocks_on_unsafe_upstream_counter() -> 
     assert "databaseMutationRows_nonzero" in report["gate"]["unsafeUpstreamFlags"]
     assert report["counts"]["dryRunPlanRows"] == 1
     assert report["counts"]["databaseMutationRows"] == 0
+
+
+def test_candidate_pack_executor_dry_run_blocks_and_redacts_private_paths() -> None:
+    design = copy.deepcopy(_design_fixture())
+    design["candidatePackDesignRows"][0]["artifactId"] = "/Users/sam/private.txt"
+
+    report = build_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run(
+        design_report=design
+    )
+    serialized = json.dumps(report, ensure_ascii=False)
+
+    assert report["status"] == "blocked"
+    assert report["counts"]["privatePathLeakRows"] == 1
+    assert report["counts"]["dryRunPlanRows"] == 0
+    assert report["dryRunPlanRows"] == []
+    assert "private_path_leak_detected_report_rows_redacted" in report["warnings"]
+    assert "/Users/sam" not in serialized
+    result = validate_payload(
+        report,
+        PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID,
+        strict=True,
+    )
+    assert result.ok, result.errors
+
+
+def test_candidate_pack_executor_dry_run_blocked_fallback_validates() -> None:
+    report = build_blocked_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run(
+        reason="schema_validation_failed"
+    )
+
+    assert report["status"] == "blocked"
+    assert report["counts"]["schemaViolationCount"] == 1
+    result = validate_payload(
+        report,
+        PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID,
+        strict=True,
+    )
+    assert result.ok, result.errors
 
 
 def test_candidate_pack_executor_dry_run_schema_fixture_validates() -> None:
