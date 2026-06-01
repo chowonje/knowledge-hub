@@ -11,8 +11,8 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from knowledge_hub.core.schema_validator import validate_payload
-from knowledge_hub.papers.parsed_artifact_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run import (
+from knowledge_hub.core.schema_validator import validate_payload  # noqa: E402
+from knowledge_hub.papers.parsed_artifact_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run import (  # noqa: E402
     PYMUPDF_QUALITY_REPAIR_SIDECAR_ORACLE_CANDIDATE_PACK_EXECUTOR_DRY_RUN_SCHEMA_ID,
     build_blocked_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run,
     build_pymupdf_quality_repair_sidecar_oracle_candidate_pack_executor_dry_run,
