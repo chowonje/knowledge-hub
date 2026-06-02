@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.chat.result.v1",
+  "title": "knowledge-hub.chat.result.v1",
+  "type": "object",
+  "required": ["schema", "status", "mode", "layerUsed", "route", "sessionId", "turnId"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.chat.result.v1" },
+    "status": { "type": "string" },
+    "mode": { "type": "string" },
+    "layerUsed": { "enum": ["interface", "core", "gateway", "mcp"] },
+    "route": { "type": "string" },
+    "providerApplied": { "type": "string" },
+    "modelApplied": { "type": "string" },
+    "sessionId": { "type": "string" },
+    "turnId": { "type": "string" },
+    "externalCallAllowed": { "type": "boolean" },
+    "policyBlocked": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}
