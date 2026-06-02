@@ -369,10 +369,35 @@ def test_top_level_help_hides_operator_surfaces():
 
     assert result.exit_code == 0
     command_lines = _command_lines(result.output)
-    for token in ("dinger", "os", "eval", "paper", "paper-memory", "math-memory", "vector-compare", "vector-restore"):
+    for token in (
+        "auth",
+        "models",
+        "dinger",
+        "os",
+        "eval",
+        "paper",
+        "paper-memory",
+        "math-memory",
+        "vector-compare",
+        "vector-restore",
+    ):
         assert token not in command_lines
     for token in ("discover", "index", "search", "ask", "doctor", "status", "papers", "labs"):
         assert token in command_lines
+
+
+def test_hidden_provider_model_interface_commands_remain_directly_invokable():
+    runner = CliRunner()
+
+    auth_result = runner.invoke(cli, ["auth", "--help"])
+    models_result = runner.invoke(cli, ["models", "--help"])
+
+    assert auth_result.exit_code == 0
+    assert models_result.exit_code == 0
+    assert "status" in _command_lines(auth_result.output)
+    assert "login" in _command_lines(auth_result.output)
+    assert "status" in _command_lines(models_result.output)
+    assert "use" in _command_lines(models_result.output)
 
 
 def test_hidden_eval_compat_alias_remains_directly_invokable():

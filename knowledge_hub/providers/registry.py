@@ -86,6 +86,14 @@ def _discover_providers():
         pass
 
     try:
+        from knowledge_hub.providers.codex_provider import CodexDelegatedLLM
+
+        _LLM_REGISTRY["codex"] = CodexDelegatedLLM
+        _PROVIDER_INFO["codex"] = CodexDelegatedLLM.provider_info()
+    except ImportError:
+        pass
+
+    try:
         from knowledge_hub.providers.pplx_local import PPLXLocalEmbedder
         _EMBEDDER_REGISTRY["pplx-local"] = PPLXLocalEmbedder
         _PROVIDER_INFO["pplx-local"] = PPLXLocalEmbedder.provider_info()

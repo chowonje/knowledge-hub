@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added a docs-only four-layer agent architecture tranche that fixes Core Runtime, MCP Tool Plane, Agent Gateway, and Interface ownership; documents report-only external-agent handoffs; adds the `knowledge-hub.external-agent-handoff.v1` schema stub; and records the dirty LLM CLI worktree gap analysis without merging code or changing runtime behavior.
+- Added the hidden provider/model Interface tranche for future assistant chat setup. `khub auth` and `khub models` are directly invokable but hidden from default top-level help; they store only explicit API-key environment references, write `routing.llm.tasks.chat` without changing default `ask` or summarization routing, and register a delegated Codex CLI provider that enforces the outbound P0 policy gate before transport.
+
 ### Removed
 
 - Removed tracked public-inappropriate process artifacts: the generated `PROJECT_PROGRESS.md`, historical `tasks/` notes, stale `docs/status/` handoff notes, workstation-specific `ops/launchd/com.won.*.plist` files, and two manual `eval/knowledgeos/reports/` review reports. Public-facing state should live in `CHANGELOG.md`, `docs/PROJECT_STATE.md`, durable ADRs, or reproducible eval fixtures instead of local progress logs and machine-specific launchd files.

@@ -366,6 +366,8 @@ cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.math_memory_cmd", "m
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.explore_cmd", "explore_group", "explore", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "search", "search")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "ask", "ask")
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.auth_cmd", "auth_group", "auth", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.models_cmd", "models_group", "models", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "inspect_cmd", "inspect")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "compare_cmd", "compare")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "trace_cmd", "trace")
