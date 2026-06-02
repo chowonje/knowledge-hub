@@ -137,12 +137,54 @@ def _ok_payload(
     }
 
 
-def _new_recorder(*, save_session: bool, surface: str, provider: str, model: str, allow_external: bool) -> SessionRecorder | None:
+def _new_recorder(
+    *, save_session: bool, surface: str, session_id: str, provider: str, model: str, allow_external: bool
+) -> SessionRecorder | None:
     if not save_session:
         return None
-    recorder = SessionRecorder(session_id=new_session_id(surface), surface=surface)
+    recorder = SessionRecorder(session_id=session_id, surface=surface)
     recorder.start(provider=provider, model=model, allow_external=allow_external, history_mode="sqlite-redacted-events")
     return recorder
+
+
+def _diagnostics(
+    *,
+    layer_used: str,
+    route: str,
+    session_id: str,
+    turn_id: str,
+    provider_applied: str = "",
+    model_applied: str = "",
+    external_call_allowed: bool,
+    policy_blocked: bool,
+) -> dict[str, Any]:
+    # Mapping: plain chat is an Interface/provider turn; /paper delegates to the Core ask/paper runtime.
+    return {
+        "layerUsed": layer_used,
+        "route": route,
+        "providerApplied": str(provider_applied or ""),
+        "modelApplied": str(model_applied or ""),
+        "sessionId": session_id,
+        "turnId": turn_id,
+        "externalCallAllowed": bool(external_call_allowed),
+        "policyBlocked": bool(policy_blocked),
+    }
+
+
+def _attach_diagnostics(payload: dict[str, Any], diagnostics: dict[str, Any]) -> dict[str, Any]:
+    payload.update(diagnostics)
+    return payload
+
+
+def _footer(payload: dict[str, Any]) -> str:
+    provider = str(payload.get("providerApplied") or payload.get("provider") or "-")
+    model = str(payload.get("modelApplied") or payload.get("model") or "-")
+    return (
+        f"diagnostics: layer={payload.get('layerUsed') or '-'} route={payload.get('route') or '-'} "
+        f"provider={provider} model={model} external={bool(payload.get('externalCallAllowed'))} "
+        f"policyBlocked={bool(payload.get('policyBlocked'))} session={payload.get('sessionId') or '-'} "
+        f"turn={payload.get('turnId') or '-'}"
+    )
 
 
 def _attach_session(payload: dict[str, Any], recorder: SessionRecorder | None) -> dict[str, Any]:
@@ -204,6 +246,8 @@ def _single_turn(
     model: str,
     allow_external: bool,
     as_json: bool,
+    session_id: str,
+    turn_id: str,
     recorder: SessionRecorder | None = None,
 ) -> None:
     khub = ctx.obj["khub"]
@@ -225,6 +269,19 @@ def _single_turn(
             mode="single",
             reason=blocked_reason,
         )
+        _attach_diagnostics(
+            payload,
+            _diagnostics(
+                layer_used="interface",
+                route="plain_llm",
+                session_id=session_id,
+                turn_id=turn_id,
+                provider_applied=provider,
+                model_applied=model,
+                external_call_allowed=allow_external,
+                policy_blocked=True,
+            ),
+        )
         _attach_session(payload, recorder)
         _record_route_metadata(recorder, route="plain", payload=payload)
         if as_json:
@@ -240,6 +297,19 @@ def _single_turn(
         allow_external=allow_external,
         mode="single",
     )
+    _attach_diagnostics(
+        payload,
+        _diagnostics(
+            layer_used="interface",
+            route="plain_llm",
+            session_id=session_id,
+            turn_id=turn_id,
+            provider_applied=provider,
+            model_applied=model,
+            external_call_allowed=allow_external,
+            policy_blocked=False,
+        ),
+    )
     if recorder is not None:
         recorder.assistant_message(route="plain", answer=answer)
     _attach_session(payload, recorder)
@@ -248,6 +318,7 @@ def _single_turn(
         console.print_json(data=payload)
         return
     click.echo(answer)
+    click.echo(_footer(payload))
 
 
 def _single_turn_paper(
@@ -255,6 +326,8 @@ def _single_turn_paper(
     prompt: str,
     allow_external: bool | None,
     as_json: bool,
+    session_id: str,
+    turn_id: str,
     recorder: SessionRecorder | None = None,
 ) -> None:
     khub = ctx.obj["khub"]
@@ -269,6 +342,19 @@ def _single_turn_paper(
         question=command.question,
         allow_external_override=allow_external,
     )
+    _attach_diagnostics(
+        payload,
+        _diagnostics(
+            layer_used="core",
+            route=str(payload.get("route") or "paper"),
+            session_id=session_id,
+            turn_id=turn_id,
+            provider_applied=str(payload.get("answerProviderApplied") or ""),
+            model_applied=str(payload.get("answerModelApplied") or ""),
+            external_call_allowed=bool(payload.get("allowExternal")),
+            policy_blocked=payload.get("status") == "blocked",
+        ),
+    )
     if recorder is not None:
         recorder.assistant_message(route="paper", answer=str(payload.get("answer") or ""))
     _attach_session(payload, recorder)
@@ -280,6 +366,7 @@ def _single_turn_paper(
         warnings = list(payload.get("warnings") or [])
         raise click.ClickException(str(warnings[0] if warnings else payload.get("status") or "paper route failed"))
     click.echo("\n".join(paper_payload_text_lines(payload)))
+    click.echo(_footer(payload))
 
 
 def _repl(
@@ -288,6 +375,7 @@ def _repl(
     model: str,
     allow_external: bool,
     paper_allow_external: bool | None,
+    session_id: str,
     recorder: SessionRecorder | None = None,
 ) -> None:
     khub = ctx.obj["khub"]
@@ -296,6 +384,7 @@ def _repl(
             raise click.ClickException(f"external provider blocked: {provider}/{model} requires --allow-external")
 
         history: list[tuple[str, str]] = []
+        turn_index = 0
         click.echo(f"khub chat ({provider}/{model}); type /exit to quit")
         while True:
             click.echo("you> ", nl=False)
@@ -310,6 +399,8 @@ def _repl(
                 break
             paper_command = parse_paper_slash(user_prompt)
             if paper_command is not None:
+                turn_index += 1
+                turn_id = f"turn_{turn_index:04d}"
                 if recorder is not None:
                     recorder.user_message(route="paper", text=user_prompt)
                 payload = generate_paper_answer_payload(
@@ -318,11 +409,27 @@ def _repl(
                     question=paper_command.question,
                     allow_external_override=paper_allow_external,
                 )
+                _attach_diagnostics(
+                    payload,
+                    _diagnostics(
+                        layer_used="core",
+                        route=str(payload.get("route") or "paper"),
+                        session_id=session_id,
+                        turn_id=turn_id,
+                        provider_applied=str(payload.get("answerProviderApplied") or ""),
+                        model_applied=str(payload.get("answerModelApplied") or ""),
+                        external_call_allowed=bool(payload.get("allowExternal")),
+                        policy_blocked=payload.get("status") == "blocked",
+                    ),
+                )
                 if recorder is not None:
                     recorder.assistant_message(route="paper", answer=str(payload.get("answer") or ""))
                 _record_route_metadata(recorder, route="paper", payload=payload)
                 click.echo("\n".join(paper_payload_text_lines(payload)))
+                click.echo(_footer(payload))
                 continue
+            turn_index += 1
+            turn_id = f"turn_{turn_index:04d}"
             if recorder is not None:
                 recorder.user_message(route="plain", text=user_prompt)
             turn_prompt = _build_turn_prompt(history, user_prompt)
@@ -342,8 +449,22 @@ def _repl(
                     mode="repl",
                     reason=blocked_reason,
                 )
+                _attach_diagnostics(
+                    payload,
+                    _diagnostics(
+                        layer_used="interface",
+                        route="plain_llm",
+                        session_id=session_id,
+                        turn_id=turn_id,
+                        provider_applied=provider,
+                        model_applied=model,
+                        external_call_allowed=allow_external,
+                        policy_blocked=True,
+                    ),
+                )
                 _record_route_metadata(recorder, route="plain", payload=payload)
                 click.echo(f"blocked: {blocked_reason}")
+                click.echo(_footer(payload))
                 continue
             if recorder is not None:
                 recorder.assistant_message(route="plain", answer=answer)
@@ -355,8 +476,22 @@ def _repl(
                 allow_external=allow_external,
                 mode="repl",
             )
+            _attach_diagnostics(
+                payload,
+                _diagnostics(
+                    layer_used="interface",
+                    route="plain_llm",
+                    session_id=session_id,
+                    turn_id=turn_id,
+                    provider_applied=provider,
+                    model_applied=model,
+                    external_call_allowed=allow_external,
+                    policy_blocked=False,
+                ),
+            )
             _record_route_metadata(recorder, route="plain", payload=payload)
             click.echo(answer)
+            click.echo(_footer(payload))
             history.append(("User", user_prompt))
             history.append(("Assistant", answer))
     finally:
@@ -381,31 +516,44 @@ def chat_cmd(ctx, prompt, provider, model, allow_external, as_json, save_session
     khub = ctx.obj["khub"]
     route_provider, route_model = _resolve_chat_route(khub.config, provider_override=provider, model_override=model)
     effective_allow_external = _allow_external_value(khub.config, route_provider, allow_external)
+    session_id = new_session_id("chat")
     if prompt is None:
         if as_json:
             raise click.ClickException("--json requires PROMPT for khub chat")
         recorder = _new_recorder(
             save_session=bool(save_session),
             surface="chat",
+            session_id=session_id,
             provider=route_provider,
             model=route_model,
             allow_external=effective_allow_external,
         )
-        _repl(ctx, route_provider, route_model, effective_allow_external, allow_external, recorder=recorder)
+        _repl(ctx, route_provider, route_model, effective_allow_external, allow_external, session_id, recorder=recorder)
         return
 
     recorder = _new_recorder(
         save_session=bool(save_session),
         surface="chat",
+        session_id=session_id,
         provider=route_provider,
         model=route_model,
         allow_external=effective_allow_external,
     )
     try:
         if parse_paper_slash(str(prompt)) is not None:
-            _single_turn_paper(ctx, str(prompt), allow_external, as_json, recorder=recorder)
+            _single_turn_paper(ctx, str(prompt), allow_external, as_json, session_id, "turn_0001", recorder=recorder)
             return
-        _single_turn(ctx, str(prompt), route_provider, route_model, effective_allow_external, as_json, recorder=recorder)
+        _single_turn(
+            ctx,
+            str(prompt),
+            route_provider,
+            route_model,
+            effective_allow_external,
+            as_json,
+            session_id,
+            "turn_0001",
+            recorder=recorder,
+        )
     finally:
         if recorder is not None:
             recorder.end()

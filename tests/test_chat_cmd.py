@@ -82,6 +82,14 @@ def test_chat_single_turn_json_uses_fake_llm(tmp_path):
     assert payload["status"] == "ok"
     assert payload["mode"] == "single"
     assert payload["provider"] == "fake"
+    assert payload["layerUsed"] == "interface"
+    assert payload["route"] == "plain_llm"
+    assert payload["providerApplied"] == "fake"
+    assert payload["modelApplied"] == config.summarization_model
+    assert payload["sessionId"].startswith("chat_")
+    assert payload["turnId"] == "turn_0001"
+    assert payload["externalCallAllowed"] is True
+    assert payload["policyBlocked"] is False
     assert payload["promptChars"] == len("hello")
     assert "prompt" not in payload
     assert payload["answer"] == "fake response: hello"
@@ -105,6 +113,13 @@ def test_chat_paper_slash_json_uses_paper_evidence_runtime_without_building_llm(
     assert payload["status"] == "ok"
     assert payload["mode"] == "paper"
     assert payload["route"] == "paper"
+    assert payload["layerUsed"] == "core"
+    assert payload["providerApplied"] == "fake-rag"
+    assert payload["modelApplied"] == "fake-paper-model"
+    assert payload["sessionId"].startswith("chat_")
+    assert payload["turnId"] == "turn_0001"
+    assert payload["externalCallAllowed"] is False
+    assert payload["policyBlocked"] is False
     assert payload["sourceType"] == "paper"
     assert payload["retrievalMode"] == "hybrid"
     assert payload["topK"] == 8
@@ -206,6 +221,13 @@ def test_chat_no_allow_external_blocks_external_provider_without_building_llm(tm
     assert payload["provider"] == "openai"
     assert payload["model"] == "gpt-5.4"
     assert payload["allowExternal"] is False
+    assert payload["externalCallAllowed"] is False
+    assert payload["policyBlocked"] is True
+    assert payload["route"] == "plain_llm"
+    assert payload["layerUsed"] == "interface"
+    assert payload["providerApplied"] == "openai"
+    assert payload["modelApplied"] == "gpt-5.4"
+    assert payload["turnId"] == "turn_0001"
     assert payload["promptChars"] == len("hello")
     assert "prompt" not in payload
     assert "external provider blocked" in payload["warnings"][0]
@@ -221,3 +243,19 @@ def test_chat_json_without_prompt_is_rejected(tmp_path):
 
     assert result.exit_code != 0
     assert "--json requires PROMPT" in result.output
+
+
+def test_chat_text_mode_prints_diagnostics_footer(tmp_path):
+    config = _config(tmp_path)
+    khub = _FakeKhub(config)
+
+    result = CliRunner().invoke(
+        chat_cmd,
+        ["hello", "--provider", "fake"],
+        obj={"khub": khub},
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "fake response: hello" in result.output
+    assert "diagnostics: layer=interface route=plain_llm provider=fake" in result.output
+    assert "policyBlocked=False" in result.output
