@@ -69,7 +69,7 @@ KnowledgeOS/artifacts/hermes_public_source_radar/2026-06-01/
 
 - `docs/adr/2026-06-03-four-layer-agent-architecture.md`
 - `docs/adr/2026-06-03-external-agent-handoff-v1.md`
+- `docs/guides/embedded-agent-e2e-runbook.md`
 - `docs/guides/agent-gateway-v1.md`
 - `docs/guides/cli-commands.md`
 - `docs/schemas/knowledge-hub.external-agent-handoff.v1.json`
-

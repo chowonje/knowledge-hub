@@ -9,6 +9,7 @@
 - Added hidden explicit `khub chat` as an Interface-only assistant surface. Plain chat uses the provider/model route configured by `khub models`, ordinary turns do not write vault, knowledge DB, index, or ontology state, `/paper` delegates to the existing ask/paper evidence runtime, and opt-in `--save-session` persists metadata-only redacted session events with SQLite as the canonical store.
 - Added read-only `khub chat` turn diagnostics. Chat JSON payloads and text footers now expose the observed layer, route, applied provider/model, session id, turn id, external-call allowance, and policy-block flag without changing retrieval, policy, persistence, or default `ask` behavior.
 - Hardened opt-in `khub chat` session storage and redaction. SQLite remains the canonical session store, the JSONL mirror carries the same redacted events, unknown content classification fails closed for raw persistence, route metadata is allowlisted before storage, and CLI session payloads redact local session paths.
+- Added an embedded-agent E2E runbook that ties together read-only context, local `khub chat`, dry-run planning, approval-gated docs writeback, failure modes, and the Hermes report-only handoff pointer without promoting TUI, enrich, vault access, or a new gateway command family.
 
 ### Removed
 
