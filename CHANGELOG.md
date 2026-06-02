@@ -6,6 +6,7 @@
 
 - Added a docs-only four-layer agent architecture tranche that fixes Core Runtime, MCP Tool Plane, Agent Gateway, and Interface ownership; documents report-only external-agent handoffs; adds the `knowledge-hub.external-agent-handoff.v1` schema stub; and records the dirty LLM CLI worktree gap analysis without merging code or changing runtime behavior.
 - Added the hidden provider/model Interface tranche for future assistant chat setup. `khub auth` and `khub models` are directly invokable but hidden from default top-level help; they store only explicit API-key environment references, write `routing.llm.tasks.chat` without changing default `ask` or summarization routing, and register a delegated Codex CLI provider that enforces the outbound P0 policy gate before transport.
+- Added hidden explicit `khub chat` as an Interface-only assistant surface. Plain chat uses the provider/model route configured by `khub models`, ordinary turns do not write vault, knowledge DB, index, or ontology state, `/paper` delegates to the existing ask/paper evidence runtime, and opt-in `--save-session` persists metadata-only redacted session events with SQLite as the canonical store.
 
 ### Removed
 
