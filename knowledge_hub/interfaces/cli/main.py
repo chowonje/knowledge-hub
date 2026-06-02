@@ -369,6 +369,7 @@ cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "ask", 
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.auth_cmd", "auth_group", "auth", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.models_cmd", "models_group", "models", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.chat_cmd", "chat_cmd", "chat", hidden=True)
+cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.tui_cmd", "tui_cmd", "tui", hidden=True)
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "inspect_cmd", "inspect")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "compare_cmd", "compare")
 cli.add_lazy_command("knowledge_hub.interfaces.cli.commands.substrate_cmd", "trace_cmd", "trace")
