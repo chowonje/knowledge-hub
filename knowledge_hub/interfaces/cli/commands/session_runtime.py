@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -12,6 +13,30 @@ from typing import Any
 from uuid import uuid4
 
 SESSION_EVENT_SCHEMA = "knowledge-hub.assistant.session.event.v1"
+SESSION_HISTORY_MODE = "sqlite-redacted-events"
+SESSION_PERSISTENCE_POLICY = "metadata_only_fail_closed"
+UNKNOWN_CLASSIFICATION = "UNKNOWN"
+
+_ROUTE_METADATA_ALLOWED_KEYS = {
+    "allowExternal",
+    "answerModelApplied",
+    "answerProviderApplied",
+    "answerRouteApplied",
+    "assistUsage",
+    "model",
+    "provider",
+    "status",
+    "warningCount",
+}
+_ASSIST_USAGE_ALLOWED_KEYS = {
+    "claimCards",
+    "cluster",
+    "documentMemory",
+    "enrichRecommended",
+    "ontology",
+    "paperEvidence",
+    "paperMemory",
+}
 
 
 def utc_now() -> str:
@@ -26,6 +51,55 @@ def new_session_id(surface: str) -> str:
 def text_hash(value: str) -> str:
     digest = hashlib.sha256(str(value or "").encode("utf-8")).hexdigest()
     return f"sha256:{digest}"
+
+
+def redaction_metadata(*, fields: list[str]) -> dict[str, Any]:
+    return {
+        "rawContentStored": False,
+        "contentStored": False,
+        "contentClassification": UNKNOWN_CLASSIFICATION,
+        "contentClassificationKnown": False,
+        "persistencePolicy": SESSION_PERSISTENCE_POLICY,
+        "redactionStatus": "redacted",
+        "redactionReason": "unknown_classification_fail_closed",
+        "redactedFields": list(fields),
+    }
+
+
+def _sanitize_assist_usage(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        return {}
+    safe: dict[str, Any] = {}
+    for key in sorted(_ASSIST_USAGE_ALLOWED_KEYS):
+        if key in value:
+            item = value[key]
+            safe[key] = bool(item) if isinstance(item, bool) else str(item)
+    return safe
+
+
+def _sanitize_route_metadata(metadata: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    safe: dict[str, Any] = {}
+    dropped = 0
+    for key, value in dict(metadata or {}).items():
+        if key not in _ROUTE_METADATA_ALLOWED_KEYS:
+            dropped += 1
+            continue
+        if key == "assistUsage":
+            safe[key] = _sanitize_assist_usage(value)
+        elif key in {"allowExternal"}:
+            safe[key] = bool(value)
+        elif key in {"warningCount"}:
+            safe[key] = int(value or 0)
+        else:
+            safe[key] = str(value)
+    policy = {
+        "mode": "allowlist",
+        "allowedKeys": sorted(safe.keys()),
+        "droppedKeyCount": dropped,
+        "rawContentStored": False,
+        "persistencePolicy": SESSION_PERSISTENCE_POLICY,
+    }
+    return safe, policy
 
 
 def default_session_dir() -> Path:
@@ -90,6 +164,7 @@ class SessionRecorder:
                 "route": str(route),
                 "textHash": text_hash(text),
                 "textChars": len(str(text or "")),
+                **redaction_metadata(fields=["text"]),
             }
         )
 
@@ -103,11 +178,12 @@ class SessionRecorder:
                 "route": str(route),
                 "answerHash": text_hash(answer),
                 "answerChars": len(str(answer or "")),
+                **redaction_metadata(fields=["answer"]),
             }
         )
 
     def route_metadata(self, *, route: str, metadata: dict[str, Any]) -> None:
-        safe_metadata = dict(metadata or {})
+        safe_metadata, metadata_policy = _sanitize_route_metadata(metadata)
         self._append(
             {
                 "type": "route_metadata",
@@ -115,6 +191,7 @@ class SessionRecorder:
                 "createdAt": utc_now(),
                 "surface": self.surface,
                 "route": str(route),
+                "metadataPolicy": metadata_policy,
                 **safe_metadata,
             }
         )
@@ -135,9 +212,12 @@ class SessionRecorder:
         return {
             "id": self.session_id,
             "persisted": True,
-            "historyMode": "sqlite-redacted-events",
-            "metadataPath": str(self.metadata_path),
-            "transcriptMirrorPath": str(self.transcript_path),
+            "historyMode": SESSION_HISTORY_MODE,
+            "canonicalStore": "sqlite",
+            "metadataPath": "<local-session-store>",
+            "transcriptMirrorPath": "<local-session-mirror>",
+            "pathRedacted": True,
+            "persistencePolicy": SESSION_PERSISTENCE_POLICY,
         }
 
     def _append(self, payload: dict[str, Any]) -> None:

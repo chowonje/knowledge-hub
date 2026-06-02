@@ -13,7 +13,7 @@ from knowledge_hub.interfaces.cli.commands.assistant_runtime import (
     paper_payload_text_lines,
     parse_paper_slash,
 )
-from knowledge_hub.interfaces.cli.commands.session_runtime import SessionRecorder, new_session_id
+from knowledge_hub.interfaces.cli.commands.session_runtime import SESSION_HISTORY_MODE, SessionRecorder, new_session_id
 
 console = Console()
 
@@ -143,7 +143,7 @@ def _new_recorder(
     if not save_session:
         return None
     recorder = SessionRecorder(session_id=session_id, surface=surface)
-    recorder.start(provider=provider, model=model, allow_external=allow_external, history_mode="sqlite-redacted-events")
+    recorder.start(provider=provider, model=model, allow_external=allow_external, history_mode=SESSION_HISTORY_MODE)
     return recorder
 
 
