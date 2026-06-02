@@ -371,6 +371,7 @@ def test_top_level_help_hides_operator_surfaces():
     command_lines = _command_lines(result.output)
     for token in (
         "auth",
+        "chat",
         "models",
         "dinger",
         "os",
@@ -386,16 +387,20 @@ def test_top_level_help_hides_operator_surfaces():
         assert token in command_lines
 
 
-def test_hidden_provider_model_interface_commands_remain_directly_invokable():
+def test_hidden_assistant_interface_commands_remain_directly_invokable():
     runner = CliRunner()
 
     auth_result = runner.invoke(cli, ["auth", "--help"])
+    chat_result = runner.invoke(cli, ["chat", "--help"])
     models_result = runner.invoke(cli, ["models", "--help"])
 
     assert auth_result.exit_code == 0
+    assert chat_result.exit_code == 0
     assert models_result.exit_code == 0
     assert "status" in _command_lines(auth_result.output)
     assert "login" in _command_lines(auth_result.output)
+    assert "--save-session" in chat_result.output
+    assert "/paper QUESTION" in chat_result.output
     assert "status" in _command_lines(models_result.output)
     assert "use" in _command_lines(models_result.output)
 
