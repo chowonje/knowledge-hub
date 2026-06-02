@@ -419,7 +419,7 @@ def _expand_env_vars(value: Any) -> Any:
 
 def _deep_merge(base: dict, override: dict) -> dict:
     """딥 머지: override 값이 base를 덮어씀"""
-    result = dict(base)
+    result = deepcopy(base)
     for key, value in override.items():
         if key in result and isinstance(result[key], dict) and isinstance(value, dict):
             result[key] = _deep_merge(result[key], value)
@@ -429,10 +429,10 @@ def _deep_merge(base: dict, override: dict) -> dict:
 
 
 def get_public_setup_profile(name: str) -> dict[str, Any]:
-    token = str(name or "").strip().lower()
-    if token == "custom":
+    profile_name = str(name or "").strip().lower()
+    if profile_name == "custom":
         return {}
-    profile = PUBLIC_SETUP_PROFILES.get(token)
+    profile = PUBLIC_SETUP_PROFILES.get(profile_name)
     if profile is None:
         raise ConfigError(f"unknown public setup profile: {name}")
     return deepcopy(profile)

@@ -258,6 +258,10 @@ class AppContextFactory:
 
     def build_llm(self, provider: str, model: str | None = None):  # noqa: ANN201
         cfg = self.config.get_provider_config(provider)
+        if str(provider or "").strip().lower() == "codex":
+            cfg = dict(cfg)
+            cfg.setdefault("_khub_config", self.config)
+            cfg.setdefault("task_type", "chat")
         return get_llm(provider, model=model, **cfg)
 
     def build_embedder(self, provider: str, model: str | None = None):  # noqa: ANN201
