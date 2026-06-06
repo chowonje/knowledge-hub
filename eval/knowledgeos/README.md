@@ -101,6 +101,19 @@ source-quality hard gate 운영 규칙:
   - paper/vault/web `capability_missing_rate == 0.0`
 - PR 필수 CI로는 아직 승격하지 않는다. 현재 승격 범위는 persistent local run history를 가진 운영 daily loop이고, remote CI 승격은 run history restore/cache 정책이 따로 필요하다.
 
+legacy runtime removal gate 운영 규칙:
+- legacy answer runtime removal은 별도 controlled local checker로 고정한다.
+- canonical command:
+  - `python eval/knowledgeos/scripts/check_legacy_runtime_removal_gate.py --runs-root eval/knowledgeos/runs --json`
+- 통과 기준은 최신 readiness report 기준이다:
+  - `decision == ready_for_removal_tranche`
+  - `run_count >= required_run_count`
+  - runtime/eval/script legacy runtime symbol 또는 `ask_v2_mode="legacy"` literal callsite 없음
+  - paper/vault/web `legacy_runtime_rate == 0.0`
+  - paper/vault/web `capability_missing_rate == 0.0`
+  - paper/vault/web `forced_legacy_rate == 0.0`
+- 테스트 안의 `ask_v2_mode="legacy"` literal은 제거 방어 테스트로만 허용한다.
+
 source-quality detail observation 운영 규칙:
 - 세부 품질 지표는 2026-04-21부터 별도 observation report로 자동화한다.
 - canonical command:
