@@ -39,13 +39,16 @@ hard gate 기준:
 - `paper/vault/web legacy_runtime_rate == 0.0`
 - `paper/vault/web capability_missing_rate == 0.0`
 
-detail observation 기준:
-- 아직 hard gate가 아니라 승격 후보 관찰층입니다.
+detail gate 기준:
+- detail-quality는 별도 controlled local hard-gate checker로 승격되었습니다.
+- canonical check:
+  - `python eval/knowledgeos/scripts/check_source_quality_detail_gate.py --runs-root eval/knowledgeos/runs --json`
 - 최신 base source-quality observation이 `ready_for_hard_gate_review`여야 합니다.
 - paper `paper_citation_correctness >= 1.0`
 - vault `vault_abstention_correctness >= 1.0`
 - web `web_recency_violation <= 0.0`
 - 각 지표는 `required_runs`만큼 numeric point가 있어야 합니다. 값이 `None`이면 승격 준비가 아니라 coverage 보강 대상으로 봅니다.
+- 현재 이 checker는 PR 필수 CI나 daily runner enforce가 아닙니다. `scripts/run_daily_source_quality.py`는 이미 큰 orchestration 파일이라 이번 tranche에서 수정하지 않고, daily run은 observation refresh를 계속 담당합니다.
 
 writeback goal:
 - 기본 goal은 최신 observation summary를 바탕으로 자동 생성됩니다.
@@ -55,6 +58,7 @@ writeback goal:
 - `scripts/run_daily_source_quality.py`
 - `scripts/run_daily_source_quality.sh`
 - `eval/knowledgeos/scripts/check_source_quality_hard_gate.py`
+- `eval/knowledgeos/scripts/check_source_quality_detail_gate.py`
 - `eval/knowledgeos/scripts/report_source_quality_detail_observation.py`
 - installed launchd helper: `~/.khub/bin/run_daily_source_quality_launchd.sh`
 

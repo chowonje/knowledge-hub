@@ -117,7 +117,10 @@ source-quality detail observation 운영 규칙:
   - base source-quality hard gate가 먼저 통과해야 한다.
   - 각 후보 지표가 `required_runs`만큼 numeric point를 가져야 한다.
   - 모든 후보 지표가 full window 동안 threshold를 통과해야 한다.
-- 현재 이 층은 관찰 전용이다. `ready_for_detail_gate_review`가 안정적으로 나오면 별도 change로 hard gate 승격한다.
+- detail-quality는 별도 controlled local hard-gate checker로 승격되었다.
+- canonical detail gate command:
+  - `python eval/knowledgeos/scripts/check_source_quality_detail_gate.py --runs-root eval/knowledgeos/runs --json`
+- PR 필수 CI나 daily runner enforce로는 아직 승격하지 않는다. 현재 범위는 source-quality daily loop가 생성한 persistent local detail observation history를 operator가 별도 checker로 검증하는 controlled gate다.
 
 live retrieval-span eval 운영 규칙:
 - 목적은 deterministic CI fixture가 아니라 실제 장기 로컬 DB에서 "이 질문이 기대 source/span을 찾는가"를 operator가 주간/수동으로 확인하는 것이다.
