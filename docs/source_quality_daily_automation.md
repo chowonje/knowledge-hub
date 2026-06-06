@@ -39,6 +39,15 @@ hard gate 기준:
 - `paper/vault/web legacy_runtime_rate == 0.0`
 - `paper/vault/web capability_missing_rate == 0.0`
 
+legacy runtime removal gate 기준:
+- canonical check:
+  - `python eval/knowledgeos/scripts/check_legacy_runtime_removal_gate.py --runs-root eval/knowledgeos/runs --json`
+- 최신 legacy readiness report가 `ready_for_removal_tranche`여야 합니다.
+- `run_count >= required_run_count`여야 합니다.
+- runtime/eval/script에는 legacy runtime symbol이나 `ask_v2_mode="legacy"` literal callsite가 없어야 합니다.
+- paper/vault/web `legacy_runtime_rate`, `capability_missing_rate`, `forced_legacy_rate`는 모두 `0.0`이어야 합니다.
+- 테스트 안의 `ask_v2_mode="legacy"` literal은 제거 방어 테스트로만 허용합니다.
+
 detail gate 기준:
 - detail-quality는 별도 controlled local hard-gate checker로 승격되었습니다.
 - canonical check:
@@ -59,6 +68,7 @@ writeback goal:
 - `scripts/run_daily_source_quality.sh`
 - `eval/knowledgeos/scripts/check_source_quality_hard_gate.py`
 - `eval/knowledgeos/scripts/check_source_quality_detail_gate.py`
+- `eval/knowledgeos/scripts/check_legacy_runtime_removal_gate.py`
 - `eval/knowledgeos/scripts/report_source_quality_detail_observation.py`
 - installed launchd helper: `~/.khub/bin/run_daily_source_quality_launchd.sh`
 
