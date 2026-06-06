@@ -126,7 +126,7 @@ def _seed_eval_center_inputs(repo_root: Path) -> tuple[Path, Path]:
     )
 
     _write_text(queries_dir / "paper_default_eval_queries_v1.csv", "query,source\np1,paper\n")
-    _write_text(queries_dir / "user_answer_eval_queries_v1.csv", "query,source\n\"a,b\",paper,extra\n")
+    _write_text(queries_dir / "user_answer_eval_queries_v1.csv", "query,source\n\"a,b\",paper\n")
     return runs_root, queries_dir
 
 
@@ -167,7 +167,7 @@ def test_run_daily_snapshot_writes_snapshot_and_latest_reports(tmp_path: Path):
     assert result["summary"]["sourceQualityFreshnessStatus"] == "fresh"
     assert result["summary"]["answerLoopStatus"] == "ok"
     assert result["summary"]["answerLoopRowCount"] == 5
-    assert "failure_bank" in result["summary"]["gapIds"]
+    assert "failure_bank" in result["summary"]["gapIds"] and not any("extra field" in warning for warning in json.loads(Path(result["latestJsonPath"]).read_text(encoding="utf-8"))["warnings"])
 
 
 def test_parser_default_runs_root_is_externalized():

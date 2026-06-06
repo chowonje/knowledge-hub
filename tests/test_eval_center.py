@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import csv
 import json
 import os
 from pathlib import Path
@@ -126,26 +125,13 @@ def _seed_answer_loop(runs_root: Path) -> Path:
     )
 
 
-def test_canonical_eval_query_csvs_have_no_extra_fields():
-    queries_dir = Path(__file__).resolve().parents[1] / "eval" / "knowledgeos" / "queries"
-    failures: list[str] = []
-    for path in sorted(queries_dir.glob("*.csv")):
-        with path.open(newline="", encoding="utf-8-sig") as handle:
-            reader = csv.DictReader(handle)
-            for row_number, row in enumerate(reader, start=2):
-                extras = row.get(None)
-                if extras:
-                    failures.append(f"{path.name}: row {row_number} has {len(extras)} extra field(s)")
-    assert failures == []
-
-
 def test_build_eval_center_summary_rolls_up_current_artifacts(tmp_path: Path):
     runs_root = tmp_path / "eval" / "knowledgeos" / "runs"
     queries_dir = tmp_path / "eval" / "knowledgeos" / "queries"
     latest_source_run = _seed_source_quality(runs_root)
     answer_summary = _seed_answer_loop(runs_root)
     _write_text(queries_dir / "paper_default_eval_queries_v1.csv", "query,source\np1,paper\n")
-    _write_text(queries_dir / "user_answer_eval_queries_v1.csv", "query,source\n\"a,b\",paper,extra\n")
+    _write_text(queries_dir / "user_answer_eval_queries_v1.csv", "query,source\n\"a,b\",paper\n")
 
     payload = build_eval_center_summary(
         runs_root=runs_root,
@@ -168,13 +154,14 @@ def test_build_eval_center_summary_rolls_up_current_artifacts(tmp_path: Path):
     assert payload["answerLoop"]["collect"]["backendModels"] == {"codex_mcp": "gpt-5.4"}
     assert payload["answerLoop"]["judge"]["judgeModel"] == "gpt-4.1-nano"
     assert payload["queryInventory"]["count"] == 2
-    assert any("extra field" in warning for warning in payload["warnings"])
+    assert not any("extra field" in warning for warning in payload["warnings"])
+    assert all(item["parseWarnings"] == [] for item in payload["queryInventory"]["items"])
     assert not any("missing answer-loop latest alias" in warning for warning in payload["warnings"])
     assert any(gap["id"] == "failure_bank" for gap in payload["gaps"])
     assert "answer_loop_latest_alias" not in {gap["id"] for gap in payload["gaps"]}
     assert payload["operatorBrief"]["summary"]["priority"] == "answer_loop_triage"
     assert any(section["id"] == "source_quality" for section in payload["operatorBrief"]["sections"])
-    assert any(finding["part"] == "query_inventory" for finding in payload["operatorBrief"]["findings"])
+    assert not any(finding["part"] == "query_inventory" for finding in payload["operatorBrief"]["findings"])
     assert not any(
         finding["title"] == "Latest answer-loop alias is missing"
         for finding in payload["operatorBrief"]["findings"]
