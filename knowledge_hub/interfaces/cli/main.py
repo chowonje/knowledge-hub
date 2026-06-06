@@ -411,6 +411,7 @@ labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.ask_graph_cmd
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.memory_cmd", "memory_group", "memory")
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.rag_labs_cmd", "rag_labs_group", "rag")
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_labs_cmd", "paper_labs_group", "paper")
+labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_harness_cmd", "paper_harness_group", "paper-harness")
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_summary_cmd", "paper_summary_group", "paper-summary")
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.eval_cmd", "eval_group", "eval")
 
