@@ -7,6 +7,7 @@ import sys
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "eval" / "knowledgeos" / "scripts" / "check_legacy_runtime_removal_gate.py"
+UNEXPECTED_TEST_LITERAL_ERROR = "ask_v2_mode_legacy_literal_tests_unexpected_hits_present"
 
 
 def _load_script():
@@ -18,6 +19,14 @@ def _load_script():
     return module
 
 
+def _allowed_guard_hit() -> dict[str, str | int]:
+    return {
+        "path": "tests/test_rag_runtime_services.py",
+        "line": 438,
+        "text": "ask_v2_mode=\"legacy\",",
+    }
+
+
 def _readiness_payload(
     *,
     decision: str = "ready_for_removal_tranche",
@@ -26,9 +35,11 @@ def _readiness_payload(
     runtime_hit: bool = False,
     script_hit: bool = False,
     legacy_rate: float = 0.0,
+    test_literal_hits: list[dict[str, str | int]] | None = None,
 ) -> dict[str, object]:
     runtime_hits = [{"path": "knowledge_hub/ai/rag_legacy_runtime.py", "line": 1, "text": "LegacyRAGRuntime"}] if runtime_hit else []
     script_hits = [{"path": "scripts/example.py", "line": 1, "text": "ask_v2_mode=\"legacy\""}] if script_hit else []
+    ask_v2_test_hits = test_literal_hits if test_literal_hits is not None else [_allowed_guard_hit()]
     return {
         "schema": "knowledge-hub.legacy-runtime-readiness.report.v1",
         "decision": decision,
@@ -44,13 +55,7 @@ def _readiness_payload(
             },
             "ask_v2_mode_legacy_literal": {
                 "runtime": [],
-                "tests": [
-                    {
-                        "path": "tests/test_rag_runtime_services.py",
-                        "line": 438,
-                        "text": "ask_v2_mode=\"legacy\",",
-                    }
-                ],
+                "tests": ask_v2_test_hits,
                 "eval": [],
                 "scripts": script_hits,
             },
@@ -77,6 +82,51 @@ def test_build_gate_result_passes_ready_removed_runtime():
     assert result["errors"] == []
     assert result["readinessReportPath"] == "/tmp/legacy.json"
     assert result["testOnlyLegacyLiteralHits"] == 1
+
+
+def test_build_gate_result_fails_on_unexpected_test_legacy_literal():
+    module = _load_script()
+
+    # Given: readiness has the allowed removal-guard literal plus an unrelated tests literal.
+    unexpected_hit = {
+        "path": "tests/test_unrelated_legacy_mode.py",
+        "line": 12,
+        "text": "ask_v2_mode=\"legacy\"",
+    }
+    readiness = _readiness_payload(test_literal_hits=[_allowed_guard_hit(), unexpected_hit])
+
+    # When: the removal gate evaluates the readiness report.
+    result = module.build_gate_result(readiness, readiness_path="/tmp/legacy.json")
+
+    # Then: the gate fails and exposes the unexpected tests hit.
+    assert result["status"] == "failed"
+    assert UNEXPECTED_TEST_LITERAL_ERROR in result["errors"]
+    assert result["testOnlyLegacyLiteralHits"] == 2
+    assert result["allowedTestLegacyLiteralHits"] == 1
+    assert result["unexpectedTestLegacyLiteralHits"] == 1
+    assert result["unexpectedTestLegacyLiteralHitDetails"] == [unexpected_hit]
+
+
+def test_build_gate_result_fails_on_malformed_test_legacy_literal_hit():
+    module = _load_script()
+
+    # Given: readiness has a tests literal hit that cannot be matched by path and text.
+    malformed_hit = {
+        "line": 99,
+        "text": "ask_v2_mode=\"legacy\"",
+    }
+    readiness = _readiness_payload(test_literal_hits=[_allowed_guard_hit(), malformed_hit])
+
+    # When: the removal gate evaluates the readiness report.
+    result = module.build_gate_result(readiness, readiness_path="/tmp/legacy.json")
+
+    # Then: the gate fails closed instead of treating all test hits as acceptable.
+    assert result["status"] == "failed"
+    assert UNEXPECTED_TEST_LITERAL_ERROR in result["errors"]
+    assert result["testOnlyLegacyLiteralHits"] == 2
+    assert result["allowedTestLegacyLiteralHits"] == 1
+    assert result["unexpectedTestLegacyLiteralHits"] == 1
+    assert result["unexpectedTestLegacyLiteralHitDetails"] == [malformed_hit]
 
 
 def test_build_gate_result_fails_on_runtime_or_script_callsites_and_metric_drift():
