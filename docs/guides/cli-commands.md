@@ -167,8 +167,10 @@ khub agent writeback-request
 
 용도:
 - `context`: repo + 지식 문맥 조립
-- `run`: gateway-facing agent/foundry bridge 실행 엔벨로프
+- `run`: gateway-facing agent/foundry bridge 실행 엔벨로프. qwen8 paper evidence는 기본 off이며, `--paper-query-run`, `--paper-query-id`, `--paper-qwen-namespace`, `--paper-qwen-model`를 명시한 경우에만 delegated agent surface로 전달한다.
 - `writeback-request`: `Agent Gateway v2`의 approval-gated repo-local writeback lane 진입점. 현재 first-consumer 안전 범위는 **docs-only**이며 (`docs/adr/`, `docs/status/`, `reviews/`, `worklog/`), dry-run plan을 기반으로 pending request를 만들고 advisory `writebackPreview`로 허용된 문서 대상만 예측해 노출한 뒤, `khub labs ops action-ack -> action-execute`로 좁은 execution lane을 탄다. 성공 실행은 agent queue item을 자동 `resolved`로 닫는다.
+
+qwen8 paper evidence의 stop rule은 명확하다: CLI에서 remote SSH를 실행하지 않고, canonical qwen namespace를 바꾸지 않으며, vault를 스캔하지 않는다. explicit paper harness 입력이 없으면 `khub agent run`과 MCP `run_agentic_query`는 현재 fallback payload shape를 유지하고 `paperEvidencePack`을 붙이지 않는다.
 
 예:
 
@@ -178,6 +180,8 @@ khub labs ops action-list --scope agent --json
 khub labs ops action-ack --action-id <id> --actor cli-user
 khub labs ops action-execute --action-id <id> --actor cli-user --json
 ```
+
+MCP `run_agentic_query`도 같은 opt-in 의미의 `paperQueryRun`, `paperQueryId`, `paperQwenNamespace`, `paperQwenModel` 필드를 받는다. 필드가 없으면 `paperEvidencePack`은 생성되지 않는다.
 
 ### `khub labs foundry`
 
@@ -572,19 +576,28 @@ khub labs paper lanes-backfill
 khub labs paper lanes-review
 khub labs paper lanes-sync-hubs
 khub labs paper topic-synthesize
+khub labs paper-harness query-export
+khub labs paper-harness query-validate
+khub labs paper-harness query-remote-plan
+khub labs paper-harness retrieve
+khub labs paper-harness retrieve-from-run
 ```
 
 용도:
 - paper lane/operator 워크플로
 - 주제형 다논문 shortlist + synthesis
+- `paper-harness`는 qwen8 side namespace 실험 surface다. sanitized query embedding bundle을 만들고, operator가 별도 원격 환경에서 생성해 가져온 checksum-backed query embedding output만 검증해 retrieval에 붙인다.
 - `lanes-backfill`은 이제 AI lane 후보로 보이는 논문만 채운다. non-AI 또는 현재 6-lane taxonomy 바깥 논문은 `primary_lane`을 비운 채 남긴다.
 - `lanes-backfill --force`는 `seeded` 행만 다시 판정하고, `reviewed` / `locked` lane은 덮어쓰지 않는다.
+- stop rules: CLI는 remote SSH를 실행하지 않는다. qwen8은 canonical namespace나 default `ask` runtime을 바꾸지 않는다. 이 flow는 vault를 scan하지 않고 canonical DB/vector namespace mutation도 하지 않는다.
 
 예:
 
 ```bash
 khub labs paper topic-synthesize "트랜스포머를 대체할 차세대 아키텍처 논문들을 찾아 정리해줘" --json
 khub labs paper topic-synthesize "state space model papers beyond transformers" --top-k 6 --candidate-limit 14 --json
+khub labs paper-harness query-export --query "agentic retrieval planning" --out .khub/runs/qwen8-query --json
+khub labs paper-harness retrieve-from-run --run .khub/runs/qwen8-query --query-id query:0001 --json
 ```
 
 용도:

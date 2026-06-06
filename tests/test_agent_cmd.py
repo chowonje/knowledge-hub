@@ -191,7 +191,7 @@ def test_agent_run_json_normalizes_foundry_payload(monkeypatch, tmp_path):
     assert "gateway" not in payload
 
 
-def test_agent_run_policy_gate_reclassifies_sensitive_artifact(monkeypatch, tmp_path):
+def test_agent_run_policy_gate_blocks_declared_p0_artifact(monkeypatch, tmp_path):
     config = _make_config(tmp_path)
     runner = CliRunner()
 
@@ -211,10 +211,10 @@ def test_agent_run_policy_gate_reclassifies_sensitive_artifact(monkeypatch, tmp_
                 "verify": {"allowed": True, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
                 "writeback": {"ok": True, "detail": "ok"},
                 "artifact": {
-                    "jsonContent": {"answer": "api_key: test-secret-value"},
-                    "classification": "P2",
+                    "jsonContent": {"answer": "redacted fixture marker"},
+                    "classification": "P0",
                     "generatedAt": "2026-01-01T00:00:00+00:00",
-                    "metadata": {"trace": "private@example.com"},
+                    "metadata": {"trace": "example.invalid"},
                 },
                 "createdAt": "2026-01-01T00:00:00+00:00",
                 "updatedAt": "2026-01-01T00:00:01+00:00",
@@ -935,3 +935,62 @@ def test_foundry_help_exposes_operator_subcommands():
         "conflict-apply",
         "conflict-reject",
     }.issubset(command_lines)
+
+
+def test_agent_run_accepts_explicit_qwen8_paper_harness_options(monkeypatch, tmp_path):
+    config = _make_config(tmp_path)
+    runner = CliRunner()
+    captured = {}
+
+    def _fake_run(command, command_args, timeout_sec=120):  # noqa: ANN001
+        captured["command"] = command
+        captured["command_args"] = list(command_args)
+        return (
+            {
+                "schema": "knowledge-hub.foundry.agent.run.result.v1",
+                "source": "foundry-core/cli-agent",
+                "runId": "run_qwen8_001",
+                "status": "completed",
+                "goal": "RAG 요약",
+                "role": "planner",
+                "orchestratorMode": "adaptive",
+                "stage": "DONE",
+                "transitions": [],
+                "verify": {"allowed": True, "schemaValid": True, "policyAllowed": True, "schemaErrors": []},
+                "writeback": {"ok": True, "detail": "ok"},
+                "artifact": {"jsonContent": {"answer": "ok"}, "classification": "P2"},
+                "dryRun": False,
+            },
+            None,
+        )
+
+    monkeypatch.setattr("knowledge_hub.interfaces.cli.commands.agent_cmd._run_foundry_cli", _fake_run)
+    result = runner.invoke(
+        agent_group,
+        [
+            "run",
+            "--goal",
+            "RAG 요약",
+            "--paper-query-run",
+            str(tmp_path / "query-run"),
+            "--paper-query-id",
+            "query:0001",
+            "--paper-qwen-namespace",
+            "qwen3_8b_full_candidate",
+            "--paper-qwen-model",
+            "qwen3-embedding:8b",
+            "--json",
+        ],
+        obj={"khub": _StubKhub(config)},
+    )
+
+    assert result.exit_code == 0, result.output
+    assert captured["command"] == "run"
+    assert "--paper-query-run" in captured["command_args"]
+    assert str(tmp_path / "query-run") in captured["command_args"]
+    assert "--paper-query-id" in captured["command_args"]
+    assert "query:0001" in captured["command_args"]
+    assert "--paper-qwen-namespace" in captured["command_args"]
+    assert "qwen3_8b_full_candidate" in captured["command_args"]
+    assert "--paper-qwen-model" in captured["command_args"]
+    assert "qwen3-embedding:8b" in captured["command_args"]

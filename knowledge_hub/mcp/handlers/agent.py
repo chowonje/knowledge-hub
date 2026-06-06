@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
+from knowledge_hub.application.paper_query_export import DEFAULT_QUERY_MODEL
+from knowledge_hub.application.paper_query_run import query_text_for_id, validate_query_embedding_run
+from knowledge_hub.application.paper_retrieval_harness import DEFAULT_QWEN8_NAMESPACE, retrieve_paper_evidence_pack
 from knowledge_hub.application.task_context import build_task_context, classify_task_mode
 
 
@@ -40,6 +44,106 @@ def _synthesize_from_task_context(searcher: Any, goal: str, task_context: dict[s
         normalized["synthesisMode"] = "ask_knowledge_fallback"
         return normalized
     return {"answer": "", "sources": [], "warnings": ["no synthesis runtime available"], "synthesisMode": "none"}
+
+
+def _paper_arg(arguments: dict[str, Any], camel_key: str, snake_key: str = "") -> str:
+    value = arguments.get(camel_key)
+    if value is None and snake_key:
+        value = arguments.get(snake_key)
+    return str(value or "").strip()
+
+
+def _blocked_paper_evidence_pack(
+    *,
+    query: str,
+    blockers: list[str] | tuple[str, ...],
+    qwen_namespace: str,
+    qwen_model: str,
+    run_dir: str,
+    query_id: str,
+) -> dict[str, Any]:
+    return {
+        "schema": "knowledge-hub.labs.paper-retrieval-harness.v1",
+        "status": "blocked",
+        "query": query,
+        "topK": 0,
+        "blockers": list(blockers),
+        "arms": [
+            {
+                "name": "qwen8",
+                "status": "blocked",
+                "namespace": qwen_namespace,
+                "model": qwen_model,
+                "resultCount": 0,
+                "blockers": list(blockers),
+                "queryEmbeddingSource": "artifact",
+            }
+        ],
+        "evidence": [],
+        "runtimeDiagnostics": {"queryRunDir": run_dir, "queryId": query_id, "qwenNamespace": qwen_namespace},
+    }
+
+
+def _build_paper_evidence_pack(arguments: dict[str, Any], searcher: Any) -> dict[str, Any] | None:
+    paper_query_run = _paper_arg(arguments, "paperQueryRun", "paper_query_run")
+    if not paper_query_run:
+        return None
+    paper_query_id = _paper_arg(arguments, "paperQueryId", "paper_query_id")
+    qwen_namespace = _paper_arg(arguments, "paperQwenNamespace", "paper_qwen_namespace") or DEFAULT_QWEN8_NAMESPACE
+    qwen_model = _paper_arg(arguments, "paperQwenModel", "paper_qwen_model") or DEFAULT_QUERY_MODEL
+    validation = validate_query_embedding_run(Path(paper_query_run).expanduser(), qwen_model)
+    if validation.status == "blocked":
+        return _blocked_paper_evidence_pack(
+            query="",
+            blockers=validation.blockers,
+            qwen_namespace=qwen_namespace,
+            qwen_model=qwen_model,
+            run_dir=paper_query_run,
+            query_id=paper_query_id,
+        )
+    query = query_text_for_id(validation.query_rows, paper_query_id)
+    if not query:
+        return _blocked_paper_evidence_pack(
+            query="",
+            blockers=["query_id_not_found"],
+            qwen_namespace=qwen_namespace,
+            qwen_model=qwen_model,
+            run_dir=paper_query_run,
+            query_id=paper_query_id,
+        )
+    payload = retrieve_paper_evidence_pack(
+        khub=searcher,
+        query=query,
+        use_bge=True,
+        use_keyword=True,
+        use_qwen8=True,
+        qwen_query_embeddings_path=validation.query_embedding_path,
+        qwen_query_id=paper_query_id,
+        qwen_namespace=qwen_namespace,
+        qwen_model=qwen_model,
+        top_k=5,
+    )
+    diagnostics = dict(payload.get("runtimeDiagnostics") or {})
+    diagnostics["queryRunDir"] = paper_query_run
+    diagnostics["queryId"] = paper_query_id
+    payload["runtimeDiagnostics"] = diagnostics
+    return payload
+
+
+def _attach_paper_evidence(artifact: Any, paper_evidence_pack: dict[str, Any] | None) -> Any:
+    if not paper_evidence_pack:
+        return artifact
+    if isinstance(artifact, dict):
+        merged = dict(artifact)
+    else:
+        merged = {"answer": str(artifact or ""), "sources": []}
+    merged["paperEvidencePack"] = paper_evidence_pack
+    if paper_evidence_pack.get("status") == "blocked":
+        warnings = [str(item) for item in list(merged.get("warnings") or [])]
+        blockers = ", ".join(str(item) for item in list(paper_evidence_pack.get("blockers") or []))
+        warnings.append(f"qwen8 paper evidence blocked: {blockers}")
+        merged["warnings"] = warnings
+    return merged
 
 
 async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any]):
@@ -83,6 +187,7 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         if include_workspace_arg is not None
         else bool(repo_path and mode in {"coding", "design", "debug"})
     )
+    paper_evidence_pack = _build_paper_evidence_pack(arguments, searcher)
 
     async def _runner() -> dict[str, Any]:
         delegated, delegated_err = run_foundry_agent_goal(
@@ -99,6 +204,29 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         )
         if delegated:
             payload = coerce_foundry_payload(delegated)
+            if paper_evidence_pack:
+                artifact = payload.get("artifact")
+                if isinstance(artifact, dict):
+                    updated_artifact = dict(artifact)
+                    updated_artifact["jsonContent"] = _attach_paper_evidence(
+                        updated_artifact.get("jsonContent"),
+                        paper_evidence_pack,
+                    )
+                    payload["artifact"] = updated_artifact
+                else:
+                    payload["artifact"] = {
+                        "jsonContent": _attach_paper_evidence(artifact, paper_evidence_pack),
+                        "classification": "P2",
+                    }
+                transitions = list(payload.get("transitions") or payload.get("trace") or [])
+                transitions.append(
+                    {
+                        "stage": "ACT",
+                        "status": "PAPER_HARNESS_QWEN8",
+                        "message": f"paper_harness_qwen8 status={paper_evidence_pack.get('status')}",
+                    }
+                )
+                payload["transitions"] = transitions
             normalized = normalize_foundry_payload(payload, goal=goal, max_rounds=max_rounds, dry_run=dry_run)
             normalized["source"] = "foundry-core/cli-agent"
             if report_path:
@@ -154,6 +282,15 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
                 "warnings": synthesis.get("warnings", []),
                 "synthesisMode": synthesis.get("synthesisMode", ""),
             }
+            artifact = _attach_paper_evidence(artifact, paper_evidence_pack)
+            if paper_evidence_pack:
+                trace.append(
+                    {
+                        "stage": "ACT",
+                        "step": "paper_harness_qwen8",
+                        "status": paper_evidence_pack.get("status"),
+                    }
+                )
             trace.append(
                 {
                     "stage": "ACT",
@@ -190,6 +327,15 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
                     if not artifact:
                         verify_ok = False
                         errors.append(f"{step} produced empty artifact")
+            artifact = _attach_paper_evidence(artifact, paper_evidence_pack)
+            if paper_evidence_pack:
+                trace.append(
+                    {
+                        "stage": "ACT",
+                        "step": "paper_harness_qwen8",
+                        "status": paper_evidence_pack.get("status"),
+                    }
+                )
 
         fallback = build_fallback_agent_payload(
             goal=goal,

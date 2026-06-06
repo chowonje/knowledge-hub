@@ -64,10 +64,10 @@ def _coerce_bool(value: Any) -> bool:
         return value
     if isinstance(value, (int, float)):
         return bool(value)
-    token = str(value or "").strip().lower()
-    if token in {"1", "true", "yes", "on"}:
+    raw_bool = str(value or "").strip().lower()
+    if raw_bool in {"1", "true", "yes", "on"}:
         return True
-    if token in {"0", "false", "no", "off"}:
+    if raw_bool in {"0", "false", "no", "off"}:
         return False
     return False
 
@@ -507,6 +507,10 @@ def _build_agent_run_payload(
     include_workspace: bool | None = None,
     max_workspace_files: int = 8,
     report_path: str = "",
+    paper_query_run: str = "",
+    paper_query_id: str = "",
+    paper_qwen_namespace: str = "",
+    paper_qwen_model: str = "",
 ) -> dict[str, Any]:
     max_rounds_safe = max(1, int(max_rounds))
     resolved_repo_path = _default_repo_path(repo_path or None)
@@ -527,6 +531,10 @@ def _build_agent_run_payload(
             *(["--no-include-workspace"] if include_workspace is False else []),
             "--max-workspace-files",
             str(max(1, int(max_workspace_files))),
+            *(["--paper-query-run", paper_query_run] if paper_query_run else []),
+            *(["--paper-query-id", paper_query_id] if paper_query_id else []),
+            *(["--paper-qwen-namespace", paper_qwen_namespace] if paper_qwen_namespace else []),
+            *(["--paper-qwen-model", paper_qwen_model] if paper_qwen_model else []),
             *(["--dry-run"] if dry_run else []),
             *(["--report-path", report_path] if report_path else []),
         ],
@@ -712,6 +720,10 @@ def agent_context(
 @click.option("--repo-path", default="", help="Workspace repo path passed to task-context step")
 @click.option("--include-workspace/--no-include-workspace", default=None, help="Override workspace inclusion for coding goals")
 @click.option("--max-workspace-files", default=8, type=int, show_default=True)
+@click.option("--paper-query-run", default="", help="Validated paper-harness query run directory")
+@click.option("--paper-query-id", default="", help="Query id inside --paper-query-run")
+@click.option("--paper-qwen-namespace", default="", help="qwen8 paper vector namespace")
+@click.option("--paper-qwen-model", default="", help="qwen8 query embedding model")
 @click.option("--dry-run", is_flag=True, default=False)
 @click.option("--dump-json", is_flag=True, default=False, help="Alias for --json")
 @click.option("--json/--no-json", "as_json", default=False, show_default=True)
@@ -726,6 +738,10 @@ def agent_run(
     repo_path,
     include_workspace,
     max_workspace_files,
+    paper_query_run,
+    paper_query_id,
+    paper_qwen_namespace,
+    paper_qwen_model,
     dry_run,
     dump_json,
     as_json,
@@ -747,6 +763,10 @@ def agent_run(
         include_workspace=include_workspace,
         max_workspace_files=max_workspace_files,
         report_path=report_path,
+        paper_query_run=paper_query_run,
+        paper_query_id=paper_query_id,
+        paper_qwen_namespace=paper_qwen_namespace,
+        paper_qwen_model=paper_qwen_model,
     )
 
     if as_json or dump_json:
