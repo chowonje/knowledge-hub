@@ -4,14 +4,17 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import sys
-from typing import Any
+from typing import Any, Final
 
 
 READY_DECISION = "ready_for_removal_tranche"
 SCHEMA = "knowledge-hub.legacy-runtime-removal-gate.result.v1"
 SOURCE_ORDER = ("paper", "vault", "web")
 TREND_METRICS = ("legacy_runtime_rate", "capability_missing_rate", "forced_legacy_rate")
+ASK_V2_MODE_LEGACY_LITERAL_TESTS_UNEXPECTED_ERROR = "ask_v2_mode_legacy_literal_tests_unexpected_hits_present"
+ALLOWED_TEST_LEGACY_LITERAL_HITS: Final[tuple[tuple[str, str], ...]] = (
+    ("tests/test_rag_runtime_services.py", 'ask_v2_mode="legacy"'),
+)
 
 
 def _clean_text(value: Any) -> str:
@@ -41,6 +44,15 @@ def _hits(readiness: dict[str, Any], group: str, category: str) -> list[dict[str
             (((readiness.get("callsites") or {}).get(group) or {}).get(category) or [])
         )
     ]
+
+
+def _is_allowed_test_legacy_literal_hit(hit: dict[str, Any]) -> bool:
+    path = _clean_text(hit.get("path"))
+    text = _clean_text(hit.get("text"))
+    return any(
+        path == allowed_path and allowed_literal in text
+        for allowed_path, allowed_literal in ALLOWED_TEST_LEGACY_LITERAL_HITS
+    )
 
 
 def _trend_values(readiness: dict[str, Any], source: str, metric: str) -> list[Any]:
@@ -82,6 +94,15 @@ def build_gate_result(readiness: dict[str, Any], *, readiness_path: str = "") ->
                 errors.append(f"{group}_{category}_hits_present")
 
     test_literal_hits = _hits(readiness, "ask_v2_mode_legacy_literal", "tests")
+    allowed_test_literal_hits = [
+        hit for hit in test_literal_hits if _is_allowed_test_legacy_literal_hit(hit)
+    ]
+    unexpected_test_literal_hits = [
+        hit for hit in test_literal_hits if not _is_allowed_test_legacy_literal_hit(hit)
+    ]
+    if unexpected_test_literal_hits:
+        errors.append(ASK_V2_MODE_LEGACY_LITERAL_TESTS_UNEXPECTED_ERROR)
+
     for source in SOURCE_ORDER:
         for metric in TREND_METRICS:
             values = _trend_values(readiness, source, metric)
@@ -112,6 +133,10 @@ def build_gate_result(readiness: dict[str, Any], *, readiness_path: str = "") ->
         "callsiteChecks": callsite_checks,
         "trendChecks": trend_checks,
         "testOnlyLegacyLiteralHits": len(test_literal_hits),
+        "allowedTestLegacyLiteralHits": len(allowed_test_literal_hits),
+        "allowedTestLegacyLiteralHitDetails": allowed_test_literal_hits,
+        "unexpectedTestLegacyLiteralHits": len(unexpected_test_literal_hits),
+        "unexpectedTestLegacyLiteralHitDetails": unexpected_test_literal_hits,
         "errors": errors,
     }
 
@@ -123,6 +148,8 @@ def render_human(result: dict[str, Any]) -> str:
         f"run_count: {result.get('runCount')} / {result.get('requiredRunCount')}",
         f"readiness_report: {result.get('readinessReportPath')}",
         f"test_only_legacy_literal_hits: {result.get('testOnlyLegacyLiteralHits')}",
+        f"allowed_test_legacy_literal_hits: {result.get('allowedTestLegacyLiteralHits')}",
+        f"unexpected_test_legacy_literal_hits: {result.get('unexpectedTestLegacyLiteralHits')}",
     ]
     errors = list(result.get("errors") or [])
     if errors:
@@ -158,6 +185,10 @@ def main(argv: list[str] | None = None) -> int:
             "callsiteChecks": [],
             "trendChecks": [],
             "testOnlyLegacyLiteralHits": 0,
+            "allowedTestLegacyLiteralHits": 0,
+            "allowedTestLegacyLiteralHitDetails": [],
+            "unexpectedTestLegacyLiteralHits": 0,
+            "unexpectedTestLegacyLiteralHitDetails": [],
             "errors": [f"readiness_read_failed:{exc}"],
         }
 
