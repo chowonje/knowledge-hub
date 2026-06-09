@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added a docs-only Research Review Loop MVP contract. The new ADR, plan, and `knowledge-hub.research-review-loop.result.v1` schema define the labs-first path from explicit source scope to proposed claims, evidence spans, user review decisions, weak concepts/open questions, and a learning or judgment context-pack preview while keeping unreviewed agent output out of canonical memory.
 - Added a labs-only qwen8 paper-harness query artifact flow. `khub labs paper-harness` can export sanitized query embedding bundles, validate checksum-backed remote query outputs, plan report-only Oracle worker commands, and merge explicit qwen8 query artifacts with local BGE/keyword paper evidence while blocking qwen8 retrieval when the required artifact is missing or mismatched.
 - Added explicit qwen8 paper-evidence opt-in fields for agent flows. MCP `run_agentic_query` can attach a `paperEvidencePack` only when `paperQueryRun` and `paperQueryId` are supplied, blocks missing query artifacts without changing the normal fallback answer, and keeps qwen8 paper evidence absent by default; `khub agent run` now accepts the matching explicit paper-harness options for delegated agent surfaces.
 - Added a docs-only four-layer agent architecture tranche that fixes Core Runtime, MCP Tool Plane, Agent Gateway, and Interface ownership; documents report-only external-agent handoffs; adds the `knowledge-hub.external-agent-handoff.v1` schema stub; and records the dirty LLM CLI worktree gap analysis without merging code or changing runtime behavior.

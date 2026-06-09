@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "knowledge-hub.research-review-loop.result.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "version",
+    "sourceScope",
+    "proposedClaims",
+    "evidenceSpans",
+    "reviewDecisions",
+    "weakConcepts",
+    "openQuestions",
+    "contextPackPreview",
+    "counts",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.research-review-loop.result.v1" },
+    "status": {
+      "type": "string",
+      "enum": ["ready_for_human_review", "blocked", "reviewed", "partial"]
+    },
+    "version": { "type": "string" },
+    "sourceScope": {
+      "type": "object",
+      "required": ["sourceType", "explicitSourceIds", "implicitScopeAllowed"],
+      "properties": {
+        "sourceType": { "type": "string", "enum": ["paper", "web", "vault", "project", "mixed"] },
+        "explicitSourceIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "implicitScopeAllowed": { "type": "boolean" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "proposedClaims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claimId", "claimText", "state", "sourceIds", "evidenceSpanIds", "canonicalEligible"],
+        "properties": {
+          "claimId": { "type": "string" },
+          "claimText": { "type": "string" },
+          "state": {
+            "type": "string",
+            "enum": ["proposed", "accepted", "rejected", "unsure", "archived"]
+          },
+          "sourceIds": { "type": "array", "items": { "type": "string" } },
+          "evidenceSpanIds": { "type": "array", "items": { "type": "string" } },
+          "canonicalEligible": { "type": "boolean" },
+          "reviewDecisionId": { "type": ["string", "null"] },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidenceSpans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidenceSpanId", "sourceId", "locator", "snippetHash", "state"],
+        "properties": {
+          "evidenceSpanId": { "type": "string" },
+          "sourceId": { "type": "string" },
+          "locator": { "type": "string" },
+          "sourceContentHash": { "type": ["string", "null"] },
+          "snippetHash": { "type": "string" },
+          "textPreview": { "type": "string" },
+          "state": {
+            "type": "string",
+            "enum": ["proposed", "reviewed", "blocked_missing_locator", "blocked_missing_hash"]
+          },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "reviewDecisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["decisionId", "targetType", "targetId", "decision", "reviewer", "reviewedAt"],
+        "properties": {
+          "decisionId": { "type": "string" },
+          "targetType": {
+            "type": "string",
+            "enum": ["claim", "evidence_span", "concept", "question", "context_pack"]
+          },
+          "targetId": { "type": "string" },
+          "decision": {
+            "type": "string",
+            "enum": ["accept", "reject", "unsure", "needs_more_evidence", "archive"]
+          },
+          "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
+          "reviewer": { "type": "string" },
+          "reviewedAt": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "weakConcepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["conceptId", "label", "basis"],
+        "properties": {
+          "conceptId": { "type": "string" },
+          "label": { "type": "string" },
+          "basis": {
+            "type": "string",
+            "enum": ["rejected_claim", "unsure_claim", "blocked_evidence", "missing_evidence"]
+          },
+          "supportingDecisionIds": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["questionId", "questionText", "basis"],
+        "properties": {
+          "questionId": { "type": "string" },
+          "questionText": { "type": "string" },
+          "basis": { "type": "string" },
+          "sourceIds": { "type": "array", "items": { "type": "string" } },
+          "supportingDecisionIds": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "contextPackPreview": {
+      "type": "object",
+      "required": [
+        "packId",
+        "packType",
+        "reviewedClaimIds",
+        "excludedUnreviewedClaimIds",
+        "canonicalWriteAllowed"
+      ],
+      "properties": {
+        "packId": { "type": "string" },
+        "packType": { "type": "string", "enum": ["learning", "judgment", "review"] },
+        "reviewedClaimIds": { "type": "array", "items": { "type": "string" } },
+        "excludedUnreviewedClaimIds": { "type": "array", "items": { "type": "string" } },
+        "weakConceptIds": { "type": "array", "items": { "type": "string" } },
+        "openQuestionIds": { "type": "array", "items": { "type": "string" } },
+        "canonicalWriteAllowed": { "type": "boolean" },
+        "outputPath": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "sourceCount",
+        "proposedClaimRows",
+        "evidenceSpanRows",
+        "reviewDecisionRows",
+        "weakConceptRows",
+        "openQuestionRows",
+        "unsupportedCanonicalRows"
+      ],
+      "properties": {
+        "sourceCount": { "type": "integer", "minimum": 0 },
+        "proposedClaimRows": { "type": "integer", "minimum": 0 },
+        "evidenceSpanRows": { "type": "integer", "minimum": 0 },
+        "reviewDecisionRows": { "type": "integer", "minimum": 0 },
+        "weakConceptRows": { "type": "integer", "minimum": 0 },
+        "openQuestionRows": { "type": "integer", "minimum": 0 },
+        "unsupportedCanonicalRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "schemaErrors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
