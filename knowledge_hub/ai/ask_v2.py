@@ -72,14 +72,25 @@ def _ask_v2_hard_gate_reason(
     *,
     verification: dict[str, Any],
     claim_consensus: dict[str, Any],
+    paper_family: str = "",
+    evidence_packet: Any | None = None,
 ) -> str:
     status = _clean_text(verification.get("verificationStatus")).casefold()
     unsupported_fields = [_clean_text(item) for item in list(verification.get("unsupportedFields") or []) if _clean_text(item)]
+    validation = dict(dict(getattr(evidence_packet, "evidence_packet", {}) or {}).get("validation") or {})
+    paper_lookup_direct = (
+        _clean_text(paper_family) == "paper_lookup"
+        and int(validation.get("substantiveEvidenceCount") or 0) > 0
+        and int(validation.get("directAnswerEvidenceCount") or 0) > 0
+        and int(validation.get("sourceMismatchCount") or 0) == 0
+    )
     if status in {"missing", "no_evidence"}:
         return f"ask_v2_{status}"
     if status == "weak" and unsupported_fields:
         return f"ask_v2_weak_evidence:{unsupported_fields[0]}"
     if int(claim_consensus.get("unsupportedClaimCount") or 0) > 0:
+        if paper_lookup_direct:
+            return ""
         return "ask_v2_unsupported_claim_cards"
     return ""
 
@@ -2111,6 +2122,8 @@ class AskV2Service:
         hard_gate_reason = _ask_v2_hard_gate_reason(
             verification=verification,
             claim_consensus=claim_consensus,
+            paper_family=paper_family,
+            evidence_packet=evidence_packet,
         )
         if hard_gate_reason:
             evidence_packet.evidence_packet = {

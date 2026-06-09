@@ -731,9 +731,12 @@ def build_rule_based_query_frame(
     lookup_rescue_forms = [] if ambiguous_lookup_alias else bounded_rescue_forms
     if ambiguous_lookup_alias:
         lookup_seed = _remove_ambiguous_short_source_alias_forms(lookup_seed)
-    lookup_forms = _dedupe_lines([*lookup_seed, *lookup_rescue_forms], limit=10 if family == PAPER_FAMILY_COMPARE else 6)
+    lookup_forms = _dedupe_lines([*lookup_rescue_forms, *lookup_seed], limit=10 if family == PAPER_FAMILY_COMPARE else 6)
     if family in {PAPER_FAMILY_LOOKUP, PAPER_FAMILY_COMPARE}:
         card_lookup_ids, card_lookup_titles = resolve_lookup(lookup_forms, sqlite_db=sqlite_db)
+        local_form_lookup_ids, local_form_lookup_titles = resolve_lookup_from_local_titles(lookup_forms, sqlite_db=sqlite_db)
+        card_lookup_ids = _dedupe_lines([*card_lookup_ids, *local_form_lookup_ids], limit=3)
+        card_lookup_titles = _dedupe_lines([*card_lookup_titles, *local_form_lookup_titles], limit=3)
         lookup_ids, lookup_titles = list(card_lookup_ids), list(card_lookup_titles)
         if family == PAPER_FAMILY_LOOKUP and title_candidate:
             if _is_ambiguous_short_source_alias(title_candidate):
@@ -750,11 +753,11 @@ def build_rule_based_query_frame(
                 strict_lookup_ids = _dedupe_lines(
                     [*rescue_ids, *local_lookup_ids, *strict_card_lookup_ids],
                     limit=3,
-                )
+                ) or card_lookup_ids
                 strict_lookup_titles = _dedupe_lines(
                     [*rescue_titles, *local_lookup_titles, *strict_card_lookup_titles],
                     limit=3,
-                )
+                ) or card_lookup_titles
                 lookup_ids = strict_lookup_ids
                 lookup_titles = strict_lookup_titles
             elif local_lookup_ids:

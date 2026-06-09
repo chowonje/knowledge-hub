@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 import re
 from typing import Any
 
@@ -449,7 +449,6 @@ def _derive_paper_answer_scope(
         "paper_lookup" if intent == "paper_lookup" else "paper_discover" if intent == "paper_topic" else "concept_explainer" if normalize_source_type(source_type) == "paper" and intent == "definition" else "general"
     )
     policy_payload = normalize_evidence_policy(evidence_policy, family=paper_family)
-    normalized_source = normalize_source_type(source_type)
     scoped_filter = dict(metadata_filter or {})
     explicit_paper_id = str(scoped_filter.get("arxiv_id") or scoped_filter.get("paper_id") or "").strip()
     planned_paper_ids = [
@@ -1272,6 +1271,12 @@ class EvidenceAssemblyService:
         source_mismatch_count = int(validation.get("sourceMismatchCount") or 0)
         high_trust_count = int(validation.get("highAuthorityCount") or 0)
         memory_provenance_count = int(validation.get("memoryProvenanceCount") or 0)
+        answer_signals = {
+            **answer_signals,
+            "substantive_evidence_count": substantive_count,
+            "direct_answer_evidence_count": direct_answer_count,
+            "source_mismatch_count": source_mismatch_count,
+        }
         preferred_source_count = int((answer_signals.get("quality_counts") or {}).get("ok", 0))
         top1_item = evidence[0] if evidence else {}
         top1_substantive = bool(validation.get("top1Substantive"))

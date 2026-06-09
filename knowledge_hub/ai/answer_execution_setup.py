@@ -6,6 +6,39 @@ from typing import Any
 from knowledge_hub.ai.answer_policy_support import claim_consensus_requires_strict_merge
 
 
+def _int_value(value: Any) -> int:
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _paper_lookup_has_direct_evidence(*, pipeline_result: Any, evidence_packet: Any) -> bool:
+    try:
+        plan_payload = dict(getattr(getattr(pipeline_result, "plan", None), "to_dict", lambda: {})() or {})
+    except Exception:
+        plan_payload = {}
+    query_frame = dict(plan_payload.get("queryFrame") or {})
+    family = str(query_frame.get("family") or plan_payload.get("paperFamily") or "").strip().lower()
+    if family != "paper_lookup":
+        return False
+
+    diagnostics = dict(getattr(pipeline_result, "v2_diagnostics", {}) or {})
+    answer_provenance = dict(diagnostics.get("answerProvenance") or {})
+    if str(answer_provenance.get("mode") or "").strip().lower() == "claim_cards_conflicted":
+        return False
+
+    packet = dict(getattr(evidence_packet, "evidence_packet", {}) or {})
+    if packet.get("answerable") is False:
+        return False
+    validation = dict(packet.get("validation") or {})
+    return (
+        _int_value(validation.get("substantiveEvidenceCount")) > 0
+        and _int_value(validation.get("directAnswerEvidenceCount")) > 0
+        and _int_value(validation.get("sourceMismatchCount")) == 0
+    )
+
+
 @dataclass(frozen=True)
 class AnswerExecutionSetupDeps:
     claim_consensus_merge_mode_fn: Any
@@ -48,6 +81,10 @@ class AnswerExecutionSetup:
             claim_native_used=False,
             pipeline_result=pipeline_result,
         )
+        direct_paper_lookup = _paper_lookup_has_direct_evidence(
+            pipeline_result=pipeline_result,
+            evidence_packet=evidence_packet,
+        )
         section_native = deps.section_native_inputs_fn(
             query=query,
             pipeline_result=pipeline_result,
@@ -56,12 +93,14 @@ class AnswerExecutionSetup:
         if section_native is not None:
             answer_prompt, answer_context, _section_coverage = section_native
         else:
-            claim_native = deps.claim_native_inputs_fn(
-                query=query,
-                pipeline_result=pipeline_result,
-                evidence_packet=evidence_packet,
-                llm=selected_llm,
-            )
+            claim_native = None
+            if not direct_paper_lookup:
+                claim_native = deps.claim_native_inputs_fn(
+                    query=query,
+                    pipeline_result=pipeline_result,
+                    evidence_packet=evidence_packet,
+                    llm=selected_llm,
+                )
             if claim_native is not None:
                 answer_prompt, answer_context, claim_verification, claim_consensus, _scope_warnings = claim_native
                 claim_consensus_merge_mode = deps.claim_consensus_merge_mode_fn(
@@ -77,6 +116,7 @@ class AnswerExecutionSetup:
         if (
             claim_consensus_merge_mode == "advisory"
             and claim_consensus_requires_strict_merge(claim_consensus)
+            and not direct_paper_lookup
         ):
             claim_consensus_merge_mode = "strict"
         safe_context, external_policy, original_classification = deps.evaluate_policy_fn(

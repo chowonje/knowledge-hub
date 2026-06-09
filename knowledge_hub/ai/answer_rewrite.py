@@ -29,7 +29,44 @@ def _unsupported_claim_count(verification: dict) -> int:
     )
 
 
-def _gate_fallback_warning(verification: dict) -> str:
+def _int_value(value) -> int:
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _direct_paper_lookup_heuristic_guard(verification: dict, answer_signals: dict) -> bool:
+    signals = dict(answer_signals or {})
+    route = dict(verification.get("route") or {})
+    warnings = [str(item or "") for item in list(verification.get("warnings") or [])]
+    heuristic_only = str(route.get("mode") or "").strip().lower() == "heuristic" or any(
+        "answer verification used heuristic fallback" in warning for warning in warnings
+    )
+    if not heuristic_only:
+        return False
+    if str(signals.get("paper_family") or "").strip().lower() != "paper_lookup":
+        return False
+    if _int_value(signals.get("substantive_evidence_count")) <= 0:
+        return False
+    if _int_value(signals.get("direct_answer_evidence_count")) <= 0:
+        return False
+    if _int_value(signals.get("source_mismatch_count")) != 0:
+        return False
+    if _int_value(signals.get("contradictory_source_count")) > 0 or _int_value(signals.get("contradicting_belief_count")) > 0:
+        return False
+    if bool(verification.get("contradictsRejectedBelief")):
+        return False
+    if _int_value(verification.get("claimConflictCount")) > 0:
+        return False
+    if _int_value(verification.get("retrievalSignalCount")) > 0 and _int_value(verification.get("groundingEvidenceCount")) == 0:
+        return False
+    return True
+
+
+def _gate_fallback_warning(verification: dict, answer_signals: dict | None = None) -> str:
+    if _unsupported_claim_count(verification) > 0 and _direct_paper_lookup_heuristic_guard(verification, dict(answer_signals or {})):
+        return ""
     if bool(verification.get("contradictsRejectedBelief")):
         return "answer rewrite skipped: rejected belief conflict requires conservative fallback"
     if int(verification.get("retrievalSignalCount") or 0) > 0 and int(verification.get("groundingEvidenceCount") or 0) == 0:
@@ -112,7 +149,7 @@ def rewrite_answer(
 ):
     triggered_by = searcher._should_rewrite_answer(verification)
     rewrite_meta = searcher._default_answer_rewrite(answer=answer)
-    gate_warning = _gate_fallback_warning(verification)
+    gate_warning = _gate_fallback_warning(verification, answer_signals)
     if gate_warning:
         rewrite_meta.update(
             {

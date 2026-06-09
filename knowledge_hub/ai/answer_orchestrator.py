@@ -72,6 +72,30 @@ class AnswerRuntimeDeps:
     apply_conservative_fallback_if_needed: Any
 
 
+def _answer_citation_label_context(evidence_packet: Any) -> str:
+    citations = list(getattr(evidence_packet, "citations", []) or [])
+    evidence = list(getattr(evidence_packet, "evidence", []) or [])
+    lines: list[str] = []
+    for index in range(1, max(len(citations), len(evidence)) + 1):
+        citation = dict(citations[index - 1] or {}) if index - 1 < len(citations) else {}
+        item = dict(evidence[index - 1] or {}) if index - 1 < len(evidence) else {}
+        label = str(citation.get("label") or item.get("citation_label") or f"S{index}").strip()
+        if not label:
+            continue
+        title = str(citation.get("title") or item.get("title") or "Untitled").strip()
+        target = str(citation.get("target") or item.get("citation_target") or item.get("source_id") or "").strip()
+        lines.append(f"- [{label}] title={title} target={target or '-'}")
+    if not lines:
+        return ""
+    return "\n".join(
+        [
+            "=== Citation Labels ===",
+            "Use these exact labels in factual answer sentences.",
+            *lines,
+        ]
+    )
+
+
 class AnswerOrchestrator:
     def __init__(self, searcher: Any):
         self.searcher = searcher
@@ -484,6 +508,9 @@ class AnswerOrchestrator:
             )
         else:
             answer_context = self._with_claim_context(evidence_packet.context, claim_context)
+        citation_context = _answer_citation_label_context(evidence_packet)
+        if citation_context:
+            answer_context = f"{answer_context}\n\n{citation_context}"
         return answer_prompt, answer_context
 
     @staticmethod
