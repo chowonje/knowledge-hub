@@ -195,6 +195,26 @@ def test_real_answer_quality_gate_blocks_unexpected_answer_for_abstain_case() ->
     assert report["counts"]["unexpectedAnswerRows"] == 1
 
 
+def test_real_answer_quality_gate_accepts_korean_insufficient_evidence_abstain() -> None:
+    module = _module()
+    payload = _bounded_real_answer_payload()
+    payload["rows"][3]["answerText"] = "제공된 근거만으로는 검증 가능한 답변을 생성하기 어렵습니다."
+
+    # When: an abstain row uses the live Korean insufficient-evidence wording.
+    report = module.build_paper_real_answer_quality_gate(
+        answer_payload_report=payload,
+        generated_at="2026-06-09T00:00:00Z",
+    )
+
+    # Then: the report treats it as a valid fail-closed abstention.
+    row = report["rows"][3]
+    assert report["status"] == "ready"
+    assert row["status"] == "not_applicable"
+    assert row["draftStatus"] == "insufficient_evidence"
+    assert report["counts"]["unexpectedAnswerRows"] == 0
+    assert report["counts"]["insufficientEvidenceRows"] == 1
+
+
 def test_real_answer_quality_gate_sanitizes_private_paths_and_raw_prompts() -> None:
     module = _module()
     payload = _bounded_real_answer_payload()

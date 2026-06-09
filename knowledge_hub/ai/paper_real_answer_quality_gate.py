@@ -8,7 +8,14 @@ import json
 PAPER_REAL_ANSWER_QUALITY_GATE_SCHEMA_ID: Final = "knowledge-hub.paper-real-answer-quality-gate.v1"
 PRIVATE_PATH_MARKERS: Final = ("/Users/", "Mobile Documents", "iCloud")
 FORBIDDEN_MARKERS: Final = ("rawPrompt", "paper-card-v2", "card_id", "source_card_id")
-INSUFFICIENT_MARKERS: Final = ("insufficient_evidence", "not_applicable", "no paper evidence", "no source evidence")
+INSUFFICIENT_MARKERS: Final = (
+    "insufficient_evidence",
+    "not_applicable",
+    "no paper evidence",
+    "no source evidence",
+    "제공된 근거만으로는",
+    "검증 가능한 답변을 생성하기 어렵",
+)
 
 JsonValue = None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
 JsonMap = dict[str, JsonValue]
