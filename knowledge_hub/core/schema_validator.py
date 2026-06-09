@@ -13,6 +13,8 @@ from typing import Any
 import json
 from jsonschema import Draft202012Validator
 
+from knowledge_hub.core.schema_registry_extensions import SCHEMA_NAME_BY_ID_EXTENSIONS
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_ROOT = PROJECT_ROOT / "docs" / "schemas"
 
@@ -509,7 +511,7 @@ class SchemaValidationResult:
 
 
 def _schema_file_for(schema_id: str) -> Path | None:
-    file_name = SCHEMA_NAME_BY_ID.get(schema_id)
+    file_name = SCHEMA_NAME_BY_ID.get(schema_id) or SCHEMA_NAME_BY_ID_EXTENSIONS.get(schema_id)
     if not file_name:
         return None
     candidate = SCHEMA_ROOT / file_name

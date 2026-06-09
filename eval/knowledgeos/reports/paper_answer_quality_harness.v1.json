@@ -1,0 +1,279 @@
+{
+  "counts": {
+    "abstentionRows": 2,
+    "answerQualityReadyRows": 6,
+    "blockedRows": 0,
+    "compareMeaningfulSynthesisRows": 2,
+    "compareReadyRows": 2,
+    "compareRestatementOnlyRows": 0,
+    "dbVectorMutationRows": 0,
+    "defaultPromotionRows": 0,
+    "externalModelCallRows": 0,
+    "forbiddenRawMarkerRows": 0,
+    "humanReadableReviewRows": 8,
+    "inlineCitationReadyRows": 6,
+    "insufficientEvidenceRows": 2,
+    "modelApiCallRows": 0,
+    "notApplicableRows": 2,
+    "privatePathLeakRows": 0,
+    "rawAnswerPersistedRows": 0,
+    "rowCount": 8,
+    "sampleDraftRows": 8,
+    "schemaViolationCount": 0,
+    "semanticCitationFailRows": 0,
+    "semanticCitationSupportRows": 6,
+    "singlePaperReadyRows": 2,
+    "synthesisReadyRows": 2,
+    "twoSidedCompareCitationRows": 2,
+    "unexpectedAnswerRows": 0,
+    "unsupportedInventionRows": 0,
+    "vaultReadRows": 0
+  },
+  "generatedAt": "2026-06-09T04:44:16.738880+00:00",
+  "policy": {
+    "dbVectorMutation": false,
+    "externalModelCallsAllowed": false,
+    "localFakeLlmOnly": true,
+    "publicDefaultPromotionAllowed": false,
+    "reportOnly": true,
+    "vaultRead": false
+  },
+  "profile": "paper-answer-quality-harness",
+  "rows": [
+    {
+      "answerHash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+      "answerPreview": "1706.03762 supports the requested paper understanding answer with grounded evidence [S1].",
+      "answerType": "single_paper",
+      "caseId": "single_paper_attention",
+      "citationLabels": [
+        "S1"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "usable"
+      },
+      "inlineCitationReady": true,
+      "runId": "single_paper_attention__A_hybrid_k5",
+      "sampleDraft": {
+        "hash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": true,
+      "status": "ready",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+      "answerPreview": "1706.03762 supports the requested paper understanding answer with grounded evidence [S1].",
+      "answerType": "single_paper",
+      "caseId": "single_paper_attention",
+      "citationLabels": [
+        "S1"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "usable"
+      },
+      "inlineCitationReady": true,
+      "runId": "single_paper_attention__B_semantic_k8",
+      "sampleDraft": {
+        "hash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": true,
+      "status": "ready",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+      "answerPreview": "1706.03762 supports the requested paper understanding answer with grounded evidence [S1].",
+      "answerType": "synthesis",
+      "caseId": "synthesis_attention_components",
+      "citationLabels": [
+        "S1"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "usable"
+      },
+      "inlineCitationReady": true,
+      "runId": "synthesis_attention_components__A_hybrid_k5",
+      "sampleDraft": {
+        "hash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": true,
+      "status": "ready",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+      "answerPreview": "1706.03762 supports the requested paper understanding answer with grounded evidence [S1].",
+      "answerType": "synthesis",
+      "caseId": "synthesis_attention_components",
+      "citationLabels": [
+        "S1"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "usable"
+      },
+      "inlineCitationReady": true,
+      "runId": "synthesis_attention_components__B_semantic_k8",
+      "sampleDraft": {
+        "hash": "sha256:99f81ea20cb842fad811e09ba82000099fc1a6fb52a57f99d1df84273eb46551",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": true,
+      "status": "ready",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:510f66113940d62a1e8fb4a3166c8ae6fd1f75345dbda7b2831ddcc12da46251",
+      "answerPreview": "2005.11401 and 2312.10997 both ground RAG-style evidence work, but they differ in whether the row frames a method or a survey synthesis [S1] [S2].",
+      "answerType": "compare",
+      "caseId": "compare_rag_fid",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "usable"
+      },
+      "inlineCitationReady": true,
+      "runId": "compare_rag_fid__A_hybrid_k5",
+      "sampleDraft": {
+        "hash": "sha256:510f66113940d62a1e8fb4a3166c8ae6fd1f75345dbda7b2831ddcc12da46251",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": true,
+      "status": "ready",
+      "twoSidedCompareCitationReady": true,
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:510f66113940d62a1e8fb4a3166c8ae6fd1f75345dbda7b2831ddcc12da46251",
+      "answerPreview": "2005.11401 and 2312.10997 both ground RAG-style evidence work, but they differ in whether the row frames a method or a survey synthesis [S1] [S2].",
+      "answerType": "compare",
+      "caseId": "compare_rag_fid",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "usable"
+      },
+      "inlineCitationReady": true,
+      "runId": "compare_rag_fid__B_semantic_k8",
+      "sampleDraft": {
+        "hash": "sha256:510f66113940d62a1e8fb4a3166c8ae6fd1f75345dbda7b2831ddcc12da46251",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": true,
+      "status": "ready",
+      "twoSidedCompareCitationReady": true,
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:65c6bce587bfff62998abcc5359ea79da7afa95edc354e390313eeeab949c9ff",
+      "answerPreview": "insufficient_evidence: no source evidence is available for this row.",
+      "answerType": "abstain",
+      "caseId": "abstain_missing_arxiv",
+      "citationLabels": [],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "insufficient_evidence",
+      "expectedSourceIds": [],
+      "humanReadableReview": {
+        "reason": "not_applicable_abstention",
+        "status": "insufficient"
+      },
+      "inlineCitationReady": false,
+      "runId": "abstain_missing_arxiv__A_hybrid_k5",
+      "sampleDraft": {
+        "hash": "sha256:65c6bce587bfff62998abcc5359ea79da7afa95edc354e390313eeeab949c9ff",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": false,
+      "status": "not_applicable",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "A_hybrid_k5",
+      "warnings": [
+        "not_applicable_abstention"
+      ]
+    },
+    {
+      "answerHash": "sha256:65c6bce587bfff62998abcc5359ea79da7afa95edc354e390313eeeab949c9ff",
+      "answerPreview": "insufficient_evidence: no source evidence is available for this row.",
+      "answerType": "abstain",
+      "caseId": "abstain_missing_arxiv",
+      "citationLabels": [],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "insufficient_evidence",
+      "expectedSourceIds": [],
+      "humanReadableReview": {
+        "reason": "not_applicable_abstention",
+        "status": "insufficient"
+      },
+      "inlineCitationReady": false,
+      "runId": "abstain_missing_arxiv__B_semantic_k8",
+      "sampleDraft": {
+        "hash": "sha256:65c6bce587bfff62998abcc5359ea79da7afa95edc354e390313eeeab949c9ff",
+        "stored": "local_evidence_only"
+      },
+      "semanticCitationSupported": false,
+      "status": "not_applicable",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "B_semantic_k8",
+      "warnings": [
+        "not_applicable_abstention"
+      ]
+    }
+  ],
+  "schema": "knowledge-hub.paper-answer-quality-harness.v1",
+  "status": "ready",
+  "warnings": []
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/evidence-packet-input-completeness.v1.json",
+  "title": "knowledge-hub.evidence-packet.input-completeness.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "profile", "policy", "counts", "rows", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.evidence-packet.input-completeness.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "$ref": "#/$defs/timestamp" },
+    "profile": { "const": "evidence-packet-v1-llm-only-harness" },
+    "policy": {
+      "type": "object",
+      "required": ["reportOnly", "localOnlyRawArtifactRefs", "publicDefaultPromotionAllowed"],
+      "properties": {
+        "reportOnly": { "const": true },
+        "localOnlyRawArtifactRefs": { "const": true },
+        "publicDefaultPromotionAllowed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": ["rowCount", "nonEmptyPacketRows", "blockedRows", "privatePathLeakRows", "forbiddenRawMarkerRows"],
+      "properties": {
+        "rowCount": { "type": "integer", "minimum": 0 },
+        "nonEmptyPacketRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "forbiddenRawMarkerRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "rows": { "type": "array", "items": { "$ref": "#/$defs/row" } },
+    "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "row": {
+      "type": "object",
+      "required": [
+        "runId",
+        "caseId",
+        "variantId",
+        "status",
+        "spanCount",
+        "packetSourceIds",
+        "sourceCandidateIds",
+        "citationCandidateIds",
+        "missingExpectedSourceIds",
+        "promptPacket",
+        "warnings"
+      ],
+      "properties": {
+        "runId": { "type": "string", "minLength": 1 },
+        "caseId": { "type": "string" },
+        "variantId": { "type": "string" },
+        "status": { "enum": ["ready", "blocked"] },
+        "spanCount": { "type": "integer", "minimum": 0 },
+        "packetSourceIds": { "type": "array", "items": { "type": "string" } },
+        "sourceCandidateIds": { "type": "array", "items": { "type": "string" } },
+        "citationCandidateIds": { "type": "array", "items": { "type": "string" } },
+        "missingExpectedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "promptPacket": { "type": "object" },
+        "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

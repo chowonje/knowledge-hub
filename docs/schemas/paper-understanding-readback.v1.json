@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-understanding-readback.v1.json",
+  "title": "knowledge-hub.paper-understanding-readback.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "profile", "policy", "requirements", "counts", "rows", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-understanding-readback.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "$ref": "#/$defs/timestamp" },
+    "profile": { "const": "paper-understanding-readback" },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "localOnlyRawArtifactRefs",
+        "modelCallsAllowed",
+        "dbVectorMutation",
+        "vaultRead",
+        "publicDefaultPromotionAllowed"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "localOnlyRawArtifactRefs": { "const": true },
+        "modelCallsAllowed": { "const": false },
+        "dbVectorMutation": { "const": false },
+        "vaultRead": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "object",
+      "required": ["briefProfileSlots", "requiresCitationLabel", "requiresSourceHash", "requiresSnippetHash"],
+      "properties": {
+        "briefProfileSlots": { "type": "array", "items": { "type": "string" } },
+        "requiresCitationLabel": { "const": true },
+        "requiresSourceHash": { "const": true },
+        "requiresSnippetHash": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "rowCount",
+        "readbackReadyRows",
+        "notApplicableRows",
+        "blockedRows",
+        "paperReadbackRows",
+        "briefReadyPaperRows",
+        "briefBlockedPaperRows",
+        "privatePathLeakRows",
+        "forbiddenRawMarkerRows",
+        "schemaViolationCount"
+      ],
+      "properties": {
+        "rowCount": { "type": "integer", "minimum": 0 },
+        "readbackReadyRows": { "type": "integer", "minimum": 0 },
+        "notApplicableRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "paperReadbackRows": { "type": "integer", "minimum": 0 },
+        "briefReadyPaperRows": { "type": "integer", "minimum": 0 },
+        "briefBlockedPaperRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "forbiddenRawMarkerRows": { "type": "integer", "minimum": 0 },
+        "schemaViolationCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "rows": { "type": "array", "items": { "$ref": "#/$defs/row" } },
+    "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "row": {
+      "type": "object",
+      "required": [
+        "runId",
+        "caseId",
+        "variantId",
+        "status",
+        "expectedSourceIds",
+        "paperReadbacks",
+        "readyPaperCount",
+        "blockedPaperCount",
+        "warnings"
+      ],
+      "properties": {
+        "runId": { "type": "string", "minLength": 1 },
+        "caseId": { "type": "string" },
+        "variantId": { "type": "string" },
+        "status": { "enum": ["ready", "blocked", "not_applicable"] },
+        "expectedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "paperReadbacks": { "type": "array", "items": { "$ref": "#/$defs/paperReadback" } },
+        "readyPaperCount": { "type": "integer", "minimum": 0 },
+        "blockedPaperCount": { "type": "integer", "minimum": 0 },
+        "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "paperReadback": {
+      "type": "object",
+      "required": [
+        "sourceId",
+        "slots",
+        "availableSlots",
+        "missingBriefSlots",
+        "coreReady",
+        "briefReady",
+        "warnings"
+      ],
+      "properties": {
+        "sourceId": { "type": "string", "minLength": 1 },
+        "slots": { "type": "array", "items": { "$ref": "#/$defs/slotReadback" } },
+        "availableSlots": { "type": "array", "items": { "type": "string" } },
+        "missingBriefSlots": { "type": "array", "items": { "type": "string" } },
+        "coreReady": { "type": "boolean" },
+        "briefReady": { "type": "boolean" },
+        "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "slotReadback": {
+      "type": "object",
+      "required": [
+        "slot",
+        "status",
+        "sourceId",
+        "citationLabel",
+        "locator",
+        "sourceRef",
+        "contentHash",
+        "snippetHash",
+        "excerpt",
+        "warnings"
+      ],
+      "properties": {
+        "slot": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["ready", "blocked"] },
+        "sourceId": { "type": "string", "minLength": 1 },
+        "citationLabel": { "type": "string" },
+        "locator": { "type": "string" },
+        "sourceRef": { "type": "string" },
+        "contentHash": { "type": "string" },
+        "snippetHash": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
