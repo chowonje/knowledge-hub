@@ -8,6 +8,7 @@ SCHEMA_NAME_BY_ID_EXTENSIONS: Final = {
     "knowledge-hub.paper-understanding-readback.v1": "paper-understanding-readback.v1.json",
     "knowledge-hub.paper-understanding-profile-readiness.v1": "paper-understanding-profile-readiness.v1.json",
     "knowledge-hub.paper-answer-quality-harness.v1": "paper-answer-quality-harness.v1.json",
+    "knowledge-hub.paper-real-answer-quality-gate.v1": "paper-real-answer-quality-gate.v1.json",
 }
 
 
