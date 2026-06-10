@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import hashlib
-from typing import TYPE_CHECKING, TypeAlias
-
-JsonValue: TypeAlias = str | int | float | bool | None | list["JsonValue"] | dict[str, "JsonValue"]
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from knowledge_hub.application.research_review_loop import ClaimCandidate, Row, WeakConceptBasis
+    from knowledge_hub.application.research_review_loop_types import ClaimCandidate, JsonValue, Row, WeakConceptBasis
 
 
 def _claim_payload(claim: "ClaimCandidate") -> dict[str, "JsonValue"]:
@@ -14,12 +12,21 @@ def _claim_payload(claim: "ClaimCandidate") -> dict[str, "JsonValue"]:
         "claimId": claim.claim_id,
         "claimCardId": claim.claim_card_id,
         "claimText": claim.claim_text,
+        "claimTextHash": claim.claim_text_hash,
         "state": claim.state,
         "sourceIds": claim.source_ids,
         "evidenceSpanIds": claim.evidence_span_ids,
+        "evidenceSnippetHashes": claim.evidence_snippet_hashes,
         "canonicalEligible": claim.canonical_eligible,
         "reviewDecisionId": claim.review_decision_id,
         "warnings": claim.warnings,
+        "claimOrigin": claim.claim_origin,
+        "claimTrustLevel": claim.claim_trust_level,
+        "claimQualityFlag": claim.claim_quality_flag,
+        "reviewInputEligible": claim.review_input_eligible,
+        "authorityLevel": claim.authority_level,
+        "authorityStatus": claim.authority_status,
+        "canonicalBlockers": claim.canonical_blockers,
     }
     return payload
 
@@ -50,24 +57,156 @@ def _evidence_span_id(anchor: "Row", *, claim_id: str, index: int) -> str:
 def _evidence_payloads(store, *, row: "Row", claim_id: str) -> list[dict[str, JsonValue]]:
     from knowledge_hub.application.research_review_loop import _anchors_for_claim
 
+    return _evidence_payloads_for_anchors(
+        row=row,
+        claim_id=claim_id,
+        anchors=_anchors_for_claim(store, row=row, claim_id=claim_id),
+    )
+
+
+def _evidence_payloads_for_anchors(
+    *,
+    row: "Row",
+    claim_id: str,
+    anchors: list["Row"],
+) -> list[dict[str, "JsonValue"]]:
     payloads: list[dict[str, JsonValue]] = []
-    for index, anchor in enumerate(_anchors_for_claim(store, row=row, claim_id=claim_id), start=1):
-        locator = _first_text(anchor, ("locator", "stable_span_locator", "source_locator"))
+    seen_hashes: set[str] = set()
+    for index, anchor in enumerate(anchors, start=1):
+        raw_locator = _first_text(anchor, ("locator", "stable_span_locator", "source_locator"))
+        resolved_locator = _first_text(anchor, ("resolvedLocator", "resolved_locator"))
+        locator = _effective_locator(raw_locator=raw_locator, resolved_locator=resolved_locator)
+        source_content_hash = _first_text(anchor, ("sourceContentHash", "source_content_hash"))
+        source_id = _first_text(anchor, ("source_id",)) or _first_text(row, ("paper_id", "source_id"))
+        expected_source_id = _first_text(row, ("paper_id", "source_id"))
         text_preview = _first_text(anchor, ("quote", "excerpt", "text"))
-        state = "proposed" if locator else "blocked_missing_locator"
+        snippet_hash = _snippet_hash(anchor, text_preview)
+        if snippet_hash in seen_hashes:
+            continue
+        seen_hashes.add(snippet_hash)
+        authority = _evidence_authority(
+            locator=locator,
+            source_id=source_id,
+            expected_source_id=expected_source_id,
+            source_content_hash=source_content_hash,
+            snippet_hash=snippet_hash,
+            text_preview=text_preview,
+        )
         payloads.append(
             {
                 "evidenceSpanId": _evidence_span_id(anchor, claim_id=claim_id, index=index),
-                "sourceId": _first_text(anchor, ("source_id",)) or _first_text(row, ("paper_id", "source_id")),
+                "sourceId": source_id,
                 "locator": locator,
-                "sourceContentHash": _first_text(anchor, ("sourceContentHash", "source_content_hash")) or None,
-                "snippetHash": _snippet_hash(anchor, text_preview),
+                "rawLocator": raw_locator if raw_locator != locator else None,
+                "sourceContentHash": source_content_hash or None,
+                "snippetHash": snippet_hash,
                 "textPreview": text_preview[:240],
-                "state": state,
-                "warnings": [] if locator else ["missing locator"],
+                "state": authority["state"],
+                "warnings": authority["warnings"],
+                "locatorKind": authority["locatorKind"],
+                "locatorAuthority": authority["locatorAuthority"],
+                "provenanceStatus": authority["provenanceStatus"],
+                "canonicalBlockers": authority["canonicalBlockers"],
+                "sourceContentHashAvailable": authority["sourceContentHashAvailable"],
+                "canonicalEligible": authority["canonicalEligible"],
             }
         )
     return payloads
+
+
+def _effective_locator(*, raw_locator: str, resolved_locator: str) -> str:
+    resolved = resolved_locator.strip()
+    if raw_locator.strip().startswith("memory-unit:") and _valid_chars_locator(resolved):
+        return resolved
+    return raw_locator.strip()
+
+
+def _evidence_authority(
+    *,
+    locator: str,
+    source_id: str,
+    expected_source_id: str,
+    source_content_hash: str,
+    snippet_hash: str,
+    text_preview: str,
+) -> dict[str, "JsonValue"]:
+    locator_kind = _locator_kind(locator)
+    source_hash_available = bool(source_content_hash.strip())
+    snippet_hash_available = bool(snippet_hash.strip())
+    snippet_text_available = bool(text_preview.strip())
+    canonical_blockers: list[str] = []
+    if source_id.strip() != expected_source_id.strip():
+        canonical_blockers.append("source_outside_explicit_scope")
+    match locator_kind:
+        case "chars_offset":
+            if not source_hash_available:
+                canonical_blockers.append("missing_source_content_hash")
+            if not snippet_hash_available:
+                canonical_blockers.append("missing_snippet_hash")
+            if snippet_hash_available and not snippet_text_available:
+                canonical_blockers.append("missing_snippet_text")
+        case "missing":
+            canonical_blockers.append("missing_locator")
+        case "memory_unit":
+            canonical_blockers.append("unresolved_memory_unit_locator")
+        case "non_offset":
+            canonical_blockers.append("non_offset_locator")
+        case unreachable:
+            raise AssertionError(f"unexpected locator kind: {unreachable}")
+    canonical_eligible = not canonical_blockers
+    provenance_status = "source_resolved" if canonical_eligible else _blocked_status(canonical_blockers)
+    return {
+        "state": "proposed" if canonical_eligible else provenance_status,
+        "locatorKind": locator_kind,
+        "locatorAuthority": "source_text" if canonical_eligible else "blocked",
+        "provenanceStatus": provenance_status,
+        "canonicalBlockers": canonical_blockers,
+        "sourceContentHashAvailable": source_hash_available,
+        "canonicalEligible": canonical_eligible,
+        "warnings": [] if canonical_eligible else canonical_blockers,
+    }
+
+
+def _locator_kind(locator: str) -> str:
+    token = locator.strip()
+    if not token:
+        return "missing"
+    if token.startswith("memory-unit:"):
+        return "memory_unit"
+    if token.startswith("chars:") and _valid_chars_locator(token):
+        return "chars_offset"
+    return "non_offset"
+
+
+def _valid_chars_locator(locator: str) -> bool:
+    _, _, span = locator.partition(":")
+    start_text, separator, end_text = span.partition("-")
+    if separator != "-":
+        return False
+    if not start_text.isdecimal() or not end_text.isdecimal():
+        return False
+    return int(start_text) < int(end_text)
+
+
+def _blocked_status(canonical_blockers: list[str]) -> str:
+    primary = canonical_blockers[0] if canonical_blockers else "missing_locator"
+    match primary:
+        case "missing_locator":
+            return "blocked_missing_locator"
+        case "unresolved_memory_unit_locator":
+            return "blocked_unresolved_memory_unit_locator"
+        case "non_offset_locator":
+            return "blocked_non_offset_locator"
+        case "missing_source_content_hash":
+            return "blocked_missing_source_content_hash"
+        case "missing_snippet_hash":
+            return "blocked_missing_hash"
+        case "missing_snippet_text":
+            return "blocked_missing_snippet_text"
+        case "source_outside_explicit_scope":
+            return "blocked_source_scope_mismatch"
+        case unreachable:
+            raise AssertionError(f"unexpected canonical blocker: {unreachable}")
 
 
 def _first_text(row: "Row", keys: tuple[str, ...]) -> str:
@@ -82,6 +221,8 @@ def _snippet_hash(anchor: "Row", text_preview: str) -> str:
     explicit = str(anchor.get("snippet_hash") or anchor.get("snippetHash") or "").strip()
     if explicit:
         return explicit
+    if not text_preview.strip():
+        return ""
     return hashlib.sha1(text_preview.encode("utf-8")).hexdigest()[:16]
 
 

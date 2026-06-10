@@ -349,6 +349,7 @@ SCHEMA_NAME_BY_ID = {
     "knowledge-hub.claim-compare.result.v1": "claim-compare-result.v1.json",
     "knowledge-hub.claim-synthesis.result.v1": "claim-synthesis-result.v1.json",
     "knowledge-hub.research-review-loop.result.v1": "research-review-loop-result.v1.json",
+    "knowledge-hub.research-review-loop.pack.v1": "research-review-loop-pack.v1.json",
     "knowledge-hub.ai-watchlist-batch.v2": "ai-watchlist-batch.v2.json",
     "knowledge-hub.foundry.agent.run.result.v1": "agent-run-result.v1.json",
     "knowledge-hub.agent.writeback.request.result.v1": "agent-writeback-request-result.v1.json",

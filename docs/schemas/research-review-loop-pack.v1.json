@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/research-review-loop-pack.v1.json",
+  "title": "knowledge-hub.research-review-loop.pack.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "packId",
+    "sourceScope",
+    "canonicalWriteAllowed",
+    "authoritativeAssertCount",
+    "reviewedButNoAuthoritativeAssertions",
+    "memoryProjectionPolicy",
+    "acceptedClaimIds",
+    "rejectedClaimIds",
+    "unsureClaimIds",
+    "weakConceptIds",
+    "openQuestionIds",
+    "acceptedClaims",
+    "rejectedClaims",
+    "unsureClaims",
+    "openQuestions"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.research-review-loop.pack.v1" },
+    "packId": { "type": "string" },
+    "sourceScope": { "type": "object" },
+    "canonicalWriteAllowed": { "type": "boolean", "const": false },
+    "authoritativeAssertCount": { "type": "integer", "minimum": 0 },
+    "reviewedButNoAuthoritativeAssertions": { "type": "boolean" },
+    "memoryProjectionPolicy": {
+      "type": "object",
+      "required": [
+        "memoryCards",
+        "canonicalMemoryCardWriteAllowed",
+        "projectionAllowedFromReviewedArtifactsOnly"
+      ],
+      "properties": {
+        "memoryCards": { "type": "string", "enum": ["excluded_generated_unreviewed"] },
+        "canonicalMemoryCardWriteAllowed": { "type": "boolean", "const": false },
+        "projectionAllowedFromReviewedArtifactsOnly": { "type": "boolean", "const": true }
+      },
+      "additionalProperties": false
+    },
+    "acceptedClaimIds": { "type": "array", "items": { "type": "string" } },
+    "rejectedClaimIds": { "type": "array", "items": { "type": "string" } },
+    "unsureClaimIds": { "type": "array", "items": { "type": "string" } },
+    "weakConceptIds": { "type": "array", "items": { "type": "string" } },
+    "openQuestionIds": { "type": "array", "items": { "type": "string" } },
+    "acceptedClaims": { "type": "array", "items": { "type": "object" } },
+    "rejectedClaims": { "type": "array", "items": { "type": "object" } },
+    "unsureClaims": { "type": "array", "items": { "type": "object" } },
+    "openQuestions": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": false
+}

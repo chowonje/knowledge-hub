@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Final
 
 from click.testing import CliRunner
 from jsonschema import Draft202012Validator
@@ -11,72 +10,14 @@ from knowledge_hub.application.research_review_loop import RESEARCH_REVIEW_LOOP_
 from knowledge_hub.core.schema_validator import validate_payload
 from knowledge_hub.interfaces.cli.commands.review_loop_cmd import review_loop_group
 from knowledge_hub.interfaces.cli.main import cli
-
-
-SCHEMA_PATH: Final = Path(__file__).resolve().parents[1] / "docs" / "schemas" / "research-review-loop-result.v1.json"
-
-
-class _ReviewLoopDb:
-    def list_claim_cards(self, *, source_kind: str, limit: int):
-        assert source_kind == "paper"
-        assert limit >= 1
-        return [
-            {
-                "claim_card_id": "claim-card-v1:paper:claim-supported",
-                "claim_id": "claim-supported",
-                "claim_text": "Transformers use attention to relate token positions.",
-                "paper_id": "1706.03762",
-                "source_id": "1706.03762",
-                "task_canonical": "sequence transduction",
-                "dataset_canonical": "WMT14",
-                "metric_canonical": "BLEU",
-            },
-            {
-                "claim_card_id": "claim-card-v1:paper:claim-unreviewed",
-                "claim_id": "claim-unreviewed",
-                "claim_text": "The paper proves all sequence models are obsolete.",
-                "paper_id": "1706.03762",
-                "source_id": "1706.03762",
-                "task_canonical": "sequence modeling",
-            },
-        ]
-
-    def list_claim_card_source_refs(self, *, claim_card_id: str = ""):
-        match claim_card_id:
-            case "claim-card-v1:paper:claim-supported":
-                return [{"source_card_id": "paper-card-v2:1706.03762"}]
-            case "claim-card-v1:paper:claim-unreviewed":
-                return [{"source_card_id": "paper-card-v2:1706.03762"}]
-            case "":
-                return []
-            case unreachable:
-                raise AssertionError(f"unexpected claim_card_id: {unreachable}")
-
-    def list_evidence_anchors_v2(self, *, card_id: str, claim_ids: list[str]):
-        assert card_id == "paper-card-v2:1706.03762"
-        match claim_ids:
-            case ["claim-supported"]:
-                return [
-                    {
-                        "anchor_id": "span-supported",
-                        "source_id": "1706.03762",
-                        "locator": "section:3",
-                        "snippet_hash": "hash-supported",
-                        "quote": "Attention relates different positions in a sequence.",
-                    }
-                ]
-            case ["claim-unreviewed"]:
-                return []
-            case unreachable:
-                raise AssertionError(f"unexpected claim ids: {unreachable}")
-
-
-class _ReviewLoopKhub:
-    def __init__(self, db: _ReviewLoopDb) -> None:
-        self._db = db
-
-    def sqlite_db(self) -> _ReviewLoopDb:
-        return self._db
+from tests.research_review_loop_fixtures import (
+    EVALUATION_PAPER_ID,
+    SCHEMA_PATH,
+    SUPPORTED_CLAIM,
+    ReviewLoopDb,
+    ReviewLoopKhub,
+    claim_text_hash,
+)
 
 
 def test_research_review_loop_report_excludes_unreviewed_claims_from_context_pack(tmp_path: Path) -> None:
@@ -95,6 +36,8 @@ def test_research_review_loop_report_excludes_unreviewed_claims_from_context_pac
                         "reviewer": "human",
                         "reviewedAt": "2026-06-10T00:00:00Z",
                         "reason": "Evidence span directly supports the claim.",
+                        "claimTextHash": claim_text_hash(SUPPORTED_CLAIM),
+                        "snippetHashes": ["hash-supported"],
                     }
                 ]
             }
@@ -108,12 +51,12 @@ def test_research_review_loop_report_excludes_unreviewed_claims_from_context_pac
         [
             "report",
             "--paper-id",
-            "1706.03762",
+            EVALUATION_PAPER_ID,
             "--decision-file",
             str(decision_file),
             "--json",
         ],
-        obj={"khub": _ReviewLoopKhub(_ReviewLoopDb())},
+        obj={"khub": ReviewLoopKhub(ReviewLoopDb())},
     )
 
     # Then: the payload is schema-valid and excludes unreviewed proposed claims.
@@ -122,9 +65,14 @@ def test_research_review_loop_report_excludes_unreviewed_claims_from_context_pac
     Draft202012Validator(json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))).validate(payload)
     assert validate_payload(payload, RESEARCH_REVIEW_LOOP_SCHEMA, strict=True).ok
     assert payload["schema"] == "knowledge-hub.research-review-loop.result.v1"
-    assert payload["sourceScope"]["explicitSourceIds"] == ["1706.03762"]
+    assert payload["sourceScope"]["explicitSourceIds"] == [EVALUATION_PAPER_ID]
     assert payload["contextPackPreview"]["reviewedClaimIds"] == ["claim-supported"]
-    assert payload["contextPackPreview"]["excludedUnreviewedClaimIds"] == ["claim-unreviewed"]
+    assert payload["contextPackPreview"]["excludedUnreviewedClaimIds"] == [
+        "claim-rejected",
+        "claim-unsupported",
+        "claim-unreviewed",
+        "claim-missing-locator",
+    ]
     assert payload["contextPackPreview"]["canonicalWriteAllowed"] is False
     assert payload["counts"]["unsupportedCanonicalRows"] == 0
 
@@ -137,7 +85,7 @@ def test_research_review_loop_requires_explicit_paper_scope() -> None:
     result = runner.invoke(
         review_loop_group,
         ["report", "--json"],
-        obj={"khub": _ReviewLoopKhub(_ReviewLoopDb())},
+        obj={"khub": ReviewLoopKhub(ReviewLoopDb())},
     )
 
     # Then: the command fails closed instead of broad-scanning papers.
