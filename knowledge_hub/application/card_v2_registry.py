@@ -50,6 +50,12 @@ def _parse_timestamp(value: Any) -> datetime | None:
         return None
 
 
+def _is_invalidated(existing: dict[str, Any] | None) -> bool:
+    if not existing:
+        return False
+    return bool(existing.get("stale")) or bool(_clean_text(existing.get("invalidated_at")))
+
+
 def _has_newer_upstream(card_updated_at: Any, *upstream_updated_at: Any) -> bool:
     baseline = _parse_timestamp(card_updated_at)
     if baseline is None:
@@ -124,6 +130,8 @@ class _PaperCardV2SourceHandler(_CardV2SourceHandler):
     def needs_rebuild(self, source_id: str, existing: dict[str, Any] | None) -> bool:
         if not existing:
             return True
+        if _is_invalidated(existing):
+            return True
         card_id = _clean_text(existing.get("card_id"))
         if not self.sqlite_db.list_evidence_anchors_v2(card_id=card_id):
             return True
@@ -146,6 +154,8 @@ class _WebCardV2SourceHandler(_CardV2SourceHandler):
 
     def needs_rebuild(self, source_id: str, existing: dict[str, Any] | None) -> bool:
         if not existing:
+            return True
+        if _is_invalidated(existing):
             return True
         card_id = _clean_text(existing.get("card_id"))
         if not self.sqlite_db.list_web_evidence_anchors_v2(card_id=card_id):
@@ -220,6 +230,8 @@ class _VaultCardV2SourceHandler(_CardV2SourceHandler):
 
     def needs_rebuild(self, source_id: str, existing: dict[str, Any] | None) -> bool:
         if not existing:
+            return True
+        if _is_invalidated(existing):
             return True
         card_id = _clean_text(existing.get("card_id"))
         if not self.sqlite_db.list_vault_evidence_anchors_v2(card_id=card_id):
