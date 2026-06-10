@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import importlib
 import json
+import subprocess
 from types import SimpleNamespace
 
 import pytest
@@ -950,6 +951,7 @@ def test_build_task_context_returns_schema_valid_payload(tmp_path):
     _setup_fakes(module)
     repo = tmp_path / "repo"
     repo.mkdir()
+    subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True, text=True)
     (repo / "AGENTS.md").write_text("- Preserve boundaries\n", encoding="utf-8")
     (repo / "src").mkdir(parents=True)
     (repo / "src" / "agent.ts").write_text("export const enabled = true;\n", encoding="utf-8")

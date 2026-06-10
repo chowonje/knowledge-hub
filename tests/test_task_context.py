@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
 from types import SimpleNamespace
 
 from knowledge_hub.application.task_context import build_task_context, classify_task_mode
@@ -44,6 +45,11 @@ def _write(path: Path, body: str) -> None:
     path.write_text(body, encoding="utf-8")
 
 
+def _init_git_repo(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=path, check=True, capture_output=True, text=True)
+
+
 def test_classify_task_mode_distinguishes_coding_and_knowledge():
     assert classify_task_mode("Implement agent context for cli-agent.ts") == "coding"
     assert classify_task_mode("debug failing retrieval path") == "debug"
@@ -53,6 +59,7 @@ def test_classify_task_mode_distinguishes_coding_and_knowledge():
 
 def test_build_task_context_prioritizes_project_docs_and_respects_excludes(tmp_path):
     repo = tmp_path / "repo"
+    _init_git_repo(repo)
     _write(repo / "AGENTS.md", "- Preserve boundaries\n- Prefer inspectable outputs\n")
     _write(repo / "README.md", "- Repo overview\n")
     _write(repo / "docs" / "PROJECT_STATE.md", "- Current architecture\n")
@@ -84,6 +91,7 @@ def test_build_task_context_prioritizes_project_docs_and_respects_excludes(tmp_p
 
 def test_build_task_context_keeps_repo_context_ephemeral(tmp_path):
     repo = tmp_path / "repo"
+    _init_git_repo(repo)
     _write(repo / "README.md", "repo readme\n")
 
     class _NoPersistenceSearcher(_FakeSearcher):
@@ -115,6 +123,7 @@ def test_build_task_context_keeps_repo_context_ephemeral(tmp_path):
 
 def test_build_task_context_excludes_virtualenv_and_vendor_paths_but_keeps_repo_matches(tmp_path):
     repo = tmp_path / "repo"
+    _init_git_repo(repo)
     _write(repo / "src" / "rag.py", "def build():\n    return True\n")
     _write(repo / ".venv3108" / "lib" / "python3.10" / "site-packages" / "rag.py", "bad = True\n")
     _write(repo / "vendor" / "generated" / "rag.py", "bad = True\n")
@@ -135,3 +144,54 @@ def test_build_task_context_excludes_virtualenv_and_vendor_paths_but_keeps_repo_
     assert all("site-packages" not in path for path in rel_paths)
     assert all("vendor/" not in path for path in rel_paths)
     assert all("build/" not in path for path in rel_paths)
+
+
+def test_build_task_context_rejects_non_git_repo_path_without_path_echo(tmp_path):
+    repo = tmp_path / "not-a-git-repo"
+    fake_secret = "OPENAI_API_KEY=\"sk-test-secret-value-abcdefghijklmnopqrstuvwxyz\""
+    _write(repo / "src" / "token_holder.py", fake_secret)
+
+    payload = build_task_context(
+        _FakeSearcher(),
+        goal="Debug src/token_holder.py",
+        repo_path=str(repo),
+        include_workspace=True,
+        include_vault=False,
+        include_papers=False,
+        include_web=False,
+        max_workspace_files=3,
+        max_knowledge_hits=1,
+    )
+
+    warning_text = "\n".join(payload["warnings"])
+    assert payload["workspace_files"] == []
+    assert payload["repoPath"] == ""
+    assert "git worktree" in warning_text
+    assert str(repo) not in warning_text
+    assert "sk-test-secret-value" not in payload["suggested_prompt_context"]
+
+
+def test_build_task_context_redacts_p0_workspace_snippets(tmp_path):
+    repo = tmp_path / "repo"
+    _init_git_repo(repo)
+    _write(repo / "src" / "token_holder.py", "OWNER='private@example.com'\n")
+
+    payload = build_task_context(
+        _FakeSearcher(),
+        goal="Debug src/token_holder.py",
+        repo_path=str(repo),
+        include_workspace=True,
+        include_vault=False,
+        include_papers=False,
+        include_web=False,
+        max_workspace_files=3,
+        max_knowledge_hits=1,
+    )
+
+    workspace_text = "\n".join(str(item.get("snippet", "")) for item in payload["workspace_files"])
+    warning_text = "\n".join(payload["warnings"])
+    assert payload["workspace_files"]
+    assert "private@example.com" not in workspace_text
+    assert "private@example.com" not in payload["suggested_prompt_context"]
+    assert "[REDACTED]" in workspace_text
+    assert "workspace snippet redacted by policy: src/token_holder.py" in warning_text

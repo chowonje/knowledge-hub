@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import subprocess
 
 from click.testing import CliRunner
 
@@ -81,6 +82,11 @@ def _seed_db(sqlite_path: str) -> None:
         db.conn.commit()
     finally:
         db.close()
+
+
+def _init_git_repo(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=path, check=True, capture_output=True, text=True)
 
 
 def test_agent_sync_json_returns_foundry_compatible_payload(tmp_path):
@@ -431,7 +437,7 @@ def test_agent_writeback_request_includes_workspace_writeback_preview(monkeypatc
     config.set_nested("validation", "schema", "strict", True)
     runner = CliRunner()
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "AGENTS.md").write_text("- Preserve boundaries\n", encoding="utf-8")
     (repo / "docs" / "status").mkdir(parents=True)
     (repo / "worklog").mkdir(parents=True)
@@ -496,7 +502,7 @@ def test_agent_writeback_request_filters_non_docs_targets_from_preview(monkeypat
     config.set_nested("validation", "schema", "strict", True)
     runner = CliRunner()
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "src").mkdir(parents=True)
     (repo / "src" / "agent.ts").write_text("export const enabled = true;\n", encoding="utf-8")
 
@@ -571,7 +577,7 @@ def test_agent_context_json_returns_task_context_payload(tmp_path):
     )()
 
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "AGENTS.md").write_text("- Preserve boundaries\n", encoding="utf-8")
     (repo / "src").mkdir(parents=True)
     (repo / "src" / "agent.ts").write_text("export const enabled = true;\n", encoding="utf-8")

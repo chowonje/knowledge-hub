@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import subprocess
 
 from knowledge_hub.ai.ask_v2_support import build_project_cards
 from knowledge_hub.application.query_frame import build_query_frame
@@ -11,6 +12,11 @@ from knowledge_hub.ai.rag import RAGSearcher
 from knowledge_hub.web.ingest import make_web_note_id
 from tests.test_rag_search import DummyEmbedder, DummyVectorDB, FakeLLM
 from tests.test_paper_ask_v2 import _seed_web_document_memory
+
+
+def _init_git_repo(path):
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=path, check=True, capture_output=True, text=True)
 
 
 class _SearchForbiddenVectorDB:
@@ -634,7 +640,7 @@ def test_generate_answer_uses_vault_card_v2(tmp_path):
 
 def test_generate_answer_uses_ephemeral_project_cards_without_persistence(tmp_path):
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "AGENTS.md").write_text("- Keep repo context ephemeral\n", encoding="utf-8")
     (repo / "README.md").write_text("# Repo\n\nProject overview.\n", encoding="utf-8")
     src = repo / "src"
@@ -667,7 +673,7 @@ def test_generate_answer_uses_ephemeral_project_cards_without_persistence(tmp_pa
 
 def test_generate_answer_project_path_does_not_require_claim_card_builder(tmp_path, monkeypatch):
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "README.md").write_text("# Repo\n\nProject overview.\n", encoding="utf-8")
     src = repo / "src"
     src.mkdir()
@@ -727,7 +733,7 @@ def test_build_project_cards_extracts_file_role_and_stable_anchors():
 
 def test_generate_answer_project_architecture_prefers_entrypoint_over_readme_and_tests(tmp_path):
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "README.md").write_text("# Repo\n\nArchitecture overview.\n", encoding="utf-8")
     src = repo / "src"
     src.mkdir()
@@ -769,7 +775,7 @@ def test_generate_answer_project_architecture_prefers_entrypoint_over_readme_and
 
 def test_generate_answer_project_symbol_owner_prefers_definition_file(tmp_path):
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     src = repo / "src"
     src.mkdir()
     (repo / "README.md").write_text("# Repo\n\nHelper docs.\n", encoding="utf-8")
@@ -802,7 +808,7 @@ def test_generate_answer_project_symbol_owner_prefers_definition_file(tmp_path):
 
 def test_generate_answer_project_weak_repo_cards_are_marked_weak(tmp_path):
     repo = tmp_path / "repo"
-    repo.mkdir()
+    _init_git_repo(repo)
     (repo / "README.md").write_text("# Repo\n\nGeneral notes only.\n", encoding="utf-8")
 
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))

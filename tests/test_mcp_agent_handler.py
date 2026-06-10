@@ -21,6 +21,31 @@ def _emit(status, payload, **kwargs):  # noqa: ANN001
     return {"status": status, "payload": payload, "meta": kwargs}
 
 
+def test_synthesize_from_task_context_blocks_p0_context_for_unknown_llm():
+    class _RecordingLLM:
+        def __init__(self):
+            self.calls = 0
+
+        def generate(self, **_kwargs):  # noqa: ANN003
+            self.calls += 1
+            return "should not run"
+
+    llm = _RecordingLLM()
+    result = agent_handler._synthesize_from_task_context(
+        SimpleNamespace(llm=llm, config=None),
+        "debug src/token_holder.py",
+        {
+            "suggested_prompt_context": "OWNER='private@example.com'",
+            "knowledge_hits": [],
+            "warnings": [],
+        },
+    )
+
+    assert llm.calls == 0
+    assert result["synthesisMode"] == "task_context_policy_blocked"
+    assert any("P0" in item for item in result["warnings"])
+
+
 def test_agent_handler_requires_goal():
     module = _import_mcp_server()
     ctx = {

@@ -3,12 +3,42 @@ from __future__ import annotations
 from typing import Any
 
 from knowledge_hub.application.task_context import build_task_context, classify_task_mode
+from knowledge_hub.learning.policy import evaluate_policy_for_payload
+from knowledge_hub.infrastructure.providers import get_provider_info
+
+
+def _searcher_llm_is_local(searcher: Any) -> bool:
+    config = getattr(searcher, "config", None)
+    provider = str(getattr(config, "summarization_provider", "") or "").strip()
+    if not provider:
+        return False
+    try:
+        info = get_provider_info(provider, config=config)
+    except Exception:
+        info = None
+    return bool(info and info.is_local)
 
 
 def _synthesize_from_task_context(searcher: Any, goal: str, task_context: dict[str, Any]) -> dict[str, Any]:
     llm = getattr(searcher, "llm", None)
     generate = getattr(llm, "generate", None)
     if callable(generate):
+        context = str(task_context.get("suggested_prompt_context", ""))
+        if not _searcher_llm_is_local(searcher):
+            policy = evaluate_policy_for_payload(
+                allow_external=True,
+                raw_texts=[context],
+                mode="task-context-llm",
+            )
+            if not policy.allowed:
+                warnings = list(task_context.get("warnings", []))
+                warnings.extend(policy.policy_errors or ["policy denied: task context cannot be synthesized externally"])
+                return {
+                    "answer": "",
+                    "sources": list(task_context.get("knowledge_hits", [])),
+                    "warnings": warnings,
+                    "synthesisMode": "task_context_policy_blocked",
+                }
         try:
             answer = str(
                 generate(
@@ -16,7 +46,7 @@ def _synthesize_from_task_context(searcher: Any, goal: str, task_context: dict[s
                         "Use the provided task context to answer the goal. "
                         "Treat workspace evidence as ephemeral project context and do not invent missing code details."
                     ),
-                    context=str(task_context.get("suggested_prompt_context", "")),
+                    context=context,
                     max_tokens=1200,
                 )
             ).strip()

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Security
+
+- Hardened task-context workspace assembly so `repo_path` must resolve inside a git worktree, symlink escapes are skipped, P0-like workspace snippets are redacted before prompt construction, and MCP task-context LLM synthesis blocks P0 context before invoking an unknown or external summarizer.
+- Hardened RAG answer routing so `allow_external=false` blocks configured non-local `fixed_llm` fallback after local routing failure instead of sending P1/P2 local context to the configured summarization provider.
+
 ### Removed
 
 - Removed tracked public-inappropriate process artifacts: the generated `PROJECT_PROGRESS.md`, historical `tasks/` notes, stale `docs/status/` handoff notes, workstation-specific `ops/launchd/com.won.*.plist` files, and two manual `eval/knowledgeos/reports/` review reports. Public-facing state should live in `CHANGELOG.md`, `docs/PROJECT_STATE.md`, durable ADRs, or reproducible eval fixtures instead of local progress logs and machine-specific launchd files.
@@ -11,6 +16,8 @@
 
 ### Changed
 
+- Recorded the product decision to hold Palantir AIP PDF translation as a labs sidecar, keep layout-faithful translated PDF cloning out of the default product promise, and prioritize source-linked Korean reading packs for local-first research workflows.
+- Restructured `docs/PROJECT_STATE.md` into a current-state summary with stop rules for repeated report-only tranches, and preserved the previous long-form project ledger under `docs/project-state-archive/`.
 - Added the code-only visual retrieval-hint vertical: schema-backed visual annotation packs, layout candidate reports, retrieval-hint candidate-store design/dry-run/expansion/review/search/usefulness/apply-design helpers, build/validation scripts, schema registration, and focused tests. This tranche intentionally excludes generated `eval/knowledgeos/reports/` JSON/Markdown outputs and image assets; visual text remains retrieval-hint-only and is not strict evidence, citation-grade evidence, runtime-visible answer text, or an index mutation.
 - Switched the default-off labs cross-encoder reranker candidate from `BAAI/bge-reranker-v2-m3` to `cross-encoder/ettin-reranker-17m-v1`, added explicit cached-only loading defaults (`allow_download=false`, `local_files_only=true`, `max_length=512`, `trust_remote_code=false`), added cache/version preflight so missing local model files or too-old Sentence Transformers/Transformers runtimes do not trigger CrossEncoder loading, disabled TensorFlow/Flax backend imports on the reranker path, moved the reranker instance cache onto the searcher so repeated searches do not reload the model, and kept default `search`/`ask` behavior unchanged. The install contract now declares core `packaging` and a separate `ettin-reranker` extra for the Sentence Transformers / Transformers 5 runtime because MinerU still pins Transformers below 5. The first local `control` vs `ettin17m` A/B run showed no top-k quality lift (`top1`, `hit@3`, and `hit@6` unchanged on 24 paper-default queries) with higher latency, so default promotion is explicitly held.
 - Hardened the vault default source-quality collector so stale-citation checks resolve vault paths from top-level source fields plus nested metadata/provenance/source-trace locators before marking citations stale, can take an explicit `--vault-root`, and can fall back to the KnowledgeOS workspace `vault` symlink when product config omits `obsidian.vault_path`, while still treating title-only vault sources as stale.

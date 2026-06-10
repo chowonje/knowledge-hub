@@ -4,7 +4,19 @@ from typing import Any, Callable
 
 from knowledge_hub.application.codex_backend import resolve_preferred_codex_backend
 from knowledge_hub.application.runtime_diagnostics import provider_runtime_probe
+from knowledge_hub.infrastructure.providers import get_provider_info
 from knowledge_hub.learning.task_router import decide_task_route, get_llm_for_task
+
+
+def _provider_is_local(config: Any, provider: str) -> bool:
+    token = str(provider or "").strip()
+    if not token:
+        return False
+    try:
+        info = get_provider_info(token, config=config)
+    except Exception:
+        info = None
+    return bool(info and info.is_local)
 
 
 def resolve_llm_for_request(
@@ -80,6 +92,22 @@ def resolve_llm_for_request(
                 next_cached_local_llm_signature,
             )
         fixed_provider = str(getattr(config, "summarization_provider", "") or "").strip()
+        if not allow_external and not _provider_is_local(config, fixed_provider):
+            blocked_warnings = list(warnings)
+            blocked_warnings.append("fixed llm fallback blocked: allow_external=false and provider is not local")
+            return (
+                None,
+                {
+                    "route": "fallback-only",
+                    "provider": "",
+                    "model": "",
+                    "reasons": ["routing_failed_no_available_llm", "fixed_llm_blocked_external_disallowed"],
+                    "fallbackUsed": True,
+                },
+                blocked_warnings,
+                next_cached_local_llm,
+                next_cached_local_llm_signature,
+            )
         fixed_probe = provider_runtime_probe(config, fixed_provider) if fixed_provider else {}
         if fixed_probe and not bool(fixed_probe.get("available", True)):
             unavailable_warnings = list(warnings)

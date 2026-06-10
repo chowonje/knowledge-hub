@@ -27,6 +27,15 @@ class _Config:
         return current
 
 
+class _ProviderConfig(_Config):
+    def __init__(self, provider: str, values: dict | None = None):
+        super().__init__(values)
+        self.summarization_provider = provider
+
+    def get_provider_config(self, _provider):  # noqa: ANN001
+        return {}
+
+
 def test_resolve_llm_for_request_reuses_cached_local_llm_only_for_matching_signature():
     class _Decision:
         def __init__(self, *, provider: str, model: str, timeout_sec: int):
@@ -169,6 +178,53 @@ def test_resolve_llm_for_request_keeps_codex_skip_warning_when_config_missing(mo
     assert warnings == ["codex_mcp backend unavailable: codex command not found: codex"]
     assert cached_llm is None
     assert cached_signature is None
+
+
+def test_resolve_llm_for_request_blocks_fixed_external_fallback_when_external_disallowed():
+    fixed_llm = FakeLLM()
+
+    llm, route_meta, warnings, cached_llm, cached_signature = resolve_llm_for_request_impl(
+        config=_ProviderConfig("openai"),
+        fixed_llm=fixed_llm,
+        query="rag query",
+        context="entity_id: private_case_123\nstatus: internal",
+        source_count=1,
+        allow_external=False,
+        cached_local_llm=None,
+        cached_local_llm_signature=None,
+        get_llm_for_hybrid_routing_fn=lambda *_args, **_kwargs: (None, SimpleNamespace(route="fallback-only"), ["local route unavailable"]),
+    )
+
+    assert llm is None
+    assert route_meta["route"] == "fallback-only"
+    assert "fixed_llm_blocked_external_disallowed" in route_meta["reasons"]
+    assert any("fixed llm fallback blocked" in item for item in warnings)
+    assert cached_llm is None
+    assert cached_signature is None
+
+
+def test_resolve_llm_for_request_allows_fixed_local_fallback_when_external_disallowed(monkeypatch):
+    fixed_llm = FakeLLM()
+    monkeypatch.setattr(
+        "knowledge_hub.ai.rag_answer_route_resolver.provider_runtime_probe",
+        lambda *_args, **_kwargs: {"available": True},
+    )
+
+    llm, route_meta, warnings, _, _ = resolve_llm_for_request_impl(
+        config=_ProviderConfig("ollama"),
+        fixed_llm=fixed_llm,
+        query="rag query",
+        context="local context",
+        source_count=1,
+        allow_external=False,
+        cached_local_llm=None,
+        cached_local_llm_signature=None,
+        get_llm_for_hybrid_routing_fn=lambda *_args, **_kwargs: (None, SimpleNamespace(route="fallback-only"), ["local route unavailable"]),
+    )
+
+    assert llm is fixed_llm
+    assert route_meta["route"] == "fixed"
+    assert warnings == ["local route unavailable"]
 
 
 def test_rag_searcher_resolve_llm_for_request_syncs_route_cache_mirror_and_attrs():

@@ -128,7 +128,7 @@ def build_tools(profile: str | None = None) -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "goal": {"type": "string", "description": "작업 목표 또는 질문"},
-                    "repo_path": {"type": "string", "description": "현재 작업 repo 경로. 기본값은 caller cwd"},
+                    "repo_path": {"type": "string", "description": "현재 작업 git worktree 경로. 기본값은 caller cwd"},
                     "include_workspace": {"type": "boolean", "default": True},
                     "include_vault": {"type": "boolean", "default": True},
                     "include_papers": {"type": "boolean", "default": True},
@@ -434,7 +434,7 @@ def build_tools(profile: str | None = None) -> list[Tool]:
                 "role": {"type": "string", "description": "에이전트 역할", "default": "planner"},
                 "orchestratorMode": {"type": "string", "description": "조율 모드", "enum": ["single-pass", "adaptive", "strict"], "default": "adaptive"},
                 "reportPath": {"type": "string", "description": "실행 리포트 저장 경로"},
-                "repo_path": {"type": "string", "description": "현재 작업 repo 경로"},
+                "repo_path": {"type": "string", "description": "현재 작업 git worktree 경로"},
                 "include_workspace": {"type": "boolean", "description": "coding/debug/design 요청에서 repo context 포함 여부"},
                 "max_workspace_files": {"type": "integer", "description": "task context에 포함할 최대 repo 파일 수", "default": 8},
                 "dry_run": {"type": "boolean", "description": "검증만 수행", "default": False},

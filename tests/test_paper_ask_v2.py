@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 import json
+import subprocess
 import pytest
 
 import knowledge_hub.ai.ask_v2 as ask_v2_module
@@ -21,6 +22,11 @@ from knowledge_hub.papers.source_text import source_hash_for_path
 from knowledge_hub.web.ingest import make_web_note_id
 from tests.test_paper_memory import _seed_paper_with_note
 from tests.test_rag_search import DummyEmbedder, FakeLLM
+
+
+def _init_git_repo(path):
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=path, check=True, capture_output=True, text=True)
 
 
 class _SearchForbiddenVectorDB:
@@ -1853,7 +1859,7 @@ def test_generate_answer_vault_file_path_scope_accepts_note_source_type(tmp_path
 
 def test_generate_answer_project_query_uses_ephemeral_repo_cards(tmp_path):
     repo_root = tmp_path / "repo"
-    repo_root.mkdir()
+    _init_git_repo(repo_root)
     (repo_root / "README.md").write_text("# Repo\nService architecture summary.\n", encoding="utf-8")
     (repo_root / "service.py").write_text("def build_pipeline():\n    return 'pipeline'\n", encoding="utf-8")
     db = SQLiteDatabase(str(tmp_path / "knowledge.db"))

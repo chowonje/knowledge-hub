@@ -6,10 +6,12 @@ from dataclasses import dataclass
 from pathlib import Path
 import os
 import re
+import subprocess
 from typing import Any
 
 from knowledge_hub.ai.retrieval_fit import normalize_source_type
 from knowledge_hub.core.chunking import snippet_for_path
+from knowledge_hub.core.sanitizer import detect_p0, redact_p0
 
 
 CONTEXT_PACK_SCHEMA = "knowledge-hub.context-pack.result.v1"
@@ -163,7 +165,9 @@ def build_context_pack(
     resolved_target = str(target or "task").strip().lower() or "task"
     max_chars = max(200, int(max_chars or DEFAULT_MAX_SOURCE_CHARS))
     warnings: list[str] = []
-    resolved_repo_path = _resolve_repo_path(repo_path) if include_workspace else None
+    resolved_repo_path, repo_path_warning = _resolve_workspace_repo_path(repo_path) if include_workspace else (None, None)
+    if repo_path_warning:
+        warnings.append(repo_path_warning)
 
     persistent_sources: list[dict[str, Any]]
     workspace_sources: list[dict[str, Any]] = []
@@ -200,11 +204,8 @@ def build_context_pack(
 
         if include_workspace and mode in {"coding", "design", "debug"}:
             if resolved_repo_path is None:
-                warnings.append("workspace context skipped: repo_path unavailable")
-            elif not resolved_repo_path.exists():
-                warnings.append(f"workspace context skipped: repo_path not found: {resolved_repo_path}")
-            elif not resolved_repo_path.is_dir():
-                warnings.append(f"workspace context skipped: repo_path is not a directory: {resolved_repo_path}")
+                if not repo_path_warning:
+                    warnings.append("workspace context skipped: repo_path unavailable")
             else:
                 workspace_payload = _collect_workspace_context(
                     goal=text,
@@ -309,6 +310,54 @@ def _resolve_repo_path(repo_path: str | None) -> Path | None:
         return Path.cwd().resolve()
     except Exception:
         return None
+
+
+def _resolve_workspace_repo_path(repo_path: str | None) -> tuple[Path | None, str | None]:
+    requested = _resolve_repo_path(repo_path)
+    if requested is None:
+        return None, "workspace context skipped: repo_path unavailable"
+    if not requested.exists():
+        return None, "workspace context skipped: repo_path not found"
+    if not requested.is_dir():
+        return None, "workspace context skipped: repo_path is not a directory"
+
+    worktree_root = _git_worktree_root(requested)
+    if worktree_root is None:
+        return None, "workspace context skipped: repo_path must be inside a git worktree"
+    if not _path_is_within(requested, worktree_root):
+        return None, "workspace context skipped: repo_path escaped the git worktree"
+    return worktree_root, None
+
+
+def _git_worktree_root(path: Path) -> Path | None:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(path), "rev-parse", "--show-toplevel"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=3,
+        )
+    except Exception:
+        return None
+    if result.returncode != 0:
+        return None
+    raw = str(result.stdout or "").strip()
+    if not raw:
+        return None
+    try:
+        root = Path(raw).expanduser().resolve()
+    except Exception:
+        return None
+    return root if root.exists() and root.is_dir() else None
+
+
+def _path_is_within(path: Path, root: Path) -> bool:
+    try:
+        path.resolve().relative_to(root.resolve())
+        return True
+    except Exception:
+        return False
 
 
 def _extract_goal_tokens(goal: str) -> set[str]:
@@ -443,6 +492,18 @@ def _collect_workspace_context(
     max_workspace_files = max(1, int(max_workspace_files or 8))
     max_project_docs = max(0, int(max_project_docs or 6))
     max_excerpt_chars = max(200, int(max_excerpt_chars or 1500))
+    worktree_root = _git_worktree_root(repo_path)
+    if worktree_root is None:
+        return {
+            "workspace_files": [],
+            "warnings": ["workspace context skipped: repo_path must be inside a git worktree"],
+        }
+    if not _path_is_within(repo_path, worktree_root):
+        return {
+            "workspace_files": [],
+            "warnings": ["workspace context skipped: repo_path escaped the git worktree"],
+        }
+    repo_path = worktree_root
 
     explicit_paths = _extract_explicit_path_mentions(goal)
     goal_tokens = _extract_goal_tokens(goal)
@@ -455,6 +516,9 @@ def _collect_workspace_context(
         rel_path = path.relative_to(repo_path).as_posix()
         lowered_rel = rel_path.lower()
         snippet = snippet_for_path(path, max_chars=max_excerpt_chars)
+        if detect_p0(snippet):
+            snippet = redact_p0(snippet)
+            warnings.append(f"workspace snippet redacted by policy: {rel_path}")
         score, reason = _score_workspace_file(
             path=path,
             relative_path=rel_path,
@@ -540,6 +604,8 @@ def _iter_workspace_files(repo_path: Path):
             for name in dirnames
             if not _is_excluded_workspace_dir(name)
             and not _path_contains_excluded_workspace_part(Path(root) / name)
+            and not (Path(root) / name).is_symlink()
+            and _path_is_within(Path(root) / name, repo_path)
         ]
         base_path = Path(root)
         for filename in filenames:
@@ -547,6 +613,8 @@ def _iter_workspace_files(repo_path: Path):
             if _path_contains_excluded_workspace_part(path):
                 continue
             if path.suffix.lower() not in ALLOWED_WORKSPACE_SUFFIXES:
+                continue
+            if path.is_symlink() or not _path_is_within(path, repo_path):
                 continue
             yield path
 
