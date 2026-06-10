@@ -1,0 +1,61 @@
+{
+  "blockersByCategory": [
+    {
+      "category": "source_content_hash_invalid",
+      "paperCount": 3,
+      "rowCount": 12,
+      "samplePaperIds": [
+        "2020.30163",
+        "2025.16582",
+        "2025.16785"
+      ]
+    }
+  ],
+  "counts": {
+    "answerVisibleEvidenceRows": 20,
+    "candidateBlockerRows": 12,
+    "candidateRows": 1200,
+    "candidateRowsWithValidCharLocators": 1200,
+    "candidateRowsWithValidSourceContentHash": 1188,
+    "candidateStoreAnswerVisibleRows": 0,
+    "papersEvaluated": 300,
+    "papersWithCandidateRows": 300,
+    "papersWithValidCharLocators": 300,
+    "papersWithValidSourceContentHash": 297,
+    "positiveAnswerPassRows": 7,
+    "positiveCharsLocatorRows": 20,
+    "positiveSeedRows": 7,
+    "positiveSourceContentHashRows": 20,
+    "positiveStrictProvenanceSpanRows": 20,
+    "privatePathLeakRows": 0,
+    "provenancePassRows": 7,
+    "publicDefaultPromotionHeldRows": 1,
+    "publicDefaultPromotionReadyRows": 0,
+    "schemaViolationCount": 0
+  },
+  "decision": "promotion_candidate_narrow_scope",
+  "gate": {
+    "defaultKhubAskChanged": false,
+    "defaultPromotionBlocked": true,
+    "defaultRuntimeMutationAllowed": false,
+    "narrowScopePromotionCandidate": true,
+    "positiveQualityReady": true,
+    "reportOnly": true,
+    "semanticViolations": [],
+    "vaultAccessAllowed": false,
+    "vectorDbMutationAllowed": false
+  },
+  "generatedAt": "2026-06-10T16:24:59Z",
+  "inputs": {
+    "candidateStoreRef": "papers_dir/structured_evidence_candidates/evidence_chunk/*.jsonl",
+    "papersDirRef": "papers_dir",
+    "positiveCompleteReportRef": "/Users/won/Desktop/allinone/knowledge-hub-parsed-artifact-positive-promotion-gate-20260611/eval/knowledgeos/reports/knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review.v1.json"
+  },
+  "nextRecommendedTranche": "parsed_artifact_evidence_chunk_narrow_scope_promotion_design",
+  "schema": "knowledge-hub.product.parsed-artifact-evidence-chunk-promotion-audit.v1",
+  "status": "ready",
+  "warnings": [
+    "candidate rows remain candidate-store records; answer-visible evidence is proven only through opt-in runtime rows",
+    "default promotion remains held unless a later implementation gate explicitly changes the default surface"
+  ]
+}
