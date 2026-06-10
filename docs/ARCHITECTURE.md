@@ -11,6 +11,7 @@ The canonical product definition is `docs/knowledge_os_definition.md`: the final
 See also:
 - `docs/knowledge_os_definition.md`
 - `docs/adr/2026-05-29-knowledgeos-product-definition.md`
+- `docs/adr/2026-06-10-research-review-loop-mvp.md`
 - `docs/maps/README.md`
 - `docs/maps/canonical-ownership-map.md`
 - `docs/maps/agent-execution-map.md`
@@ -75,6 +76,11 @@ Definitions:
 - `Narrow Normalization`: domain-limited comparison axes such as `task`, `dataset`, `metric`, `comparator`, `condition`, `scope`.
 - `Retrieve/Compare/Synthesize`: bounded retrieval, compare reports, limitation summaries, conflict explanations.
 - `Epistemic/Agent`: belief/decision/outcome and bounded research-assistant workflows.
+
+The Research Review Loop MVP composes the `Claim` and `EvidenceLink` layers
+into the `Epistemic/Agent` layer through explicit user review decisions:
+proposed claims and evidence spans remain derivative candidates until review,
+and only reviewed artifacts can feed learning or judgment context packs.
 
 ## Durable implementation rules
 
