@@ -101,7 +101,12 @@ def test_answer_orchestrator_default_inputs_use_direct_builder_path_without_over
     )
 
     assert answer_prompt == "direct-prompt"
-    assert answer_context == "direct-context"
+    assert answer_context == (
+        "direct-context\n\n"
+        "=== Citation Labels ===\n"
+        "Use these exact labels in factual answer sentences.\n"
+        "- [S1] title=Paper A target=-"
+    )
     assert observed["prompt"] == ("attention mechanism", {"paper_definition_mode": True})
     assert observed["context"] == {
         "query": "attention mechanism",
@@ -139,7 +144,12 @@ def test_answer_orchestrator_default_inputs_preserve_searcher_builder_overrides(
     )
 
     assert answer_prompt == "override-prompt:attention mechanism"
-    assert answer_context == "override-context:claim-context"
+    assert answer_context == (
+        "override-context:claim-context\n\n"
+        "=== Citation Labels ===\n"
+        "Use these exact labels in factual answer sentences.\n"
+        "- [S1] title=Paper A target=-"
+    )
 
 
 def test_answer_orchestrator_build_fallback_uses_direct_helper_without_override(monkeypatch):

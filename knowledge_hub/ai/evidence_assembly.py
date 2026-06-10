@@ -362,6 +362,12 @@ def _direct_answer_score(item: dict[str, Any], *, query: str) -> float:
     elif intent == "paper_lookup":
         if normalize_source_type(item.get("source_type")) == "paper":
             score += 0.8
+        if (
+            str(item.get("retrieval_mode") or "").strip().lower() == "paper-card-v2"
+            and str(item.get("citation_target") or item.get("source_id") or item.get("arxiv_id") or "").strip()
+            and str(item.get("excerpt") or item.get("document") or "").strip()
+        ):
+            score += 0.4
         if any(token in text for token in ("abstract", "summary", "논문", "초록", "요약")):
             score += 0.8
     elif intent == "paper_topic":
