@@ -22,6 +22,7 @@ def _config(tmp_path: Path) -> Config:
     config.set_nested("storage", "vector_db", str(tmp_path / "vector_db"))
     config.set_nested("summarization", "provider", "openai")
     config.set_nested("summarization", "model", "gpt-5-mini")
+    config.set_nested("obsidian", "enabled", True)
     config.set_nested("obsidian", "vault_path", str(tmp_path / "vault"))
     return config
 

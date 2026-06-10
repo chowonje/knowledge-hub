@@ -15,7 +15,7 @@ from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase, VectorDatabase
 from knowledge_hub.learning.contracts import LearningServiceRepository
 from knowledge_hub.learning.assessor import parse_edges_from_session, parse_frontmatter
-from knowledge_hub.learning.obsidian_writeback import build_paths, resolve_vault_write_adapter
+from knowledge_hub.learning.obsidian_writeback import build_paths, resolve_config_vault_write_adapter
 
 
 def runtime_provider(service) -> Any | None:
@@ -192,15 +192,7 @@ def resolve_dynamic_dir(service) -> Path:
 
 
 def resolve_vault_adapter(service):
-    backend = str(service.config.get_nested("obsidian", "write_backend", default="filesystem") or "filesystem")
-    cli_binary = str(service.config.get_nested("obsidian", "cli_binary", default="obsidian") or "obsidian")
-    vault_name = str(service.config.get_nested("obsidian", "vault_name", default="") or "")
-    return resolve_vault_write_adapter(
-        vault_path=service.config.vault_path,
-        backend=backend,
-        cli_binary=cli_binary,
-        vault_name=vault_name,
-    )
+    return resolve_config_vault_write_adapter(service.config)
 
 
 def obsidian_backend_kwargs(service) -> dict:

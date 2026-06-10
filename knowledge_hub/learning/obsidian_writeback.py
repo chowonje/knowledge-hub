@@ -13,6 +13,7 @@ from typing import Iterable
 
 import yaml
 
+from knowledge_hub.core.vault_guard import ensure_vault_writes_allowed
 from knowledge_hub.learning.mapper import slugify_topic
 
 
@@ -219,6 +220,36 @@ def resolve_vault_write_adapter(
     if mode in {"cli-preferred", "cli", "obsidian-cli"}:
         return ObsidianCliPreferredAdapter(vault_path=vault_path, cli_binary=cli_binary, vault_name=vault_name)
     return FileSystemVaultAdapter()
+
+
+def resolve_config_vault_write_adapter(
+    config,
+    *,
+    vault_path: str | None = None,
+    backend: str | None = None,
+    cli_binary: str | None = None,
+    vault_name: str | None = None,
+) -> VaultWriteAdapter:
+    """Authoritative vault-write chokepoint.
+
+    Consults obsidian.enabled/vault_path via ensure_vault_writes_allowed and
+    fails closed (VaultWriteError) before handing out a write adapter. CLI
+    overrides may replace the path/backend but never bypass the enabled check.
+    """
+    resolved_vault = ensure_vault_writes_allowed(config, vault_path=vault_path)
+    resolved_backend = str(
+        backend or config.get_nested("obsidian", "write_backend", default="filesystem") or "filesystem"
+    ).strip() or "filesystem"
+    resolved_cli_binary = str(
+        cli_binary or config.get_nested("obsidian", "cli_binary", default="obsidian") or "obsidian"
+    ).strip() or "obsidian"
+    resolved_vault_name = str(vault_name or config.get_nested("obsidian", "vault_name", default="") or "").strip()
+    return resolve_vault_write_adapter(
+        vault_path=resolved_vault,
+        backend=resolved_backend,
+        cli_binary=resolved_cli_binary,
+        vault_name=resolved_vault_name,
+    )
 
 
 def _ensure_dir(path: Path) -> None:

@@ -491,7 +491,7 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         sort_by = str(arguments.get("sort_by", "relevance")).strip()
         if sort_by not in {"relevance", "citationCount"}:
             sort_by = "relevance"
-        create_obsidian = to_bool(arguments.get("create_obsidian_note"), default=True)
+        create_obsidian = to_bool(arguments.get("create_obsidian_note"), default=False)
         gen_summary = to_bool(arguments.get("generate_summary"), default=True)
         judge_enabled = to_bool(arguments.get("judge_enabled"), default=False)
         judge_threshold = float(arguments.get("judge_threshold", 0.62) or 0.62)
@@ -543,7 +543,7 @@ async def handle_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any])
         sort_by = str(arguments.get("sort_by", "relevance")).strip()
         if sort_by not in {"relevance", "citationCount"}:
             sort_by = "relevance"
-        create_obsidian = to_bool(arguments.get("create_obsidian_note"), default=True)
+        create_obsidian = to_bool(arguments.get("create_obsidian_note"), default=False)
         gen_summary = to_bool(arguments.get("generate_summary"), default=True)
         dry_run = to_bool(arguments.get("dry_run"), default=False)
 

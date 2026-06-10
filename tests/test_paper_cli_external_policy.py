@@ -310,6 +310,7 @@ def test_paper_sync_keywords_claims_store_breakdown(monkeypatch, tmp_path: Path)
     vault_path = tmp_path / "vault"
     papers_dir = vault_path / "Papers"
     papers_dir.mkdir(parents=True, exist_ok=True)
+    config.set_nested("obsidian", "enabled", True)
     config.set_nested("obsidian", "vault_path", str(vault_path))
 
     note_path = papers_dir / "Transformer Benchmark.md"

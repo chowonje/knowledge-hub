@@ -23,6 +23,8 @@ from knowledge_hub.infrastructure.persistence.stores.derivative_lifecycle import
 )
 from knowledge_hub.core.chunking import chunk_text_with_offsets as canonical_chunk_text_with_offsets
 from knowledge_hub.core.keywords import extract_keywords_from_text
+from knowledge_hub.core.vault_guard import VaultWriteError
+from knowledge_hub.learning.obsidian_writeback import resolve_config_vault_write_adapter
 from knowledge_hub.providers.base import BaseEmbedder
 from knowledge_hub.core.models import SourceType
 from knowledge_hub.papers.downloader import PaperDownloader
@@ -823,11 +825,13 @@ class PaperManager:
         translated_abstract: str = "",
     ) -> str:
         """논문 요약 노트를 Obsidian vault에 생성하고 관련 노트를 [[링크]]"""
-        vault_path = self.config.vault_path
-        if not vault_path:
+        try:
+            adapter = resolve_config_vault_write_adapter(self.config)
+        except VaultWriteError as error:
+            console.print(f"[yellow]Obsidian 노트 생성 건너뜀: {error}[/yellow]")
             return ""
 
-        vault = Path(vault_path)
+        vault = Path(self.config.vault_path)
         notes_folder = self.config.obsidian_notes_folder or "Papers"
         notes_root = Path(notes_folder)
         if notes_root.is_absolute():
@@ -836,7 +840,6 @@ class PaperManager:
             notes_dir = vault / notes_root
 
         papers_dir = notes_dir
-        papers_dir.mkdir(parents=True, exist_ok=True)
 
         safe_title = re.sub(r'[\\/:*?"<>|]', '', paper.title)[:80].strip()
         note_path = papers_dir / f"{safe_title}.md"
@@ -948,7 +951,7 @@ class PaperManager:
             ])
 
         note_content = "\n".join(content_lines)
-        note_path.write_text(note_content, encoding="utf-8")
+        adapter.write_text(note_path, note_content)
 
         note_id = f"paper:{paper.arxiv_id}"
         self.sqlite_db.upsert_note(
