@@ -13,7 +13,14 @@ def test_paper_lookup_text_shows_identity_source_backed_excerpt_and_labels() -> 
         "answer": "The Transformer replaces recurrent sequence processing with attention.",
         "queryFrame": {"family": "paper_lookup"},
         "evidencePacket": {"answerable": True, "paperFamily": "paper_lookup"},
-        "answerVerification": {"status": "caution", "needsCaution": True},
+        "answerVerification": {
+            "status": "caution",
+            "supportedClaimCount": 0,
+            "unsupportedClaimCount": 2,
+            "uncertainClaimCount": 1,
+            "needsCaution": True,
+            "route": {"mode": "heuristic", "provider": "ollama", "model": "gemma4:e4b"},
+        },
         "citations": [{"label": "S1", "title": "Attention Is All You Need", "target": "1706.03762"}],
         "sources": [
             {
@@ -36,7 +43,9 @@ def test_paper_lookup_text_shows_identity_source_backed_excerpt_and_labels() -> 
     assert "The Transformer replaces recurrent sequence processing with attention. [S1]" in rendered
     assert "Paper: Attention Is All You Need (arXiv:1706.03762)" in rendered
     assert "Evidence state: verifier weakness" in rendered
-    assert "[S1] The Transformer uses only attention mechanisms" in rendered
+    assert "Verdict: THIN - 0/3 claims verified, 2 unsupported, coverage unknown" in rendered
+    assert "Verifier: lexical heuristic; Korean/English mismatch can make counts unreliable." in rendered
+    assert "[S1] raw - The Transformer uses only attention mechanisms" in rendered
     assert "Citations: [S1]" in rendered
     assert "Chroma" not in rendered
     assert "vector" not in rendered.lower()
@@ -73,6 +82,47 @@ def test_paper_lookup_text_labels_card_only_answers_as_insufficient() -> None:
     assert "paper-card-v2 only" in rendered
     assert "Source-backed excerpts:" not in rendered
     assert "This answer came from a paper memory card. [S1]" in rendered
+
+
+def test_paper_lookup_text_marks_partial_coverage_as_thin_verdict() -> None:
+    # Given: a verified-looking paper answer has only partial claim coverage.
+    payload = {
+        "status": "ok",
+        "answer": "The Transformer removes recurrence by using attention [S1].",
+        "queryFrame": {"family": "paper_lookup"},
+        "evidencePacket": {
+            "answerable": True,
+            "paperFamily": "paper_lookup",
+            "coverage": {"status": "partial"},
+        },
+        "answerVerification": {
+            "status": "verified",
+            "supportedClaimCount": 1,
+            "unsupportedClaimCount": 0,
+            "uncertainClaimCount": 1,
+            "needsCaution": False,
+            "route": {"mode": "llm"},
+        },
+        "sources": [
+            {
+                "title": "Attention Is All You Need",
+                "source_type": "paper",
+                "arxiv_id": "1706.03762",
+                "retrieval_mode": "active-vector-paper",
+                "evidence_kind": "raw_span",
+                "citation_label": "S1",
+                "excerpt": "The Transformer avoids recurrence and instead relies on attention.",
+            }
+        ],
+    }
+
+    # When: the normal text renderer formats the payload.
+    rendered = render_paper_lookup_text("What evidence supports removing recurrence?", payload)
+
+    # Then: partial coverage is visible as a thin verdict without exposing internals.
+    assert "Verdict: THIN - 1/2 claims verified, 0 unsupported, coverage partial" in rendered
+    assert "Verifier: lexical heuristic" not in rendered
+    assert "provider" not in rendered.lower()
 
 
 def test_paper_lookup_text_marks_unanswerable_payload_as_insufficient() -> None:

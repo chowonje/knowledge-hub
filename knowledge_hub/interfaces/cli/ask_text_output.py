@@ -6,6 +6,8 @@ from typing import Any, Final
 
 _CITATION_RE: Final = re.compile(r"\[S\d+\]")
 _SOURCE_BACKED_KINDS: Final = {"raw_span", "raw_source", "parsed_artifact_evidence_chunk"}
+_THIN_COVERAGE_STATUSES: Final = {"partial", "insufficient", "missing", "none", "low", "weak"}
+_THIN_VERIFICATION_STATUSES: Final = {"caution", "failed", "fail", "warning", "unsupported"}
 
 
 def should_render_paper_lookup_text(source_type: str | None, result: Mapping[str, Any]) -> bool:
@@ -36,13 +38,20 @@ def render_paper_lookup_text(question: str, result: Mapping[str, Any]) -> str:
     lines.append(f"Evidence state: {state}")
     if note:
         lines.append(f"Evidence note: {note}")
+    verdict = _verdict_line(result)
+    if verdict:
+        lines.append(verdict)
+    if _verification_is_heuristic(result):
+        lines.append("Verifier: lexical heuristic; Korean/English mismatch can make counts unreliable.")
 
     if source_backed_excerpts:
         lines.extend(["", "Source-backed excerpts:"])
         for source in source_backed_excerpts[:2]:
             label = _display_label(str(source.get("citation_label") or ""))
             prefix = f"{label} " if label else ""
-            lines.append(f"{prefix}{_excerpt(source)}")
+            material = _source_material_label(source)
+            material_prefix = f"{material} - " if material else ""
+            lines.append(f"{prefix}{material_prefix}{_excerpt(source)}")
     elif source_backed:
         lines.append("Source-backed excerpts: unavailable in the selected source rows.")
 
@@ -187,6 +196,91 @@ def _verification_caution(result: Mapping[str, Any]) -> bool:
     verification = _mapping(result.get("answerVerification"))
     status = str(verification.get("status") or "").strip().lower()
     return bool(verification.get("needsCaution")) or status in {"caution", "failed", "fail", "warning"}
+
+
+def _verdict_line(result: Mapping[str, Any]) -> str:
+    coverage_status = _coverage_status(result)
+    if not _thin_answer(result, coverage_status=coverage_status):
+        return ""
+    supported, total, unsupported = _claim_counts(result)
+    return f"Verdict: THIN - {supported}/{total} claims verified, {unsupported} unsupported, coverage {coverage_status}"
+
+
+def _thin_answer(result: Mapping[str, Any], *, coverage_status: str) -> bool:
+    verification = _mapping(result.get("answerVerification"))
+    status = str(verification.get("status") or "").strip().lower()
+    if bool(verification.get("needsCaution")) or status in _THIN_VERIFICATION_STATUSES:
+        return True
+    return coverage_status in _THIN_COVERAGE_STATUSES
+
+
+def _claim_counts(result: Mapping[str, Any]) -> tuple[int, int, int]:
+    verification = _mapping(result.get("answerVerification"))
+    claims = [_mapping(item) for item in _sequence(verification.get("claims"))]
+    supported = _safe_int(verification.get("supportedClaimCount"))
+    unsupported = _safe_int(verification.get("unsupportedClaimCount"))
+    uncertain = _safe_int(verification.get("uncertainClaimCount"))
+    if claims:
+        supported = max(supported, sum(1 for item in claims if str(item.get("verdict") or "").strip().lower() == "supported"))
+        unsupported = max(unsupported, sum(1 for item in claims if str(item.get("verdict") or "").strip().lower() == "unsupported"))
+        uncertain = max(uncertain, sum(1 for item in claims if str(item.get("verdict") or "").strip().lower() == "uncertain"))
+    total = max(supported + unsupported + uncertain, len(claims))
+    return supported, total, unsupported
+
+
+def _safe_int(value: Any) -> int:
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _coverage_status(result: Mapping[str, Any]) -> str:
+    evidence_packet = _mapping(result.get("evidencePacket"))
+    answer_contract = _mapping(result.get("answerContract") or result.get("answer_contract"))
+    candidates = [
+        evidence_packet.get("coverageStatus"),
+        evidence_packet.get("coverage"),
+        evidence_packet.get("sourceCoverage"),
+        _mapping(evidence_packet.get("validation")).get("coverageStatus"),
+        _mapping(evidence_packet.get("validation")).get("coverage"),
+        answer_contract.get("coverageStatus"),
+        answer_contract.get("coverage"),
+        result.get("coverageStatus"),
+        result.get("coverage"),
+    ]
+    for value in candidates:
+        status = _coverage_status_value(value)
+        if status:
+            return status
+    return "unknown"
+
+
+def _coverage_status_value(value: Any) -> str:
+    if isinstance(value, Mapping):
+        return str(value.get("status") or value.get("coverageStatus") or "").strip().lower()
+    return str(value or "").strip().lower()
+
+
+def _verification_is_heuristic(result: Mapping[str, Any]) -> bool:
+    verification = _mapping(result.get("answerVerification"))
+    route = _mapping(verification.get("route"))
+    if str(route.get("mode") or "").strip().lower() == "heuristic":
+        return True
+    warnings = [str(item).strip().lower() for item in _sequence(verification.get("warnings"))]
+    return any("heuristic" in warning for warning in warnings)
+
+
+def _source_material_label(source: Mapping[str, Any]) -> str:
+    if _is_paper_card_v2(source):
+        return "derived"
+    evidence_kind = str(source.get("evidence_kind") or "").strip().lower()
+    source_trace = _mapping(source.get("source_trace") or source.get("sourceTrace"))
+    trace_kind = str(source_trace.get("evidenceKind") or "").strip().lower()
+    retrieval_mode = str(source.get("retrieval_mode") or source.get("retrievalMode") or "").strip().lower()
+    if evidence_kind in _SOURCE_BACKED_KINDS or trace_kind in _SOURCE_BACKED_KINDS or retrieval_mode == "active-vector-paper":
+        return "raw"
+    return ""
 
 
 def _excerpt(source: Mapping[str, Any]) -> str:
