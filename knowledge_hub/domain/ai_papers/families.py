@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from knowledge_hub.domain.ai_papers.followup_scope import canonical_followup_title_candidate
 from knowledge_hub.domain.registry import normalize_domain_source
 
 
@@ -59,6 +60,8 @@ def _single_paper_lookup_signal(query: str) -> bool:
     body = _clean_text(query)
     if not body:
         return False
+    if canonical_followup_title_candidate(body):
+        return True
     if explicit_paper_id(body):
         return True
     has_lookup = bool(_LOOKUP_RE.search(body))
