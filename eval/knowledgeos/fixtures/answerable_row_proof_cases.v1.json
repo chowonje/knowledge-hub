@@ -1,0 +1,73 @@
+{
+  "schema": "knowledge-hub.answerable-row-proof-cases.v1",
+  "description": "Bounded question set for the first real answerable-row proof over the local paper corpus. All expectedSourceIds verified present and indexed on 2026-06-11 (post-backfill, 953 indexed docs). Abstain rows use fictional paper titles verified absent from the corpus.",
+  "runRegime": {
+    "answerRoute": "codex",
+    "allowExternal": true,
+    "sourceScope": "local public arxiv papers only"
+  },
+  "cases": [
+    {
+      "caseId": "single-anchor-taste",
+      "answerType": "single_paper",
+      "query": "AI Can Learn Scientific Taste 논문(2603.14473)의 핵심 주장과 방법을 설명해줘",
+      "expectedSourceIds": ["2603.14473"]
+    },
+    {
+      "caseId": "single-bert-pretraining",
+      "answerType": "single_paper",
+      "query": "What are the two pre-training tasks used in the BERT paper?",
+      "expectedSourceIds": ["1810.04805"]
+    },
+    {
+      "caseId": "single-gan-objective",
+      "answerType": "single_paper",
+      "query": "GAN 논문(Generative Adversarial Nets)에서 generator와 discriminator는 어떤 목적함수로 학습되는지 설명해줘",
+      "expectedSourceIds": ["1406.2661"]
+    },
+    {
+      "caseId": "single-gpt3-fewshot",
+      "answerType": "single_paper",
+      "query": "What does the GPT-3 paper (Language Models are Few-Shot Learners) mean by in-context learning?",
+      "expectedSourceIds": ["2005.14165"]
+    },
+    {
+      "caseId": "single-word2vec-models",
+      "answerType": "single_paper",
+      "query": "word2vec 논문(Efficient Estimation of Word Representations in Vector Space)의 CBOW와 Skip-gram 구조 차이를 설명해줘",
+      "expectedSourceIds": ["1301.3781"]
+    },
+    {
+      "caseId": "single-dqn-replay",
+      "answerType": "single_paper",
+      "query": "Playing Atari with Deep Reinforcement Learning 논문에서 experience replay가 학습 안정성에 어떤 역할을 하는지 설명해줘",
+      "expectedSourceIds": ["1312.5602"]
+    },
+    {
+      "caseId": "compare-word2vec-phrases",
+      "answerType": "compare",
+      "query": "Compare the original word2vec paper with its follow-up 'Distributed Representations of Words and Phrases and their Compositionality' — what did the follow-up add or change?",
+      "expectedSourceIds": ["1301.3781", "1310.4546"]
+    },
+    {
+      "caseId": "compare-bert-gpt3",
+      "answerType": "compare",
+      "query": "BERT 논문과 GPT-3 논문의 사전학습 방식과 다운스트림 활용 방식 차이를 비교해줘",
+      "expectedSourceIds": ["1810.04805", "2005.14165"]
+    },
+    {
+      "caseId": "abstain-fictional-hypergraph",
+      "answerType": "abstain",
+      "query": "Recursive Hypergraph Attention Networks 논문의 어텐션 설계를 설명해줘",
+      "expectedSourceIds": [],
+      "expectedInsufficientEvidence": true
+    },
+    {
+      "caseId": "abstain-fictional-photonic",
+      "answerType": "abstain",
+      "query": "Explain the training pipeline of the paper 'Photonic Mixture-of-Memories Transformer'",
+      "expectedSourceIds": [],
+      "expectedInsufficientEvidence": true
+    }
+  ]
+}

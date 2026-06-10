@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Made external answer generation opt-in for `khub ask` (ADR `docs/adr/2026-06-11-ask-external-default.md`): the default `allow_external` is now always `false` and is no longer inferred from the configured summarization provider; only an explicit `answer.allow_external_default: true` in config or the per-invocation `--allow-external` flag enables external generation. Effective policy stays visible (`allow_external=` line in text output, `allowExternal` in JSON).
+- Stale derivative cards now trigger a rebuild on the scoped ensure path: `CardV2BuilderRegistry` handlers (paper/web/vault) treat `stale`/`invalidated_at` cards as needing rebuild instead of serving them verbatim, so a paper whose source content hash changed no longer answers from an outdated card on `paper_id`-scoped asks. Search-path stale filtering at the store layer is unchanged.
+
 ### Added
+
+- Answer logs now persist runtime execution markers: `rag_answer_logs.answer_route_json` gains `runtimeUsed` (`ask_v2`/`legacy`), `runtimeFallbackReason`, and `askV2HardGate`, and ask payloads expose the same data under `runtimeExecution`. This makes the promoted ask_v2 surface measurable in real traffic (previously 0 of 5,124 log rows were segmentable by runtime).
+- Added `eval/knowledgeos/fixtures/answerable_row_proof_cases.v1.json`: a bounded 10-row question set (6 single-paper incl. the `2603.14473` anchor, 2 compare, 2 fictional-title abstain probes) for the first real answerable-row proof run against the post-backfill local corpus.
 
 - Added a report-only parsed-artifact evidence chunk promotion audit. The new schema-backed report consumes the positive section/paragraph quality complete review and reads the local candidate store without changing default `khub ask`, MCP, vectors, DB/indexes, parser output, or vault content. The generated `parsed_artifact_evidence_chunk_promotion_audit.v1.{json,md}` is `ready` with decision `promotion_candidate_narrow_scope`: `papersEvaluated=300`, `papersWithCandidateRows=300`, `candidateRows=1200`, `candidateRowsWithValidSourceContentHash=1188`, `candidateRowsWithValidCharLocators=1200`, `answerVisibleEvidenceRows=20`, `candidateStoreAnswerVisibleRows=0`, and one blocker category, `source_content_hash_invalid` (`12` rows across `3` papers). Default promotion remains blocked, but the evidence is sufficient to move to a narrower promotion-design tranche.
 - Added the bounded `paper_answer_quality_harness.v1` report-only quality gate for the existing 8-row paper evidence/readback/profile readiness surface. The generated report is `ready` with `answerQualityReadyRows=6`, `notApplicableRows=2`, `semanticCitationSupportRows=6`, `semanticCitationFailRows=0`, `compareMeaningfulSynthesisRows=2`, `compareRestatementOnlyRows=0`, `unsupportedInventionRows=0`, `sampleDraftRows=8`, `humanReadableReviewRows=8`, and zero vault/DB/vector/model/default-promotion mutation counters; public/default answer exposure remains disabled.
