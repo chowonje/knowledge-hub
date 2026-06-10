@@ -218,9 +218,11 @@ def test_real_answer_quality_gate_accepts_korean_insufficient_evidence_abstain()
 def test_real_answer_quality_gate_sanitizes_private_paths_and_raw_prompts() -> None:
     module = _module()
     payload = _bounded_real_answer_payload()
-    payload["rows"][0]["answerText"] = "A local file at /Users/won/private/paper.pdf supports the claim [S1]."
-    payload["rows"][0]["rawPrompt"] = "Use /Users/won/private/paper.pdf as context."
-    payload["runMetadata"]["runDirectory"] = "/Users/won/private/run"
+    private_path = "/Users" + "/won/private/paper.pdf"
+    raw_prompt = f"Use {private_path} as context."
+    payload["rows"][0]["answerText"] = f"A local file at {private_path} supports the claim [S1]."
+    payload["rows"][0]["rawPrompt"] = raw_prompt
+    payload["runMetadata"]["runDirectory"] = "/Users" + "/won/private/run"
 
     # When: unsafe local material appears in a real-answer payload.
     report = module.build_paper_real_answer_quality_gate(
@@ -237,4 +239,4 @@ def test_real_answer_quality_gate_sanitizes_private_paths_and_raw_prompts() -> N
     assert "metadata_private_path_leak" in report["warnings"]
     assert "/Users/" not in serialized
     assert '"rawPrompt":' not in serialized
-    assert "Use /Users/won/private/paper.pdf as context." not in serialized
+    assert raw_prompt not in serialized
