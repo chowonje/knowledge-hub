@@ -20,7 +20,7 @@
     "schema": { "const": "knowledge-hub.research-review-loop.result.v1" },
     "status": {
       "type": "string",
-      "enum": ["ready_for_human_review", "blocked", "reviewed", "partial"]
+      "enum": ["ready_for_human_review", "blocked", "reviewed", "reviewed_no_authoritative_assertions", "partial"]
     },
     "version": { "type": "string" },
     "sourceScope": {
@@ -41,18 +41,51 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["claimId", "claimText", "state", "sourceIds", "evidenceSpanIds", "canonicalEligible"],
+        "required": [
+          "claimId",
+          "claimText",
+          "claimTextHash",
+          "state",
+          "sourceIds",
+          "evidenceSpanIds",
+          "evidenceSnippetHashes",
+          "canonicalEligible",
+          "claimOrigin",
+          "claimTrustLevel",
+          "claimQualityFlag",
+          "reviewInputEligible",
+          "authorityLevel",
+          "authorityStatus",
+          "canonicalBlockers"
+        ],
         "properties": {
           "claimId": { "type": "string" },
           "claimText": { "type": "string" },
+          "claimTextHash": { "type": "string" },
           "state": {
             "type": "string",
             "enum": ["proposed", "accepted", "rejected", "unsure", "archived"]
           },
           "sourceIds": { "type": "array", "items": { "type": "string" } },
           "evidenceSpanIds": { "type": "array", "items": { "type": "string" } },
+          "evidenceSnippetHashes": { "type": "array", "items": { "type": "string" } },
           "canonicalEligible": { "type": "boolean" },
           "reviewDecisionId": { "type": ["string", "null"] },
+          "claimOrigin": { "type": "string" },
+          "claimTrustLevel": {
+            "type": "string",
+            "enum": [
+              "candidate",
+              "human_reviewed_authoritative",
+              "human_reviewed_non_authoritative",
+              "blocked_review_input"
+            ]
+          },
+          "claimQualityFlag": { "type": "string" },
+          "reviewInputEligible": { "type": "boolean" },
+          "authorityLevel": { "type": "string", "enum": ["authoritative", "candidate"] },
+          "authorityStatus": { "type": "string", "enum": ["authoritative", "blocked", "candidate"] },
+          "canonicalBlockers": { "type": "array", "items": { "type": "string" } },
           "warnings": { "type": "array", "items": { "type": "string" } }
         },
         "additionalProperties": true
@@ -62,18 +95,62 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["evidenceSpanId", "sourceId", "locator", "snippetHash", "state"],
+        "required": [
+          "evidenceSpanId",
+          "sourceId",
+          "locator",
+          "snippetHash",
+          "state",
+          "locatorKind",
+          "locatorAuthority",
+          "provenanceStatus",
+          "canonicalBlockers",
+          "sourceContentHashAvailable",
+          "canonicalEligible"
+        ],
         "properties": {
           "evidenceSpanId": { "type": "string" },
           "sourceId": { "type": "string" },
           "locator": { "type": "string" },
+          "rawLocator": { "type": ["string", "null"] },
           "sourceContentHash": { "type": ["string", "null"] },
           "snippetHash": { "type": "string" },
           "textPreview": { "type": "string" },
           "state": {
             "type": "string",
-            "enum": ["proposed", "reviewed", "blocked_missing_locator", "blocked_missing_hash"]
+            "enum": [
+              "proposed",
+              "reviewed",
+              "blocked_missing_locator",
+              "blocked_missing_hash",
+              "blocked_missing_snippet_text",
+              "blocked_unresolved_memory_unit_locator",
+              "blocked_non_offset_locator",
+              "blocked_missing_source_content_hash",
+              "blocked_source_scope_mismatch"
+            ]
           },
+          "locatorKind": {
+            "type": "string",
+            "enum": ["chars_offset", "missing", "memory_unit", "non_offset"]
+          },
+          "locatorAuthority": { "type": "string", "enum": ["source_text", "blocked"] },
+          "provenanceStatus": {
+            "type": "string",
+            "enum": [
+              "source_resolved",
+              "blocked_missing_locator",
+              "blocked_missing_hash",
+              "blocked_missing_snippet_text",
+              "blocked_unresolved_memory_unit_locator",
+              "blocked_non_offset_locator",
+              "blocked_missing_source_content_hash",
+              "blocked_source_scope_mismatch"
+            ]
+          },
+          "canonicalBlockers": { "type": "array", "items": { "type": "string" } },
+          "sourceContentHashAvailable": { "type": "boolean" },
+          "canonicalEligible": { "type": "boolean" },
           "warnings": { "type": "array", "items": { "type": "string" } }
         },
         "additionalProperties": true
@@ -83,7 +160,17 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["decisionId", "targetType", "targetId", "decision", "reviewer", "reviewedAt"],
+        "required": [
+          "decisionId",
+          "targetType",
+          "targetId",
+          "decision",
+          "reviewer",
+          "reviewedAt",
+          "reason",
+          "claimTextHash",
+          "snippetHashes"
+        ],
         "properties": {
           "decisionId": { "type": "string" },
           "targetType": {
@@ -98,7 +185,10 @@
           "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
           "reviewer": { "type": "string" },
           "reviewedAt": { "type": "string" },
-          "reason": { "type": "string" }
+          "reason": { "type": "string" },
+          "claimTextHash": { "type": "string" },
+          "snippetHashes": { "type": "array", "items": { "type": "string" } },
+          "decisionSource": { "type": "string" }
         },
         "additionalProperties": true
       }
@@ -142,7 +232,10 @@
         "packType",
         "reviewedClaimIds",
         "excludedUnreviewedClaimIds",
-        "canonicalWriteAllowed"
+        "canonicalWriteAllowed",
+        "authoritativeAssertCount",
+        "reviewedButNoAuthoritativeAssertions",
+        "memoryProjectionPolicy"
       ],
       "properties": {
         "packId": { "type": "string" },
@@ -152,7 +245,25 @@
         "weakConceptIds": { "type": "array", "items": { "type": "string" } },
         "openQuestionIds": { "type": "array", "items": { "type": "string" } },
         "canonicalWriteAllowed": { "type": "boolean" },
-        "outputPath": { "type": ["string", "null"] }
+        "authoritativeAssertCount": { "type": "integer", "minimum": 0 },
+        "reviewedButNoAuthoritativeAssertions": { "type": "boolean" },
+        "memoryProjectionPolicy": {
+          "type": "object",
+          "required": [
+            "memoryCards",
+            "canonicalMemoryCardWriteAllowed",
+            "projectionAllowedFromReviewedArtifactsOnly"
+          ],
+          "properties": {
+            "memoryCards": { "type": "string", "enum": ["excluded_generated_unreviewed"] },
+            "canonicalMemoryCardWriteAllowed": { "type": "boolean", "const": false },
+            "projectionAllowedFromReviewedArtifactsOnly": { "type": "boolean", "const": true }
+          },
+          "additionalProperties": false
+        },
+        "outputPath": { "type": ["string", "null"] },
+        "packMarkdownPath": { "type": "string" },
+        "packJsonPath": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -163,18 +274,27 @@
         "proposedClaimRows",
         "evidenceSpanRows",
         "reviewDecisionRows",
+        "appliedReviewDecisionRows",
         "weakConceptRows",
         "openQuestionRows",
-        "unsupportedCanonicalRows"
+        "unsupportedCanonicalRows",
+        "authoritativeAssertRows",
+        "blockedEvidenceSpanRows",
+        "reviewedBlockedClaimRows"
       ],
       "properties": {
         "sourceCount": { "type": "integer", "minimum": 0 },
         "proposedClaimRows": { "type": "integer", "minimum": 0 },
         "evidenceSpanRows": { "type": "integer", "minimum": 0 },
         "reviewDecisionRows": { "type": "integer", "minimum": 0 },
+        "appliedReviewDecisionRows": { "type": "integer", "minimum": 0 },
         "weakConceptRows": { "type": "integer", "minimum": 0 },
         "openQuestionRows": { "type": "integer", "minimum": 0 },
-        "unsupportedCanonicalRows": { "type": "integer", "minimum": 0 }
+        "unsupportedCanonicalRows": { "type": "integer", "minimum": 0 },
+        "authoritativeAssertRows": { "type": "integer", "minimum": 0 },
+        "authoritativeAssertionRows": { "type": "integer", "minimum": 0 },
+        "blockedEvidenceSpanRows": { "type": "integer", "minimum": 0 },
+        "reviewedBlockedClaimRows": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": true
     },
