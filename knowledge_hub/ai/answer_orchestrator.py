@@ -252,6 +252,20 @@ class AnswerOrchestrator:
             claim_context=claim_context,
         )
 
+    @staticmethod
+    def _build_runtime_execution_meta(
+        *,
+        runtime_execution: dict[str, Any] | None,
+        evidence_packet: Any,
+    ) -> dict[str, Any]:
+        meta = dict(runtime_execution or {})
+        packet_payload = dict(getattr(evidence_packet, "evidence_packet", None) or {})
+        return {
+            "used": str(meta.get("used") or "").strip(),
+            "fallbackReason": str(meta.get("fallbackReason") or "").strip(),
+            "askV2HardGate": packet_payload.get("askV2HardGate") is True,
+        }
+
     def _record_answer_log(
         self,
         *,
@@ -261,6 +275,9 @@ class AnswerOrchestrator:
         retrieval_mode: str,
         allow_external: bool,
     ) -> None:
+        runtime_meta = dict(getattr(self, "_runtime_execution_meta", None) or {})
+        if runtime_meta and isinstance(payload, dict):
+            payload.setdefault("runtimeExecution", runtime_meta)
         if self._method_overridden("_record_answer_log"):
             self.searcher._record_answer_log(
                 query=query,
@@ -724,7 +741,12 @@ class AnswerOrchestrator:
         answer_route_override: str | None = None,
         pipeline_result: Any,
         evidence_packet: Any,
+        runtime_execution: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
+        self._runtime_execution_meta = self._build_runtime_execution_meta(
+            runtime_execution=runtime_execution,
+            evidence_packet=evidence_packet,
+        )
         early_exit = self._early_exit_result(
             query=query,
             source_type=source_type,
@@ -805,7 +827,12 @@ class AnswerOrchestrator:
         answer_route_override: str | None = None,
         pipeline_result: Any,
         evidence_packet: Any,
+        runtime_execution: dict[str, Any] | None = None,
     ):
+        self._runtime_execution_meta = self._build_runtime_execution_meta(
+            runtime_execution=runtime_execution,
+            evidence_packet=evidence_packet,
+        )
         early_exit = self._early_exit_result(
             query=query,
             source_type=source_type,
