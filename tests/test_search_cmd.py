@@ -228,6 +228,7 @@ class _FakeSearcher:
             "warnings": [
                 "answer verification caution: unsupported=1 uncertain=1 conflict_mentioned=False"
             ],
+            "evidencePacket": {"answerable": True, "answerableDecisionReason": "substantive_evidence_found"},
             "sources": [
                 {
                     "title": "RAG Note",
@@ -654,6 +655,20 @@ def test_ask_command_filters_unknown_kwargs_for_legacy_generate_answer():
         "min_score": 0.0,
         "source_type": "vault",
     }
+
+
+def test_ask_json_exposes_top_level_answerable_from_evidence_packet():
+    runner = CliRunner()
+    result = runner.invoke(
+        search_cmd.ask,
+        ["rag", "--source", "vault", "--json", "--no-allow-external"],
+        obj={"khub": type("Ctx", (), {"factory": _FakeFactory(), "config": type("Cfg", (), {"summarization_provider": "openai"})()})()},
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["answerable"] is True
+    assert payload["evidencePacket"]["answerable"] is True
 
 
 def test_ask_command_keeps_paper_memory_prefilter_disabled_for_non_paper_source():

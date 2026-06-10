@@ -15,6 +15,7 @@ from knowledge_hub.application.runtime_diagnostics import build_runtime_diagnost
 from knowledge_hub.application.rag_reports import build_rag_ops_report
 from knowledge_hub.ai.memory_prefilter import normalize_memory_route_mode
 from knowledge_hub.ai.retrieval_fit import normalize_source_type
+from knowledge_hub.interfaces.cli.ask_text_output import render_paper_lookup_text, should_render_paper_lookup_text
 from knowledge_hub.knowledge.graph_signals import analyze_graph_query
 from knowledge_hub.core.schema_validator import annotate_schema_errors
 from knowledge_hub.papers.prefilter import normalize_paper_memory_mode
@@ -546,10 +547,17 @@ def ask(ctx, question, top_k, source, retrieval_mode, alpha, memory_route_mode, 
         payload["allowExternal"] = allow_external_effective
         payload["answerRouteRequested"] = str(answer_route or "auto")
         payload.update(_selected_answer_route_fields(payload))
+        evidence_packet = dict(payload.get("evidencePacket") or {})
+        if "answerable" not in payload and "answerable" in evidence_packet:
+            payload["answerable"] = bool(evidence_packet.get("answerable"))
         payload["runtimeDiagnostics"] = runtime_diagnostics
         payload["graphQuerySignal"] = graph_query_signal
         payload["graph_query_signal"] = graph_query_signal
         console.print_json(data=payload)
+        return
+
+    if should_render_paper_lookup_text(source, result):
+        console.print(render_paper_lookup_text(question, result), markup=False)
         return
 
     console.print(f"\n[bold cyan]Q: {question}[/bold cyan]\n")
