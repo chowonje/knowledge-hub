@@ -111,3 +111,48 @@ def test_rewrite_answer_skips_when_verification_reports_signal_only_grounding():
         "retrieval signals without citation-grade evidence require conservative fallback" in warning
         for warning in rewrite_meta["warnings"]
     )
+
+
+def test_rewrite_answer_keeps_direct_paper_lookup_when_only_heuristic_verification_failed():
+    searcher = _local_searcher()
+    answer = "Transformer는 recurrence를 attention 기반 구조로 대체합니다. [S1]"
+
+    rewritten, rewrite_meta = rewrite_answer(
+        searcher,
+        query="Explain the core idea of the Transformer paper.",
+        answer=answer,
+        evidence=[
+            {
+                "title": "Attention Is All You Need",
+                "excerpt": "The Transformer is based entirely on attention mechanisms, dispensing with recurrence and convolutions.",
+                "source_type": "paper",
+                "citation_label": "S1",
+            }
+        ],
+        answer_signals={
+            "paper_family": "paper_lookup",
+            "direct_answer_evidence_count": 1,
+            "substantive_evidence_count": 1,
+            "source_mismatch_count": 0,
+            "contradictory_source_count": 0,
+            "contradicting_belief_count": 0,
+        },
+        verification={
+            "status": "caution",
+            "needsCaution": True,
+            "supportedClaimCount": 0,
+            "unsupportedClaimCount": 1,
+            "uncertainClaimCount": 0,
+            "retrievalSignalCount": 0,
+            "groundingEvidenceCount": 1,
+            "conflictMentioned": True,
+            "warnings": ["answer verification used heuristic fallback"],
+            "route": {"mode": "heuristic"},
+        },
+        contradicting_beliefs=[],
+        allow_external=False,
+    )
+
+    assert rewritten == answer
+    assert rewrite_meta["applied"] is False
+    assert "requiresConservativeFallback" not in rewrite_meta

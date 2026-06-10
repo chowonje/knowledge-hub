@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper-answer-quality-harness.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "profile", "policy", "counts", "rows", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-answer-quality-harness.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "profile": { "const": "paper-answer-quality-harness" },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "localFakeLlmOnly",
+        "externalModelCallsAllowed",
+        "dbVectorMutation",
+        "vaultRead",
+        "publicDefaultPromotionAllowed"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "localFakeLlmOnly": { "const": true },
+        "externalModelCallsAllowed": { "const": false },
+        "dbVectorMutation": { "const": false },
+        "vaultRead": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "rowCount",
+        "answerQualityReadyRows",
+        "notApplicableRows",
+        "blockedRows",
+        "singlePaperReadyRows",
+        "synthesisReadyRows",
+        "compareReadyRows",
+        "abstentionRows",
+        "inlineCitationReadyRows",
+        "semanticCitationSupportRows",
+        "semanticCitationFailRows",
+        "twoSidedCompareCitationRows",
+        "compareMeaningfulSynthesisRows",
+        "compareRestatementOnlyRows",
+        "insufficientEvidenceRows",
+        "unexpectedAnswerRows",
+        "unsupportedInventionRows",
+        "sampleDraftRows",
+        "humanReadableReviewRows",
+        "privatePathLeakRows",
+        "forbiddenRawMarkerRows",
+        "rawAnswerPersistedRows",
+        "externalModelCallRows",
+        "modelApiCallRows",
+        "dbVectorMutationRows",
+        "vaultReadRows",
+        "defaultPromotionRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "runId",
+          "caseId",
+          "variantId",
+          "answerType",
+          "status",
+          "draftStatus",
+          "expectedSourceIds",
+          "citationLabels",
+          "answerHash",
+          "answerPreview",
+          "inlineCitationReady",
+          "semanticCitationSupported",
+          "twoSidedCompareCitationReady",
+          "compareMeaningfulSynthesis",
+          "sampleDraft",
+          "humanReadableReview",
+          "warnings"
+        ],
+        "properties": {
+          "runId": { "type": "string" },
+          "caseId": { "type": "string" },
+          "variantId": { "type": "string" },
+          "answerType": { "enum": ["single_paper", "synthesis", "compare", "abstain"] },
+          "status": { "enum": ["ready", "blocked", "not_applicable"] },
+          "draftStatus": { "enum": ["answerable", "insufficient_evidence"] },
+          "expectedSourceIds": { "type": "array", "items": { "type": "string" } },
+          "citationLabels": { "type": "array", "items": { "type": "string" } },
+          "answerHash": { "type": "string", "pattern": "^sha256:" },
+          "answerPreview": { "type": "string" },
+          "inlineCitationReady": { "type": "boolean" },
+          "semanticCitationSupported": { "type": "boolean" },
+          "twoSidedCompareCitationReady": { "type": "boolean" },
+          "compareMeaningfulSynthesis": { "type": "boolean" },
+          "sampleDraft": {
+            "type": "object",
+            "required": ["stored", "hash"],
+            "properties": {
+              "stored": { "const": "local_evidence_only" },
+              "hash": { "type": "string", "pattern": "^sha256:" }
+            },
+            "additionalProperties": false
+          },
+          "humanReadableReview": {
+            "type": "object",
+            "required": ["status", "reason"],
+            "properties": {
+              "status": { "enum": ["usable", "insufficient", "failed"] },
+              "reason": { "type": "string" }
+            },
+            "additionalProperties": false
+          },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

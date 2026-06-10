@@ -1,0 +1,761 @@
+{
+  "counts": {
+    "blockedRows": 0,
+    "briefBlockedPaperRows": 0,
+    "briefReadyPaperRows": 8,
+    "forbiddenRawMarkerRows": 0,
+    "notApplicableRows": 2,
+    "paperReadbackRows": 8,
+    "privatePathLeakRows": 0,
+    "readbackReadyRows": 6,
+    "rowCount": 8,
+    "schemaViolationCount": 0
+  },
+  "generatedAt": "2026-06-08T15:48:48Z",
+  "policy": {
+    "dbVectorMutation": false,
+    "localOnlyRawArtifactRefs": true,
+    "modelCallsAllowed": false,
+    "publicDefaultPromotionAllowed": false,
+    "reportOnly": true,
+    "vaultRead": false
+  },
+  "profile": "paper-understanding-readback",
+  "requirements": {
+    "briefProfileSlots": [
+      "claim",
+      "method",
+      "evidence",
+      "limitation",
+      "purpose_relevance"
+    ],
+    "requiresCitationLabel": true,
+    "requiresSnippetHash": true,
+    "requiresSourceHash": true
+  },
+  "rows": [
+    {
+      "blockedPaperCount": 0,
+      "caseId": "single_paper_attention",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperReadbacks": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "claim",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "method",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "evidence",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "limitation",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "1706.03762",
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "single_paper_attention__A_hybrid_k5",
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "single_paper_attention",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperReadbacks": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "claim",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "method",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "evidence",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "limitation",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "1706.03762",
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "single_paper_attention__B_semantic_k8",
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "synthesis_attention_components",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperReadbacks": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "claim",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "method",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "evidence",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "limitation",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "1706.03762",
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "synthesis_attention_components__A_hybrid_k5",
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "synthesis_attention_components",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperReadbacks": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "claim",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "method",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "evidence",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "limitation",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:2d77fa9629e22a4e1d70afe64261cafcd970972e2c4c2bd0f7d6fad20955439f",
+              "excerpt": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw",
+              "locator": "chars:25-2880",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:c7010b53564c8251672fa3136bc5228040ce2d3335a39bad342b77bdfa8b8153",
+              "sourceId": "1706.03762",
+              "sourceRef": "papers_dir/parsed/1706.03762/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "1706.03762",
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "synthesis_attention_components__B_semantic_k8",
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "compare_rag_fid",
+      "expectedSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "paperReadbacks": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "claim",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "method",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "evidence",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "limitation",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "2005.11401",
+          "warnings": []
+        },
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "claim",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "method",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "evidence",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "limitation",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "2312.10997",
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 2,
+      "runId": "compare_rag_fid__A_hybrid_k5",
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "compare_rag_fid",
+      "expectedSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "paperReadbacks": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "claim",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "method",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "evidence",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "limitation",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S1",
+              "contentHash": "sha256:1062e9155ce212aff863c57d23020c1d9332567e1f071a13a005b218dd06fccd",
+              "excerpt": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task",
+              "locator": "chars:25-2921",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:3a7654e38e369e206899b6c362cbc36d89980ff8e380dfa17ca9fc3100f85c72",
+              "sourceId": "2005.11401",
+              "sourceRef": "papers_dir/parsed/2005.11401/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "2005.11401",
+          "warnings": []
+        },
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "slots": [
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "claim",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "method",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "evidence",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "limitation",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            },
+            {
+              "citationLabel": "S2",
+              "contentHash": "sha256:f6de38e1dfc360543f6953cf17b8c7b462cbec47dbcea13e9f0462812befc7c6",
+              "excerpt": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat",
+              "locator": "chars:25-5474",
+              "slot": "purpose_relevance",
+              "snippetHash": "sha256:3a56fc3407951129389e72722ef981c03043ff455e9c4cbf4a41691c1bde4203",
+              "sourceId": "2312.10997",
+              "sourceRef": "papers_dir/parsed/2312.10997/document.md",
+              "status": "ready",
+              "warnings": []
+            }
+          ],
+          "sourceId": "2312.10997",
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 2,
+      "runId": "compare_rag_fid__B_semantic_k8",
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "abstain_missing_arxiv",
+      "expectedSourceIds": [],
+      "paperReadbacks": [],
+      "readyPaperCount": 0,
+      "runId": "abstain_missing_arxiv__A_hybrid_k5",
+      "status": "not_applicable",
+      "variantId": "A_hybrid_k5",
+      "warnings": [
+        "not_applicable_abstention"
+      ]
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "abstain_missing_arxiv",
+      "expectedSourceIds": [],
+      "paperReadbacks": [],
+      "readyPaperCount": 0,
+      "runId": "abstain_missing_arxiv__B_semantic_k8",
+      "status": "not_applicable",
+      "variantId": "B_semantic_k8",
+      "warnings": [
+        "not_applicable_abstention"
+      ]
+    }
+  ],
+  "schema": "knowledge-hub.paper-understanding-readback.v1",
+  "status": "ready",
+  "warnings": []
+}

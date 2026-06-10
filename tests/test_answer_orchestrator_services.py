@@ -101,7 +101,12 @@ def test_answer_orchestrator_default_inputs_use_direct_builder_path_without_over
     )
 
     assert answer_prompt == "direct-prompt"
-    assert answer_context == "direct-context"
+    assert answer_context == (
+        "direct-context\n\n"
+        "=== Citation Labels ===\n"
+        "Use these exact labels in factual answer sentences.\n"
+        "- [S1] title=Paper A target=-"
+    )
     assert observed["prompt"] == ("attention mechanism", {"paper_definition_mode": True})
     assert observed["context"] == {
         "query": "attention mechanism",
@@ -139,7 +144,12 @@ def test_answer_orchestrator_default_inputs_preserve_searcher_builder_overrides(
     )
 
     assert answer_prompt == "override-prompt:attention mechanism"
-    assert answer_context == "override-context:claim-context"
+    assert answer_context == (
+        "override-context:claim-context\n\n"
+        "=== Citation Labels ===\n"
+        "Use these exact labels in factual answer sentences.\n"
+        "- [S1] title=Paper A target=-"
+    )
 
 
 def test_answer_orchestrator_build_fallback_uses_direct_helper_without_override(monkeypatch):
@@ -657,6 +667,59 @@ def test_answer_orchestrator_prepare_answer_execution_inputs_updates_claim_nativ
     assert prepared.claim_consensus == {"status": "native"}
     assert prepared.claim_consensus_merge_mode == "strict"
     assert prepared.original_classification == "P1"
+
+
+def test_answer_orchestrator_prepare_answer_execution_inputs_uses_default_for_direct_paper_lookup(monkeypatch):
+    searcher = RAGSearcher(DummyEmbedder(), DummyVectorDB(_build_records()), llm=FakeLLM())
+    orchestrator = AnswerOrchestrator(searcher)
+    pipeline_result = SimpleNamespace(
+        v2_diagnostics={"answerProvenance": {"mode": "weak_claim_fallback"}},
+        plan=SimpleNamespace(to_dict=lambda: {"queryFrame": {"family": "paper_lookup"}}),
+    )
+    evidence_packet = _evidence_packet(
+        evidence_packet_payload={
+            "answerable": True,
+            "validation": {
+                "substantiveEvidenceCount": 2,
+                "directAnswerEvidenceCount": 1,
+                "sourceMismatchCount": 0,
+            },
+        }
+    )
+
+    monkeypatch.setattr(orchestrator, "_section_native_inputs", lambda **_kwargs: None)
+    monkeypatch.setattr(
+        orchestrator,
+        "_claim_native_inputs",
+        lambda **_kwargs: (_ for _ in ()).throw(AssertionError("direct paper lookup should use evidence context")),
+    )
+    monkeypatch.setattr(orchestrator, "_default_answer_inputs", lambda **_kwargs: ("default-prompt", "default-context"))
+    monkeypatch.setattr(
+        orchestrator,
+        "_evaluate_policy",
+        lambda **kwargs: (f"safe::{kwargs['context']}", _AllowedPolicy(), "P1"),
+    )
+
+    prepared = orchestrator._prepare_answer_execution_inputs(
+        query="Explain the core idea of the Transformer paper.",
+        pipeline_result=pipeline_result,
+        evidence_packet=evidence_packet,
+        selected_llm=StaticLLM("unused"),
+        claim_verification=[{"claim": "base"}],
+        claim_consensus={
+            "supportCount": 0,
+            "weakClaimCount": 0,
+            "unsupportedClaimCount": 8,
+            "conflictCount": 0,
+        },
+        claim_context="claim-context",
+        allow_external=False,
+        route_mode="fixed",
+    )
+
+    assert prepared.answer_prompt == "default-prompt"
+    assert prepared.safe_context == "safe::default-context"
+    assert prepared.claim_consensus_merge_mode == "advisory"
 
 
 def test_answer_orchestrator_promotes_weak_advisory_claim_consensus_to_strict(monkeypatch):

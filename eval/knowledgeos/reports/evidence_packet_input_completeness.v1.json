@@ -1,0 +1,275 @@
+{
+  "counts": {
+    "blockedRows": 0,
+    "forbiddenRawMarkerRows": 0,
+    "nonEmptyPacketRows": 6,
+    "privatePathLeakRows": 0,
+    "rowCount": 8
+  },
+  "generatedAt": "2026-06-08T15:10:05Z",
+  "policy": {
+    "localOnlyRawArtifactRefs": true,
+    "publicDefaultPromotionAllowed": false,
+    "reportOnly": true
+  },
+  "profile": "evidence-packet-v1-llm-only-harness",
+  "rows": [
+    {
+      "caseId": "single_paper_attention",
+      "citationCandidateIds": [
+        "1706.03762"
+      ],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [
+        "1706.03762"
+      ],
+      "promptPacket": {
+        "expectedSourceIds": [
+          "1706.03762"
+        ],
+        "query": "1706.03762 Attention Is All You Need에서 self-attention의 핵심 아이디어를 본문 근거만으로 짧게 설명해줘",
+        "spans": [
+          {
+            "citationLabel": "S1",
+            "contentHashAvailable": true,
+            "locator": "chars:25-2880",
+            "sourceId": "1706.03762",
+            "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw"
+          }
+        ]
+      },
+      "runId": "single_paper_attention__A_hybrid_k5",
+      "sourceCandidateIds": [
+        "1706.03762"
+      ],
+      "spanCount": 1,
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "caseId": "single_paper_attention",
+      "citationCandidateIds": [
+        "1706.03762"
+      ],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [
+        "1706.03762"
+      ],
+      "promptPacket": {
+        "expectedSourceIds": [
+          "1706.03762"
+        ],
+        "query": "1706.03762 Attention Is All You Need에서 self-attention의 핵심 아이디어를 본문 근거만으로 짧게 설명해줘",
+        "spans": [
+          {
+            "citationLabel": "S1",
+            "contentHashAvailable": true,
+            "locator": "chars:25-2880",
+            "sourceId": "1706.03762",
+            "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw"
+          }
+        ]
+      },
+      "runId": "single_paper_attention__B_semantic_k8",
+      "sourceCandidateIds": [
+        "1706.03762"
+      ],
+      "spanCount": 1,
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "caseId": "synthesis_attention_components",
+      "citationCandidateIds": [
+        "1706.03762"
+      ],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [
+        "1706.03762"
+      ],
+      "promptPacket": {
+        "expectedSourceIds": [
+          "1706.03762"
+        ],
+        "query": "1706.03762 Attention Is All You Need 논문의 self-attention, multi-head attention, encoder-decoder attention을 종합해서 Transformer가 RNN/CNN 없이 seq transduction을 처리하는 방식을 설명해줘",
+        "spans": [
+          {
+            "citationLabel": "S1",
+            "contentHashAvailable": true,
+            "locator": "chars:25-2880",
+            "sourceId": "1706.03762",
+            "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw"
+          }
+        ]
+      },
+      "runId": "synthesis_attention_components__A_hybrid_k5",
+      "sourceCandidateIds": [
+        "1706.03762"
+      ],
+      "spanCount": 1,
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "caseId": "synthesis_attention_components",
+      "citationCandidateIds": [
+        "1706.03762"
+      ],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [
+        "1706.03762"
+      ],
+      "promptPacket": {
+        "expectedSourceIds": [
+          "1706.03762"
+        ],
+        "query": "1706.03762 Attention Is All You Need 논문의 self-attention, multi-head attention, encoder-decoder attention을 종합해서 Transformer가 RNN/CNN 없이 seq transduction을 처리하는 방식을 설명해줘",
+        "spans": [
+          {
+            "citationLabel": "S1",
+            "contentHashAvailable": true,
+            "locator": "chars:25-2880",
+            "sourceId": "1706.03762",
+            "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N. Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural netw"
+          }
+        ]
+      },
+      "runId": "synthesis_attention_components__B_semantic_k8",
+      "sourceCandidateIds": [
+        "1706.03762"
+      ],
+      "spanCount": 1,
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "caseId": "compare_rag_fid",
+      "citationCandidateIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "promptPacket": {
+        "expectedSourceIds": [
+          "2005.11401",
+          "2312.10997"
+        ],
+        "query": "2005.11401 RAG와 2312.10997 Fusion-in-Decoder를 논문 근거만으로 retrieval-augmented generation 관점에서 비교해줘",
+        "spans": [
+          {
+            "citationLabel": "S1",
+            "contentHashAvailable": true,
+            "locator": "chars:25-2921",
+            "sourceId": "2005.11401",
+            "text": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task"
+          },
+          {
+            "citationLabel": "S2",
+            "contentHashAvailable": true,
+            "locator": "chars:25-5474",
+            "sourceId": "2312.10997",
+            "text": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat"
+          }
+        ]
+      },
+      "runId": "compare_rag_fid__A_hybrid_k5",
+      "sourceCandidateIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "spanCount": 2,
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "caseId": "compare_rag_fid",
+      "citationCandidateIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "promptPacket": {
+        "expectedSourceIds": [
+          "2005.11401",
+          "2312.10997"
+        ],
+        "query": "2005.11401 RAG와 2312.10997 Fusion-in-Decoder를 논문 근거만으로 retrieval-augmented generation 관점에서 비교해줘",
+        "spans": [
+          {
+            "citationLabel": "S1",
+            "contentHashAvailable": true,
+            "locator": "chars:25-2921",
+            "sourceId": "2005.11401",
+            "text": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Patrick Lewis†‡, Ethan Perez⋆, Aleksandra Piktus†, Fabio Petroni†, Vladimir Karpukhin†, Naman Goyal†, Heinrich Küttler†, Mike Lewis†, Wen-tau Yih†, Tim Rocktäschel†‡, Sebastian Riedel†‡, Douwe Kiela† †Facebook AI Research; ‡University College London; ⋆New York University; plewis@fb.com Abstract Large pre-trained language models have been shown to store factual knowledge in their parameters, and achieve state-of-the-art results when ﬁne-tuned on down- stream NLP tasks. However, their ability to access and precisely manipulate knowl- edge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task"
+          },
+          {
+            "citationLabel": "S2",
+            "contentHashAvailable": true,
+            "locator": "chars:25-5474",
+            "sourceId": "2312.10997",
+            "text": "1 Retrieval-Augmented Generation for Large Language Models: A Survey Yunfan Gaoa, Yun Xiongb, Xinyu Gaob, Kangxiang Jiab, Jinliu Panb, Yuxi Bic, Yi Daia, Jiawei Suna, Meng Wangc, and Haofen Wang a,c aShanghai Research Institute for Intelligent Autonomous Systems, Tongji University bShanghai Key Laboratory of Data Science, School of Computer Science, Fudan University cCollege of Design and Innovation, Tongji University Abstract—Large Language Models (LLMs) showcase impres- sive capabilities but encounter challenges like hallucination, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporat"
+          }
+        ]
+      },
+      "runId": "compare_rag_fid__B_semantic_k8",
+      "sourceCandidateIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "spanCount": 2,
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "caseId": "abstain_missing_arxiv",
+      "citationCandidateIds": [],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [],
+      "promptPacket": {
+        "expectedSourceIds": [],
+        "query": "9999.99999라는 arxiv id 논문의 최신 성능 수치를 논문 본문 근거만으로 요약해줘",
+        "spans": []
+      },
+      "runId": "abstain_missing_arxiv__A_hybrid_k5",
+      "sourceCandidateIds": [],
+      "spanCount": 0,
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "caseId": "abstain_missing_arxiv",
+      "citationCandidateIds": [],
+      "missingExpectedSourceIds": [],
+      "packetSourceIds": [],
+      "promptPacket": {
+        "expectedSourceIds": [],
+        "query": "9999.99999라는 arxiv id 논문의 최신 성능 수치를 논문 본문 근거만으로 요약해줘",
+        "spans": []
+      },
+      "runId": "abstain_missing_arxiv__B_semantic_k8",
+      "sourceCandidateIds": [],
+      "spanCount": 0,
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    }
+  ],
+  "schema": "knowledge-hub.evidence-packet.input-completeness.v1",
+  "status": "ready",
+  "warnings": []
+}

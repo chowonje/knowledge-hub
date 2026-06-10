@@ -1,0 +1,289 @@
+{
+  "counts": {
+    "blockedRows": 0,
+    "briefBlockedPaperRows": 0,
+    "briefReadyPaperRows": 8,
+    "forbiddenRawMarkerRows": 0,
+    "notApplicableRows": 2,
+    "paperProfileRows": 8,
+    "privatePathLeakRows": 0,
+    "readyRows": 6,
+    "rowCount": 8
+  },
+  "generatedAt": "2026-06-08T15:48:55Z",
+  "policy": {
+    "localOnlyRawArtifactRefs": true,
+    "publicDefaultPromotionAllowed": false,
+    "reportOnly": true,
+    "runtimePromotionApplied": false
+  },
+  "profile": "paper-compare-brief-understanding-profile-readiness",
+  "requirements": {
+    "briefProfileSlots": [
+      "claim",
+      "method",
+      "evidence",
+      "limitation",
+      "purpose_relevance"
+    ],
+    "coreProfileSlots": [
+      "claim",
+      "method",
+      "evidence"
+    ],
+    "requiresCitationSpan": true
+  },
+  "rows": [
+    {
+      "blockedPaperCount": 0,
+      "caseId": "single_paper_attention",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperProfiles": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "1706.03762",
+          "spanCount": 5,
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "single_paper_attention__A_hybrid_k5",
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "single_paper_attention",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperProfiles": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "1706.03762",
+          "spanCount": 5,
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "single_paper_attention__B_semantic_k8",
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "synthesis_attention_components",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperProfiles": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "1706.03762",
+          "spanCount": 5,
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "synthesis_attention_components__A_hybrid_k5",
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "synthesis_attention_components",
+      "expectedSourceIds": [
+        "1706.03762"
+      ],
+      "paperProfiles": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "1706.03762",
+          "spanCount": 5,
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 1,
+      "runId": "synthesis_attention_components__B_semantic_k8",
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "compare_rag_fid",
+      "expectedSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "paperProfiles": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "2005.11401",
+          "spanCount": 5,
+          "warnings": []
+        },
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "2312.10997",
+          "spanCount": 5,
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 2,
+      "runId": "compare_rag_fid__A_hybrid_k5",
+      "status": "ready",
+      "variantId": "A_hybrid_k5",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "compare_rag_fid",
+      "expectedSourceIds": [
+        "2005.11401",
+        "2312.10997"
+      ],
+      "paperProfiles": [
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "2005.11401",
+          "spanCount": 5,
+          "warnings": []
+        },
+        {
+          "availableSlots": [
+            "claim",
+            "method",
+            "evidence",
+            "limitation",
+            "purpose_relevance"
+          ],
+          "briefReady": true,
+          "citationSpanCount": 5,
+          "coreReady": true,
+          "missingBriefSlots": [],
+          "missingCoreSlots": [],
+          "sourceId": "2312.10997",
+          "spanCount": 5,
+          "warnings": []
+        }
+      ],
+      "readyPaperCount": 2,
+      "runId": "compare_rag_fid__B_semantic_k8",
+      "status": "ready",
+      "variantId": "B_semantic_k8",
+      "warnings": []
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "abstain_missing_arxiv",
+      "expectedSourceIds": [],
+      "paperProfiles": [],
+      "readyPaperCount": 0,
+      "runId": "abstain_missing_arxiv__A_hybrid_k5",
+      "status": "not_applicable",
+      "variantId": "A_hybrid_k5",
+      "warnings": [
+        "not_applicable_abstention"
+      ]
+    },
+    {
+      "blockedPaperCount": 0,
+      "caseId": "abstain_missing_arxiv",
+      "expectedSourceIds": [],
+      "paperProfiles": [],
+      "readyPaperCount": 0,
+      "runId": "abstain_missing_arxiv__B_semantic_k8",
+      "status": "not_applicable",
+      "variantId": "B_semantic_k8",
+      "warnings": [
+        "not_applicable_abstention"
+      ]
+    }
+  ],
+  "schema": "knowledge-hub.paper-understanding-profile-readiness.v1",
+  "status": "ready",
+  "warnings": []
+}

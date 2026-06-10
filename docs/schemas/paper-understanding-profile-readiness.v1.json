@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-hub.local/schemas/paper-understanding-profile-readiness.v1.json",
+  "title": "knowledge-hub.paper-understanding-profile-readiness.v1",
+  "type": "object",
+  "required": ["schema", "status", "generatedAt", "profile", "policy", "requirements", "counts", "rows", "warnings"],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-understanding-profile-readiness.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "$ref": "#/$defs/timestamp" },
+    "profile": { "const": "paper-compare-brief-understanding-profile-readiness" },
+    "policy": {
+      "type": "object",
+      "required": ["reportOnly", "localOnlyRawArtifactRefs", "publicDefaultPromotionAllowed", "runtimePromotionApplied"],
+      "properties": {
+        "reportOnly": { "const": true },
+        "localOnlyRawArtifactRefs": { "const": true },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "runtimePromotionApplied": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "object",
+      "required": ["coreProfileSlots", "briefProfileSlots", "requiresCitationSpan"],
+      "properties": {
+        "coreProfileSlots": { "type": "array", "items": { "type": "string" } },
+        "briefProfileSlots": { "type": "array", "items": { "type": "string" } },
+        "requiresCitationSpan": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "rowCount",
+        "readyRows",
+        "notApplicableRows",
+        "blockedRows",
+        "paperProfileRows",
+        "briefReadyPaperRows",
+        "briefBlockedPaperRows",
+        "privatePathLeakRows",
+        "forbiddenRawMarkerRows"
+      ],
+      "properties": {
+        "rowCount": { "type": "integer", "minimum": 0 },
+        "readyRows": { "type": "integer", "minimum": 0 },
+        "notApplicableRows": { "type": "integer", "minimum": 0 },
+        "blockedRows": { "type": "integer", "minimum": 0 },
+        "paperProfileRows": { "type": "integer", "minimum": 0 },
+        "briefReadyPaperRows": { "type": "integer", "minimum": 0 },
+        "briefBlockedPaperRows": { "type": "integer", "minimum": 0 },
+        "privatePathLeakRows": { "type": "integer", "minimum": 0 },
+        "forbiddenRawMarkerRows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "rows": { "type": "array", "items": { "$ref": "#/$defs/row" } },
+    "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "row": {
+      "type": "object",
+      "required": [
+        "runId",
+        "caseId",
+        "variantId",
+        "status",
+        "expectedSourceIds",
+        "paperProfiles",
+        "readyPaperCount",
+        "blockedPaperCount",
+        "warnings"
+      ],
+      "properties": {
+        "runId": { "type": "string", "minLength": 1 },
+        "caseId": { "type": "string" },
+        "variantId": { "type": "string" },
+        "status": { "enum": ["ready", "blocked", "not_applicable"] },
+        "expectedSourceIds": { "type": "array", "items": { "type": "string" } },
+        "paperProfiles": { "type": "array", "items": { "$ref": "#/$defs/paperProfile" } },
+        "readyPaperCount": { "type": "integer", "minimum": 0 },
+        "blockedPaperCount": { "type": "integer", "minimum": 0 },
+        "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "paperProfile": {
+      "type": "object",
+      "required": [
+        "sourceId",
+        "spanCount",
+        "citationSpanCount",
+        "availableSlots",
+        "missingCoreSlots",
+        "missingBriefSlots",
+        "coreReady",
+        "briefReady",
+        "warnings"
+      ],
+      "properties": {
+        "sourceId": { "type": "string", "minLength": 1 },
+        "spanCount": { "type": "integer", "minimum": 0 },
+        "citationSpanCount": { "type": "integer", "minimum": 0 },
+        "availableSlots": { "type": "array", "items": { "type": "string" } },
+        "missingCoreSlots": { "type": "array", "items": { "type": "string" } },
+        "missingBriefSlots": { "type": "array", "items": { "type": "string" } },
+        "coreReady": { "type": "boolean" },
+        "briefReady": { "type": "boolean" },
+        "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

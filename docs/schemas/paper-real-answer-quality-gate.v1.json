@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge-hub.paper-real-answer-quality-gate.v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "generatedAt",
+    "profile",
+    "querySet",
+    "collector",
+    "runDirectory",
+    "answerRoute",
+    "allowExternal",
+    "policy",
+    "counts",
+    "rows",
+    "warnings"
+  ],
+  "properties": {
+    "schema": { "const": "knowledge-hub.paper-real-answer-quality-gate.v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "generatedAt": { "type": "string" },
+    "profile": { "const": "paper-real-answer-quality-gate" },
+    "querySet": { "type": "string" },
+    "collector": { "type": "string" },
+    "runDirectory": { "type": "string" },
+    "answerRoute": { "type": "string" },
+    "allowExternal": { "type": "boolean" },
+    "policy": {
+      "type": "object",
+      "required": [
+        "reportOnly",
+        "consumesRealAnswerPayloads",
+        "localFakeLlmOnly",
+        "externalModelCallsAllowed",
+        "dbVectorMutation",
+        "vaultRead",
+        "publicDefaultPromotionAllowed",
+        "qwenDefaultFallbackAllowed",
+        "rawPromptPersistenceAllowed"
+      ],
+      "properties": {
+        "reportOnly": { "const": true },
+        "consumesRealAnswerPayloads": { "const": true },
+        "localFakeLlmOnly": { "const": false },
+        "externalModelCallsAllowed": { "type": "boolean" },
+        "dbVectorMutation": { "const": false },
+        "vaultRead": { "const": false },
+        "publicDefaultPromotionAllowed": { "const": false },
+        "qwenDefaultFallbackAllowed": { "const": false },
+        "rawPromptPersistenceAllowed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "rowCount",
+        "answerableRows",
+        "readyRows",
+        "notApplicableRows",
+        "blockedRows",
+        "singlePaperReadyRows",
+        "synthesisReadyRows",
+        "compareReadyRows",
+        "abstentionRows",
+        "inlineCitationReadyRows",
+        "semanticCitationSupportRows",
+        "semanticCitationFailRows",
+        "twoSidedCompareCitationRows",
+        "compareMeaningfulSynthesisRows",
+        "compareRestatementOnlyRows",
+        "insufficientEvidenceRows",
+        "unexpectedAnswerRows",
+        "unsupportedInventionRows",
+        "sampleDraftRows",
+        "humanReadableReviewRows",
+        "privatePathLeakRows",
+        "forbiddenRawMarkerRows",
+        "rawPromptPersistedRows",
+        "rawAnswerPersistedRows",
+        "externalModelCallRows",
+        "modelApiCallRows",
+        "dbVectorMutationRows",
+        "vaultReadRows",
+        "defaultPromotionRows",
+        "schemaViolationCount"
+      ],
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "runId",
+          "caseId",
+          "variantId",
+          "answerType",
+          "status",
+          "draftStatus",
+          "expectedSourceIds",
+          "citationLabels",
+          "citationSourceIds",
+          "answerHash",
+          "answerPreview",
+          "inlineCitationReady",
+          "semanticCitationSupported",
+          "twoSidedCompareCitationReady",
+          "compareMeaningfulSynthesis",
+          "sampleDraft",
+          "humanReadableReview",
+          "warnings"
+        ],
+        "properties": {
+          "runId": { "type": "string" },
+          "caseId": { "type": "string" },
+          "variantId": { "type": "string" },
+          "answerType": { "enum": ["single_paper", "synthesis", "compare", "abstain"] },
+          "status": { "enum": ["ready", "blocked", "not_applicable"] },
+          "draftStatus": { "enum": ["answerable", "insufficient_evidence"] },
+          "expectedSourceIds": { "type": "array", "items": { "type": "string" } },
+          "citationLabels": { "type": "array", "items": { "type": "string" } },
+          "citationSourceIds": { "type": "array", "items": { "type": "string" } },
+          "answerHash": { "type": "string", "pattern": "^sha256:" },
+          "answerPreview": { "type": "string" },
+          "inlineCitationReady": { "type": "boolean" },
+          "semanticCitationSupported": { "type": "boolean" },
+          "twoSidedCompareCitationReady": { "type": "boolean" },
+          "compareMeaningfulSynthesis": { "type": "boolean" },
+          "sampleDraft": {
+            "type": "object",
+            "required": ["stored", "hash"],
+            "properties": {
+              "stored": { "const": "hash_and_sanitized_preview" },
+              "hash": { "type": "string", "pattern": "^sha256:" }
+            },
+            "additionalProperties": false
+          },
+          "humanReadableReview": {
+            "type": "object",
+            "required": ["status", "reason"],
+            "properties": {
+              "status": { "enum": ["usable", "insufficient", "failed"] },
+              "reason": { "type": "string" }
+            },
+            "additionalProperties": false
+          },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
