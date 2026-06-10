@@ -28,6 +28,7 @@ from knowledge_hub.ai.ask_v2_support import (
 )
 from knowledge_hub.ai.ask_v2_card_selectors import AskV2CardSelectorRegistry
 from knowledge_hub.ai.ask_v2_pipeline_result import build_card_v2_pipeline_result
+from knowledge_hub.ai.ask_v2_source_backed_paper_lookup import source_backed_paper_lookup_results
 from knowledge_hub.ai.ask_v2_verification import AskV2Verifier
 from knowledge_hub.ai.evidence_assembly import EvidenceAssemblyService
 from knowledge_hub.ai.retrieval_pipeline import RetrievalPlan, RetrievalPipelineResult
@@ -2054,6 +2055,16 @@ class AskV2Service:
             elif list(query_frame_obj.canonical_entity_ids or []):
                 prefilter_reason = "canonical_entity_linking"
 
+        source_backed_lookup_results = source_backed_paper_lookup_results(
+            searcher=self.searcher,
+            paper_family=str(query_frame_obj.family or paper_family or ""),
+            query_frame=query_frame_obj.to_dict(),
+            metadata_filter=effective_metadata_filter,
+            limit=max(1, min(2, top_k)),
+        )
+        if source_backed_lookup_results:
+            anchor_results = [*source_backed_lookup_results, *anchor_results]
+
         plan = RetrievalPlan(
             query=query,
             source_scope="project" if route.source_kind == "project" else route.source_kind,
@@ -2163,6 +2174,7 @@ class AskV2Service:
             },
             "cardSelection": {
                 **_card_selection_diagnostics(selected_cards),
+                "sourceBackedLookupCount": len(source_backed_lookup_results),
                 "selected": [
                     {
                         "cardId": _clean_text(card.get("card_id")),

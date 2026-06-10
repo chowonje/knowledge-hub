@@ -37,6 +37,32 @@ class _SearchForbiddenVectorDB:
         return {"documents": [], "metadatas": [], "ids": []}
 
 
+class _ScopedPaperVectorDB(_SearchForbiddenVectorDB):
+    def __init__(self, *, paper_id: str, document: str):
+        super().__init__()
+        self.paper_id = paper_id
+        self.document = document
+        self.get_calls: list[dict[str, object]] = []
+
+    def get_documents(self, filter_dict=None, limit=500, include_ids=True, include_documents=True, include_metadatas=True):  # noqa: ANN001
+        _ = (limit, include_ids, include_documents, include_metadatas)
+        scoped = dict(filter_dict or {})
+        self.get_calls.append(scoped)
+        if scoped != {"source_type": "paper", "arxiv_id": self.paper_id}:
+            return {"documents": [], "metadatas": [], "ids": []}
+        return {
+            "documents": [self.document],
+            "metadatas": [
+                {
+                    "title": "Personalized Agent Memory",
+                    "source_type": "paper",
+                    "arxiv_id": self.paper_id,
+                }
+            ],
+            "ids": [f"paper_{self.paper_id}_0"],
+        }
+
+
 class _NoAliasStoreDB:
     def __init__(self, db: SQLiteDatabase):
         self._db = db
@@ -1066,6 +1092,51 @@ def test_generate_answer_uses_card_first_v2_and_anchor_scoped_evidence(tmp_path)
     assert payload["paperMemoryPrefilter"]["requestedMode"] == "paper-card-v2"
     assert payload["queryFrame"]["family"] == "paper_lookup"
     assert payload["evidencePolicy"]["policyKey"] == "paper_lookup_policy"
+
+
+def test_generate_answer_adds_source_backed_vector_evidence_for_single_paper_lookup(tmp_path):
+    db = SQLiteDatabase(str(tmp_path / "knowledge.db"))
+    paper_id = "2603.13017"
+    _seed_paper_with_note(db, tmp_path, paper_id=paper_id)
+    _seed_document_memory(db, paper_id)
+    vector_db = _ScopedPaperVectorDB(
+        paper_id=paper_id,
+        document=(
+            "Title: Personalized Agent Memory\n\n"
+            "The paper uses self-attention style retrieval, removes sequential bottlenecks, "
+            "and supports parallelizable memory compression for agent interactions."
+        ),
+    )
+    searcher = RAGSearcher(
+        DummyEmbedder(),
+        vector_db,
+        llm=FakeLLM(),
+        sqlite_db=db,
+    )
+    searcher._verify_answer = lambda **kwargs: {  # type: ignore[method-assign]
+        "status": "passed",
+        "supportedClaimCount": 1,
+        "unsupportedClaimCount": 0,
+        "uncertainClaimCount": 0,
+        "conflictMentioned": False,
+        "needsCaution": False,
+        "summary": "",
+        "warnings": [],
+        "claims": [],
+    }
+
+    payload = searcher.generate_answer(
+        query=f"{paper_id} 논문 요약",
+        source_type="paper",
+        top_k=3,
+    )
+
+    assert vector_db.search_called is False
+    assert {"source_type": "paper", "arxiv_id": paper_id} in vector_db.get_calls
+    assert payload["sources"][0]["retrieval_mode"] == "active-vector-paper"
+    assert payload["sources"][0]["evidence_kind"] == "raw_span"
+    assert "parallelizable" in payload["sources"][0]["excerpt"]
+    assert payload["v2"]["cardSelection"]["sourceBackedLookupCount"] == 1
 
 
 def test_generate_answer_v2_fallback_does_not_trigger_on_weak_claim_only_when_verification_is_strong(tmp_path, monkeypatch):
