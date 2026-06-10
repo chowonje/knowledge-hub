@@ -52,8 +52,11 @@ khub dinger ingest --paper "주제"
 khub dinger ask "질문"
 khub paper layout-parser-pilot --paper-id 1706.03762 --parser pymupdf --json
 khub labs eval answer-loop run --max-attempts 3 --repo-path . --json
+khub labs review-loop report --paper-id 2603.14473 --claims-file claims.json --decision-file decisions.json --emit-pack ./artifacts/review-loop --json
 khub agent context "작업 목표" --repo-path .
 ```
+
+`khub labs review-loop report` is report-only. In its JSON payload, `canonicalEligible=true` for accepted claims requires an applied human decision plus source-resolved `chars:start-end` evidence with non-empty snippet text/hash, `sourceContentHash`, matching `snippetHash`, and the same explicit source scope; `origin=extracted` is not enough. Unresolved `memory-unit:*`, `section:*`, missing locator, missing source-hash, empty-snippet, explicit hash without snippet text, and cross-source evidence stay review-visible but non-canonical. When review decisions exist but no authoritative accepted claim remains, `status` is `reviewed_no_authoritative_assertions`, emitted packs contain no `ASSERT:` rows, pack sidecars validate as `knowledge-hub.research-review-loop.pack.v1`, CLI JSON reports artifact filenames instead of absolute local output paths, and `contextPackPreview.memoryProjectionPolicy` keeps generated unreviewed MemoryCards out of canonical context.
 
 ## Evidence-substrate facades
 
