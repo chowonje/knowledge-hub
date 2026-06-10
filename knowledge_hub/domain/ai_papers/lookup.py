@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from knowledge_hub.domain.ai_papers.followup_scope import canonical_followup_title_candidate
 from knowledge_hub.learning.resolver import normalize_term
 
 _LOOKUP_NOISE_RE = re.compile(
@@ -99,6 +100,9 @@ def extract_lookup_title_candidate(query: str) -> str:
     body = _clean_text(query)
     if not body:
         return ""
+    followup_title = canonical_followup_title_candidate(body)
+    if followup_title:
+        return followup_title
     stripped = _LOOKUP_NOISE_RE.sub(" ", body)
     stripped = re.sub(r"[?!.;]+", " ", stripped)
     tokens = _clean_text(stripped).split()
