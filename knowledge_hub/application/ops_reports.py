@@ -13,6 +13,7 @@ from knowledge_hub.application.ops_actions import queue_item_view
 from knowledge_hub.application.paper_reports import build_paper_source_ops_report
 from knowledge_hub.application.rag_reports import build_rag_ops_report
 from knowledge_hub.ai.rag import RAGSearcher
+from knowledge_hub.core.vault_guard import VaultWriteError, ensure_vault_writes_allowed
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase, VectorDatabase
 from knowledge_hub.notes.materializer import KoNoteMaterializer
 
@@ -256,6 +257,12 @@ class OpsReportRunner:
         note_path = self.note_path()
         if note_path is None:
             return "", ["vault_path not configured; ops note skipped"]
+        if self._note_path_override is None:
+            # default note target lives inside the vault: consult the gate
+            try:
+                ensure_vault_writes_allowed(self.config)
+            except VaultWriteError as error:
+                return "", [f"ops note skipped: {error}"]
         note_path.parent.mkdir(parents=True, exist_ok=True)
         original = note_path.read_text(encoding="utf-8") if note_path.exists() else "# Knowledge Hub Ops Report\n"
         updated = _upsert_managed_block(original, self._render_note(payload))

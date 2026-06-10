@@ -186,6 +186,43 @@ def test_paper_summary_sync_blocked_when_vault_disabled(tmp_path):
     assert note.read_text(encoding="utf-8") == original
 
 
+def test_ops_report_note_blocked_when_vault_disabled(tmp_path):
+    from knowledge_hub.application.ops_reports import OpsReportRunner
+
+    config = _disabled_config(tmp_path)
+    repo = _FakeKoNoteRepo()
+    runner = OpsReportRunner(
+        config,
+        sqlite_db=repo,
+        materializer=KoNoteMaterializer(config, sqlite_db=repo),
+        searcher=object(),
+    )
+    note_path, warnings = runner._write_note({})
+    assert note_path == ""
+    assert any("disabled" in str(warning) for warning in warnings)
+    assert list((tmp_path / "vault").rglob("*.md")) == []
+
+
+def test_paper_lanes_sync_hubs_blocked_when_vault_disabled(tmp_path):
+    from click.testing import CliRunner
+
+    from knowledge_hub.interfaces.cli.commands.paper_labs_cmd import paper_lanes_sync_hubs
+
+    config = _disabled_config(tmp_path)
+
+    class _Khub:
+        def __init__(self) -> None:
+            self.config = config
+
+        def sqlite_db(self):
+            raise AssertionError("sqlite must not be touched when vault writes are disabled")
+
+    result = CliRunner().invoke(paper_lanes_sync_hubs, ["--json"], obj={"khub": _Khub()})
+    assert result.exit_code != 0
+    assert "disabled" in result.output
+    assert list((tmp_path / "vault").rglob("*.md")) == []
+
+
 def test_apply_lane_fails_closed_when_vault_disabled(tmp_path):
     materializer = KoNoteMaterializer(_disabled_config(tmp_path), sqlite_db=_FakeKoNoteRepo())
     result = KoNoteApplier(materializer).apply(run_id="run_disabled")
