@@ -1,9 +1,14 @@
-"""Tranche B: 13 wrong-document paper ids quarantined from ask/search/compare.
+"""Quarantine surfaces after the 2026-06-11 repair tranche.
 
-Surface blocking only — no data deletion. The deny-list comes from the
-2026-06-11 parsed-store content-identity audit. Reproduced live hazard: a
-lexical search for "AlphaFold" returned paper_1207.0580_0 (registered as the
-dropout paper) because its on-disk PDF is the AlphaFold article.
+The original 13-id deny-list came from the 2026-06-11 parsed-store
+content-identity audit (reproduced live hazard: a lexical search for
+"AlphaFold" returned paper_1207.0580_0, registered as the dropout paper,
+because its on-disk PDF was the AlphaFold article). The 12 arXiv-backed ids
+were re-acquired, identity-gate verified, purged, and rebuilt — they are
+lifted. Only ``Gemini_Embedding_Generalizable_b5cf39ed`` remains quarantined
+(iCloud-vault pdf_path pending manual re-registration).
+
+Surface blocking only — no data deletion.
 """
 
 from __future__ import annotations
@@ -24,11 +29,28 @@ from knowledge_hub.papers.quarantine import (
     resolve_quarantined_paper_targets,
 )
 
+QUARANTINED_ID = "Gemini_Embedding_Generalizable_b5cf39ed"
 
-def test_quarantine_set_matches_audit_thirteen():
-    assert len(QUARANTINED_PAPER_IDS) == 13
-    assert "1207.0580" in QUARANTINED_PAPER_IDS
-    assert "Gemini_Embedding_Generalizable_b5cf39ed" in QUARANTINED_PAPER_IDS
+REPAIRED_IDS = (
+    "1207.0580",
+    "1311.2524",
+    "1406.1078",
+    "1409.4842",
+    "1410.3916",
+    "1603.02754",
+    "1608.06993",
+    "1802.05365",
+    "2109.01652",
+    "2309.15217",
+    "2401.15391",
+    "2605.21347",
+)
+
+
+def test_quarantine_set_only_unrepaired_id_remains():
+    assert QUARANTINED_PAPER_IDS == frozenset({QUARANTINED_ID})
+    for repaired_id in REPAIRED_IDS:
+        assert repaired_id not in QUARANTINED_PAPER_IDS
 
 
 def test_normalize_paper_id_token_forms():
@@ -43,11 +65,18 @@ def test_normalize_paper_id_token_forms():
 
 
 def test_is_quarantined_paper_all_token_forms():
-    assert is_quarantined_paper("1207.0580")
-    assert is_quarantined_paper("paper:1207.0580")
-    assert is_quarantined_paper("paper_1207.0580_0")
+    assert is_quarantined_paper(QUARANTINED_ID)
+    assert is_quarantined_paper(f"paper:{QUARANTINED_ID}")
+    assert is_quarantined_paper(f"paper_{QUARANTINED_ID}_3")
     assert not is_quarantined_paper("2601.12542")
     assert not is_quarantined_paper("")
+
+
+def test_repaired_ids_are_no_longer_quarantined():
+    for repaired_id in REPAIRED_IDS:
+        assert not is_quarantined_paper(repaired_id)
+        assert not is_quarantined_paper(f"paper:{repaired_id}")
+        assert not is_quarantined_paper(f"paper_{repaired_id}_0")
 
 
 def _paper_result(paper_id: str, *, title: str, document: str) -> SearchResult:
@@ -60,20 +89,20 @@ def _paper_result(paper_id: str, *, title: str, document: str) -> SearchResult:
     )
 
 
-def test_alphafold_query_results_exclude_quarantined_dropout_id():
+def test_search_results_exclude_quarantined_gemini_embedding_id():
     hits = [
         _paper_result(
-            "1207.0580",
-            title="Improving neural networks by preventing co-adaptation of feature detectors",
-            document="Highly accurate protein structure prediction with AlphaFold ...",
+            QUARANTINED_ID,
+            title="Gemini Embedding: Generalizable Embeddings",
+            document="DINOv3 self-supervised vision backbone ...",
         ),
         _paper_result(
             "2601.12542",
-            title="A clean paper that legitimately discusses AlphaFold",
-            document="AlphaFold-style structure prediction ...",
+            title="A clean paper that legitimately discusses embeddings",
+            document="Generalizable embedding models ...",
         ),
         SearchResult(
-            document="vault note about AlphaFold",
+            document="vault note about embeddings",
             metadata={"source_type": "vault"},
             distance=0.4,
             score=0.5,
@@ -82,10 +111,28 @@ def test_alphafold_query_results_exclude_quarantined_dropout_id():
     ]
     kept, dropped = filter_quarantined_search_results(hits)
     kept_ids = [item.metadata.get("paper_id") for item in kept]
-    assert "1207.0580" not in kept_ids
+    assert QUARANTINED_ID not in kept_ids
     assert "2601.12542" in kept_ids
     assert len(kept) == 2
-    assert dropped == ["1207.0580"]
+    assert dropped == [QUARANTINED_ID]
+
+
+def test_search_results_keep_repaired_ids():
+    hits = [
+        _paper_result(
+            "1207.0580",
+            title="Improving neural networks by preventing co-adaptation of feature detectors",
+            document="dropout prevents co-adaptation of feature detectors ...",
+        ),
+        _paper_result(
+            "1406.1078",
+            title="Learning Phrase Representations using RNN Encoder-Decoder",
+            document="RNN Encoder-Decoder for statistical machine translation ...",
+        ),
+    ]
+    kept, dropped = filter_quarantined_search_results(hits)
+    assert [item.metadata.get("paper_id") for item in kept] == ["1207.0580", "1406.1078"]
+    assert dropped == []
 
 
 def test_filter_matches_document_id_when_metadata_missing():
@@ -94,37 +141,46 @@ def test_filter_matches_document_id_when_metadata_missing():
         metadata={},
         distance=0.1,
         score=0.9,
-        document_id="paper:1406.1078",
+        document_id=f"paper:{QUARANTINED_ID}",
     )
     kept, dropped = filter_quarantined_search_results([hit])
     assert kept == []
-    assert dropped == ["1406.1078"]
+    assert dropped == [QUARANTINED_ID]
 
 
 def test_filter_quarantined_cards():
     cards = [
-        {"paper_id": "1207.0580", "card_id": "a"},
+        {"paper_id": QUARANTINED_ID, "card_id": "a"},
         {"paper_id": "2601.12542", "card_id": "b"},
+        {"paper_id": "1207.0580", "card_id": "c"},
     ]
     kept, dropped = filter_quarantined_cards(cards)
-    assert [card["card_id"] for card in kept] == ["b"]
-    assert dropped == ["1207.0580"]
+    assert [card["card_id"] for card in kept] == ["b", "c"]
+    assert dropped == [QUARANTINED_ID]
 
 
 def test_resolve_targets_partial_lookup_keeps_clean_ids():
-    assert resolve_quarantined_paper_targets(["1207.0580", "2601.12542"]) == ["2601.12542"]
+    assert resolve_quarantined_paper_targets([QUARANTINED_ID, "2601.12542"]) == ["2601.12542"]
 
 
 def test_resolve_targets_all_quarantined_raises():
     with pytest.raises(QuarantinedPaperTargetError) as exc_info:
-        resolve_quarantined_paper_targets(["1207.0580", "1406.1078"])
-    assert exc_info.value.paper_ids == ["1207.0580", "1406.1078"]
+        resolve_quarantined_paper_targets([QUARANTINED_ID])
+    assert exc_info.value.paper_ids == [QUARANTINED_ID]
     assert QUARANTINE_REASON_CODE in str(exc_info.value)
 
 
 def test_resolve_targets_compare_fails_closed_on_any_quarantined_member():
     with pytest.raises(QuarantinedPaperTargetError):
-        resolve_quarantined_paper_targets(["1810.04805", "1207.0580"], compare=True)
+        resolve_quarantined_paper_targets(["1810.04805", QUARANTINED_ID], compare=True)
+
+
+def test_resolve_targets_repaired_ids_pass_through():
+    assert resolve_quarantined_paper_targets(list(REPAIRED_IDS)) == list(REPAIRED_IDS)
+    assert resolve_quarantined_paper_targets(["1207.0580", "1406.1078"], compare=True) == [
+        "1207.0580",
+        "1406.1078",
+    ]
 
 
 class _SelectorServiceStub:
@@ -153,8 +209,8 @@ def test_scoped_quarantined_paper_question_fails_closed():
     service = _SelectorServiceStub()
     selector = _paper_selector(service)
     with pytest.raises(QuarantinedPaperTargetError) as exc_info:
-        selector.select(_request(metadata_filter={"paper_id": "1207.0580"}))
-    assert exc_info.value.paper_ids == ["1207.0580"]
+        selector.select(_request(metadata_filter={"paper_id": QUARANTINED_ID}))
+    assert exc_info.value.paper_ids == [QUARANTINED_ID]
     assert service.requested == []
 
 
@@ -165,11 +221,21 @@ def test_scoped_clean_paper_question_still_selects_card():
     assert [card["paper_id"] for card in cards] == ["2601.12542"]
 
 
-def test_scoped_quarantine_matches_arxiv_id_in_query():
+def test_scoped_repaired_paper_question_selects_card_again():
     service = _SelectorServiceStub()
     selector = _paper_selector(service)
-    with pytest.raises(QuarantinedPaperTargetError):
-        selector.select(_request(metadata_filter=None, query="1406.1078 논문의 핵심 기여를 설명해줘"))
+    cards = selector.select(_request(metadata_filter={"paper_id": "1207.0580"}))
+    assert [card["paper_id"] for card in cards] == ["1207.0580"]
+    assert service.requested == ["1207.0580"]
+
+
+def test_repaired_arxiv_id_in_query_selects_card_again():
+    service = _SelectorServiceStub()
+    selector = _paper_selector(service)
+    cards = selector.select(
+        _request(metadata_filter=None, query="1406.1078 논문의 핵심 기여를 설명해줘")
+    )
+    assert [card["paper_id"] for card in cards] == ["1406.1078"]
 
 
 def test_ask_v2_execute_returns_quarantined_fail_closed(monkeypatch):
@@ -181,7 +247,7 @@ def test_ask_v2_execute_returns_quarantined_fail_closed(monkeypatch):
     monkeypatch.setattr(AskV2Service, "_route", lambda self, **kwargs: route)
 
     def _raise_quarantined(self, **kwargs):
-        raise QuarantinedPaperTargetError(["1207.0580"])
+        raise QuarantinedPaperTargetError([QUARANTINED_ID])
 
     captured = {}
 
@@ -193,7 +259,7 @@ def test_ask_v2_execute_returns_quarantined_fail_closed(monkeypatch):
     monkeypatch.setattr(AskV2Service, "_scoped_no_result_execution", _fake_scoped_no_result)
 
     result = service.execute(
-        query="1207.0580 dropout 논문이 말하는 핵심은?",
+        query="Gemini embedding 논문이 말하는 핵심은?",
         top_k=5,
         source_type="paper",
         retrieval_mode="hybrid",
@@ -201,5 +267,5 @@ def test_ask_v2_execute_returns_quarantined_fail_closed(monkeypatch):
         allow_external=False,
     )
     assert result == ("pipeline-result", "evidence-packet")
-    assert captured["reason"] == f"{QUARANTINE_REASON_CODE}:1207.0580"
+    assert captured["reason"] == f"{QUARANTINE_REASON_CODE}:{QUARANTINED_ID}"
     assert captured["route"] is route

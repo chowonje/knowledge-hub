@@ -6,6 +6,14 @@ whose on-disk PDF / parsed text is a different document than their metadata.
 Until those sources are re-acquired and re-parsed, ask/search/compare surfaces
 must not select or cite them.
 
+2026-06-11 repair tranche: the 12 arXiv-backed ids were re-acquired from
+arxiv.org, passed ``enforce_parse_identity`` (watermark/title gate), had their
+contaminated parsed/derived/vector layers purged and rebuilt, and were
+store-verified — they are lifted from the quarantine set.
+``Gemini_Embedding_Generalizable_b5cf39ed`` remains quarantined: its registered
+pdf_path points into the iCloud vault (off-limits) and re-registration to a
+``~/.khub/papers/`` location is a pending manual product decision.
+
 Quarantine blocks exposure only: stored rows, parsed artifacts, vectors, and
 derived cards are left untouched so the repair flow can re-acquire and verify
 them. Membership is keyed by the registered paper id in any of its runtime
@@ -22,18 +30,6 @@ QUARANTINE_REASON_CODE = "quarantined_wrong_document"
 
 QUARANTINED_PAPER_IDS: frozenset[str] = frozenset(
     {
-        "1207.0580",
-        "1311.2524",
-        "1406.1078",
-        "1409.4842",
-        "1410.3916",
-        "1603.02754",
-        "1608.06993",
-        "1802.05365",
-        "2109.01652",
-        "2309.15217",
-        "2401.15391",
-        "2605.21347",
         "Gemini_Embedding_Generalizable_b5cf39ed",
     }
 )
