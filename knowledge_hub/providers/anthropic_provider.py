@@ -44,7 +44,9 @@ class AnthropicLLM(BaseLLM):
         return self._client
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
-        decision = enforce_outbound_policy(provider="anthropic", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider="anthropic", model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -62,7 +64,9 @@ class AnthropicLLM(BaseLLM):
         return message.content[0].text
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
-        decision = enforce_outbound_policy(provider="anthropic", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider="anthropic", model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)

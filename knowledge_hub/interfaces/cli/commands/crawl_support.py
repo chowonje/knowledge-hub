@@ -286,7 +286,7 @@ def sync_watchlist_payload(
         validate_cli_payload(khub.config, materialize_payload, "knowledge-hub.ko-note.generate.result.v1")
         run_id = str(materialize_payload.get("runId") or "").strip()
         if apply_notes and run_id:
-            apply_payload = materializer.apply(run_id=run_id, item_type="all", limit=0, only_approved=False)
+            apply_payload = materializer.apply(run_id=run_id, item_type="all", limit=0, only_approved=True)
             validate_cli_payload(khub.config, apply_payload, "knowledge-hub.ko-note.apply.result.v1")
 
     return {
