@@ -53,6 +53,11 @@ from knowledge_hub.infrastructure.persistence.stores.section_card_v1_store impor
 from knowledge_hub.core.models import SearchResult
 from knowledge_hub.papers.memory_adapter import paper_memory_card_to_section_cards
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
+from knowledge_hub.papers.quarantine import (
+    QUARANTINE_REASON_CODE,
+    QuarantinedPaperTargetError,
+    filter_quarantined_cards,
+)
 from knowledge_hub.papers.source_text import extract_pdf_text_excerpt, source_hash_for_path
 from knowledge_hub.web.youtube_extractor import is_youtube_url
 
@@ -1764,14 +1769,27 @@ class AskV2Service:
             query_frame_payload=query_frame_payload,
         )
         card_limit = max(1, min(3, top_k))
-        selected_cards = self._select_cards(
-            query=query,
-            route=route,
-            limit=card_limit,
-            metadata_filter=metadata_filter,
-            query_plan=query_plan_payload,
-            query_frame=query_frame_payload,
-        )
+        try:
+            selected_cards = self._select_cards(
+                query=query,
+                route=route,
+                limit=card_limit,
+                metadata_filter=metadata_filter,
+                query_plan=query_plan_payload,
+                query_frame=query_frame_payload,
+            )
+        except QuarantinedPaperTargetError as quarantine_error:
+            return self._scoped_no_result_execution(
+                query=query,
+                top_k=top_k,
+                source_type=source_type,
+                retrieval_mode=retrieval_mode,
+                route=route,
+                query_plan_payload=query_plan_payload,
+                query_frame_payload=query_frame_payload,
+                metadata_filter=metadata_filter,
+                reason=f"{QUARANTINE_REASON_CODE}:{','.join(quarantine_error.paper_ids)}",
+            )
         if route.source_kind == "paper" and paper_family in {PAPER_FAMILY_CONCEPT_EXPLAINER, "paper_discover"}:
             selected_cards = self._supplement_paper_candidates(
                 query=query,
@@ -1783,6 +1801,7 @@ class AskV2Service:
                 query_frame=query_frame_payload,
                 widen_fallback=(paper_family == "paper_discover"),
             )
+            selected_cards, _quarantined_supplements = filter_quarantined_cards(selected_cards)
         if route.source_kind == "vault" and not selected_cards and self._is_missing_vault_scope(query_frame_payload, metadata_filter):
             return self._scoped_no_result_execution(
                 query=query,

@@ -14,6 +14,7 @@ from knowledge_hub.core.chunking import infer_content_type
 from knowledge_hub.core.models import Document, SourceType
 from knowledge_hub.document_memory.extraction import DocumentMemoryExtractionV1
 from knowledge_hub.document_memory.models import DocumentMemoryUnit
+from knowledge_hub.papers.identity_gate import enforce_parse_identity
 from knowledge_hub.papers.mineru_adapter import MinerUPDFAdapter
 from knowledge_hub.papers.opendataloader_adapter import OpenDataLoaderPDFAdapter, resolve_opendataloader_convert_options
 from knowledge_hub.papers.pymupdf_adapter import PyMuPDFAdapter
@@ -522,6 +523,11 @@ class DocumentMemoryBuilder:
             pdf_path = str(paper.get("pdf_path") or "").strip()
             if not pdf_path:
                 raise ValueError(f"paper pdf not found: {paper_id}")
+            enforce_parse_identity(
+                paper_id=token,
+                pdf_path=pdf_path,
+                registered_title=str(paper.get("title") or ""),
+            )
             if parser_token == "opendataloader":
                 adapter = self._paper_parser_adapter()
             elif parser_token == "mineru":

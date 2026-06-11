@@ -23,6 +23,7 @@ from knowledge_hub.document_memory.payloads import semantic_units_payload
 from knowledge_hub.infrastructure.providers import get_llm, get_provider_info
 from knowledge_hub.learning.task_router import TaskRouteDecision, get_llm_for_task
 from knowledge_hub.knowledge.claim_normalization import ClaimNormalizationService
+from knowledge_hub.papers.identity_gate import PaperIdentityGateError
 from knowledge_hub.papers.memory_builder import (
     PaperMemoryBuilder,
     _parsed_markdown_slot_values,
@@ -2052,6 +2053,10 @@ class StructuredPaperSummaryService:
                     parser_used = candidate
                     attempted_parser = ",".join(attempted)
                     break
+                except PaperIdentityGateError:
+                    # Wrong-document sources must fail loudly, never degrade to
+                    # the raw-text fallback that would ingest the wrong bytes.
+                    raise
                 except Exception as error:
                     parser_fallback_reason = _classify_parser_failure(error)
                     warnings.append(f"paper parser auto fallback from {candidate}: {parser_fallback_reason} ({error})")
