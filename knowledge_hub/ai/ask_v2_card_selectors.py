@@ -445,7 +445,6 @@ class _WebCardSelector(_BaseCardSelector):
             metadata_filter=metadata_filter,
         )
         effective_metadata_filter = dict(selection_inputs.get("effective_metadata_filter") or {})
-        family = _clean_text(selection_inputs.get("family"))
         media_platform = _clean_text(selection_inputs.get("media_platform"))
         resolved_urls = list(selection_inputs.get("resolved_urls") or [])
         resolved_doc_ids = list(selection_inputs.get("resolved_doc_ids") or [])
