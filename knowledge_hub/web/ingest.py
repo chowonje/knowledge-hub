@@ -24,7 +24,7 @@ from knowledge_hub.core.sanitizer import detect_p0, redact_p0
 from knowledge_hub.infrastructure.providers import get_embedder
 from knowledge_hub.learning.obsidian_writeback import (
     build_paths,
-    resolve_vault_write_adapter,
+    resolve_config_vault_write_adapter,
     write_web_concepts,
     write_web_sources,
 )
@@ -3042,17 +3042,7 @@ class WebIngestService:
             else:
                 try:
                     paths = build_paths(self.config.vault_path, topic_safe)
-                    backend = str(
-                        self.config.get_nested("obsidian", "write_backend", default="filesystem") or "filesystem"
-                    )
-                    cli_binary = str(self.config.get_nested("obsidian", "cli_binary", default="obsidian") or "obsidian")
-                    vault_name = str(self.config.get_nested("obsidian", "vault_name", default="") or "")
-                    adapter = resolve_vault_write_adapter(
-                        vault_path=self.config.vault_path,
-                        backend=backend,
-                        cli_binary=cli_binary,
-                        vault_name=vault_name,
-                    )
+                    adapter = resolve_config_vault_write_adapter(self.config)
                     write_web_sources(
                         paths=paths,
                         topic=topic_safe,

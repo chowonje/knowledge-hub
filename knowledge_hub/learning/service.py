@@ -49,7 +49,6 @@ from knowledge_hub.learning.models import (
 )
 from knowledge_hub.learning.obsidian_writeback import (
     build_paths,
-    resolve_vault_write_adapter,
     write_canvas as write_canvas_file,
     write_gap_report,
     write_hub,

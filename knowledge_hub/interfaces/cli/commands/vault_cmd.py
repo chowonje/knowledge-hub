@@ -6,6 +6,7 @@ import click
 from rich.console import Console
 from rich.table import Table
 
+from knowledge_hub.core.vault_guard import VaultWriteError, ensure_vault_writes_allowed
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase, VectorDatabase
 from knowledge_hub.vault.ai_organizer import AIVaultOrganizer
 from knowledge_hub.vault.cluster_materializer import (
@@ -30,6 +31,16 @@ def _vector_db(khub):
         return khub.vector_db()
     config = khub.config
     return VectorDatabase(config.vector_db_path, config.collection_name)
+
+
+def _guard_vault_mutation(config, vault_path_override=None) -> bool:
+    """Vault-mutating commands must pass the authoritative write gate."""
+    try:
+        ensure_vault_writes_allowed(config, vault_path=vault_path_override)
+        return True
+    except VaultWriteError as error:
+        console.print(f"[red]{error}[/red]")
+        return False
 
 
 @click.group("vault")
@@ -66,6 +77,9 @@ def vault_organize(
     if relocate and not apply:
         console.print("[yellow]--relocate는 --apply와 함께만 동작합니다. preview로 진행합니다.[/yellow]")
         relocate = False
+
+    if apply and not _guard_vault_mutation(config, resolved_vault):
+        return
 
     organizer = VaultOrganizer(
         vault_path=resolved_vault,
@@ -132,6 +146,9 @@ def vault_organize_ai(ctx, vault_path, scope, dry_run, report_json):
     if scope != "projects-ai":
         raise click.BadParameter(f"unsupported scope: {scope}")
 
+    if not dry_run and not _guard_vault_mutation(config, resolved_vault):
+        return
+
     organizer = AIVaultOrganizer(resolved_vault)
     result = organizer.organize_projects_ai(apply=not dry_run)
 
@@ -194,6 +211,9 @@ def vault_topology_build(
     resolved_vault = vault_path or config.vault_path
     if not resolved_vault:
         console.print("[red]vault path가 없습니다. khub config set obsidian.vault_path <경로>[/red]")
+        return
+
+    if not _guard_vault_mutation(config, resolved_vault):
         return
 
     khub = ctx.obj["khub"]
@@ -265,6 +285,9 @@ def vault_cluster_materialize(
         console.print("[red]vault path가 없습니다. khub config set obsidian.vault_path <경로>[/red]")
         return
 
+    if apply and not _guard_vault_mutation(config, resolved_vault):
+        return
+
     materializer = VaultClusterMaterializer(resolved_vault)
     try:
         payload = materializer.materialize(
@@ -326,6 +349,9 @@ def vault_cluster_revert(ctx, vault_path, manifest, latest, as_json):
     resolved_vault = vault_path or config.vault_path
     if not resolved_vault:
         console.print("[red]vault path가 없습니다. khub config set obsidian.vault_path <경로>[/red]")
+        return
+
+    if not _guard_vault_mutation(config, resolved_vault):
         return
 
     materializer = VaultClusterMaterializer(resolved_vault)

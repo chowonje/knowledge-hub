@@ -36,6 +36,7 @@ def _config(tmp_path: Path) -> Config:
     config.set_nested("storage", "sqlite", str(tmp_path / "knowledge.db"))
     config.set_nested("storage", "papers_dir", str(tmp_path / "papers"))
     config.set_nested("storage", "vector_db", str(tmp_path / "vector_db"))
+    config.set_nested("obsidian", "enabled", True)
     config.set_nested("obsidian", "vault_path", str(tmp_path / "vault"))
     config.set_nested("obsidian", "notes_folder", "Papers")
     config.set_nested("summarization", "provider", "ollama")

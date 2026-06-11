@@ -51,6 +51,7 @@ def _make_capture_runtime_config(tmp_path: Path) -> Config:
     config = Config()
     config.set_nested("validation", "schema", "strict", True)
     config.set_nested("storage", "sqlite", str(tmp_path / "knowledge.db"))
+    config.set_nested("obsidian", "enabled", True)
     config.set_nested("obsidian", "vault_path", str(tmp_path / "vault"))
     config.set_nested("obsidian", "write_backend", "filesystem")
     config.set_nested("obsidian", "cli_binary", "obsidian")
