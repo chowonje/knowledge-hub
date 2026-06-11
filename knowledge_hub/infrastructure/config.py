@@ -162,7 +162,9 @@ DEFAULT_CONFIG = {
         },
         "memory": {
             "extraction_mode": "schema",
-            "allow_external": True,
+            # External LLM extraction is opt-in: corpus text must not leave the
+            # machine unless the user explicitly enables it.
+            "allow_external": False,
             "extractor_timeout_sec": 90,
         },
     },

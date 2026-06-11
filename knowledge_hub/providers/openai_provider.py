@@ -108,7 +108,9 @@ class OpenAILLM(BaseLLM):
         return self._extract_response_text(response)
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
-        decision = enforce_outbound_policy(provider="openai", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider="openai", model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -127,7 +129,9 @@ class OpenAILLM(BaseLLM):
         return response.choices[0].message.content or ""
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
-        decision = enforce_outbound_policy(provider="openai", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider="openai", model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -213,7 +217,9 @@ class OpenAIEmbedder(BaseEmbedder):
     def embed_text(self, text: str) -> List[float]:
         if not text or not text.strip():
             raise ValueError("빈 텍스트는 임베딩할 수 없습니다")
-        decision = enforce_outbound_policy(provider="openai", model=self.model, prompt=text, context="")
+        decision = enforce_outbound_policy(
+            provider="openai", model=self.model, prompt=text, context="", allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -229,7 +235,9 @@ class OpenAIEmbedder(BaseEmbedder):
             return [None] * len(texts)
 
         clean_texts = [text for _, text in clean_pairs]
-        report = evaluate_outbound_policy_batch(provider="openai", model=self.model, texts=clean_texts)
+        report = evaluate_outbound_policy_batch(
+            provider="openai", model=self.model, texts=clean_texts, allow_external=self.allow_external
+        )
         blocked_positions = set(report.blocked_indices)
         safe_texts = [text for pos, text in enumerate(clean_texts) if pos not in blocked_positions]
         self.last_policy = report.to_dict()

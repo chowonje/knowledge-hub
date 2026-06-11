@@ -49,7 +49,7 @@
   "inputs": {
     "candidateStoreRef": "papers_dir/structured_evidence_candidates/evidence_chunk/*.jsonl",
     "papersDirRef": "papers_dir",
-    "positiveCompleteReportRef": "/Users/won/Desktop/allinone/knowledge-hub-parsed-artifact-positive-promotion-gate-20260611/eval/knowledgeos/reports/knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review.v1.json"
+    "positiveCompleteReportRef": "eval/knowledgeos/reports/knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review.v1.json"
   },
   "nextRecommendedTranche": "parsed_artifact_evidence_chunk_narrow_scope_promotion_design",
   "schema": "knowledge-hub.product.parsed-artifact-evidence-chunk-promotion-audit.v1",

@@ -72,6 +72,7 @@ def evaluate_outbound_policy(
     model: str,
     prompt: str = "",
     context: str = "",
+    allow_external: bool | None = None,
 ) -> OutboundPolicyDecision:
     trace_id = f"policy_{uuid4().hex[:12]}"
     status = evaluate_policy_for_payload(
@@ -80,6 +81,20 @@ def evaluate_outbound_policy(
         mode=f"provider-outbound:{provider}",
     )
     warnings = list(status.warnings or [])
+    if allow_external is False:
+        # 호출자가 local-only를 명시했는데 외부 provider 어댑터까지 도달한 경우:
+        # P0 여부와 무관하게 outbound를 hard-deny한다. (None은 레거시 호출자 호환)
+        warnings.append("allow_external=false: external provider call denied")
+        warnings.append(f"provider={provider}")
+        warnings.append(f"model={model}")
+        return OutboundPolicyDecision(
+            allowed=False,
+            classification=status.classification,
+            warnings=warnings,
+            rule="deny_external_local_only",
+            trace_id=trace_id,
+            policy_errors=["policy deny: allow_external=false but external provider call attempted"],
+        )
     rule = "deny_p0_raw_sensitive" if status.classification == "P0" else "allow_non_p0_with_warning"
     if status.classification == "P1" and "P1 structured facts detected" not in warnings:
         warnings.append("P1 structured facts detected")
@@ -101,8 +116,15 @@ def enforce_outbound_policy(
     model: str,
     prompt: str = "",
     context: str = "",
+    allow_external: bool | None = None,
 ) -> OutboundPolicyDecision:
-    decision = evaluate_outbound_policy(provider=provider, model=model, prompt=prompt, context=context)
+    decision = evaluate_outbound_policy(
+        provider=provider,
+        model=model,
+        prompt=prompt,
+        context=context,
+        allow_external=allow_external,
+    )
     if not decision.allowed:
         raise OutboundPolicyError(decision)
     return decision
@@ -114,8 +136,23 @@ def evaluate_outbound_policy_batch(
     model: str,
     texts: list[str],
     chunk_size: int = 128,
+    allow_external: bool | None = None,
 ) -> BatchOutboundPolicyReport:
     trace_id = f"policy_batch_{uuid4().hex[:12]}"
+    if allow_external is False:
+        all_indices = list(range(len(texts)))
+        return BatchOutboundPolicyReport(
+            checked_count=len(texts),
+            allowed_count=0,
+            blocked_count=len(texts),
+            blocked_indices=all_indices,
+            warnings=[
+                f"provider={provider}",
+                f"model={model}",
+                "allow_external=false: external provider call denied",
+            ],
+            trace_id=trace_id,
+        )
     blocked_indices: list[int] = []
     warnings: list[str] = [f"provider={provider}", f"model={model}"]
     checked = 0
