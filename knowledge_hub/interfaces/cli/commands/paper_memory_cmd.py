@@ -21,8 +21,8 @@ def _validate_cli_payload(config, payload: dict, schema_id: str) -> None:
         raise click.ClickException(f"schema validation failed for {schema_id}: {problems}")
 
 
-def _builder(khub):
-    return build_paper_memory_builder(khub.sqlite_db(), config=khub.config)
+def _builder(khub, *, allow_external: bool | None = None):
+    return build_paper_memory_builder(khub.sqlite_db(), config=khub.config, allow_external=allow_external)
 
 
 def _retriever(khub):
@@ -40,12 +40,18 @@ def paper_memory_group():
 
 @paper_memory_group.command("build")
 @click.option("--paper-id", required=True)
+@click.option(
+    "--allow-external/--no-allow-external",
+    "allow_external",
+    default=None,
+    help="외부 LLM 추출 허용 (미지정 시 config paper.memory.allow_external, 기본 false)",
+)
 @click.option("--json/--no-json", "as_json", default=False, show_default=True)
 @click.pass_context
-def build_paper_memory(ctx, paper_id, as_json):
+def build_paper_memory(ctx, paper_id, allow_external, as_json):
     """하나의 paper memory card를 빌드/업데이트"""
     khub = ctx.obj["khub"]
-    item = _builder(khub).build_and_store(paper_id=str(paper_id).strip())
+    item = _builder(khub, allow_external=allow_external).build_and_store(paper_id=str(paper_id).strip())
     payload = {
         "schema": "knowledge-hub.paper-memory.build.result.v1",
         "status": "ok",
@@ -67,14 +73,20 @@ def build_paper_memory(ctx, paper_id, as_json):
 @paper_memory_group.command("rebuild")
 @click.option("--all", "rebuild_all", is_flag=True, help="모든 paper memory card를 재빌드")
 @click.option("--limit", type=int, default=5000, show_default=True)
+@click.option(
+    "--allow-external/--no-allow-external",
+    "allow_external",
+    default=None,
+    help="외부 LLM 추출 허용 (미지정 시 config paper.memory.allow_external, 기본 false)",
+)
 @click.option("--json/--no-json", "as_json", default=False, show_default=True)
 @click.pass_context
-def rebuild_paper_memory(ctx, rebuild_all, limit, as_json):
+def rebuild_paper_memory(ctx, rebuild_all, limit, allow_external, as_json):
     """전체 paper memory card 재빌드"""
     if not rebuild_all:
         raise click.ClickException("--all 플래그가 필요합니다.")
     khub = ctx.obj["khub"]
-    items = _builder(khub).rebuild_all(limit=max(1, int(limit)))
+    items = _builder(khub, allow_external=allow_external).rebuild_all(limit=max(1, int(limit)))
     payload = {
         "schema": "knowledge-hub.paper-memory.build.result.v1",
         "status": "ok",

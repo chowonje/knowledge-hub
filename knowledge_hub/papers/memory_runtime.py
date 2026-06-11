@@ -38,7 +38,7 @@ def build_paper_memory_builder(
         return PaperMemoryBuilder(sqlite_db)
 
     allow_external_effective = (
-        bool(config.get_nested("paper", "memory", "allow_external", default=True))
+        bool(config.get_nested("paper", "memory", "allow_external", default=False))
         if allow_external is None
         else bool(allow_external)
     )
