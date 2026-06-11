@@ -12,6 +12,11 @@ import json
 from pathlib import Path
 from typing import Any
 
+from knowledge_hub.papers.identity_gate import (
+    IDENTITY_GATE_FAIL_REASON_PREFIX,
+    check_page1_identity,
+    extract_first_page_text,
+)
 from knowledge_hub.papers.pymupdf_adapter import PyMuPDFAdapter
 from knowledge_hub.papers.source_text import source_hash_for_path
 
@@ -286,6 +291,28 @@ def materialize_parsed_artifacts(
                     status="blocked",
                     reason="source_pdf_missing",
                     action="none",
+                )
+            )
+            continue
+
+        identity = check_page1_identity(
+            page1_text=extract_first_page_text(str(source_path)),
+            registered_title=title,
+            expected_arxiv_id=paper_id,
+        )
+        if identity.status == "fail":
+            items.append(
+                _materialization_item(
+                    paper_id=paper_id,
+                    title=title,
+                    parser=parser_token,
+                    papers_dir=papers_dir,
+                    source_path=source_path,
+                    source_kind=source_kind,
+                    before=before,
+                    status="blocked",
+                    reason=f"{IDENTITY_GATE_FAIL_REASON_PREFIX}:{identity.reason}",
+                    action="reacquire_source_pdf",
                 )
             )
             continue

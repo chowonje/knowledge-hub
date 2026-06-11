@@ -19,6 +19,12 @@ from knowledge_hub.ai.ask_v2_support import (
 from knowledge_hub.application.query_frame import normalize_query_frame_dict
 from knowledge_hub.domain.ai_papers.query_plan import build_rule_query_plan, normalize_query_plan_dict
 from knowledge_hub.domain.web_knowledge.internal_reference import build_internal_reference_cards
+from knowledge_hub.papers.quarantine import (
+    QuarantinedPaperTargetError,
+    filter_quarantined_cards,
+    is_quarantined_paper,
+    resolve_quarantined_paper_targets,
+)
 
 
 @dataclass(frozen=True)
@@ -297,6 +303,8 @@ class _PaperCardSelector(_BaseCardSelector):
 
         scoped_paper_id = _paper_scope_from_filter(metadata_filter) or _paper_scope_from_query(query)
         if scoped_paper_id:
+            if is_quarantined_paper(scoped_paper_id):
+                raise QuarantinedPaperTargetError([scoped_paper_id])
             card = self.service._ensure_paper_card(scoped_paper_id)
             return [card] if card else []
         frame_payload = normalize_query_frame_dict(query_frame)
@@ -319,6 +327,10 @@ class _PaperCardSelector(_BaseCardSelector):
         )
         resolved_paper_ids = list(selection_inputs.get("resolved_paper_ids") or [])
         paper_family = _clean_text(selection_inputs.get("family"))
+        resolved_paper_ids = resolve_quarantined_paper_targets(
+            resolved_paper_ids,
+            compare=paper_family == "paper_compare" or route.intent == "comparison",
+        )
         if (route.intent == "paper_lookup" or paper_family == "paper_lookup") and resolved_paper_ids:
             resolved_cards = self.service._ensure_cards_for_papers(resolved_paper_ids)
             if resolved_cards:
@@ -433,7 +445,6 @@ class _WebCardSelector(_BaseCardSelector):
             metadata_filter=metadata_filter,
         )
         effective_metadata_filter = dict(selection_inputs.get("effective_metadata_filter") or {})
-        family = _clean_text(selection_inputs.get("family"))
         media_platform = _clean_text(selection_inputs.get("media_platform"))
         resolved_urls = list(selection_inputs.get("resolved_urls") or [])
         resolved_doc_ids = list(selection_inputs.get("resolved_doc_ids") or [])
@@ -612,7 +623,7 @@ class AskV2CardSelectorRegistry:
         query_plan: dict[str, Any] | None = None,
         query_frame: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
-        return self.get(source_kind).select(
+        cards = self.get(source_kind).select(
             CardSelectionRequest(
                 query=query,
                 route=route,
@@ -622,6 +633,9 @@ class AskV2CardSelectorRegistry:
                 query_frame=query_frame,
             )
         )
+        if _clean_text(source_kind).casefold() == "paper":
+            cards, _quarantined = filter_quarantined_cards(cards)
+        return cards
 
 
 __all__ = ["AskV2CardSelectorRegistry", "CardSelectionRequest"]

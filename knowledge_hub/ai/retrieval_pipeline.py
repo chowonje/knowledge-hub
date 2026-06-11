@@ -51,6 +51,7 @@ from knowledge_hub.core.models import SearchResult
 from knowledge_hub.domain.ai_papers.query_plan import normalize_query_plan_dict, paper_family_query_intent
 from knowledge_hub.domain.ai_papers.representative import local_title_prefix_rescue_forms
 from knowledge_hub.knowledge.graph_signals import analyze_graph_query
+from knowledge_hub.papers.quarantine import filter_quarantined_search_results
 from knowledge_hub.papers.prefilter import (
     PAPER_MEMORY_MODE_COMPAT,
     PAPER_MEMORY_MODE_OFF,
@@ -1825,6 +1826,7 @@ class RetrievalPipelineService:
                 ontology_used=ontology_used,
                 cluster_used=False,
             )
+        scoped_results, quarantined_excluded_paper_ids = filter_quarantined_search_results(scoped_results)
         mixed_fallback_used = bool(memory_prefilter.get("mixedFallbackUsed"))
         retrieval_strategy = build_retrieval_strategy_diagnostics(plan)
         retrieval_quality = build_retrieval_quality_diagnostics(
@@ -1834,6 +1836,8 @@ class RetrievalPipelineService:
             rerank_signals=rerank_signals,
             memory_prefilter=memory_prefilter,
         )
+        if quarantined_excluded_paper_ids and isinstance(retrieval_quality, dict):
+            retrieval_quality["quarantinedPaperIdsExcluded"] = quarantined_excluded_paper_ids
         answerability_rerank = build_answerability_rerank_diagnostics(
             plan=plan,
             results=scoped_results,
