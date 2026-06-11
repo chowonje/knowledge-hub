@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Security
+
+- Changed `khub crawl continuous-sync` to staged-only vault behavior by default: `--apply` now defaults to `--no-apply`, and an explicit `--apply` in the sync path applies approved ko-note items only (`only_approved=True`) instead of every staged item. This prevents unattended runs (including scheduled launchd runs) from writing unapproved generated notes into the user's Obsidian vault; staging, review, and the explicit approved apply path are unchanged.
+
 ### Added
 
 - Added a report-only parsed-artifact evidence chunk promotion audit. The new schema-backed report consumes the positive section/paragraph quality complete review and reads the local candidate store without changing default `khub ask`, MCP, vectors, DB/indexes, parser output, or vault content. The generated `parsed_artifact_evidence_chunk_promotion_audit.v1.{json,md}` is `ready` with decision `promotion_candidate_narrow_scope`: `papersEvaluated=300`, `papersWithCandidateRows=300`, `candidateRows=1200`, `candidateRowsWithValidSourceContentHash=1188`, `candidateRowsWithValidCharLocators=1200`, `answerVisibleEvidenceRows=20`, `candidateStoreAnswerVisibleRows=0`, and one blocker category, `source_content_hash_invalid` (`12` rows across `3` papers). Default promotion remains blocked, but the evidence is sufficient to move to a narrower promotion-design tranche.
