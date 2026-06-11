@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any, Callable
 
 from rich.table import Table
+from knowledge_hub.core.vault_guard import VaultWriteError
+from knowledge_hub.learning.obsidian_writeback import resolve_config_vault_write_adapter
 from knowledge_hub.vault.concepts import iter_concept_note_paths, normalize_concept_wikilink_target
 
 
@@ -353,10 +355,12 @@ def run_paper_sync_keywords(
     score_claim_with_breakdown_fn: Callable[..., tuple[float, dict[str, Any]]],
 ) -> None:
     config = khub.config
-    vault_path = config.vault_path
-    if not vault_path:
-        console.print("[red]Obsidian vault 경로가 설정되지 않았습니다. khub config set obsidian.vault_path <경로>[/red]")
+    try:
+        adapter = resolve_config_vault_write_adapter(config)
+    except VaultWriteError as error:
+        console.print(f"[red]{error}[/red]")
         return
+    vault_path = config.vault_path
 
     papers_dir = resolve_vault_papers_dir_fn(vault_path)
     if not papers_dir or not papers_dir.exists():
@@ -592,7 +596,7 @@ def run_paper_sync_keywords(
                         claim_dropped += 1
 
         new_content = update_note_concepts_fn(content, concepts)
-        md_path.write_text(new_content, encoding="utf-8")
+        adapter.write_text(md_path, new_content)
         updated += 1
         console.print(f"[green]{len(concepts)}개 키워드[/green]")
 
@@ -623,10 +627,12 @@ def run_paper_build_concepts(
     rebuild_concept_index_with_relations_fn: Callable[[Path, Path, dict[str, list[str]]], None],
 ) -> None:
     config = khub.config
-    vault_path = config.vault_path
-    if not vault_path:
-        console.print("[red]Obsidian vault 경로가 설정되지 않았습니다.[/red]")
+    try:
+        adapter = resolve_config_vault_write_adapter(config)
+    except VaultWriteError as error:
+        console.print(f"[red]{error}[/red]")
         return
+    vault_path = config.vault_path
 
     papers_dir = resolve_vault_papers_dir_fn(vault_path)
     concepts_dir = resolve_vault_concepts_dir_fn(vault_path)
@@ -714,7 +720,7 @@ def run_paper_build_concepts(
 
             note_content = build_concept_note_fn(concept_name, description, related, papers)
             safe_name = re.sub(r'[\\/:*?"<>|]', "", concept_name).strip()
-            (concepts_dir / f"{safe_name}.md").write_text(note_content, encoding="utf-8")
+            adapter.write_text(concepts_dir / f"{safe_name}.md", note_content)
             created += 1
 
         console.print(f"[green]{len(results)}개 생성[/green]")

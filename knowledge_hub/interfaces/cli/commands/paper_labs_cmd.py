@@ -11,7 +11,9 @@ import click
 from rich.console import Console
 
 from knowledge_hub.core.schema_validator import annotate_schema_errors
+from knowledge_hub.core.vault_guard import VaultWriteError
 from knowledge_hub.interfaces.cli.commands.paper_shared_runtime import _resolve_vault_papers_dir
+from knowledge_hub.learning.obsidian_writeback import resolve_config_vault_write_adapter
 from knowledge_hub.papers.evidence_chunk_answer_preview import build_paper_evidence_chunk_answer_preview
 from knowledge_hub.papers.paper_lanes import (
     LANE_DEFINITIONS,
@@ -411,10 +413,14 @@ def paper_lanes_review(ctx, out_path, status_filter, lane_filter, summary_out, a
 def paper_lanes_sync_hubs(ctx, vault_path, as_json):
     """Generate idempotent lane hub notes under the paper vault."""
     khub = ctx.obj["khub"]
-    sqlite_db = _sqlite_db(khub)
     resolved_vault = str(vault_path or khub.config.vault_path or "").strip()
     if not resolved_vault:
         raise click.ClickException("vault_path not configured")
+    try:
+        adapter = resolve_config_vault_write_adapter(khub.config, vault_path=resolved_vault)
+    except VaultWriteError as error:
+        raise click.ClickException(str(error)) from error
+    sqlite_db = _sqlite_db(khub)
     all_papers = _paper_rows(sqlite_db, limit=5000)
     written_paths: list[str] = []
     lane_counts: dict[str, int] = {}
@@ -422,7 +428,7 @@ def paper_lanes_sync_hubs(ctx, vault_path, as_json):
         lane_papers = [paper for paper in all_papers if paper.get("primary_lane") == lane_slug]
         lane_counts[lane_slug] = len(lane_papers)
         note_path = _lane_note_path(resolved_vault, lane_slug)
-        note_path.write_text(_build_hub_content(lane_slug, lane_papers), encoding="utf-8")
+        adapter.write_text(note_path, _build_hub_content(lane_slug, lane_papers))
         written_paths.append(str(note_path))
     payload = {
         "schema": "knowledge-hub.paper-lanes.sync-hubs.result.v1",

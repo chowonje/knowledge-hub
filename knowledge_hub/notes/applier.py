@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from knowledge_hub.core.vault_guard import VaultWriteError, ensure_vault_writes_allowed
 from knowledge_hub.notes.approval_policy import auto_approve_concept_items_for_apply
 from knowledge_hub.notes.models import KoNoteQuality, KoNoteReview
 from knowledge_hub.notes.workflow_helpers import (
@@ -27,6 +28,19 @@ class KoNoteApplier:
         only_approved: bool = True,
     ) -> dict[str, Any]:
         ts = now_iso()
+        try:
+            ensure_vault_writes_allowed(self.materializer.config)
+        except VaultWriteError as error:
+            return {
+                "schema": "knowledge-hub.ko-note.apply.result.v1",
+                "status": "failed",
+                "runId": str(run_id),
+                "applied": 0,
+                "skipped": 0,
+                "conflicts": 0,
+                "warnings": [str(error)],
+                "ts": ts,
+            }
         run = self.sqlite_db.get_ko_note_run(run_id)
         if not run:
             return {

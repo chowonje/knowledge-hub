@@ -64,7 +64,9 @@ class GoogleLLM(BaseLLM):
         return self._model_instance
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
-        decision = enforce_outbound_policy(provider="google", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider="google", model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -82,7 +84,9 @@ class GoogleLLM(BaseLLM):
         return response.text
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
-        decision = enforce_outbound_policy(provider="google", model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider="google", model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -143,7 +147,9 @@ class GoogleEmbedder(BaseEmbedder):
                 raise ImportError("google-generativeai 패키지 필요: pip install knowledge-hub[google]")
 
     def embed_text(self, text: str) -> List[float]:
-        decision = enforce_outbound_policy(provider="google", model=self.model, prompt=text, context="")
+        decision = enforce_outbound_policy(
+            provider="google", model=self.model, prompt=text, context="", allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -155,7 +161,9 @@ class GoogleEmbedder(BaseEmbedder):
     def embed_batch(self, texts: List[str], show_progress: bool = False) -> List[Optional[List[float]]]:
         clean_pairs = [(idx, text) for idx, text in enumerate(texts) if text and text.strip()]
         clean_texts = [text for _, text in clean_pairs]
-        report = evaluate_outbound_policy_batch(provider="google", model=self.model, texts=clean_texts)
+        report = evaluate_outbound_policy_batch(
+            provider="google", model=self.model, texts=clean_texts, allow_external=self.allow_external
+        )
         blocked_positions = set(report.blocked_indices)
         self.last_policy = report.to_dict()
         if report.blocked_count or any("P1 warning" in warning for warning in report.warnings):

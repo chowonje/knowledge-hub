@@ -180,7 +180,9 @@ class OpenAICompatLLM(BaseLLM):
         return os.getenv("OPENAI_COMPAT_API_KEY", "")
 
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
-        decision = enforce_outbound_policy(provider=self.provider_name, model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider=self.provider_name, model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -204,7 +206,9 @@ class OpenAICompatLLM(BaseLLM):
         return resp.json()["choices"][0]["message"]["content"]
 
     def stream_generate(self, prompt: str, context: str = "") -> Generator[str, None, None]:
-        decision = enforce_outbound_policy(provider=self.provider_name, model=self.model, prompt=prompt, context=context)
+        decision = enforce_outbound_policy(
+            provider=self.provider_name, model=self.model, prompt=prompt, context=context, allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -281,7 +285,9 @@ class OpenAICompatEmbedder(BaseEmbedder):
     def embed_text(self, text: str) -> List[float]:
         if not text or not text.strip():
             raise ValueError("빈 텍스트는 임베딩할 수 없습니다")
-        decision = enforce_outbound_policy(provider=self.provider_name, model=self.model, prompt=text, context="")
+        decision = enforce_outbound_policy(
+            provider=self.provider_name, model=self.model, prompt=text, context="", allow_external=self.allow_external
+        )
         self.last_policy = decision.to_dict()
         if decision.classification == "P1":
             log.warning("Provider outbound warning trace_id=%s warnings=%s", decision.trace_id, decision.warnings)
@@ -299,7 +305,9 @@ class OpenAICompatEmbedder(BaseEmbedder):
         clean = [text for _, text in clean_pairs]
         if not clean:
             return [None] * len(texts)
-        report = evaluate_outbound_policy_batch(provider=self.provider_name, model=self.model, texts=clean)
+        report = evaluate_outbound_policy_batch(
+            provider=self.provider_name, model=self.model, texts=clean, allow_external=self.allow_external
+        )
         blocked_positions = set(report.blocked_indices)
         self.last_policy = report.to_dict()
         if report.blocked_count or any("P1 warning" in warning for warning in report.warnings):

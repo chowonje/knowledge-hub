@@ -9,7 +9,8 @@ from typing import Any
 
 import click
 
-from knowledge_hub.learning.obsidian_writeback import _upsert_marked_section, resolve_vault_write_adapter
+from knowledge_hub.core.vault_guard import VaultWriteError
+from knowledge_hub.learning.obsidian_writeback import _upsert_marked_section, resolve_config_vault_write_adapter
 from knowledge_hub.notes.templates import slugify_title, split_frontmatter, yaml_frontmatter
 
 SOURCE_REF_PRIMARY_KEYS = ("paperId", "url", "noteId", "stableScopeId", "documentScopeId")
@@ -137,15 +138,16 @@ def _write_dinger_projection(
     if not resolved_vault:
         raise click.ClickException("vault_path not configured")
     resolved_backend = str(backend or config.get_nested("obsidian", "write_backend", default="filesystem") or "filesystem").strip() or "filesystem"
-    resolved_cli_binary = str(cli_binary or config.get_nested("obsidian", "cli_binary", default="obsidian") or "obsidian").strip() or "obsidian"
-    resolved_vault_name = str(vault_name or config.get_nested("obsidian", "vault_name", default="") or "").strip()
-
-    adapter = resolve_vault_write_adapter(
-        resolved_vault,
-        backend=resolved_backend,
-        cli_binary=resolved_cli_binary,
-        vault_name=resolved_vault_name,
-    )
+    try:
+        adapter = resolve_config_vault_write_adapter(
+            config,
+            vault_path=resolved_vault,
+            backend=resolved_backend,
+            cli_binary=cli_binary,
+            vault_name=vault_name,
+        )
+    except VaultWriteError as error:
+        raise click.ClickException(str(error)) from error
     vault_root = Path(resolved_vault).expanduser().resolve()
     dinger_root = vault_root / "KnowledgeOS" / "Dinger"
     pages_dir = dinger_root / "Pages"

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import math
-import os
 import re
 import unicodedata
 from collections import defaultdict
@@ -14,6 +13,7 @@ from typing import Any, Callable
 from urllib.parse import urlsplit
 from uuid import uuid4
 
+from knowledge_hub.core.vault_guard import ensure_vault_writes_allowed
 from knowledge_hub.infrastructure.config import Config
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.notes.contracts import MaterializationRepository
@@ -63,7 +63,6 @@ from knowledge_hub.knowledge.ai_taxonomy import classify_ai_concept
 from knowledge_hub.web.ingest import make_web_note_id
 
 
-DEFAULT_DOCUMENTS_VAULT = Path(os.environ.get("KHUB_DOCUMENTS_VAULT", "~/Documents/Obsidian Vault")).expanduser()
 CONCEPT_RELATION_PREDICATES = {
     "mentions",
     "uses",
@@ -220,10 +219,8 @@ class KoNoteMaterializer:
         self.koreanizer = Koreanizer(self.config)
 
     def _vault_root(self) -> Path:
-        configured = str(self.config.vault_path or "").strip()
-        if configured:
-            return Path(configured).expanduser().resolve()
-        return DEFAULT_DOCUMENTS_VAULT
+        configured = ensure_vault_writes_allowed(self.config)
+        return Path(configured).expanduser().resolve()
 
     def _staging_root(self, run_id: str) -> Path:
         dt = datetime.now(timezone.utc)

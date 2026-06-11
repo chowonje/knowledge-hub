@@ -10,6 +10,7 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any, Callable
 
+from knowledge_hub.core.vault_guard import ensure_vault_writes_allowed
 from knowledge_hub.infrastructure.config import Config
 from knowledge_hub.infrastructure.persistence import SQLiteDatabase
 from knowledge_hub.notes.contracts import EnrichmentRepository
@@ -197,6 +198,7 @@ class KoNoteEnricher:
         return _enrichment_support.concept_model_fingerprint(self, allow_external, llm_mode)
 
     def _rewrite_staging_or_final(self, item: dict[str, Any], *, run_id: str) -> None:
+        ensure_vault_writes_allowed(self.config)
         payload = dict(item.get("payload_json") or {})
         if str(item.get("item_type")) == "source":
             payload["frontmatter"] = self.materializer._build_source_frontmatter(
@@ -212,8 +214,6 @@ class KoNoteEnricher:
             staging_path = _resolve_existing_path(str(item.get("staging_path") or ""))
             if staging_path.exists():
                 staging_path.write_text(markdown, encoding="utf-8")
-            if str(item.get("status")) == "applied":
-                self.materializer._apply_source_item(dict(item), run_id)
         else:
             payload["frontmatter"] = build_visible_frontmatter(
                 note_type="concept",
@@ -226,8 +226,23 @@ class KoNoteEnricher:
             staging_path = _resolve_existing_path(str(item.get("staging_path") or ""))
             if staging_path.exists():
                 staging_path.write_text(markdown, encoding="utf-8")
-            if str(item.get("status")) == "applied":
-                self.materializer._apply_concept_item(dict(item))
+        if str(item.get("status")) == "applied":
+            # An already-applied vault note must not be rewritten on the
+            # strength of its old approval: demote the item back into the
+            # review lane so a fresh approve + apply is required.
+            self._demote_applied_item_for_reapproval(item, run_id=run_id)
+
+    def _demote_applied_item_for_reapproval(self, item: dict[str, Any], *, run_id: str) -> None:
+        payload = dict(item.get("payload_json") or {})
+        review = KoNoteReview.from_payload(payload)
+        review.queue = True
+        review.decision = None
+        reason = f"rewritten-after-apply:{run_id}"
+        if reason not in review.reasons:
+            review.reasons.append(reason)
+        payload["review"] = review.to_payload()
+        self.sqlite_db.update_ko_note_item_payload(int(item["id"]), payload=payload)
+        self.sqlite_db.update_ko_note_item_status(int(item["id"]), status="staged")
 
     def _review_guidance(
         self,
