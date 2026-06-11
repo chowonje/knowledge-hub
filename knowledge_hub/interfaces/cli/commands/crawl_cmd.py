@@ -389,7 +389,7 @@ def crawl_latest_build(ctx, watchlist_file, output_prefix, per_source_limit, inc
 @click.option("--index/--no-index", default=True, show_default=True)
 @click.option("--extract-concepts/--no-extract-concepts", default=True, show_default=True)
 @click.option("--materialize/--no-materialize", default=True, show_default=True, help="ko-note 생성까지 연속 실행")
-@click.option("--apply/--no-apply", "apply_notes", default=True, show_default=True, help="생성된 ko-note를 최종 Vault에 반영")
+@click.option("--apply/--no-apply", "apply_notes", default=False, show_default=True, help="approved ko-note만 최종 Vault에 반영 (기본은 stage-only)")
 @click.option("--max-source-notes", type=int, default=20, show_default=True)
 @click.option("--max-concept-notes", type=int, default=10, show_default=True)
 @click.option("--allow-external", is_flag=True, default=False, help="crawl/ko-note 외부 LLM 보강 허용")

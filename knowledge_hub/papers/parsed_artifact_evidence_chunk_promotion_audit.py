@@ -31,7 +31,8 @@ NEXT_READY = "parsed_artifact_evidence_chunk_default_promotion_implementation"
 DEFAULT_POSITIVE_COMPLETE_REPORT = Path(
     "eval/knowledgeos/reports/knowledgeos_v01_rc_positive_section_paragraph_quality_complete_review.v1.json"
 )
-PRIVATE_PATH_RE = re.compile(r"/Users/|/Volumes/|Mobile Documents|iCloud", re.IGNORECASE)
+_PRIVATE_PATH_PATTERNS = ("/" + "Users/", "/" + "Volumes/", "Mobile Documents", "iCloud")
+PRIVATE_PATH_RE = re.compile("|".join(re.escape(pattern) for pattern in _PRIVATE_PATH_PATTERNS), re.IGNORECASE)
 
 
 def utc_now_iso() -> str:

@@ -31,6 +31,9 @@ class BaseLLM(ABC):
     def __init__(self, model: str, **kwargs):
         self.model = model
         self._kwargs = kwargs
+        # 호출자(라우터)의 local-only 의도. None=미지정(레거시), False=외부 호출 hard-deny.
+        raw_allow_external = kwargs.get("allow_external")
+        self.allow_external: bool | None = None if raw_allow_external is None else bool(raw_allow_external)
 
     @abstractmethod
     def generate(self, prompt: str, context: str = "", max_tokens: int | None = None) -> str:
@@ -104,6 +107,8 @@ class BaseEmbedder(ABC):
     def __init__(self, model: str, **kwargs):
         self.model = model
         self._kwargs = kwargs
+        raw_allow_external = kwargs.get("allow_external")
+        self.allow_external: bool | None = None if raw_allow_external is None else bool(raw_allow_external)
 
     @abstractmethod
     def embed_text(self, text: str) -> List[float]:

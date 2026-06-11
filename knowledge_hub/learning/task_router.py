@@ -324,6 +324,9 @@ def get_llm_for_task(
         resolved_timeout = float(timeout_sec or route_timeout)
         provider_cfg["timeout"] = resolved_timeout
         provider_cfg["request_timeout"] = resolved_timeout
+        # provider 어댑터의 outbound policy guard가 호출자의 local-only 의도를
+        # 마지막 방어선에서 hard-deny로 존중할 수 있도록 전달한다.
+        provider_cfg["allow_external"] = decision.allow_external_effective
         try:
             llm = get_llm(provider, model=model, **provider_cfg)
             if idx > 0:
