@@ -1,0 +1,431 @@
+{
+  "allowExternal": true,
+  "answerRoute": "codex",
+  "collector": "manual-ask-batch+claude-adversarial-judges",
+  "counts": {
+    "abstentionRows": 1,
+    "answerableRows": 8,
+    "blockedRows": 9,
+    "compareMeaningfulSynthesisRows": 0,
+    "compareReadyRows": 0,
+    "compareRestatementOnlyRows": 0,
+    "dbVectorMutationRows": 0,
+    "defaultPromotionRows": 0,
+    "externalModelCallRows": 1,
+    "forbiddenRawMarkerRows": 0,
+    "humanReadableReviewRows": 10,
+    "inlineCitationReadyRows": 0,
+    "insufficientEvidenceRows": 1,
+    "modelApiCallRows": 1,
+    "notApplicableRows": 1,
+    "privatePathLeakRows": 0,
+    "rawAnswerPersistedRows": 0,
+    "rawPromptPersistedRows": 0,
+    "readyRows": 0,
+    "rowCount": 10,
+    "sampleDraftRows": 10,
+    "schemaViolationCount": 0,
+    "semanticCitationFailRows": 8,
+    "semanticCitationSupportRows": 0,
+    "singlePaperReadyRows": 0,
+    "synthesisReadyRows": 0,
+    "twoSidedCompareCitationRows": 0,
+    "unexpectedAnswerRows": 1,
+    "unsupportedInventionRows": 5,
+    "vaultReadRows": 0
+  },
+  "generatedAt": "2026-06-10T18:28:21.205909+00:00",
+  "policy": {
+    "consumesRealAnswerPayloads": true,
+    "dbVectorMutation": false,
+    "externalModelCallsAllowed": true,
+    "localFakeLlmOnly": false,
+    "publicDefaultPromotionAllowed": false,
+    "qwenDefaultFallbackAllowed": false,
+    "rawPromptPersistenceAllowed": false,
+    "reportOnly": true,
+    "vaultRead": false
+  },
+  "profile": "paper-real-answer-quality-gate",
+  "querySet": "answerable_row_proof_cases.v1",
+  "rows": [
+    {
+      "answerHash": "sha256:216d04574d54ec85c5abae921a6ed2019d00c6a77162bfba17552e089239a720",
+      "answerPreview": "quality_flag=`ok` **핵심 답변** 이 논문의 핵심 주장은, 저자들이 정의한 의미의 “scientific taste” 즉 “영향력 높은 연구 아이디어를 판단하고 제안하는 능력”은 AI도 학습할 수 있다는 것입니다.[S1] 이를 위해 논문은 과학적 취향 학습을 선호학습 문제로 바꾸고, 커뮤니티 피드백을 이용하",
+      "answerType": "single_paper",
+      "caseId": "single-anchor-taste",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "citationSourceIds": [
+        "2603.14473"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "2603.14473"
+      ],
+      "humanReadableReview": {
+        "reason": "unsupported_invention;semantic_citation_support_failed",
+        "status": "failed"
+      },
+      "inlineCitationReady": true,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:216d04574d54ec85c5abae921a6ed2019d00c6a77162bfba17552e089239a720",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unsupported_invention",
+        "semantic_citation_support_failed"
+      ]
+    },
+    {
+      "answerHash": "sha256:b57a8f29e5be7726f099123c7359afd6354328d6f2b3ca011273f7d5486edd48",
+      "answerPreview": "**핵심 답변** 제공된 근거만으로는 BERT 논문의 두 pre-training task가 무엇인지 확인할 수 없습니다. 제공된 두 문서는 BERT가 아니라 `AI Can Learn Scientific Taste` 논문 내용이며, RLCF, Scientific Judge, Scientific Thinker를 설명합니다.[",
+      "answerType": "single_paper",
+      "caseId": "single-bert-pretraining",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "citationSourceIds": [
+        "2603.14473"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1810.04805"
+      ],
+      "humanReadableReview": {
+        "reason": "unsupported_invention;unexpected_insufficient_evidence;semantic_citation_support_failed",
+        "status": "failed"
+      },
+      "inlineCitationReady": true,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:b57a8f29e5be7726f099123c7359afd6354328d6f2b3ca011273f7d5486edd48",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unsupported_invention",
+        "unexpected_insufficient_evidence",
+        "semantic_citation_support_failed"
+      ]
+    },
+    {
+      "answerHash": "sha256:7a813691c35e0cd38f4b534a347a94d89e0eaa0d6522dd321aeb2b77f268804b",
+      "answerPreview": "**핵심 답변** 원 논문은 GAN을 다음의 minimax 목적함수로 학습시키는 두 플레이어 게임으로 둡니다: \\[ \\min_G \\max_D V(D,G)=\\mathbb{E}_{x\\sim p_{\\text{data}}}[\\log D(x)] + \\mathbb{E}_{z\\sim p_z}[\\log(1-D(G(z)))] \\] [S1",
+      "answerType": "single_paper",
+      "caseId": "single-gan-objective",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "citationSourceIds": [
+        "1406.2661"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1406.2661"
+      ],
+      "humanReadableReview": {
+        "reason": "unsupported_invention;inline_citation_missing;semantic_citation_support_failed",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:7a813691c35e0cd38f4b534a347a94d89e0eaa0d6522dd321aeb2b77f268804b",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unsupported_invention",
+        "inline_citation_missing",
+        "semantic_citation_support_failed"
+      ]
+    },
+    {
+      "answerHash": "sha256:cbafca6774f84769be87517222dad499a2e3b3382040c44913ff35d39fc911c6",
+      "answerPreview": "**핵심 답변** GPT-3 논문에서 `in-context learning`은 모델 가중치를 바꾸지 않고, 프롬프트 안에 들어 있는 자연어 지시와 예시 몇 개만으로 과제를 파악해 같은 문맥에서 다음 답을 이어서 생성하는 방식을 뜻합니다. 저자들은 이것을 메타러닝의 `inner loop`, 즉 각 입력 시퀀스의 forwar",
+      "answerType": "single_paper",
+      "caseId": "single-gpt3-fewshot",
+      "citationLabels": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "citationSourceIds": [
+        "2603.14473",
+        "1406.2661"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "2005.14165"
+      ],
+      "humanReadableReview": {
+        "reason": "unsupported_invention;inline_citation_missing;semantic_citation_support_failed",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:cbafca6774f84769be87517222dad499a2e3b3382040c44913ff35d39fc911c6",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unsupported_invention",
+        "inline_citation_missing",
+        "semantic_citation_support_failed"
+      ]
+    },
+    {
+      "answerHash": "sha256:1a7d9c036b6d725c1c8865013860dcd740d2edd6dcaf82487cb51d26429db51b",
+      "answerPreview": "제공된 근거만으로는 검증 가능한 답변을 생성하기 어렵습니다.",
+      "answerType": "single_paper",
+      "caseId": "single-word2vec-models",
+      "citationLabels": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "citationSourceIds": [
+        "2603.23749",
+        "2503.23077"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1301.3781"
+      ],
+      "humanReadableReview": {
+        "reason": "unexpected_insufficient_evidence;inline_citation_missing;semantic_citation_support_failed",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:1a7d9c036b6d725c1c8865013860dcd740d2edd6dcaf82487cb51d26429db51b",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unexpected_insufficient_evidence",
+        "inline_citation_missing",
+        "semantic_citation_support_failed"
+      ]
+    },
+    {
+      "answerHash": "sha256:287973d4b1dddc109a3a0be9573452064db164294f106b16759a2c05ca2d3eed",
+      "answerPreview": "**핵심 답변** 이 논문에서 experience replay는 학습을 더 안정적으로 만들기 위해, 연속적으로 들어오는 상관된 경험을 그대로 쓰지 않고 과거 transition들을 저장해 두었다가 무작위로 샘플링하는 장치로 설명됩니다.[S1] 논문이 말하는 핵심 효과는 두 가지입니다. 첫째, 강화학습에서 연속 상태들이 서",
+      "answerType": "single_paper",
+      "caseId": "single-dqn-replay",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "citationSourceIds": [
+        "1312.5602"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1312.5602"
+      ],
+      "humanReadableReview": {
+        "reason": "unsupported_invention;inline_citation_missing;semantic_citation_support_failed",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:287973d4b1dddc109a3a0be9573452064db164294f106b16759a2c05ca2d3eed",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unsupported_invention",
+        "inline_citation_missing",
+        "semantic_citation_support_failed"
+      ]
+    },
+    {
+      "answerHash": "sha256:1a7d9c036b6d725c1c8865013860dcd740d2edd6dcaf82487cb51d26429db51b",
+      "answerPreview": "제공된 근거만으로는 검증 가능한 답변을 생성하기 어렵습니다.",
+      "answerType": "compare",
+      "caseId": "compare-word2vec-phrases",
+      "citationLabels": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "citationSourceIds": [
+        "1810.04805",
+        "2602.16683"
+      ],
+      "compareMeaningfulSynthesis": false,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1301.3781",
+        "1310.4546"
+      ],
+      "humanReadableReview": {
+        "reason": "unexpected_insufficient_evidence;inline_citation_missing;semantic_citation_support_failed;compare_two_sided_citation_missing;compare_meaningful_synthesis_missing",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:1a7d9c036b6d725c1c8865013860dcd740d2edd6dcaf82487cb51d26429db51b",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unexpected_insufficient_evidence",
+        "inline_citation_missing",
+        "semantic_citation_support_failed",
+        "compare_two_sided_citation_missing",
+        "compare_meaningful_synthesis_missing"
+      ]
+    },
+    {
+      "answerHash": "sha256:048eb1e76dcb8b054df2d13bc5417288390b2729f48eba75334b0ddfa9a2f7d6",
+      "answerPreview": "비교 가능한 논문 2편 이상을 찾지 못했습니다.",
+      "answerType": "compare",
+      "caseId": "compare-bert-gpt3",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "citationSourceIds": [
+        "1810.04805"
+      ],
+      "compareMeaningfulSynthesis": false,
+      "draftStatus": "answerable",
+      "expectedSourceIds": [
+        "1810.04805",
+        "2005.14165"
+      ],
+      "humanReadableReview": {
+        "reason": "inline_citation_missing;semantic_citation_support_failed;compare_two_sided_citation_missing;compare_meaningful_synthesis_missing",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:048eb1e76dcb8b054df2d13bc5417288390b2729f48eba75334b0ddfa9a2f7d6",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "inline_citation_missing",
+        "semantic_citation_support_failed",
+        "compare_two_sided_citation_missing",
+        "compare_meaningful_synthesis_missing"
+      ]
+    },
+    {
+      "answerHash": "sha256:aaf132bed06e8a2d33283933047af31bc056ca80f6311bbfd987e1e58e608ad5",
+      "answerPreview": "quality_flag=ok **핵심 답변** 현재 제공된 근거만으로는 **Recursive Hypergraph Attention Networks** 논문의 어텐션 설계를 정확히 설명할 수 없습니다. 제공된 문서는 해당 논문이 아니라, Transformer의 멀티헤드 어텐션과 장문 추론용 희소 어텐션만 다루고 있습니다.[",
+      "answerType": "abstain",
+      "caseId": "abstain-fictional-hypergraph",
+      "citationLabels": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "citationSourceIds": [
+        "1706.03762",
+        "2502.20766"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "insufficient_evidence",
+      "expectedSourceIds": [],
+      "humanReadableReview": {
+        "reason": "grounded",
+        "status": "insufficient"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:aaf132bed06e8a2d33283933047af31bc056ca80f6311bbfd987e1e58e608ad5",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "not_applicable",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": []
+    },
+    {
+      "answerHash": "sha256:72b63b10951d559c40f280e83bc1c1f9ad1a91a8e3e0191e52beca4c02430a1a",
+      "answerPreview": "핵심 답변: 제공된 `Selected Sections`만 기준으로 보면, 질문하신 **“Photonic Mixture-of-Memories Transformer의 training pipeline”은 설명할 수 없습니다.** 이유는 선택된 근거가 그 논문이 아니라 **`Scattering data and correlatio",
+      "answerType": "abstain",
+      "caseId": "abstain-fictional-photonic",
+      "citationLabels": [
+        "S1",
+        "S2"
+      ],
+      "citationSourceIds": [
+        "2602.16683"
+      ],
+      "compareMeaningfulSynthesis": true,
+      "draftStatus": "insufficient_evidence",
+      "expectedSourceIds": [],
+      "humanReadableReview": {
+        "reason": "unexpected_answer_for_abstain",
+        "status": "failed"
+      },
+      "inlineCitationReady": false,
+      "runId": "answerable-row-proof-20260611",
+      "sampleDraft": {
+        "hash": "sha256:72b63b10951d559c40f280e83bc1c1f9ad1a91a8e3e0191e52beca4c02430a1a",
+        "stored": "hash_and_sanitized_preview"
+      },
+      "semanticCitationSupported": false,
+      "status": "blocked",
+      "twoSidedCompareCitationReady": false,
+      "variantId": "v1",
+      "warnings": [
+        "unexpected_answer_for_abstain"
+      ]
+    }
+  ],
+  "runDirectory": "workspace-evidence:knowledgeos-answerable-row-proof-20260611",
+  "schema": "knowledge-hub.paper-real-answer-quality-gate.v1",
+  "status": "blocked",
+  "warnings": [
+    "paper_real_answer_quality_gate_blocked"
+  ]
+}

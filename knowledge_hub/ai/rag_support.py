@@ -269,6 +269,15 @@ def record_answer_log(
     status = str(payload.get("status") or "").strip() or "ok"
     if not payload.get("sources") and not payload.get("evidence") and status == "ok":
         status = "no_result"
+    answer_route = route_summary(router.get("selected"))
+    runtime_execution = dict(payload.get("runtimeExecution") or {})
+    if runtime_execution:
+        answer_route = {
+            **dict(answer_route or {}),
+            "runtimeUsed": str(runtime_execution.get("used") or ""),
+            "runtimeFallbackReason": str(runtime_execution.get("fallbackReason") or ""),
+            "askV2HardGate": bool(runtime_execution.get("askV2HardGate")),
+        }
     try:
         recorder(
             query_hash=query_hash(query),
@@ -289,7 +298,7 @@ def record_answer_log(
             warning_count=len(warnings),
             source_count=len(payload.get("sources") or []),
             evidence_count=len(payload.get("evidence") or []),
-            answer_route=route_summary(router.get("selected")),
+            answer_route=answer_route,
             verification_route=route_summary(verification.get("route")),
             rewrite_route=route_summary(rewrite.get("route")),
             warnings=warnings[:20],
