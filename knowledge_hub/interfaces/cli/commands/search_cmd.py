@@ -38,13 +38,17 @@ def _get_searcher(khub_ctx):
 
 
 def _ask_allow_external_default(khub_ctx, searcher) -> bool:
+    """ADR 2026-06-11: external answer generation is opt-in, never inferred.
+
+    The previous behavior derived the default from the summarization provider,
+    which silently enabled external calls whenever a cloud provider was
+    configured. Only an explicit `answer.allow_external_default: true` (or the
+    per-invocation --allow-external flag) may enable external generation.
+    """
     config = getattr(khub_ctx, "config", None) or getattr(searcher, "config", None)
-    provider = str(getattr(config, "summarization_provider", "") or "").strip().lower()
-    if not provider and config is not None and hasattr(config, "get_nested"):
-        provider = str(config.get_nested("summarization", "provider", default="") or "").strip().lower()
-    if not provider:
+    if config is None or not hasattr(config, "get_nested"):
         return False
-    return provider not in _LOCAL_PROVIDER_NAMES
+    return bool(config.get_nested("answer", "allow_external_default", default=False))
 
 
 def _filter_supported_kwargs(func, kwargs: dict) -> dict:

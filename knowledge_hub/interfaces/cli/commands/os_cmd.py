@@ -19,9 +19,10 @@ from knowledge_hub.application.dinger_os_bridge import (
     bridge_dinger_result_to_os_capture,
 )
 from knowledge_hub.core.schema_validator import annotate_schema_errors
+from knowledge_hub.core.vault_guard import VaultWriteError
 from knowledge_hub.learning.obsidian_writeback import (
     _upsert_marked_section,
-    resolve_vault_write_adapter,
+    resolve_config_vault_write_adapter,
 )
 
 console = Console()
@@ -1311,21 +1312,16 @@ def _render_export_payload(
         backend
         or config.get_nested("obsidian", "write_backend", default="filesystem")
     ).strip() or "filesystem"
-    resolved_cli_binary = str(
-        cli_binary
-        or config.get_nested("obsidian", "cli_binary", default="obsidian")
-    ).strip() or "obsidian"
-    resolved_vault_name = str(
-        vault_name
-        or config.get_nested("obsidian", "vault_name", default="")
-    ).strip()
-
-    adapter = resolve_vault_write_adapter(
-        resolved_vault,
-        backend=resolved_backend,
-        cli_binary=resolved_cli_binary,
-        vault_name=resolved_vault_name,
-    )
+    try:
+        adapter = resolve_config_vault_write_adapter(
+            config,
+            vault_path=resolved_vault,
+            backend=resolved_backend,
+            cli_binary=cli_binary,
+            vault_name=vault_name,
+        )
+    except VaultWriteError as error:
+        raise click.ClickException(str(error)) from error
     root = Path(resolved_vault).expanduser().resolve()
     written_files: list[dict[str, Any]] = []
     for projection in list(payload.get("projections") or []):

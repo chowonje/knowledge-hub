@@ -17,6 +17,8 @@ import requests
 from rich.console import Console
 
 from knowledge_hub.core.schema_validator import annotate_schema_errors
+from knowledge_hub.core.vault_guard import VaultWriteError
+from knowledge_hub.learning.obsidian_writeback import resolve_config_vault_write_adapter
 from knowledge_hub.learning.task_router import TaskRouteDecision, get_llm_for_task
 from knowledge_hub.papers.memory_retriever import PaperMemoryRetriever
 from knowledge_hub.papers.memory_payloads import shared_slot_payload
@@ -553,7 +555,10 @@ def _render_structured_summary_notes(payload: dict) -> str:
 
 
 def _update_obsidian_summary(paper: dict, summary: str, config):
-    if not getattr(config, "vault_path", None):
+    try:
+        adapter = resolve_config_vault_write_adapter(config)
+    except VaultWriteError as error:
+        console.print(f"[dim]Obsidian 노트 업데이트 건너뜀: {error}[/dim]")
         return
     vault = Path(config.vault_path)
     safe_title = re.sub(r'[\\/:*?"<>|]', "", paper["title"]).strip()
@@ -569,7 +574,7 @@ def _update_obsidian_summary(paper: dict, summary: str, config):
 
         if placeholder in content:
             content = content.replace(placeholder, summary)
-            note_path.write_text(content, encoding="utf-8")
+            adapter.write_text(note_path, content)
             console.print(f"[dim]Obsidian 노트 업데이트: {note_path.name}[/dim]")
             return
 
@@ -587,7 +592,7 @@ def _update_obsidian_summary(paper: dict, summary: str, config):
                 if end is None:
                     end = len(lines)
                 new_lines = lines[:start] + ["## 요약", "", summary, ""] + lines[end:]
-                note_path.write_text("\n".join(new_lines), encoding="utf-8")
+                adapter.write_text(note_path, "\n".join(new_lines))
                 console.print(f"[dim]Obsidian 노트 업데이트: {note_path.name}[/dim]")
 
 

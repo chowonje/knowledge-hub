@@ -427,6 +427,7 @@ class RAGAnswerRuntime:
             answer_route_override=request.answer_route_override,
             pipeline_result=execution.pipeline_result,
             evidence_packet=execution.evidence_packet,
+            runtime_execution=self._runtime_execution_for_log(payload=None, execution=execution),
         )
 
     def _stream_via_orchestrator(
@@ -445,6 +446,7 @@ class RAGAnswerRuntime:
             answer_route_override=request.answer_route_override,
             pipeline_result=execution.pipeline_result,
             evidence_packet=execution.evidence_packet,
+            runtime_execution=self._runtime_execution_for_log(payload=None, execution=execution),
         )
 
     @staticmethod
