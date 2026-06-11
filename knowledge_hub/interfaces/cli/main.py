@@ -414,6 +414,12 @@ labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_labs_cm
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_harness_cmd", "paper_harness_group", "paper-harness")
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.paper_summary_cmd", "paper_summary_group", "paper-summary")
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.review_loop_cmd", "review_loop_group", "review-loop")
+labs_group.add_lazy_command(
+    "knowledge_hub.interfaces.cli.commands.judge_cmd",
+    "judge_group",
+    "judge",
+    short_help="Record and list user judgments (V0 judgment loop)",
+)
 labs_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.eval_cmd", "eval_group", "eval")
 
 labs_ops_group.add_lazy_command("knowledge_hub.interfaces.cli.commands.search_cmd", "rag_report", "rag-report")

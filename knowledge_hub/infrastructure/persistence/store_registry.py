@@ -16,6 +16,7 @@ from knowledge_hub.infrastructure.persistence.stores import (
     EntityResolutionStore,
     EpistemicStore,
     EvidenceRegistryStore,
+    JudgmentStore,
     KoNoteStore,
     LearningGraphStore,
     LearningStore,
@@ -389,6 +390,17 @@ DELEGATED_METHODS.update(
 )
 DELEGATED_METHODS.update(
     _delegate_map(
+        "judgment_store",
+        (
+            "record_judgment",
+            "list_judgments",
+            "get_judgment",
+            "supersede_judgment",
+        ),
+    )
+)
+DELEGATED_METHODS.update(
+    _delegate_map(
         "ops_action_queue_store",
         get_ops_action="get_action",
         get_ops_action_by_identity="get_action_by_identity",
@@ -518,6 +530,7 @@ class StoreRegistry:
         self.crawl_pipeline_store = CrawlPipelineStore(self.conn)
         self.quality_mode_store = QualityModeStore(self.conn)
         self.rag_answer_log_store = RAGAnswerLogStore(self.conn)
+        self.judgment_store = JudgmentStore(self.conn, db_path=self.db_path)
         self.ops_action_queue_store = OpsActionQueueStore(self.conn)
         self.ops_action_receipt_store = OpsActionReceiptStore(self.conn)
         self.entity_resolution_store = EntityResolutionStore(self.conn, self)
@@ -551,6 +564,7 @@ class StoreRegistry:
             self.crawl_pipeline_store.ensure_schema()
             self.quality_mode_store.ensure_schema()
             self.rag_answer_log_store.ensure_schema()
+            self.judgment_store.ensure_schema()
             self.document_memory_store.ensure_schema()
             self.paper_card_v2_store.ensure_schema()
             self.web_card_v2_store.ensure_schema()

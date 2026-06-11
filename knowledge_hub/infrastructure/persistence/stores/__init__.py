@@ -14,6 +14,7 @@ _EXPORTS = {
     "EpistemicStore": "knowledge_hub.infrastructure.persistence.stores.epistemic_store",
     "EvidenceRegistryStore": "knowledge_hub.infrastructure.persistence.stores.evidence_registry_store",
     "EventStore": "knowledge_hub.infrastructure.persistence.stores.event_store",
+    "JudgmentStore": "knowledge_hub.infrastructure.persistence.stores.judgment_store",
     "KoNoteStore": "knowledge_hub.infrastructure.persistence.stores.ko_note_store",
     "LearningGraphStore": "knowledge_hub.infrastructure.persistence.stores.learning_graph_store",
     "LearningStore": "knowledge_hub.infrastructure.persistence.stores.learning_store",

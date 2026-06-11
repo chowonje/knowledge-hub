@@ -60,6 +60,7 @@ class SQLiteDatabase:
             "crawl_pipeline_store",
             "quality_mode_store",
             "rag_answer_log_store",
+            "judgment_store",
             "ops_action_receipt_store",
             "entity_resolution_store",
         ):

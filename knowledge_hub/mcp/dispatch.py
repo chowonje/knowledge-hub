@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from knowledge_hub.mcp.handlers import agent, crawl, epistemic, jobs, learn, paper, search, transform
+from knowledge_hub.mcp.handlers import agent, crawl, epistemic, jobs, judgment, learn, paper, search, transform
 
 
 async def dispatch_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any]):
@@ -12,6 +12,7 @@ async def dispatch_tool(name: str, arguments: dict[str, Any], ctx: dict[str, Any
         search.handle_tool,
         transform.handle_tool,
         epistemic.handle_tool,
+        judgment.handle_tool,
         learn.handle_tool,
         crawl.handle_tool,
         paper.handle_tool,

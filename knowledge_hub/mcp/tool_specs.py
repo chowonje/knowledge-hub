@@ -698,6 +698,49 @@ def build_tools(profile: str | None = None) -> list[Tool]:
             },
         ),
         Tool(
+            name="record_judgment",
+            description="사용자 판정(judgment)을 영구 원장(judgments.jsonl + sqlite mirror)에 기록",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "target_type": {"type": "string", "enum": ["claim", "answer", "brief"]},
+                    "target_id": {"type": "string"},
+                    "decision": {
+                        "type": "string",
+                        "enum": ["accept", "thin", "reject", "unsure", "abstain", "archive"],
+                    },
+                    "reviewer": {"type": "string"},
+                    "reason": {"type": "string"},
+                    "confidence": {"type": "string", "enum": ["low", "medium", "high"], "default": "medium"},
+                    "reviewed_at": {"type": "string", "description": "ISO-8601 (생략 시 now UTC)"},
+                    "target_text": {"type": "string", "description": "원문은 저장되지 않고 sha1[:16] 해시만 기록"},
+                    "snippet_hashes": {"type": "array", "items": {"type": "string"}},
+                    "evidence_span_ids": {"type": "array", "items": {"type": "string"}},
+                    "source_ids": {"type": "array", "items": {"type": "string"}},
+                    "query_hash": {"type": "string"},
+                    "rag_answer_log_id": {"type": "integer"},
+                    "runtime_used": {"type": "string"},
+                    "supersedes": {"type": "string", "description": "대체할 기존 judgment_id"},
+                },
+                "required": ["target_type", "target_id", "decision", "reviewer", "reason"],
+            },
+        ),
+        Tool(
+            name="list_judgments",
+            description="기록된 사용자 판정(judgment) 목록 조회",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "limit": {"type": "integer", "default": 50},
+                    "target_type": {"type": "string", "enum": ["claim", "answer", "brief"]},
+                    "decision": {
+                        "type": "string",
+                        "enum": ["accept", "thin", "reject", "unsure", "abstain", "archive"],
+                    },
+                },
+            },
+        ),
+        Tool(
             name="search_papers",
             description="논문 메타데이터 검색 (제목, 저자, 분야)",
             inputSchema={
