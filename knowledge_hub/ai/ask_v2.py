@@ -1276,27 +1276,34 @@ class AskV2Service:
                 unit_type = _clean_text(row.get("unit_type")).lower()
                 if unit_type not in {"document_summary", "summary"}:
                     continue
-                excerpt = _clean_text(
-                    row.get("contextual_summary")
-                    or row.get("source_excerpt")
-                    or row.get("document_thesis")
+                # Prefer the raw source span over the LLM contextual summary so the
+                # anchor cites verifiable text, not a paraphrase (N1 span surfacing).
+                source_excerpt = _clean_text(row.get("source_excerpt"))
+                excerpt = source_excerpt or _clean_text(
+                    row.get("contextual_summary") or row.get("document_thesis")
                 )
                 if not excerpt:
                     continue
+                anchor = {
+                    "anchor_id": f"doc-summary-anchor:{_clean_text(row.get('unit_id'))}",
+                    "card_id": card_id,
+                    "paper_id": paper_id,
+                    "unit_id": _clean_text(row.get("unit_id")),
+                    "document_id": _clean_text(row.get("document_id")) or f"paper:{paper_id}",
+                    "title": _clean_text(row.get("document_title") or card.get("title")),
+                    "section_path": _clean_text(row.get("section_path") or row.get("title") or "Summary"),
+                    "unit_type": unit_type or "document_summary",
+                    "evidence_role": "document_summary",
+                    "excerpt": excerpt,
+                    "evidence_kind": "raw_span" if source_excerpt else "summary",
+                    "score": max(0.72, min(0.96, max(_stable_score(card.get("selection_score")), _stable_score(row.get("confidence"))))),
+                }
+                # Route through the shared provenance enricher so the anchor carries a
+                # resolved span locator / char offsets / source_content_hash (offset surfacing).
                 anchors.append(
-                    {
-                        "anchor_id": f"doc-summary-anchor:{_clean_text(row.get('unit_id'))}",
-                        "card_id": card_id,
-                        "paper_id": paper_id,
-                        "unit_id": _clean_text(row.get("unit_id")),
-                        "document_id": _clean_text(row.get("document_id")) or f"paper:{paper_id}",
-                        "title": _clean_text(row.get("document_title") or card.get("title")),
-                        "section_path": _clean_text(row.get("section_path") or row.get("title") or "Summary"),
-                        "unit_type": unit_type or "document_summary",
-                        "evidence_role": "document_summary",
-                        "excerpt": excerpt,
-                        "score": max(0.72, min(0.96, max(_stable_score(card.get("selection_score")), _stable_score(row.get("confidence"))))),
-                    }
+                    self._enrich_anchor_provenance(
+                        anchor, card=card, fallback_source_hash=card.get("source_content_hash")
+                    )
                 )
         deduped: list[dict[str, Any]] = []
         seen: set[str] = set()
