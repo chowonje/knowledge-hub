@@ -14,6 +14,7 @@
 
 ### Changed
 
+- Refactored Dinger filing ownership so `knowledge_hub.application.dinger_filing` is the only vault-projection implementation. The CLI facade now delegates through `file_dinger_request` and no longer carries an unused 183-line copy of source-ref rendering, page indexing, and vault write logic; CLI commands and result schemas are unchanged.
 - Made external answer generation opt-in for `khub ask` (ADR `docs/adr/2026-06-11-ask-external-default.md`): the default `allow_external` is now always `false` and is no longer inferred from the configured summarization provider; only an explicit `answer.allow_external_default: true` in config or the per-invocation `--allow-external` flag enables external generation. Effective policy stays visible (`allow_external=` line in text output, `allowExternal` in JSON).
 - Stale derivative cards now trigger a rebuild on the scoped ensure path: `CardV2BuilderRegistry` handlers (paper/web/vault) treat `stale`/`invalidated_at` cards as needing rebuild instead of serving them verbatim, so a paper whose source content hash changed no longer answers from an outdated card on `paper_id`-scoped asks. Search-path stale filtering at the store layer is unchanged.
 

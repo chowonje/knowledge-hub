@@ -24,9 +24,7 @@ from knowledge_hub.application.dinger_filing import file_dinger_request, resolve
 from knowledge_hub.application.dinger_os_bridge import bridge_dinger_result_to_os_capture, is_capture_linked_to_os
 from knowledge_hub.application.ko_note_reports import build_ko_note_report
 from knowledge_hub.core.schema_validator import annotate_schema_errors
-from knowledge_hub.core.vault_guard import VaultWriteError
-from knowledge_hub.learning.obsidian_writeback import _upsert_marked_section, resolve_config_vault_write_adapter
-from knowledge_hub.notes.templates import slugify_title, split_frontmatter, yaml_frontmatter
+from knowledge_hub.notes.templates import slugify_title
 
 console = Console()
 SOURCE_REF_PRIMARY_KEYS = ("paperId", "url", "noteId", "stableScopeId", "documentScopeId")
@@ -299,25 +297,6 @@ def _dedupe_source_refs(refs: list[dict[str, Any]]) -> list[dict[str, Any]]:
         seen.add(marker)
         deduped.append({k: v for k, v in ref.items() if v not in (None, "")})
     return deduped
-
-
-def _format_source_refs(refs: list[dict[str, Any]]) -> str:
-    if not refs:
-        return "## Source Refs\n- none"
-    lines = ["## Source Refs"]
-    for ref in refs:
-        source_type = str(ref.get("sourceType") or "").strip() or "unknown"
-        detail = ""
-        for key in SOURCE_REF_PRIMARY_KEYS:
-            candidate = str(ref.get(key) or "").strip()
-            if candidate:
-                detail = candidate
-                break
-        if detail:
-            lines.append(f"- `{source_type}` {detail}")
-        else:
-            lines.append(f"- `{source_type}`")
-    return "\n".join(lines)
 
 
 def _build_capture_filing_input_from_payload(
@@ -790,167 +769,6 @@ def _build_file_failure_payload(
         "payload": dict(payload or {}),
     }
     return result
-
-
-def _obsidian_link(relative_path: str, title: str) -> str:
-    target = str(Path(relative_path).with_suffix("")).replace("\\", "/")
-    label = str(title or "").strip() or Path(relative_path).stem
-    return f"[[{target}|{label}]]"
-
-
-def _load_dinger_pages(vault_root: Path, pages_dir: Path) -> list[dict[str, Any]]:
-    entries: list[dict[str, Any]] = []
-    if not pages_dir.exists():
-        return entries
-    for path in sorted(pages_dir.glob("*.md")):
-        frontmatter, _body = split_frontmatter(path.read_text(encoding="utf-8"))
-        if not isinstance(frontmatter, dict):
-            frontmatter = {}
-        relative_path = str(path.relative_to(vault_root).as_posix())
-        entries.append(
-            {
-                "title": str(frontmatter.get("title") or path.stem),
-                "slug": str(frontmatter.get("slug") or path.stem),
-                "kind": str(frontmatter.get("dingerKind") or "note"),
-                "createdAt": str(frontmatter.get("createdAt") or ""),
-                "updatedAt": str(frontmatter.get("updatedAt") or ""),
-                "relativePath": relative_path,
-                "sourceType": str(frontmatter.get("sourceType") or ""),
-            }
-        )
-    entries.sort(key=lambda item: (str(item.get("updatedAt") or ""), str(item.get("slug") or "")), reverse=True)
-    return entries
-
-
-def _render_dinger_index(entries: list[dict[str, Any]]) -> str:
-    lines = ["## Filed Pages"]
-    if not entries:
-        lines.append("- none")
-        return "\n".join(lines)
-    for entry in entries[:50]:
-        suffix_bits = [str(entry.get("kind") or "")]
-        if str(entry.get("sourceType") or "").strip():
-            suffix_bits.append(str(entry.get("sourceType")))
-        updated_at = str(entry.get("updatedAt") or "").strip()
-        if updated_at:
-            suffix_bits.append(updated_at)
-        suffix = f" ({', '.join(bit for bit in suffix_bits if bit)})" if any(suffix_bits) else ""
-        lines.append(f"- {_obsidian_link(str(entry.get('relativePath') or ''), str(entry.get('title') or ''))}{suffix}")
-    return "\n".join(lines)
-
-
-def _render_dinger_log(entries: list[dict[str, Any]]) -> str:
-    lines = ["## Recent Filed Items"]
-    if not entries:
-        lines.append("- none")
-        return "\n".join(lines)
-    for entry in entries[:50]:
-        updated_at = str(entry.get("updatedAt") or "").strip() or str(entry.get("createdAt") or "").strip()
-        lines.append(
-            f"- `{updated_at}` {str(entry.get('kind') or 'note')}: "
-            f"{_obsidian_link(str(entry.get('relativePath') or ''), str(entry.get('title') or ''))}"
-        )
-    return "\n".join(lines)
-
-
-def _write_dinger_projection(
-    *,
-    khub,
-    title: str,
-    slug: str,
-    kind: str,
-    content_body: str,
-    source_refs: list[dict[str, Any]],
-    metadata: dict[str, Any],
-    vault_path: str | None,
-    backend: str | None,
-    cli_binary: str | None,
-    vault_name: str | None,
-) -> dict[str, Any]:
-    config = khub.config
-    resolved_vault = str(vault_path or config.vault_path or "").strip()
-    if not resolved_vault:
-        raise click.ClickException("vault_path not configured")
-    resolved_backend = str(backend or config.get_nested("obsidian", "write_backend", default="filesystem") or "filesystem").strip() or "filesystem"
-    try:
-        adapter = resolve_config_vault_write_adapter(
-            config,
-            vault_path=resolved_vault,
-            backend=resolved_backend,
-            cli_binary=cli_binary,
-            vault_name=vault_name,
-        )
-    except VaultWriteError as error:
-        raise click.ClickException(str(error)) from error
-    vault_root = Path(resolved_vault).expanduser().resolve()
-    dinger_root = vault_root / "KnowledgeOS" / "Dinger"
-    pages_dir = dinger_root / "Pages"
-    page_path = pages_dir / f"{slug}.md"
-    index_path = dinger_root / "Index.md"
-    log_path = dinger_root / "Log.md"
-
-    existing = adapter.read_text(page_path)
-    existing_frontmatter, existing_body = split_frontmatter(existing)
-    if not isinstance(existing_frontmatter, dict):
-        existing_frontmatter = {}
-    content = str(existing_body or "").strip()
-    if not content:
-        content = f"# {title}\n"
-
-    created_at = str(existing_frontmatter.get("createdAt") or "").strip() or _now_iso()
-    updated_at = _now_iso()
-    content = _upsert_marked_section(content, "khub-dinger-content", content_body)
-    content = _upsert_marked_section(content, "khub-dinger-source-refs", _format_source_refs(source_refs))
-    content = _upsert_marked_section(
-        content,
-        "khub-dinger-metadata",
-        "\n".join(
-            [
-                "## Metadata",
-                f"- kind: `{kind}`",
-                f"- createdAt: `{created_at}`",
-                f"- updatedAt: `{updated_at}`",
-                *[f"- {key}: `{value}`" for key, value in metadata.items() if str(value or "").strip()],
-            ]
-        ),
-    )
-
-    frontmatter = {
-        "title": title,
-        "slug": slug,
-        "dingerKind": kind,
-        "createdAt": created_at,
-        "updatedAt": updated_at,
-        "sourceType": str(metadata.get("sourceType") or ""),
-        "sourceRefs": source_refs,
-        "managedBy": "knowledge-hub.dinger.file.v1",
-    }
-    adapter.write_text(page_path, yaml_frontmatter(frontmatter) + content.rstrip() + "\n")
-
-    entries = _load_dinger_pages(vault_root, pages_dir)
-    index_content = adapter.read_text(index_path) or "# Dinger Index\n"
-    index_content = _upsert_marked_section(index_content, "khub-dinger-index", _render_dinger_index(entries))
-    adapter.write_text(index_path, index_content.rstrip() + "\n")
-
-    log_content = adapter.read_text(log_path) or "# Dinger Log\n"
-    log_content = _upsert_marked_section(log_content, "khub-dinger-log", _render_dinger_log(entries))
-    adapter.write_text(log_path, log_content.rstrip() + "\n")
-
-    return {
-        "schema": "knowledge-hub.dinger.file.result.v1",
-        "status": "ok",
-        "title": title,
-        "slug": slug,
-        "kind": kind,
-        "relativePath": str(page_path.relative_to(vault_root).as_posix()),
-        "filePath": str(page_path),
-        "indexPath": str(index_path),
-        "logPath": str(log_path),
-        "vaultPath": str(vault_root),
-        "backend": resolved_backend,
-        "sourceRefs": source_refs,
-        "createdAt": updated_at,
-    }
 
 
 def _apply_file_trace(payload: dict[str, Any], trace: dict[str, Any] | None) -> dict[str, Any]:

@@ -489,6 +489,14 @@ def test_hidden_dinger_operator_utility_commands_remain_directly_invokable():
     assert "--limit" in result.output
 
 
+def test_dinger_filing_projection_is_application_owned():
+    from knowledge_hub.application import dinger_filing
+    from knowledge_hub.interfaces.cli.commands import dinger_cmd
+
+    assert dinger_cmd.file_dinger_request is dinger_filing.file_dinger_request
+    assert not hasattr(dinger_cmd, "_write_dinger_projection")
+
+
 def test_validate_invalid_command_result_requires_non_zero_error():
     module = _load_script_module()
     result = module.CommandResult(

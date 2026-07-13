@@ -518,6 +518,7 @@ This means two things operationally:
   - `knowledge_hub.domain.*` for source/domain-specific rules that sit above the generic engine
 - Config, vector DB, repository contracts, ontology profile internals, SQLite store implementations, paper lane taxonomy, and section-card persistence now use `infrastructure.*` or feature-local canonical modules, while legacy `core.*` paths remain compatibility shims for tests and external callers.
 - Legacy `knowledge_hub.cli.*` and `knowledge_hub.mcp_server` are compatibility shims only; internal package code should not import them directly.
+- Dinger filing now follows the same ownership direction: `knowledge_hub.interfaces.cli.commands.dinger_cmd` is a facade that delegates filing to `knowledge_hub.application.dinger_filing`, which is the single owner of source-ref rendering, page projection, and vault writes. The unused CLI-side projection copy was removed without changing command or result-schema contracts.
 - `knowledge_hub/domain` is no longer just a model alias bucket. It now contains registry/protocol scaffolding plus concrete domain packs such as `knowledge_hub.domain.ai_papers` and `knowledge_hub.domain.web_knowledge`.
 - `knowledge_hub/ai` now trends toward a generic engine surface. Paper-specific routing/query/claim rules are moving under `domain.ai_papers`, while `knowledge_hub.ai.paper_query_plan` and `knowledge_hub.ai.claim_cards` stay as compatibility shims for one stabilization cycle.
 
